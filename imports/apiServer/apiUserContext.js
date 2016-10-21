@@ -1,0 +1,27 @@
+/**
+ * Created by aston on 19/09/2016.
+ */
+import { Meteor } from 'meteor/meteor';
+
+import  UserContextServices     from '../servicers/user_context_services.js';
+
+// Meteor methods
+Meteor.methods({
+
+    'userContext.setCurrentUserContext'(context){
+
+        UserContextServices.saveUserContext(context);
+    },
+
+    'userContext.setCurrentUserDevContext'(userId, designId, designVersionId, workPackageId, featureFilesLocation){
+
+        UserContextServices.saveUserDevContext(
+            userId,
+            designId,
+            designVersionId,
+            workPackageId,
+            featureFilesLocation,
+        );
+    },
+
+});

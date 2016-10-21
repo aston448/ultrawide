@@ -1,0 +1,873 @@
+/* CSS declarations go here */
+
+/* HTML OVERRIDES */
+
+body {
+  font-family: sans-serif;
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+}
+
+#login-buttons {
+  display: block;
+}
+
+
+/* List formatting for text editor */
+ul {
+    margin: 0 0 0 5px;
+    padding: 0px;
+    background-color: transparent;
+}
+
+li {
+    position: relative;
+    list-style: bullet;
+    padding: 0;
+    margin: 0 0 0 15px;
+    background-color: transparent;
+}
+
+li .text {
+    margin-left: 10px;
+}
+
+
+
+
+input {
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* BOOTSTRAP OVERRIDES */
+
+.alert{
+    padding: 0 5px 0 5px;
+    margin: 0;
+}
+
+.checkbox {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: auto;
+    margin: 0;
+    min-height: 100%;
+    background: white;
+    padding: 0;
+}
+
+.row{
+    margin: 0px;
+}
+
+.col{
+    margin: 0px;
+    padding: 0px;
+}
+
+.panel {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: 0px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(255, 255, 255, .05);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, .05);
+}
+
+.panel-default > .panel-heading {
+    color: darkred;
+    margin: 10px 10px 0 10px;
+}
+
+.panel-small > .panel-heading {
+    color: darkgrey;
+    margin: 10px 10px 0 10px;
+    font-size:  14px;
+    font-weight: normal;
+}
+
+.panel-steps > .panel-heading {
+    color: black;
+    margin: 10px 0px 0 0px;
+    font-size:  14px;
+    font-weight: normal;
+}
+
+.panel-text > .panel-heading {
+    color: black;
+    margin: 5px 0 0 0;
+    font-size:  14px;
+    font-weight: normal;
+}
+
+.panel-update > .panel-heading {
+    color: black;
+    margin: 10px 0px 0 0px;
+    font-size:  16px;
+    font-weight: normal;
+    border-bottom: 1px solid darkgrey;
+}
+
+.panel-heading {
+    padding: 3px 0px 2px 10px;
+    border: 1px solid lightgrey;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    font-weight: bold;
+}
+
+.sub-panel-heading {
+    color: darkgrey;
+    margin: 10px 10px 0 10px;
+    padding: 3px 0px 2px 10px;
+    border: 1px solid lightgrey;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+}
+
+.panel-body {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: 0px solid lightgrey;
+    border-radius: 4px;
+}
+
+.panel-small-body > .panel-body{
+    margin: 0 10px 0 10px;
+    padding: 3px 0px 2px 10px;
+    background-color: transparent;
+    border: 1px solid lightgrey;
+    border-top: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+}
+
+.panel-update-body > .panel-body{
+    margin: 0;
+    padding: 3px 0px 2px 0px;
+    background-color: transparent;
+}
+
+.panel-steps-body > .panel-body{
+    margin: 0 0px 0 0px;
+    padding: 3px 0px 2px 10px;
+    background-color: transparent;
+    border: 1px solid lightgrey;
+    border-top: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+}
+
+.panel-text-body > .panel-body{
+    margin: 0 0px 5px 0px;
+    padding: 5px 10px 5px 10px;
+    background-color: transparent;
+    border: 1px solid lightgrey;
+    border-top: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+}
+
+.input-group-addon {
+    padding: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    /*line-height: 1;*/
+    color: #555;
+    text-align: center;
+    background-color: transparent;
+    border: 0px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group .form-control {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 2px;
+    height: auto;
+
+}
+
+.form-control-static {
+    min-height: 24px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-bottom: 0px;
+    background-color: transparent;
+    border: 0;
+}
+
+
+/* ULTRAWIDE */
+
+.ultrawide-logo{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    font-weight: normal;
+    letter-spacing: 8px;
+    color: darkgrey
+}
+
+.header-row-top{
+    padding: 10px 0 10px 0;
+}
+
+.header-row-bottom{
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid lightgrey
+}
+
+.header-title{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: darkgrey
+}
+
+.header-data{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: darkblue;
+    margin: 0 5px 0 5px;
+}
+
+.login-screen{
+    margin: 50px;
+    padding: 50px;
+    border: 1px solid blue;
+}
+
+.main-grid{
+    margin: 10px 0 0 0;
+    padding: 0px;
+    width: auto;
+}
+
+.close-grid{
+    margin: 0;
+    padding: 0;
+    width: auto;
+}
+
+.close-col{
+    margin: 0;
+    padding: 0;
+}
+
+.design-item-header{
+    margin: 0 0 10px 0;
+    padding: 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: normal;
+    color: black;
+}
+
+.design-item-add{
+    margin: 10px;
+}
+
+.button-group-left{
+    margin: 0 5px 0 0;
+}
+
+/* -- Design Editor ------------------------------------------------------------------------------------------------- */
+
+.design-editor{
+    margin: 15px 0 0 0px;
+    padding: 0 25px 5px 0px;
+    border-right: 1px solid lightgrey;
+}
+
+.scroll-col{
+    height: 1000px;
+    overflow-y: scroll;
+}
+
+.design-component-panel{
+    border: 0px;
+    padding: 0;
+    margin: 0;
+}
+
+.design-item{
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+}
+
+.di-active{
+    border: 0px solid lightgrey;
+    border-radius: 2px;
+    background-color: aliceblue;
+}
+
+.design-item-note{
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: black;
+}
+
+.design-item-button{
+    margin: 0 10px 10px 10px;
+    padding: 0px;
+}
+
+.design-component{
+    margin: 0;
+    /*padding: 0 0 0 0px;*/
+}
+.dc-active{
+    background-color: aliceblue;
+}
+
+.editableItem{
+    padding: 2px 0 0 5px;
+    background-color: papayawhip;
+    border: 0px solid lightgrey;
+    min-height: 24px;
+}
+
+.readOnlyItem{
+    padding: 0px 0 0 0;
+    background-color: transparent;
+    border: 0px solid transparent;
+    min-height: 24px;
+}
+
+.application{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    font-weight: bold;
+    color: black;
+}
+
+.section1{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    color: black;
+    background-color: transparent;
+}
+
+.section2{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    width: 100%;
+    color: black;
+    background-color: transparent;
+}
+
+.section3{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: black;
+    background-color: transparent;
+}
+
+.section4{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: black;
+    background-color: transparent;
+}
+
+.control-table-data-app{
+    padding: 0 10px 0 20px;
+}
+
+.control-table-data-section{
+    padding: 0 10px 0 25px;
+}
+
+.control-table-data-feature{
+    padding: 0 10px 0 35px;
+}
+
+.control-table-data-feature-aspect{
+    padding: 0 10px 0 45px;
+}
+
+.control-table-data-scenario{
+    padding: 0 10px 0 55px;
+}
+
+.feature {
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    padding: 3px 0 0 0;
+    font-size:  15px;
+    font-weight: bold;
+    color: black;
+    background-color: transparent;
+}
+
+.feature-aspect {
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    padding: 4px 0 0 0;
+    font-size:  14px;
+    font-weight: bold;
+    color: black;
+    background-color: transparent;
+}
+
+.narrative {
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-style: italic;
+    padding: 0 0 0 60px;
+    color: black;
+    background-color: transparent;
+}
+
+.narrative-edit {
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-style: italic;
+    padding: 0 0 0 60px;
+    color: black;
+    background-color: papayawhip;
+    border-top: 0px solid lightgrey;
+    border-bottom: 0px solid lightgrey;
+}
+
+.scenario{
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    padding: 2px 0 0 0px;
+    color: darkslategrey;
+    background-color: transparent;
+}
+
+.open-status-open{
+    font-size: 16px;
+    color: cornflowerblue;
+}
+
+.open-status-closed{
+    font-size: 16px;
+    color: lightgrey;
+}
+
+.item-indent-none{
+    width: 1px;
+}
+
+.item-indent-section{
+    width: 10px;
+}
+
+.item-indent-feature{
+    width: 20px;
+}
+
+.item-indent-feature-aspect{
+    width: 25px;
+}
+
+.item-indent-scenario{
+    width: 40px;
+}
+
+.step-type-col{
+    min-width: 400px;
+}
+
+.step-editor{
+    width: 100%;
+}
+
+.scenario-step-editor{
+    width: 100%;
+    margin: 0 0 0 0px;
+}
+
+.scenario-step-type{
+    font-weight: bold;
+    padding: 3px 5px 0 0;
+    width: 50px;
+}
+
+.scenario-step-type-chooser{
+    font-weight: bold;
+    padding: 0px 5px 0 0;
+    min-width: 60px;
+    border: 0px;
+    border-radius: 0px;
+    margin: 0;
+    height: 24px;
+    box-shadow: none;
+    background-color: papayawhip;
+}
+
+.step-background{
+    color: cornflowerblue;
+}
+
+.scenario-step-text{
+    padding: 3px 5px 0 0;
+}
+
+.suggested-steps{
+    margin: 2px 40px 0 85px;
+    border: 1px solid lightgrey;
+}
+.suggested-step{
+    padding: 2px 2px 2px 5px;
+}
+
+.suggested-highlight{
+    background-color: yellow;
+}
+
+.domain-item{
+    margin: 5px 20px 0 0;
+    padding: 0 0 5px 0;
+    border-bottom: 1px solid lightgrey;
+}
+
+.domain-term{
+    color: darkred;
+    font-weight: bold;
+}
+
+.dragging-item{
+    color: lightgrey;
+}
+
+.greyed-out{
+    color: darkgrey;
+}
+
+.removed-item{
+    text-decoration: line-through;
+}
+
+
+
+.highlight{
+    background-color: powderblue;
+}
+
+.in-scope{
+    font-size: 10px;
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+    padding: 1px;
+    margin: 0;
+    color: black;
+    background-color: lightgrey;
+}
+
+.out-scope{
+    font-size: 10px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    padding: 1px;
+    margin: 0;
+    color: transparent;
+    background-color: transparent;
+}
+
+/* -- Design Text --------------------------------------------------------------------------------------------------- */
+
+.text-underline{
+    border-bottom: 1px solid lightgrey;
+}
+
+.text-title{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    font-weight: normal;
+    color: black;
+}
+
+.text-note{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: normal;
+    color: darkgrey;
+}
+
+.item-text-editable{
+    font-family: 'Baskervile', 'Palatino Linotype', Times, serif;
+    font-size:  13px;
+    padding: 2px;
+    margin: 0 0 10px 0;
+    color: black;
+    background-color: papayawhip;
+    border: 0px solid lightgrey;
+}
+
+.item-text{
+    font-family: 'Baskervile', 'Palatino Linotype', Times, serif;
+    font-size:  13px;
+    padding: 0;
+    margin: 0 0 10px 0;
+    color: black;
+    background-color: transparent;
+}
+
+
+.editor-panel-large{
+    min-height: 300px;
+}
+
+.editor-panel-small{
+    min-height: 100px;
+}
+
+.editor-panel-edit{
+    padding: 2px 0 0 3px;
+    border: 0px solid lightgrey;
+    background-color: papayawhip;
+}
+
+.editor-toolbar{
+    margin: 3px 0 0 0;
+}
+
+
+
+.move-target{
+    height: 5px;
+    color: transparent;
+}
+
+.move-target-active{
+    height: 44px;
+    color: lightgrey;
+    background-color: white;
+}
+
+/*.active-open{*/
+    /*border: 1px solid lightgrey;*/
+    /*border-radius: 3px;*/
+    /*background-color: whitesmoke;*/
+/*}*/
+
+/*.active-closed{*/
+    /*border: 1px solid lightgrey;*/
+    /*border-radius: 3px;*/
+    /*background-color: whitesmoke;*/
+/*}*/
+
+.change-item-old{
+    color: darkred;
+    font-weight: bold;
+}
+
+.change-item-new{
+    color: darkgreen;
+    font-weight: bold;
+}
+
+.green{
+  color: green;
+}
+
+.blue{
+  color: lightblue;
+}
+
+.red{
+  color: red;
+}
+
+.lgrey {
+    color: lightgrey;
+}
+
+.invisible {
+    color: transparent;
+}
+
+.drag-icon {
+    width: 24px;
+    font-size: 10px;
+    padding: 0;
+}
+
+/* -- Dev Design Mash ----------------------------------------------------------------------------------------------- */
+
+.mash-item {
+    margin: 0;
+    padding: 2px 0 0 0px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    background-color: transparent;
+}
+
+.mash-linked {
+    color: black;
+}
+
+.mash-not-implemented {
+    color: lightgrey;
+}
+
+.mash-not-designed {
+    color: lightgrey;
+}
+
+.mash-not-linked {
+    color: transparent;
+}
+
+.mash-not-implemented {
+    color: darkgrey;
+}
+
+.mash-pass {
+    color: darkgreen;
+}
+
+.mash-fail {
+    color: red;
+}
+
+/* -- Add Item Groups ----------------------------------------------------------------------------------------------- */
+.add-icon {
+    color: lightgrey;
+    font-size: 10px;
+}
+
+.add-icon-active {
+    cursor: pointer;
+    color: darkgreen;
+    font-size: 10px;
+    padding: 0;
+}
+
+.add-label {
+    color: lightgrey;
+    font-size: 10px;
+    padding: 3px 0 0 3px;
+}
+
+.add-label-active {
+    cursor: pointer;
+    color: black;
+    font-size: 10px;
+    padding: 3px 0 0 3px;
+}
+
+
+.subtleButton {
+    color: grey;
+    background-color: lightgrey ;
+}
+
+.component-selected{
+  background-color: #0b97c4;
+}
+
+.component-normal{
+  background-color: #EEEEEE;
+}
+
+
+
+/* DRAFT JS */
+
+.RichEditor-root {
+  background: #fff;
+  border: 1px solid #ddd;
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  padding: 15px;
+}
+
+.RichEditor-editor {
+  border-top: 1px solid #ddd;
+  cursor: text;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-editor .public-DraftEditor-content {
+  margin: 0 -15px -15px;
+  padding: 15px;
+}
+
+.RichEditor-editor .public-DraftEditor-content {
+  min-height: 100px;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.RichEditor-controls {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 2px 0;
+  display: inline-block;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
