@@ -49,11 +49,11 @@ class ClientDesignServices{
             scenarioReferenceId:    'NONE',
             scenarioStepId:         'NONE',
             featureFilesLocation:   '',
-            saveToDb:               true
+            designComponentType:    'NONE'
         };
 
         if(newDesignId != currentDesignId) {
-            store.dispatch(setCurrentUserItemContext(context));
+            store.dispatch(setCurrentUserItemContext(context, true));
 
             return true;
         }
@@ -98,10 +98,10 @@ class ClientDesignServices{
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
                 featureFilesLocation:   'NONE',
-                saveToDb:               true
+                designComponentType:    'NONE'
             };
 
-            store.dispatch(setCurrentUserItemContext(context));
+            store.dispatch(setCurrentUserItemContext(context, true));
 
             Meteor.call('design.removeDesign', designId);
             return true;

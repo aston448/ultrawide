@@ -10,8 +10,8 @@ Meteor.methods({
         FeatureFileServices.updateFileData(userContext);
     },
 
-    'featureFiles.writeFeatureFile'(userContext){
-        FeatureFileServices.writeFeatureFile(userContext);
+    'featureFiles.writeFeatureFile'(featureReferenceId, userContext){
+        FeatureFileServices.writeFeatureFile(featureReferenceId, userContext);
     },
 
 

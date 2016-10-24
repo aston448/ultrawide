@@ -37,6 +37,8 @@ class ClientWorkPackageServices {
     // Sets the currently selected work package as part of the global state
     setWorkPackage(userContext, newWorkPackageId){
 
+        // Returns updated context so this can be passed on if needed
+
         if(newWorkPackageId != userContext.workPackageId) {
 
             const context = {
@@ -50,16 +52,16 @@ class ClientWorkPackageServices {
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
                 featureFilesLocation:   userContext.featureFilesLocation,
-                saveToDb:               true
+                designComponentType:    'NONE'
             };
 
-            store.dispatch(setCurrentUserItemContext(context));
+            store.dispatch(setCurrentUserItemContext(context, true));
 
-            return true;
+            return context;
         }
 
         // Not an error - just indicates no update needed
-        return false;
+        return userContext;
     };
 
     // Gets the full details of a Design or Design Update item that relates to a Work Package item
@@ -183,13 +185,13 @@ class ClientWorkPackageServices {
     developWorkPackage(userContext, wpToDevelopId){
 
         // Set the current context
-        this.setWorkPackage(userContext, wpToDevelopId);
+        let updatedContext = this.setWorkPackage(userContext, wpToDevelopId);
 
         // Load dev data
         let loading = ClientContainerServices.getDevData();
 
         // Get the latest DEV data for the Mash
-        ClientMashDataServices.createFeatureMashData(userContext);
+        ClientMashDataServices.createFeatureMashData(updatedContext);
 
         // Switch to Dev View
         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_WORK));

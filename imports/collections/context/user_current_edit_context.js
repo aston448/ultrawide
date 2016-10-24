@@ -18,7 +18,8 @@ let Schema = new SimpleSchema({
     featureReferenceId:     {type: String, defaultValue: 'NONE'},       // DEV Mash Feature Ref (if any)
     scenarioReferenceId:    {type: String, defaultValue: 'NONE'},       // DEV Mash Scenario Ref (if any)
     scenarioStepId:         {type: String, defaultValue: 'NONE'},       // DEV Mash Step Ref (if any)
-    featureFilesLocation:   {type: String, defaultValue: 'NONE'}        // DEV test feature files location (if any)
+    featureFilesLocation:   {type: String, defaultValue: 'NONE'},       // DEV test feature files location (if any)
+    designComponentType:    {type: String, defaultValue: 'NONE'}        // Useful information when displaying DEV Mash
 });
 
 UserCurrentEditContext.attachSchema(Schema);

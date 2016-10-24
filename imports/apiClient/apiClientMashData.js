@@ -26,8 +26,8 @@ class ClientMashDataServices {
 
     createFeatureMashData(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, 'Creating feature mash data for user {} with Design {}, Design Version {} and Test Location {}',
-            userContext.userId, userContext.designId, userContext.designVersionId, userContext.featureFilesLocation);
+        log((msg) => console.log(msg), LogLevel.DEBUG, 'Creating feature mash data for user {} with Design {}, Design Version {} Work Package {} and Test Location {}',
+            userContext.userId, userContext.designId, userContext.designVersionId, userContext.workPackageId, userContext.featureFilesLocation);
 
         if(userContext.designId != 'NONE' && userContext.designVersionId != 'NONE') {
 

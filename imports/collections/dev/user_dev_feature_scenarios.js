@@ -13,7 +13,9 @@ let Schema = new SimpleSchema({
     userDevFeatureId:       {type: String},
     featureReferenceId:     {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
     scenarioReferenceId:    {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
+    // Data
     scenarioText:           {type: String},                         // Unique functional text - plain text
+    // Status
     scenarioStatus:         {type: String}
 });
 

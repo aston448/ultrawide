@@ -43,10 +43,10 @@ class ClientDesignVersionServices{
             scenarioReferenceId:    'NONE',
             scenarioStepId:         'NONE',
             featureFilesLocation:   'NONE',
-            saveToDb:               true
+            designComponentType:    'NONE'
         };
 
-        store.dispatch(setCurrentUserItemContext(context));
+        store.dispatch(setCurrentUserItemContext(context, true));
 
         return true;
 

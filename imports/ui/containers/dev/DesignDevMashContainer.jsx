@@ -10,18 +10,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import Design from '../../components/select/Design.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
+import DesignDevMashItem from '../../components/dev/DesignDevMashItem.jsx';
 
 // Ultrawide Services
-import {RoleType} from '../../../constants/constants.js';
+import {RoleType, ComponentType} from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
 
 // Bootstrap
-import {Grid, Col, Row} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
-import {Button} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -40,67 +37,61 @@ class DesignItemMashList extends Component {
 
     }
 
-    onExportFeature(context){
-        ClientFeatureFileServices.writeFeatureFile(context);
-    }
 
-    renderDesignFeatures(features){
-        return features.map((feature) => {
-            return (
-                <FeatureDesignMash
-                    key={feature._id}
-                    feature={feature}
-                />
-            );
-        });
-    }
 
-    renderFeatureDesignScenarios(scenarios){
-        return scenarios.map((scenario) => {
-            return (
-                <ScenarioDesignMash
-                    key={scenario._id}
-                    scenario={scenario}
-                />
-            );
-        });
-    }
-
-    renderFeatureDevScenarios(scenarios){
-        return scenarios.map((scenario) => {
-            return (
-                <ScenarioDevMash
-                    key={scenario._id}
-                    scenario={scenario}
-                />
-            );
+    renderDesignItemMash(mashData){
+        return mashData.map((mashItem) => {
+            if(mashItem) {
+                return (
+                    <DesignDevMashItem
+                        key={mashItem._id}
+                        mashItem={mashItem}
+                    />
+                );
+            } else {
+                return(<div></div>);
+            }
         });
     }
 
     render() {
 
-        const {designFeatureName, designScenarios, devScenarios, currentUserRole, currentUserItemContext} = this.props;
+        const {designMashItemData, currentUserRole, userContext} = this.props;
 
-        let designPanelHeader = 'Feature: ' + designFeatureName;
+        let panelHeader = '';
+
+        switch(userContext.designComponentType){
+            case ComponentType.APPLICATION:
+            case ComponentType.DESIGN_SECTION:
+                panelHeader = 'Features in this ' + userContext.designComponentType;
+                break;
+            case ComponentType.FEATURE:
+            case ComponentType.FEATURE_ASPECT:
+                panelHeader = 'Scenarios in this ' + userContext.designComponentType;
+                break;
+            case ComponentType.SCENARIO:
+                panelHeader = 'Steps in this ' + userContext.designComponentType;
+                break;
+        }
 
 
-        let mainPanel = '';
+        let mainPanel = 'Select a design item';
 
-        if(currentUserItemContext.featureReferenceId != 'NONE') {
+        if(designMashItemData) {
             mainPanel =
-            <Panel className="panel-text panel-text-body" header={designPanelHeader}>
-                <Grid>
-                    <Row>
-                        <Col md={6} className="close-col">
-                            {/*{this.renderFeatureDesignScenarios(designScenarios)}*/}
-                            <Button onClick={() => this.onExportFeature(currentUserItemContext)}>Export Feature</Button>
-                        </Col>
-                        <Col md={6} className="close-col">
-
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+                <Panel className="panel-text panel-text-body" header={panelHeader}>
+                    <Grid className="close-grid">
+                        <Row>
+                            <Col md={6} className="close-col">
+                                Design
+                            </Col>
+                            <Col md={6} className="close-col">
+                                Build
+                            </Col>
+                        </Row>
+                    </Grid>
+                    {this.renderDesignItemMash(designMashItemData)}
+                </Panel>;
         }
 
         return(
@@ -113,9 +104,7 @@ class DesignItemMashList extends Component {
 }
 
 DesignItemMashList.propTypes = {
-    designFeatureName: PropTypes.string.isRequired,
-    designScenarios: PropTypes.array.isRequired,
-    devScenarios: PropTypes.array.isRequired
+    designMashItemData: PropTypes.array
 };
 
 
@@ -123,7 +112,7 @@ DesignItemMashList.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUserRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 
@@ -133,13 +122,11 @@ DesignItemMashList = connect(mapStateToProps)(DesignItemMashList);
 
 export default DesignDevMashContainer = createContainer(({params}) => {
 
-    //
-    //let designScenarios = ClientContainerServices.getDesignMashScenarioData();
+
+    let designMashItemData = ClientContainerServices.getDesignMashData(params.userContext);
 
     return{
-        designFeatureName: 'Feature 1',
-        designScenarios: [],
-        devScenarios: []
+        designMashItemData
     }
 
 

@@ -60,10 +60,10 @@ class ClientDesignComponentServices{
                 scenarioReferenceId:    scenarioReferenceId,
                 scenarioStepId:         'NONE',
                 featureFilesLocation:   userContext.featureFilesLocation,
-                saveToDb:               true
+                designComponentType:    component.componentType
             };
 
-            store.dispatch(setCurrentUserItemContext(context));
+            store.dispatch(setCurrentUserItemContext(context, true));
 
             return true;
         }
@@ -265,10 +265,10 @@ class ClientDesignComponentServices{
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
                 featureFilesLocation:   userContext.featureFilesLocation,
-                saveToDb:               true
+                designComponentType:    'NONE'
             };
 
-            store.dispatch(setCurrentUserItemContext(context));
+            store.dispatch(setCurrentUserItemContext(context, true));
             return true;
 
         } else {

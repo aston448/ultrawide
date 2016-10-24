@@ -61,7 +61,7 @@ class DevApplicationsList extends Component {
 
     render() {
 
-        const {wpApplications, featureFiles, currentUserItemContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
+        const {wpApplications, featureFiles, userContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
 
         let layout = '';
 
@@ -75,21 +75,21 @@ class DevApplicationsList extends Component {
         let mash =
             <Panel header="Implementation Status" className="panel-update panel-update-body">
                 <DesignDevMashContainer params={{
-                    userContext: currentUserItemContext
+                    userContext: userContext
                 }}/>
             </Panel>;
 
         // Files
         let devFiles =
-            <Panel header="Dev Feature Files" className="panel-update panel-update-body">
+            <Panel header="Build Feature Files" className="panel-update panel-update-body">
 
             </Panel>;
 
         // Domain Dictionary
         let domainDictionary =
             <DomainDictionaryContainer params={{
-                designId: currentUserItemContext.designId,
-                designVersionId: currentUserItemContext.designVersionId
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId
             }}/>;
 
 
@@ -162,7 +162,7 @@ DevApplicationsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserItemContext: state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
         currentItemName: state.currentDesignComponentName,
         view: state.currentAppView,
         mode: state.currentViewMode,

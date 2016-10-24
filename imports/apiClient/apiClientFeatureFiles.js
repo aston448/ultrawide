@@ -24,13 +24,13 @@ import {reorderDropAllowed, log} from '../common/utils.js';
 
 class ClientFeatureFileServices {
 
-    writeFeatureFile(userContext){
+    writeFeatureFile(featureReferenceId, userContext){
 
         log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}', userContext.featureFilesLocation);
 
-        if(userContext.featureFilesLocation != 'NONE') {
+        if(featureReferenceId && userContext.featureFilesLocation != 'NONE') {
 
-            Meteor.call('featureFiles.writeFeatureFile', userContext);
+            Meteor.call('featureFiles.writeFeatureFile', featureReferenceId, userContext);
             return true;
 
         } else {

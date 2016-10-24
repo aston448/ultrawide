@@ -12,7 +12,7 @@ import {log} from '../common/utils.js';
 class FeatureFileServices{
 
     // Convert a whole base design feature into a Gherkin feature file
-    writeFeatureFile(userContext){
+    writeFeatureFile(featureReferenceId, userContext){
 
         const path = userContext.featureFilesLocation;
 
@@ -32,7 +32,7 @@ class FeatureFileServices{
                 feature = DesignComponents.findOne(
                     {
                         designVersionId: userContext.designVersionId,
-                        componentReferenceId: userContext.featureReferenceId
+                        componentReferenceId: featureReferenceId
                     }
                 );
 
@@ -42,7 +42,7 @@ class FeatureFileServices{
                     {
                         designVersionId: userContext.designVersionId,
                         componentType: ComponentType.SCENARIO,
-                        componentFeatureReferenceId: userContext.featureReferenceId
+                        componentFeatureReferenceId: featureReferenceId
                     }
                 ).fetch();
                 break;
@@ -52,7 +52,7 @@ class FeatureFileServices{
                     {
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
-                        componentReferenceId: userContext.featureReferenceId
+                        componentReferenceId: featureReferenceId
                     }
                 );
 
@@ -63,7 +63,7 @@ class FeatureFileServices{
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
                         componentType: ComponentType.SCENARIO,
-                        componentFeatureReferenceId: userContext.featureReferenceId
+                        componentFeatureReferenceId: featureReferenceId
                     }
                 ).fetch();
                 break;
@@ -75,7 +75,7 @@ class FeatureFileServices{
             {
                 designVersionId: userContext.designVersionId,
                 designUpdateId: userContext.designUpdateId,
-                featureReferenceId: userContext.featureReferenceId
+                featureReferenceId: featureReferenceId
             }
         ).fetch();
 
@@ -177,6 +177,25 @@ class FeatureFileServices{
         } else {
             return '';
         }
+    }
+
+    getFeatureScenarios(fileText){
+
+        let scenarioRegex = new RegExp('/Scenario:/', 'g');
+
+        let scenarios = [];
+
+        let matchArr, start, end;
+
+        while ((matchArr = scenarioRegex.exec(fileText)) !== null) {
+            start = matchArr.index;
+            end = fileText.indexOf('\n', start);
+
+            scenarios.push(fileText.substring(start + 9, end).trim());
+        }
+
+        return scenarios;
+
     }
 
 }

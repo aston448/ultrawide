@@ -165,10 +165,10 @@ class ClientUserContextServices {
                 scenarioReferenceId:    userContext.scenarioReferenceId,
                 scenarioStepId:         userContext.scenarioStepId,
                 featureFilesLocation:   '/Users/aston/WebstormProjects/shared/test/',                //userContext.featureFilesLocation,
-                saveToDb:               false       // Don't save - we are reading from DB here!
+                designComponentType:    userContext.designComponentType
             };
 
-            store.dispatch(setCurrentUserItemContext(context));
+            store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
 
         } else {
             // No context saved so default to nothing
@@ -183,10 +183,10 @@ class ClientUserContextServices {
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
                 featureFilesLocation:   '/Users/aston/WebstormProjects/shared/test/',
-                saveToDb:               false       // Don't save - we are reading from DB here!
+                designComponentType:    'NONE'
             };
 
-            store.dispatch(setCurrentUserItemContext(emptyContext));
+            store.dispatch(setCurrentUserItemContext(emptyContext, false)); // Don't save - we are reading from DB here!
         }
 
         // // Set developer context too if developer

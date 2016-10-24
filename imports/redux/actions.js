@@ -70,7 +70,7 @@ export function toggleDomainDictionary(isVisible) {
 
 // What any user is looking at or designer is working on or a developer is developing
 
-export function setCurrentUserItemContext(contextItem){
+export function setCurrentUserItemContext(contextItem, saveToDb){
 
     console.log("ACTIONS: Current user context update: DE: " + contextItem.designId + " DV: " + contextItem.designVersionId + " DU: " + contextItem.designUpdateId + " WP: " + contextItem.workPackageId + " DC: " + contextItem.designComponentId);
 
@@ -87,12 +87,13 @@ export function setCurrentUserItemContext(contextItem){
             scenarioReferenceId:    contextItem.scenarioReferenceId,
             scenarioStepId:         contextItem.scenarioStepId,
             featureFilesLocation:   contextItem.featureFilesLocation,
+            designComponentType:    contextItem.designComponentType
         };
 
         dispatch({type: SET_CURRENT_USER_ITEM_CONTEXT, newUserItemContext: newContext});
 
         // And persist the settings - only want to do this if we are changing them...
-        if(contextItem.saveToDb) {
+        if(saveToDb) {
             Meteor.call('userContext.setCurrentUserContext', contextItem);
         }
     };
