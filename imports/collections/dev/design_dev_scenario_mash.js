@@ -9,18 +9,20 @@ export const DesignDevScenarioMash = new Mongo.Collection('designDevScenarioMash
 
 let Schema = new SimpleSchema({
     // Identity
-    userId:                     {type: String},                         // Meteor user id
-    designVersionId:            {type: String},
-    designUpdateId:             {type: String, optional: true},
-    workPackageId:              {type: String, optional: true},
-    designFeatureReferenceId:   {type: String},
-    userDevScenarioId:          {type: String, optional: true},
-    designScenarioReferenceId:  {type: String, optional: true},
+    userId:                         {type: String},                         // Meteor user id
+    designVersionId:                {type: String},
+    designUpdateId:                 {type: String, optional: true},
+    workPackageId:                  {type: String, optional: true},
+    designFeatureReferenceId:       {type: String},
+    designFeatureAspectReferenceId: {type: String, optional: true},
+    designScenarioReferenceId:      {type: String, optional: true},
+    userDevScenarioId:              {type: String, optional: true},
+
     // Data
-    scenarioName:               {type: String},
+    scenarioName:                   {type: String},
     // Status
-    scenarioMashStatus:         {type: String},
-    scenarioTestStatus:         {type: String},
+    scenarioMashStatus:             {type: String},
+    scenarioTestStatus:             {type: String},
 });
 
 DesignDevScenarioMash.attachSchema(Schema);

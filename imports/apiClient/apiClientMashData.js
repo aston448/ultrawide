@@ -24,14 +24,18 @@ import { log} from '../common/utils.js';
 
 class ClientMashDataServices {
 
-    createFeatureMashData(userContext){
+    createDevMashData(userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, 'Creating feature mash data for user {} with Design {}, Design Version {} Work Package {} and Test Location {}',
+        log((msg) => console.log(msg), LogLevel.DEBUG, 'Creating user dev mash data for user {} with Design {}, Design Version {} Work Package {} and Test Location {}',
             userContext.userId, userContext.designId, userContext.designVersionId, userContext.workPackageId, userContext.featureFilesLocation);
 
         if(userContext.designId != 'NONE' && userContext.designVersionId != 'NONE') {
 
+            Meteor.call('mash.loadUserFeatureFileData', userContext);
+
             Meteor.call('mash.createFeatureMashData', userContext);
+
+            Meteor.call('mash.createScenarioMashData', userContext);
             return true;
 
         } else {

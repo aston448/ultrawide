@@ -136,8 +136,7 @@ export const ScenarioStepStatus = {
 };
 
 export const UserDevFeatureFileStatus = {
-    FILE_FROM_DESIGN:       'FILE_FROM_DESIGN',         // File exported from Design to Dev
-    FILE_FROM_DEV:          'FILE_FROM_DEV',            // File imported from Dev
+    FILE_VALID:             'FILE_VALID',               // File OK as Feature
     FILE_INVALID:           'FILE_INVALID'              // Not able to parse as a Feature
 };
 

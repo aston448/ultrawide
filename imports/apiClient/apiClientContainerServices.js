@@ -20,12 +20,13 @@ import { DomainDictionary }         from '../collections/design/domain_dictionar
 import { DesignDevFeatureMash }     from '../collections/dev/design_dev_feature_mash.js';
 import { DesignDevScenarioMash }    from '../collections/dev/design_dev_scenario_mash.js';
 import { DesignDevScenarioStepMash }from '../collections/dev/design_dev_scenario_step_mash.js';
+import { UserDevFeatures }          from '../collections/dev/user_dev_features.js';
 
 // Ultrawide GUI Components
 
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, LogLevel } from '../constants/constants.js';
+import { ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, LogLevel } from '../constants/constants.js';
 import ClientDesignServices from '../apiClient/apiClientDesign.js';
 
 import { log } from '../common/utils.js';
@@ -875,7 +876,9 @@ class ClientContainerServices{
                         designFeatureReferenceId:   feature.componentReferenceId
                     });
 
-                    featureMashData.push(featureMash);
+                    if(featureMash) {
+                        featureMashData.push(featureMash);
+                    }
                 });
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Found {} feature mash entries for current component", featureMashData.length);
@@ -884,42 +887,39 @@ class ClientContainerServices{
                 break;
 
             case ComponentType.FEATURE:
-                // Get all Scenarios in this Feature
+                // Here we want to get all Scenario data that may be related to the feature.  This should already be set in the Scenario Mash data
 
-                let featureScenarios = [];
-                if(userContext.designUpdateId === 'NONE'){
-                    // Base design version
-                    featureScenarios = DesignComponents.find({
-                        designId:                       userContext.designId,
-                        designVersionId:                userContext.designVersionId,
-                        componentType:                  ComponentType.SCENARIO,
-                        componentFeatureReferenceId:    userContext.featureReferenceId
-                    }).fetch();
-                } else {
-                    // Update
-                    featureScenarios = DesignUpdateComponents.find({
-                        designId:                       userContext.designId,
-                        designVersionId:                userContext.designVersionId,
-                        designUpdateId:                 userContext.designUpdateId,
-                        componentType:                  ComponentType.SCENARIO,
-                        componentFeatureReferenceIdNew: userContext.featureReferenceId
-                    }).fetch();
-                }
+                // let featureScenarios = WorkPackageComponents.find({
+                //     workPackageId:                  userContext.workPackageId,
+                //     componentType:                  ComponentType.SCENARIO,
+                //     componentFeatureReferenceId:    userContext.featureReferenceId,
+                //     componentActive:                true
+                // }).fetch();
+                //
+                // log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenarios in Work Package feature", featureScenarios.length);
 
                 let scenarioMashData = [];
-                let scenarioMash = null;
+                // let scenarioMash = null;
 
                 // Get scenario mash data
-                featureScenarios.forEach((scenario) => {
-                    scenarioMash = DesignDevScenarioMash.findOne({
+                //log((msg) => console.log(msg), LogLevel.TRACE, "Looking for scenario mash data with user id {}, DV: {}, DU: {}", scenarioMash);
+
+                // featureScenarios.forEach((scenario) => {
+                    scenarioMashData = DesignDevScenarioMash.find({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designUpdateId:             userContext.designUpdateId,
-                        designScenarioReferenceId:  scenario.componentReferenceId
-                    });
+                        designFeatureReferenceId:   userContext.featureReferenceId
+                    }).fetch();
 
-                    scenarioMashData.push(scenarioMash);
-                });
+                    // log((msg) => console.log(msg), LogLevel.TRACE, "Adding {} to scenario mash data", scenarioMash);
+                    //
+                    // if(scenarioMash) {
+                    //     scenarioMashData.push(scenarioMash);
+                    // }
+                // });
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current component", scenarioMashData.length);
 
                 return scenarioMashData;
                 break;
@@ -927,27 +927,18 @@ class ClientContainerServices{
             case ComponentType.FEATURE_ASPECT:
                 // Get all Scenarios in this Feature Aspect
 
-                let aspectScenarios = [];
-                if(userContext.designUpdateId === 'NONE'){
-                    // Base design version
-                    aspectScenarios = DesignComponents.find({
-                        designId:                       userContext.designId,
-                        designVersionId:                userContext.designVersionId,
-                        componentType:                  ComponentType.SCENARIO,
-                        componentFeatureReferenceId:    userContext.featureReferenceId,
-                        componentParentId:              userContext.designComponentId       // Scenarios always directly under a Feature Aspect
-                    }).fetch();
-                } else {
-                    // Update
-                    aspectScenarios = DesignUpdateComponents.find({
-                        designId:                       userContext.designId,
-                        designVersionId:                userContext.designVersionId,
-                        designUpdateId:                 userContext.designUpdateId,
-                        componentType:                  ComponentType.SCENARIO,
-                        componentFeatureReferenceIdNew: userContext.featureReferenceId,
-                        componentParentIdNew:           userContext.designComponentId       // Scenarios always directly under a Feature Aspect
-                    }).fetch();
-                }
+                // Get reference of particular Aspect selected
+                const aspectRef = DesignComponents.findOne({_id: userContext.designComponentId}).componentReferenceId;
+
+                let aspectScenarios = WorkPackageComponents.find({
+                    workPackageId:                  userContext.workPackageId,
+                    componentType:                  ComponentType.SCENARIO,
+                    componentParentReferenceId:     aspectRef,
+                    componentFeatureReferenceId:    userContext.featureReferenceId,
+                    componentActive:                true
+                }).fetch();
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenarios in Work Package feature aspect", aspectScenarios.length);
 
                 let aspectScenarioMashData = [];
                 let aspectScenarioMash = null;
@@ -958,11 +949,15 @@ class ClientContainerServices{
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designUpdateId:             userContext.designUpdateId,
-                        designScenarioReferenceId:  scenario.componentReferenceId
+                        designFeatureReferenceId:   userContext.featureReferenceId
                     });
 
-                    aspectScenarioMashData.push(aspectScenarioMash);
+                    if(aspectScenarioMash) {
+                        aspectScenarioMashData.push(aspectScenarioMash);
+                    }
                 });
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current component", aspectScenarioMashData.length);
 
                 return aspectScenarioMashData;
                 break;
@@ -1029,6 +1024,36 @@ class ClientContainerServices{
 
         // No parent found
         return false;
+
+    }
+
+    getDevFilesData(userContext){
+
+        // Get the data on feature files in the user's build area, split into:
+        // - Relevant to current WP
+        // - Relevant to wider design
+        // - Unknown in Design
+
+        const wpFiles = UserDevFeatures.find({
+            userId: userContext.userId,
+            featureStatus: UserDevFeatureStatus.FEATURE_IN_WP
+        }).fetch();
+
+        const designFiles = UserDevFeatures.find({
+            userId: userContext.userId,
+            featureStatus: UserDevFeatureStatus.FEATURE_IN_DESIGN
+        }).fetch();
+
+        const unknownFiles = UserDevFeatures.find({
+            userId: userContext.userId,
+            featureStatus: UserDevFeatureStatus.FEATURE_UNKNOWN
+        }).fetch();
+
+        return{
+            wpFiles: wpFiles,
+            designFiles: designFiles,
+            unknownFiles: unknownFiles
+        }
 
     }
 

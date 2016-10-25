@@ -8,6 +8,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
+import TextLookups from '../../../common/lookups.js';
 import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
 import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
 
@@ -51,19 +52,24 @@ class DesignDevMashItem extends Component {
           // If adding a feature file, refresh the view...
           ClientMashDataServices.createFeatureMashData(context);
       }
+    }
 
-
+    onExportScenario(scenarioReferenceId, context){
+        //TODO - are we going to support this?
     }
 
     render(){
-
         const { mashItem, userContext } = this.props;
+
+        console.log("Render mash item: " + mashItem);
 
         let mashStyle = '';
         let testStyle = '';
 
-        let mashItemDesign = '';
-        let mashItemDev = '';
+        let mashItemName = '';
+        let mashItemStatus = '';
+        let mashItemActions = '';
+        let mashItemTestStatus = '';
 
 
         switch(userContext.designComponentType){
@@ -73,57 +79,83 @@ class DesignDevMashItem extends Component {
                 mashStyle = mashItem.featureMashStatus;
                 testStyle = mashItem.featureTestStatus;
 
-                // Display depends on whether Feature is in Dev or not
+                mashItemName = <div className={"mash-item " + mashStyle}>
+                    {mashItem.featureName}
+                </div>;
 
+                mashItemStatus = <div className={"mash-item " + mashStyle}>
+                    {TextLookups.mashStatus(mashItem.featureMashStatus)}
+                </div>;
+
+                mashItemTestStatus = <div className={"mash-item " + mashStyle}>
+                    {TextLookups.mashTestStatus(mashItem.featureTestStatus)}
+                </div>;
+
+                // Actions depend on status
                 switch (mashItem.featureMashStatus){
                     case MashStatus.MASH_LINKED:
                         // The feature has a dev test file
-                        mashItemDesign =
-                            <InputGroup>
-                                <InputGroup.Addon>
-                                    <div className={testStyle}><Glyphicon glyph="list-alt"/></div>
-                                </InputGroup.Addon>
-                                <div className={"mash-item " + mashStyle}>
-                                    {mashItem.featureName}
-                                </div>
-                            </InputGroup>;
-
-                        mashItemDev =
-                            <InputGroup>
-                                <InputGroup.Addon>
-                                    <div className={testStyle}><Glyphicon glyph="list-alt"/></div>
-                                </InputGroup.Addon>
-                                <div className={"mash-item " + mashStyle}>
-                                    {mashItem.featureName}
-                                </div>
-                            </InputGroup>;
-
                         break;
-
                     default:
                         // Anything else - feature not implemented so option to export to dev
-                        mashItemDesign =
+                        mashItemActions=
                             <InputGroup>
-                                <InputGroup.Addon>
-                                    <div className={testStyle}><Glyphicon glyph="list-alt"/></div>
-                                </InputGroup.Addon>
-                                <div className={"mash-item " + mashStyle}>
-                                    {mashItem.featureName}
-                                </div>
                                 <InputGroup.Addon onClick={() => this.onExportFeature(mashItem.designFeatureReferenceId, userContext)}>
-                                    <div><Glyphicon glyph="download-alt"/></div>
+                                    <div><Glyphicon glyph="download"/></div>
                                 </InputGroup.Addon>
                             </InputGroup>;
-
-                        mashItemDev =
-                            <div>Feature not implemented</div>
 
                 }
 
                 break;
             case ComponentType.FEATURE:
             case ComponentType.FEATURE_ASPECT:
-                // TODO
+                // Displaying Scenarios
+                mashStyle = mashItem.scenarioMashStatus;
+                testStyle = mashItem.scenarioTestStatus;
+
+                mashItemName = <div className={"mash-item " + mashStyle}>
+                    {mashItem.scenarioName}
+                </div>;
+
+                mashItemStatus = <div className={"mash-item " + mashStyle}>
+                    {TextLookups.mashStatus(mashItem.scenarioMashStatus)}
+                </div>;
+
+                mashItemTestStatus = <div className={"mash-item " + mashStyle}>
+                    {TextLookups.mashTestStatus(mashItem.scenarioTestStatus)}
+                </div>;
+
+
+                switch (mashItem.scenarioMashStatus){
+                    case MashStatus.MASH_LINKED:
+                        // The scenario is in a dev test file for the feature
+                        break;
+
+                    case MashStatus.MASH_NOT_IMPLEMENTED:
+                        // The scenario is in the design but not in the build
+                        mashItemActions =
+                            <InputGroup>
+                                <InputGroup.Addon onClick={() => this.onExportScenario(mashItem.designScenarioReferenceId, userContext)}>
+                                    <div><Glyphicon glyph="download"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>;
+
+                        break;
+
+                    case MashStatus.MASH_NOT_DESIGNED:
+                        // The scenario is in the build but not in the design
+
+
+                        mashItemActions =
+                            <InputGroup>
+                                <InputGroup.Addon onClick={() => this.onImportScenario(mashItem.designScenarioReferenceId, userContext)}>
+                                    <div><Glyphicon glyph="upload"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>;
+
+                        break;
+                }
                 break;
 
             case ComponentType.SCENARIO:
@@ -138,10 +170,16 @@ class DesignDevMashItem extends Component {
                 <Grid className="close-grid">
                     <Row>
                         <Col md={6} className="close-col">
-                            {mashItemDesign}
+                            {mashItemName}
                         </Col>
-                        <Col md={6} className="close-col">
-                            {mashItemDev}
+                        <Col md={2} className="close-col">
+                            {mashItemStatus}
+                        </Col>
+                        <Col md={2} className="close-col">
+                            {mashItemActions}
+                        </Col>
+                        <Col md={2} className="close-col">
+                            {mashItemTestStatus}
                         </Col>
                     </Row>
                 </Grid>

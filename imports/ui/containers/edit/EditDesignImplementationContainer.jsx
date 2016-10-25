@@ -12,6 +12,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
 import DesignDevMashContainer from '../dev/DesignDevMashContainer.jsx';
 import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
+import DevFilesContainer from '../dev/DevFilesContainer.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -82,7 +83,9 @@ class DevApplicationsList extends Component {
         // Files
         let devFiles =
             <Panel header="Build Feature Files" className="panel-update panel-update-body">
-
+                <DevFilesContainer params={{
+                    userContext: userContext
+                }}/>
             </Panel>;
 
         // Domain Dictionary

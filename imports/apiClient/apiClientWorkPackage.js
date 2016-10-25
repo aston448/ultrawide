@@ -191,7 +191,7 @@ class ClientWorkPackageServices {
         let loading = ClientContainerServices.getDevData();
 
         // Get the latest DEV data for the Mash
-        ClientMashDataServices.createFeatureMashData(updatedContext);
+        ClientMashDataServices.createDevMashData(updatedContext);
 
         // Switch to Dev View
         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_WORK));

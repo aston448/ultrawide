@@ -38,8 +38,10 @@ class DesignItemMashList extends Component {
     }
 
 
-
     renderDesignItemMash(mashData){
+
+        console.log("Rendering mash list of length " + mashData.length)
+
         return mashData.map((mashItem) => {
             if(mashItem) {
                 return (
@@ -48,8 +50,6 @@ class DesignItemMashList extends Component {
                         mashItem={mashItem}
                     />
                 );
-            } else {
-                return(<div></div>);
             }
         });
     }
@@ -59,18 +59,22 @@ class DesignItemMashList extends Component {
         const {designMashItemData, currentUserRole, userContext} = this.props;
 
         let panelHeader = '';
+        let itemHeader = '';
 
         switch(userContext.designComponentType){
             case ComponentType.APPLICATION:
             case ComponentType.DESIGN_SECTION:
                 panelHeader = 'Features in this ' + userContext.designComponentType;
+                itemHeader = 'Feature';
                 break;
             case ComponentType.FEATURE:
             case ComponentType.FEATURE_ASPECT:
                 panelHeader = 'Scenarios in this ' + userContext.designComponentType;
+                itemHeader = 'Scenario';
                 break;
             case ComponentType.SCENARIO:
                 panelHeader = 'Steps in this ' + userContext.designComponentType;
+                itemHeader = 'Step';
                 break;
         }
 
@@ -83,10 +87,16 @@ class DesignItemMashList extends Component {
                     <Grid className="close-grid">
                         <Row>
                             <Col md={6} className="close-col">
-                                Design
+                                {itemHeader}
                             </Col>
-                            <Col md={6} className="close-col">
-                                Build
+                            <Col md={2} className="close-col">
+                                Status
+                            </Col>
+                            <Col md={2} className="close-col">
+                                Actions
+                            </Col>
+                            <Col md={2} className="close-col">
+                                Test
                             </Col>
                         </Row>
                     </Grid>

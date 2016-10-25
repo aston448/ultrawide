@@ -181,18 +181,35 @@ class FeatureFileServices{
 
     getFeatureScenarios(fileText){
 
-        let scenarioRegex = new RegExp('/Scenario:/', 'g');
-
+        let scenarioStartIndex = fileText.indexOf('Scenario:', 0);
+        let scenarioEndIndex = 0;
         let scenarios = [];
 
-        let matchArr, start, end;
+        while (scenarioStartIndex >= 0){
+            scenarioEndIndex = fileText.indexOf('\n', scenarioStartIndex);
 
-        while ((matchArr = scenarioRegex.exec(fileText)) !== null) {
-            start = matchArr.index;
-            end = fileText.indexOf('\n', start);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Looking for scenario name from {} to {}", scenarioStartIndex, scenarioEndIndex);
 
-            scenarios.push(fileText.substring(start + 9, end).trim());
+            scenarios.push(fileText.substring(scenarioStartIndex + 9, scenarioEndIndex).trim());
+
+            scenarioStartIndex = fileText.indexOf('Scenario:', scenarioEndIndex);
         }
+
+
+
+        // let scenarioRegex = new RegExp('/Scenario:/', 'g');
+        //
+        // let scenarios = [];
+        //
+        // let matchArr, start, end;
+        //
+        // while ((matchArr = scenarioRegex.exec(fileText)) !== null) {
+        //     log((msg) => console.log(msg), LogLevel.TRACE, "Found scenario at index {}", matchArr.index);
+        //     start = matchArr.index;
+        //     end = fileText.indexOf('\n', start);
+        //
+        //     scenarios.push(fileText.substring(start + 9, end).trim());
+        // }
 
         return scenarios;
 

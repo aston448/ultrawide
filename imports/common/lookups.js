@@ -1,4 +1,4 @@
-import {ComponentType} from '../constants/constants.js';
+import {ComponentType, MashStatus, MashTestStatus} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -23,6 +23,36 @@ class TextLookups {
                 return 'Text not defined';
         }
     };
+
+
+    mashStatus(mashStatus){
+
+        switch(mashStatus){
+            case MashStatus.MASH_LINKED:
+                return 'Implemented';
+            case MashStatus.MASH_NOT_IMPLEMENTED:
+                return 'Not Implemented';
+            case MashStatus.MASH_NOT_DESIGNED:
+                return 'Not in Design';
+            default:
+                return 'UNKNOWN';
+        }
+
+    };
+
+    mashTestStatus(mashTestStatus){
+
+        switch(mashTestStatus){
+            case MashTestStatus.MASH_NOT_LINKED:
+                return 'Not Implemented';
+            case MashTestStatus.MASH_PENDING:
+                return 'Pending';
+            case MashTestStatus.MASH_PASS:
+                return 'Pass';
+            case MashTestStatus.MASH_FAIL:
+                return 'Fail';
+        }
+    }
 
 }
 
