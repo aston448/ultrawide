@@ -6,6 +6,8 @@ import { Mongo } from 'meteor/mongo';
 
 export const Designs = new Mongo.Collection('designs');
 
+//GlobalDesigns = Designs;
+
 let Schema = new SimpleSchema({
     designName:             {type: String},                                 // The design name - e.g. ULTRAWIDE PROJECT
     designRawText:          {type: Object, blackbox: true, optional: true}, // Text descriptive of this design
@@ -20,3 +22,5 @@ if(Meteor.isServer){
         return Designs.find({});
     })
 }
+
+

@@ -6,7 +6,7 @@ import { UserRoles } from '../../../collections/users/user_roles.js';
 
 
 import { RoleType, ViewType } from '../../../constants/constants.js';
-import ClientUserContextServices from '../../../apiClient/apiClientUserContext.js'
+import ClientLoginServices from '../../../apiClient/apiClientLogin.js'
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -26,37 +26,12 @@ class LoginScreen extends Component {
 
         // TODO: Remove this when proper user login implemented
         // TEMP: User 1 is designer, User 2 is developer ---------------------------------------------------------------
-        switch(role){
-            case RoleType.DESIGNER:
-                Meteor.loginWithPassword('user1', 'user1', (error) => {this.initialise(error, role)});
-                break;
-            case RoleType.DEVELOPER:
-                Meteor.loginWithPassword('user2', 'user2', (error) => {this.initialise(error, role)});
-                break;
-            case RoleType.MANAGER:
-                Meteor.loginWithPassword('user3', 'user3', (error) => {this.initialise(error, role)});
-                break;
-
-        }
+        ClientLoginServices.createMeteorUser(role);
         // TEMP --------------------------------------------------------------------------------------------------------
 
     };
 
-    initialise(error, role){
-        if(error){
-            console.log("LOGIN FAILURE: " + error);
-        } else {
 
-            let userId = Meteor.userId();
-            console.log("LOGGED IN AS METEOR USER: " + userId);
-
-            // Update the redux current item settings from the stored DB data
-            ClientUserContextServices.setInitialSelectionSettings(role, userId);
-
-            ClientUserContextServices.setViewFromUserContext(role, this.props.userItemContext, this.props.userDevContext);
-        }
-
-    }
 
     render() {
         // TODO - add proper login.
@@ -77,8 +52,7 @@ LoginScreen.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userItemContext: state.currentUserItemContext,
-        userDevContext: state.currentUserDevContext
+        userContext: state.currentUserItemContext,
     }
 }
 

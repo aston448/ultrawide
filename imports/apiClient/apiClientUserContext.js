@@ -63,21 +63,6 @@ class ClientUserContextServices {
                 break;
             case RoleType.DEVELOPER:
                 userContext = UserCurrentEditContext.findOne({userId: userId});
-                // userDevContext = UserCurrentDevContext.findOne({userId: userId});
-                // if(userDevContext){
-                //     userDevUpdates = UserCurrentDevUpdates.find(
-                //         {
-                //             userId: userId,
-                //             userDevContextId: userDevContext._id
-                //         }
-                //     );
-                //
-                //     if(userDevUpdates){
-                //         userDevUpdates.forEach((update) => {
-                //             userDevUpdatesArr.push(update.designUpdateId)
-                //         });
-                //     }
-                // }
                 break;
         }
 
@@ -164,11 +149,13 @@ class ClientUserContextServices {
                 featureReferenceId:     userContext.featureReferenceId,
                 scenarioReferenceId:    userContext.scenarioReferenceId,
                 scenarioStepId:         userContext.scenarioStepId,
-                featureFilesLocation:   '/Users/aston/WebstormProjects/shared/test/',                //userContext.featureFilesLocation,
+                featureFilesLocation:   '/Users/aston/WebstormProjects/Ultrawide/tests/features/',                //userContext.featureFilesLocation,
                 designComponentType:    userContext.designComponentType
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
+
+            return userContext;
 
         } else {
             // No context saved so default to nothing
@@ -182,41 +169,19 @@ class ClientUserContextServices {
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   '/Users/aston/WebstormProjects/shared/test/',
+                featureFilesLocation:   '/Users/aston/WebstormProjects/Ultrawide/tests/features/',
                 designComponentType:    'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, false)); // Don't save - we are reading from DB here!
-        }
 
-        // // Set developer context too if developer
-        // if(role === RoleType.DEVELOPER) {
-        //     if (userDevContext) {
-        //         store.dispatch(setCurrentUserDevContext(
-        //             userId,
-        //             userDevContext.designId,            // Design
-        //             userDevContext.designVersionId,     // Design Version Adopted
-        //
-        //             userDevContext.featureFilesLocation,// Location of build are feature files
-        //             userDevUpdatesArr,                  // List of Design Updates adopted (if any)
-        //             false                               // Don't update the DB
-        //         ));
-        //     } else {
-        //         store.dispatch(setCurrentUserDevContext(
-        //             userId,
-        //             'NONE',                 // Design
-        //             'NONE',                 // Design Version Adopted
-        //             'NONE',                 // Location of build are feature files
-        //             [],                     // List of Design Updates adopted (if any)
-        //             false                   // Don't update the DB
-        //         ));
-        //     }
-        // }
+            return emptyContext;
+        }
 
 
     }
 
-    setViewFromUserContext(role, userItemContext, userDevContext){
+    setViewFromUserContext(role, userItemContext){
 
         // Decide where to go depending on the user context
         if(userItemContext){
@@ -225,11 +190,11 @@ class ClientUserContextServices {
             switch(role){
                 case RoleType.DESIGNER:
                     // If no design, go to the Designs screen
-                    if(userItemContext.designId) {
+                    if(userItemContext.designId != 'NONE') {
                         // If a designer, go to the design version that is in the context.  If its new, editing it.
                         // If published and an update is new / draft go to update
                         // If final go to view
-                        if (userItemContext.designVersionId) {
+                        if (userItemContext.designVersionId != 'NONE') {
                             // See what status the design version has
                             const designVersion = DesignVersions.findOne({_id: userItemContext.designVersionId});
 

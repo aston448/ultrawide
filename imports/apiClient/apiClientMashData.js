@@ -41,6 +41,10 @@ class ClientMashDataServices {
         } else {
             return false;
         }
+    };
+
+    updateTestData(userContext){
+        Meteor.call('mash.updateTestData', userContext);
     }
 
 }

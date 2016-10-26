@@ -24,6 +24,7 @@ class UserContextServices{
                 designUpdateId:         context.designUpdateId,
                 workPackageId:          context.workPackageId,
                 designComponentId:      context.designComponentId,
+                designComponentType:    context.designComponentType,
                 featureReferenceId:     context.featureReferenceId,
                 scenarioReferenceId:    context.scenarioReferenceId,
                 scenarioStepId:         context.scenarioStepId,

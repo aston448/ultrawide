@@ -126,6 +126,7 @@ class FeatureFileServices{
     };
 
     getFeatureFiles(userContext){
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking fro FEATURE FILES at {}", userContext.featureFilesLocation);
 
         if(userContext.featureFilesLocation != 'NONE'){
 

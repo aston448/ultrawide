@@ -193,6 +193,9 @@ class ClientWorkPackageServices {
         // Get the latest DEV data for the Mash
         ClientMashDataServices.createDevMashData(updatedContext);
 
+        // Get the latest test results
+        ClientMashDataServices.updateTestData(updatedContext);
+
         // Switch to Dev View
         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_WORK));
     }

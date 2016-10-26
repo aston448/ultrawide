@@ -2,7 +2,7 @@
  * Created by aston on 19/09/2016.
  */
 
-import { Mongo } from 'meteor/mongo';
+//import { Mongo } from 'meteor/mongo';
 
 export const UserCurrentEditContext = new Mongo.Collection('userCurrentEditContext');
 

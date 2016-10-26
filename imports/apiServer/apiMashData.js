@@ -22,5 +22,9 @@ Meteor.methods({
         MashDataServices.createScenarioStepMashData(userContext);
     },
 
+    'mash.updateTestData'(userContext){
+        MashDataServices.updateTestData(userContext);
+    }
+
 });
 

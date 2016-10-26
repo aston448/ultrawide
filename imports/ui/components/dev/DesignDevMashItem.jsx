@@ -69,6 +69,7 @@ class DesignDevMashItem extends Component {
         let mashItemName = '';
         let mashItemStatus = '';
         let mashItemActions = '';
+        let mashItemTestActions = '';
         let mashItemTestStatus = '';
 
 
@@ -87,7 +88,7 @@ class DesignDevMashItem extends Component {
                     {TextLookups.mashStatus(mashItem.featureMashStatus)}
                 </div>;
 
-                mashItemTestStatus = <div className={"mash-item " + mashStyle}>
+                mashItemTestStatus = <div className={"mash-item " + testStyle}>
                     {TextLookups.mashTestStatus(mashItem.featureTestStatus)}
                 </div>;
 
@@ -122,7 +123,7 @@ class DesignDevMashItem extends Component {
                     {TextLookups.mashStatus(mashItem.scenarioMashStatus)}
                 </div>;
 
-                mashItemTestStatus = <div className={"mash-item " + mashStyle}>
+                mashItemTestStatus = <div className={"mash-item " + testStyle}>
                     {TextLookups.mashTestStatus(mashItem.scenarioTestStatus)}
                 </div>;
 
@@ -130,6 +131,18 @@ class DesignDevMashItem extends Component {
                 switch (mashItem.scenarioMashStatus){
                     case MashStatus.MASH_LINKED:
                         // The scenario is in a dev test file for the feature
+                        mashItemTestActions =
+                            <InputGroup>
+                                <InputGroup.Addon>
+                                    <div><Glyphicon glyph="search"/></div>
+                                </InputGroup.Addon>
+                                <InputGroup.Addon>
+                                    <div><Glyphicon glyph="ok"/></div>
+                                </InputGroup.Addon>
+                                <InputGroup.Addon>
+                                    <div><Glyphicon glyph="remove"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>;
                         break;
 
                     case MashStatus.MASH_NOT_IMPLEMENTED:
@@ -175,10 +188,13 @@ class DesignDevMashItem extends Component {
                         <Col md={2} className="close-col">
                             {mashItemStatus}
                         </Col>
-                        <Col md={2} className="close-col">
+                        <Col md={1} className="close-col">
                             {mashItemActions}
                         </Col>
                         <Col md={2} className="close-col">
+                            {mashItemTestActions}
+                        </Col>
+                        <Col md={1} className="close-col">
                             {mashItemTestStatus}
                         </Col>
                     </Row>

@@ -92,11 +92,14 @@ class DesignItemMashList extends Component {
                             <Col md={2} className="close-col">
                                 Status
                             </Col>
-                            <Col md={2} className="close-col">
+                            <Col md={1} className="close-col">
                                 Actions
                             </Col>
                             <Col md={2} className="close-col">
                                 Test
+                            </Col>
+                            <Col md={1} className="close-col">
+                                Result
                             </Col>
                         </Row>
                     </Grid>

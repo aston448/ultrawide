@@ -13,7 +13,7 @@ import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.
 // Ultrawide Services
 import {ViewType, ViewMode} from '../../../constants/constants.js'
 import ClientAppHeaderServices from '../../../apiClient/apiClientAppHeader.js';
-
+import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
 // Bootstrap
 import {Alert} from 'react-bootstrap';
 import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
@@ -64,10 +64,14 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin();
     }
 
+    onRefreshTestData(userContext){
+        ClientMashDataServices.updateTestData(userContext)
+    }
+
 
     render() {
 
-        const {mode, view, userRole, userName, currentUserItemContext, message, domainDictionaryVisible} = this.props;
+        const {mode, view, userRole, userName, userContext, message, domainDictionaryVisible} = this.props;
 
         // The header display depends on the current application View
         let headerTopActions = '';
@@ -94,6 +98,9 @@ class AppHeader extends Component {
 
         let selectionScreenButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Home</Button>;
+
+        let refreshTestsButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext)}>Get Test Results</Button>;
 
 
         // The message display depends on the type of message being displayed
@@ -164,6 +171,14 @@ class AppHeader extends Component {
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                headerUserInfo = userData;
+                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
+                headerBottomActions =
+                    <ButtonToolbar>
+                        {domainDictionaryButton}
+                        {selectionScreenButton}
+                    </ButtonToolbar>;
+                break;
             case ViewType.WORK_PACKAGE_WORK:
                 headerUserInfo = userData;
                 headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
@@ -171,6 +186,7 @@ class AppHeader extends Component {
                     <ButtonToolbar>
                         {domainDictionaryButton}
                         {selectionScreenButton}
+                        {refreshTestsButton}
                     </ButtonToolbar>;
                 break;
             default:
@@ -181,10 +197,10 @@ class AppHeader extends Component {
             // Only show data once context is established
             let appData = <div></div>;
 
-            if(currentUserItemContext){
+            if(userContext){
                 appData = <AppHeaderDataContainer params={{
                     currentAppView: view,
-                    currentUserItemContext: currentUserItemContext
+                    currentUserItemContext: userContext
                 }}/>;
             }
 
@@ -237,7 +253,7 @@ function mapStateToProps(state) {
         view: state.currentAppView,
         userRole: state.currentUserRole,
         userName: state.currentUserName,
-        currentUserItemContext: state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
         message: state.currentUserMessage,
         domainDictionaryVisible: state.domainDictionaryVisible
     }

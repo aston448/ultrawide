@@ -344,11 +344,18 @@ class MashDataServices{
         // Scenarios in current WP
         designWpScenarios.forEach((designWpScenario) => {
 
-            let scenarioName = '';
+            let designScenario = null;
+            let scenarioName = ''
             if(userContext.designUpdateId === 'NONE'){
-                scenarioName = DesignComponents.findOne({_id: designWpScenario.componentId}).componentName;
+                designScenario = DesignComponents.findOne({_id: designWpScenario.componentId});
+                if(designScenario){
+                    scenarioName = designScenario.componentName;
+                }
             } else {
-                scenarioName = DesignUpdateComponents.findOne({_id: designWpScenario.componentId}).componentNameNew;
+                designScenario = DesignUpdateComponents.findOne({_id: designWpScenario.componentId});
+                if(designScenario){
+                    scenarioName = designScenario.componentNameNew;
+                }
             }
 
             // See if we have a corresponding Dev Scenario
@@ -376,6 +383,7 @@ class MashDataServices{
                     workPackageId:              userContext.workPackageId,
                     userDevScenarioId:          devScenarioId,
                     designFeatureReferenceId:   designWpScenario.componentFeatureReferenceId,
+                    designScenarioReferenceId:  designScenario.componentReferenceId,
                     // Data
                     scenarioName:               scenarioName,
                     // Status
@@ -421,6 +429,120 @@ class MashDataServices{
     createScenarioStepMashData(userContext){
 
     };
+
+    updateTestData(userContext){
+
+        // Read the test results file TODO: make this a user context path
+        const resultsText = fs.readFileSync('/Users/aston/WebstormProjects/shared/test/test_results.json');
+
+        let results = JSON.parse(resultsText);
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "UPDATE TEST DATA: {}", results);
+
+        results.forEach((result) => {
+            if(result.keyword === 'Feature'){
+                const featureName = result.name;
+                let featureTestStatus = MashTestStatus.MASH_PASS;
+
+                let designFeature = null;
+                if(userContext.designUpdateId === 'NONE'){
+                    designFeature = DesignComponents.findOne({
+                        designId: userContext.designId,
+                        designVersionId: userContext.designVersionId,
+                        componentType: ComponentType.FEATURE,
+                        componentName: featureName
+                    });
+                } else {
+                    designFeature = DesignUpdateComponents.findOne({
+                        designId: userContext.designId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
+                        componentType: ComponentType.FEATURE,
+                        componentNameNew: featureName
+                    });
+                }
+
+                result.elements.forEach((element) => {
+                    if(element.keyword === 'Scenario'){
+                        const scenarioName = element.name;
+                        let scenarioTestStatus = MashTestStatus.MASH_PASS;
+                        let scenarioError = '';
+                        element.steps.forEach((step) => {
+                            if(step.result.status != 'passed'){
+                                scenarioTestStatus = MashTestStatus.MASH_FAIL;
+                                featureTestStatus = MashTestStatus.MASH_FAIL;
+                                scenarioError = step.result.error_message;
+                            }
+                        });
+
+
+                        // Update the data for this scenario
+                        let designScenario = null;
+                        if(userContext.designUpdateId === 'NONE'){
+                            designScenario = DesignComponents.findOne({
+                                designId: userContext.designId,
+                                designVersionId: userContext.designVersionId,
+                                componentType: ComponentType.SCENARIO,
+                                componentName: scenarioName
+                            });
+                        } else {
+                            designScenario = DesignUpdateComponents.findOne({
+                                designId: userContext.designId,
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId,
+                                componentType: ComponentType.SCENARIO,
+                                componentNameNew: scenarioName
+                            });
+                        }
+
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Design Scenario is: {}", designScenario);
+
+                        if(designFeature && designScenario) {
+                            DesignDevScenarioMash.update(
+                                {
+                                    userId:                         userContext.userId,
+                                    designVersionId:                userContext.designVersionId,
+                                    designUpdateId:                 userContext.designUpdateId,
+                                    workPackageId:                  userContext.workPackageId,
+                                    designFeatureReferenceId:       designFeature.componentReferenceId,
+                                    designScenarioReferenceId:      designScenario.componentReferenceId,
+                                 },
+                                {
+                                    $set:{
+                                        scenarioTestStatus: scenarioTestStatus
+                                    }
+                                },
+                                (error, result) => {
+                                    log((msg) => console.log(msg), LogLevel.TRACE, "Updated {} scenario", result);
+                                }
+
+                            );
+                        }
+                    }
+                });
+
+                // Update the feature test status as well
+                if(designFeature){
+                    DesignDevFeatureMash.update(
+                        {
+                            userId:                         userContext.userId,
+                            designVersionId:                userContext.designVersionId,
+                            designUpdateId:                 userContext.designUpdateId,
+                            workPackageId:                  userContext.workPackageId,
+                            designFeatureReferenceId:       designFeature.componentReferenceId,
+                        },
+                        {
+                            $set:{
+                                featureTestStatus: featureTestStatus
+                            }
+                        }
+
+                    );
+                }
+            }
+        });
+
+    }
 }
 
 export default new MashDataServices();

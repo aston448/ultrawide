@@ -39,3 +39,6 @@ import '../imports/apiServer/apiDomainDictionary.js';
 import '../imports/apiServer/apiImpEx.js';
 import '../imports/apiServer/apiFeatureFiles.js';
 import '../imports/apiServer/apiMashData.js';
+import '../imports/apiServer/apiFixtures.js';
+import '../imports/apiTest/apiClientTest.js';
+import '../imports/apiTest/apiServerCheck.js';
