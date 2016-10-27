@@ -36,35 +36,35 @@ class Design extends Component {
         super(props);
     }
 
-    onSelectDesign(currentDesignId, newDesignId){
-        ClientDesignServices.setDesign(currentDesignId, newDesignId);
+    onSelectDesign(userContext, newDesignId){
+        ClientDesignServices.setDesign(userContext, newDesignId);
     };
 
-    onWorkDesign(currentDesignId, newDesignId){
-        ClientDesignServices.workDesign(currentDesignId, newDesignId);
+    onWorkDesign(userContext, newDesignId){
+        ClientDesignServices.workDesign(userContext, newDesignId);
     }
 
-    onRemoveDesign(designId){
-        ClientDesignServices.removeDesign(designId);
+    onRemoveDesign(userContext, designId){
+        ClientDesignServices.removeDesign(userContext, designId);
     }
 
     render() {
-        const {design, currentUserItemContext} = this.props;
+        const {design, userContext} = this.props;
 
-        console.log("Rendering design " + design._id + "  Current design is " + currentUserItemContext.designId);
+        console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
 
         // Active if this design is the current context design
-        let itemStyle = (design._id === currentUserItemContext.designId ? 'design-item di-active' : 'design-item');
+        let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
 
         let buttons = '';
         if(design.isRemovable){
             buttons = <ButtonGroup>
-                <Button bsSize="xs" onClick={ () => this.onWorkDesign(currentUserItemContext.designId, design._id)}>Work on this Design</Button>
-                <Button bsSize="xs" onClick={ () => this.onRemoveDesign(design._id)}>Remove Design</Button>
+                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, design._id)}>Work on this Design</Button>
+                <Button bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, design._id)}>Remove Design</Button>
             </ButtonGroup>
         } else {
             buttons = <ButtonGroup>
-                <Button bsSize="xs" onClick={ () => this.onWorkDesign(currentUserItemContext.designId, design._id)}>Work on this Design</Button>
+                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, design._id)}>Work on this Design</Button>
             </ButtonGroup>
         }
 
@@ -75,7 +75,7 @@ class Design extends Component {
                     currentItemId={design._id}
                     currentItemName={design.designName}
                     currentItemStatus=''
-                    onSelectItem={ () => this.onSelectDesign(currentUserItemContext.designId, design._id)}
+                    onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
                 />
                 {buttons}
             </div>
@@ -90,7 +90,7 @@ Design.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 

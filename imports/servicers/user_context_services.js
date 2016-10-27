@@ -33,32 +33,32 @@ class UserContextServices{
         )
     };
 
-    saveUserDevContext(userId, designId, designVersionId, workPackageId, featureFilesLocation){
-
-        // Remove the current context
-        UserCurrentDevContext.remove({userId: userId});
-        UserCurrentDevUpdates.remove({userId: userId});
-
-        // Add the new one
-        UserCurrentDevContext.insert(
-            {
-                userId:                 userId,
-                designId:               designId,
-                designVersionId:        designVersionId,
-                workPackageId:          workPackageId,
-                featureFilesLocation:   featureFilesLocation
-            },
-            (error, result) => {
-                if(error){
-                    console.log("Failed to set user dev context: " + error);
-                } else {
-
-                    console.log("Success setting dev context");
-
-                }
-            }
-        );
-    };
+    // saveUserDevContext(userId, designId, designVersionId, workPackageId, featureFilesLocation){
+    //
+    //     // Remove the current context
+    //     UserCurrentDevContext.remove({userId: userId});
+    //     UserCurrentDevUpdates.remove({userId: userId});
+    //
+    //     // Add the new one
+    //     UserCurrentDevContext.insert(
+    //         {
+    //             userId:                 userId,
+    //             designId:               designId,
+    //             designVersionId:        designVersionId,
+    //             workPackageId:          workPackageId,
+    //             featureFilesLocation:   featureFilesLocation
+    //         },
+    //         (error, result) => {
+    //             if(error){
+    //                 console.log("Failed to set user dev context: " + error);
+    //             } else {
+    //
+    //                 console.log("Success setting dev context");
+    //
+    //             }
+    //         }
+    //     );
+    // };
 
 
 }

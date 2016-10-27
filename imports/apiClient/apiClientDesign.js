@@ -35,24 +35,25 @@ class ClientDesignServices{
         return true;
     }
 
-    setDesign(currentDesignId, newDesignId){
+    setDesign(userContext, newDesignId){
         // Set a new design as the current design if a new one chosen
 
-        const context = {
-            userId:                 Meteor.userId(),
-            designId:               newDesignId,
-            designVersionId:        'NONE',
-            designUpdateId:         'NONE',
-            workPackageId:          'NONE',
-            designComponentId:      'NONE',
-            featureReferenceId:     'NONE',
-            scenarioReferenceId:    'NONE',
-            scenarioStepId:         'NONE',
-            featureFilesLocation:   '',
-            designComponentType:    'NONE'
-        };
+        if(newDesignId != userContext.designId) {
 
-        if(newDesignId != currentDesignId) {
+            const context = {
+                userId:                 Meteor.userId(),
+                designId:               newDesignId,
+                designVersionId:        'NONE',
+                designUpdateId:         'NONE',
+                workPackageId:          'NONE',
+                designComponentId:      'NONE',
+                designComponentType:    'NONE',
+                featureReferenceId:     'NONE',
+                scenarioReferenceId:    'NONE',
+                scenarioStepId:         'NONE',
+                featureFilesLocation:   userContext.featureFilesLocation
+            };
+
             store.dispatch(setCurrentUserItemContext(context, true));
 
             return true;
@@ -62,10 +63,10 @@ class ClientDesignServices{
         return false;
     }
 
-    workDesign(currentDesignId, newDesignId){
+    workDesign(userContext, newDesignId){
 
         // Make sure the current design is set
-        this.setDesign(currentDesignId, newDesignId);
+        this.setDesign(userContext, newDesignId);
 
         // Design set - go to selection screen
         store.dispatch(setCurrentView(ViewType.SELECT));
@@ -79,12 +80,14 @@ class ClientDesignServices{
         return true;
     }
 
-    removeDesign(designId){
+    removeDesign(userContext, designId){
 
         // Validation - can only remove removable designs
         const design = Designs.findOne({_id: designId});
 
         if(design && design.isRemovable){
+
+            Meteor.call('design.removeDesign', designId);
 
             // Set no current user context
             const context = {
@@ -94,16 +97,17 @@ class ClientDesignServices{
                 designUpdateId:         'NONE',
                 workPackageId:          'NONE',
                 designComponentId:      'NONE',
+                designComponentType:    'NONE',
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   'NONE',
-                designComponentType:    'NONE'
+                featureFilesLocation:   userContext.featureFilesLocation,
+
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
 
-            Meteor.call('design.removeDesign', designId);
+
             return true;
 
         } else {

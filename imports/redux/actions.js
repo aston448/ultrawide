@@ -83,11 +83,11 @@ export function setCurrentUserItemContext(contextItem, saveToDb){
             designUpdateId:         contextItem.designUpdateId,
             workPackageId:          contextItem.workPackageId,
             designComponentId:      contextItem.designComponentId,
+            designComponentType:    contextItem.designComponentType,
             featureReferenceId:     contextItem.featureReferenceId,
             scenarioReferenceId:    contextItem.scenarioReferenceId,
             scenarioStepId:         contextItem.scenarioStepId,
             featureFilesLocation:   contextItem.featureFilesLocation,
-            designComponentType:    contextItem.designComponentType
         };
 
         dispatch({type: SET_CURRENT_USER_ITEM_CONTEXT, newUserItemContext: newContext});

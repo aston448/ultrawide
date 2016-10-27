@@ -48,11 +48,11 @@ class ClientWorkPackageServices {
                 designUpdateId:         userContext.designUpdateId,
                 workPackageId:          newWorkPackageId,
                 designComponentId:      'NONE',
+                designComponentType:    'NONE',
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   userContext.featureFilesLocation,
-                designComponentType:    'NONE'
+                featureFilesLocation:   userContext.featureFilesLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

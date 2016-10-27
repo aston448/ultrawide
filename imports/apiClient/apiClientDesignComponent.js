@@ -56,11 +56,11 @@ class ClientDesignComponentServices{
                 designUpdateId:         userContext.designUpdateId,
                 workPackageId:          userContext.workPackageId,
                 designComponentId:      newDesignComponentId,
+                designComponentType:    component.componentType,
                 featureReferenceId:     featureReferenceId,
                 scenarioReferenceId:    scenarioReferenceId,
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   userContext.featureFilesLocation,
-                designComponentType:    component.componentType
+                featureFilesLocation:   userContext.featureFilesLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

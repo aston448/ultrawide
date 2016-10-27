@@ -35,16 +35,16 @@ class ClientDesignUpdateServices {
 
             const context = {
                 userId:                 Meteor.userId(),
-                designId:               userContext.designId,            // Must be the same design
-                designVersionId:        userContext.designVersionId,     // Must be same design version
-                designUpdateId:         newDesignUpdateId,          // Update selected
+                designId:               userContext.designId,           // Must be the same design
+                designVersionId:        userContext.designVersionId,    // Must be same design version
+                designUpdateId:         newDesignUpdateId,              // Update selected
                 workPackageId:          'NONE',
                 designComponentId:      'NONE',
+                designComponentType:    'NONE',
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   'NONE',
-                designComponentType:    'NONE'
+                featureFilesLocation:   userContext.featureFilesLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -194,11 +194,11 @@ class ClientDesignUpdateServices {
                     designUpdateId:         'NONE',
                     workPackageId:          'NONE',
                     designComponentId:      'NONE',
-                    featureReferenceId:     'NONE',                     // These are set in a DEV context so not relevant here
+                    designComponentType:    'NONE',
+                    featureReferenceId:     'NONE',
                     scenarioReferenceId:    'NONE',
                     scenarioStepId:         'NONE',
-                    featureFilesLocation:   'NONE',
-                    designComponentType:    'NONE'
+                    featureFilesLocation:   userContext.featureFilesLocation
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));
@@ -215,49 +215,6 @@ class ClientDesignUpdateServices {
             return false;
         }
     };
-
-    // setUpdateAdoptionStatus(designUpdate, updatesList, action, designId){
-    //
-    //     let userId = Meteor.userId();
-    //
-    //     if(!updatesList){
-    //         console.log("No updates list!");
-    //         updatesList = [];
-    //     }
-    //
-    //     if(userId && designUpdate && designId){
-    //
-    //         switch(action){
-    //             case 'ADD':
-    //                 // Add the new item to the list
-    //                 if(!updatesList.includes(designUpdate._id)){
-    //                     console.log("Adding DU to list: " + designUpdate._id);
-    //                     updatesList.push(designUpdate._id);
-    //                 }
-    //                 break;
-    //             case 'SUBTRACT':
-    //                 // Remove the existing item from the list
-    //                 if(updatesList.includes(designUpdate._id)){
-    //                     console.log("Removing DU from list: " + designUpdate._id);
-    //                     updatesList.pop(designUpdate._id);
-    //                 }
-    //                 break;
-    //         }
-    //
-    //         // Store to REDUX and to DB
-    //         store.dispatch(setCurrentUserDevContext(
-    //             userId,
-    //             designId,
-    //             designUpdate.designVersionId,
-    //             updatesList,
-    //             true
-    //         ));
-    //         return true;
-    //
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
 }
 

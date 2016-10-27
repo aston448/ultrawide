@@ -114,17 +114,25 @@ Meteor.methods({
                 isManager: true
             });
 
+            //TODO get proper root
+            const root =  '/Users/aston/WebstormProjects/ultrawide-test';    //Meteor.rootPath;
+
+            console.log("Setting root path to " + root);
+
             // Start that user at the beginning.  Assume no settings yet
             UserCurrentEditContext.insert({
-                userId: designerUserId
+                userId: designerUserId,
+                featureFilesLocation:   root + '/tests/features/'
             });
 
             UserCurrentEditContext.insert({
-                userId: developerUserId
+                userId: developerUserId,
+                featureFilesLocation:   root + '/tests/features/'
             });
 
             UserCurrentEditContext.insert({
-                userId: managerUserId
+                userId: managerUserId,
+                featureFilesLocation:   root + '/tests/features/'
             });
         }
 

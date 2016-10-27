@@ -39,11 +39,11 @@ class ClientDesignVersionServices{
             designUpdateId:         'NONE',                     // Everything else reset for new Design
             workPackageId:          'NONE',
             designComponentId:      'NONE',
+            designComponentType:    'NONE',
             featureReferenceId:     'NONE',
             scenarioReferenceId:    'NONE',
             scenarioStepId:         'NONE',
-            featureFilesLocation:   'NONE',
-            designComponentType:    'NONE'
+            featureFilesLocation:   userContext.featureFilesLocation
         };
 
         store.dispatch(setCurrentUserItemContext(context, true));

@@ -1,6 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
+import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { UserCurrentEditContext } from '../collections/context/user_current_edit_context.js';
@@ -51,20 +52,7 @@ class ClientUserContextServices {
 
         // Get the stored context for the user
         // Get last known state from the DB
-        let userContext = null;
-        let userDevContext = null;
-        let userDevUpdates = null;
-        let userDevUpdatesArr = [];
-
-        switch(role){
-            case RoleType.DESIGNER:
-            case RoleType.MANAGER:
-                userContext = UserCurrentEditContext.findOne({userId: userId});
-                break;
-            case RoleType.DEVELOPER:
-                userContext = UserCurrentEditContext.findOne({userId: userId});
-                break;
-        }
+        const userContext = UserCurrentEditContext.findOne({userId: userId});
 
         // Set default view settings for open items
         // TODO - could get persisted settings here
@@ -137,7 +125,6 @@ class ClientUserContextServices {
 
 
         // Set the saved user data into REDUX
-        const root = process.env.PWD;
 
         if(userContext){
 
@@ -151,7 +138,7 @@ class ClientUserContextServices {
                 featureReferenceId:     userContext.featureReferenceId,
                 scenarioReferenceId:    userContext.scenarioReferenceId,
                 scenarioStepId:         userContext.scenarioStepId,
-                featureFilesLocation:   root + '/tests/features/',                //userContext.featureFilesLocation,
+                featureFilesLocation:   userContext.featureFilesLocation,
                 designComponentType:    userContext.designComponentType
             };
 
@@ -171,7 +158,7 @@ class ClientUserContextServices {
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   root + '/tests/features/',
+                featureFilesLocation:   '',
                 designComponentType:    'NONE'
             };
 
