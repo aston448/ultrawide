@@ -37,75 +37,98 @@ Meteor.methods({
         DesignUpdates.remove({});
         DesignVersions.remove({});
         Designs.remove({});
-        UserCurrentEditContext.remove({});
-        UserRoles.remove({});
 
-        console.log('Inserting data...');
-
+        // Clear current edit context
+        UserCurrentEditContext.update(
+            {},
+            {
+                $set:{
+                    designId:               'NONE',
+                    designVersionId:        'NONE',
+                    designUpdateId:         'NONE',
+                    workPackageId:          'NONE',
+                    designComponentId:      'NONE',
+                    featureReferenceId:     'NONE',
+                    scenarioReferenceId:    'NONE',
+                    scenarioStepId:         'NONE',
+                    featureFilesLocation:   '/Users/aston/WebstormProjects/ultrawide-test/tests/features/',
+                    designComponentType:    'NONE'
+                }
+            },
+            {multi: true}
+        );
 
         // Make up a temporary user until login implemented
 
-        // Create a new account - note need different user names than in "live"
-        let designerUserId = Accounts.createUser(
-            {
-                username: 'test-user1',
-                password: 'user1'
-            }
-        );
 
-        UserRoles.insert({
-            userId: designerUserId,
-            userName: 'gloria',
-            displayName: 'Gloria Slap',
-            isDesigner: true,
-            isDeveloper: false,
-            isManager: false
-        });
+        // Recreate users only needed after a reset (may be recreated by normal fixtures anyway)
+        if(UserRoles.find({}).count() === 0) {
 
-        let developerUserId = Accounts.createUser(
-            {
-                username: 'test-user2',
-                password: 'user2'
-            }
-        );
+            console.log('Inserting data...');
+            // Create a new accounts
+            let designerUserId = Accounts.createUser(
+                {
+                    username: 'user1',
+                    password: 'user1'
+                }
+            );
 
-        UserRoles.insert({
-            userId: developerUserId,
-            userName: 'hugh',
-            displayName: 'Hugh Gengin',
-            isDesigner: false,
-            isDeveloper: true,
-            isManager: false
-        });
+            UserRoles.insert({
+                userId: designerUserId,
+                userName: 'gloria',
+                displayName: 'Gloria Slap',
+                isDesigner: true,
+                isDeveloper: false,
+                isManager: false
+            });
 
-        let managerUserId = Accounts.createUser(
-            {
-                username: 'test-user3',
-                password: 'user3'
-            }
-        );
+            let developerUserId = Accounts.createUser(
+                {
+                    username: 'user2',
+                    password: 'user2'
+                }
+            );
 
-        UserRoles.insert({
-            userId: managerUserId,
-            userName: 'miles',
-            displayName: 'Miles Behind',
-            isDesigner: false,
-            isDeveloper: false,
-            isManager: true
-        });
+            UserRoles.insert({
+                userId: developerUserId,
+                userName: 'hugh',
+                displayName: 'Hugh Gengin',
+                isDesigner: false,
+                isDeveloper: true,
+                isManager: false
+            });
 
-        // Start that user at the beginning.  Assume no settings yet
-        UserCurrentEditContext.insert({
-            userId: designerUserId
-        });
+            let managerUserId = Accounts.createUser(
+                {
+                    username: 'user3',
+                    password: 'user3'
+                }
+            );
 
-        UserCurrentEditContext.insert({
-            userId: developerUserId
-        });
+            UserRoles.insert({
+                userId: managerUserId,
+                userName: 'miles',
+                displayName: 'Miles Behind',
+                isDesigner: false,
+                isDeveloper: false,
+                isManager: true
+            });
 
-        UserCurrentEditContext.insert({
-            userId: managerUserId
-        });
+            // Start that user at the beginning.  Assume no settings yet
+            UserCurrentEditContext.insert({
+                userId: designerUserId
+            });
+
+            UserCurrentEditContext.insert({
+                userId: developerUserId
+            });
+
+            UserCurrentEditContext.insert({
+                userId: managerUserId
+            });
+        }
+
+
 
 
     }

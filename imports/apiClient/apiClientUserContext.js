@@ -137,6 +137,8 @@ class ClientUserContextServices {
 
 
         // Set the saved user data into REDUX
+        const root = process.env.PWD;
+
         if(userContext){
 
             const context = {
@@ -149,7 +151,7 @@ class ClientUserContextServices {
                 featureReferenceId:     userContext.featureReferenceId,
                 scenarioReferenceId:    userContext.scenarioReferenceId,
                 scenarioStepId:         userContext.scenarioStepId,
-                featureFilesLocation:   '/Users/aston/WebstormProjects/Ultrawide/tests/features/',                //userContext.featureFilesLocation,
+                featureFilesLocation:   root + '/tests/features/',                //userContext.featureFilesLocation,
                 designComponentType:    userContext.designComponentType
             };
 
@@ -169,7 +171,7 @@ class ClientUserContextServices {
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
                 scenarioStepId:         'NONE',
-                featureFilesLocation:   '/Users/aston/WebstormProjects/Ultrawide/tests/features/',
+                featureFilesLocation:   root + '/tests/features/',
                 designComponentType:    'NONE'
             };
 
