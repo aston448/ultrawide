@@ -209,7 +209,7 @@ class AppHeader extends Component {
                 <Grid>
                     <Row className="header-row-top">
                         <Col md={2}>
-                            <div className="ultrawide-logo">ULTRAWIDE</div>
+                            <div className="ultrawide-logo">ULTRAWIDE R</div>
                         </Col>
                         <Col md={3}>
                             {headerUserInfo}
