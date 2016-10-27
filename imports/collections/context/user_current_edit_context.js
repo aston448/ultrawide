@@ -15,11 +15,10 @@ let Schema = new SimpleSchema({
     designUpdateId:         {type: String, defaultValue: 'NONE'},       // Current design update (if any)
     workPackageId:          {type: String, defaultValue: 'NONE'},       // Current work package (if any)
     designComponentId:      {type: String, defaultValue: 'NONE'},       // The actual component (if any)
+    designComponentType:    {type: String, defaultValue: 'NONE'},       // Useful information when displaying DEV Mash
     featureReferenceId:     {type: String, defaultValue: 'NONE'},       // DEV Mash Feature Ref (if any)
     scenarioReferenceId:    {type: String, defaultValue: 'NONE'},       // DEV Mash Scenario Ref (if any)
     scenarioStepId:         {type: String, defaultValue: 'NONE'},       // DEV Mash Step Ref (if any)
-    featureFilesLocation:   {type: String, defaultValue: 'NONE'},       // DEV test feature files location (if any)
-    designComponentType:    {type: String, defaultValue: 'NONE'}        // Useful information when displaying DEV Mash
 });
 
 UserCurrentEditContext.attachSchema(Schema);

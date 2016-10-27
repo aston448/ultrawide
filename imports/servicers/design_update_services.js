@@ -40,6 +40,22 @@ class DesignUpdateServices{
         return designUpdateId;
     };
 
+    importDesignUpdate(designVersionId, designUpdate){
+
+        let designUpdateId = DesignUpdates.insert(
+            {
+                designVersionId:            designVersionId,
+                updateName:                 designUpdate.updateName,
+                updateVersion:              designUpdate.updateVersion,
+                updateRawText:              designUpdate.updateRawText,
+                updateStatus:               designUpdate.updateStatus,
+                updateMergeAction:          designUpdate.updateMergeAction
+            }
+        );
+
+        return designUpdateId;
+    }
+
     // Copy the current base design version to a new update.  Initially the "new" values are the same as the current ones.
     populateDesignUpdate(designVersionId, designUpdateId){
 

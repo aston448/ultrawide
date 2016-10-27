@@ -17,14 +17,14 @@ import FeatureFileServices from '../servicers/feature_file_services.js'
 
 class MashDataServices{
 
-    loadUserFeatureFileData(userContext){
+    loadUserFeatureFileData(userContext, filePath){
 
         // Remove current user file data so deleted files are cleared.
         UserDevFeatures.remove({userId: userContext.userId});
         UserDevFeatureScenarios.remove({userId: userContext.userId});
 
         // This means looking for feature files in the dev users test folder
-        let featureFiles = FeatureFileServices.getFeatureFiles(userContext);
+        let featureFiles = FeatureFileServices.getFeatureFiles(filePath);
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} feature files", featureFiles.length);
 
@@ -35,7 +35,7 @@ class MashDataServices{
         // Load up data for any feature file found but highlighting those in the current WP scope
         featureFiles.forEach((file) => {
 
-            const fileText = FeatureFileServices.getFeatureFileText(userContext, file);
+            const fileText = FeatureFileServices.getFeatureFileText(filePath, file);
             const featureName = FeatureFileServices.getFeatureName(fileText.toString());
 
             // Initial default feature file data
@@ -430,10 +430,10 @@ class MashDataServices{
 
     };
 
-    updateTestData(userContext){
+    updateTestData(userContext, resultsPath){
 
-        // Read the test results file TODO: make this a user context path
-        const resultsText = fs.readFileSync('/Users/aston/WebstormProjects/shared/test/test_results.json');
+        // Read the test results file
+        const resultsText = fs.readFileSync(resultsPath);
 
         let results = JSON.parse(resultsText);
 

@@ -41,6 +41,22 @@ class WorkPackageServices{
         return workPackageId;
     };
 
+    importWorkPackage(designVersionId, designUpdateId, workPackage){
+
+        let workPackageId = WorkPackages.insert(
+            {
+                designVersionId:            designVersionId,
+                designUpdateId:             designUpdateId,
+                workPackageType:            workPackage.workPackageType,
+                workPackageName:            workPackage.workPackageName,
+                workPackageRawText:         workPackage.workPackageRawText,
+                workPackageStatus:          workPackage.workPackageStatus
+            }
+        );
+
+        return workPackageId;
+    }
+
     // Populate WP with components from related Design Version ot Design Update
     populateWorkPackageComponents(workPackageId, designVersionId, designUpdateId, wpType){
 
@@ -138,6 +154,18 @@ class WorkPackageServices{
             {
                 $set: {
                     workPackageStatus: WorkPackageStatus.WP_AVAILABLE
+                }
+            }
+        );
+    };
+
+    completeWorkPackage(workPackageId){
+
+        WorkPackages.update(
+            {_id: workPackageId},
+            {
+                $set: {
+                    workPackageStatus: WorkPackageStatus.WP_COMPLETE
                 }
             }
         );

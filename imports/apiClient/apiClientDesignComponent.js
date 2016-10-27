@@ -59,8 +59,7 @@ class ClientDesignComponentServices{
                 designComponentType:    component.componentType,
                 featureReferenceId:     featureReferenceId,
                 scenarioReferenceId:    scenarioReferenceId,
-                scenarioStepId:         'NONE',
-                featureFilesLocation:   userContext.featureFilesLocation
+                scenarioStepId:         'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -261,11 +260,10 @@ class ClientDesignComponentServices{
                 designUpdateId:         userContext.designUpdateId,
                 workPackageId:          userContext.workPackageId,
                 designComponentId:      'NONE',
+                designComponentType:    'NONE',
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE',
-                featureFilesLocation:   userContext.featureFilesLocation,
-                designComponentType:    'NONE'
+                scenarioStepId:         'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

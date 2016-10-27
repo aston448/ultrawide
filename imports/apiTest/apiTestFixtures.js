@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { UserRoles }                from '../collections/users/user_roles.js';
 import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
+import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 import { Designs }                  from '../collections/design/designs.js';
 import { DesignVersions }           from '../collections/design/design_versions.js';
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
@@ -48,19 +49,20 @@ Meteor.methods({
                     designUpdateId:         'NONE',
                     workPackageId:          'NONE',
                     designComponentId:      'NONE',
+                    designComponentType:    'NONE',
                     featureReferenceId:     'NONE',
                     scenarioReferenceId:    'NONE',
                     scenarioStepId:         'NONE',
-                    featureFilesLocation:   '/Users/aston/WebstormProjects/ultrawide-test/tests/features/',
-                    designComponentType:    'NONE'
                 }
             },
             {multi: true}
         );
 
+        // Keep Dev context as was...
+
+
+
         // Make up a temporary user until login implemented
-
-
         // Recreate users only needed after a reset (may be recreated by normal fixtures anyway)
         if(UserRoles.find({}).count() === 0) {
 
@@ -122,17 +124,29 @@ Meteor.methods({
             // Start that user at the beginning.  Assume no settings yet
             UserCurrentEditContext.insert({
                 userId: designerUserId,
-                featureFilesLocation:   root + '/tests/features/'
+            });
+            UserCurrentDevContext.insert({
+                userId: designerUserId,
+                featureFilesLocation:   root + '/tests/features/',
+                featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
             });
 
             UserCurrentEditContext.insert({
                 userId: developerUserId,
-                featureFilesLocation:   root + '/tests/features/'
+            });
+            UserCurrentDevContext.insert({
+                userId: developerUserId,
+                featureFilesLocation:   root + '/tests/features/',
+                featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
             });
 
             UserCurrentEditContext.insert({
                 userId: managerUserId,
-                featureFilesLocation:   root + '/tests/features/'
+            });
+            UserCurrentDevContext.insert({
+                userId: managerUserId,
+                featureFilesLocation:   root + '/tests/features/',
+                featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
             });
         }
 

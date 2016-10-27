@@ -6,8 +6,8 @@ import  MashDataServices     from '../servicers/mash_data_services.js';
 // Meteor methods
 Meteor.methods({
 
-    'mash.loadUserFeatureFileData'(userContext){
-        MashDataServices.loadUserFeatureFileData(userContext);
+    'mash.loadUserFeatureFileData'(userContext, filePath){
+        MashDataServices.loadUserFeatureFileData(userContext, filePath);
     },
 
     'mash.createFeatureMashData'(userContext){
@@ -22,8 +22,8 @@ Meteor.methods({
         MashDataServices.createScenarioStepMashData(userContext);
     },
 
-    'mash.updateTestData'(userContext){
-        MashDataServices.updateTestData(userContext);
+    'mash.updateTestData'(userContext, resultsPath){
+        MashDataServices.updateTestData(userContext, resultsPath);
     }
 
 });

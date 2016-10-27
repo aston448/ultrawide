@@ -135,11 +135,10 @@ class ClientUserContextServices {
                 designUpdateId:         userContext.designUpdateId,
                 workPackageId:          userContext.workPackageId,
                 designComponentId:      userContext.designComponentId,
+                designComponentType:    userContext.designComponentType,
                 featureReferenceId:     userContext.featureReferenceId,
                 scenarioReferenceId:    userContext.scenarioReferenceId,
-                scenarioStepId:         userContext.scenarioStepId,
-                featureFilesLocation:   userContext.featureFilesLocation,
-                designComponentType:    userContext.designComponentType
+                scenarioStepId:         userContext.scenarioStepId
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
@@ -155,11 +154,10 @@ class ClientUserContextServices {
                 designUpdateId:         'NONE',
                 workPackageId:          'NONE',
                 designComponentId:      'NONE',
+                designComponentType:    'NONE',
                 featureReferenceId:     'NONE',
                 scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE',
-                featureFilesLocation:   '',
-                designComponentType:    'NONE'
+                scenarioStepId:         'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, false)); // Don't save - we are reading from DB here!

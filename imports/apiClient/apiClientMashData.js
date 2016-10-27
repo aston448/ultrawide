@@ -4,6 +4,7 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
+import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, LogLevel} from '../constants/constants.js';
@@ -26,12 +27,15 @@ class ClientMashDataServices {
 
     createDevMashData(userContext){
 
+        // Get location data
+        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
+
         log((msg) => console.log(msg), LogLevel.DEBUG, 'Creating user dev mash data for user {} with Design {}, Design Version {} Work Package {} and Test Location {}',
-            userContext.userId, userContext.designId, userContext.designVersionId, userContext.workPackageId, userContext.featureFilesLocation);
+            userContext.userId, userContext.designId, userContext.designVersionId, userContext.workPackageId, devContext.featureFilesLocation);
 
-        if(userContext.designId != 'NONE' && userContext.designVersionId != 'NONE') {
+        if(userContext.designId != 'NONE' && userContext.designVersionId != 'NONE' && devContext.featureFilesLocation != 'NONE') {
 
-            Meteor.call('mash.loadUserFeatureFileData', userContext);
+            Meteor.call('mash.loadUserFeatureFileData', userContext, devContext.featureFilesLocation);
 
             Meteor.call('mash.createFeatureMashData', userContext);
 
@@ -44,7 +48,10 @@ class ClientMashDataServices {
     };
 
     updateTestData(userContext){
-        Meteor.call('mash.updateTestData', userContext);
+        // Get location data
+        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
+
+        Meteor.call('mash.updateTestData', userContext, devContext.featureTestResultsLocation);
     }
 
 }

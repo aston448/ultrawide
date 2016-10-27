@@ -44,6 +44,21 @@ class DesignVersionServices{
         return designVersionId;
     }
 
+    importDesignVersion(designId, designVersion){
+
+        let designVersionId = DesignVersions.insert(
+            {
+                designId:               designId,
+                designVersionName:      designVersion.designVersionName,
+                designVersionNumber:    designVersion.designVersionNumber,
+                designVersionRawText:   designVersion.designVersionRawText,
+                designVersionStatus:    designVersion.designVersionStatus
+            }
+        );
+
+        return designVersionId;
+    }
+
     updateDesignVersionName(designVersionId, newName){
 
         DesignVersions.update(

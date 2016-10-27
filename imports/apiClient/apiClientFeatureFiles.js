@@ -4,6 +4,7 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
+import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, LogLevel} from '../constants/constants.js';
@@ -26,11 +27,14 @@ class ClientFeatureFileServices {
 
     writeFeatureFile(featureReferenceId, userContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}', userContext.featureFilesLocation);
+        // Get location data
+        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
 
-        if(featureReferenceId && userContext.featureFilesLocation != 'NONE') {
+        if(featureReferenceId && devContext) {
 
-            Meteor.call('featureFiles.writeFeatureFile', featureReferenceId, userContext);
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}', devContext.featureFilesLocation);
+
+            Meteor.call('featureFiles.writeFeatureFile', featureReferenceId, userContext, devContext.featureFilesLocation);
             return true;
 
         } else {

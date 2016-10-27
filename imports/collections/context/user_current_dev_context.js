@@ -6,11 +6,9 @@ export const UserCurrentDevContext = new Mongo.Collection('userCurrentDevContext
 // This represents the current work package under development by a Developer
 
 let Schema = new SimpleSchema({
-    userId:                 {type: String},                         // Meteor user id
-    designId:               {type: String, defaultValue: 'NONE'},   // Current Design
-    designVersionId:        {type: String, defaultValue: 'NONE'},   // Current design version
-    workPackageId:          {type: String, defaultValue: 'NONE'},   // Current work package
-    featureFilesLocation:   {type: String, defaultValue: 'NONE'},   // Location of feature files in current user build
+    userId:                     {type: String},                         // Meteor user id
+    featureFilesLocation:       {type: String, defaultValue: 'NONE'},   // Location of feature files in application being tested
+    featureTestResultsLocation: {type: String, defaultValue: 'NONE'},   // Location of JSON output file(s) for feature tests
 });
 
 UserCurrentDevContext.attachSchema(Schema);

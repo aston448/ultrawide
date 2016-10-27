@@ -24,7 +24,7 @@ import ScenarioServices                 from '../servicers/scenario_services.js'
 import {getIdFromMap, log}              from '../common/utils.js';
 
 
-import { WorkPackageStatus, WorkPackageType, ComponentType, LogLevel} from '../constants/constants.js';
+import { DesignUpdateStatus, WorkPackageStatus, WorkPackageType, ComponentType, LogLevel} from '../constants/constants.js';
 
 class ImpExServices{
 
@@ -110,14 +110,13 @@ class ImpExServices{
         let designs = JSON.parse(designString);
 
         designs.forEach((design) => {
-            log(LogLevel.DEBUG, "Adding Design: *", design.designName);
-            designId = DesignServices.addDesign(false); // Don't create the default Design Version
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design: {}", design.designName);
+
+            designId = DesignServices.importDesign(design);
             if(designId){
                 // Store the new Design ID
                 designsMapping.push({oldId: design._id, newId: designId});
-                // And restore the name
-                DesignServices.updateDesignName(designId, design.designName)
-
             }
         });
 
@@ -132,12 +131,12 @@ class ImpExServices{
         designVersions.forEach((designVersion) => {
             designId = getIdFromMap(designsMapping, designVersion.designId);
             if(designId) {
-                console.log("Adding Design Version " + designVersion.designVersionName + " to design " + designId);
-                designVersionId = DesignVersionServices.addNewDesignVersion(
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
+
+                designVersionId = DesignVersionServices.importDesignVersion(
                     designId,
-                    designVersion.designVersionName,
-                    designVersion.designVersionNumber,
-                    designVersion.designVersionStatus
+                    designVersion
                 );
 
                 if (designVersionId) {
@@ -157,19 +156,17 @@ class ImpExServices{
         designUpdates.forEach((designUpdate) => {
             designVersionId = getIdFromMap(designVersionsMapping, designUpdate.designVersionId);
             if(designVersionId) {
-                console.log("Adding Design Update " + designUpdate.updateName + " to design version " + designVersionId);
 
-                designUpdateId = DesignUpdateServices.addNewDesignUpdate(
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update: {} to Design Version {}",  designUpdate.updateName, designVersionId);
+
+                designUpdateId = DesignUpdateServices.importDesignUpdate(
                     designVersionId,
-                    false               // Don't populate the update as we have the data stored
+                    designUpdate
                 );
 
                 if (designUpdateId) {
                     // Store the new Design Update ID
                     designUpdatesMapping.push({oldId: designUpdate._id, newId: designUpdateId});
-                    // And restore the name and version
-                    DesignUpdateServices.updateDesignUpdateName(designUpdateId, designUpdate.updateName);
-                    DesignUpdateServices.updateDesignUpdateVersion(designUpdateId, designUpdate.updateVersion);
                 }
             }
         });
@@ -187,27 +184,25 @@ class ImpExServices{
             designVersionId = getIdFromMap(designVersionsMapping, workPackage.designVersionId);
 
             if(designVersionId) {
-                console.log("Adding Work Package " + workPackage.workPackageName + " to design version " + designVersionId);
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Work Package: {} of type {} to Design Version {}",
+                    workPackage.workPackageName, workPackage.workPackageType, designVersionId);
 
                 if(workPackage.workPackageType === WorkPackageType.WP_UPDATE){
-                    console.log("Adding UPDATE WP...");
                     designUpdateId = getIdFromMap(designUpdatesMapping, workPackage.designUpdateId);
                 } else {
                     designUpdateId = 'NONE';
                 }
 
-                workPackageId = WorkPackageServices.addNewWorkPackage(
+                workPackageId = WorkPackageServices.importWorkPackage(
                     designVersionId,
                     designUpdateId,
-                    workPackage.workPackageType,
-                    false                           // Don't populate the WP as we have the data stored
+                    workPackage
                 );
 
                 if (workPackageId) {
                     // Store the new Work Package ID
                     workPackagesMapping.push({oldId: workPackage._id, newId: workPackageId});
-                    // And restore the name
-                    WorkPackageServices.updateWorkPackageName(workPackageId, workPackage.workPackageName);
                 }
             }
         });

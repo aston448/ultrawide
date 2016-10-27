@@ -11,17 +11,6 @@ Meteor.methods({
     'userContext.setCurrentUserContext'(context){
 
         UserContextServices.saveUserContext(context);
-    },
-
-    'userContext.setCurrentUserDevContext'(userId, designId, designVersionId, workPackageId, featureFilesLocation){
-
-        UserContextServices.saveUserDevContext(
-            userId,
-            designId,
-            designVersionId,
-            workPackageId,
-            featureFilesLocation,
-        );
-    },
+    }
 
 });

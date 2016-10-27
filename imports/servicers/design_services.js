@@ -35,6 +35,20 @@ class DesignServices{
 
     };
 
+    // Import a design from saved data
+    importDesign(design){
+
+        let designId = Designs.insert(
+            {
+                designName:             design.designName,
+                designRawText:          design.designRawText,
+                isRemovable:            design.isRemovable
+            }
+        );
+
+        return designId;
+    }
+
     updateDesignName(designId, newName){
 
         Designs.update(

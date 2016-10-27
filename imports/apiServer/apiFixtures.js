@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Designs }                  from '../collections/design/designs.js';
 import { UserRoles }                from '../collections/users/user_roles.js';
 import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
+import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 
 import  ImpExServices     from '../servicers/import_export.js';
 
@@ -71,24 +72,37 @@ Meteor.methods({
             });
 
             //TODO get proper root
-            const root =  '/Users/aston/WebstormProjects/Ultrawide';    //Meteor.rootPath;
+            // NOTE: The Features folder is in the TEST version of Ultrawide - for self testing!
+            const root =  '/Users/aston/WebstormProjects/ultrawide-test';    //Meteor.rootPath;
 
             console.log("Setting root path to " + root);
 
             // Start that user at the beginning.  Assume no settings yet
             UserCurrentEditContext.insert({
                 userId: designerUserId,
-                featureFilesLocation:   root + '/tests/features/'
+            });
+            UserCurrentDevContext.insert({
+                userId: designerUserId,
+                featureFilesLocation:   root + '/tests/features/',
+                featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
             });
 
             UserCurrentEditContext.insert({
                 userId: developerUserId,
-                featureFilesLocation:   root + '/tests/features/'
+            });
+            UserCurrentDevContext.insert({
+                userId: developerUserId,
+                featureFilesLocation:   root + '/tests/features/',
+                featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
             });
 
             UserCurrentEditContext.insert({
                 userId: managerUserId,
-                featureFilesLocation:   root + '/tests/features/'
+            });
+            UserCurrentDevContext.insert({
+                userId: managerUserId,
+                featureFilesLocation:   root + '/tests/features/',
+                featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
             });
 
             // Import the last saved data

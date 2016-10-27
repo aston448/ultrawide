@@ -12,11 +12,10 @@ import {log} from '../common/utils.js';
 class FeatureFileServices{
 
     // Convert a whole base design feature into a Gherkin feature file
-    writeFeatureFile(featureReferenceId, userContext){
+    writeFeatureFile(featureReferenceId, userContext, filePath){
 
-        const path = userContext.featureFilesLocation;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, 'Exporting feature file to {}', path);
+        log((msg) => console.log(msg), LogLevel.TRACE, 'Exporting feature file to {}', filePath);
 
         const wp = WorkPackages.findOne({_id: userContext.workPackageId});
 
@@ -121,17 +120,17 @@ class FeatureFileServices{
 
         });
 
-        fs.writeFileSync(path + fileName, fileText);
+        fs.writeFileSync(filePath + fileName, fileText);
 
     };
 
-    getFeatureFiles(userContext){
-        log((msg) => console.log(msg), LogLevel.TRACE, "Looking fro FEATURE FILES at {}", userContext.featureFilesLocation);
+    getFeatureFiles(filePath){
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking fro FEATURE FILES at {}", filePath);
 
-        if(userContext.featureFilesLocation != 'NONE'){
+        if(filePath != 'NONE'){
 
             let featureFiles = [];
-            let files = fs.readdirSync(userContext.featureFilesLocation);
+            let files = fs.readdirSync(filePath);
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Found {} files", files.length);
 
@@ -154,9 +153,9 @@ class FeatureFileServices{
         }
     };
 
-    getFeatureFileText(userContext, fileName){
+    getFeatureFileText(filePath, fileName){
 
-        return fs.readFileSync(userContext.featureFilesLocation + fileName);
+        return fs.readFileSync(filePath + fileName);
 
     }
 

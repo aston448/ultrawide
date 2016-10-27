@@ -27,8 +27,7 @@ class UserContextServices{
                 designComponentType:    context.designComponentType,
                 featureReferenceId:     context.featureReferenceId,
                 scenarioReferenceId:    context.scenarioReferenceId,
-                scenarioStepId:         context.scenarioStepId,
-                featureFilesLocation:   context.featureFilesLocation,
+                scenarioStepId:         context.scenarioStepId
             }
         )
     };
