@@ -45,10 +45,10 @@ Meteor.methods({
 
         // Make up a temporary user until login implemented
 
-        // Create a new account
+        // Create a new account - note need different user names than in "live"
         let designerUserId = Accounts.createUser(
             {
-                username: 'user1',
+                username: 'test-user1',
                 password: 'user1'
             }
         );
@@ -64,7 +64,7 @@ Meteor.methods({
 
         let developerUserId = Accounts.createUser(
             {
-                username: 'user2',
+                username: 'test-user2',
                 password: 'user2'
             }
         );
@@ -80,7 +80,7 @@ Meteor.methods({
 
         let managerUserId = Accounts.createUser(
             {
-                username: 'user3',
+                username: 'test-user3',
                 password: 'user3'
             }
         );
