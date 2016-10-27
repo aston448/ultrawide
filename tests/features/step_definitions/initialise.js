@@ -14,7 +14,7 @@ import {RoleType} from '../../../imports/constants/constants.js';
 
         this.Given(/^a new instance of Ultrawide$/, function () {
 
-            server.call('fixtures.startup');
+            server.call('testfixtures.startup');
         });
 
         this.When(/^I log in as a Designer$/, function () {
