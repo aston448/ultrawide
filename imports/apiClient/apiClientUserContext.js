@@ -4,15 +4,16 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import { UserCurrentEditContext } from '../collections/context/user_current_edit_context.js';
-import { UserCurrentDevContext } from '../collections/context/user_current_dev_context.js';
-import { UserCurrentDevUpdates } from '../collections/design_update/user_current_dev_updates.js';
-import { UserRoles } from '../collections/users/user_roles.js';
-import { DesignVersions } from '../collections/design/design_versions.js';
-import { DesignUpdates } from '../collections/design_update/design_updates.js';
-import { DesignComponents } from '../collections/design/design_components.js';
-import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
-import { WorkPackageComponents } from '../collections/work/work_package_components.js';
+import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
+import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
+import { UserRoles }                from '../collections/users/user_roles.js';
+import { Designs }                  from '../collections/design/designs.js';
+import { DesignVersions }           from '../collections/design/design_versions.js';
+import { DesignUpdates }            from '../collections/design_update/design_updates.js';
+import { WorkPackages }             from '../collections/work/work_packages.js';
+import { DesignComponents }         from '../collections/design/design_components.js';
+import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
+import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
 import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType } from '../constants/constants.js';
@@ -265,6 +266,121 @@ class ClientUserContextServices {
             store.dispatch(setCurrentView(ViewType.SELECT));
         }
 
+    };
+
+    // Get readable details of the current user context
+    getContextNameData(userContext){
+
+        let contextNameData = {
+            design:             'NONE',
+            designVersion:      'NONE',
+            designUpdate:       'NONE',
+            workPackage:        'NONE',
+            application:        'NONE',
+            designSection:      'NONE',
+            feature:            'NONE',
+            featureAspect:      'NONE',
+            scenario:           'NONE'
+        };
+
+        if(userContext.designId != 'NONE'){
+            contextNameData.design = Designs.findOne({_id: userContext.designId}).designName;
+        }
+
+        if(userContext.designVersionId != 'NONE'){
+            contextNameData.designVersion = DesignVersions.findOne({_id: userContext.designVersionId}).designVersionName;
+        }
+
+        if(userContext.designUpdateId != 'NONE'){
+            contextNameData.designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId}).updateName;
+        }
+
+        if(userContext.workPackageId != 'NONE'){
+            contextNameData.workPackage = WorkPackages.findOne({_id: userContext.workPackageId}).workPackageName;
+        }
+
+        if(userContext.designComponentId != 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                    if(userContext.designUpdateId === 'NONE'){
+                        contextNameData.application = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                    } else {
+                        contextNameData.application = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                    }
+                    break;
+                case ComponentType.DESIGN_SECTION:
+                    if(userContext.designUpdateId === 'NONE'){
+                        contextNameData.designSection = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                    } else {
+                        contextNameData.designSection = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                    }
+                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                    break;
+                case ComponentType.FEATURE:
+                    if(userContext.designUpdateId === 'NONE'){
+                        contextNameData.feature = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                    } else {
+                        contextNameData.feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                    }
+                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                    contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    if(userContext.designUpdateId === 'NONE'){
+                        contextNameData.featureAspect = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                    } else {
+                        contextNameData.featureAspect = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                    }
+                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                    contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                    contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
+                    break;
+                case ComponentType.SCENARIO:
+                    if(userContext.designUpdateId === 'NONE'){
+                        contextNameData.scenario = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                    } else {
+                        contextNameData.scenario = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                    }
+                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                    contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                    contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
+                    contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext);
+                    break;
+            }
+        }
+
+        return contextNameData;
+
+    };
+
+    getParent(parentType, context){
+
+        let currentItemType = context.designComponentType;
+        let currentItemId= context.designComponentId;
+
+        if(context.designUpdateId === 'NONE'){
+
+            let currentItem = DesignComponents.findOne({_id: currentItemId});
+            let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+
+            while(parentItem.componentType != parentType && currentItem.componentParentId != 'NONE'){
+                currentItemId = parentItem._id;
+                parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+            }
+
+            return parentItem.componentName;
+
+        } else {
+            let currentUpdateItem = DesignUpdateComponents.findOne({_id: currentItemId});
+            let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+
+            while(parentUpdateItem.componentType != parentType && currentUpdateItem.componentParentIdNew != 'NONE'){
+                currentItemId = parentUpdateItem._id;
+                parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+            }
+
+            return parentUpdateItem.componentName;
+        }
     }
 
 }

@@ -79,7 +79,7 @@ class FeatureFileServices{
         ).fetch();
 
 
-        const fileName = featureName.replace(' ', '_') + '.feature';
+        const fileName = featureName.replace(/ /g, '_') + '.feature';
 
         let fileText = '@test\n';
 

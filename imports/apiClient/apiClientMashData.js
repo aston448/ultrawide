@@ -5,9 +5,11 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
+import { DesignComponents }         from '../collections/design/design_components.js';
+import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, LogLevel} from '../constants/constants.js';
+import { ComponentType, LogLevel} from '../constants/constants.js';
 import { log} from '../common/utils.js';
 
 
@@ -54,6 +56,14 @@ class ClientMashDataServices {
         Meteor.call('mash.updateTestData', userContext, devContext.featureTestResultsLocation);
     }
 
+    featureHasAspects(featureId, designUpdateId){
+
+        if(designUpdateId === 'NONE'){
+            return DesignComponents.find({componentParentId: featureId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
+        } else {
+            return DesignUpdateComponents.find({componentParentIdNew: featureId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
+        }
+    }
 }
 
 export default new ClientMashDataServices();

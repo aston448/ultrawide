@@ -997,7 +997,7 @@ class ClientContainerServices{
 
         }
 
-    }
+    };
 
     isDescendentOf(child, parent, context){
 
@@ -1026,6 +1026,32 @@ class ClientContainerServices{
 
         // No parent found
         return false;
+
+    };
+
+    getMashFeatureAspects(userContext){
+
+        if(userContext.designComponentType === ComponentType.FEATURE){
+
+            let featureAspects = [];
+
+            if(userContext.designUpdateId === 'NONE'){
+                featureAspects = DesignComponents.find({
+                    componentParentId: userContext.designComponentId,
+                    componentType: ComponentType.FEATURE_ASPECT
+                }).fetch();
+            } else {
+                featureAspects = DesignUpdateComponents.find({
+                    componentParentIdNew: userContext.designComponentId,
+                    componentType: ComponentType.FEATURE_ASPECT
+                }).fetch();
+            }
+
+            return featureAspects;
+
+        } else {
+            return [];
+        }
 
     }
 

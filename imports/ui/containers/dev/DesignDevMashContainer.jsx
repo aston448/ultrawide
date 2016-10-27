@@ -13,8 +13,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignDevMashItem from '../../components/dev/DesignDevMashItem.jsx';
 
 // Ultrawide Services
-import {RoleType, ComponentType} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import {RoleType, ComponentType}    from '../../../constants/constants.js';
+
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
+import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -61,19 +64,27 @@ class DesignItemMashList extends Component {
         let panelHeader = '';
         let itemHeader = '';
 
+        const nameData = UserContextServices.getContextNameData(userContext);
+
         switch(userContext.designComponentType){
             case ComponentType.APPLICATION:
+                panelHeader = 'Features in ' + nameData.application;
+                itemHeader = 'Feature';
+                break;
             case ComponentType.DESIGN_SECTION:
-                panelHeader = 'Features in this ' + userContext.designComponentType;
+                panelHeader = 'Features in ' + nameData.designSection;
                 itemHeader = 'Feature';
                 break;
             case ComponentType.FEATURE:
+                panelHeader = 'Scenarios in ' + nameData.feature;
+                itemHeader = 'Scenario';
+                break;
             case ComponentType.FEATURE_ASPECT:
-                panelHeader = 'Scenarios in this ' + userContext.designComponentType;
+                panelHeader = 'Scenarios in aspect ' + nameData.featureAspect + ' of ' + nameData.feature;
                 itemHeader = 'Scenario';
                 break;
             case ComponentType.SCENARIO:
-                panelHeader = 'Steps in this ' + userContext.designComponentType;
+                panelHeader = 'Steps in ' + nameData.scenario;
                 itemHeader = 'Step';
                 break;
         }
@@ -82,29 +93,70 @@ class DesignItemMashList extends Component {
         let mainPanel = 'Select a design item';
 
         if(designMashItemData) {
-            mainPanel =
-                <Panel className="panel-text panel-text-body" header={panelHeader}>
-                    <Grid className="close-grid">
-                        <Row>
-                            <Col md={6} className="close-col">
-                                {itemHeader}
-                            </Col>
-                            <Col md={2} className="close-col">
-                                Status
-                            </Col>
-                            <Col md={1} className="close-col">
-                                Actions
-                            </Col>
-                            <Col md={2} className="close-col">
-                                Test
-                            </Col>
-                            <Col md={1} className="close-col">
-                                Result
-                            </Col>
-                        </Row>
-                    </Grid>
-                    {this.renderDesignItemMash(designMashItemData)}
-                </Panel>;
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                case ComponentType.DESIGN_SECTION:
+                case ComponentType.FEATURE_ASPECT:
+                case ComponentType.SCENARIO:
+                    mainPanel =
+                        <Panel className="panel-text panel-text-body" header={panelHeader}>
+                            <Grid className="close-grid">
+                                <Row>
+                                    <Col md={6} className="close-col">
+                                        {itemHeader}
+                                    </Col>
+                                    <Col md={2} className="close-col">
+                                        Status
+                                    </Col>
+                                    <Col md={1} className="close-col">
+                                        Actions
+                                    </Col>
+                                    <Col md={2} className="close-col">
+                                        Test
+                                    </Col>
+                                    <Col md={1} className="close-col">
+                                        Result
+                                    </Col>
+                                </Row>
+                            </Grid>
+                            {this.renderDesignItemMash(designMashItemData)}
+                        </Panel>;
+                    break;
+                case ComponentType.FEATURE:
+                    // Here we divide in to feature aspects (if any)
+                    if(ClientMashDataServices.featureHasAspects()){
+                        mainPanel =
+                            <MashFeatureAspectContainer params={{
+                                userContext: userContext
+                            }}/>
+                    } else {
+                        // Just render the scenarios
+                        mainPanel =
+                            <Panel className="panel-text panel-text-body" header={panelHeader}>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={6} className="close-col">
+                                            {itemHeader}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            Status
+                                        </Col>
+                                        <Col md={1} className="close-col">
+                                            Actions
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            Test
+                                        </Col>
+                                        <Col md={1} className="close-col">
+                                            Result
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                                {this.renderDesignItemMash(designMashItemData)}
+                            </Panel>;
+                    }
+
+            }
         }
 
         return(
