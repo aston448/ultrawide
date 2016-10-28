@@ -10,10 +10,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignDevMashItem from '../../components/dev/DesignDevMashItem.jsx';
+import DesignDevMashItem            from '../../components/dev/DesignDevMashItem.jsx';
+import MashFeatureAspectContainer   from '../../containers/dev/MashFeatureAspectContainer';
 
 // Ultrawide Services
-import {RoleType, ComponentType}    from '../../../constants/constants.js';
+import {RoleType, MashStatus, ComponentType}    from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
@@ -21,6 +22,8 @@ import ClientMashDataServices       from '../../../apiClient/apiClientMashData.j
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
+import {InputGroup} from 'react-bootstrap';
+import {Glyphicon} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
@@ -43,9 +46,35 @@ class DesignItemMashList extends Component {
 
     renderDesignItemMash(mashData){
 
-        console.log("Rendering mash list of length " + mashData.length)
+        console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
+            if(mashItem) {
+                return (
+                    <DesignDevMashItem
+                        key={mashItem._id}
+                        mashItem={mashItem}
+                    />
+                );
+            }
+        });
+    }
+
+    // Renders stuff in the current context that is in Dev but not in the Design
+    renderUnknownDesignItemMash(mashData){
+
+        let unknownMashData = [];
+
+        mashData.forEach((mashItem) => {
+
+            if(mashItem.mashStatus === MashStatus.MASH_NOT_DESIGNED){
+                unknownMashData.push(mashItem);
+            }
+        });
+
+        console.log("Rendering unknown mash list of length " + unknownMashData.length);
+
+        return unknownMashData.map((mashItem) => {
             if(mashItem) {
                 return (
                     <DesignDevMashItem
@@ -61,8 +90,12 @@ class DesignItemMashList extends Component {
 
         const {designMashItemData, currentUserRole, userContext} = this.props;
 
+        console.log("Rendering mash container... ");
+
         let panelHeader = '';
+        let secondPanelHeader = '';
         let itemHeader = '';
+        let secondPanel = <div></div>;
 
         const nameData = UserContextServices.getContextNameData(userContext);
 
@@ -77,10 +110,36 @@ class DesignItemMashList extends Component {
                 break;
             case ComponentType.FEATURE:
                 panelHeader = 'Scenarios in ' + nameData.feature;
+                secondPanelHeader = 'Scenarios in ' + nameData.feature + ' NOT in Design';
                 itemHeader = 'Scenario';
+
+                if(ClientMashDataServices.featureHasUnknownScenarios(userContext)){
+                    secondPanel =
+                        <Panel className="panel-text panel-text-body" header={secondPanelHeader}>
+                            <InputGroup>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={8} className="close-col">
+                                            {itemHeader}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            Status
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            Test
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                                <InputGroup.Addon className="invisible">
+                                    <div><Glyphicon glyph="star"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>
+                            {this.renderUnknownDesignItemMash(designMashItemData)}
+                        </Panel>;
+                }
                 break;
             case ComponentType.FEATURE_ASPECT:
-                panelHeader = 'Scenarios in aspect ' + nameData.featureAspect + ' of ' + nameData.feature;
+                panelHeader = nameData.featureAspect + ' scenarios for ' + nameData.feature;
                 itemHeader = 'Scenario';
                 break;
             case ComponentType.SCENARIO:
@@ -100,58 +159,79 @@ class DesignItemMashList extends Component {
                 case ComponentType.SCENARIO:
                     mainPanel =
                         <Panel className="panel-text panel-text-body" header={panelHeader}>
-                            <Grid className="close-grid">
-                                <Row>
-                                    <Col md={6} className="close-col">
-                                        {itemHeader}
-                                    </Col>
-                                    <Col md={2} className="close-col">
-                                        Status
-                                    </Col>
-                                    <Col md={1} className="close-col">
-                                        Actions
-                                    </Col>
-                                    <Col md={2} className="close-col">
-                                        Test
-                                    </Col>
-                                    <Col md={1} className="close-col">
-                                        Result
-                                    </Col>
-                                </Row>
-                            </Grid>
-                            {this.renderDesignItemMash(designMashItemData)}
-                        </Panel>;
-                    break;
-                case ComponentType.FEATURE:
-                    // Here we divide in to feature aspects (if any)
-                    if(ClientMashDataServices.featureHasAspects()){
-                        mainPanel =
-                            <MashFeatureAspectContainer params={{
-                                userContext: userContext
-                            }}/>
-                    } else {
-                        // Just render the scenarios
-                        mainPanel =
-                            <Panel className="panel-text panel-text-body" header={panelHeader}>
+                            <InputGroup>
                                 <Grid className="close-grid">
                                     <Row>
-                                        <Col md={6} className="close-col">
+                                        <Col md={8} className="close-col">
                                             {itemHeader}
                                         </Col>
                                         <Col md={2} className="close-col">
                                             Status
                                         </Col>
-                                        <Col md={1} className="close-col">
-                                            Actions
-                                        </Col>
                                         <Col md={2} className="close-col">
                                             Test
                                         </Col>
-                                        <Col md={1} className="close-col">
-                                            Result
-                                        </Col>
                                     </Row>
                                 </Grid>
+                                <InputGroup.Addon className="invisible">
+                                    <div><Glyphicon glyph="star"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>
+                            {this.renderDesignItemMash(designMashItemData)}
+                        </Panel>;
+                    break;
+                case ComponentType.FEATURE:
+                    // Here we divide in to feature aspects (if any)
+                    if(ClientMashDataServices.featureHasAspects(userContext)){
+                        mainPanel =
+                            <div>
+                                <Panel className="panel-text panel-text-body" header={panelHeader}>
+                                    <InputGroup>
+                                        <Grid className="close-grid">
+                                            <Row>
+                                                <Col md={8} className="close-col">
+                                                    {itemHeader}
+                                                </Col>
+                                                <Col md={2} className="close-col">
+                                                    Status
+                                                </Col>
+                                                <Col md={2} className="close-col">
+                                                    Test
+                                                </Col>
+                                            </Row>
+                                        </Grid>
+                                        <InputGroup.Addon className="invisible">
+                                            <div><Glyphicon glyph="star"/></div>
+                                        </InputGroup.Addon>
+                                    </InputGroup>
+                                    <MashFeatureAspectContainer params={{
+                                        userContext: userContext
+                                    }}/>
+                                </Panel>
+                                {secondPanel}
+                            </div>
+                    } else {
+                        // Just render the scenarios
+                        mainPanel =
+                            <Panel className="panel-text panel-text-body" header={panelHeader}>
+                                <InputGroup>
+                                    <Grid className="close-grid">
+                                        <Row>
+                                            <Col md={8} className="close-col">
+                                                {itemHeader}
+                                            </Col>
+                                            <Col md={2} className="close-col">
+                                                Status
+                                            </Col>
+                                            <Col md={2} className="close-col">
+                                                Test
+                                            </Col>
+                                        </Row>
+                                    </Grid>
+                                    <InputGroup.Addon className="invisible">
+                                        <div><Glyphicon glyph="star"/></div>
+                                    </InputGroup.Addon>
+                                </InputGroup>
                                 {this.renderDesignItemMash(designMashItemData)}
                             </Panel>;
                     }

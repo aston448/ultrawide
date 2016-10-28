@@ -33,16 +33,17 @@ class ClientDesignVersionServices{
     setDesignVersion(userContext, newDesignVersionId){
 
         const context = {
-            userId:                 Meteor.userId(),
-            designId:               userContext.designId,       // Must be the same design
-            designVersionId:        newDesignVersionId,         // The new design version
-            designUpdateId:         'NONE',                     // Everything else reset for new Design
-            workPackageId:          'NONE',
-            designComponentId:      'NONE',
-            designComponentType:    'NONE',
-            featureReferenceId:     'NONE',
-            scenarioReferenceId:    'NONE',
-            scenarioStepId:         'NONE'
+            userId:                     Meteor.userId(),
+            designId:                   userContext.designId,       // Must be the same design
+            designVersionId:            newDesignVersionId,         // The new design version
+            designUpdateId:             'NONE',                     // Everything else reset for new Design
+            workPackageId:              'NONE',
+            designComponentId:          'NONE',
+            designComponentType:        'NONE',
+            featureReferenceId:         'NONE',
+            featureAspectReferenceId:   'NONE',
+            scenarioReferenceId:        'NONE',
+            scenarioStepId:             'NONE'
         };
 
         store.dispatch(setCurrentUserItemContext(context, true));

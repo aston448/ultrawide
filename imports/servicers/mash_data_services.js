@@ -10,8 +10,9 @@ import {UserDevFeatures}        from '../collections/dev/user_dev_features.js';
 import {UserDevFeatureScenarios}from '../collections/dev/user_dev_feature_scenarios.js';
 import {DesignDevFeatureMash}   from '../collections/dev/design_dev_feature_mash.js';
 import {DesignDevScenarioMash}   from '../collections/dev/design_dev_scenario_mash.js';
+import {UserDesignDevMashData}   from '../collections/dev/user_design_dev_mash_data.js';
 
-import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, MashStatus, MashTestStatus, LogLevel} from '../constants/constants.js';
+import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
 import {log} from '../common/utils.js';
 import FeatureFileServices from '../servicers/feature_file_services.js'
 
@@ -36,7 +37,9 @@ class MashDataServices{
         featureFiles.forEach((file) => {
 
             const fileText = FeatureFileServices.getFeatureFileText(filePath, file);
-            const featureName = FeatureFileServices.getFeatureName(fileText.toString());
+            const feature = FeatureFileServices.getFeatureName(fileText.toString());
+            const featureName = feature.feature;
+            const tag = feature.tag;
 
             // Initial default feature file data
             let devFeatureData = {
@@ -45,6 +48,7 @@ class MashDataServices{
                 // Data
                 featureName:            featureName,
                 featureNarrative:       '',
+                featureTag:             tag,
                 // Status
                 featureFileStatus:      UserDevFeatureFileStatus.FILE_VALID,
                 featureStatus:          UserDevFeatureStatus.FEATURE_UNKNOWN,
@@ -144,7 +148,8 @@ class MashDataServices{
                 let devScenarioData = {
                     userId:                 userContext.userId,
                     userDevFeatureId:       devFeatureId,
-                    text:                   devScenario,
+                    scenarioName:           devScenario.scenario,
+                    scenarioTag:            devScenario.tag,
                     featureReferenceId:     'NONE',
                     scenarioReferenceId:    'NONE',
                     scenarioStatus:         UserDevScenarioStatus.SCENARIO_UNKNOWN
@@ -160,7 +165,7 @@ class MashDataServices{
                             designId: userContext.designId,
                             designVersionId: userContext.designVersionId,
                             componentType: ComponentType.SCENARIO,
-                            componentName: devScenario
+                            componentName: devScenario.scenario
                         }
                     );
                 } else {
@@ -171,7 +176,7 @@ class MashDataServices{
                             designVersionId: userContext.designVersionId,
                             designUpdateId: userContext.designUpdateId,
                             componentType: ComponentType.SCENARIO,
-                            componentNameNew: devScenario
+                            componentNameNew: devScenario.scenario
                         }
                     );
                 }
@@ -223,7 +228,8 @@ class MashDataServices{
                         featureReferenceId:     devScenarioData.featureReferenceId,
                         scenarioReferenceId:    devScenarioData.scenarioReferenceId,
                         // Data
-                        scenarioName:           devScenario,
+                        scenarioName:           devScenarioData.scenarioName,
+                        scenarioTag:            devScenarioData.scenarioTag,
                         // Status
                         scenarioStatus:         devScenarioData.scenarioStatus
                     }
@@ -236,203 +242,449 @@ class MashDataServices{
 
         });
 
-    }
+    };
 
     createDesignDevMashData(userContext){
-        // TODO - replace below functions with this one.  Include Feature Aspect data
 
+        // Data created depends on context...
+
+        if(userContext.workPackageId != 'NONE'){
+            // A work package is being used so create data related to that
+            this.createWpDevMashData(userContext);
+        } else {
+            // Otherwise we will be creating data for the whole design version or update for a view of progress
+            if(userContext.designUpdate != 'NONE'){
+                this.createDesignUpdateDevMashData(userContext);
+            } else {
+                this.createDesignVersionDevMashData(userContext);
+            }
+        }
+    };
+
+    createWpDevMashData(userContext){
+
+        // Remove existing WP Mash
+        UserDesignDevMashData.remove({
+            userId:                     userContext.userId,
+            designVersionId:            userContext.designVersionId,
+            designUpdateId:             userContext.designUpdateId,
+            workPackageId:              userContext.workPackageId,
+        });
+
+        // Get list of all mashable elements in current WP: Features, Feature Aspects, Scenarios
+        let designWpItems = WorkPackageComponents.find(
+            {
+                workPackageId: userContext.workPackageId,
+                componentType: {$in: [ComponentType.FEATURE, ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
+                $or:[{componentActive: true}, {componentParent: true}]
+            }
+        );
+
+        designWpItems.forEach((item) => {
+
+            let designItem = null;
+            let designItemParent = null;
+            let designItemIndex = 0;
+
+            if(userContext.designUpdateId === 'NONE'){
+                designItem = DesignComponents.findOne({_id: item.componentId});
+                designItemParent = DesignComponents.findOne({_id: designItem.componentParentId});
+                designItemIndex = designItem.componentIndex;
+            } else {
+                designItem = DesignUpdateComponents.findOne({_id: item.componentId}).componentNameNew;
+                designItemParent = DesignUpdateComponents.findOne({_id: designItem.componentParentIdNew});
+                designItemIndex = designItem.componentIndexNew;
+            }
+
+            let itemName = designItem.componentName;
+
+            let devFeature = null;
+            let devFeatureId = 'NONE';
+            let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+            let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+            let tag = DevTestTag.TEST_TEST; // Default testing tag to Test
+
+            switch(item.componentType){
+                case ComponentType.FEATURE:
+                    // See if we have a corresponding Dev item
+                    devFeature = UserDevFeatures.findOne({
+                        userId: userContext.userId,
+                        featureName: itemName
+                    });
+
+
+                    if(devFeature){
+                        devFeatureId = devFeature._id;
+                        mashStatus = MashStatus.MASH_LINKED;
+                        mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
+                        tag = devFeature.featureTag;
+                    }
+
+                    // Add new Mash
+                    UserDesignDevMashData.insert(
+                        {
+                            // Identity
+                            userId:                         userContext.userId,
+                            designVersionId:                userContext.designVersionId,
+                            designUpdateId:                 userContext.designUpdateId,
+                            workPackageId:                  userContext.workPackageId,
+                            designComponentId:              item.componentId,
+                            mashComponentType:              ComponentType.FEATURE,
+                            designComponentReferenceId:     designItem.componentReferenceId,
+                            designFeatureReferenceId:       item.componentReferenceId,
+                            mashItemIndex:                  designItemIndex,
+                            // Links
+                            devFeatureId:                   devFeatureId,
+                            // Data
+                            mashItemName:                   itemName,
+                            mashItemTag:                    tag,
+                            // Status
+                            mashStatus:                     mashStatus,
+                            mashTestStatus:                 mashTestStatus
+                        }
+                    );
+
+                    // For each WP Feature, check also for scenarios in this feature in Dev but NOT in Design
+                    let devOnlyScenarios = UserDevFeatureScenarios.find({
+                        userId:             userContext.userId,
+                        featureReferenceId: item.componentReferenceId,
+                        scenarioStatus:     UserDevScenarioStatus.SCENARIO_UNKNOWN
+                    }).fetch();
+
+                    devOnlyScenarios.forEach((scenario) => {
+                        // Add new Mash
+                        UserDesignDevMashData.insert(
+                            {
+                                // Identity
+                                userId:                         userContext.userId,
+                                designVersionId:                userContext.designVersionId,
+                                designUpdateId:                 userContext.designUpdateId,
+                                workPackageId:                  userContext.workPackageId,
+                                designComponentId:              item.componentId,
+                                mashComponentType:              ComponentType.SCENARIO,
+                                designFeatureReferenceId:       item.componentReferenceId,
+                                // Links
+                                devFeatureId:                   devFeatureId,
+                                devScenarioId:                  scenario._id,
+                                // Data
+                                mashItemName:                   scenario.scenarioName,
+                                mashItemTag:                    scenario.scenarioTag,
+                                // Status
+                                mashStatus:                     MashStatus.MASH_NOT_DESIGNED,
+                                mashTestStatus:                 MashTestStatus.MASH_NOT_LINKED
+                            }
+                        );
+                    });
+                    break;
+
+                case ComponentType.FEATURE_ASPECT:
+                    // There is no direct equivalent dev data - this is for organisation on the design side
+
+                    // However, link to the dev Feature for which this is an Aspect
+                    let parentFeatureName = '';
+                    const wpFeatureItem = WorkPackageComponents.findOne({
+                        workPackageId: userContext.workPackageId,
+                        componentReferenceId: item.componentFeatureReferenceId
+                    });
+
+                    if(userContext.designUpdateId === 'NONE'){
+                        parentFeatureName = DesignComponents.findOne({_id: wpFeatureItem.componentId}).componentName;
+                    } else {
+                        parentFeatureName = DesignUpdateComponents.findOne({_id: wpFeatureItem.componentId}).componentNameNew;
+                    }
+
+                    devFeature = UserDevFeatures.findOne({
+                        userId: userContext.userId,
+                        featureName: parentFeatureName
+                    });
+
+                    if(devFeature){
+                        devFeatureId = devFeature._id;
+                        mashStatus = MashStatus.MASH_LINKED;
+                        mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
+                        tag = devFeature.featureTag;
+                    }
+
+                    // Add new Mash
+                    UserDesignDevMashData.insert(
+                        {
+                            // Identity
+                            userId:                         userContext.userId,
+                            designVersionId:                userContext.designVersionId,
+                            designUpdateId:                 userContext.designUpdateId,
+                            workPackageId:                  userContext.workPackageId,
+                            designComponentId:              item.componentId,
+                            mashComponentType:              ComponentType.FEATURE_ASPECT,
+                            designComponentReferenceId:     designItem.componentReferenceId,
+                            designFeatureReferenceId:       item.componentFeatureReferenceId,
+                            mashItemIndex:                  designItemIndex,
+                            // Links
+                            devFeatureId:                   devFeatureId,
+                            // Data
+                            mashItemName:                   itemName,
+                            mashItemTag:                    tag,
+                            // Status
+                            mashStatus:                     mashStatus,
+                            mashTestStatus:                 mashTestStatus
+                        }
+                    );
+
+                    break;
+
+                case ComponentType.SCENARIO:
+                    // See if we have a corresponding Dev Scenario
+                    const devScenario = UserDevFeatureScenarios.findOne({
+                        userId: userContext.userId,
+                        scenarioName: itemName
+                    });
+
+                    let devScenarioId = 'NONE';
+                    let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+                    let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+
+                    if(devScenario){
+                        devFeatureId = devScenario.userDevFeatureId;
+                        devScenarioId = devScenario._id;
+                        mashStatus = MashStatus.MASH_LINKED;
+                        mashTestStatus = MashTestStatus.MASH_PENDING;
+                        tag = devScenario.scenarioTag;
+                    }
+
+                    let featureAspectReferenceId = 'NONE';
+                    if(designItemParent.componentType === ComponentType.FEATURE_ASPECT){
+                        featureAspectReferenceId = designItemParent.componentReferenceId
+                    }
+
+                    // Add new Mash
+                    UserDesignDevMashData.insert(
+                        {
+                            // Identity
+                            userId:                         userContext.userId,
+                            designVersionId:                userContext.designVersionId,
+                            designUpdateId:                 userContext.designUpdateId,
+                            workPackageId:                  userContext.workPackageId,
+                            designComponentId:              item.componentId,
+                            mashComponentType:              ComponentType.SCENARIO,
+                            designComponentReferenceId:     designItem.componentReferenceId,
+                            designFeatureReferenceId:       item.componentFeatureReferenceId,
+                            designFeatureAspectReferenceId: featureAspectReferenceId,
+                            designScenarioReferenceId:      item.componentReferenceId,
+                            mashItemIndex:                  designItemIndex,
+                            // Links
+                            devFeatureId:                   devFeatureId,
+                            devScenarioId:                  devScenarioId,
+                            // Data
+                            mashItemName:                   itemName,
+                            mashItemTag:                    tag,
+                            // Status
+                            mashStatus:                     mashStatus,
+                            mashTestStatus:                 mashTestStatus
+                        }
+                    );
+                    break;
+            }
+        });
+    };
+
+    createDesignUpdateDevMashData(userContext){
+        // TODO
+    };
+
+    createDesignVersionDevMashData(userContext){
+        // TODO
     }
 
-    createFeatureMashData(userContext){
 
-        // Called when opening a new development work package or when data is imported / exported from / to dev
-
-        // Get list of all features in current WP
-        let designWpFeatures = WorkPackageComponents.find(
-            {
-                workPackageId: userContext.workPackageId,
-                componentType: ComponentType.FEATURE,
-                componentActive: true
-            }
-        );
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} design features in current WP", designWpFeatures.count());
-
-        // Remove existing WP Mash
-        DesignDevFeatureMash.remove({
-            userId:                     userContext.userId,
-            designVersionId:            userContext.designVersionId,
-            designUpdateId:             userContext.designUpdateId,
-            workPackageId:              userContext.workPackageId,
-        });
-
-        designWpFeatures.forEach((designWpFeature) => {
-
-            let featureName = '';
-
-            if(userContext.designUpdateId === 'NONE'){
-                featureName = DesignComponents.findOne({_id: designWpFeature.componentId}).componentName;
-            } else {
-                featureName = DesignUpdateComponents.findOne({_id: designWpFeature.componentId}).componentNameNew;
-            }
-
-            // See if we have a corresponding Dev feature
-            const devFeature = UserDevFeatures.findOne({
-                userId: userContext.userId,
-                featureName: featureName
-            });
-
-            let devFeatureId = null;
-            let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
-            let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
-
-            if(devFeature){
-                devFeatureId = devFeature._id;
-                mashStatus = MashStatus.MASH_LINKED;
-                mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
-            }
-
-            // Add new Mash
-            DesignDevFeatureMash.insert(
-                {
-                    userId:                     userContext.userId,
-                    designVersionId:            userContext.designVersionId,
-                    designUpdateId:             userContext.designUpdateId,
-                    workPackageId:              userContext.workPackageId,
-                    userDevFeatureId:           devFeatureId,
-                    designFeatureReferenceId:   designWpFeature.componentReferenceId,
-                    // Data
-                    featureName:                featureName,
-                    // Status
-                    featureMashStatus:          mashStatus,
-                    featureTestStatus:          mashTestStatus
-                }
-            );
-
-        });
-
-        // NOTE: if a feature is not in the design we don't add it to the mash.  Assumption that only designed Features are valid
-
-        // Also, there is no removal of Features from the mash as it is not possible to remove a feature from a WP
-
-    };
-
-    createScenarioMashData(userContext){
-
-        //Get list of all Features in current WP
-        let designWpFeatures = WorkPackageComponents.find(
-            {
-                workPackageId: userContext.workPackageId,
-                componentType: ComponentType.FEATURE,
-                componentActive: true
-            }
-        );
-
-        // And a list of scenarios
-        let designWpScenarios = WorkPackageComponents.find(
-            {
-                workPackageId: userContext.workPackageId,
-                componentType: ComponentType.SCENARIO,
-                componentActive: true
-            }
-        );
-
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} design scenarios in current WP", designWpScenarios.count());
-
-        // Remove existing WP Mash
-        DesignDevScenarioMash.remove({
-            userId:                     userContext.userId,
-            designVersionId:            userContext.designVersionId,
-            designUpdateId:             userContext.designUpdateId,
-            workPackageId:              userContext.workPackageId,
-        });
-
-        // Insert any Scenarios that are either in the current WP or in DEV in a feature that is in the WP
-
-        // Scenarios in current WP
-        designWpScenarios.forEach((designWpScenario) => {
-
-            let designScenario = null;
-            let scenarioName = ''
-            if(userContext.designUpdateId === 'NONE'){
-                designScenario = DesignComponents.findOne({_id: designWpScenario.componentId});
-                if(designScenario){
-                    scenarioName = designScenario.componentName;
-                }
-            } else {
-                designScenario = DesignUpdateComponents.findOne({_id: designWpScenario.componentId});
-                if(designScenario){
-                    scenarioName = designScenario.componentNameNew;
-                }
-            }
-
-            // See if we have a corresponding Dev Scenario
-            const devScenario = UserDevFeatureScenarios.findOne({
-                userId: userContext.userId,
-                scenarioName: scenarioName
-            });
-
-            let devScenarioId = null;
-            let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
-            let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
-
-            if(devScenario){
-                devScenarioId = devScenario._id;
-                mashStatus = MashStatus.MASH_LINKED;
-                mashTestStatus = MashTestStatus.MASH_PENDING;
-            }
-
-            // Add new Mash
-            DesignDevScenarioMash.insert(
-                {
-                    userId:                     userContext.userId,
-                    designVersionId:            userContext.designVersionId,
-                    designUpdateId:             userContext.designUpdateId,
-                    workPackageId:              userContext.workPackageId,
-                    userDevScenarioId:          devScenarioId,
-                    designFeatureReferenceId:   designWpScenario.componentFeatureReferenceId,
-                    designScenarioReferenceId:  designScenario.componentReferenceId,
-                    // Data
-                    scenarioName:               scenarioName,
-                    // Status
-                    scenarioMashStatus:         mashStatus,
-                    scenarioTestStatus:         mashTestStatus
-                }
-            );
-
-        });
-
-        // Extra Dev Scenarios NOT in Design but in Features in Design
-        designWpFeatures.forEach((wpFeature) => {
-
-            let devOnlyScenarios = UserDevFeatureScenarios.find({
-                userId:             userContext.userId,
-                featureReferenceId: wpFeature.componentReferenceId,
-                scenarioStatus:     UserDevScenarioStatus.SCENARIO_UNKNOWN
-            }).fetch();
-
-            devOnlyScenarios.forEach((scenario) => {
-                // Add new Mash
-                DesignDevScenarioMash.insert(
-                    {
-                        userId:                     userContext.userId,
-                        designVersionId:            userContext.designVersionId,
-                        designUpdateId:             userContext.designUpdateId,
-                        workPackageId:              userContext.workPackageId,
-                        userDevScenarioId:          scenario._id,
-                        designFeatureReferenceId:   wpFeature.componentReferenceId,
-                        // Data
-                        scenarioName:               scenario.scenarioName,
-                        // Status
-                        scenarioMashStatus:         MashStatus.MASH_NOT_DESIGNED,
-                        scenarioTestStatus:         MashTestStatus.MASH_NOT_LINKED
-                    }
-                );
-            });
-        });
-
-
-    };
+    // createFeatureMashData(userContext){
+    //
+    //     // Called when opening a new development work package or when data is imported / exported from / to dev
+    //
+    //     // Get list of all features in current WP
+    //     let designWpFeatures = WorkPackageComponents.find(
+    //         {
+    //             workPackageId: userContext.workPackageId,
+    //             componentType: ComponentType.FEATURE,
+    //             componentActive: true
+    //         }
+    //     );
+    //
+    //     log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} design features in current WP", designWpFeatures.count());
+    //
+    //     // Remove existing WP Mash
+    //     DesignDevFeatureMash.remove({
+    //         userId:                     userContext.userId,
+    //         designVersionId:            userContext.designVersionId,
+    //         designUpdateId:             userContext.designUpdateId,
+    //         workPackageId:              userContext.workPackageId,
+    //     });
+    //
+    //     designWpFeatures.forEach((designWpFeature) => {
+    //
+    //         let featureName = '';
+    //
+    //         if(userContext.designUpdateId === 'NONE'){
+    //             featureName = DesignComponents.findOne({_id: designWpFeature.componentId}).componentName;
+    //         } else {
+    //             featureName = DesignUpdateComponents.findOne({_id: designWpFeature.componentId}).componentNameNew;
+    //         }
+    //
+    //         // See if we have a corresponding Dev feature
+    //         const devFeature = UserDevFeatures.findOne({
+    //             userId: userContext.userId,
+    //             featureName: featureName
+    //         });
+    //
+    //         let devFeatureId = null;
+    //         let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+    //         let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+    //
+    //         if(devFeature){
+    //             devFeatureId = devFeature._id;
+    //             mashStatus = MashStatus.MASH_LINKED;
+    //             mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
+    //         }
+    //
+    //         // Add new Mash
+    //         DesignDevFeatureMash.insert(
+    //             {
+    //                 userId:                     userContext.userId,
+    //                 designVersionId:            userContext.designVersionId,
+    //                 designUpdateId:             userContext.designUpdateId,
+    //                 workPackageId:              userContext.workPackageId,
+    //                 userDevFeatureId:           devFeatureId,
+    //                 designFeatureReferenceId:   designWpFeature.componentReferenceId,
+    //                 // Data
+    //                 featureName:                featureName,
+    //                 // Status
+    //                 featureMashStatus:          mashStatus,
+    //                 featureTestStatus:          mashTestStatus
+    //             }
+    //         );
+    //
+    //     });
+    //
+    //     // NOTE: if a feature is not in the design we don't add it to the mash.  Assumption that only designed Features are valid
+    //
+    //     // Also, there is no removal of Features from the mash as it is not possible to remove a feature from a WP
+    //
+    // };
+    //
+    // createScenarioMashData(userContext){
+    //
+    //     //Get list of all Features in current WP
+    //     let designWpFeatures = WorkPackageComponents.find(
+    //         {
+    //             workPackageId: userContext.workPackageId,
+    //             componentType: ComponentType.FEATURE,
+    //             componentActive: true
+    //         }
+    //     );
+    //
+    //     // And a list of scenarios
+    //     let designWpScenarios = WorkPackageComponents.find(
+    //         {
+    //             workPackageId: userContext.workPackageId,
+    //             componentType: ComponentType.SCENARIO,
+    //             componentActive: true
+    //         }
+    //     );
+    //
+    //     log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} design scenarios in current WP", designWpScenarios.count());
+    //
+    //     // Remove existing WP Mash
+    //     DesignDevScenarioMash.remove({
+    //         userId:                     userContext.userId,
+    //         designVersionId:            userContext.designVersionId,
+    //         designUpdateId:             userContext.designUpdateId,
+    //         workPackageId:              userContext.workPackageId,
+    //     });
+    //
+    //     // Insert any Scenarios that are either in the current WP or in DEV in a feature that is in the WP
+    //
+    //     // Scenarios in current WP
+    //     designWpScenarios.forEach((designWpScenario) => {
+    //
+    //         let designScenario = null;
+    //         let scenarioName = ''
+    //         if(userContext.designUpdateId === 'NONE'){
+    //             designScenario = DesignComponents.findOne({_id: designWpScenario.componentId});
+    //             if(designScenario){
+    //                 scenarioName = designScenario.componentName;
+    //             }
+    //         } else {
+    //             designScenario = DesignUpdateComponents.findOne({_id: designWpScenario.componentId});
+    //             if(designScenario){
+    //                 scenarioName = designScenario.componentNameNew;
+    //             }
+    //         }
+    //
+    //         // See if we have a corresponding Dev Scenario
+    //         const devScenario = UserDevFeatureScenarios.findOne({
+    //             userId: userContext.userId,
+    //             scenarioName: scenarioName
+    //         });
+    //
+    //         let devScenarioId = null;
+    //         let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+    //         let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+    //
+    //         if(devScenario){
+    //             devScenarioId = devScenario._id;
+    //             mashStatus = MashStatus.MASH_LINKED;
+    //             mashTestStatus = MashTestStatus.MASH_PENDING;
+    //         }
+    //
+    //         // Add new Mash
+    //         DesignDevScenarioMash.insert(
+    //             {
+    //                 userId:                     userContext.userId,
+    //                 designVersionId:            userContext.designVersionId,
+    //                 designUpdateId:             userContext.designUpdateId,
+    //                 workPackageId:              userContext.workPackageId,
+    //                 userDevScenarioId:          devScenarioId,
+    //                 designFeatureReferenceId:   designWpScenario.componentFeatureReferenceId,
+    //                 designScenarioReferenceId:  designScenario.componentReferenceId,
+    //                 // Data
+    //                 scenarioName:               scenarioName,
+    //                 // Status
+    //                 scenarioMashStatus:         mashStatus,
+    //                 scenarioTestStatus:         mashTestStatus
+    //             }
+    //         );
+    //
+    //     });
+    //
+    //     // Extra Dev Scenarios NOT in Design but in Features in Design
+    //     designWpFeatures.forEach((wpFeature) => {
+    //
+    //         let devOnlyScenarios = UserDevFeatureScenarios.find({
+    //             userId:             userContext.userId,
+    //             featureReferenceId: wpFeature.componentReferenceId,
+    //             scenarioStatus:     UserDevScenarioStatus.SCENARIO_UNKNOWN
+    //         }).fetch();
+    //
+    //         devOnlyScenarios.forEach((scenario) => {
+    //             // Add new Mash
+    //             DesignDevScenarioMash.insert(
+    //                 {
+    //                     userId:                     userContext.userId,
+    //                     designVersionId:            userContext.designVersionId,
+    //                     designUpdateId:             userContext.designUpdateId,
+    //                     workPackageId:              userContext.workPackageId,
+    //                     userDevScenarioId:          scenario._id,
+    //                     designFeatureReferenceId:   wpFeature.componentReferenceId,
+    //                     // Data
+    //                     scenarioName:               scenario.scenarioName,
+    //                     // Status
+    //                     scenarioMashStatus:         MashStatus.MASH_NOT_DESIGNED,
+    //                     scenarioTestStatus:         MashTestStatus.MASH_NOT_LINKED
+    //                 }
+    //             );
+    //         });
+    //     });
+    //
+    //
+    // };
 
     createScenarioStepMashData(userContext){
 
@@ -506,18 +758,19 @@ class MashDataServices{
                         log((msg) => console.log(msg), LogLevel.TRACE, "Design Scenario is: {}", designScenario);
 
                         if(designFeature && designScenario) {
-                            DesignDevScenarioMash.update(
+                            UserDesignDevMashData.update(
                                 {
                                     userId:                         userContext.userId,
                                     designVersionId:                userContext.designVersionId,
                                     designUpdateId:                 userContext.designUpdateId,
                                     workPackageId:                  userContext.workPackageId,
+                                    mashComponentType:              ComponentType.SCENARIO,
                                     designFeatureReferenceId:       designFeature.componentReferenceId,
                                     designScenarioReferenceId:      designScenario.componentReferenceId,
                                  },
                                 {
                                     $set:{
-                                        scenarioTestStatus: scenarioTestStatus
+                                        mashTestStatus: scenarioTestStatus
                                     }
                                 },
                                 (error, result) => {
@@ -529,19 +782,22 @@ class MashDataServices{
                     }
                 });
 
+                // TODO - Update this to set Feature Aspect and Feature Status by looking at the Scenarios within them...
+
                 // Update the feature test status as well
                 if(designFeature){
-                    DesignDevFeatureMash.update(
+                    UserDesignDevMashData.update(
                         {
                             userId:                         userContext.userId,
                             designVersionId:                userContext.designVersionId,
                             designUpdateId:                 userContext.designUpdateId,
                             workPackageId:                  userContext.workPackageId,
+                            mashComponentType:              ComponentType.FEATURE,
                             designFeatureReferenceId:       designFeature.componentReferenceId,
                         },
                         {
                             $set:{
-                                featureTestStatus: featureTestStatus
+                                mashTestStatus: featureTestStatus
                             }
                         }
 

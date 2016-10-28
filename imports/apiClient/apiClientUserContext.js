@@ -16,7 +16,8 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType } from '../constants/constants.js';
+import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel } from '../constants/constants.js';
+import { log } from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -130,16 +131,17 @@ class ClientUserContextServices {
         if(userContext){
 
             const context = {
-                userId:                 userId,
-                designId:               userContext.designId,
-                designVersionId:        userContext.designVersionId,
-                designUpdateId:         userContext.designUpdateId,
-                workPackageId:          userContext.workPackageId,
-                designComponentId:      userContext.designComponentId,
-                designComponentType:    userContext.designComponentType,
-                featureReferenceId:     userContext.featureReferenceId,
-                scenarioReferenceId:    userContext.scenarioReferenceId,
-                scenarioStepId:         userContext.scenarioStepId
+                userId:                     userId,
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
+                workPackageId:              userContext.workPackageId,
+                designComponentId:          userContext.designComponentId,
+                designComponentType:        userContext.designComponentType,
+                featureReferenceId:         userContext.featureReferenceId,
+                featureAspectReferenceId:   userContext.featureAspectReferenceId,
+                scenarioReferenceId:        userContext.scenarioReferenceId,
+                scenarioStepId:             userContext.scenarioStepId
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
@@ -149,16 +151,17 @@ class ClientUserContextServices {
         } else {
             // No context saved so default to nothing
             const emptyContext = {
-                userId:                 userId,
-                designId:               'NONE',
-                designVersionId:        'NONE',
-                designUpdateId:         'NONE',
-                workPackageId:          'NONE',
-                designComponentId:      'NONE',
-                designComponentType:    'NONE',
-                featureReferenceId:     'NONE',
-                scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE'
+                userId:                     userId,
+                designId:                   'NONE',
+                designVersionId:            'NONE',
+                designUpdateId:             'NONE',
+                workPackageId:              'NONE',
+                designComponentId:          'NONE',
+                designComponentType:        'NONE',
+                featureReferenceId:         'NONE',
+                featureAspectReferenceId:   'NONE',
+                scenarioReferenceId:        'NONE',
+                scenarioStepId:             'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, false)); // Don't save - we are reading from DB here!
@@ -271,6 +274,8 @@ class ClientUserContextServices {
     // Get readable details of the current user context
     getContextNameData(userContext){
 
+        log((msg) => console.log(msg), LogLevel.TRACE, "Getting context name data...");
+
         let contextNameData = {
             design:             'NONE',
             designVersion:      'NONE',
@@ -349,6 +354,8 @@ class ClientUserContextServices {
             }
         }
 
+        log((msg) => console.log(msg), LogLevel.TRACE, "Returning {}", contextNameData);
+
         return contextNameData;
 
     };
@@ -358,14 +365,20 @@ class ClientUserContextServices {
         let currentItemType = context.designComponentType;
         let currentItemId= context.designComponentId;
 
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for parent of type {} for component {} ", parentType, currentItemId);
+
         if(context.designUpdateId === 'NONE'){
 
             let currentItem = DesignComponents.findOne({_id: currentItemId});
             let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
 
-            while(parentItem.componentType != parentType && currentItem.componentParentId != 'NONE'){
-                currentItemId = parentItem._id;
+            log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
+
+            while((parentItem.componentType != parentType) && (currentItem.componentParentId != 'NONE')){
+                currentItem = parentItem;
                 parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
             }
 
             return parentItem.componentName;
@@ -374,8 +387,8 @@ class ClientUserContextServices {
             let currentUpdateItem = DesignUpdateComponents.findOne({_id: currentItemId});
             let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
 
-            while(parentUpdateItem.componentType != parentType && currentUpdateItem.componentParentIdNew != 'NONE'){
-                currentItemId = parentUpdateItem._id;
+            while((parentUpdateItem.componentType != parentType) && (currentUpdateItem.componentParentIdNew != 'NONE')){
+                currentUpdateItem = parentUpdateItem;
                 parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
             }
 

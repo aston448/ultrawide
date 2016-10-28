@@ -163,6 +163,12 @@ export const UserDevScenarioStepStatus = {
     STEP_INVALID:           'STEP_INVALID'
 };
 
+export const DevTestTag = {
+    TEST_TEST:              '@test',
+    TEST_WATCH:             '@watch',
+    TEST_IGNORE:            '@ignore'
+};
+
 export const MashStatus = {
     MASH_LINKED:            'mash-linked',              // This feature is recognised both in the Design and Dev Build
     MASH_NOT_IMPLEMENTED:   'mash-not-implemented',     // This is a Design feature not in Dev

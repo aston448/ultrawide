@@ -7,9 +7,10 @@ import { Meteor } from 'meteor/meteor';
 import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 import { DesignComponents }         from '../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
+import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mash_data.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel} from '../constants/constants.js';
+import { ComponentType, MashStatus, LogLevel} from '../constants/constants.js';
 import { log} from '../common/utils.js';
 
 
@@ -39,9 +40,7 @@ class ClientMashDataServices {
 
             Meteor.call('mash.loadUserFeatureFileData', userContext, devContext.featureFilesLocation);
 
-            Meteor.call('mash.createFeatureMashData', userContext);
-
-            Meteor.call('mash.createScenarioMashData', userContext);
+            Meteor.call('mash.createMashData', userContext);
             return true;
 
         } else {
@@ -54,15 +53,29 @@ class ClientMashDataServices {
         const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
 
         Meteor.call('mash.updateTestData', userContext, devContext.featureTestResultsLocation);
-    }
+    };
 
-    featureHasAspects(featureId, designUpdateId){
+    featureHasAspects(userContext){
 
-        if(designUpdateId === 'NONE'){
-            return DesignComponents.find({componentParentId: featureId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Checking for feature aspects for feature {}", userContext.designComponentId);
+
+        if(userContext.designUpdateId === 'NONE'){
+            return DesignComponents.find({componentParentId: userContext.designComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
         } else {
-            return DesignUpdateComponents.find({componentParentIdNew: featureId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
+            return DesignUpdateComponents.find({componentParentIdNew: userContext.designComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
         }
+    };
+
+    featureHasUnknownScenarios(userContext){
+        return UserDesignDevMashData.find({
+            userId:                         userContext.userId,
+            designVersionId:                userContext.designVersionId,
+            designUpdateId:                 userContext.designUpdateId,
+            workPackageId:                  userContext.workPackageId,
+            mashComponentType:              ComponentType.SCENARIO,
+            designFeatureReferenceId:       userContext.featureReferenceId,
+            mashStatus:                     MashStatus.MASH_NOT_DESIGNED
+        })
     }
 }
 

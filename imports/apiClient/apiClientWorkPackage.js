@@ -42,16 +42,17 @@ class ClientWorkPackageServices {
         if(newWorkPackageId != userContext.workPackageId) {
 
             const context = {
-                userId:                 Meteor.userId(),
-                designId:               userContext.designId,
-                designVersionId:        userContext.designVersionId,
-                designUpdateId:         userContext.designUpdateId,
-                workPackageId:          newWorkPackageId,
-                designComponentId:      'NONE',
-                designComponentType:    'NONE',
-                featureReferenceId:     'NONE',
-                scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE'
+                userId:                     Meteor.userId(),
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
+                workPackageId:              newWorkPackageId,
+                designComponentId:          'NONE',
+                designComponentType:        'NONE',
+                featureReferenceId:         'NONE',
+                featureAspectReferenceId:   'NONE',
+                scenarioReferenceId:        'NONE',
+                scenarioStepId:             'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

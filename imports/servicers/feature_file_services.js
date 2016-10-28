@@ -172,7 +172,12 @@ class FeatureFileServices{
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature name from {} to {}", featureStartIndex, featureEndIndex);
 
-            return fileText.substring(featureStartIndex + 8, featureEndIndex).trim();
+            return(
+                {
+                    feature: fileText.substring(featureStartIndex + 8, featureEndIndex).trim(),
+                    tag: this.getTag(fileText, featureStartIndex)
+                }
+            )
 
         } else {
             return '';
@@ -190,8 +195,12 @@ class FeatureFileServices{
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Looking for scenario name from {} to {}", scenarioStartIndex, scenarioEndIndex);
 
-            scenarios.push(fileText.substring(scenarioStartIndex + 9, scenarioEndIndex).trim());
-
+            scenarios.push(
+                {
+                    scenario: fileText.substring(scenarioStartIndex + 9, scenarioEndIndex).trim(),
+                    tag: this.getTag(fileText, scenarioStartIndex)
+                }
+            );
             scenarioStartIndex = fileText.indexOf('Scenario:', scenarioEndIndex);
         }
 
@@ -213,6 +222,23 @@ class FeatureFileServices{
 
         return scenarios;
 
+    }
+
+    getTag(fileText, tagLocation){
+
+        // Assume that we pass in the location of a Feature: or Scenario: found in the file text.
+
+        // We progress back until we hit an @
+
+        const lastAtPos = fileText.lastIndexOf('@', tagLocation);
+
+        const tagEnd = fileText.indexOf('\n', lastAtPos);
+
+        const tag = fileText.substring(lastAtPos, tagEnd);
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found tag {}", tag);
+
+        return tag;
     }
 
 }

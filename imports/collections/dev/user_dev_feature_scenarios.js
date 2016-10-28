@@ -15,6 +15,7 @@ let Schema = new SimpleSchema({
     scenarioReferenceId:    {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
     // Data
     scenarioName:           {type: String},                         // Unique functional text - plain text
+    scenarioTag:            {type: String, optional: true},
     // Status
     scenarioStatus:         {type: String}
 });

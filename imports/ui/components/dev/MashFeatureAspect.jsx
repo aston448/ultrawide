@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
+import MashFeatureAspectScenarioContainer from '../../containers/dev/MashFeatureAspectScenarioContainer.jsx';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -46,12 +47,12 @@ class MashFeatureAspect extends Component {
 
     }
 
-    onExportFeatureAspect(context){
+    onExportFeatureAspect(aspect, context){
 
-        if(ClientFeatureFileServices.writeFeatureAspectFile(context)){
-            // If adding a feature aspect file, refresh the view...
-            ClientMashDataServices.createFeatureMashData(context);
-        }
+        // if(ClientFeatureFileServices.writeFeatureAspectFile(context)){
+        //     // If adding a feature aspect file, refresh the view...
+        //     ClientMashDataServices.createDevMashData(context);
+        // }
     }
 
 
@@ -61,7 +62,17 @@ class MashFeatureAspect extends Component {
         // All this is is the Aspect (exportable) plus a list of its scenarios
         return(
             <div>
-
+                <InputGroup>
+                    <div className={"mash-aspect"}>
+                        {aspect.mashItemName}
+                    </div>
+                    <InputGroup.Addon onClick={() => this.onExportFeatureAspect(aspect, userContext)}>
+                        <div><Glyphicon glyph="download"/></div>
+                    </InputGroup.Addon>
+                </InputGroup>
+                <MashFeatureAspectScenarioContainer params={{
+                    aspect: aspect
+                }}/>
             </div>
         )
 

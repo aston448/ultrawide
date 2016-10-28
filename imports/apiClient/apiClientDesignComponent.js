@@ -4,6 +4,7 @@
 
 // Ultrawide collections
 import {DesignComponents} from '../collections/design/design_components.js';
+import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import {ViewType, ViewMode, DisplayContext, ComponentType, LogLevel} from '../constants/constants.js';
@@ -32,34 +33,55 @@ class ClientDesignComponentServices{
         if(newDesignComponentId != userContext.designComponentId) {
 
             // See if any of the feature specific fields need setting
-            const component = DesignComponents.findOne({_id: newDesignComponentId});
+            let component = null;
+            let componentFeatureRef = '';
+            let componentParentRef = '';
+            if(userContext.designUpdateId === 'NONE'){
+                component = DesignComponents.findOne({_id: newDesignComponentId});
+                componentFeatureRef = component.componentFeatureReferenceId;
+                componentParentRef = component.componentParentReferenceId;
+            } else {
+                component = DesignUpdateComponents.findOne({_id: newDesignComponentId});
+                componentFeatureRef = component.componentFeatureReferenceIdNew;
+                componentParentRef = component.componentParentReferenceIdNew;
+            }
+
 
             let featureReferenceId = 'NONE';
+            let featureAspectReferenceId = 'NONE';
             let scenarioReferenceId = 'NONE';
 
             switch(component.componentType){
                 case ComponentType.FEATURE:
-                case ComponentType.FEATURE_ASPECT:
                     featureReferenceId = component.componentReferenceId;
                     break;
+                case ComponentType.FEATURE_ASPECT:
+                    featureAspectReferenceId = component.componentReferenceId;
+                    featureReferenceId = componentFeatureRef;
+                    break;
                 case ComponentType.SCENARIO:
-                    featureReferenceId = component.componentFeatureReferenceId;
+                    featureReferenceId = componentFeatureRef;
+                    // If this Scenario is not directly under its feature then the parent is the Feature Aspect
+                    if(componentParentRef != componentFeatureRef){
+                        featureAspectReferenceId = componentParentRef;
+                    }
                     scenarioReferenceId = component.componentReferenceId;
                     break;
             }
 
             // Update context to new component
             const context = {
-                userId:                 Meteor.userId(),
-                designId:               userContext.designId,
-                designVersionId:        userContext.designVersionId,
-                designUpdateId:         userContext.designUpdateId,
-                workPackageId:          userContext.workPackageId,
-                designComponentId:      newDesignComponentId,
-                designComponentType:    component.componentType,
-                featureReferenceId:     featureReferenceId,
-                scenarioReferenceId:    scenarioReferenceId,
-                scenarioStepId:         'NONE'
+                userId:                     Meteor.userId(),
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
+                workPackageId:              userContext.workPackageId,
+                designComponentId:          newDesignComponentId,
+                designComponentType:        component.componentType,
+                featureReferenceId:         featureReferenceId,
+                featureAspectReferenceId:   featureAspectReferenceId,
+                scenarioReferenceId:        scenarioReferenceId,
+                scenarioStepId:             'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -254,16 +276,17 @@ class ClientDesignComponentServices{
 
             // There can now be no component selected...
             const context = {
-                userId:                 Meteor.userId(),
-                designId:               userContext.designId,
-                designVersionId:        userContext.designVersionId,
-                designUpdateId:         userContext.designUpdateId,
-                workPackageId:          userContext.workPackageId,
-                designComponentId:      'NONE',
-                designComponentType:    'NONE',
-                featureReferenceId:     'NONE',
-                scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE'
+                userId:                     Meteor.userId(),
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
+                workPackageId:              userContext.workPackageId,
+                designComponentId:          'NONE',
+                designComponentType:        'NONE',
+                featureReferenceId:         'NONE',
+                featureAspectReferenceId:   'NONE',
+                scenarioReferenceId:        'NONE',
+                scenarioStepId:             'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import MashFeatureAspect from '../../components/dev/MashFeatureAspect.jsx';
+import DesignDevMashItem from '../../components/dev/DesignDevMashItem.jsx';
 
 // Ultrawide Services
 import {RoleType, ComponentType}    from '../../../constants/constants.js';
@@ -30,25 +30,25 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Mash Feature Aspect Container - Where a Feature has Aspects, breaks the Scenarios up into those Aspects
+// Mash Feature Aspect Scenario Container - List of Scenarios inside a Feature aspect in the Dev Design Mash
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class MashFeatureAspectList extends Component {
+class MashFeatureAspectScenarioList extends Component {
     constructor(props) {
         super(props);
 
     }
 
 
-    renderFeatureAspects(featureAspects){
+    renderScenarios(scenarios){
 
-        return featureAspects.map((aspect) => {
+        return scenarios.map((scenario) => {
 
             return (
-                <MashFeatureAspect
-                    key={aspect._id}
-                    aspect={aspect}
+                <DesignDevMashItem
+                    key={scenario._id}
+                    mashItem={scenario}
                 />
             );
 
@@ -57,19 +57,19 @@ class MashFeatureAspectList extends Component {
 
     render() {
 
-        const {featureAspects} = this.props;
+        const {scenarios} = this.props;
 
         return(
             <div>
-                {this.renderFeatureAspects(featureAspects)}
+                {this.renderScenarios(scenarios)}
             </div>
         )
 
     }
 }
 
-MashFeatureAspectList.propTypes = {
-    featureAspects: PropTypes.array
+MashFeatureAspectScenarioList.propTypes = {
+    scenarios: PropTypes.array
 };
 
 
@@ -82,19 +82,17 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-MashFeatureAspectList = connect(mapStateToProps)(MashFeatureAspectList);
+MashFeatureAspectScenarioList = connect(mapStateToProps)(MashFeatureAspectScenarioList);
 
 
-export default MashFeatureAspectContainer = createContainer(({params}) => {
+export default MashFeatureAspectScenarioContainer = createContainer(({params}) => {
 
 
-    let featureAspects = ClientContainerServices.getMashFeatureAspects(params.userContext);
-
-    console.log("Found " + featureAspects.length + " feature aspects for Container")
+    let scenarios = ClientContainerServices.getMashFeatureAspectScenarios(params.aspect);
 
     return{
-        featureAspects: featureAspects
+        scenarios: scenarios
     }
 
 
-}, MashFeatureAspectList);
+}, MashFeatureAspectScenarioList);

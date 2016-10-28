@@ -736,6 +736,17 @@ input {
     background-color: transparent;
 }
 
+.mash-aspect {
+    margin: 0;
+    padding: 2px 0 0 0px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: bold;
+    color: darkred;
+    background-color: palegoldenrod;
+}
+
 .mash-linked {
     color: black;
 }
@@ -756,12 +767,24 @@ input {
     color: darkgrey;
 }
 
+.mash-pending{
+    color: darkorange;
+}
+
 .mash-pass {
-    color: darkgreen;
+    color: green;
 }
 
 .mash-fail {
     color: red;
+}
+
+.tag-active {
+    color: blue;
+}
+
+.tag-inactive {
+    color: lightgrey;
 }
 
 /* -- Add Item Groups ----------------------------------------------------------------------------------------------- */

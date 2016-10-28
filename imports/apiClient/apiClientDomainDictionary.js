@@ -94,7 +94,8 @@ class ClientDomainDictionaryServices {
     getDomainTermDecoratorFunction(designId, designVersionId) {
 
         // Get a regex that is a list of all domain terms
-        let domainTermsRegexArr = this.getDomainTermsRegex(designId, designVersionId);
+
+        let domainTermsRegexArr = this.getDomainTermsRegex(designVersionId);
         let domainTermsRegex = '';
 
         // This function is complex because the decorator can't cope with a term that is a subset of another term.
@@ -110,10 +111,10 @@ class ClientDomainDictionaryServices {
 
             if (contentBlock) {
                 const text = contentBlock.getText();
-                log((msg) => console.log(msg), LogLevel.TRACE, "Search Text is {}", text);
+                //log((msg) => console.log(msg), LogLevel.TRACE, "Search Text is {}", text);
                 let i = 1;
                 domainTermsRegexArr.forEach((regex) => {
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Searching for {}", regex);
+                    //log((msg) => console.log(msg), LogLevel.TRACE, "Searching for {}", regex);
                     domainTermsRegex = new RegExp(regex, 'g');
 
                     let matchArr, start;
@@ -121,7 +122,7 @@ class ClientDomainDictionaryServices {
 
                     while ((matchArr = domainTermsRegex.exec(text)) !== null) {
                         start = matchArr.index;
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Found at {} with length {}", matchArr.index, matchArr[0].length);
+                        //log((msg) => console.log(msg), LogLevel.TRACE, "Found at {} with length {}", matchArr.index, matchArr[0].length);
                         action = {
                             index: i,
                             search: regex,
@@ -182,11 +183,13 @@ class ClientDomainDictionaryServices {
 
     }
 
-    getDomainTermsRegex(designId, designVersionId) {
+    getDomainTermsRegex(designVersionId) {
+
+        console.log("Getting Domain Terms for DV: " + designVersionId);
 
         let regex = '';
         let regexArr = [];
-        const domainTerms = DomainDictionary.find({designId: designId, designVersionId: designVersionId});
+        const domainTerms = DomainDictionary.find({designVersionId: designVersionId});
         let termText = '';
 
         // Must return something if no domain dictionary yet or Draft JS goes into meltdown...

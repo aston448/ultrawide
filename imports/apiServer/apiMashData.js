@@ -10,16 +10,8 @@ Meteor.methods({
         MashDataServices.loadUserFeatureFileData(userContext, filePath);
     },
 
-    'mash.createFeatureMashData'(userContext){
-        MashDataServices.createFeatureMashData(userContext);
-    },
-
-    'mash.createScenarioMashData'(userContext){
-        MashDataServices.createScenarioMashData(userContext);
-    },
-
-    'mash.createScenarioStepMashData'(userContext){
-        MashDataServices.createScenarioStepMashData(userContext);
+    'mash.createMashData'(userContext){
+        MashDataServices.createDesignDevMashData(userContext);
     },
 
     'mash.updateTestData'(userContext, resultsPath){

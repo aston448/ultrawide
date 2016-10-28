@@ -17,10 +17,11 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { FeatureBackgroundSteps }   from '../collections/design/feature_background_steps.js';
 import { ScenarioSteps }            from '../collections/design/scenario_steps.js';
 import { DomainDictionary }         from '../collections/design/domain_dictionary.js';
-import { DesignDevFeatureMash }     from '../collections/dev/design_dev_feature_mash.js';
-import { DesignDevScenarioMash }    from '../collections/dev/design_dev_scenario_mash.js';
-import { DesignDevScenarioStepMash }from '../collections/dev/design_dev_scenario_step_mash.js';
+// import { DesignDevFeatureMash }     from '../collections/dev/design_dev_feature_mash.js';
+// import { DesignDevScenarioMash }    from '../collections/dev/design_dev_scenario_mash.js';
+// import { DesignDevScenarioStepMash }from '../collections/dev/design_dev_scenario_step_mash.js';
 import { UserDevFeatures }          from '../collections/dev/user_dev_features.js';
+import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mash_data.js';
 
 // Ultrawide GUI Components
 
@@ -88,20 +89,14 @@ class ClientContainerServices{
         const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps');
         const fsHandle = Meteor.subscribe('userDevFeatureScenarios');
         const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps');
-        const fmHandle = Meteor.subscribe('designDevFeatureMash');
-        const bmHandle = Meteor.subscribe('designDevFeatureBackgroundStepMash');
-        const smHandle = Meteor.subscribe('designDevScenarioMash');
-        const tmHandle = Meteor.subscribe('designDevScenarioStepMash');
+        const dmHandle = Meteor.subscribe('userDesignDevMashData');
 
         const loading = (
             !dfHandle.ready()   ||
             !dbHandle.ready()   ||
             !fsHandle.ready()   ||
             !ssHandle.ready()   ||
-            !fmHandle.ready()   ||
-            !bmHandle.ready()   ||
-            !smHandle.ready()   ||
-            !tmHandle.ready()
+            !dmHandle.ready()
         );
 
         return loading;
@@ -831,8 +826,9 @@ class ClientContainerServices{
         // - Scenarios in a Feature Aspect
         // - Steps in a Scenario
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Searching for Mash data for user context D: {} DV: {}, DU: {}, WP: {} Type: {}",
-            userContext.designId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId, userContext.designComponentType);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Searching for Mash data for user {} context D: {} DV: {}, DU: {}, WP: {} Type: {} FR: {}",
+            userContext.userId, userContext.designId, userContext.designVersionId, userContext.designUpdateId,
+            userContext.workPackageId, userContext.designComponentType, userContext.featureReferenceId);
 
         switch(userContext.designComponentType){
             case ComponentType.APPLICATION:
@@ -868,11 +864,12 @@ class ClientContainerServices{
 
                 // Get feature mash data
                 wantedFeatures.forEach((feature) => {
-                    featureMash = DesignDevFeatureMash.findOne({
+                    featureMash = UserDesignDevMashData.findOne({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designUpdateId:             userContext.designUpdateId,
                         workPackageId:              userContext.workPackageId,
+                        mashComponentType:          ComponentType.FEATURE,
                         designFeatureReferenceId:   feature.componentReferenceId
                     });
 
@@ -887,37 +884,18 @@ class ClientContainerServices{
                 break;
 
             case ComponentType.FEATURE:
-                // Here we want to get all Scenario data that may be related to the feature.  This should already be set in the Scenario Mash data
-
-                // let featureScenarios = WorkPackageComponents.find({
-                //     workPackageId:                  userContext.workPackageId,
-                //     componentType:                  ComponentType.SCENARIO,
-                //     componentFeatureReferenceId:    userContext.featureReferenceId,
-                //     componentActive:                true
-                // }).fetch();
-                //
-                // log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenarios in Work Package feature", featureScenarios.length);
+                // Here we want to get all Scenario data that may be related to the feature.  This should already be set in the Mash data
 
                 let scenarioMashData = [];
-                // let scenarioMash = null;
 
-                // Get scenario mash data
-                //log((msg) => console.log(msg), LogLevel.TRACE, "Looking for scenario mash data with user id {}, DV: {}, DU: {}", scenarioMash);
-
-                // featureScenarios.forEach((scenario) => {
-                    scenarioMashData = DesignDevScenarioMash.find({
-                        userId:                     userContext.userId,
-                        designVersionId:            userContext.designVersionId,
-                        designUpdateId:             userContext.designUpdateId,
-                        designFeatureReferenceId:   userContext.featureReferenceId
-                    }).fetch();
-
-                    // log((msg) => console.log(msg), LogLevel.TRACE, "Adding {} to scenario mash data", scenarioMash);
-                    //
-                    // if(scenarioMash) {
-                    //     scenarioMashData.push(scenarioMash);
-                    // }
-                // });
+                scenarioMashData = UserDesignDevMashData.find({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    designUpdateId:             userContext.designUpdateId,
+                    workPackageId:              userContext.workPackageId,
+                    designFeatureReferenceId:   userContext.featureReferenceId,
+                    mashComponentType:          ComponentType.SCENARIO
+                }).fetch();
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current component", scenarioMashData.length);
 
@@ -927,37 +905,27 @@ class ClientContainerServices{
             case ComponentType.FEATURE_ASPECT:
                 // Get all Scenarios in this Feature Aspect
 
-                // Get reference of particular Aspect selected
-                const aspectRef = DesignComponents.findOne({_id: userContext.designComponentId}).componentReferenceId;
-
-                let aspectScenarios = WorkPackageComponents.find({
-                    workPackageId:                  userContext.workPackageId,
-                    componentType:                  ComponentType.SCENARIO,
-                    componentParentReferenceId:     aspectRef,
-                    componentFeatureReferenceId:    userContext.featureReferenceId,
-                    componentActive:                true
-                }).fetch();
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenarios in Work Package feature aspect", aspectScenarios.length);
+                // // Get reference of particular Aspect selected
+                // let aspectRef = null;
+                // if(userContext.designUpdateId === 'NONE') {
+                //     aspectRef = DesignComponents.findOne({_id: userContext.designComponentId}).componentReferenceId;
+                // } else {
+                //     aspectRef = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentReferenceId;
+                // }
 
                 let aspectScenarioMashData = [];
-                let aspectScenarioMash = null;
 
-                // Get scenario mash data
-                aspectScenarios.forEach((scenario) => {
-                    aspectScenarioMash = DesignDevScenarioMash.findOne({
-                        userId:                     userContext.userId,
-                        designVersionId:            userContext.designVersionId,
-                        designUpdateId:             userContext.designUpdateId,
-                        designFeatureReferenceId:   userContext.featureReferenceId
-                    });
+                aspectScenarioMashData = UserDesignDevMashData.find({
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  userContext.workPackageId,
+                    designFeatureReferenceId:       userContext.featureReferenceId,
+                    designFeatureAspectReferenceId: userContext.featureAspectReferenceId,
+                    mashComponentType:              ComponentType.SCENARIO
+                }).fetch();
 
-                    if(aspectScenarioMash) {
-                        aspectScenarioMashData.push(aspectScenarioMash);
-                    }
-                });
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current component", aspectScenarioMashData.length);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current aspect {}", aspectScenarioMashData.length, userContext.featureAspectReferenceId);
 
                 return aspectScenarioMashData;
                 break;
@@ -965,33 +933,35 @@ class ClientContainerServices{
             case ComponentType.SCENARIO:
                 //Get all Scenario Steps for the scenario
 
-                let scenarioSteps = [];
+                // TODO
 
-                scenarioSteps = ScenarioSteps.find({
-                    designId:                       userContext.designId,
-                    designVersionId:                userContext.designVersionId,
-                    designUpdateId:                 userContext.designUpdateId,         // NONE if base version
-                    scenarioReferenceId:            userContext.scenarioReferenceId
-                });
-
-                let stepMashData = [];
-                let stepMash = null;
-
-                // Get step mash data
-                scenarioSteps.forEach((step) => {
-                    stepMash = DesignDevScenarioStepMash.findOne({
-                       userId:                          userContext.userId,
-                       designVersionId:                 userContext.designVersionId,
-                       designUpdateId:                  userContext.designUpdateId,
-                       designScenarioReferenceId:       userContext.scenarioReferenceId,
-                       designScenarioStepReferenceId:   step.stepReferenceId
-                    });
-
-                    stepMashData.push(stepMash);
-
-                });
-
-                return stepMashData;
+                // let scenarioSteps = [];
+                //
+                // scenarioSteps = ScenarioSteps.find({
+                //     designId:                       userContext.designId,
+                //     designVersionId:                userContext.designVersionId,
+                //     designUpdateId:                 userContext.designUpdateId,         // NONE if base version
+                //     scenarioReferenceId:            userContext.scenarioReferenceId
+                // });
+                //
+                // let stepMashData = [];
+                // let stepMash = null;
+                //
+                // // Get step mash data
+                // scenarioSteps.forEach((step) => {
+                //     stepMash = DesignDevScenarioStepMash.findOne({
+                //        userId:                          userContext.userId,
+                //        designVersionId:                 userContext.designVersionId,
+                //        designUpdateId:                  userContext.designUpdateId,
+                //        designScenarioReferenceId:       userContext.scenarioReferenceId,
+                //        designScenarioStepReferenceId:   step.stepReferenceId
+                //     });
+                //
+                //     stepMashData.push(stepMash);
+                //
+                // });
+                //
+                // return stepMashData;
                 break;
             default:
 
@@ -1031,29 +1001,42 @@ class ClientContainerServices{
 
     getMashFeatureAspects(userContext){
 
+        log((msg) => console.log(msg), LogLevel.TRACE, "Getting mash feature aspects for component type {}", userContext.designComponentType);
+
         if(userContext.designComponentType === ComponentType.FEATURE){
 
-            let featureAspects = [];
-
-            if(userContext.designUpdateId === 'NONE'){
-                featureAspects = DesignComponents.find({
-                    componentParentId: userContext.designComponentId,
-                    componentType: ComponentType.FEATURE_ASPECT
-                }).fetch();
-            } else {
-                featureAspects = DesignUpdateComponents.find({
-                    componentParentIdNew: userContext.designComponentId,
-                    componentType: ComponentType.FEATURE_ASPECT
-                }).fetch();
-            }
-
-            return featureAspects;
+            return UserDesignDevMashData.find(
+                {
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  userContext.workPackageId,
+                    mashComponentType:              ComponentType.FEATURE_ASPECT
+                },
+                {sort: {mashItemIndex: 1}}
+            ).fetch();
 
         } else {
             return [];
         }
 
-    }
+    };
+
+    getMashFeatureAspectScenarios(aspect){
+
+        return UserDesignDevMashData.find(
+            {
+                userId:                         aspect.userId,
+                designVersionId:                aspect.designVersionId,
+                designUpdateId:                 aspect.designUpdateId,
+                workPackageId:                  aspect.workPackageId,
+                designFeatureAspectReferenceId: aspect.designComponentReferenceId,
+                mashComponentType:              ComponentType.SCENARIO
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+
+    };
 
     getDevFilesData(userContext){
 

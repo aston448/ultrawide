@@ -232,7 +232,7 @@ class DesignComponentHeader extends Component{
         let item = props.currentItem;
 
         // For Work Package items the item needed for decoration is the Design Item
-        if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.WP_VIEW){
+        if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.WP_VIEW || props.displayContext === DisplayContext.DEV_DESIGN){
             item = props.designItem;
         }
 

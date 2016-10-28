@@ -41,16 +41,17 @@ class ClientDesignServices{
         if(newDesignId != userContext.designId) {
 
             const context = {
-                userId:                 Meteor.userId(),
-                designId:               newDesignId,
-                designVersionId:        'NONE',
-                designUpdateId:         'NONE',
-                workPackageId:          'NONE',
-                designComponentId:      'NONE',
-                designComponentType:    'NONE',
-                featureReferenceId:     'NONE',
-                scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE'
+                userId:                     Meteor.userId(),
+                designId:                   newDesignId,
+                designVersionId:            'NONE',
+                designUpdateId:             'NONE',
+                workPackageId:              'NONE',
+                designComponentId:          'NONE',
+                designComponentType:        'NONE',
+                featureReferenceId:         'NONE',
+                featureAspectReferenceId:   'NONE',
+                scenarioReferenceId:        'NONE',
+                scenarioStepId:             'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -90,16 +91,17 @@ class ClientDesignServices{
 
             // Set no current user context
             const context = {
-                userId:                 Meteor.userId(),
-                designId:               'NONE',
-                designVersionId:        'NONE',
-                designUpdateId:         'NONE',
-                workPackageId:          'NONE',
-                designComponentId:      'NONE',
-                designComponentType:    'NONE',
-                featureReferenceId:     'NONE',
-                scenarioReferenceId:    'NONE',
-                scenarioStepId:         'NONE'
+                userId:                     Meteor.userId(),
+                designId:                   'NONE',
+                designVersionId:            'NONE',
+                designUpdateId:             'NONE',
+                workPackageId:              'NONE',
+                designComponentId:          'NONE',
+                designComponentType:        'NONE',
+                featureReferenceId:         'NONE',
+                featureAspectReferenceId:   'NONE',
+                scenarioReferenceId:        'NONE',
+                scenarioStepId:             'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

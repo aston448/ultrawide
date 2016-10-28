@@ -7,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus, DevTestTag} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
 import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
@@ -63,92 +63,163 @@ class DesignDevMashItem extends Component {
 
         console.log("Render mash item: " + mashItem);
 
-        let mashStyle = '';
-        let testStyle = '';
-
-        let mashItemName = '';
-        let mashItemStatus = '';
         let mashItemActions = '';
-        let mashItemTestActions = '';
-        let mashItemTestStatus = '';
+        let mashItemTest = '';
 
+        const mashStyle = mashItem.mashStatus;
+        const testStyle = mashItem.mashTestStatus;
+
+
+        const watchTagStyle = mashItem.mashItemTag === DevTestTag.TEST_WATCH ? 'tag-active' : 'tag-inactive';
+        const testTagStyle = mashItem.mashItemTag === DevTestTag.TEST_TEST ? 'tag-active' : 'tag-inactive';
+        const ignoreTagStyle = mashItem.mashItemTag === DevTestTag.TEST_IGNORE ? 'tag-active' : 'tag-inactive';
+
+        const mashItemName = <div className={"mash-item " + mashStyle}>
+            {mashItem.mashItemName}
+        </div>;
+
+        const mashItemStatus = <div className={"mash-item " + mashStyle}>
+            {TextLookups.mashStatus(mashItem.mashStatus)}
+        </div>;
+
+        // const mashItemTestStatus = <div className={"mash-item " + testStyle}>
+        //     {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+        // </div>;
+        //
+        let mashItemEntry = '';
 
         switch(userContext.designComponentType){
             case ComponentType.APPLICATION:
             case ComponentType.DESIGN_SECTION:
                 // Displaying Features
-                mashStyle = mashItem.featureMashStatus;
-                testStyle = mashItem.featureTestStatus;
-
-                mashItemName = <div className={"mash-item " + mashStyle}>
-                    {mashItem.featureName}
-                </div>;
-
-                mashItemStatus = <div className={"mash-item " + mashStyle}>
-                    {TextLookups.mashStatus(mashItem.featureMashStatus)}
-                </div>;
-
-                mashItemTestStatus = <div className={"mash-item " + testStyle}>
-                    {TextLookups.mashTestStatus(mashItem.featureTestStatus)}
-                </div>;
 
                 // Actions depend on status
-                switch (mashItem.featureMashStatus){
+                switch (mashItem.mashStatus){
                     case MashStatus.MASH_LINKED:
                         // The feature has a dev test file
+                        mashItemEntry =
+                            <InputGroup>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={8} className="close-col">
+                                            {mashItemName}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {mashItemStatus}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            <InputGroup>
+                                                <div className={"mash-item " + testStyle}>
+                                                    {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                                                </div>
+                                                <InputGroup.Addon>
+                                                    <div className={watchTagStyle}><Glyphicon glyph="eye-open"/></div>
+                                                </InputGroup.Addon>
+                                                <InputGroup.Addon>
+                                                    <div className={testTagStyle}><Glyphicon glyph="ok-circle"/></div>
+                                                </InputGroup.Addon>
+                                                <InputGroup.Addon>
+                                                    <div className={ignoreTagStyle}><Glyphicon glyph="ban-circle"/></div>
+                                                </InputGroup.Addon>
+                                            </InputGroup>
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                                <InputGroup.Addon className={testStyle}>
+                                    <div><Glyphicon glyph="star"/></div>
+                                </InputGroup.Addon>
+                            </InputGroup>;
                         break;
                     default:
                         // Anything else - feature not implemented so option to export to dev
-                        mashItemActions=
+                        mashItemEntry =
                             <InputGroup>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={8} className="close-col">
+                                            {mashItemName}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {mashItemStatus}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            <InputGroup>
+                                                <div className={"mash-item " + testStyle}>
+                                                    {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                                                </div>
+                                            </InputGroup>
+                                        </Col>
+                                    </Row>
+                                </Grid>
                                 <InputGroup.Addon onClick={() => this.onExportFeature(mashItem.designFeatureReferenceId, userContext)}>
                                     <div><Glyphicon glyph="download"/></div>
                                 </InputGroup.Addon>
                             </InputGroup>;
-
                 }
 
                 break;
             case ComponentType.FEATURE:
             case ComponentType.FEATURE_ASPECT:
                 // Displaying Scenarios
-                mashStyle = mashItem.scenarioMashStatus;
-                testStyle = mashItem.scenarioTestStatus;
 
-                mashItemName = <div className={"mash-item " + mashStyle}>
-                    {mashItem.scenarioName}
-                </div>;
-
-                mashItemStatus = <div className={"mash-item " + mashStyle}>
-                    {TextLookups.mashStatus(mashItem.scenarioMashStatus)}
-                </div>;
-
-                mashItemTestStatus = <div className={"mash-item " + testStyle}>
-                    {TextLookups.mashTestStatus(mashItem.scenarioTestStatus)}
-                </div>;
-
-
-                switch (mashItem.scenarioMashStatus){
+                switch (mashItem.mashStatus){
                     case MashStatus.MASH_LINKED:
                         // The scenario is in a dev test file for the feature
-                        mashItemTestActions =
+                        mashItemEntry =
                             <InputGroup>
-                                <InputGroup.Addon>
-                                    <div><Glyphicon glyph="search"/></div>
-                                </InputGroup.Addon>
-                                <InputGroup.Addon>
-                                    <div><Glyphicon glyph="ok"/></div>
-                                </InputGroup.Addon>
-                                <InputGroup.Addon>
-                                    <div><Glyphicon glyph="remove"/></div>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={8} className="close-col">
+                                            {mashItemName}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {mashItemStatus}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            <InputGroup>
+                                                <div className={"mash-item " + testStyle}>
+                                                    {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                                                </div>
+                                                <InputGroup.Addon>
+                                                    <div className={watchTagStyle}><Glyphicon glyph="eye-open"/></div>
+                                                </InputGroup.Addon>
+                                                <InputGroup.Addon>
+                                                    <div className={testTagStyle}><Glyphicon glyph="ok-circle"/></div>
+                                                </InputGroup.Addon>
+                                                <InputGroup.Addon>
+                                                    <div className={ignoreTagStyle}><Glyphicon glyph="ban-circle"/></div>
+                                                </InputGroup.Addon>
+                                            </InputGroup>
+                                        </Col>
+                                    </Row>
+                                </Grid>
+                                <InputGroup.Addon className={testStyle}>
+                                    <div><Glyphicon glyph="star"/></div>
                                 </InputGroup.Addon>
                             </InputGroup>;
                         break;
 
                     case MashStatus.MASH_NOT_IMPLEMENTED:
                         // The scenario is in the design but not in the build
-                        mashItemActions =
+                        mashItemEntry =
                             <InputGroup>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={8} className="close-col">
+                                            {mashItemName}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {mashItemStatus}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            <InputGroup>
+                                                <div className={"mash-item " + testStyle}>
+                                                    {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                                                </div>
+                                            </InputGroup>
+                                        </Col>
+                                    </Row>
+                                </Grid>
                                 <InputGroup.Addon onClick={() => this.onExportScenario(mashItem.designScenarioReferenceId, userContext)}>
                                     <div><Glyphicon glyph="download"/></div>
                                 </InputGroup.Addon>
@@ -158,15 +229,29 @@ class DesignDevMashItem extends Component {
 
                     case MashStatus.MASH_NOT_DESIGNED:
                         // The scenario is in the build but not in the design
-
-
-                        mashItemActions =
+                        mashItemEntry =
                             <InputGroup>
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={8} className="close-col">
+                                            {mashItemName}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            {mashItemStatus}
+                                        </Col>
+                                        <Col md={2} className="close-col">
+                                            <InputGroup>
+                                                <div className={"mash-item " + testStyle}>
+                                                    {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                                                </div>
+                                            </InputGroup>
+                                        </Col>
+                                    </Row>
+                                </Grid>
                                 <InputGroup.Addon onClick={() => this.onImportScenario(mashItem.designScenarioReferenceId, userContext)}>
                                     <div><Glyphicon glyph="upload"/></div>
                                 </InputGroup.Addon>
                             </InputGroup>;
-
                         break;
                 }
                 break;
@@ -180,25 +265,7 @@ class DesignDevMashItem extends Component {
 
         return (
             <div>
-                <Grid className="close-grid">
-                    <Row>
-                        <Col md={6} className="close-col">
-                            {mashItemName}
-                        </Col>
-                        <Col md={2} className="close-col">
-                            {mashItemStatus}
-                        </Col>
-                        <Col md={1} className="close-col">
-                            {mashItemActions}
-                        </Col>
-                        <Col md={2} className="close-col">
-                            {mashItemTestActions}
-                        </Col>
-                        <Col md={1} className="close-col">
-                            {mashItemTestStatus}
-                        </Col>
-                    </Row>
-                </Grid>
+                {mashItemEntry}
             </div>
         );
     }
