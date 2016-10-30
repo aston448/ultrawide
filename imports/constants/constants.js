@@ -157,11 +157,9 @@ export const UserDevScenarioStatus = {
 };
 
 export const UserDevScenarioStepStatus = {
-    STEP_FROM_DESIGN:       'STEP_FROM_DESIGN',
-    STEP_FROM_DEV:          'STEP_FROM_DEV',
-    STEP_MODIFIED_DESIGN:   'STEP_MODIFIED_DESIGN',
-    STEP_MODIFIED_DEV:      'STEP_MODIFIED_DEV',
-    STEP_INVALID:           'STEP_INVALID'
+    STEP_DEV_ONLY:              'STEP_DEV_ONLY',        // Step implemented but not in design
+    STEP_LINKED:                'STEP_LINKED',          // We have decided this step is present in the Design too
+    STEP_INVALID:               'STEP_INVALID'
 };
 
 export const DevTestTag = {

@@ -190,35 +190,32 @@ class FeatureFileServices{
         let scenarioEndIndex = 0;
         let scenarios = [];
 
+
         while (scenarioStartIndex >= 0){
+            let scenarioText = '';
+            let scenarioTag = '';
+            let scenarioSteps = [];
+
             scenarioEndIndex = fileText.indexOf('\n', scenarioStartIndex);
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Looking for scenario name from {} to {}", scenarioStartIndex, scenarioEndIndex);
+
+
+            scenarioText = fileText.substring(scenarioStartIndex + 9, scenarioEndIndex).trim();
+            scenarioTag = this.getTag(fileText, scenarioStartIndex);
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Found scenario {} with tag {}", scenarioText, scenarioTag);
+
+            scenarioSteps = this.getScenarioSteps(fileText, scenarioEndIndex);
 
             scenarios.push(
                 {
-                    scenario: fileText.substring(scenarioStartIndex + 9, scenarioEndIndex).trim(),
-                    tag: this.getTag(fileText, scenarioStartIndex)
+                    scenario: scenarioText,
+                    tag: scenarioTag,
+                    steps: scenarioSteps
                 }
             );
             scenarioStartIndex = fileText.indexOf('Scenario:', scenarioEndIndex);
         }
-
-
-
-        // let scenarioRegex = new RegExp('/Scenario:/', 'g');
-        //
-        // let scenarios = [];
-        //
-        // let matchArr, start, end;
-        //
-        // while ((matchArr = scenarioRegex.exec(fileText)) !== null) {
-        //     log((msg) => console.log(msg), LogLevel.TRACE, "Found scenario at index {}", matchArr.index);
-        //     start = matchArr.index;
-        //     end = fileText.indexOf('\n', start);
-        //
-        //     scenarios.push(fileText.substring(start + 9, end).trim());
-        // }
 
         return scenarios;
 
@@ -239,6 +236,58 @@ class FeatureFileServices{
         log((msg) => console.log(msg), LogLevel.TRACE, "Found tag {}", tag);
 
         return tag;
+    };
+
+    getScenarioSteps(fileText, startPos){
+
+        let steps = [];
+        let step = '';
+        let stepStart = startPos + 1;
+        let nextStepEnd = fileText.indexOf('\n', stepStart);
+
+        // The end of the steps is either the next tag or next Scenario.
+        const stepsEndAt = fileText.indexOf('@', startPos);
+        const stepsEndScenario = fileText.indexOf('Scenario:', startPos);
+
+        if(stepsEndAt > 0 && stepsEndScenario > 0){
+            // Not last scenario in file
+            let endPos = 0;
+            if(stepsEndAt > 0 && stepsEndAt < stepsEndScenario){
+                endPos = stepsEndAt;
+            } else {
+                endPos = stepsEndScenario;
+            }
+
+            while(nextStepEnd < endPos){
+                step = fileText.substring(stepStart, nextStepEnd);
+
+                // Ignore blank lines
+                if(step.trim().length > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Found step {}", step);
+                    steps.push(step.trim());
+                }
+
+                stepStart = nextStepEnd + 1;
+                nextStepEnd = fileText.indexOf('\n', stepStart);
+            }
+        } else {
+            // Last scenario - keep reading until end
+            while(nextStepEnd > 0){
+                step = fileText.substring(stepStart, nextStepEnd);
+
+                // Ignore blank lines
+                if(step.trim().length > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Found step {}", step);
+                    steps.push(step.trim());
+                }
+
+                stepStart = nextStepEnd + 1;
+                nextStepEnd = fileText.indexOf('\n', stepStart);
+            }
+        }
+
+
+
     }
 
 }

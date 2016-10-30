@@ -387,6 +387,9 @@ class ImpExServices{
         let scenarioSteps = JSON.parse(scenarioStepsString);
 
         scenarioSteps.forEach((step) => {
+
+            step = this.migrateStep(step);
+
             console.log("Adding Scenario Step " + step.stepType + " " + step.stepText);
 
             designId = getIdFromMap(designsMapping, step.designId);
@@ -405,6 +408,18 @@ class ImpExServices{
         });
 
     };
+
+
+    // MIGRATION FUNCTIONS
+    migrateStep(step){
+        let newStep = step;
+
+        if(!step.stepFullName){
+            newStep.stepFullName = step.stepType + ' ' + step.stepText;
+        }
+
+        return newStep;
+    }
 
 
 

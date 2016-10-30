@@ -12,10 +12,14 @@ let Schema = new SimpleSchema({
     userId:                 {type: String},                         // Meteor user id
     userDevFeatureId:       {type: String},
     userDevScenarioId:      {type: String},
-    featureReferenceId:     {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
-    stepReferenceId:        {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
+    featureReferenceId:     {type: String, defaultValue: 'NONE'},         // A unique ID that persists across design updates - populated if linked
+    scenarioReferenceId:    {type: String, defaultValue: 'NONE'},
+    scenarioStepReferenceId:{type: String, defaultValue: 'NONE'},
+    // Data
     stepType:               {type: String},                         // GIVEN, WHEN, THEN etc
     stepText:               {type: String},                         // Unique functional text - plain text
+    stepFullName:           {type: String},
+    // Status
     stepStatus:             {type: String}
 });
 

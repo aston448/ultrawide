@@ -77,6 +77,7 @@ class ScenarioServices{
                 // Data
                 stepType:                   ScenarioStepType.STEP_NEW,
                 stepText:                   'set step text here',
+                stepFullName:               'NEW Step',
                 stepTextRaw:                this.getDefaultRawStepText(),
                 // Step index defaults and then is set correctly below
 
@@ -113,6 +114,7 @@ class ScenarioServices{
     // Used for data restore only
     importFeatureBackgroundStep(designId, designVersionId, designUpdateId, step){
 
+
         const featureBackgroundStepId = FeatureBackgroundSteps.insert(
             {
                 // Identity
@@ -127,6 +129,7 @@ class ScenarioServices{
                 // Data
                 stepType:                   step.stepType,
                 stepText:                   step.stepText,
+                stepFullName:               step.stepFullName,
                 stepTextRaw:                step.stepTextRaw,
 
                 // State
@@ -164,6 +167,7 @@ class ScenarioServices{
                 // Data
                 stepType:                   ScenarioStepType.STEP_NEW,
                 stepText:                   'set step text here',
+                stepFullName:               'NEW Step',
                 stepTextRaw:                this.getDefaultRawStepText(),
                 // Step index defaults and then is set correctly below
 
@@ -215,6 +219,7 @@ class ScenarioServices{
                 // Data
                 stepType:                   step.stepType,
                 stepText:                   step.stepText,
+                stepFullName:               step.stepFullName,
                 stepTextRaw:                step.stepTextRaw,
 
                 // State
@@ -312,6 +317,7 @@ class ScenarioServices{
                         $set:{
                             stepType:                   stepType,
                             stepText:                   newPlainText,
+                            stepFullName:               stepType + ' ' + newPlainText,
                             stepTextRaw:                newRawText,
                             isChanged:                  true
                         }
@@ -332,6 +338,7 @@ class ScenarioServices{
                         $set:{
                             stepType:                   stepType,
                             stepText:                   newPlainText,
+                            stepFullName:               stepType + ' ' + newPlainText,
                             stepTextRaw:                newRawText,
                             isChanged:                  true
                         }
