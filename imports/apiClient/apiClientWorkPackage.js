@@ -197,7 +197,11 @@ class ClientWorkPackageServices {
         ClientMashDataServices.updateTestData(updatedContext);
 
         // Switch to Dev View
-        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_WORK));
+        if(userContext.designUpdateId === 'NONE') {
+            store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_WORK));
+        } else {
+            store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_WORK));
+        }
     }
 
     // User chose to delete a WP

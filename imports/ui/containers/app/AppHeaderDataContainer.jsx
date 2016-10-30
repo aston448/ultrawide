@@ -106,7 +106,7 @@ class AppHeaderData extends Component {
                     break;
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
-                case ViewType.WORK_PACKAGE_WORK:
+                case ViewType.WORK_PACKAGE_BASE_WORK:
                     headerData =
                         <div>
                             <span className="header-title">DESIGN: </span>
@@ -119,6 +119,7 @@ class AppHeaderData extends Component {
                     break;
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                case ViewType.WORK_PACKAGE_UPDATE_WORK:
                     headerData =
                         <div>
                             <span className="header-title">DESIGN: </span>

@@ -93,6 +93,8 @@ class ClientDomainDictionaryServices {
 
     getDomainTermDecoratorFunction(designId, designVersionId) {
 
+        // NOTE: This is a very intense function: Adding debug log statements MASSIVELY slows it down.  So don't go looking for other causes!
+
         // Get a regex that is a list of all domain terms
 
         let domainTermsRegexArr = this.getDomainTermsRegex(designVersionId);

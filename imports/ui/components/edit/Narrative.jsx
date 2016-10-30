@@ -163,6 +163,7 @@ export default class Narrative extends React.Component {
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
                 console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
                 rawNarrative = props.designComponent.componentNarrativeRaw;
                 break;
@@ -170,6 +171,7 @@ export default class Narrative extends React.Component {
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 if(props.mode == DisplayContext.BASE_VIEW){
                     rawNarrative = props.designComponent.componentNarrativeRaw;
                 } else {

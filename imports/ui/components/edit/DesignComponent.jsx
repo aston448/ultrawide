@@ -105,7 +105,8 @@ class DesignComponent extends Component{
                     nextProps.mode === this.props.mode
                 );
                 break;
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 return !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
@@ -155,7 +156,8 @@ class DesignComponent extends Component{
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 if(newProps.openWorkPackageItems.length != this.props.openWorkPackageItems.length){
                     this.setOpenState(newProps);
                 }
@@ -177,7 +179,8 @@ class DesignComponent extends Component{
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 this.setState({open: props.openWorkPackageItems.includes(props.currentItem._id)});
                 break;
         }
@@ -206,7 +209,8 @@ class DesignComponent extends Component{
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 ClientWorkPackageServices.setOpenClosed(this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
                 break;
         }
@@ -288,8 +292,12 @@ class DesignComponent extends Component{
             case ViewType.DESIGN_UPDATE_EDIT:
                 ClientDesignUpdateComponentServices.addScenario(view, mode, parentItem);
                 break;
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
                 // TODO
+                break;
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
+                // TODO
+                break;
         }
     }
 
@@ -356,7 +364,8 @@ class DesignComponent extends Component{
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                case ViewType.WORK_PACKAGE_WORK:
+                case ViewType.WORK_PACKAGE_BASE_WORK:
+                case ViewType.WORK_PACKAGE_UPDATE_WORK:
                     // Parent Id is the Ref Id for a WP editor item
                     parentId = currentItem.componentReferenceId;
                     break;

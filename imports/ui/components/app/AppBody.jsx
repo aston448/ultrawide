@@ -103,7 +103,8 @@ class AppBody extends Component {
                         view: view,
                     }}/>;
                 break;
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 // When a Developer decides to work on a Work Package
                 bodyHtml =
                     <EditDesignImplementationContainer params={{

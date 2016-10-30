@@ -82,10 +82,10 @@ class AppHeader extends Component {
         let bsStyleView = (mode === ViewMode.MODE_VIEW ? 'success': 'default');
 
         let logoutButton =
-                <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
+            <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
 
         let designsButton =
-                <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onGoToDesigns()}>Designs</Button>;
+            <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onGoToDesigns()}>Designs</Button>;
 
         let viewModeEditButton =
             <Button bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
@@ -179,7 +179,8 @@ class AppHeader extends Component {
                         {selectionScreenButton}
                     </ButtonToolbar>;
                 break;
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 headerUserInfo = userData;
                 headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
                 headerBottomActions =

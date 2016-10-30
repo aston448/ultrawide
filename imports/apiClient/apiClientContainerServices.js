@@ -134,13 +134,14 @@ class ClientContainerServices{
                     break;
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
-                case ViewType.WORK_PACKAGE_WORK:
+                case ViewType.WORK_PACKAGE_BASE_WORK:
                     currentDesign = Designs.findOne({_id: userContext.designId});
                     currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
                     currentWorkPackage = WorkPackages.findOne({_id: userContext.workPackageId});
                     break;
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                case ViewType.WORK_PACKAGE_UPDATE_WORK:
                     currentDesign = Designs.findOne({_id: userContext.designId});
                     currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
                     currentDesignUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
@@ -388,7 +389,8 @@ class ClientContainerServices{
                     wpScopeApplications:    wpApplicationsArr,
                     wpViewApplications:     wpApplicationsInScopeArr
                 };
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 // Need just WP apps TODO: get feature files
                 return {
                     wpApplications: wpApplicationsArr,
@@ -508,7 +510,8 @@ class ClientContainerServices{
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.WORK_PACKAGE_WORK:
+            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.WORK_PACKAGE_UPDATE_WORK:
                 // WORK PACKAGE: The minimal data that defines the SCOPE and the CONTENT (view) of the Work Package.
                 // This is not the actual design data which is retrieved separately where needed.
                 console.log("Looking for components for WP in context: " + displayContext + " for DV " + designVersionId + " WP " + workPackageId + " with parent " + parentId);

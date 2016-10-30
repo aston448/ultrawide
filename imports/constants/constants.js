@@ -22,7 +22,8 @@ export const ViewType = {
     WORK_PACKAGE_UPDATE_EDIT:   'WORK_PACKAGE_UPDATE_EDIT', // Edit a Work Package content for a Design Update
     WORK_PACKAGE_BASE_VIEW:     'WORK_PACKAGE_BASE_VIEW',   // View a Work Package content for a Design Version
     WORK_PACKAGE_UPDATE_VIEW:   'WORK_PACKAGE_UPDATE_VIEW', // View a Work Package content for a Design Update
-    WORK_PACKAGE_WORK:          'WORK_PACKAGE_WORK'         // Work with adopted work package(s) as a developer
+    WORK_PACKAGE_BASE_WORK:     'WORK_PACKAGE_BASE_WORK',   // Work with adopted base work package as a developer
+    WORK_PACKAGE_UPDATE_WORK:   'WORK_PACKAGE_UPDATE_WORK'  // Work with adopted update work package as a developer
 
 };
 
