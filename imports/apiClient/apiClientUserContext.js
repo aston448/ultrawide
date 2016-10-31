@@ -75,12 +75,7 @@ class ClientUserContextServices {
             dvArr.push(component._id);
         });
 
-        store.dispatch(setCurrentUserOpenDesignItems(
-            Meteor.userId(),
-            dvArr,
-            null,
-            true
-        ));
+
 
 
         // All Design Updates
@@ -96,12 +91,7 @@ class ClientUserContextServices {
             duArr.push(component._id);
         });
 
-        store.dispatch(setCurrentUserOpenDesignUpdateItems(
-            Meteor.userId(),
-            duArr,
-            null,
-            true
-        ));
+
 
 
         // All Work Packages
@@ -117,14 +107,136 @@ class ClientUserContextServices {
             wpArr.push(component._id);
         });
 
+
+        // Plus for the actual open item context, open all the way down to that item
+        log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
+            userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
+
+        if(userContext.designComponentId != 'NONE') {
+            // There is a current component...
+            if (userContext.workPackageId != 'NONE') {
+                // User is in a WP so drill down to that item...
+
+                let wpComponent = WorkPackageComponents.findOne({
+                    componentId: userContext.designComponentId
+                });
+
+                if(wpComponent.componentParentReferenceId === 'NONE'){
+                    // No Parent, just make sure component is open
+                    if(!wpArr.includes(wpComponent._id)) {
+                        wpArr.push(wpComponent._id);
+                    }
+                } else {
+                    // Get the parent
+                    let wpParent = WorkPackageComponents.findOne({
+                        componentReferenceId: wpComponent.componentParentReferenceId
+                    });
+
+                    // Keep going up until the parent is already open or top of tree
+                    while(!wpArr.includes(wpParent._id) && wpParent.componentParentReferenceId != 'NONE'){
+                        wpComponent = wpParent;
+
+                        if(!wpArr.includes(wpComponent._id)) {
+                            wpArr.push(wpComponent._id);
+                        }
+
+                        wpParent = WorkPackageComponents.findOne({
+                            componentReferenceId: wpComponent.componentParentReferenceId
+                        });
+                    }
+                }
+
+            } else {
+                if (userContext.designUpdateId != 'NONE') {
+                    // Not in a WP but in a Design update so open to the DU component
+
+                    let duComponent = DesignUpdateComponents.findOne({
+                        _id: userContext.designComponentId
+                    });
+
+                    if(duComponent.componentParentIdNew === 'NONE'){
+                        // No Parent, just make sure component is open
+                        if(!duArr.includes(duComponent._id)) {
+                            duArr.push(duComponent._id);
+                        }
+                    } else {
+                        // Get the parent
+                        let duParent = DesignUpdateComponents.findOne({
+                            _id: duComponent.componentParentIdNew
+                        });
+
+                        // Keep going up until the parent is already open or top of tree
+                        while(!duArr.includes(duParent._id) && duParent.componentParentIdNew != 'NONE'){
+                            duComponent = duParent;
+
+                            if(!duArr.includes(duComponent._id)) {
+                                duArr.push(duComponent._id);
+                            }
+
+                            duParent = DesignUpdateComponents.findOne({
+                                _id: duComponent.componentParentIdNew
+                            });
+                        }
+                    }
+
+                } else {
+                    if (userContext.designVersionId != 'NONE') {
+                        // Just in a DV so open that component
+
+                        let dvComponent = DesignComponents.findOne({
+                            _id: userContext.designComponentId
+                        });
+
+                        if(dvComponent.componentParentId === 'NONE'){
+                            // No Parent, just make sure component is open
+                            if(!dvArr.includes(dvComponent._id)) {
+                                dvArr.push(dvComponent._id);
+                            }
+                        } else {
+                            // Get the parent
+                            let dvParent = DesignComponents.findOne({
+                                _id: dvComponent.componentParentId
+                            });
+
+                            // Keep going up until the parent is already open or top of tree
+                            while(!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE'){
+                                dvComponent = dvParent;
+
+                                if(!dvArr.includes(dvComponent._id)) {
+                                    log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Opening {}", dvComponent.componentName);
+                                    dvArr.push(dvComponent._id);
+                                }
+
+                                dvParent = DesignComponents.findOne({
+                                    _id: dvComponent.componentParentId
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            Meteor.userId(),
+            dvArr,
+            null,
+            true
+        ));
+
+        store.dispatch(setCurrentUserOpenDesignUpdateItems(
+            Meteor.userId(),
+            duArr,
+            null,
+            true
+        ));
+
         store.dispatch(setCurrentUserOpenWorkPackageItems(
             Meteor.userId(),
             wpArr,
             null,
             true
         ));
-
-
 
         // Set the saved user data into REDUX
 
