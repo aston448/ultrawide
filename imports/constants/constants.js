@@ -46,7 +46,10 @@ export const DisplayContext = {
     DEV_FEATURE_DESIGN:     'DEV_FEATURE_DESIGN',   // Developer view of a design Feature and its Scenarios
     DEV_FEATURE_CODE:       'DEV_FEATURE_CODE',     // Developer view of a Feature implementation in code tests
     DEV_SCENARIO_DESIGN:    'DEV_SCENARIO_DESIGN',  // Developer view of a design Scenario
-    DEV_SCENARIO_CODE:      'DEV_SCENARIO_CODE'     // Developer view of a Scenario implementation in code tests
+    DEV_SCENARIO_CODE:      'DEV_SCENARIO_CODE',    // Developer view of a Scenario implementation in code tests
+    EDIT_STEP_DESIGN:       'EDIT_STEP_DESIGN',     // Step editor for Design-Dev Mash: Steps only in Design
+    EDIT_STEP_LINKED:       'EDIT_STEP_LINKED',     // Step editor for Design-Dev Mash: Steps linked across Design and Dev
+    EDIT_STEP_DEV:          'EDIT_STEP_DEV'         // Step editor for Design-Dev Mash: Steps only in Dev
 };
 
 export const StepContext = {

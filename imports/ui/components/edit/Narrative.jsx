@@ -138,7 +138,7 @@ export default class Narrative extends React.Component {
             } else {
                 compositeDecorator = new CompositeDecorator([
                     {
-                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.designComponent.designId, props.designComponent.designVersionId),
+                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
                         component: DomainSpan
                     },
 

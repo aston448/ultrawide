@@ -11,7 +11,7 @@ import {UserDevFeatureScenarios}        from '../collections/dev/user_dev_featur
 import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js';
 import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
 
-import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
+import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
 import {log} from '../common/utils.js';
 import FeatureFileServices from '../servicers/feature_file_services.js'
 
@@ -22,6 +22,7 @@ class MashDataServices{
         // Remove current user file data so deleted files are cleared.
         UserDevFeatures.remove({userId: userContext.userId});
         UserDevFeatureScenarios.remove({userId: userContext.userId});
+        UserDevFeatureScenarioSteps.remove({userId: userContext.userId});
 
         // This means looking for feature files in the dev users test folder
         let featureFiles = FeatureFileServices.getFeatureFiles(filePath);
@@ -142,6 +143,7 @@ class MashDataServices{
             let devScenarioId = null;
 
             featureScenarios.forEach((devScenario) => {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Found scenario: ", devScenario.scenario);
 
                 // Initial default data
                 let devScenarioData = {
@@ -223,36 +225,85 @@ class MashDataServices{
                         }
                     );
 
+                    // Add Feature background steps
+                    devScenario.backgroundSteps.forEach((backgroundStep) => {
+
+                        let devBackgroundStepData = {
+                            // Identity
+                            userId:                     userContext.userId,
+                            userDevFeatureId:           devFeatureId,
+                            userDevScenarioId:          devScenarioId,
+                            featureReferenceId:         devScenarioData.featureReferenceId,     // Feature is in design
+                            scenarioReferenceId:        devScenarioData.scenarioReferenceId,    // Scenario is in design
+                            scenarioStepReferenceId:    'NONE',                                 // Until known to be in Design
+                            // Data
+                            stepType:                   this.getStepType(backgroundStep),
+                            stepText:                   this.getStepText(backgroundStep),
+                            stepFullName:               backgroundStep,
+                            // Status
+                            stepContext:                StepContext.STEP_FEATURE_SCENARIO,   // Background step
+                            stepStatus:                 UserDevScenarioStepStatus.STEP_DEV_ONLY  // Until known to be in Design
+                        };
+
+                        // Returns null if no step found
+                        const designBackgroundStep = this.getDesignBackgroundStep(backgroundStep, devScenarioData.featureReferenceId, userContext);
+
+                        if(designBackgroundStep){
+                            devBackgroundStepData.scenarioStepReferenceId = designBackgroundStep.stepReferenceId;
+                            devBackgroundStepData.stepStatus = UserDevScenarioStepStatus.STEP_LINKED;
+                        }
+
+                        log((msg) => console.log(msg), LogLevel.DEBUG, "Inserting Background Step: {} as {}", devBackgroundStepData.stepFullName, devBackgroundStepData.stepStatus);
+
+                        UserDevFeatureScenarioSteps.insert({
+                            // Identity
+                            userId:                     devBackgroundStepData.userId,
+                            userDevFeatureId:           devBackgroundStepData.userDevFeatureId,
+                            userDevScenarioId:          devBackgroundStepData.userDevScenarioId,
+                            featureReferenceId:         devBackgroundStepData.featureReferenceId,
+                            scenarioReferenceId:        devBackgroundStepData.scenarioReferenceId,
+                            scenarioStepReferenceId:    devBackgroundStepData.scenarioStepReferenceId,
+                            // Data
+                            stepType:                   devBackgroundStepData.stepType,
+                            stepText:                   devBackgroundStepData.stepText,
+                            stepFullName:               devBackgroundStepData.stepFullName,
+                            // Status
+                            stepContext:                devBackgroundStepData.stepContext,
+                            stepStatus:                 devBackgroundStepData.stepStatus
+                        });
+                    });
+
                     // If the scenario is in the design, assume any steps in it that are in the design scenario
-                    // are design or WP steps (depending on where te scenario is) and any other steps are not.
+                    // are design or WP steps (depending on where the scenario is) and any other steps are not.
 
                     devScenario.steps.forEach((step) => {
 
                         let devStepData = {
                             // Identity
-                            userId:                 userContext.userId,
-                            userDevFeatureId:       devFeatureId,
-                            userDevScenarioId:      devScenarioId,
-                            featureReferenceId:     'NONE',                 // Until known to be in Design
-                            scenarioReferenceId:    'NONE',                 // Until known to be in Design
-                            scenarioStepReferenceId:'NONE',                 // Until known to be in Design
+                            userId:                     userContext.userId,
+                            userDevFeatureId:           devFeatureId,
+                            userDevScenarioId:          devScenarioId,
+                            featureReferenceId:         devScenarioData.featureReferenceId,     // Feature is in design
+                            scenarioReferenceId:        devScenarioData.scenarioReferenceId,    // Scenario is in design
+                            scenarioStepReferenceId:    'NONE',                 // Until known to be in Design
                             // Data
-                            stepType:               this.getStepType(step),
-                            stepText:               this.getStepText(step),
-                            stepFullName:           step,
+                            stepType:                   this.getStepType(step),
+                            stepText:                   this.getStepText(step),
+                            stepFullName:               step,
                             // Status
-                            stepStatus:             UserDevScenarioStepStatus.STEP_DEV_ONLY  // Until known to be in Design
+                            stepContext:                StepContext.STEP_SCENARIO,
+                            stepStatus:                 UserDevScenarioStepStatus.STEP_DEV_ONLY  // Until known to be in Design
                         };
 
                         // Returns null if no step found
                         const designStep = this.getDesignStep(step, devScenarioData.scenarioReferenceId, userContext);
 
                         if(designStep){
-                            devStepData.featureReferenceId = devScenarioData.featureReferenceId;
-                            devStepData.scenarioReferenceId = designStep.scenarioReferenceId;
                             devStepData.scenarioStepReferenceId = designStep.stepReferenceId;
                             devStepData.stepStatus = UserDevScenarioStepStatus.STEP_LINKED;
                         }
+
+                        log((msg) => console.log(msg), LogLevel.DEBUG, "Inserting Dev Step: {} as {}", devStepData.stepFullName, devStepData.stepStatus);
 
                         UserDevFeatureScenarioSteps.insert({
                             // Identity
@@ -267,6 +318,7 @@ class MashDataServices{
                             stepText:                   devStepData.stepText,
                             stepFullName:               devStepData.stepFullName,
                             // Status
+                            stepContext:                devStepData.stepContext,
                             stepStatus:                 devStepData.stepStatus
                         });
                     });
@@ -297,29 +349,48 @@ class MashDataServices{
                         }
                     );
 
-                    // Where the scenario is not in the Design, all steps are assumed to be DEV only even if they do happen to match steps in the design
-                    devScenario.steps.forEach((step) => {
+                    // Where the scenario is not in the Design, there is no point in adding any scenario steps until it is...
 
-                        UserDevFeatureScenarioSteps.insert({
-                            // Identity
-                            userId:                     userContext.userId,
-                            userDevFeatureId:           devFeatureId,
-                            userDevScenarioId:          devScenarioId,
-                            featureReferenceId:         'NONE',
-                            scenarioReferenceId:        'NONE',
-                            scenarioStepReferenceId:    'NONE',
-                            // Data
-                            stepType:                   this.getStepType(step),
-                            stepText:                   this.getStepText(step),
-                            stepFullName:               step,
-                            // Status
-                            stepStatus:                 UserDevScenarioStepStatus.STEP_DEV_ONLY
-                        });
-                    });
+                    // devScenario.backgroundSteps.forEach((backgroundStep) => {
+                    //
+                    //     UserDevFeatureScenarioSteps.insert({
+                    //         // Identity
+                    //         userId:                     userContext.userId,
+                    //         userDevFeatureId:           devFeatureId,
+                    //         userDevScenarioId:          devScenarioId,
+                    //         featureReferenceId:         'NONE',
+                    //         scenarioReferenceId:        'NONE',
+                    //         scenarioStepReferenceId:    'NONE',
+                    //         // Data
+                    //         stepType:                   this.getStepType(backgroundStep),
+                    //         stepText:                   this.getStepText(backgroundStep),
+                    //         stepFullName:               backgroundStep,
+                    //         // Status
+                    //         stepContext:                StepContext.STEP_FEATURE_SCENARIO,
+                    //         stepStatus:                 UserDevScenarioStepStatus.STEP_DEV_ONLY
+                    //     });
+                    // });
+                    //
+                    // devScenario.steps.forEach((step) => {
+                    //
+                    //     UserDevFeatureScenarioSteps.insert({
+                    //         // Identity
+                    //         userId:                     userContext.userId,
+                    //         userDevFeatureId:           devFeatureId,
+                    //         userDevScenarioId:          devScenarioId,
+                    //         featureReferenceId:         'NONE',
+                    //         scenarioReferenceId:        'NONE',
+                    //         scenarioStepReferenceId:    'NONE',
+                    //         // Data
+                    //         stepType:                   this.getStepType(step),
+                    //         stepText:                   this.getStepText(step),
+                    //         stepFullName:               step,
+                    //         // Status
+                    //         stepContext:                StepContext.STEP_SCENARIO,
+                    //         stepStatus:                 UserDevScenarioStepStatus.STEP_DEV_ONLY
+                    //     });
+                    // });
                 }
-
-
-
             });
 
         });
@@ -331,15 +402,26 @@ class MashDataServices{
 
         // Even if the scenario has duplicate steps in it they are then the same step so have the same reference...
 
-        let designStep = ScenarioSteps.findOne({
+        return ScenarioSteps.findOne({
             designId:                   userContext.designId,
             designVersionId:            userContext.designVersionId,
             designUpdateId:             userContext.designUpdateId,
             scenarioReferenceId:        scenarioRef,
-            stepFullName:               step
+            stepFullName:               step,
+            isRemoved:                  false
         });
+    }
 
-        return (designStep);
+    getDesignBackgroundStep(step, featureRef, userContext) {
+
+        return FeatureBackgroundSteps.findOne({
+            designId:               userContext.designId,
+            designVersionId:        userContext.designVersionId,
+            designUpdateId:         userContext.designUpdateId,
+            featureReferenceId:     featureRef,
+            stepFullName:           step,
+            isRemoved:              false
+        });
     }
 
     getStepType(stepFullName){
@@ -354,6 +436,26 @@ class MashDataServices{
         const firstSpace = stepFullName.indexOf(' ');
         return stepFullName.substring(firstSpace, stepFullName.length).trim();
     }
+
+    createRawStepText(stepFullName){
+
+        // Create Ultrawide editor text from the text created by a Developer
+
+        let stepText = this.getStepText(stepFullName);
+
+        return {
+            "entityMap" : {  },
+            "blocks" : [
+                { "key" : "5efv7", "text" : stepText,
+                    "type" : "unstyled",
+                    "depth" : 0,
+                    "inlineStyleRanges" : [ ],
+                    "entityRanges" : [ ],
+                    "data" : {  }
+                }
+            ]
+        };
+    };
 
     createDesignDevMashData(userContext){
 
@@ -594,7 +696,7 @@ class MashDataServices{
                     );
 
                     // Create the scenario step mash data for this scenario
-                    this.createScenarioStepMashData(item.componentReferenceId, userContext);
+                    this.createScenarioStepMashData(item.componentReferenceId, featureAspectReferenceId, item.componentFeatureReferenceId, userContext);
 
                     break;
             }
@@ -609,10 +711,203 @@ class MashDataServices{
         // TODO
     }
 
-    createScenarioStepMashData(scenarioReferenceId, userContext){
+    createScenarioStepMashData(scenarioReferenceId, aspectReferenceId, featureReferenceId, userContext){
         // TODO - common function that can be used in all 3 above functions...
 
-    }
+        let devScenarioStepId = 'NONE';
+        let devScenarioId = 'NONE';
+        let devFeatureId = 'NONE';
+        let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+        let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+
+        // For Scenario Steps we want a combined list of steps from Design and Dev in a proper editor so that a final definition can be created and saved to the design.
+
+        // Get all background steps in the Feature
+        const backgroundSteps = FeatureBackgroundSteps.find({
+            designId:                   userContext.designId,
+            designVersionId:            userContext.designVersionId,
+            designUpdateId:             userContext.designUpdateId,
+            featureReferenceId:         userContext.featureReferenceId,
+            isRemoved:                  false
+        }).fetch();
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} feature background steps", backgroundSteps.length);
+
+        // See if we have a corresponding Dev Scenario Step
+        backgroundSteps.forEach((backgroundStep) => {
+            const devBackgroundScenarioStep = UserDevFeatureScenarioSteps.findOne({
+                userId:                 userContext.userId,
+                scenarioReferenceId:    scenarioReferenceId,
+                stepFullName:           backgroundStep.stepFullName,
+                stepContext:            StepContext.STEP_FEATURE_SCENARIO
+            });
+
+            if(devBackgroundScenarioStep){
+                devFeatureId = devBackgroundScenarioStep.userDevFeatureId;
+                devScenarioId = devBackgroundScenarioStep.userDevScenarioId;
+                devScenarioStepId = devBackgroundScenarioStep.scenarioStepReferenceId;
+                mashStatus = MashStatus.MASH_LINKED;
+                mashTestStatus = MashTestStatus.MASH_PENDING;
+            }
+
+            // Add new Mash
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding background step {} to scenario {} with mash status {}", backgroundStep.stepFullName, scenarioReferenceId, mashStatus);
+            UserDesignDevMashData.insert(
+                {
+                    // Identity
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  userContext.workPackageId,
+                    designComponentId:              backgroundStep._id,
+                    mashComponentType:              ComponentType.SCENARIO_STEP,
+                    designComponentReferenceId:     backgroundStep.stepReferenceId,
+                    designFeatureReferenceId:       featureReferenceId,
+                    designFeatureAspectReferenceId: aspectReferenceId,
+                    designScenarioReferenceId:      scenarioReferenceId,
+                    mashItemIndex:                  backgroundStep.stepIndex,
+                    // Links
+                    devFeatureId:                   devFeatureId,
+                    devScenarioId:                  devScenarioId,
+                    devScenarioStepId:              devScenarioStepId,
+                    // Data
+                    mashItemName:                   backgroundStep.stepFullName,
+                    mashItemTag:                    'NONE',
+                    stepType:                       backgroundStep.stepType,
+                    stepText:                       backgroundStep.stepText,
+                    stepTextRaw:                    backgroundStep.stepTextRaw,
+                    // Status
+                    stepContext:                    StepContext.STEP_FEATURE_SCENARIO,
+                    mashStatus:                     mashStatus,
+                    mashTestStatus:                 mashTestStatus
+                }
+            );
+
+        });
+
+
+        //  Get all Design Steps in the Scenario
+        const designSteps = ScenarioSteps.find({
+            designId:                   userContext.designId,
+            designVersionId:            userContext.designVersionId,
+            designUpdateId:             userContext.designUpdateId,
+            scenarioReferenceId:        scenarioReferenceId,
+            isRemoved:                  false
+        });
+
+        // See if we have a corresponding Dev Scenario Step
+        designSteps.forEach((designStep) => {
+            const devScenarioStep = UserDevFeatureScenarioSteps.findOne({
+                userId:                 userContext.userId,
+                scenarioReferenceId:    scenarioReferenceId,
+                stepFullName:           designStep.stepFullName
+            });
+
+            devScenarioStepId = 'NONE';
+            devScenarioId = 'NONE';
+            devFeatureId = 'NONE';
+            mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+            mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+
+            if(devScenarioStep){
+                devFeatureId = devScenarioStep.userDevFeatureId;
+                devScenarioId = devScenarioStep.userDevScenarioId;
+                devScenarioStepId = devScenarioStep.scenarioStepReferenceId;
+                mashStatus = MashStatus.MASH_LINKED;
+                mashTestStatus = MashTestStatus.MASH_PENDING;
+            }
+
+            // Add new Mash
+            UserDesignDevMashData.insert(
+                {
+                    // Identity
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  userContext.workPackageId,
+                    designComponentId:              designStep._id,
+                    mashComponentType:              ComponentType.SCENARIO_STEP,
+                    designComponentReferenceId:     designStep.stepReferenceId,
+                    designFeatureReferenceId:       featureReferenceId,
+                    designFeatureAspectReferenceId: aspectReferenceId,
+                    designScenarioReferenceId:      designStep.scenarioReferenceId,
+                    mashItemIndex:                  designStep.stepIndex,
+                    // Links
+                    devFeatureId:                   devFeatureId,
+                    devScenarioId:                  devScenarioId,
+                    devScenarioStepId:              devScenarioStepId,
+                    // Data
+                    mashItemName:                   designStep.stepFullName,
+                    mashItemTag:                    'NONE',
+                    stepType:                       designStep.stepType,
+                    stepText:                       designStep.stepText,
+                    stepTextRaw:                    designStep.stepTextRaw,
+                    // Status
+                    stepContext:                    StepContext.STEP_SCENARIO,
+                    mashStatus:                     mashStatus,
+                    mashTestStatus:                 mashTestStatus
+                }
+            );
+
+        });
+
+        // Now also add any Dev Steps not already covered
+        const devSteps = UserDevFeatureScenarioSteps.find({
+            userId:                 userContext.userId,
+            scenarioReferenceId:    scenarioReferenceId
+        });
+
+        devSteps.forEach((devStep) => {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Checking for dev step {}", devStep.stepFullName);
+
+            // See if already exists
+            const existingMashStep = UserDesignDevMashData.find({
+                userId:                         userContext.userId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                mashComponentType:              ComponentType.SCENARIO_STEP,
+                mashItemName:                   devStep.stepFullName
+            });
+
+            if(existingMashStep.count() == 0){
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding dev only step {} to scenario {}", devStep.stepFullName, scenarioReferenceId);
+
+                UserDesignDevMashData.insert(
+                    {
+                        // Identity
+                        userId:                         userContext.userId,
+                        designVersionId:                userContext.designVersionId,
+                        designUpdateId:                 userContext.designUpdateId,
+                        workPackageId:                  userContext.workPackageId,
+                        designComponentId:              'NONE',
+                        mashComponentType:              ComponentType.SCENARIO_STEP,
+                        designComponentReferenceId:     'NONE',
+                        designFeatureReferenceId:       featureReferenceId,
+                        designFeatureAspectReferenceId: 'NONE',
+                        designScenarioReferenceId:      scenarioReferenceId,
+                        // Links
+                        devFeatureId:                   devStep.userDevFeatureId,
+                        devScenarioId:                  devStep.userDevScenarioId,
+                        devScenarioStepId:              devStep._id,
+                        // Data
+                        mashItemName:                   devStep.stepFullName,
+                        mashItemTag:                    'NONE',
+                        stepType:                       this.getStepType(devStep.stepFullName),
+                        stepText:                       this.getStepText(devStep.stepFullName),
+                        stepTextRaw:                    this.createRawStepText(devStep.stepFullName),
+                        // Status
+                        stepContext:                    devStep.stepContext,
+                        mashStatus:                     MashStatus.MASH_NOT_DESIGNED,
+                        mashTestStatus:                 MashTestStatus.MASH_NOT_LINKED
+                    }
+                );
+            }
+
+        });
+
+    };
 
     updateTestData(userContext, resultsPath){
 
@@ -657,6 +952,8 @@ class MashDataServices{
                                 featureTestStatus = MashTestStatus.MASH_FAIL;
                                 scenarioError = step.result.error_message;
                             }
+
+
                         });
 
 
@@ -702,6 +999,31 @@ class MashDataServices{
                                 }
 
                             );
+
+                            // And update the step results too
+                            element.steps.forEach((step) => {
+
+                                UserDesignDevMashData.update(
+                                    {
+                                        userId:                         userContext.userId,
+                                        designVersionId:                userContext.designVersionId,
+                                        designUpdateId:                 userContext.designUpdateId,
+                                        workPackageId:                  userContext.workPackageId,
+                                        mashComponentType:              ComponentType.SCENARIO_STEP,
+                                        designFeatureReferenceId:       designFeature.componentReferenceId,
+                                        designScenarioReferenceId:      designScenario.componentReferenceId,
+                                        stepText:                       step.name
+                                    },
+                                    {
+                                        $set:{
+                                            mashTestStatus: step.result.status === 'passed' ? MashTestStatus.MASH_PASS : MashTestStatus.MASH_FAIL
+                                        }
+                                    },
+                                    (error, result) => {
+                                        log((msg) => console.log(msg), LogLevel.TRACE, "Updated {} scenario step", result);
+                                    }
+                                )
+                            });
                         }
                     }
                 });

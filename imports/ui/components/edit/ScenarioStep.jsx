@@ -6,11 +6,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignItemHeader from '../select/DesignItemHeader.jsx';
-import MoveTarget from './MoveTarget.jsx';
+import MoveTarget from '../../components/edit/MoveTarget.jsx';
 import SuggestedStepsContainer from '../../containers/edit/SuggestedStepsContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext } from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, ScenarioStepStatus, ScenarioStepType, StepContext, MashTestStatus } from '../../../constants/constants.js';
 import ClientScenarioStepServices from '../../../apiClient/apiClientScenarioStep.js';
 import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
 
@@ -55,6 +55,8 @@ const DomainSpan = (props) => {
 // -- DECORATOR CODE ---------------------------------------------------------------------------------------------------
 
 class ScenarioStep extends Component {
+    // Need to ensure that properties of scenarioStep are satisfied by both Design Scenario Step AND Dev Mash data
+
     constructor(props) {
         super(props);
 
@@ -101,7 +103,7 @@ class ScenarioStep extends Component {
 
         let compositeDecorator = new CompositeDecorator([
             {
-                strategy:  ClientDomainDictionaryServices.getDomainTermDecoratorFunction(this.props.scenarioStep.designId, this.props.scenarioStep.designVersionId),
+                strategy:  ClientDomainDictionaryServices.getDomainTermDecoratorFunction(this.props.scenarioStep.designVersionId),
                 component: DomainSpan,
             }
         ]);
@@ -240,7 +242,7 @@ class ScenarioStep extends Component {
 
         this.updateText(newRawText);
 
-        this.onSaveStepText(this.props.scenarioStep, this.props.scenarioStep.stepType, this.props.view, this.props.mode, this.props.scenarioInScope);
+        this.onSaveStepText(this.props.scenarioStep, this.props.scenarioStep.stepType, this.props.view, this.props.mode, this.props.parentInScope);
 
     }
 
@@ -263,23 +265,76 @@ class ScenarioStep extends Component {
         );
 
         let devStyle = '';
+        let glyph = 'star';
 
-        switch(scenarioStep.devStatus){
-            case ScenarioStepStatus.STEP_STATUS_UNLINKED:
-                devStyle = 'lgrey';
+        switch(displayContext){
+            case DisplayContext.EDIT_STEP_LINKED:
+                switch(scenarioStep.mashTestStatus){
+                    case MashTestStatus.MASH_PASS:
+                        devStyle = 'green';
+                        glyph = 'ok-circle';
+                        break;
+                    case MashTestStatus.MASH_FAIL:
+                        devStyle = 'red';
+                        glyph = 'remove-circle';
+                        break;
+                    default:
+                        devStyle = 'invisible';
+                        break;
+                }
                 break;
-            case ScenarioStepStatus.STEP_STATUS_FAIL:
-                devStyle = 'red';
-                break;
-            case ScenarioStepStatus.STEP_STATUS_PASS:
-                devStyle = 'green';
+            default:
+                devStyle = 'invisible';
                 break;
         }
+
 
         let stepClass = '';
         if(stepContext === StepContext.STEP_FEATURE_SCENARIO){
             stepClass = 'step-background'
         }
+
+        let draggableUnlinkedStep =
+            connectDragPreview(
+                <div className={"readOnlyItem"}>
+                    <InputGroup>
+                        <InputGroup.Addon>
+                            <div className={devStyle}><Glyphicon glyph={glyph}/></div>
+                        </InputGroup.Addon>
+                        <div>
+                            <table className="scenario-step-editor">
+                                <tbody>
+                                <tr>
+                                    <td className="scenario-step-type">
+                                        <div>{this.state.stepType}</div>
+                                    </td>
+                                    <td>
+                                        <div className="scenario-step-text">
+                                            <Editor
+                                                editorState={this.state.editorState}
+                                                spellCheck={false}
+                                                ref="editorReadOnly"
+                                                readOnly={true}
+                                            />
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <InputGroup.Addon onClick={ () => this.onDeleteScenarioStep(scenarioStep, view, mode, parentInScope, stepContext)}>
+                            <div className="red"><Glyphicon glyph="remove"/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            {connectDragSource(
+                                <div className="lgrey">
+                                    <Glyphicon glyph="move"/>
+                                </div>)
+                            }
+                        </InputGroup.Addon>
+                    </InputGroup>
+                </div>
+            );
 
         let editingStep =
             <div>
@@ -289,7 +344,7 @@ class ScenarioStep extends Component {
                         <td>
                             <InputGroup>
                                 <InputGroup.Addon>
-                                    <div className={devStyle}><Glyphicon glyph="star"/></div>
+                                    <div className={devStyle}><Glyphicon glyph={glyph}/></div>
                                 </InputGroup.Addon>
                                 <table className="scenario-step-editor">
                                     <tbody>
@@ -348,7 +403,7 @@ class ScenarioStep extends Component {
                 <div className={"readOnlyItem"}>
                     <InputGroup>
                         <InputGroup.Addon>
-                            <div className={devStyle}><Glyphicon glyph="star"/></div>
+                            <div className={devStyle}><Glyphicon glyph={glyph}/></div>
                         </InputGroup.Addon>
                         <div  onClick={ () => this.setCurrentStep()}>
                             <table className="scenario-step-editor">
@@ -396,7 +451,7 @@ class ScenarioStep extends Component {
             <div className={"readOnlyItem"}>
                 <InputGroup>
                     <InputGroup.Addon>
-                        <div className={devStyle}><Glyphicon glyph="star"/></div>
+                        <div className={devStyle}><Glyphicon glyph={glyph}/></div>
                     </InputGroup.Addon>
                     <div  onClick={ () => this.setCurrentStep()}>
                         <table>
@@ -432,25 +487,39 @@ class ScenarioStep extends Component {
                 </div>
             )
         } else {
-            // Editing allowed
-            if (this.state.editable) {
-                return (
-                    <div>
-                        {editingStep}
-                    </div>
-                )
-            } else {
-                return (
-                    <div>
-                        <MoveTarget
-                            currentItem={scenarioStep}
-                            displayContext={displayContext}
-                            mode={mode}
-                        />
-                        {draggableStep}
-                    </div>
-                )
+            switch(displayContext){
+                case DisplayContext.EDIT_STEP_DESIGN:
+                case DisplayContext.EDIT_STEP_DEV:
+                    // For unlinked steps outside the core design - you can drag them in to the design or delete them
+                    return (
+                        <div>
+                            {draggableUnlinkedStep}
+                        </div>
+                    );
+                    break;
+                default:
+                    // Anything else is in the main step editor and has a move target if not currently editing
+                    if (this.state.editable) {
+                        // Editing allowed
+                        return (
+                            <div>
+                                {editingStep}
+                            </div>
+                        )
+                    } else {
+                        return (
+                            <div>
+                                <MoveTarget
+                                    currentItem={scenarioStep}
+                                    displayContext={displayContext}
+                                    mode={mode}
+                                />
+                                {draggableStep}
+                            </div>
+                        )
+                    }
             }
+
         }
     }
 }

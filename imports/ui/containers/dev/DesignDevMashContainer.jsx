@@ -11,7 +11,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignDevMashItem            from '../../components/dev/DesignDevMashItem.jsx';
-import MashFeatureAspectContainer   from '../../containers/dev/MashFeatureAspectContainer';
+import MashFeatureAspectContainer   from '../../containers/dev/MashFeatureAspectContainer.jsx';
+import MashScenarioStepContainer    from '../../containers/dev/MashScenarioStepContainer.jsx';
 
 // Ultrawide Services
 import {RoleType, MashStatus, ComponentType}    from '../../../constants/constants.js';
@@ -90,7 +91,7 @@ class DesignItemMashList extends Component {
 
         const {designMashItemData, currentUserRole, userContext} = this.props;
 
-        console.log("Rendering mash container... ");
+        console.log("Rendering mash container with user context component type " + userContext.designComponentType);
 
         let panelHeader = '';
         let secondPanelHeader = '';
@@ -151,12 +152,11 @@ class DesignItemMashList extends Component {
 
         let mainPanel = 'Select a design item';
 
-        if(designMashItemData) {
+        if(designMashItemData || userContext.designComponentType === ComponentType.SCENARIO) {
             switch(userContext.designComponentType){
                 case ComponentType.APPLICATION:
                 case ComponentType.DESIGN_SECTION:
                 case ComponentType.FEATURE_ASPECT:
-                case ComponentType.SCENARIO:
                     mainPanel =
                         <Panel className="panel-text panel-text-body" header={panelHeader}>
                             <InputGroup>
@@ -235,7 +235,15 @@ class DesignItemMashList extends Component {
                                 {this.renderDesignItemMash(designMashItemData)}
                             </Panel>;
                     }
-
+                    break;
+                case ComponentType.SCENARIO:
+                    // Render the step editor
+                    mainPanel =
+                        <Panel className="panel-text panel-text-body" header={panelHeader}>
+                            <MashScenarioStepContainer params={{
+                                userContext: userContext
+                            }}/>
+                        </Panel>;
             }
         }
 

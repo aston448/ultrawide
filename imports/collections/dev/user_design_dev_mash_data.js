@@ -23,12 +23,17 @@ let Schema = new SimpleSchema({
     designScenarioStepReferenceId:  {type: String, defaultValue: 'NONE'},   // Set if known in Design and relevant
     mashItemIndex:                  {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering - follows ordering in Design
     // Links
-    devFeatureId:                   {type: String, defaultValue: 'NONE'},   // Id of the Dev Feature where this item has been found
-    devScenarioId:                  {type: String, defaultValue: 'NONE'},   // Id of the Dev Scenario if a Step
+    devFeatureId:                   {type: String, defaultValue: 'NONE'},   // Id of the Dev Feature
+    devScenarioId:                  {type: String, defaultValue: 'NONE'},   // Id of the Dev Scenario
+    devScenarioStepId:              {type: String, defaultValue: 'NONE'},   // Id of the Dev Scenario Step
     // Data
     mashItemName:                   {type: String},                         // Name of Feature, Aspect, Scenario or Step Text
-    mashItemTag:                    {type: String, defaultValue: DevTestTag.TEST_TEST},   // Test tag related to this item
+    mashItemTag:                    {type: String, defaultValue: DevTestTag.TEST_TEST},     // Test tag related to this item
+    stepType:                       {type: String, defaultValue: 'NONE'},                   // For Scenario Steps used in Editor
+    stepText:                       {type: String, defaultValue: 'NONE'},                   // For Scenario Steps used in Editor
+    stepTextRaw:                    {type: Object, blackbox: true, optional: true},         // For Scenario Steps used in Editor
     // Status
+    stepContext:                    {type: String, defaultValue: 'NONE'},   // For steps whether a Background or Scenario step
     mashStatus:                     {type: String},                         // Whether linked to dev or not and where originating
     mashTestStatus:                 {type: String},                         // If linked, latest test results status
 });

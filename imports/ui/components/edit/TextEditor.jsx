@@ -73,7 +73,7 @@ export default class TextEditor extends React.Component {
         if(props.userContext) {
             compositeDecorator = new CompositeDecorator([
                 {
-                    strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.userContext.designId, props.userContext.designVersionId),
+                    strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.userContext.designVersionId),
                     component: DomainSpan,
                 }
             ]);

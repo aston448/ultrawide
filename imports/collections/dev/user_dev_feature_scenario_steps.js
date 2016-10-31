@@ -20,6 +20,7 @@ let Schema = new SimpleSchema({
     stepText:               {type: String},                         // Unique functional text - plain text
     stepFullName:           {type: String},
     // Status
+    stepContext:            {type: String},
     stepStatus:             {type: String}
 });
 

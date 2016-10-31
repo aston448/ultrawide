@@ -246,7 +246,7 @@ class DesignComponentHeader extends Component{
                     // The WP Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
-                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designId, item.designVersionId),
+                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
                             component: DomainSpan,
                         }
                     ]);
@@ -256,7 +256,7 @@ class DesignComponentHeader extends Component{
                     // The Update Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
-                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designId, item.designVersionId),
+                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
                             component: DomainSpan,
                         }
                     ]);
@@ -266,7 +266,7 @@ class DesignComponentHeader extends Component{
                 // We are not in WP scope context so OK for all Scenarios
                 compositeDecorator = new CompositeDecorator([
                     {
-                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designId, item.designVersionId),
+                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
                         component: DomainSpan,
                     }
                 ]);

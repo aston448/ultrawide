@@ -27,7 +27,7 @@ import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mas
 
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, LogLevel } from '../constants/constants.js';
+import { ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel } from '../constants/constants.js';
 import ClientDesignServices from '../apiClient/apiClientDesign.js';
 
 import { log } from '../common/utils.js';
@@ -934,37 +934,23 @@ class ClientContainerServices{
                 break;
 
             case ComponentType.SCENARIO:
-                //Get all Scenario Steps for the scenario
-
-                // TODO
-
-                // let scenarioSteps = [];
+                //Get all Scenario Mash Steps for the scenario
                 //
-                // scenarioSteps = ScenarioSteps.find({
-                //     designId:                       userContext.designId,
+                // let stepsScenarioMashData = [];
+                //
+                // stepsScenarioMashData = UserDesignDevMashData.find({
+                //     userId:                         userContext.userId,
                 //     designVersionId:                userContext.designVersionId,
-                //     designUpdateId:                 userContext.designUpdateId,         // NONE if base version
-                //     scenarioReferenceId:            userContext.scenarioReferenceId
-                // });
+                //     designUpdateId:                 userContext.designUpdateId,
+                //     workPackageId:                  userContext.workPackageId,
+                //     designScenarioReferenceId:      userContext.scenarioReferenceId,
+                //     mashComponentType:              ComponentType.SCENARIO_STEP
+                // }).fetch();
                 //
-                // let stepMashData = [];
-                // let stepMash = null;
+                // log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario step mash entries for current scenario {}", stepsScenarioMashData.length, userContext.scenarioReferenceId);
                 //
-                // // Get step mash data
-                // scenarioSteps.forEach((step) => {
-                //     stepMash = DesignDevScenarioStepMash.findOne({
-                //        userId:                          userContext.userId,
-                //        designVersionId:                 userContext.designVersionId,
-                //        designUpdateId:                  userContext.designUpdateId,
-                //        designScenarioReferenceId:       userContext.scenarioReferenceId,
-                //        designScenarioStepReferenceId:   step.stepReferenceId
-                //     });
-                //
-                //     stepMashData.push(stepMash);
-                //
-                // });
-                //
-                // return stepMashData;
+                // return stepsScenarioMashData;
+
                 break;
             default:
 
@@ -1040,6 +1026,60 @@ class ClientContainerServices{
         ).fetch();
 
     };
+
+    getMashScenarioSteps(userContext){
+        // Returns steps for the current scenario that are:
+        // 1. In Design Only
+        // 2. Linked across Design - Dev
+        // 3. In Dev Only (but with Scenario that is in Design)
+
+        const designSteps = UserDesignDevMashData.find(
+            {
+                userId:                         userContext.userId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designScenarioReferenceId:      userContext.scenarioReferenceId,
+                mashComponentType:              ComponentType.SCENARIO_STEP,
+                mashStatus:                     MashStatus.MASH_NOT_IMPLEMENTED
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+
+        const linkedSteps = UserDesignDevMashData.find(
+            {
+                userId:                         userContext.userId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designScenarioReferenceId:      userContext.scenarioReferenceId,
+                mashComponentType:              ComponentType.SCENARIO_STEP,
+                mashStatus:                     MashStatus.MASH_LINKED
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+
+        // For the linked steps we return the full Scenario Step Data so this can be edited
+
+        const devSteps = UserDesignDevMashData.find(
+            {
+                userId:                         userContext.userId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designScenarioReferenceId:      userContext.scenarioReferenceId,
+                mashComponentType:              ComponentType.SCENARIO_STEP,
+                mashStatus:                     MashStatus.MASH_NOT_DESIGNED
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+
+        return({
+            designSteps: designSteps,
+            linkedSteps: linkedSteps,
+            devSteps: devSteps,
+        });
+    }
 
     getDevFilesData(userContext){
 

@@ -186,6 +186,13 @@ class FeatureFileServices{
 
     getFeatureScenarios(fileText){
 
+        // First get the Background steps for the whole Feature
+        let backgroundStartIndex = fileText.indexOf('Background:', 0);
+        let backgroundEndIndex = fileText.indexOf('\n', backgroundStartIndex);
+        let backgroundSteps = this.getScenarioSteps(fileText, backgroundEndIndex);
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} background steps for Feature", backgroundSteps.length);
+
         let scenarioStartIndex = fileText.indexOf('Scenario:', 0);
         let scenarioEndIndex = 0;
         let scenarios = [];
@@ -198,8 +205,6 @@ class FeatureFileServices{
 
             scenarioEndIndex = fileText.indexOf('\n', scenarioStartIndex);
 
-
-
             scenarioText = fileText.substring(scenarioStartIndex + 9, scenarioEndIndex).trim();
             scenarioTag = this.getTag(fileText, scenarioStartIndex);
 
@@ -211,9 +216,11 @@ class FeatureFileServices{
                 {
                     scenario: scenarioText,
                     tag: scenarioTag,
+                    backgroundSteps: backgroundSteps,       // All Scenarios have the same background steps
                     steps: scenarioSteps
                 }
             );
+
             scenarioStartIndex = fileText.indexOf('Scenario:', scenarioEndIndex);
         }
 
@@ -286,7 +293,7 @@ class FeatureFileServices{
             }
         }
 
-
+        return steps;
 
     }
 

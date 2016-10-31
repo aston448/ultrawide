@@ -61,7 +61,7 @@ class MoveTarget extends Component{
 }
 
 MoveTarget.propTypes = {
-    currentItem: PropTypes.object.isRequired,
+    currentItem: PropTypes.object,
     displayContext: PropTypes.string.isRequired,
     mode: PropTypes.string.isRequired
 };
@@ -81,8 +81,10 @@ const componentTarget = {
         }
 
         // Cannot drop on oneself
-        if(item.component._id === props.currentItem._id){
-            return false;
+        if(props.currentItem) {
+            if (item.component._id === props.currentItem._id) {
+                return false;
+            }
         }
 
         // Validate that drop target is of the same type as moving item and in the same list
@@ -98,7 +100,7 @@ const componentTarget = {
             return;
         }
 
-        console.log("DROP! " + item.component.componentType + " on " + props.currentItem.componentType);
+        log((msg) => console.log(msg), LogLevel.TRACE, "DROP on item {}", props.currentItem ? props.currentItem.componentType: 'Empty Space');
 
         return {
             targetItem: props.currentItem,

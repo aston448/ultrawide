@@ -91,7 +91,7 @@ class ClientDomainDictionaryServices {
         }
     }
 
-    getDomainTermDecoratorFunction(designId, designVersionId) {
+    getDomainTermDecoratorFunction(designVersionId) {
 
         // NOTE: This is a very intense function: Adding debug log statements MASSIVELY slows it down.  So don't go looking for other causes!
 

@@ -359,17 +359,20 @@ class ImpExServices{
         let backgroundSteps = JSON.parse(backgroundStepsString);
 
         backgroundSteps.forEach((step) => {
-            console.log("Adding Background Step " + step.stepType + " " + step.stepText);
 
-            designId = getIdFromMap(designsMapping, step.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, step.designVersionId);
-            designUpdateId = getIdFromMap(designUpdatesMapping, step.designUpdateId);
+            let newStep = this.migrateStep(step);
+
+            console.log("Adding Background Step " + newStep.stepType + " " + newStep.stepText);
+
+            designId = getIdFromMap(designsMapping, newStep.designId);
+            designVersionId = getIdFromMap(designVersionsMapping, newStep.designVersionId);
+            designUpdateId = getIdFromMap(designUpdatesMapping, newStep.designUpdateId);
 
             featureBackgroundStepId = ScenarioServices.importFeatureBackgroundStep(
                 designId,
                 designVersionId,
                 designUpdateId,
-                step
+                newStep
             );
 
             // Currently don't need to map step ids..
@@ -388,19 +391,19 @@ class ImpExServices{
 
         scenarioSteps.forEach((step) => {
 
-            step = this.migrateStep(step);
+            let newStep = this.migrateStep(step);
 
-            console.log("Adding Scenario Step " + step.stepType + " " + step.stepText);
+            console.log("Adding Scenario Step " + newStep.stepType + " " + newStep.stepText);
 
-            designId = getIdFromMap(designsMapping, step.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, step.designVersionId);
-            designUpdateId = getIdFromMap(designUpdatesMapping, step.designUpdateId);
+            designId = getIdFromMap(designsMapping, newStep.designId);
+            designVersionId = getIdFromMap(designVersionsMapping, newStep.designVersionId);
+            designUpdateId = getIdFromMap(designUpdatesMapping, newStep.designUpdateId);
 
             scenarioStepId = ScenarioServices.importScenarioStep(
                 designId,
                 designVersionId,
                 designUpdateId,
-                step
+                newStep
             );
 
             // Currently don't need to map step ids..

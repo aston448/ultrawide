@@ -88,7 +88,7 @@ class DomainDictionaryTerm extends Component {
 
         let compositeDecorator = new CompositeDecorator([
             {
-                strategy:  ClientDomainDictionaryServices.getDomainTermDecoratorFunction(this.props.userContext.designId, this.props.userContext.designVersionId),
+                strategy:  ClientDomainDictionaryServices.getDomainTermDecoratorFunction(this.props.userContext.designVersionId),
                 component: DomainSpan,
             }
         ]);

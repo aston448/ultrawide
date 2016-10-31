@@ -21,6 +21,7 @@ let Schema = new SimpleSchema({
     // Data
     stepType:                   {type: String},                                     // GIVEN, WHEN, THEN etc
     stepText:                   {type: String},                                     // Unique functional text - plain text
+    stepFullName:               {type: String},                                     // Type + Text combined
     stepTextRaw:                {type: Object, blackbox: true, optional: true},     // Unique functional text - rich text
 
     // State
