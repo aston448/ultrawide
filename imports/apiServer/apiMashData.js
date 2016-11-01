@@ -16,6 +16,14 @@ Meteor.methods({
 
     'mash.updateTestData'(userContext, resultsPath){
         MashDataServices.updateTestData(userContext, resultsPath);
+    },
+
+    'mash.updateMovedDesignStep'(designMashItemId){
+        MashDataServices.updateMovedDesignStep(designMashItemId);
+    },
+
+    'mash.exportFeatureConfiguration'(userContext){
+        MashDataServices.exportFeatureConfiguration(userContext);
     }
 
 });

@@ -818,7 +818,8 @@ const componentSource = {
     // Start of drag gets the item being dragged
     beginDrag(props) {
         return {
-            component: props.currentItem
+            component: props.currentItem,
+            displayContext: props.displayContext
         }
     },
 

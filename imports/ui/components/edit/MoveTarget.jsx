@@ -11,7 +11,7 @@ import React, { Component, PropTypes } from 'react';
 
 // Ultrawide Services
 import {ComponentType, ViewMode, DisplayContext, LogLevel} from '../../../constants/constants.js';
-import {reorderDropAllowed, log} from '../../../common/utils.js';
+import {reorderDropAllowed, mashMoveDropAllowed, log} from '../../../common/utils.js';
 
 // Bootstrap
 
@@ -39,15 +39,18 @@ class MoveTarget extends Component{
 
     render(){
 
-        const {currentItem, displayContext, mode, connectDropTarget, isOverCurrent, canDrop} = this.props;
+        const {currentItem, displayContext, mode, connectDropTarget, isOver, isOverCurrent, canDrop} = this.props;
 
         // When over a droppable area render it as a gap
         let moveTarget = 'move-target';
+
+        //log((msg) => console.log(msg), LogLevel.TRACE, "MOVE TARGET: Mode: {}", mode);
+
         if(canDrop && isOverCurrent){
             moveTarget = 'move-target-active'
         }
 
-        if((displayContext === DisplayContext.UPDATE_EDIT || displayContext === DisplayContext.BASE_EDIT) && mode === ViewMode.MODE_EDIT) {
+        if((displayContext === DisplayContext.UPDATE_EDIT || displayContext === DisplayContext.BASE_EDIT || displayContext === DisplayContext.EDIT_STEP_LINKED) && mode === ViewMode.MODE_EDIT) {
             // Only can be droppable if in Edit mode and if the edit section of the view
             return connectDropTarget(
                 <div className={moveTarget}></div>
@@ -71,25 +74,48 @@ MoveTarget.propTypes = {
 const componentTarget = {
 
     canDrop(props, monitor){
-        const item = monitor.getItem();
+        const item = monitor.getItem().component;
+        const itemContext = monitor.getItem().displayContext;
+        const target = props.currentItem;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Move Target Can Drop: Moving id is {}, target id is {}", item.component._id, props.currentItem._id);
+        if(!target){
+            return false;
+        }
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "MOVE TARGET CAN DROP? Item: {}, MashItem: {},  Context: {}, Target: {}, MashTarget: {}",
+            item.componentType, item.mashComponentType, itemContext, target.componentType, target.mashComponentType);
+
+
 
         // Prevent container items grabbing the drop...
         if(monitor.didDrop()){
             return false;
         }
 
-        // Cannot drop on oneself
-        if(props.currentItem) {
-            if (item.component._id === props.currentItem._id) {
-                return false;
-            }
+        switch(itemContext){
+            case DisplayContext.EDIT_STEP_DEV:
+            case DisplayContext.EDIT_STEP_DESIGN:
+                // This is a scenario step being moved into the FINAL steps container from Dev or Design
+                let mashMoveAllowed =  mashMoveDropAllowed(props.displayContext);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Mash Move Drop: {}", mashMoveAllowed);
+                return mashMoveAllowed;
+                break;
+
+            default:
+                // Anything else is a component being reordered...
+                // Cannot drop on oneself
+                if(props.currentItem) {
+                    if (item._id === target._id) {
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Can't drop on self");
+                        return false;
+                    }
+                }
+
+                // Validate that drop target is of the same type as moving item and in the same list
+                let reorderAllowed = reorderDropAllowed(item, target);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Reorder Drop: {}", reorderAllowed);
+                return reorderAllowed;
         }
-
-        // Validate that drop target is of the same type as moving item and in the same list
-        return (reorderDropAllowed(item.component, props.currentItem));
-
     },
 
     drop(props, monitor) {
@@ -104,6 +130,7 @@ const componentTarget = {
 
         return {
             targetItem: props.currentItem,
+            displayContext: props.displayContext,
             dragType: 'MOVE_REORDER'
         };
 
@@ -112,6 +139,9 @@ const componentTarget = {
 
 
 function collect(connect, monitor){
+
+    //log((msg) => console.log(msg), LogLevel.TRACE, "MOVE TARGET COLLECT: Can Drop: {}, Over Current: {}", monitor.canDrop(), monitor.isOver({shallow: true}));
+
     return {
         connectDropTarget: connect.dropTarget(),
         isOver: monitor.isOver(),
@@ -124,16 +154,5 @@ function collect(connect, monitor){
 MoveTarget = DropTarget(ComponentType.DRAGGABLE_ITEM, componentTarget, collect)(MoveTarget);
 
 // =====================================================================================================================
-
-
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        mode: state.currentViewMode
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-MoveTarget = connect(mapStateToProps)(MoveTarget);
 
 export default MoveTarget;

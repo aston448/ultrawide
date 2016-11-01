@@ -13,6 +13,7 @@ import SuggestedStepsContainer from '../../containers/edit/SuggestedStepsContain
 import {ViewType, ComponentType, ViewMode, DisplayContext, ScenarioStepStatus, ScenarioStepType, StepContext, MashTestStatus } from '../../../constants/constants.js';
 import ClientScenarioStepServices from '../../../apiClient/apiClientScenarioStep.js';
 import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
 
 
 // Bootstrap
@@ -530,7 +531,8 @@ ScenarioStep.propTypes = {
     mode: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
-    stepContext: PropTypes.string.isRequired
+    stepContext: PropTypes.string.isRequired,
+    userContext: PropTypes.object.isRequired
 };
 
 // NOTE: Redux and ReactDnD don't seem to interact - can't get Redux props in React DnD
@@ -544,7 +546,8 @@ const componentSource = {
     beginDrag(props) {
         console.log("DRAG!");
         return {
-            component: props.scenarioStep
+            component: props.scenarioStep,
+            displayContext: props.displayContext
         }
     },
 
@@ -566,8 +569,25 @@ const componentSource = {
                 // Drop action when moving an item in the list to reorder it
                 console.log("DROP - REORDER");
 
-                ClientScenarioStepServices.reorderComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);
+                switch(props.displayContext){
+                    case DisplayContext.EDIT_STEP_DESIGN:
+                        console.log("MOVE DESIGN TO MASH");
+                        ClientMashDataServices.relocateMashStep(props.view, props.mode, dropResult.displayContext, item.component);
+                        break;
+                    case DisplayContext.EDIT_STEP_DEV:
+                        // This is moving a step into linked mash steps
+                        console.log("MOVE DEV TO MASH");
+                        break;
+                    case DisplayContext.EDIT_STEP_LINKED:
+                        // Reorder linked mas steps
+                        console.log("REORDER MASH");
 
+                        break;
+                    default:
+                        // Just reordering the steps in this current list
+                        console.log("REORDER STEPS");
+                        ClientScenarioStepServices.reorderComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);
+                }
             }
         } else {
             console.log("NO DROP RESULT");

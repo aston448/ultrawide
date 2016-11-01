@@ -68,6 +68,10 @@ class AppHeader extends Component {
         ClientMashDataServices.updateTestData(userContext)
     }
 
+    onExportFeatureUpdates(userContext){
+        ClientMashDataServices.exportFeatureUpdates(userContext);
+    }
+
 
     render() {
 
@@ -102,6 +106,8 @@ class AppHeader extends Component {
         let refreshTestsButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext)}>Get Test Results</Button>;
 
+        let exportToDevButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
 
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
@@ -188,6 +194,7 @@ class AppHeader extends Component {
                         {domainDictionaryButton}
                         {selectionScreenButton}
                         {refreshTestsButton}
+                        {exportToDevButton}
                     </ButtonToolbar>;
                 break;
             default:

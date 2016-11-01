@@ -6,7 +6,7 @@ import {ComponentType} from '../constants/constants.js';
 import {DesignComponents} from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
-import {ViewType, MessageType, DisplayContext, LogLevel} from '../constants/constants.js';
+import {ViewType, MessageType, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
 
 import store from '../redux/store'
 import {updateUserMessage} from '../redux/actions'
@@ -211,6 +211,7 @@ export function locationMoveDropAllowed(itemType, targetType, viewType, inScope)
 }
 
 export function reorderDropAllowed(item, target) {
+
     // A list reordering drop is allowed if moving to a target that is of the same component type and has the same parent
     switch (item.componentType) {
         case ComponentType.SCENARIO_STEP:
@@ -221,8 +222,11 @@ export function reorderDropAllowed(item, target) {
                 log((msg) => console.log(msg), LogLevel.TRACE, "Target not a scenario step!");
                 return false;
             }
+
             // Can move steps within the same scenario
             return ((item.scenarioReferenceId === target.scenarioReferenceId) && (target._id != item._id));
+            break;
+
         default:
             // All other component types have the same structure
             log((msg) => console.log(msg), LogLevel.TRACE, "Target type: {}  Moving type: {} Target parent: {} Moving parent: {}",
@@ -231,8 +235,22 @@ export function reorderDropAllowed(item, target) {
                 item.componentParentId,
                 target.componentParentId
             );
-            return ((target.componentType === item.componentType) && (item.componentParentId === target.componentParentId) && (target._id != item._id));
+            return (
+                (item.componentType === target.componentType) &&
+                (item.componentParentId === target.componentParentId) &&
+                (item._id != target._id)
+            );
     }
+}
+
+export function mashMoveDropAllowed(displayContext){
+    // Here we are dragging steps out of the Design or Dev lists to add to the final configuration.
+    // It is possible that the target item is NULL if no steps exist already
+    log((msg) => console.log(msg), LogLevel.TRACE, "Mash move allowed for Scenario Step.  Target context {}", displayContext);
+
+    // Can only drop on the Linked Steps container drop items
+    return (displayContext === DisplayContext.EDIT_STEP_LINKED)
+
 }
 
 // Used to map the new DB Ids created on an import of data to the old ids in the export data
