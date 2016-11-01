@@ -125,7 +125,7 @@ class FeatureFileServices{
     };
 
     getFeatureFiles(filePath){
-        log((msg) => console.log(msg), LogLevel.TRACE, "Looking fro FEATURE FILES at {}", filePath);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for FEATURE FILES at {}", filePath);
 
         if(filePath != 'NONE'){
 

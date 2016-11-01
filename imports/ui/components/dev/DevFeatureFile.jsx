@@ -13,7 +13,7 @@ import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
-import {InputGroup, Label} from 'react-bootstrap';
+import {InputGroup, Panel, FormControl} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
@@ -40,13 +40,19 @@ class DevFeatureFile extends Component {
         super(props);
 
         this.state = {
-
+            open: false
         };
 
+    };
+
+    toggleOpen(){
+        this.setState({open: !this.state.open});
     }
 
     render(){
         const { file, userContext } = this.props;
+
+        let openGlyph = this.state.open ? 'collapse-up' :'collapse-down';
 
         return (
             <div>
@@ -57,7 +63,13 @@ class DevFeatureFile extends Component {
                     <div>
                         {file.featureFile}
                     </div>
+                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                        <div><Glyphicon glyph={openGlyph}/></div>
+                    </InputGroup.Addon>
                 </InputGroup>
+                <Panel collapsible expanded={this.state.open} className="feature-file-panel">
+                    <FormControl className="feature-file" componentClass="textarea" placeholder={file.fileText}/>
+                </Panel>
             </div>
         );
     }

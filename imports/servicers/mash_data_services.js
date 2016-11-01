@@ -49,6 +49,7 @@ class MashDataServices{
                 featureName:            featureName,
                 featureNarrative:       '',
                 featureTag:             tag,
+                fileText:               fileText.toString(),
                 // Status
                 featureFileStatus:      UserDevFeatureFileStatus.FILE_VALID,
                 featureStatus:          UserDevFeatureStatus.FEATURE_UNKNOWN,
@@ -127,6 +128,7 @@ class MashDataServices{
                     // Data
                     featureName:            devFeatureData.featureName,
                     featureNarrative:       '',
+                    fileText:               devFeatureData.fileText,
                     // Status
                     featureFileStatus:      devFeatureData.featureFileStatus,
                     featureStatus:          devFeatureData.featureStatus

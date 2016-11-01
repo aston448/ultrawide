@@ -787,7 +787,23 @@ input {
     color: lightgrey;
 }
 
+/* -- Feature Files ------------------------------------------------------------------------------------------------- */
+
+.feature-file-panel{
+    height: auto;
+}
+
+.feature-file {
+    margin: 2px;
+    padding: 2px;
+    border: none;
+    font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+    font-size:  8px;
+    height: 100%
+}
+
 /* -- Add Item Groups ----------------------------------------------------------------------------------------------- */
+
 .add-icon {
     color: lightgrey;
     font-size: 10px;
