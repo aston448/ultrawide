@@ -92,7 +92,8 @@ class FeatureFileServices{
             {
                 designVersionId: userContext.designVersionId,
                 designUpdateId: userContext.designUpdateId,
-                featureReferenceId: featureReferenceId
+                featureReferenceId: featureReferenceId,
+                isRemoved: false
             }
         ).fetch();
 
@@ -146,7 +147,8 @@ class FeatureFileServices{
                 {
                     designVersionId: userContext.designVersionId,
                     designUpdateId: userContext.designUpdateId,
-                    scenarioReferenceId: scenario.componentReferenceId
+                    scenarioReferenceId: scenario.componentReferenceId,
+                    isRemoved: false
                 },
                 {sort: {stepIndex: 1}}
             ).fetch();
@@ -183,7 +185,7 @@ class FeatureFileServices{
                 }
             });
 
-            // If existing file, restore any additional dev-only steps for this Scenario
+            // If existing file, restore any additional dev-only steps for this Scenario that are NOT logically deleted
             if(existingFile){
                 log((msg) => console.log(msg), LogLevel.TRACE, 'Looking for dev only steps for Feature: {}, Scenario {}', existingScenario.designFeatureReferenceId, existingScenario.designScenarioReferenceId);
 
@@ -191,7 +193,8 @@ class FeatureFileServices{
                     userId:                 userContext.userId,
                     featureReferenceId:     existingScenario.designFeatureReferenceId,
                     scenarioReferenceId:    existingScenario.designScenarioReferenceId,
-                    stepStatus:             UserDevScenarioStepStatus.STEP_DEV_ONLY
+                    stepStatus:             UserDevScenarioStepStatus.STEP_DEV_ONLY,
+                    isRemoved:              false
                 }).fetch();
 
                 log((msg) => console.log(msg), LogLevel.TRACE, 'Found {} additional dev only steps', devSteps.length);
@@ -250,7 +253,8 @@ class FeatureFileServices{
                     {
                         userId:                         userContext.userId,
                         userDevFeatureId:               existingFile._id,
-                        userDevScenarioId:              scenario._id
+                        userDevScenarioId:              scenario._id,
+                        isRemoved:                      false
                     },
                     {sort: {stepIndex: 1}}
                 ).fetch();

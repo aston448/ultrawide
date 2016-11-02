@@ -117,6 +117,7 @@ class DesignVersion extends Component {
                         buttons =
                             <ButtonGroup>
                                 <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(currentUserItemContext, designVersion)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(currentUserItemContext, designVersion)}>Edit</Button>
                                 <Button bsSize="xs" onClick={ () => this.onUnPublishDesignVersion(currentUserItemContext, designVersion)}>Unpublish</Button>
                                 <Button bsSize="xs" onClick={ () => this.onMergeUpdatesToNewDraftVersion(currentUserItemContext, designVersion)}>Create New from Updates</Button>
                             </ButtonGroup>;
@@ -128,10 +129,6 @@ class DesignVersion extends Component {
                             <div>
                                 <ButtonGroup className="button-group-left">
                                     <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(currentUserItemContext, designVersion)}>View</Button>
-                                </ButtonGroup>
-                                <ButtonGroup>
-                                    <Button bsSize="xs" onClick={ () => this.onAdoptDesignVersion(currentUserItemContext, designVersion)}>Develop</Button>
-                                    <Button bsSize="xs" onClick={ () => this.onAdoptDesignVersion(currentUserItemContext, designVersion)}>Develop with Selected Updates</Button>
                                 </ButtonGroup>
                             </div>;
                             break;

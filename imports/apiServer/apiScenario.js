@@ -35,6 +35,11 @@ Meteor.methods({
 
     },
 
+    'scenario.logicalDeleteMashScenarioStep'(step, userContext){
+        console.log('Logically Deleting step ' + step.mashItemName);
+        ScenarioServices.logicalDeleteMashScenarioStep(step, userContext)
+    },
+
     // Move a step to a new position in its current scenario
     'scenario.reorderStep'(movingStepId, targetStepId){
 

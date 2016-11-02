@@ -12,9 +12,11 @@ import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_featur
 import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
 import {UserCurrentDevContext}          from '../collections/context/user_current_dev_context.js';
 
-import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
-import {log} from '../common/utils.js';
-import FeatureFileServices from '../servicers/feature_file_services.js'
+import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
+    UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
+import {log}                            from '../common/utils.js';
+import FeatureFileServices              from '../servicers/feature_file_services.js'
+import ScenarioServices                 from '../servicers/scenario_services.js';
 
 class MashDataServices{
 
@@ -522,6 +524,8 @@ class MashDataServices{
             }
         );
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Creating Feature Mash Data. --------------------------");
+
         designWpItems.forEach((item) => {
 
             let designItem = null;
@@ -545,6 +549,8 @@ class MashDataServices{
             let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
             let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
             let tag = DevTestTag.TEST_TEST; // Default testing tag to Test
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Found WP Item: {} : {}", item.componentType, itemName);
 
             switch(item.componentType){
                 case ComponentType.FEATURE:
@@ -681,8 +687,6 @@ class MashDataServices{
                     });
 
                     let devScenarioId = 'NONE';
-                    let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
-                    let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
 
                     if(devScenario){
                         devFeatureId = devScenario.userDevFeatureId;
@@ -756,7 +760,7 @@ class MashDataServices{
             designId:                   userContext.designId,
             designVersionId:            userContext.designVersionId,
             designUpdateId:             userContext.designUpdateId,
-            featureReferenceId:         userContext.featureReferenceId,
+            featureReferenceId:         featureReferenceId,         // Don't use user context as feature may not yet be chosen
             isRemoved:                  false
         }).fetch();
 
@@ -938,6 +942,7 @@ class MashDataServices{
 
     };
 
+    // A Design Only step is moved into the Linked Steps area...
     updateMovedDesignStep(mashDataItemId)  {
 
         // Mark this step as linked
@@ -951,6 +956,75 @@ class MashDataServices{
             }
         );
     };
+
+    // A Dev Only step is moved into the Linked Steps area
+    updateMovedDevStep(devMashItemId, targetMashItemId, userContext){
+
+        // The target step is the one below where the new step will fall
+
+        // Get the index of the target step if there is one (there won't be if dropping into empty box)
+        let targetIndex = 0;
+        let newIndex = 0;
+
+        const movingStep = UserDesignDevMashData.findOne({_id: devMashItemId});
+        const currentScenarioId = userContext.scenarioReferenceId;
+
+        if(targetMashItemId) {
+            targetIndex = UserDesignDevMashData.findOne({_id: targetMashItemId}).mashItemIndex;
+        }
+
+        if(targetIndex > 0){
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Target Index =  {}", targetIndex);
+            let previousIndex = 0;
+
+            // Find the next smallest index in the current set of steps
+
+            const currentSteps = this.getFinalScenarioSteps(currentScenarioId, userContext);
+
+            // The steps returned are in ascending order
+            let lastItem = 0;
+            currentSteps.forEach((step) => {
+
+                if(step._id === targetMashItemId){
+                    previousIndex = lastItem;
+                }
+                lastItem = step.mashItemIndex;
+            });
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Previous Index =  {}", previousIndex);
+
+            newIndex = ((previousIndex + targetIndex) / 2);
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "New Index =  {}", newIndex);
+        }
+
+        // This data needs to be added to the design.  This process also updates the Mash data with the new Design item details
+        const stepFullName = movingStep.stepType + ' ' +  movingStep.stepText;
+        ScenarioServices.addDesignScenarioStepFromDev(currentScenarioId, userContext, movingStep.stepType, movingStep.stepText, stepFullName, newIndex, devMashItemId);
+
+    }
+
+    exportScenario(scenarioReferenceId, userContext){
+
+        // Make out that this entire scenario is linked.  This should update the Scenario Entry and all the steps
+        UserDesignDevMashData.update(
+            {
+                userId:                         userContext.userId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designScenarioReferenceId:      scenarioReferenceId
+            },
+            {
+                $set:{
+                    mashStatus: MashStatus.MASH_LINKED
+                }
+            },
+            { multi: true }
+        );
+
+        // Then export the whole feature
+        this.exportFeatureConfiguration(userContext);
+    }
 
     exportFeatureConfiguration(userContext){
 
@@ -1107,7 +1181,38 @@ class MashDataServices{
             }
         });
 
-    }
+    };
+
+    // GENERIC FIND FUNCTIONS ==========================================================================================
+
+    getFinalScenarioSteps(designScenarioReferenceId, userContext) {
+        return UserDesignDevMashData.find(
+            {
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                workPackageId: userContext.workPackageId,
+                designScenarioReferenceId: designScenarioReferenceId,
+                mashStatus: MashStatus.MASH_LINKED
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+    };
+
+    getDesignOnlyScenarioSteps(designScenarioReferenceId, userContext) {
+        return UserDesignDevMashData.find(
+            {
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                workPackageId: userContext.workPackageId,
+                designScenarioReferenceId: designScenarioReferenceId,
+                mashStatus: MashStatus.MASH_NOT_IMPLEMENTED
+            },
+            {sort: {mashItemIndex: 1}}
+        ).fetch();
+    };
+
 }
 
 export default new MashDataServices();

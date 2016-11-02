@@ -82,7 +82,7 @@ class WorkPackageServices{
                             componentParent:                false,
                             componentActive:                false       // Start by assuming nothing in scope
                         }
-                    )
+                    );
 
                 });
 

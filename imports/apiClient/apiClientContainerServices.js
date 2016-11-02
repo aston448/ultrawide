@@ -547,10 +547,18 @@ class ClientContainerServices{
 
                 console.log("WP components found: " + currentComponents.count());
 
-                return {
-                    components: currentComponents.fetch(),
-                    displayContext: displayContext
-                };
+                if(currentComponents.count() > 0){
+                    return {
+                        components: currentComponents.fetch(),
+                        displayContext: displayContext
+                    };
+                } else {
+                    return {
+                        components: [],
+                        displayContext: displayContext
+                    };
+                }
+
                 break;
 
         }
@@ -667,7 +675,8 @@ class ClientContainerServices{
                         designId: designId,
                         designVersionId: designVersionId,
                         designUpdateId: 'NONE',
-                        scenarioReferenceId: scenarioReferenceId
+                        scenarioReferenceId: scenarioReferenceId,
+                        isRemoved: false
                     },
                     {sort:{stepIndex: 1}}
                 );
@@ -725,7 +734,8 @@ class ClientContainerServices{
                                 designId: designId,
                                 designVersionId: designVersionId,
                                 designUpdateId: 'NONE',
-                                scenarioReferenceId: scenarioReferenceId
+                                scenarioReferenceId: scenarioReferenceId,
+                                isRemoved: false
                             },
                             {sort:{stepIndex: 1}}
                         );
@@ -1000,6 +1010,7 @@ class ClientContainerServices{
                     designVersionId:                userContext.designVersionId,
                     designUpdateId:                 userContext.designUpdateId,
                     workPackageId:                  userContext.workPackageId,
+                    designFeatureReferenceId:       userContext.featureReferenceId,
                     mashComponentType:              ComponentType.FEATURE_ASPECT
                 },
                 {sort: {mashItemIndex: 1}}
@@ -1032,6 +1043,8 @@ class ClientContainerServices{
         // 1. In Design Only
         // 2. Linked across Design - Dev
         // 3. In Dev Only (but with Scenario that is in Design)
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Getting mash Scenario Steps for Scenario {}", userContext.scenarioReferenceId);
 
         const designSteps = UserDesignDevMashData.find(
             {

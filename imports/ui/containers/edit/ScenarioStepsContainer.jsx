@@ -53,7 +53,7 @@ class ScenarioStepsList extends Component {
     }
 
     // A list of Scenarios in a Feature or Feature Aspect
-    renderSteps(steps, parentInScope, view, mode, displayContext, stepContext) {
+    renderSteps(steps, parentInScope, view, mode, displayContext, stepContext, userContext) {
 
         return steps.map((step) => {
             return(
@@ -65,13 +65,14 @@ class ScenarioStepsList extends Component {
                     mode={mode}
                     displayContext={displayContext}
                     stepContext={stepContext}
+                    userContext={userContext}
                 />
             )
         });
     }
 
     render() {
-        const {steps, displayContext, stepContext, parentReferenceId, parentInScope, view, mode, userItemContext} = this.props;
+        const {steps, displayContext, stepContext, parentReferenceId, parentInScope, view, mode, userContext} = this.props;
 
         let addScenarioStep = <div></div>;
 
@@ -87,7 +88,7 @@ class ScenarioStepsList extends Component {
                         <td className="control-table-data">
                             <DesignComponentAdd
                                 addText="Add scenario step"
-                                onClick={ () => this.addStep(view, mode, displayContext, stepContext, parentReferenceId, userItemContext, parentInScope)}
+                                onClick={ () => this.addStep(view, mode, displayContext, stepContext, parentReferenceId, userContext, parentInScope)}
                             />
                         </td>
                     </tr>
@@ -97,7 +98,7 @@ class ScenarioStepsList extends Component {
 
         return (
             <div>
-                {this.renderSteps(steps, parentInScope, view, mode, displayContext, stepContext)}
+                {this.renderSteps(steps, parentInScope, view, mode, displayContext, stepContext, userContext)}
                 {addScenarioStep}
             </div>
         );
@@ -117,7 +118,7 @@ function mapStateToProps(state) {
     return {
         view: state.currentAppView,
         mode: state.currentViewMode,
-        userItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 

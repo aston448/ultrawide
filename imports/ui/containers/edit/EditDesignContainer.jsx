@@ -46,13 +46,16 @@ class DesignApplicationsList extends Component {
     }
 
     // A list of top level applications in the design / design update
-    renderApplications(applications, context) {
+    renderApplications(applications, context, view, mode) {
         return applications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
+                    designItem={application}
                     displayContext={context}
+                    view={view}
+                    mode={mode}
                 />
             );
 
@@ -112,7 +115,7 @@ class DesignApplicationsList extends Component {
             // Root of New Design Editor
             let baseEditorComponent =
                 <div className="design-editor">
-                    {this.renderApplications(baseApplications, displayContext)}
+                    {this.renderApplications(baseApplications, displayContext, view, mode)}
                     {addComponent}
                 </div>;
 

@@ -1,8 +1,10 @@
 
-import {ScenarioSteps} from '../collections/design/scenario_steps.js';
-import {FeatureBackgroundSteps} from '../collections/design/feature_background_steps.js';
+import {ScenarioSteps}                  from '../collections/design/scenario_steps.js';
+import {FeatureBackgroundSteps}         from '../collections/design/feature_background_steps.js';
+import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
+import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js'
 
-import {ScenarioStepType, ScenarioStepStatus, StepContext } from '../constants/constants.js';
+import {ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../constants/constants.js';
 
 class ScenarioServices{
 
@@ -39,12 +41,18 @@ class ScenarioServices{
         };
     };
 
-    getDefaultRawStepText(){
+    getDefaultRawStepText(stepText){
+
+        let text = 'add step text here...';
+
+        if(stepText){
+            text = stepText;
+        }
 
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "set step text here",
+                { "key" : "5efv7", "text" : text,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
@@ -145,23 +153,17 @@ class ScenarioServices{
         return featureBackgroundStepId;
     }
 
-    addNewScenarioStep(scenarioReferenceId, userItemContext, scenarioInScope){
+    addNewScenarioStep(scenarioReferenceId, userContext, scenarioInScope){
 
         // A new step should be added to the scenario referenced for the current design or design update component
         // The step is always added at the end of the list
 
-        // Scenario step has a design update Id if Scenario is in a Design Update
-        let designUpdateId = 'NONE';
-        if(userItemContext.designUpdateId){
-            designUpdateId = userItemContext.designUpdateId;
-        }
-
         ScenarioSteps.insert(
             {
                 stepReferenceId:            'TEMP',                                     // Will set this after created
-                designId:                   userItemContext.designId,
-                designVersionId:            userItemContext.designVersionId,
-                designUpdateId:             designUpdateId,
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
                 scenarioReferenceId:        scenarioReferenceId,
 
                 // Data
@@ -194,11 +196,78 @@ class ScenarioServices{
                     );
 
                     // Set the default index for a new component
-                    this.setStepIndex(result, scenarioReferenceId, userItemContext, StepContext.STEP_SCENARIO);
+                    this.setStepIndex(result, scenarioReferenceId, userContext, StepContext.STEP_SCENARIO);
 
                 }
             }
         );
+
+    };
+
+    addDesignScenarioStepFromDev(scenarioReferenceId, userContext, stepType, stepText, stepFullName, stepIndex, mashItemId){
+
+        // A new step is added to the Design from a step defined in a Dev feature file
+
+        let newStepId = ScenarioSteps.insert(
+            {
+                stepReferenceId:            'TEMP',                                     // Will set this after created
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
+                scenarioReferenceId:        scenarioReferenceId,
+
+                // Data
+                stepType:                   stepType,
+                stepText:                   stepText,
+                stepFullName:               stepFullName,
+                stepTextRaw:                this.getDefaultRawStepText(stepText),
+                stepIndex:                  stepIndex,
+
+                // State
+                devStatus:                  ScenarioStepStatus.STEP_STATUS_UNLINKED,
+                updateFocus:                true,
+                isRemovable:                true,
+                isRemoved:                  false,
+                isNew:                      true,
+                isChanged:                  false
+            },
+
+            (error, result) => {
+                if(error){
+                    // Error handler
+                    console.log("Insert DEV Scenario Step - Error: " + error);
+                } else {
+                    console.log("Insert DEV Scenario Step - Success: " + result);
+
+                    // Update the component reference to be the _id.
+                    ScenarioSteps.update(
+                        {_id: result},
+                        { $set: {stepReferenceId: result}}
+                    );
+
+                    // And as we are adding Dev Mash item to the design, need to update the mash item with new design details
+                    // Mark this step as linked with correct index and now referencing the new Design item
+                    UserDesignDevMashData.update(
+                        {_id: mashItemId},
+                        {
+                            $set: {
+                                designComponentReferenceId:     result,
+                                designScenarioReferenceId:      scenarioReferenceId,
+                                designScenarioStepReferenceId:  result,
+                                stepTextRaw:                    this.getDefaultRawStepText(stepText),
+                                mashItemIndex:                  stepIndex,
+                                mashStatus:                     MashStatus.MASH_LINKED,
+                                mashTestStatus:                 MashTestStatus.MASH_PENDING,
+
+                            }
+                        }
+                    );
+
+                }
+            }
+        );
+
+        return newStepId;
 
     };
 
@@ -385,6 +454,119 @@ class ScenarioServices{
                 break;
         }
     };
+
+    logicalDeleteMashScenarioStep(step, userContext){
+
+        switch(step.mashStatus){
+            case MashStatus.MASH_NOT_IMPLEMENTED:
+
+                // A Design Only Step - logically delete the Design Item
+                this.logicallyDeleteDesignStep(step.designComponentId, step.stepContext);
+
+                // And delete the Mash item so it disappears immediately - it won't get recreated on next refresh
+                this.deleteMashStepItem(step._id);
+                break;
+
+            case MashStatus.MASH_LINKED:
+
+                // A linked step - do the same and this will push it into being a Dev Only step
+                this.logicallyDeleteDesignStep(step.designComponentId, step.stepContext);
+
+                // And change the item to be Dev only now...
+                UserDesignDevMashData.update(
+                    {_id: step._id},
+                    {
+                        $set:{
+                            mashStatus: MashStatus.MASH_NOT_DESIGNED
+                        }
+                    }
+                );
+
+                break;
+            case MashStatus.MASH_NOT_DESIGNED:
+
+                // Dev Only Step - logically delete the step in dev data.  This will cause the step to be deleted from the file on the next export
+                this.logicallyDeleteDevStep(step, userContext);
+
+                // And delete the Mash item so it disappears immediately - it won't get recreated on next refresh
+                this.deleteMashStepItem(step._id);
+                break;
+        }
+
+    };
+
+    logicallyDeleteDesignStep(stepId, stepContext){
+        switch (stepContext) {
+            case StepContext.STEP_FEATURE:
+                FeatureBackgroundSteps.update(
+                    {_id: stepId},
+                    {
+                        $set:{
+                            isRemoved: true
+                        }
+                    },
+                    (error, result) => {
+                        if (error) {
+                            console.log("Error logically deleting Feature Background Step: " + error);
+                        } else {
+                            console.log("Feature Background Step logically deleted " + stepId);
+                        }
+                    }
+                );
+                break;
+            case StepContext.STEP_SCENARIO:
+                ScenarioSteps.update(
+                    {_id: stepId},
+                    {
+                        $set:{
+                            isRemoved: true
+                        }
+                    },
+                    (error, result) => {
+                        if (error) {
+                            console.log("Error logically deleting Scenario Step: " + error);
+                        } else {
+                            console.log("Scenario Step logically deleted " + stepId);
+                        }
+                    }
+                );
+                break;
+        }
+    }
+
+    deleteMashStepItem(mashItemId){
+
+        UserDesignDevMashData.remove(
+            {_id: mashItemId}
+        );
+    };
+
+
+    logicallyDeleteDevStep(mashStep, userContext){
+
+        UserDevFeatureScenarioSteps.update(
+            {
+                userId:                 userContext.userId,
+                featureReferenceId:     userContext.featureReferenceId,
+                scenarioReferenceId:    userContext.scenarioReferenceId,
+                stepType:               mashStep.stepType,
+                stepText:               mashStep.stepText
+            },
+            {
+                $set:{
+                    isRemoved: true
+                }
+            },
+            (error, result) => {
+                if (error) {
+                    console.log("Error logically deleting Dev Scenario Step: " + error);
+                } else {
+                    console.log("Dev Scenario Step logically deleted " + mashStep.stepText);
+                }
+            }
+        );
+    }
+
 
 
     // Move the component to a new position in its local list

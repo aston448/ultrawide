@@ -43,13 +43,13 @@ class DesignSectionsList extends Component {
         if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
             return ClientWorkPackageServices.getDesignItem(designSection.componentId, designSection.workPackageType);
         } else {
-            return null;
+            return designSection;
         }
     }
 
     // A list of top level headings in the design
     renderDesignSections() {
-        const {components, displayContext, view} = this.props;
+        const {components, displayContext, view, mode} = this.props;
 
         return components.map((designSection) => {
 
@@ -59,6 +59,8 @@ class DesignSectionsList extends Component {
                     currentItem={designSection}
                     designItem={this.getDesignItem(designSection, displayContext)}
                     displayContext={displayContext}
+                    view={view}
+                    mode={mode}
                 />
             );
         });
@@ -82,6 +84,7 @@ DesignSectionsList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
+        mode: state.currentViewMode
     }
 }
 

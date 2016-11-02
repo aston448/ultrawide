@@ -60,15 +60,16 @@ class MashFeatureAspect extends Component {
         const { aspect, userContext } = this.props;
 
         // All this is is the Aspect (exportable) plus a list of its scenarios
+        // TODO - decide if we are going to make Aspects exportable as mini-Features
         return(
             <div>
                 <InputGroup>
                     <div className={"mash-aspect"}>
                         {aspect.mashItemName}
                     </div>
-                    <InputGroup.Addon onClick={() => this.onExportFeatureAspect(aspect, userContext)}>
-                        <div><Glyphicon glyph="download"/></div>
-                    </InputGroup.Addon>
+                    {/*<InputGroup.Addon onClick={() => this.onExportFeatureAspect(aspect, userContext)}>*/}
+                        {/*<div><Glyphicon glyph="download"/></div>*/}
+                    {/*</InputGroup.Addon>*/}
                 </InputGroup>
                 <MashFeatureAspectScenarioContainer params={{
                     aspect: aspect

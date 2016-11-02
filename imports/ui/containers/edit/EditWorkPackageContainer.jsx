@@ -47,7 +47,7 @@ class WorkPackageApplicationsList extends Component {
 
 
     // A list of top level applications in the work package potential scope
-    renderScopeApplications(wpScopeApplications, context, view) {
+    renderScopeApplications(wpScopeApplications, context, view, mode) {
         return wpScopeApplications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -55,13 +55,15 @@ class WorkPackageApplicationsList extends Component {
                     currentItem={application}
                     designItem={this.getDesignItem(application)}
                     displayContext={context}
+                    view={view}
+                    mode={mode}
                 />
             );
         });
     }
 
     // A list of top level applications in the work package view
-    renderViewApplications(wpViewApplications, context, view) {
+    renderViewApplications(wpViewApplications, context, view, mode) {
         return wpViewApplications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -69,6 +71,8 @@ class WorkPackageApplicationsList extends Component {
                     currentItem={application}
                     designItem={this.getDesignItem(application)}
                     displayContext={context}
+                    view={view}
+                    mode={mode}
                 />
             );
         });
@@ -87,13 +91,13 @@ class WorkPackageApplicationsList extends Component {
             // Scope for Work Package
             let wpScopeComponent =
                 <Panel header="Work Package Scope" className="panel-update panel-update-body">
-                    {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view)}
+                    {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
                 </Panel>;
 
             // Actual View of the WP
             let wpViewComponent =
                 <Panel header="Work Package Content" className="panel-update panel-update-body">
-                    {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view)}
+                    {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode)}
                 </Panel>;
 
             // Design Component Text / Scenario Steps
@@ -108,15 +112,16 @@ class WorkPackageApplicationsList extends Component {
                     break;
             }
 
-            let wpTextComponent =
-                <Panel header={wpTextHeader}   className="panel-update panel-update-body">
-                    <DesignComponentTextContainer params={{
-                        currentContext: currentUserItemContext,
-                        mode: ViewMode.MODE_VIEW,
-                        view: view,
-                        displayContext: DisplayContext.WP_VIEW
-                    }}/>
-                </Panel>;
+            let wpTextComponent = <div></div>
+                //TODO - Fix this - something broken here
+                // <Panel header={wpTextHeader}   className="panel-update panel-update-body">
+                //     <DesignComponentTextContainer params={{
+                //         currentContext: currentUserItemContext,
+                //         mode: ViewMode.MODE_VIEW,
+                //         view: view,
+                //         displayContext: DisplayContext.WP_VIEW
+                //     }}/>
+                // </Panel>;
 
             // Domain Dictionary
             let domainDictionary =

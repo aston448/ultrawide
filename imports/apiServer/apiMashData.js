@@ -22,6 +22,14 @@ Meteor.methods({
         MashDataServices.updateMovedDesignStep(designMashItemId);
     },
 
+    'mash.updateMovedDevStep'(devMashItemId, targetMashItemId, userContext){
+        MashDataServices.updateMovedDevStep(devMashItemId, targetMashItemId, userContext);
+    },
+
+    'mash.exportScenario'(scenarioReferenceId, userContext){
+        MashDataServices.exportScenario(scenarioReferenceId, userContext)
+    },
+
     'mash.exportFeatureConfiguration'(userContext){
         MashDataServices.exportFeatureConfiguration(userContext);
     }

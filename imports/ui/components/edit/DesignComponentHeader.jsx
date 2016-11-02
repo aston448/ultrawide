@@ -570,7 +570,7 @@ class DesignComponentHeader extends Component{
                     <InputGroup.Addon onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
+                    <InputGroup.Addon className={itemIndent}>{currentItem.componentIndex}</InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.toggleScope(view, mode, displayContext, userItemContext, currentItem)}>
                         <div className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
@@ -608,7 +608,7 @@ class DesignComponentHeader extends Component{
 
         let viewOnlyHeader =
             <div>
-                <InputGroup>
+                <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
@@ -616,7 +616,7 @@ class DesignComponentHeader extends Component{
                         {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
                     {/*</InputGroup.Addon>*/}
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle} onDoubleClick={ () => this.toggleOpen()} onClick={ () => this.setCurrentComponent()}>
+                    <div className={"readOnlyItem " + itemStyle} >
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={false}
@@ -667,7 +667,7 @@ class DesignComponentHeader extends Component{
                         {/*<InputGroup.Addon>*/}
                             {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
                         {/*</InputGroup.Addon>*/}
-                        <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
+                        <InputGroup.Addon className={itemIndent}>{currentItem.componentIndex}</InputGroup.Addon>
                         <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
                             <Editor
                                 editorState={this.state.editorState}
@@ -799,7 +799,7 @@ class DesignComponentHeader extends Component{
 // Additional properties are added by React DnD collectSource
 DesignComponentHeader.propTypes = {
     currentItem: PropTypes.object.isRequired,
-    designItem: PropTypes.object,
+    designItem: PropTypes.object.isRequired,
     isDragDropHovering: PropTypes.bool,
     onToggleOpen: PropTypes.func,
     onSelectItem: PropTypes.func,

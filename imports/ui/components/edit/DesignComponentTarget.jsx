@@ -65,6 +65,7 @@ class DesignComponentTarget extends Component{
                     <DesignComponent
                         currentItem={currentItem}
                         designItem={designItem}
+                        isDragDropHovering={false}
                         displayContext={displayContext}
                     />
                 </div>
@@ -75,8 +76,10 @@ class DesignComponentTarget extends Component{
 
 DesignComponentTarget.propTypes = {
     currentItem: PropTypes.object.isRequired,
-    designItem: PropTypes.object,
-    displayContext: PropTypes.string.isRequired
+    designItem: PropTypes.object.isRequired,
+    displayContext: PropTypes.string.isRequired,
+    view: PropTypes.string.isRequired,
+    mode: PropTypes.string.isRequired
 };
 
 // React DnD ===========================================================================================================
@@ -143,16 +146,16 @@ DesignComponentTarget = DropTarget(ComponentType.DRAGGABLE_ITEM, componentTarget
 // =====================================================================================================================
 
 
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        mode: state.currentViewMode,
-        view: state.currentAppView
-    }
-}
-
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignComponentTarget = connect(mapStateToProps)(DesignComponentTarget);
+// // Redux function which maps state from the store to specific props this component is interested in.
+// function mapStateToProps(state) {
+//     return {
+//         mode: state.currentViewMode,
+//         view: state.currentAppView
+//     }
+// }
+//
+//
+// // Connect the Redux store to this component ensuring that its required state is mapped to props
+// DesignComponentTarget = connect(mapStateToProps)(DesignComponentTarget);
 
 export default DesignComponentTarget;

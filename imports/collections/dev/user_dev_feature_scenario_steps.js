@@ -23,7 +23,8 @@ let Schema = new SimpleSchema({
     stepFullName:           {type: String},
     // Status
     stepContext:            {type: String},
-    stepStatus:             {type: String}
+    stepStatus:             {type: String},
+    isRemoved:              {type: Boolean, defaultValue: false}        // Indicates that user has indicated this item should be removed from the Dev file
 });
 
 UserDevFeatureScenarioSteps.attachSchema(Schema);

@@ -17,6 +17,7 @@ import MoveTarget   from '../../components/edit/MoveTarget.jsx';
 import {ViewMode, ViewType, DisplayContext, StepContext, ComponentType}    from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -40,7 +41,7 @@ class MashScenarioStepsList extends Component {
     }
 
 
-    renderSteps(steps, view, displayContext){
+    renderSteps(steps, view, displayContext, userContext){
         return steps.map((step) => {
             return (
                 <ScenarioStep
@@ -51,31 +52,53 @@ class MashScenarioStepsList extends Component {
                     view={view}
                     displayContext={displayContext}
                     stepContext={step.stepContext}
+                    userContext={userContext}
                 />
             );
         });
     };
 
+
     render() {
 
         const {designSteps, linkedSteps, devSteps, userContext, view} = this.props;
 
+        let designPanel = <div></div>;
+        if(designSteps.length > 0){
+            designPanel =
+                <Panel className="panel-text panel-text-body" header="Steps in DESIGN only">
+                    {this.renderSteps(designSteps, view, DisplayContext.EDIT_STEP_DESIGN, userContext)}
+                </Panel>
+        }
+
+        let linkedPanelData = <div>No Linked Steps.  You can Export the Feature or the Scenario to create the steps</div>;
+        if(linkedSteps.length > 0){
+            linkedPanelData = <div>{this.renderSteps(linkedSteps, view, DisplayContext.EDIT_STEP_LINKED, userContext)}</div>;
+        }
+
+        let linkedPanel =
+            <Panel className="panel-text panel-text-body" header="Steps LINKED between DESIGN and BUILD">
+                {linkedPanelData}
+                <MoveTarget
+                    currentItem={null}
+                    displayContext={DisplayContext.EDIT_STEP_LINKED}
+                    mode={ViewMode.MODE_EDIT}
+                />
+            </Panel>;
+
+        let devPanel = <div></div>;
+        if(devSteps.length > 0){
+            devPanel =
+                <Panel className="panel-text panel-text-body" header="Steps in BUILD only">
+                    {this.renderSteps(devSteps, view, DisplayContext.EDIT_STEP_DEV, userContext)}
+                </Panel>
+        }
+
         return(
             <div>
-                <Panel className="panel-text panel-text-body" header="Steps in DESIGN only">
-                    {this.renderSteps(designSteps, view, DisplayContext.EDIT_STEP_DESIGN)}
-                </Panel>
-                <Panel className="panel-text panel-text-body" header="FINAL step configuration">
-                    {this.renderSteps(linkedSteps, view, DisplayContext.EDIT_STEP_LINKED)}
-                    <MoveTarget
-                        currentItem={null}
-                        displayContext={DisplayContext.EDIT_STEP_LINKED}
-                        mode={ViewMode.MODE_EDIT}
-                    />
-                </Panel>
-                <Panel className="panel-text panel-text-body" header="Steps in BUILD only">
-                    {this.renderSteps(devSteps, view, DisplayContext.EDIT_STEP_DEV)}
-                </Panel>
+                {designPanel}
+                {linkedPanel}
+                {devPanel}
             </div>
         )
     }

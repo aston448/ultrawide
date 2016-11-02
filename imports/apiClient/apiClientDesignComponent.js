@@ -36,6 +36,7 @@ class ClientDesignComponentServices{
             let component = null;
             let componentFeatureRef = '';
             let componentParentRef = '';
+
             if(userContext.designUpdateId === 'NONE'){
                 component = DesignComponents.findOne({_id: newDesignComponentId});
                 componentFeatureRef = component.componentFeatureReferenceId;
@@ -45,7 +46,6 @@ class ClientDesignComponentServices{
                 componentFeatureRef = component.componentFeatureReferenceIdNew;
                 componentParentRef = component.componentParentReferenceIdNew;
             }
-
 
             let featureReferenceId = 'NONE';
             let featureAspectReferenceId = 'NONE';

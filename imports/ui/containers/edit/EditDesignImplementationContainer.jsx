@@ -45,7 +45,7 @@ class DevApplicationsList extends Component {
     }
 
     // A list of top level applications in the work package(s)
-    renderApplications(wpApplications, view, context) {
+    renderApplications(wpApplications, view, mode, context) {
         return wpApplications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -53,6 +53,8 @@ class DevApplicationsList extends Component {
                     currentItem={application}
                     designItem={this.getDesignItem(application)}
                     displayContext={context}
+                    view={view}
+                    mode={mode}
                 />
             );
 
@@ -69,7 +71,7 @@ class DevApplicationsList extends Component {
         // Working Design
         let design =
             <Panel header="Work Package Design" className="panel-update panel-update-body">
-                {this.renderApplications(wpApplications, view, DisplayContext.DEV_DESIGN)}
+                {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN)}
             </Panel>;
 
         // Mash

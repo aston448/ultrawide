@@ -69,7 +69,7 @@ class DesignComponent extends Component{
                     nextState.highlighted === this.state.highlighted &&
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
-                    nextProps.currentUserItemContext.designComponentId === this.props.currentUserItemContext.designComponentId &&
+                    nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
                     nextProps.openDesignItems.length === this.props.openDesignItems.length &&
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length &&
                     nextProps.currentItem.componentName === this.props.currentItem.componentName &&
@@ -91,7 +91,7 @@ class DesignComponent extends Component{
                     nextState.inScope === this.state.inScope &&
                     nextState.parentScope === this.state.parentScope &&
                     nextState.editorState === this.state.editorState &&
-                    nextProps.currentUserItemContext.designComponentId === this.props.currentUserItemContext.designComponentId &&
+                    nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
                     nextProps.openDesignUpdateItems.length === this.props.openDesignUpdateItems.length &&
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
@@ -110,7 +110,7 @@ class DesignComponent extends Component{
                 return !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
-                    nextProps.currentUserItemContext.designComponentId === this.props.currentUserItemContext.designComponentId &&
+                    nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
                     nextProps.openDesignItems.length === this.props.openDesignItems.length &&
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length
                 );
@@ -304,7 +304,7 @@ class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, currentUserItemContext} = this.props;
+        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext} = this.props;
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -315,9 +315,9 @@ class DesignComponent extends Component{
         let workPackageItem = (displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.DEV_DESIGN);
 
         if(workPackageItem){
-            itemStyle = (designItem._id === currentUserItemContext.designComponentId ? 'design-component dc-active' : 'design-component');
+            itemStyle = (designItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         } else {
-            itemStyle = (currentItem._id === currentUserItemContext.designComponentId ? 'design-component dc-active' : 'design-component');
+            itemStyle = (currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         }
 
 
@@ -331,11 +331,11 @@ class DesignComponent extends Component{
                     currentItem={currentItem}
                     designItem={designItem}
                     onToggleOpen={ () => this.toggleOpen()}
-                    onSelectItem={ () => this.setNewDesignComponentActive(activeComponentId, currentUserItemContext)}
+                    onSelectItem={ () => this.setNewDesignComponentActive(activeComponentId, userContext)}
                     mode={mode}
                     view={view}
                     displayContext={displayContext}
-                    userItemContext={currentUserItemContext}
+                    userItemContext={userContext}
                     isOpen={this.state.open}
                 />
             </div>;
@@ -377,22 +377,22 @@ class DesignComponent extends Component{
             // Common components used:
             let designSectionsContainer =
                 <DesignSectionsContainer params={{
-                    designVersionId: currentItem.designVersionId,
+                    designVersionId: userContext.designVersionId,
                     parentId: parentId,
                     displayContext: displayContext,
                     view: view,
-                    updateId: currentUserItemContext.designUpdateId,
-                    workPackageId: currentUserItemContext.workPackageId
+                    updateId: userContext.designUpdateId,
+                    workPackageId: userContext.workPackageId
                 }}/>;
 
             let featuresContainer =
                 <FeaturesContainer params={{
-                    designVersionId: currentItem.designVersionId,
+                    designVersionId: userContext.designVersionId,
                     parentId: parentId,
                     displayContext: displayContext,
                     view: view,
-                    updateId: currentUserItemContext.designUpdateId,
-                    workPackageId: currentUserItemContext.workPackageId
+                    updateId: userContext.designUpdateId,
+                    workPackageId: userContext.workPackageId
                 }}/>;
 
 
@@ -410,22 +410,22 @@ class DesignComponent extends Component{
 
             let scenariosContainer =
                 <ScenariosContainer params={{
-                    designVersionId: currentItem.designVersionId,
+                    designVersionId: userContext.designVersionId,
                     parentId: parentId,
                     displayContext: displayContext,
                     view: view,
-                    updateId: currentUserItemContext.designUpdateId,
-                    workPackageId: currentUserItemContext.workPackageId
+                    updateId: userContext.designUpdateId,
+                    workPackageId: userContext.workPackageId
                 }}/>;
 
             let featureAspectsContainer =
                 <FeatureAspectsContainer params={{
-                    designVersionId: currentItem.designVersionId,
+                    designVersionId: userContext.designVersionId,
                     parentId: parentId,
                     displayContext: displayContext,
                     view: view,
-                    updateId: currentUserItemContext.designUpdateId,
-                    workPackageId: currentUserItemContext.workPackageId
+                    updateId: userContext.designUpdateId,
+                    workPackageId: userContext.workPackageId
                 }}/>;
 
             // Adding stuff is not allowed in these contexts
@@ -646,9 +646,9 @@ class DesignComponent extends Component{
 
 DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
-    designItem: PropTypes.object,
-    isDragDropHovering: PropTypes.bool,
-    displayContext: PropTypes.string
+    designItem: PropTypes.object.isRequired,
+    isDragDropHovering: PropTypes.bool.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 
@@ -657,7 +657,7 @@ function mapStateToProps(state) {
     return {
         mode: state.currentViewMode,
         view: state.currentAppView,
-        currentUserItemContext: state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
         openDesignItems: state.currentUserOpenDesignItems,
         openDesignUpdateItems: state.currentUserOpenDesignUpdateItems,
         openWorkPackageItems: state.currentUserOpenWorkPackageItems

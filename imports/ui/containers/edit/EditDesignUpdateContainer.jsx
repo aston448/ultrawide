@@ -50,14 +50,17 @@ class UpdateApplicationsList extends Component {
 
 
     // A list of top level applications in the design update
-    renderUpdateApplications(updateApplications, context) {
+    renderUpdateApplications(updateApplications, context, view, mode) {
         return updateApplications.map((application) => {
             // All applications are shown even in update edit view even if not in scope so that new items can be added to them
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
+                    designItem={application}
                     displayContext={context}
+                    view={view}
+                    mode={mode}
                 />
             );
 
@@ -65,13 +68,16 @@ class UpdateApplicationsList extends Component {
     }
 
     // A depiction of the base Design Version
-    renderBaseApplications(baseApplications, context) {
+    renderBaseApplications(baseApplications, context, view, mode) {
         return baseApplications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
+                    designItem={application}
                     displayContext={context}
+                    view={view}
+                    mode={mode}
                 />
             );
         });
@@ -120,13 +126,13 @@ class UpdateApplicationsList extends Component {
                     // Scope for Design Update
                     let updateScopeComponent =
                         <Panel header="Update Scope" className="panel-update panel-update-body">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE)}
+                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode)}
                         </Panel>;
 
                     // Edit for Design Update
                     let updateEditComponent =
                         <Panel header="Update Editor" className="panel-update panel-update-body">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT)}
+                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode)}
                             {addComponent}
                         </Panel>;
 
@@ -144,7 +150,7 @@ class UpdateApplicationsList extends Component {
                     // Base Design for Design Update
                     let updateBaseComponent =
                         <Panel header="Base Design Version" className="panel-update panel-update-body">
-                            {this.renderBaseApplications(baseApplications, DisplayContext.BASE_VIEW)}
+                            {this.renderBaseApplications(baseApplications, DisplayContext.BASE_VIEW, view, mode)}
                         </Panel>;
 
                     // If dictionary visible, this replaces the base view
@@ -179,7 +185,7 @@ class UpdateApplicationsList extends Component {
                     // Update components
                     let updateViewComponent =
                         <Panel header="Design Update" className="panel-update panel-update-body">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW)}
+                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode)}
                         </Panel>;
 
                     // Text / Scenario Steps for Design Update
@@ -196,7 +202,7 @@ class UpdateApplicationsList extends Component {
                     // Base Design for Design Update
                     let updateViewBaseComponent =
                         <Panel header="Base Design Version" className="panel-update panel-update-body">
-                            {this.renderBaseApplications(baseApplications, DisplayContext.BASE_VIEW)}
+                            {this.renderBaseApplications(baseApplications, DisplayContext.BASE_VIEW, view, mode)}
                         </Panel>;
 
                     // If dictionary visible, this replaces the base view

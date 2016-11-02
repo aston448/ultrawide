@@ -247,16 +247,27 @@ class ScenarioStep extends Component {
 
     }
 
-    onDeleteScenarioStep(step, view, mode, parentInScope, stepContext){
-        event.preventDefault();
-        console.log("REMOVE STEP");
+    // Called when deleting a step - could be an actual delete by the Designer or a logical delete in Development view
+    onDeleteScenarioStep(step, view, mode, parentInScope, stepContext, displayContext, userContext){
 
-        let success = ClientScenarioStepServices.removeScenarioStep(view, mode, parentInScope, step._id, stepContext);
+        switch(displayContext) {
+            case DisplayContext.EDIT_STEP_LINKED:
+            case DisplayContext.EDIT_STEP_DEV:
+            case DisplayContext.EDIT_STEP_DESIGN:
+                // In these cases its a logical delete with cleanup of Mash data
+                console.log("LOGICAL DELETE STEP");
+                ClientScenarioStepServices.logicalDeleteMashScenarioStep(view, mode, step, userContext);
+                break;
+            default:
+                // Any other case actual delete of a Design item
+                console.log("REMOVE STEP");
+                ClientScenarioStepServices.removeScenarioStep(view, mode, parentInScope, step._id, stepContext);
+        }
     };
 
 
     render() {
-        const {scenarioStep, parentInScope, view, mode, displayContext, stepContext, connectDragPreview, connectDragSource} = this.props;
+        const {scenarioStep, parentInScope, view, mode, displayContext, stepContext, userContext, connectDragPreview, connectDragSource} = this.props;
 
         // TODO - add all the tooltips required
         const tooltipEdit = (
@@ -267,9 +278,11 @@ class ScenarioStep extends Component {
 
         let devStyle = '';
         let glyph = 'star';
+        let index = '';
 
         switch(displayContext){
             case DisplayContext.EDIT_STEP_LINKED:
+                //index = scenarioStep.mashItemIndex;
                 switch(scenarioStep.mashTestStatus){
                     case MashTestStatus.MASH_PASS:
                         devStyle = 'green';
@@ -280,12 +293,13 @@ class ScenarioStep extends Component {
                         glyph = 'remove-circle';
                         break;
                     default:
-                        devStyle = 'invisible';
+                        //devStyle = 'invisible';
                         break;
                 }
                 break;
             default:
-                devStyle = 'invisible';
+                //index = scenarioStep.stepIndex
+                //devStyle = 'invisible';
                 break;
         }
 
@@ -295,12 +309,13 @@ class ScenarioStep extends Component {
             stepClass = 'step-background'
         }
 
+        // A step in the Design Dev Mash that is either in the Design ony or in Code only and can be dragged into the Linked steps
         let draggableUnlinkedStep =
             connectDragPreview(
                 <div className={"readOnlyItem"}>
                     <InputGroup>
                         <InputGroup.Addon>
-                            <div className={devStyle}><Glyphicon glyph={glyph}/></div>
+                            <div className={devStyle}>{index}<Glyphicon glyph={glyph}/></div>
                         </InputGroup.Addon>
                         <div>
                             <table className="scenario-step-editor">
@@ -323,7 +338,7 @@ class ScenarioStep extends Component {
                                 </tbody>
                             </table>
                         </div>
-                        <InputGroup.Addon onClick={ () => this.onDeleteScenarioStep(scenarioStep, view, mode, parentInScope, stepContext)}>
+                        <InputGroup.Addon onClick={ () => this.onDeleteScenarioStep(scenarioStep, view, mode, parentInScope, stepContext, displayContext, userContext)}>
                             <div className="red"><Glyphicon glyph="remove"/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
@@ -337,6 +352,7 @@ class ScenarioStep extends Component {
                 </div>
             );
 
+        // A step that is having its details edited
         let editingStep =
             <div>
                 <table className="step-editor">
@@ -399,12 +415,13 @@ class ScenarioStep extends Component {
                 </table>
             </div>;
 
+        // A step in Design view or in Design Dev Mash Linked steps that can be dragged to reorder it
         let draggableStep =
             connectDragPreview(
                 <div className={"readOnlyItem"}>
                     <InputGroup>
                         <InputGroup.Addon>
-                            <div className={devStyle}><Glyphicon glyph={glyph}/></div>
+                            <div className={devStyle}>{index}<Glyphicon glyph={glyph}/></div>
                         </InputGroup.Addon>
                         <div  onClick={ () => this.setCurrentStep()}>
                             <table className="scenario-step-editor">
@@ -434,7 +451,7 @@ class ScenarioStep extends Component {
                                 </a>
                             </OverlayTrigger>
                         </InputGroup.Addon>
-                        <InputGroup.Addon onClick={ () => this.onDeleteScenarioStep(scenarioStep, view, mode, parentInScope, stepContext)}>
+                        <InputGroup.Addon onClick={ () => this.onDeleteScenarioStep(scenarioStep, view, mode, parentInScope, stepContext, displayContext, userContext)}>
                             <div className="red"><Glyphicon glyph="remove"/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
@@ -448,11 +465,12 @@ class ScenarioStep extends Component {
                 </div>
             );
 
+        // Read-only view of a Step
         let viewOnlyStep =
             <div className={"readOnlyItem"}>
                 <InputGroup>
                     <InputGroup.Addon>
-                        <div className={devStyle}><Glyphicon glyph={glyph}/></div>
+                        <div className={devStyle}>{index}<Glyphicon glyph={glyph}/></div>
                     </InputGroup.Addon>
                     <div  onClick={ () => this.setCurrentStep()}>
                         <table>
@@ -570,15 +588,12 @@ const componentSource = {
                 console.log("DROP - REORDER");
 
                 switch(props.displayContext){
-                    case DisplayContext.EDIT_STEP_DESIGN:
-                        console.log("MOVE DESIGN TO MASH");
-                        ClientMashDataServices.relocateMashStep(props.view, props.mode, dropResult.displayContext, item.component);
+                    case DisplayContext.EDIT_STEP_DESIGN:   // Adding design Step to Dev
+                    case DisplayContext.EDIT_STEP_DEV:      // Adding Dev Step to Design
+                        console.log("RELOCATE MASH STEP");
+                        ClientMashDataServices.relocateMashStep(props.view, props.mode, dropResult.displayContext, item.component, dropResult.targetItem, props.userContext);
                         break;
-                    case DisplayContext.EDIT_STEP_DEV:
-                        // This is moving a step into linked mash steps
-                        console.log("MOVE DEV TO MASH");
-                        break;
-                    case DisplayContext.EDIT_STEP_LINKED:
+                    case DisplayContext.EDIT_STEP_LINKED:   // Reordering shared Design / Dev steps
                         // Reorder linked mas steps
                         console.log("REORDER MASH");
 

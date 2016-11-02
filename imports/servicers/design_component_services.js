@@ -4,8 +4,10 @@
 
 import { DesignVersions } from '../collections/design/design_versions.js';
 import { DesignComponents } from '../collections/design/design_components.js';
+import { WorkPackages } from '../collections/work/work_packages.js';
+import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
-import { ComponentType, LogLevel } from '../constants/constants.js';
+import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../constants/constants.js';
 
 import  DesignServices     from './design_services.js';
 
@@ -88,9 +90,145 @@ class DesignComponentServices{
                     this.setIndex(result, componentType, parentId);
 
 
+                    // Check for any WPs in this design version and add the components to them too
+                    this.updateWorkPackages(designVersionId, result)
+
                 }
             }
         );
+
+    };
+
+    updateWorkPackages(designVersionId, newComponentId){
+
+        // See if any base WPs affected by this update
+        const workPackages = WorkPackages.find({
+            designVersionId:    designVersionId,
+            designUpdateId:     'NONE',
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_BASE
+        }).fetch();
+
+        const component = DesignComponents.findOne({_id: newComponentId});
+
+        workPackages.forEach((wp) => {
+
+            WorkPackageComponents.insert(
+                {
+                    workPackageId:                  wp._id,
+                    workPackageType:                wp.workPackageType,
+                    componentId:                    component._id,
+                    componentReferenceId:           component.componentReferenceId,
+                    componentType:                  component.componentType,
+                    componentParentReferenceId:     component.componentParentReferenceId,
+                    componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                    componentLevel:                 component.componentLevel,
+                    componentIndex:                 component.componentIndex,
+                    componentParent:                false,
+                    componentActive:                false       // Start by assuming nothing in scope
+                }
+            );
+        });
+
+    };
+
+    updateWorkPackageLocation(designComponentId, reorder){
+
+        const component = DesignComponents.findOne({_id: designComponentId});
+
+        // See if any base WPs affected by this update
+        const workPackages = WorkPackages.find({
+            designVersionId:    component.designVersionId,
+            designUpdateId:     'NONE',
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_BASE
+        }).fetch();
+
+        console.log("Update WP Location WPs to update: " + workPackages.length);
+
+        workPackages.forEach((wp) => {
+            if(reorder){
+                // Just a reordering job so can keep the WP scope as it is
+                WorkPackageComponents.update(
+                    {
+                        workPackageId:                  wp._id,
+                        workPackageType:                wp.workPackageType,
+                        componentId:                    designComponentId
+                    },
+                    {
+                        $set:{
+                            componentParentReferenceId:     component.componentParentReferenceId,
+                            componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                            componentLevel:                 component.componentLevel,
+                            componentIndex:                 component.componentIndex,
+                        }
+                    },
+                    {multi: true},
+                    (error, result) => {
+                        if(error) {
+                            // Error handler
+                            console.log("Update WP Location Error: " + error);
+                            return false;
+                        } else {
+                            console.log("Update WP Location Success: " + result);
+                            return true;
+                        }
+                    }
+                );
+            } else {
+                // Moved to a new section so will have to descope from WP
+                WorkPackageComponents.update(
+                    {
+                        workPackageId:                  wp._id,
+                        workPackageType:                wp.workPackageType,
+                        componentId:                    designComponentId
+                    },
+                    {
+                        $set:{
+                            componentParentReferenceId:     component.componentParentReferenceId,
+                            componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                            componentLevel:                 component.componentLevel,
+                            componentIndex:                 component.componentIndex,
+                            componentParent:                false,      // Reset WP status
+                            componentActive:                false
+                        }
+                    },
+                    {multi: true},
+                    (error, result) => {
+                        if(error) {
+                            // Error handler
+                            console.log("Update WP Move Location Error: " + error);
+                            return false;
+                        } else {
+                            console.log("Update WP Move Location Success: " + result);
+                            return true;
+                        }
+                    }
+                );
+            }
+
+        });
+    }
+
+    removeWorkPackageItems(designComponentId, designVersionId){
+
+        // See if any base WPs affected by this update
+        const workPackages = WorkPackages.find({
+            designVersionId:    designVersionId,
+            designUpdateId:     'NONE',
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_BASE
+        }).fetch();
+
+        workPackages.forEach((wp) => {
+            WorkPackageComponents.remove(
+                {
+                    workPackageId:                  wp._id,
+                    workPackageType:                wp.workPackageType,
+                    componentId:                    designComponentId
+                }
+            );
+        });
 
     };
 
@@ -201,7 +339,8 @@ class DesignComponentServices{
                         );
                     }
 
-
+                    // Make sure this component is also moved in any work packages
+                    this.updateWorkPackageLocation(designComponentId, false);
                 }
             }
         );
@@ -312,6 +451,9 @@ class DesignComponentServices{
                             { $set: {isRemovable: true}}
                         )
                     }
+
+                    // Remove component from any related work packages
+                    this.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
                 }
             }
 
@@ -405,6 +547,9 @@ class DesignComponentServices{
             }
         );
 
+        // Update any WPs with new ordering
+        this.updateWorkPackageLocation(componentId, true);
+
 
         // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.
         if(indexDiff < 0.001){
@@ -432,7 +577,10 @@ class DesignComponentServices{
                     }
                 );
 
+                this.updateWorkPackageLocation(component._id, true);
+
                 resetIndex = resetIndex + 100;
+
             })
         }
 

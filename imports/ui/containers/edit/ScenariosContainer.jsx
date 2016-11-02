@@ -43,25 +43,32 @@ class ScenariosList extends Component {
         if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
             return ClientWorkPackageServices.getDesignItem(scenario.componentId, scenario.workPackageType);
         } else {
-            return null;
+            return scenario;
         }
     }
 
     // A list of Scenarios in a Feature or Feature Aspect
     renderScenarios() {
-        const {components, displayContext, view} = this.props;
+        const {components, displayContext, view, mode} = this.props;
 
-        return components.map((scenario) => {
+        if(components)
+        {
+            return components.map((scenario) => {
 
-            return (
-                <DesignComponentTarget
-                    key={scenario._id}
-                    currentItem={scenario}
-                    designItem={this.getDesignItem(scenario, displayContext)}
-                    displayContext={displayContext}
-                />
-            );
-        });
+                return (
+                    <DesignComponentTarget
+                        key={scenario._id}
+                        currentItem={scenario}
+                        designItem={this.getDesignItem(scenario, displayContext)}
+                        displayContext={displayContext}
+                        view={view}
+                        mode={mode}
+                    />
+                );
+            });
+        } else {
+            console.log("NULL COMPONENTS FOR SCENARIOS!")
+        }
     }
 
     render() {
@@ -82,6 +89,7 @@ ScenariosList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
+        mode: state.currentViewMode
     }
 }
 
@@ -90,7 +98,7 @@ ScenariosList = connect(mapStateToProps)(ScenariosList);
 
 export default ScenariosContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getComponentDataForParentComponent(
+    let returnData =  ClientContainerServices.getComponentDataForParentComponent(
         ComponentType.SCENARIO,
         params.view,
         params.designVersionId,
@@ -99,5 +107,10 @@ export default ScenariosContainer = createContainer(({params}) => {
         params.parentId,
         params.displayContext,
     );
+
+    console.log("Return data: " + returnData.components);
+
+    return returnData;
+
 
 }, ScenariosList);

@@ -2,7 +2,7 @@
  * Scenario Step Data Store.  This is specification of the scenario by example
  */
 
-import { Mongo, _ensureIndex } from 'meteor/mongo';
+import { Mongo} from 'meteor/mongo';
 
 import {ComponentType} from '../../constants/constants.js';
 
@@ -39,9 +39,6 @@ ScenarioSteps.attachSchema(Schema);
 
 // Publish Design Components
 if(Meteor.isServer){
-
-    // Create the index used for step comparison...
-    ScenarioSteps._ensureIndex({stepText: 'text'});
 
     Meteor.publish('scenarioSteps', function scenarioStepsPublication(){
         return ScenarioSteps.find({});

@@ -44,25 +44,31 @@ class FeatureAspectsList extends Component {
         if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
             return ClientWorkPackageServices.getDesignItem(featureAspect.componentId, featureAspect.workPackageType);
         } else {
-            return null;
+            return featureAspect;
         }
     }
 
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
-        const {components, displayContext, view} = this.props;
+        const {components, displayContext, view, mode} = this.props;
 
-        return components.map((featureAspect) => {
+        if (components) {
+            return components.map((featureAspect) => {
 
-            return (
-                <DesignComponentTarget
-                    key={featureAspect._id}
-                    currentItem={featureAspect}
-                    designItem={this.getDesignItem(featureAspect, displayContext)}
-                    displayContext={displayContext}
-                />
-            );
-        });
+                return (
+                    <DesignComponentTarget
+                        key={featureAspect._id}
+                        currentItem={featureAspect}
+                        designItem={this.getDesignItem(featureAspect, displayContext)}
+                        displayContext={displayContext}
+                        view={view}
+                        mode={mode}
+                    />
+                );
+            });
+        } else {
+            console.log("NULL COMPONENTS FOR FEATURE ASPECTS!")
+        }
     }
 
     render() {
@@ -83,6 +89,7 @@ FeatureAspectsList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
+        mode: state.currentViewMode
     }
 }
 

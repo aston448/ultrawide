@@ -13,6 +13,9 @@ import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mas
 import { ComponentType, ViewType, ViewMode, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
 import { mashMoveDropAllowed, log} from '../common/utils.js';
 
+// REDUX
+import store from '../redux/store'
+import {setCurrentUserItemContext} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -49,10 +52,10 @@ class ClientMashDataServices {
     };
 
     // User has dragged a mash Scenario Step into the FINAL step configuration
-    relocateMashStep(view, mode, targetContext, movingComponent){
+    relocateMashStep(view, mode, targetContext, movingComponent, targetComponent, userContext){
 
         // Need to update the mash data and, if step comes from Dev, add step to Design
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Relocate Mash Step: View: {}, Mode: {}, DropContext: {}", view, mode, targetContext);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Relocate Mash Step: View: {}, Mode: {}, DropContext: {} UserContext: {}", view, mode, targetContext, userContext);
         // Validation
         if((view === ViewType.WORK_PACKAGE_BASE_WORK || view === ViewType.WORK_PACKAGE_UPDATE_WORK) &&
             mode === ViewMode.MODE_EDIT
@@ -72,8 +75,10 @@ class ClientMashDataServices {
                 return true;
             } else {
                 // A Dev item being added to the Design
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Dev Step {} to Linked", movingComponent.stepText);
 
                 // Add to the final config in the position dropped
+                Meteor.call('mash.updateMovedDevStep', movingComponent._id, targetComponent._id, userContext);
 
                 // Add also to the design
             }
@@ -102,6 +107,74 @@ class ClientMashDataServices {
         }
     };
 
+    // User has chosen to export a Scenario in the design to the dev feature file
+    exportFeatureScenario(view, scenarioReferenceId, userContext){
+
+        // Validation - must be in Dev Work view and must be a feature in context
+        if((view === ViewType.WORK_PACKAGE_BASE_WORK || view === ViewType.WORK_PACKAGE_UPDATE_WORK) && userContext.featureReferenceId != 'NONE'){
+
+            // To do this we update the scenario and its steps as linked and then re-export the Feature
+            Meteor.call('mash.exportScenario', scenarioReferenceId, userContext);
+
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    exportFeature(mashItem, userContext){
+
+        // Get the actual Feature Component Id
+        let component = null;
+
+        if(userContext.designUpdateId === 'NONE'){
+            component = DesignComponents.findOne({
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId,
+                componentType: ComponentType.FEATURE,
+                componentReferenceId: mashItem.designComponentReferenceId
+            });
+        } else {
+            component  = DesignUpdateComponents.findOne({
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                componentType: ComponentType.FEATURE,
+                componentReferenceId: mashItem.designComponentReferenceId
+            });
+        }
+
+        if(component) {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Exporting feature ", (userContext.designUpdateId === 'NONE') ? component.componentName : component.componentNameNew);
+
+            // For this function we update the user context first to the feature being exported
+            const context = {
+                userId: userContext.userId,
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                workPackageId: userContext.workPackageId,
+                designComponentId: component._id,
+                designComponentType: ComponentType.FEATURE,
+                featureReferenceId: mashItem.designFeatureReferenceId,
+                featureAspectReferenceId: 'NONE',
+                scenarioReferenceId: 'NONE',
+                scenarioStepId: 'NONE'
+            };
+
+            store.dispatch(setCurrentUserItemContext(context, true));
+
+            // And now we export the feature with the new context
+            Meteor.call('mash.exportFeatureConfiguration', context);
+
+            return true;
+        } else {
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Cant export - cant find Feature for reference id {} ", mashItem.designComponentReferenceId);
+            return false;
+        }
+    }
+
     exportFeatureUpdates(userContext){
         // Validation - A Feature must be in context
         if(userContext.featureReferenceId != 'NONE') {
@@ -110,7 +183,7 @@ class ClientMashDataServices {
         } else {
             return false;
         }
-    }
+    };
 
     featureHasUnknownScenarios(userContext){
         return UserDesignDevMashData.find({
@@ -121,8 +194,28 @@ class ClientMashDataServices {
             mashComponentType:              ComponentType.SCENARIO,
             designFeatureReferenceId:       userContext.featureReferenceId,
             mashStatus:                     MashStatus.MASH_NOT_DESIGNED
-        })
-    }
+        }).fetch().length > 0;
+    };
+
+    // Returns true if mash item Feature has a Dev feature file
+    featureIsImplemented(mashItemId){
+
+        const mashItem = UserDesignDevMashData.findOne({_id: mashItemId});
+
+        // There must be a parent Feature
+        const parentFeature = UserDesignDevMashData.findOne({
+            userId: mashItem.userId,
+            designVersionId:                mashItem.designVersionId,
+            designUpdateId:                 mashItem.designUpdateId,
+            workPackageId:                  mashItem.workPackageId,
+            designComponentReferenceId:     mashItem.designFeatureReferenceId,
+            mashComponentType:              ComponentType.FEATURE
+        });
+
+        // And if there is a Feature File it wil be linked
+        return(parentFeature.mashStatus === MashStatus.MASH_LINKED);
+
+    };
 }
 
 export default new ClientMashDataServices();

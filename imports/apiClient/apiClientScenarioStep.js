@@ -26,6 +26,7 @@ import {reorderDropAllowed, log} from '../common/utils.js';
 
 class ClientScenarioStepServices {
 
+    // User has added a new Feature background step
     addNewBackgroundStep(view, mode, featureReferenceId, userItemContext, featureInScope){
         // Validate - can only add if design is editable and for in-scope update features
         log((msg)=> console.log(msg), LogLevel.DEBUG, "Adding feature step with view: {} and mode: {} and in scope: {}", view, mode , featureInScope);
@@ -38,6 +39,7 @@ class ClientScenarioStepServices {
         }
     }
 
+    // User has added a new Scenario step
     addNewScenarioStep(view, mode, scenarioReferenceId, userItemContext, scenarioInScope){
 
         // Validate - can only add if design is editable and for in-scope update scenarios
@@ -52,6 +54,7 @@ class ClientScenarioStepServices {
 
     };
 
+    // Designer has chosen to delete a Scenario Step while creating the design
     removeScenarioStep(view, mode, parentInScope, stepId, stepContext){
 
         // Validate - can only remove if design is editable and for in-scope update scenarios
@@ -64,6 +67,19 @@ class ClientScenarioStepServices {
         }
     };
 
+    // A user has decided to remove an unwanted Scenario Step from the Design-Dev Mash
+    logicalDeleteMashScenarioStep(view, mode, step, userContext){
+
+        // Validate - must be in the Mash View
+        if(view === ViewType.WORK_PACKAGE_BASE_WORK || view === ViewType.WORK_PACKAGE_UPDATE_WORK){
+            Meteor.call('scenario.logicalDeleteMashScenarioStep', step, userContext);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // User edited and saved Scenario Step text
     updateScenarioStepText(view, mode, parentInScope, stepId, stepType, newPlainText, newRawText, stepContext){
 
         log((msg)=> console.log(msg), LogLevel.DEBUG, "Saving scenario step text with view: {} and mode: {} and in scope: {}", view, mode , parentInScope);
