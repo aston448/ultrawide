@@ -76,21 +76,21 @@ export function setCurrentUserItemContext(contextItem, saveToDb){
 
     return function (dispatch) {
 
-        let newContext = {
-            userId:                     contextItem.userId,
-            designId:                   contextItem.designId,
-            designVersionId:            contextItem.designVersionId,
-            designUpdateId:             contextItem.designUpdateId,
-            workPackageId:              contextItem.workPackageId,
-            designComponentId:          contextItem.designComponentId,
-            designComponentType:        contextItem.designComponentType,
-            featureReferenceId:         contextItem.featureReferenceId,
-            featureAspectReferenceId:   contextItem.featureAspectReferenceId,
-            scenarioReferenceId:        contextItem.scenarioReferenceId,
-            scenarioStepId:             contextItem.scenarioStepId
-        };
+        // let newContext = {
+        //     userId:                     contextItem.userId,
+        //     designId:                   contextItem.designId,
+        //     designVersionId:            contextItem.designVersionId,
+        //     designUpdateId:             contextItem.designUpdateId,
+        //     workPackageId:              contextItem.workPackageId,
+        //     designComponentId:          contextItem.designComponentId,
+        //     designComponentType:        contextItem.designComponentType,
+        //     featureReferenceId:         contextItem.featureReferenceId,
+        //     featureAspectReferenceId:   contextItem.featureAspectReferenceId,
+        //     scenarioReferenceId:        contextItem.scenarioReferenceId,
+        //     scenarioStepId:             contextItem.scenarioStepId
+        // };
 
-        dispatch({type: SET_CURRENT_USER_ITEM_CONTEXT, newUserItemContext: newContext});
+        dispatch({type: SET_CURRENT_USER_ITEM_CONTEXT, newUserItemContext: contextItem});
 
         // And persist the settings - only want to do this if we are changing them...
         if(saveToDb) {
