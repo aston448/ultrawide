@@ -14,6 +14,8 @@ import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.
 import {ViewType, ViewMode} from '../../../constants/constants.js'
 import ClientAppHeaderServices from '../../../apiClient/apiClientAppHeader.js';
 import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
+import ClientIdentityServices from '../../../apiClient/apiIdentity';
+
 // Bootstrap
 import {Alert} from 'react-bootstrap';
 import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
@@ -76,6 +78,8 @@ class AppHeader extends Component {
     render() {
 
         const {mode, view, userRole, userName, userContext, message, domainDictionaryVisible} = this.props;
+
+        let appName = ClientIdentityServices.getApplicationName();
 
         // The header display depends on the current application View
         let headerTopActions = '';
@@ -217,7 +221,7 @@ class AppHeader extends Component {
                 <Grid>
                     <Row className="header-row-top">
                         <Col md={2}>
-                            <div className="ultrawide-logo">ULTRAWIDE</div>
+                            <div className="ultrawide-logo">{appName}</div>
                         </Col>
                         <Col md={3}>
                             {headerUserInfo}
