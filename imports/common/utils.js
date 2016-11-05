@@ -260,7 +260,7 @@ export function getIdFromMap(map, oldId) {
     map.forEach((mapItem) => {
         //console.log("MAP: old: " + mapItem.oldId + " New: " + mapItem.newId);
         if (mapItem.oldId === oldId) {
-            console.log("MAP: old: " + mapItem.oldId + " New: " + mapItem.newId);
+            log((msg) => console.log(msg), LogLevel.TRACE, "MAP: old: {} new {}", mapItem.oldId, mapItem.newId);
             newId = mapItem.newId;
         }
     });
@@ -290,6 +290,8 @@ export function log(callback, level, message, ...vars){
             log = (logLevel === LogLevel.DEBUG || logLevel === LogLevel.TRACE);
             break;
         case LogLevel.INFO:
+        case LogLevel.WARNING:
+        case LogLevel.ERROR:
             // Log if not NONE
             log = logLevel != LogLevel.NONE;
             break;

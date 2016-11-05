@@ -104,311 +104,461 @@ class ImpExServices{
 
         // Design Items ================================================================================================
 
+        let hasDesignUpdates = true;
+        let hasWorkPackages = true;
+        let hasDesignComponents = true;
+        let hasDesignUpdateComponents = true;
+
          // Designs ----------------------------------------------------------------------------------------------------
-        const designString = fs.readFileSync(path + 'DESIGNS.EXP');
+        let designData = '';
+        let designs = [];
 
-        let designs = JSON.parse(designString);
+        try {
+            designData = fs.readFileSync(path + 'DESIGNS.EXP');
+            designs = JSON.parse(designData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Designs export file: {}", e);
+        }
 
-        designs.forEach((design) => {
+        if(designs.length > 0) {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design: {}", design.designName);
+            designs.forEach((design) => {
 
-            designId = DesignServices.importDesign(design);
-            if(designId){
-                // Store the new Design ID
-                designsMapping.push({oldId: design._id, newId: designId});
-            }
-        });
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design: {}", design.designName);
+
+                designId = DesignServices.importDesign(design);
+                if (designId) {
+                    // Store the new Design ID
+                    designsMapping.push({oldId: design._id, newId: designId});
+                }
+            });
+        } else {
+            // Abort
+            log((msg) => console.log(msg), LogLevel.WARNING, "No Designs - No dice...");
+            return;
+        }
 
 
         // Design Versions ---------------------------------------------------------------------------------------------
-        const designVersionsString = fs.readFileSync(path + 'DESIGN_VERSIONS.EXP');
+        let designVersionsData = '';
+        let designVersions = [];
 
-        designId = null;
+        try{
+            designVersionsData = fs.readFileSync(path + 'DESIGN_VERSIONS.EXP');
+            designVersions = JSON.parse(designVersionsData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Versions export file: {}", e);
+        }
 
-        let designVersions = JSON.parse(designVersionsString);
+        if(designVersions.length > 0) {
+            designId = null;
 
-        designVersions.forEach((designVersion) => {
-            designId = getIdFromMap(designsMapping, designVersion.designId);
-            if(designId) {
+            designVersions.forEach((designVersion) => {
+                designId = getIdFromMap(designsMapping, designVersion.designId);
+                if (designId) {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
 
-                designVersionId = DesignVersionServices.importDesignVersion(
-                    designId,
-                    designVersion
-                );
+                    designVersionId = DesignVersionServices.importDesignVersion(
+                        designId,
+                        designVersion
+                    );
 
-                if (designVersionId) {
-                    // Store the new Design Version ID
-                    designVersionsMapping.push({oldId: designVersion._id, newId: designVersionId});
+                    if (designVersionId) {
+                        // Store the new Design Version ID
+                        designVersionsMapping.push({oldId: designVersion._id, newId: designVersionId});
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            // Abort - everything else needs a Design Version
+            log((msg) => console.log(msg), LogLevel.WARNING, "No Design Versions - Invalid data.");
+            return;
+        }
+
 
         // Design Updates ----------------------------------------------------------------------------------------------
-        const designUpdatesString = fs.readFileSync(path + 'DESIGN_UPDATES.EXP');
+        let designUpdatesData = '';
+        let designUpdates = [];
 
-        designVersionId = null;
+        try{
+            designUpdatesData = fs.readFileSync(path + 'DESIGN_UPDATES.EXP');
+            designUpdates = JSON.parse(designUpdatesData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Updates export file: {}", e);
+        }
 
-        let designUpdates = JSON.parse(designUpdatesString);
+        if(designUpdates.length > 0) {
+            designVersionId = null;
 
-        designUpdates.forEach((designUpdate) => {
-            designVersionId = getIdFromMap(designVersionsMapping, designUpdate.designVersionId);
-            if(designVersionId) {
+            designUpdates.forEach((designUpdate) => {
+                designVersionId = getIdFromMap(designVersionsMapping, designUpdate.designVersionId);
+                if (designVersionId) {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update: {} to Design Version {}",  designUpdate.updateName, designVersionId);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update: {} to Design Version {}", designUpdate.updateName, designVersionId);
 
-                designUpdateId = DesignUpdateServices.importDesignUpdate(
-                    designVersionId,
-                    designUpdate
-                );
+                    designUpdateId = DesignUpdateServices.importDesignUpdate(
+                        designVersionId,
+                        designUpdate
+                    );
 
-                if (designUpdateId) {
-                    // Store the new Design Update ID
-                    designUpdatesMapping.push({oldId: designUpdate._id, newId: designUpdateId});
+                    if (designUpdateId) {
+                        // Store the new Design Update ID
+                        designUpdatesMapping.push({oldId: designUpdate._id, newId: designUpdateId});
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            // No Design Updates - could be OK
+            log((msg) => console.log(msg), LogLevel.INFO, "No Design Updates found...");
+            hasDesignUpdates = false;
+        }
 
         // Work Packages -----------------------------------------------------------------------------------------------
-        const workPackagesString = fs.readFileSync(path + 'WORK_PACKAGES.EXP');
+        let workPackagesData = '';
+        let workPackages = [];
+
+        try{
+            workPackagesData = fs.readFileSync(path + 'WORK_PACKAGES.EXP');
+            workPackages = JSON.parse(workPackagesData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Work Packages export file: {}", e);
+        }
 
         designVersionId = null;
         designUpdateId = null;
 
-        let workPackages = JSON.parse(workPackagesString);
+        if(workPackages.length > 0) {
+            workPackages.forEach((workPackage) => {
 
-        workPackages.forEach((workPackage) => {
+                designVersionId = getIdFromMap(designVersionsMapping, workPackage.designVersionId);
 
-            designVersionId = getIdFromMap(designVersionsMapping, workPackage.designVersionId);
+                if (designVersionId) {
 
-            if(designVersionId) {
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Work Package: {} of type {} to Design Version {}",
+                        workPackage.workPackageName, workPackage.workPackageType, designVersionId);
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Work Package: {} of type {} to Design Version {}",
-                    workPackage.workPackageName, workPackage.workPackageType, designVersionId);
+                    if((workPackage.workPackageType === WorkPackageType.WP_UPDATE) && !hasDesignUpdates){
+                        log((msg) => console.log(msg), LogLevel.WARNING, "INVALID DATA: Update WP found when no Updates!  Skipping");
+                    } else {
 
-                if(workPackage.workPackageType === WorkPackageType.WP_UPDATE){
-                    designUpdateId = getIdFromMap(designUpdatesMapping, workPackage.designUpdateId);
-                } else {
-                    designUpdateId = 'NONE';
+                        if (workPackage.workPackageType === WorkPackageType.WP_UPDATE) {
+                            designUpdateId = getIdFromMap(designUpdatesMapping, workPackage.designUpdateId);
+                        } else {
+                            designUpdateId = 'NONE';
+                        }
+
+                        workPackageId = WorkPackageServices.importWorkPackage(
+                            designVersionId,
+                            designUpdateId,
+                            workPackage
+                        );
+
+                        if (workPackageId) {
+                            // Store the new Work Package ID
+                            workPackagesMapping.push({oldId: workPackage._id, newId: workPackageId});
+                        }
+                    }
                 }
-
-                workPackageId = WorkPackageServices.importWorkPackage(
-                    designVersionId,
-                    designUpdateId,
-                    workPackage
-                );
-
-                if (workPackageId) {
-                    // Store the new Work Package ID
-                    workPackagesMapping.push({oldId: workPackage._id, newId: workPackageId});
-                }
-            }
-        });
+            });
+        } else {
+            // No Work Packages - could be OK
+            log((msg) => console.log(msg), LogLevel.INFO, "No Work Packages found...");
+            hasWorkPackages = false;
+        }
 
         // Design Data =================================================================================================
 
         // Domain Dictionary -------------------------------------------------------------------------------------------
+        let domainDictionaryData = '';
+        let dictionaryTerms = [];
 
-        const domainDictionaryString = fs.readFileSync(path + 'DOMAIN_DICTIONARY.EXP');
+        try{
+            domainDictionaryData = fs.readFileSync(path + 'DOMAIN_DICTIONARY.EXP');
+            dictionaryTerms = JSON.parse(domainDictionaryData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Domain Dictionary export file: {}", e);
+        }
 
-        designId = null;
-        designVersionId = null;
+        if(dictionaryTerms.length > 0) {
+            designId = null;
+            designVersionId = null;
 
-        let dictionaryTerms = JSON.parse(domainDictionaryString);
+            dictionaryTerms.forEach((term) => {
+                console.log("Adding Dictionary Term " + term.domainTermNew);
 
-        dictionaryTerms.forEach((term) => {
-            console.log("Adding Dictionary Term " + term.domainTermNew);
+                designId = getIdFromMap(designsMapping, term.designId);
+                designVersionId = getIdFromMap(designVersionsMapping, term.designVersionId);
 
-            designId = getIdFromMap(designsMapping, term.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, term.designVersionId);
+                domainTermId = DomainDictionaryServices.addNewTerm(designId, designVersionId);
 
-            domainTermId = DomainDictionaryServices.addNewTerm(designId, designVersionId);
-
-            if(domainTermId){
-                // Set the actual term and definition
-                DomainDictionaryServices.updateTermName(domainTermId, term.domainTermNew, term.domainTermOld);
-                DomainDictionaryServices.updateTermDefinition(domainTermId, term.domainTextRaw)
-            }
-        });
+                if (domainTermId) {
+                    // Set the actual term and definition
+                    DomainDictionaryServices.updateTermName(domainTermId, term.domainTermNew, term.domainTermOld);
+                    DomainDictionaryServices.updateTermDefinition(domainTermId, term.domainTextRaw)
+                }
+            });
+        } else {
+            // No Domain Dictionary - could be OK
+            log((msg) => console.log(msg), LogLevel.INFO, "No Domain Dictionary found...");
+        }
 
         // Design Components -------------------------------------------------------------------------------------------
+        let designComponentsData = '';
+        let designComponents = [];
 
-        const designComponentsString = fs.readFileSync(path + 'DESIGN_COMPONENTS.EXP');
+        try{
+            designComponentsData = fs.readFileSync(path + 'DESIGN_COMPONENTS.EXP');
+            designComponents = JSON.parse(designComponentsData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Components export file: {}", e);
+        }
 
-        designId = null;
-        designVersionId = null;
+        if(designComponents.length > 0) {
+            designId = null;
+            designVersionId = null;
 
-        let designComponents = JSON.parse(designComponentsString);
 
-        designComponents.forEach((component) => {
-            console.log("Adding Design Component " + component.componentType + " - " + component.componentName);
+            designComponents.forEach((component) => {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Component {} - {}", component.componentType, component.componentName);
 
-            designId = getIdFromMap(designsMapping, component.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
+                designId = getIdFromMap(designsMapping, component.designId);
+                designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
 
-            designComponentId = DesignComponentServices.importComponent(
-                designId,
-                designVersionId,
-                component
-            );
+                designComponentId = DesignComponentServices.importComponent(
+                    designId,
+                    designVersionId,
+                    component
+                );
 
-            if(designComponentId){
-                // Map old component ids to new
-                designComponentsMapping.push({oldId: component._id, newId: designComponentId});
-            }
+                if (designComponentId) {
+                    // Map old component ids to new
+                    designComponentsMapping.push({oldId: component._id, newId: designComponentId});
+                }
 
-        });
+            });
 
-        // Update Design Component parents for the new design components
-        designComponentsMapping.forEach((component) => {
-            DesignComponentServices.importRestoreParent(component.newId, designComponentsMapping)
-        });
+            // Update Design Component parents for the new design components
+            designComponentsMapping.forEach((component) => {
+                DesignComponentServices.importRestoreParent(component.newId, designComponentsMapping)
+            });
 
-        // Make sure Design is no longer removable
-        DesignServices.setRemovable(designId);
+            // Make sure Design is no longer removable
+            DesignServices.setRemovable(designId);
+        } else {
+            // No Design Components - could be OK
+            log((msg) => console.log(msg), LogLevel.INFO, "No Design Components found...");
+        }
 
         // Design Update Components ------------------------------------------------------------------------------------
 
-        const designUpdateComponentsString = fs.readFileSync(path + 'DESIGN_UPDATE_COMPONENTS.EXP');
+        // No point unless some Design Updates were found...
+        if(hasDesignUpdates) {
 
-        designId = null;
-        designVersionId = null;
-        designUpdateId = null;
+            let designUpdateComponentsData = '';
+            let designUpdateComponents = [];
 
-        let designUpdateComponents = JSON.parse(designUpdateComponentsString);
-
-        designUpdateComponents.forEach((updateComponent) => {
-            console.log("Adding Design Update Component " + updateComponent.componentType + " - " + updateComponent.componentNameNew);
-
-            designId = getIdFromMap(designsMapping, updateComponent.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
-            designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
-
-            designUpdateComponentId = DesignUpdateComponentServices.importComponent(
-                designId,
-                designVersionId,
-                designUpdateId,
-                updateComponent
-            );
-
-            if(designUpdateComponentId){
-                // Map old component ids to new
-                designUpdateComponentsMapping.push({oldId: updateComponent._id, newId: designUpdateComponentId});
+            try {
+                designUpdateComponentsData = fs.readFileSync(path + 'DESIGN_UPDATE_COMPONENTS.EXP');
+                designUpdateComponents = JSON.parse(designUpdateComponentsData);
+            } catch (e) {
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Update Components export file: {}", e);
             }
 
-        });
+            if (designUpdateComponents.length > 0) {
 
-        // Update Design Update Component parents for the new design update components
-        designUpdateComponentsMapping.forEach((updateComponent) => {
-            DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
-        });
+                designId = null;
+                designVersionId = null;
+                designUpdateId = null;
 
-        // Make sure Design is no longer removable
-        DesignServices.setRemovable(designId);
+                designUpdateComponents.forEach((updateComponent) => {
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
+
+                    designId = getIdFromMap(designsMapping, updateComponent.designId);
+                    designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
+                    designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
+
+                    designUpdateComponentId = DesignUpdateComponentServices.importComponent(
+                        designId,
+                        designVersionId,
+                        designUpdateId,
+                        updateComponent
+                    );
+
+                    if (designUpdateComponentId) {
+                        // Map old component ids to new
+                        designUpdateComponentsMapping.push({
+                            oldId: updateComponent._id,
+                            newId: designUpdateComponentId
+                        });
+                    }
+
+                });
+
+                // Update Design Update Component parents for the new design update components
+                designUpdateComponentsMapping.forEach((updateComponent) => {
+                    DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
+                });
+
+                // Make sure Design is no longer removable
+                DesignServices.setRemovable(designId);
+
+            } else {
+                // No Design Update Components - could be OK
+                log((msg) => console.log(msg), LogLevel.INFO, "No Design Update Components found...");
+            }
+        }
 
         // Work Package Components -------------------------------------------------------------------------------------
+        let workPackageComponentsData = '';
+        let workPackageComponents = [];
 
-        const workPackageComponentsString = fs.readFileSync(path + 'WORK_PACKAGE_COMPONENTS.EXP');
+        try{
+            workPackageComponentsData = fs.readFileSync(path + 'WORK_PACKAGE_COMPONENTS.EXP');
+            workPackageComponents = JSON.parse(workPackageComponentsData);
+        } catch (e) {
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Can't open Work Package Components export file: {}", e);
+        }
 
-        workPackageId = null;
-        let wpDesignComponentId = null;
-        let workPackage = null;
+        if (workPackageComponents.length > 0) {
 
-        let workPackageComponents = JSON.parse(workPackageComponentsString);
+            workPackageId = null;
+            let wpDesignComponentId = null;
+            let workPackage = null;
 
-        workPackageComponents.forEach((wpComponent) => {
-            console.log("Adding Work Package Component " + wpComponent.componentType + " - " + wpComponent._id);
 
-            workPackageId = getIdFromMap(workPackagesMapping, wpComponent.workPackageId);
+            workPackageComponents.forEach((wpComponent) => {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Work Package Component {} - {}", wpComponent.componentType, wpComponent._id);
+                let skip = false;
 
-            // WP Component could be a Design Component or a Design Update Component
-            workPackage = WorkPackages.findOne({_id: workPackageId});
+                workPackageId = getIdFromMap(workPackagesMapping, wpComponent.workPackageId);
 
-            switch(workPackage.workPackageType){
-                case WorkPackageType.WP_BASE:
-                    wpDesignComponentId = getIdFromMap(designComponentsMapping, wpComponent.componentId);
-                    break;
-                case WorkPackageType.WP_UPDATE:
-                    wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
-                    break;
-            }
+                // WP Component could be a Design Component or a Design Update Component
+                workPackage = WorkPackages.findOne({_id: workPackageId});
 
-            workPackageComponentId = WorkPackageServices.importComponent(
-                workPackageId,
-                wpDesignComponentId,
-                wpComponent
-            );
 
-            if(workPackageComponentId){
-                // Map old component ids to new
-                workPackageComponentsMapping.push({oldId: wpComponent._id, newId: workPackageComponentId});
-            }
+                switch (workPackage.workPackageType) {
+                    case WorkPackageType.WP_BASE:
+                        if(hasDesignComponents) {
+                            wpDesignComponentId = getIdFromMap(designComponentsMapping, wpComponent.componentId);
+                        } else {
+                            log((msg) => console.log(msg), LogLevel.INFO, "Skipping WP component because no design components...");
+                            skip = true;
+                        }
+                        break;
+                    case WorkPackageType.WP_UPDATE:
+                        if(hasDesignUpdateComponents) {
+                            wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
+                        } else {
+                            log((msg) => console.log(msg), LogLevel.INFO, "Skipping WP component because no design update components...");
+                            skip = true;
+                        }
+                        break;
+                }
 
-        });
+                if(!skip) {
+                    workPackageComponentId = WorkPackageServices.importComponent(
+                        workPackageId,
+                        wpDesignComponentId,
+                        wpComponent
+                    );
+
+                    if (workPackageComponentId) {
+                        // Map old component ids to new
+                        workPackageComponentsMapping.push({oldId: wpComponent._id, newId: workPackageComponentId});
+                    }
+                }
+
+            });
+        } else {
+            // No Work Package Components - could be OK
+            log((msg) => console.log(msg), LogLevel.DEBUG, "No Work Package Components found...");
+        }
 
         // Feature Background Steps ----------------------------------------------------------------------------------------------
+        let backgroundStepsData = '';
+        let backgroundSteps = [];
 
-        const backgroundStepsString = fs.readFileSync(path + 'FEATURE_BACKGROUND_STEPS.EXP');
+        try{
+            backgroundStepsData = fs.readFileSync(path + 'FEATURE_BACKGROUND_STEPS.EXP');
+            backgroundSteps = JSON.parse(backgroundStepsData);
+        } catch (e) {
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Can't open Feature Background Steps export file: {}", e);
+        }
 
-        designId = null;
-        designVersionId = null;
-        designUpdateId = null;
+        if (backgroundSteps.length > 0) {
+            designId = null;
+            designVersionId = null;
+            designUpdateId = null;
 
-        let backgroundSteps = JSON.parse(backgroundStepsString);
 
-        backgroundSteps.forEach((step) => {
+            backgroundSteps.forEach((step) => {
 
-            let newStep = this.migrateStep(step);
+                let newStep = this.migrateStep(step);
 
-            console.log("Adding Background Step " + newStep.stepType + " " + newStep.stepText);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Background Step {} {}", newStep.stepType, newStep.stepText);
 
-            designId = getIdFromMap(designsMapping, newStep.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, newStep.designVersionId);
-            designUpdateId = getIdFromMap(designUpdatesMapping, newStep.designUpdateId);
+                designId = getIdFromMap(designsMapping, newStep.designId);
+                designVersionId = getIdFromMap(designVersionsMapping, newStep.designVersionId);
+                designUpdateId = getIdFromMap(designUpdatesMapping, newStep.designUpdateId);
 
-            featureBackgroundStepId = ScenarioServices.importFeatureBackgroundStep(
-                designId,
-                designVersionId,
-                designUpdateId,
-                newStep
-            );
+                featureBackgroundStepId = ScenarioServices.importFeatureBackgroundStep(
+                    designId,
+                    designVersionId,
+                    designUpdateId,
+                    newStep
+                );
 
-            // Currently don't need to map step ids..
+                // Currently don't need to map step ids..
 
-        });
+            });
+        } else {
+            // No Feature Background Steps - could be OK
+            log((msg) => console.log(msg), LogLevel.DEBUG, "No Feature Background Steps found...");
+        }
 
         // Scenario Steps ----------------------------------------------------------------------------------------------
+        let scenarioStepsData = '';
+        let scenarioSteps = [];
 
-        const scenarioStepsString = fs.readFileSync(path + 'SCENARIO_STEPS.EXP');
+        try{
+            scenarioStepsData = fs.readFileSync(path + 'SCENARIO_STEPS.EXP');
+            scenarioSteps = JSON.parse(scenarioStepsData);
+        } catch (e) {
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Can't open Scenario Steps export file: {}", e);
+        }
 
-        designId = null;
-        designVersionId = null;
-        designUpdateId = null;
+        if (scenarioSteps.length > 0) {
 
-        let scenarioSteps = JSON.parse(scenarioStepsString);
+            designId = null;
+            designVersionId = null;
+            designUpdateId = null;
 
-        scenarioSteps.forEach((step) => {
 
-            let newStep = this.migrateStep(step);
+            scenarioSteps.forEach((step) => {
 
-            console.log("Adding Scenario Step " + newStep.stepType + " " + newStep.stepText);
+                let newStep = this.migrateStep(step);
 
-            designId = getIdFromMap(designsMapping, newStep.designId);
-            designVersionId = getIdFromMap(designVersionsMapping, newStep.designVersionId);
-            designUpdateId = getIdFromMap(designUpdatesMapping, newStep.designUpdateId);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Scenario Step {} {}", newStep.stepType, newStep.stepText);
 
-            scenarioStepId = ScenarioServices.importScenarioStep(
-                designId,
-                designVersionId,
-                designUpdateId,
-                newStep
-            );
+                designId = getIdFromMap(designsMapping, newStep.designId);
+                designVersionId = getIdFromMap(designVersionsMapping, newStep.designVersionId);
+                designUpdateId = getIdFromMap(designUpdatesMapping, newStep.designUpdateId);
 
-            // Currently don't need to map step ids..
+                scenarioStepId = ScenarioServices.importScenarioStep(
+                    designId,
+                    designVersionId,
+                    designUpdateId,
+                    newStep
+                );
 
-        });
+                // Currently don't need to map step ids..
+
+            });
+        } else {
+            // No Scenario Steps - could be OK
+            log((msg) => console.log(msg), LogLevel.DEBUG, "No Scenario Steps found...");
+        }
 
     };
 

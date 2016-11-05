@@ -14,7 +14,7 @@ Meteor.methods({
         console.log('STARTUP...  Fixtures');
 
 
-        if(Designs.find({}).count() === 0) {
+        if(UserRoles.find({}).count() === 0) {
 
             console.log('Inserting data...');
 
