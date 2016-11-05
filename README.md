@@ -1,11 +1,20 @@
-# Simple Todo List
+# ULTRAWIDE
 
-The Meteor Tutorial app.
+**Build Requirements**
 
-Use it to share a single todo list with your friends. The list updates on everyone's screen in real time, and you can make tasks private if you don't want others to see them.
+`meteor npm install --save react react-dom`
+`meteor npm install --save redux redux-thunk `
+`npm install --save react-redux-meteor`
+`npm install react-bootstrap --save`
+`npm install --save draft-js react react-dom`
+`npm install --save react-dnd`
+`npm install --save react-dnd-html5-backend`
+`meteor npm install --save meteor-node-stubs `
+`meteor npm install --save react react-addons-pure-render-mixin`
+`meteor add mdg:validated-method`
 
-Learn how to build this app by following the [Meteor Tutorial](http://www.meteor.com/install).
+`meteor npm install --save bcrypt`
 
-Read more about building apps with Meteor in the [Meteor Guide](http://guide.meteor.com).
+**Additional NPM for App Under Test**
+`npm install mocha-spec-json-reporter`
 
-![screenshot](screenshot.png)
