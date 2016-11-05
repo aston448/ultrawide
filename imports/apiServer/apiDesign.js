@@ -2,6 +2,7 @@
  * Created by aston on 14/08/2016.
  */
 import { Meteor } from 'meteor/meteor';
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 import {ComponentType} from '../constants/constants.js'
 
@@ -12,6 +13,40 @@ import  DesignSectionServices   from '../servicers/design_section_services.js';
 import  FeatureServices         from '../servicers/feature_services.js';
 import  ScenarioServices        from '../servicers/scenario_services.js';
 import  UserContextServices     from '../servicers/user_context_services.js';
+
+import DesignValidation         from '../apiValidation/designValidation.js';
+
+
+export const removeDesign = new ValidatedMethod({
+
+    name: 'design.removeDesign',
+
+    validate: new SimpleSchema({
+        userRole: {type: String},
+        designId: {type: String}
+    }).validator(),
+
+    run({userRole, designId}){
+
+        if(Meteor.isServer) {
+            const result = DesignValidation.validateRemoveDesign(userRole, designId);
+            console.log("Remove design validation result: " + result);
+
+            if (result != 'VALID') {
+                throw new Meteor.Error('design.removeDesign.failValidation', result)
+            }
+
+            console.log("Removing Design");
+
+            try {
+                DesignServices.removeDesign(designId);
+            } catch (e) {
+                console.log(e);
+                throw new Meteor.Error('design.removeDesign.fail', e)
+            }
+        }
+    }
+});
 
 // Meteor methods
 Meteor.methods({
@@ -29,10 +64,16 @@ Meteor.methods({
         DesignServices.updateDesignName(designId, newName);
     },
 
-    'design.removeDesign'(designId){
-        console.log('Removing Design');
-        DesignServices.removeDesign(designId);
-    },
+
+    //
+    // 'design.removeDesign'(userRole, designId){
+    //
+    //     if(DesignValidation.validateRemoveDesign(userRole, designId)) {
+    //         console.log('Removing Design');
+    //         DesignServices.removeDesign(designId);
+    //     }
+    //
+    // },
 
 
     // Design Component Management -------------------------------------------------------------------------------------

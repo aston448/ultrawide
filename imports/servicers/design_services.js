@@ -11,7 +11,7 @@ import {WorkPackages} from '../collections/work/work_packages.js'
 import {WorkPackageComponents} from '../collections/work/work_package_components.js'
 import {DesignVersionStatus, ComponentType} from '../constants/constants.js';
 
-import DesignVersionServices from '../servicers/design_version_services.js';
+import DesignVersionServices from './design_version_services.js';
 
 class DesignServices{
 
@@ -87,36 +87,41 @@ class DesignServices{
     // This can only be called for removable designs - see setRemovable
     removeDesign(designId){
 
-        // Remove all data relating to the design - there can't be much as there can't be any features
-        DesignComponents.remove({designId: designId});
-        DesignUpdateComponents.remove({designId: designId});
+        if(Meteor.isServer) {
 
-        let designVersions = DesignVersions.find({designId: designId});
+            //throw('BANG');
 
-        let workPackages = null;
+            // Remove all data relating to the design - there can't be much as there can't be any features
+            DesignComponents.remove({designId: designId});
+            DesignUpdateComponents.remove({designId: designId});
 
-        designVersions.forEach((dv) => {
-            // Remove all design updates
-            DesignUpdates.remove({designVersionId: dv._id});
+            let designVersions = DesignVersions.find({designId: designId});
 
-            // Get any WPs
-            workPackages = WorkPackages.find({designVersionId: dv._id});
+            let workPackages = null;
 
-            // Remove any WP components
-            workPackages.forEach((wp) => {
-                WorkPackageComponents.remove({workPackageId: wp._id});
+            designVersions.forEach((dv) => {
+                // Remove all design updates
+                DesignUpdates.remove({designVersionId: dv._id});
+
+                // Get any WPs
+                workPackages = WorkPackages.find({designVersionId: dv._id});
+
+                // Remove any WP components
+                workPackages.forEach((wp) => {
+                    WorkPackageComponents.remove({workPackageId: wp._id});
+                });
+
+                // Remove all WPs
+                WorkPackages.remove({designVersionId: dv._id});
+
             });
 
-            // Remove all WPs
-            WorkPackages.remove({designVersionId: dv._id});
+            // Remove all Design Versions
+            DesignVersions.remove({designId: designId});
 
-        });
-
-        // Remove all Design Versions
-        DesignVersions.remove({designId: designId});
-
-        // And finally remove the Design
-        Designs.remove({_id: designId});
+            // And finally remove the Design
+            Designs.remove({_id: designId});
+        }
     }
 
 }

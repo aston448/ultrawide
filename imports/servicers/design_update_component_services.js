@@ -8,8 +8,8 @@ import { DesignComponents } from '../collections/design/design_components.js';
 
 import { ComponentType, LogLevel } from '../constants/constants.js';
 
-import  DesignServices              from '../servicers/design_services.js';
-import  DesignUpdateServices        from '../servicers/design_update_services.js';
+import  DesignServices              from './design_services.js';
+import  DesignUpdateServices        from './design_update_services.js';
 
 import {getIdFromMap, log} from '../common/utils.js';
 

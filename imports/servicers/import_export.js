@@ -12,14 +12,14 @@ import { FeatureBackgroundSteps }       from '../collections/design/feature_back
 import { DesignUpdateComponents }       from '../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }        from '../collections/work/work_package_components.js';
 
-import DesignServices                   from '../servicers/design_services.js';
-import DesignVersionServices            from '../servicers/design_version_services.js';
-import DesignUpdateServices             from '../servicers/design_update_services.js';
-import WorkPackageServices              from '../servicers/work_package_services.js';
-import DomainDictionaryServices         from '../servicers/domain_dictionary_services.js';
-import DesignComponentServices          from '../servicers/design_component_services.js';
-import DesignUpdateComponentServices    from '../servicers/design_update_component_services.js';
-import ScenarioServices                 from '../servicers/scenario_services.js';
+import DesignServices                   from './design_services.js';
+import DesignVersionServices            from './design_version_services.js';
+import DesignUpdateServices             from './design_update_services.js';
+import WorkPackageServices              from './work_package_services.js';
+import DomainDictionaryServices         from './domain_dictionary_services.js';
+import DesignComponentServices          from './design_component_services.js';
+import DesignUpdateComponentServices    from './design_update_component_services.js';
+import ScenarioServices                 from './scenario_services.js';
 
 import {getIdFromMap, log}              from '../common/utils.js';
 
@@ -66,7 +66,7 @@ class ImpExServices{
     };
 
     produceExportFile(collection, fileName){
-        let path = '/Users/aston/WebstormProjects/shared/'; //process.env["PWD"] + '/public/';
+        let path = process.env["PWD"] + '/backup/';
 
         const data = collection.find({});
         const jsonData = JSON.stringify(data.fetch());
@@ -78,7 +78,7 @@ class ImpExServices{
     importUltrawideData(){
         // Recreate the data using the latest code so that it is compatible...
 
-        let path = '/Users/aston/WebstormProjects/shared/'; // process.env["PWD"] + '/public/';
+        let path = process.env["PWD"] + '/backup/';
 
         // Users - TODO - currently being created by fixtures
 

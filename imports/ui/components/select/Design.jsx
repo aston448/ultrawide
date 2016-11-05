@@ -40,16 +40,16 @@ class Design extends Component {
         ClientDesignServices.setDesign(userContext, newDesignId);
     };
 
-    onWorkDesign(userContext, newDesignId){
-        ClientDesignServices.workDesign(userContext, newDesignId);
+    onWorkDesign(userContext, userRole, newDesignId){
+        ClientDesignServices.workDesign(userContext, userRole, newDesignId);
     }
 
-    onRemoveDesign(userContext, designId){
-        ClientDesignServices.removeDesign(userContext, designId);
+    onRemoveDesign(userContext, userRole, designId){
+        ClientDesignServices.removeDesign(userContext, userRole, designId);
     }
 
     render() {
-        const {design, userContext} = this.props;
+        const {design, userContext, userRole} = this.props;
 
         console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
 
@@ -57,16 +57,16 @@ class Design extends Component {
         let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
 
         let buttons = '';
-        if(design.isRemovable){
+        //if(design.isRemovable){
             buttons = <ButtonGroup>
-                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, design._id)}>Work on this Design</Button>
-                <Button bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, design._id)}>Remove Design</Button>
+                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+                <Button bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
             </ButtonGroup>
-        } else {
-            buttons = <ButtonGroup>
-                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, design._id)}>Work on this Design</Button>
-            </ButtonGroup>
-        }
+        // } else {
+        //     buttons = <ButtonGroup>
+        //         <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+        //     </ButtonGroup>
+        // }
 
         return (
             <div className={itemStyle}>
@@ -90,7 +90,8 @@ Design.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext,
+        userRole: state.currentUserRole
     }
 }
 

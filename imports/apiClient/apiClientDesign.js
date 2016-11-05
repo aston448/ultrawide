@@ -6,11 +6,15 @@
 import { Designs } from '../collections/design/designs.js';
 
 // Ultrawide Services
-import { ViewType } from '../constants/constants.js';
+import { removeDesign } from '../apiServer/apiDesign.js'
+import  DesignValidation  from '../apiValidation/designValidation.js';
+
+import { ViewType, MessageType } from '../constants/constants.js';
+
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -63,7 +67,7 @@ class ClientDesignServices{
         return false;
     }
 
-    workDesign(userContext, newDesignId){
+    workDesign(userContext, userRole, newDesignId){
 
         // Make sure the current design is set
         this.setDesign(userContext, newDesignId);
@@ -80,39 +84,61 @@ class ClientDesignServices{
         return true;
     }
 
-    removeDesign(userContext, designId){
 
-        // Validation - can only remove removable designs
-        const design = Designs.findOne({_id: designId});
+    removeDesign(userContext, userRole, designId){
 
-        if(design && design.isRemovable){
+        // Client test validation
+        let result = DesignValidation.validateRemoveDesign(userRole, designId);
 
-            Meteor.call('design.removeDesign', designId);
-
-            // Set no current user context
-            const context = {
-                userId:                     Meteor.userId(),
-                designId:                   'NONE',
-                designVersionId:            'NONE',
-                designUpdateId:             'NONE',
-                workPackageId:              'NONE',
-                designComponentId:          'NONE',
-                designComponentType:        'NONE',
-                featureReferenceId:         'NONE',
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE'
-            };
-
-            store.dispatch(setCurrentUserItemContext(context, true));
-
-
-            return true;
-
-        } else {
+        if(result != 'VALID'){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
 
+        // Real action call - Remove Design server actions
+        removeDesign.call(
+            {
+                userRole: userRole,
+                designId: designId
+            },
+            (err, result) => {
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Remove Design client actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: 'Design removed successfully'
+                    }));
+
+                    // Set no current user context
+                    const context = {
+                        userId: userContext.userId,
+                        designId: 'NONE',
+                        designVersionId: 'NONE',
+                        designUpdateId: 'NONE',
+                        workPackageId: 'NONE',
+                        designComponentId: 'NONE',
+                        designComponentType: 'NONE',
+                        featureReferenceId: 'NONE',
+                        featureAspectReferenceId: 'NONE',
+                        scenarioReferenceId: 'NONE',
+                        scenarioStepId: 'NONE'
+                    };
+
+                    store.dispatch(setCurrentUserItemContext(context, true));
+
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
     }
 
 

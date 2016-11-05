@@ -12,8 +12,8 @@ import {WorkPackageComponents} from '../collections/work/work_package_components
 // Ultrawide Services
 import {ViewType, ViewMode, DisplayContext, DesignUpdateStatus, WorkPackageStatus, WorkPackageType, ComponentType} from '../constants/constants.js';
 
-import ClientContainerServices from '../apiClient/apiClientContainerServices.js';
-import ClientMashDataServices from '../apiClient/apiClientMashData.js';
+import ClientContainerServices from './apiClientContainerServices.js';
+import ClientMashDataServices from './apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'

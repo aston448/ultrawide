@@ -15,8 +15,8 @@ import {UserCurrentDevContext}          from '../collections/context/user_curren
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
     UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
 import {log}                            from '../common/utils.js';
-import FeatureFileServices              from '../servicers/feature_file_services.js'
-import ScenarioServices                 from '../servicers/scenario_services.js';
+import FeatureFileServices              from './feature_file_services.js'
+import ScenarioServices                 from './scenario_services.js';
 
 class MashDataServices{
 

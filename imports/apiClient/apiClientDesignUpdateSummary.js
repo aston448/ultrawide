@@ -17,7 +17,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 
 // Ultrawide Services
 import { ComponentType, DesignUpdateSummaryItem, DesignUpdateSummaryType} from '../constants/constants.js';
-import ClientDesignServices from '../apiClient/apiClientDesign.js';
+import ClientDesignServices from './apiClientDesign.js';
 
 
 // =====================================================================================================================

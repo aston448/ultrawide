@@ -275,6 +275,8 @@
         <item url="file://$USER_HOME$/.meteor/packages/modules-runtime/0.7.7/web.browser/modules-runtime.js" />
         <item url="file://$USER_HOME$/.meteor/packages/modules-runtime/0.7.7/web.browser/.npm/package/node_modules/install/install.js" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/index.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/mdg_validated-method/1.1.0/web.browser/validated-method.js" />
+        <item url="file://$USER_HOME$/.meteor/packages/mdg_validated-method/1.1.0/web.browser/validated-method-tests.js" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/mocha.js" />
         <item url="file://$USER_HOME$/.meteor/packages/mongo-id/1.0.6/web.browser/id.js" />
         <item url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/mocha.css" />
@@ -652,6 +654,8 @@
       <root url="file://$USER_HOME$/.meteor/packages/modules-runtime/0.7.7/web.browser/modules-runtime.js" />
       <root url="file://$USER_HOME$/.meteor/packages/modules-runtime/0.7.7/web.browser/.npm/package/node_modules/install/install.js" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/index.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/mdg_validated-method/1.1.0/web.browser/validated-method.js" />
+      <root url="file://$USER_HOME$/.meteor/packages/mdg_validated-method/1.1.0/web.browser/validated-method-tests.js" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/mocha.js" />
       <root url="file://$USER_HOME$/.meteor/packages/mongo-id/1.0.6/web.browser/id.js" />
       <root url="file://$USER_HOME$/.meteor/packages/practicalmeteor_mocha/2.4.5_6/web.browser/mocha.css" />

@@ -5,7 +5,7 @@
 
 // Ultrawide Services
 import {RoleType} from '../constants/constants.js'
-import ClientUserContextServices from '../apiClient/apiClientUserContext.js'
+import ClientUserContextServices from './apiClientUserContext.js'
 
 // REDUX services
 import store from '../redux/store'

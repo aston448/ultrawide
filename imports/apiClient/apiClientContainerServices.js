@@ -28,7 +28,7 @@ import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mas
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel } from '../constants/constants.js';
-import ClientDesignServices from '../apiClient/apiClientDesign.js';
+import ClientDesignServices from './apiClientDesign.js';
 
 import { log } from '../common/utils.js';
 
