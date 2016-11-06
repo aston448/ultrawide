@@ -4,6 +4,8 @@
 import { Meteor } from 'meteor/meteor';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
+import Designs from '../collections/design/designs.js';
+
 import {ComponentType} from '../constants/constants.js'
 
 import  DesignServices          from '../servicers/design_services.js';
@@ -14,39 +16,33 @@ import  FeatureServices         from '../servicers/feature_services.js';
 import  ScenarioServices        from '../servicers/scenario_services.js';
 import  UserContextServices     from '../servicers/user_context_services.js';
 
-import DesignValidation         from '../apiValidation/designValidation.js';
+import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
+
+import { removeDesign } from '../apiValidatedMethods/design_methods.js'
 
 
-export const removeDesign = new ValidatedMethod({
+class ServerDesignApi {
 
-    name: 'design.removeDesign',
+    removeDesign(userRole, designId, callback){
 
-    validate: new SimpleSchema({
-        userRole: {type: String},
-        designId: {type: String}
-    }).validator(),
-
-    run({userRole, designId}){
-
-        if(Meteor.isServer) {
-            const result = DesignValidation.validateRemoveDesign(userRole, designId);
-            console.log("Remove design validation result: " + result);
-
-            if (result != 'VALID') {
-                throw new Meteor.Error('design.removeDesign.failValidation', result)
+        removeDesign.call(
+            {
+                userRole: userRole,
+                designId: designId
+            },
+            (err, result) => {
+                callback(err, result);
             }
+        );
 
-            console.log("Removing Design");
+    };
 
-            try {
-                DesignServices.removeDesign(designId);
-            } catch (e) {
-                console.log(e);
-                throw new Meteor.Error('design.removeDesign.fail', e)
-            }
-        }
-    }
-});
+}
+
+export default new ServerDesignApi();
+
+
+
 
 // Meteor methods
 Meteor.methods({

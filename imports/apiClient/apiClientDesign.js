@@ -6,8 +6,8 @@
 import { Designs } from '../collections/design/designs.js';
 
 // Ultrawide Services
-import { removeDesign } from '../apiServer/apiDesign.js'
-import  DesignValidation  from '../apiValidation/designValidation.js';
+import ServerDesignApi      from '../apiServer/apiDesign.js';
+import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
 
 import { ViewType, MessageType } from '../constants/constants.js';
 
@@ -88,7 +88,7 @@ class ClientDesignServices{
     removeDesign(userContext, userRole, designId){
 
         // Client test validation
-        let result = DesignValidation.validateRemoveDesign(userRole, designId);
+        let result = DesignValidationApi.validateRemoveDesign(userRole, designId);
 
         if(result != 'VALID'){
             // Business validation failed - show error on screen
@@ -97,45 +97,40 @@ class ClientDesignServices{
         }
 
         // Real action call - Remove Design server actions
-        removeDesign.call(
-            {
-                userRole: userRole,
-                designId: designId
-            },
-            (err, result) => {
-                if(err){
-                    // Unexpected error as all expected errors already handled - show alert.
-                    // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-                } else {
-                    // Remove Design client actions:
+        ServerDesignApi.removeDesign(userRole, designId, (err, result) => {
 
-                    // Show action success on screen
-                    store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
-                        messageText: 'Design removed successfully'
-                    }));
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Remove Design client actions:
 
-                    // Set no current user context
-                    const context = {
-                        userId: userContext.userId,
-                        designId: 'NONE',
-                        designVersionId: 'NONE',
-                        designUpdateId: 'NONE',
-                        workPackageId: 'NONE',
-                        designComponentId: 'NONE',
-                        designComponentType: 'NONE',
-                        featureReferenceId: 'NONE',
-                        featureAspectReferenceId: 'NONE',
-                        scenarioReferenceId: 'NONE',
-                        scenarioStepId: 'NONE'
-                    };
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Design removed successfully'
+                }));
 
-                    store.dispatch(setCurrentUserItemContext(context, true));
+                // Set no current user context
+                const context = {
+                    userId: userContext.userId,
+                    designId: 'NONE',
+                    designVersionId: 'NONE',
+                    designUpdateId: 'NONE',
+                    workPackageId: 'NONE',
+                    designComponentId: 'NONE',
+                    designComponentType: 'NONE',
+                    featureReferenceId: 'NONE',
+                    featureAspectReferenceId: 'NONE',
+                    scenarioReferenceId: 'NONE',
+                    scenarioStepId: 'NONE'
+                };
 
-                }
+                store.dispatch(setCurrentUserItemContext(context, true));
+
             }
-        );
+        });
 
         // Indicate that business validation passed
         return true;

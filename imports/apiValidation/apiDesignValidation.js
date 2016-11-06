@@ -7,7 +7,9 @@ import { Designs } from '../collections/design/designs.js';
 
 // Ultrawide Services
 import { ViewType, RoleType } from '../constants/constants.js';
+import { DesignValidationErrors } from '../constants/validation_errors.js';
 
+import DesignValidationServices from '../service_modules/validation/design_validation_services.js';
 
 // =====================================================================================================================
 
@@ -17,26 +19,19 @@ import { ViewType, RoleType } from '../constants/constants.js';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class DesignValidation{
+class DesignValidationApi{
+
+    validateAddDesign(userRole){
+
+    }
 
     validateRemoveDesign(userRole, designId){
 
-        // To remove a design:
-        // The Design must exist
-        // The user must be a Designer
-        // The Design must be removable
-
         const design = Designs.findOne({_id: designId});
 
-        if(!design){ return 'Design does not exist!' }
-
-        if(!userRole === RoleType.DESIGNER){ return 'Only a Designer can remove Designs '}
-
-        if(!design.isRemovable){ return 'This Design is not removable' }
-
-        return 'VALID';
+        return DesignValidationServices.validateRemoveDesign(userRole, design);
 
     };
 
 }
-export default new DesignValidation();
+export default new DesignValidationApi();

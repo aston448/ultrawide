@@ -15,6 +15,11 @@ import DesignVersionServices from './design_version_services.js';
 
 class DesignServices{
 
+    // Generic server get Design
+    getDesign(designId){
+        return Designs.findOne({_id: designId});
+    }
+
     // Add a new design an its default draft design version
     addDesign(createDesignVersion){
 
@@ -88,8 +93,6 @@ class DesignServices{
     removeDesign(designId){
 
         if(Meteor.isServer) {
-
-            //throw('BANG');
 
             // Remove all data relating to the design - there can't be much as there can't be any features
             DesignComponents.remove({designId: designId});

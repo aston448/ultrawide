@@ -9,10 +9,10 @@ import React, { Component, PropTypes } from 'react';
 
 // Ultrawide Services
 import {ViewMode, ViewType, DisplayContext} from '../../../constants/constants.js';
-import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
-import {getComponentClass} from '../../../common/utils.js';
+import ClientDesignComponentServices            from '../../../apiClient/apiClientDesignComponent.js';
+import ClientDesignUpdateComponentServices      from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
+import {getComponentClass}                      from '../../../common/utils.js';
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
@@ -131,19 +131,19 @@ export default class Narrative extends React.Component {
                 // The narrative will be decorated as greyed out and no syntax highlighting...
                 compositeDecorator = new CompositeDecorator([
                     {
-                        strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
+                        strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
                         component: NarrativeGreySpan
                     }
                 ]);
             } else {
                 compositeDecorator = new CompositeDecorator([
                     {
-                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
+                        strategy: ClientDomainDictionaryApi.getDomainTermDecoratorFunction(props.designComponent.designVersionId),
                         component: DomainSpan
                     },
 
                     {
-                        strategy: ClientDomainDictionaryServices.getNarrativeDecoratorFunction(),
+                        strategy: ClientDomainDictionaryApi.getNarrativeDecoratorFunction(),
                         component: NarrativeSpan
                     }
                 ]);
