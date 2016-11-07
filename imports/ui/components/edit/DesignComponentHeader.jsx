@@ -570,7 +570,7 @@ class DesignComponentHeader extends Component{
                     <InputGroup.Addon onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}>{currentItem.componentIndex}</InputGroup.Addon>
+                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.toggleScope(view, mode, displayContext, userItemContext, currentItem)}>
                         <div className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
@@ -667,7 +667,7 @@ class DesignComponentHeader extends Component{
                         {/*<InputGroup.Addon>*/}
                             {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
                         {/*</InputGroup.Addon>*/}
-                        <InputGroup.Addon className={itemIndent}>{currentItem.componentIndex}</InputGroup.Addon>
+                        <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                         <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
                             <Editor
                                 editorState={this.state.editorState}

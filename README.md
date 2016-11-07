@@ -24,6 +24,12 @@
 
 `meteor npm install --save bcrypt`
 
+**Testing**
+
+`meteor add dburles:factory`
+
+`meteor add hwillson:stub-collections`
+
 **Additional NPM for App Under Test**
 
 `npm install mocha-spec-json-reporter`
