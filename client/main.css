@@ -746,6 +746,47 @@ input {
     color: darkred;
 }
 
+.mash-unit-test-scenario{
+    margin: 0;
+    padding: 2px 0 0 10px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    color: blue;
+    background-color: transparent;
+}
+
+.unit-test-none{
+    margin: 0;
+    padding: 2px 0 0 20px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: bold;
+    color: darkgrey;
+    background-color: transparent;
+}
+
+.unit-test-group{
+    margin: 0;
+    padding: 2px 0 0 20px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: bold;
+    color: black;
+    background-color: transparent;
+}
+
+.unit-test{
+    margin: 0;
+    padding: 2px 0 0 20px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    background-color: transparent;
+}
+
 .mash-linked {
     color: black;
 }

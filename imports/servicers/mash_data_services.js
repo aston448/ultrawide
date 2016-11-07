@@ -17,6 +17,7 @@ import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFile
 import {log}                            from '../common/utils.js';
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from './scenario_services.js';
+import MochaTestServices                from '../service_modules/server/mocha_test_services.js';
 
 class MashDataServices{
 
@@ -1039,6 +1040,10 @@ class MashDataServices{
     }
 
     updateTestData(userContext, resultsPath){
+
+        if(Meteor.isServer) {
+            MochaTestServices.processTestResults(userContext);
+        }
 
         // Read the test results file
         const resultsText = fs.readFileSync(resultsPath);

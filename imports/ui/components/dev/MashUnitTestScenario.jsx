@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashFeatureAspectScenarioContainer from '../../containers/dev/MashFeatureAspectScenarioContainer.jsx';
+import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -32,11 +32,11 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Mash Feature Aspect Component - One Feature Aspect and its scenarios - aspect can be exported as a file
+// Mash Unit Test Scenario Component - A Scenario in a Feature Aspect that may hold related unit test results
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class MashFeatureAspect extends Component {
+class MashUnitTestScenario extends Component {
 
     constructor(props) {
         super(props);
@@ -47,44 +47,28 @@ class MashFeatureAspect extends Component {
 
     }
 
-    onExportFeatureAspect(aspect, context){
-
-        // if(ClientFeatureFileServices.writeFeatureAspectFile(context)){
-        //     // If adding a feature aspect file, refresh the view...
-        //     ClientMashDataServices.createDevMashData(context);
-        // }
-    }
-
-
     render(){
-        const { aspect, displayContext, userContext } = this.props;
+        const { scenario, displayContext, userContext } = this.props;
 
-        // All this is is the Aspect (exportable) plus a list of its scenarios
-        // TODO - decide if we are going to make Aspects exportable as mini-Features
+        // All this is is the Scenario Name plus a list of its scenarios
         return(
             <div>
                 <InputGroup>
-                    <div className={"mash-aspect"}>
-                        {aspect.mashItemName}
+                    <div className={"mash-unit-test-scenario"}>
+                        {scenario.mashItemName}
                     </div>
-                    {/*<InputGroup.Addon onClick={() => this.onExportFeatureAspect(aspect, userContext)}>*/}
-                        {/*<div><Glyphicon glyph="download"/></div>*/}
-                    {/*</InputGroup.Addon>*/}
                 </InputGroup>
-                <MashFeatureAspectScenarioContainer params={{
-                    aspect: aspect,
-                    displayContext: displayContext
+                <MashUnitTestContainer params={{
+                    scenario: scenario
                 }}/>
             </div>
         )
-
     }
 
 }
 
-MashFeatureAspect.propTypes = {
-    aspect: PropTypes.object.isRequired,
-    displayContext: PropTypes.string.isRequired
+MashUnitTestScenario.propTypes = {
+    scenario: PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -95,6 +79,6 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-MashFeatureAspect = connect(mapStateToProps)(MashFeatureAspect);
+MashUnitTestScenario = connect(mapStateToProps)(MashUnitTestScenario);
 
-export default MashFeatureAspect;
+export default MashUnitTestScenario;

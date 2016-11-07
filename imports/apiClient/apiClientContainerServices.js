@@ -17,11 +17,9 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { FeatureBackgroundSteps }   from '../collections/design/feature_background_steps.js';
 import { ScenarioSteps }            from '../collections/design/scenario_steps.js';
 import { DomainDictionary }         from '../collections/design/domain_dictionary.js';
-// import { DesignDevFeatureMash }     from '../collections/dev/design_dev_feature_mash.js';
-// import { DesignDevScenarioMash }    from '../collections/dev/design_dev_scenario_mash.js';
-// import { DesignDevScenarioStepMash }from '../collections/dev/design_dev_scenario_step_mash.js';
 import { UserDevFeatures }          from '../collections/dev/user_dev_features.js';
 import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mash_data.js';
+import { UserUnitTestResults }      from '../collections/dev/user_unit_test_results.js';
 
 // Ultrawide GUI Components
 
@@ -90,13 +88,15 @@ class ClientContainerServices{
         const fsHandle = Meteor.subscribe('userDevFeatureScenarios');
         const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps');
         const dmHandle = Meteor.subscribe('userDesignDevMashData');
+        const utHandle = Meteor.subscribe('userUnitTestResults');
 
         const loading = (
             !dfHandle.ready()   ||
             !dbHandle.ready()   ||
             !fsHandle.ready()   ||
             !ssHandle.ready()   ||
-            !dmHandle.ready()
+            !dmHandle.ready()   ||
+            !utHandle.ready()
         );
 
         return loading;
@@ -1037,6 +1037,16 @@ class ClientContainerServices{
         ).fetch();
 
     };
+
+    // Get all unit test results relating to a specific Design Scenario
+    getMashScenarioUnitTestResults(scenario){
+
+        return UserUnitTestResults.find({
+            userId:                         scenario.userId,
+            designScenarioReferenceId:      scenario.designScenarioReferenceId,
+        }).fetch();
+
+    }
 
     getMashScenarioSteps(userContext){
         // Returns steps for the current scenario that are:

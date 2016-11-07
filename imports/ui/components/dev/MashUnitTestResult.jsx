@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashFeatureAspectScenarioContainer from '../../containers/dev/MashFeatureAspectScenarioContainer.jsx';
+import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -32,11 +32,11 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Mash Feature Aspect Component - One Feature Aspect and its scenarios - aspect can be exported as a file
+// Mash Unit Test Result Component - A single Mocha test result
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class MashFeatureAspect extends Component {
+class MashUnitTestResult extends Component {
 
     constructor(props) {
         super(props);
@@ -47,44 +47,38 @@ class MashFeatureAspect extends Component {
 
     }
 
-    onExportFeatureAspect(aspect, context){
-
-        // if(ClientFeatureFileServices.writeFeatureAspectFile(context)){
-        //     // If adding a feature aspect file, refresh the view...
-        //     ClientMashDataServices.createDevMashData(context);
-        // }
-    }
-
-
     render(){
-        const { aspect, displayContext, userContext } = this.props;
+        const { testResult, userContext } = this.props;
 
-        // All this is is the Aspect (exportable) plus a list of its scenarios
-        // TODO - decide if we are going to make Aspects exportable as mini-Features
+        const testStyle = testResult.testOutcome;
+
+
+        // All this is is the Scenario Name plus a list of its scenarios
         return(
-            <div>
-                <InputGroup>
-                    <div className={"mash-aspect"}>
-                        {aspect.mashItemName}
-                    </div>
-                    {/*<InputGroup.Addon onClick={() => this.onExportFeatureAspect(aspect, userContext)}>*/}
-                        {/*<div><Glyphicon glyph="download"/></div>*/}
-                    {/*</InputGroup.Addon>*/}
-                </InputGroup>
-                <MashFeatureAspectScenarioContainer params={{
-                    aspect: aspect,
-                    displayContext: displayContext
-                }}/>
-            </div>
+            <Grid className="close-grid">
+                <Row>
+                    <Col md={10} className="close-col">
+                             <span className={"unit-test-group"}>
+                                {testResult.testGroupName + ': '}
+                            </span>
+                        <span className={"unit-test " + testStyle}>
+                                {testResult.testName}
+                            </span>
+                    </Col>
+                    <Col md={2} className="close-col">
+                        <div className={"mash-item " + testStyle}>
+                            {TextLookups.mashTestStatus(testResult.testOutcome)}
+                        </div>
+                    </Col>
+                </Row>
+            </Grid>
         )
-
     }
 
 }
 
-MashFeatureAspect.propTypes = {
-    aspect: PropTypes.object.isRequired,
-    displayContext: PropTypes.string.isRequired
+MashUnitTestResult.propTypes = {
+    testResult: PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -95,6 +89,6 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-MashFeatureAspect = connect(mapStateToProps)(MashFeatureAspect);
+MashUnitTestResult = connect(mapStateToProps)(MashUnitTestResult);
 
-export default MashFeatureAspect;
+export default MashUnitTestResult;

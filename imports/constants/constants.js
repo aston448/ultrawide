@@ -49,7 +49,9 @@ export const DisplayContext = {
     DEV_SCENARIO_CODE:      'DEV_SCENARIO_CODE',    // Developer view of a Scenario implementation in code tests
     EDIT_STEP_DESIGN:       'EDIT_STEP_DESIGN',     // Step editor for Design-Dev Mash: Steps only in Design
     EDIT_STEP_LINKED:       'EDIT_STEP_LINKED',     // Step editor for Design-Dev Mash: Steps linked across Design and Dev
-    EDIT_STEP_DEV:          'EDIT_STEP_DEV'         // Step editor for Design-Dev Mash: Steps only in Dev
+    EDIT_STEP_DEV:          'EDIT_STEP_DEV',        // Step editor for Design-Dev Mash: Steps only in Dev
+    VIEW_ACCEPTANCE_MASH:   'VIEW_ACCEPTANCE_MASH', // View of Scenarios in a Feature related to Acceptance tests
+    VIEW_UNIT_MASH:         'VIEW_UNIT_MASH'        // View of related Unit Tests in the Design-Dev Mash
 };
 
 export const StepContext = {

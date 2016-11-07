@@ -17,8 +17,9 @@ import '../imports/collections/work/work_package_components.js';
 import '../imports/collections/dev/user_dev_features.js';
 import '../imports/collections/dev/user_dev_feature_background_steps.js';
 import '../imports/collections/dev/user_dev_feature_scenarios.js';
-import '../imports/collections/dev/user_dev_feature_scenario_steps';
-import '../imports/collections/dev/user_design_dev_mash_data';
+import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
+import '../imports/collections/dev/user_design_dev_mash_data.js';
+import '../imports/collections/dev/user_unit_test_results.js';
 
 // Modules
 import '../imports/startup/server/fixtures.js';

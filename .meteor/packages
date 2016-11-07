@@ -29,3 +29,5 @@ ostrio:meteor-root
 mdg:validated-method
 dburles:factory
 hwillson:stub-collections
+dispatch:mocha-phantomjs
+dispatch:mocha

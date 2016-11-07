@@ -10,10 +10,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import MashFeatureAspect from '../../components/dev/MashFeatureAspect.jsx';
+import MashUnitTestResult         from '../../components/dev/MashUnitTestResult.jsx';
 
 // Ultrawide Services
-import {RoleType, ComponentType}    from '../../../constants/constants.js';
+import {RoleType, ComponentType, DisplayContext}    from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
@@ -30,26 +30,25 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Mash Feature Aspect Container - Where a Feature has Aspects, breaks the Scenarios up into those Aspects
+// Mash Unit Test Container - List of related unit test results for a Scenario
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class MashFeatureAspectList extends Component {
+class MashUnitTestList extends Component {
     constructor(props) {
         super(props);
 
     }
 
 
-    renderFeatureAspects(featureAspects, displayContext){
+    renderTestResults(testResults){
 
-        return featureAspects.map((aspect) => {
+        return testResults.map((testResult) => {
 
             return (
-                <MashFeatureAspect
-                    key={aspect._id}
-                    aspect={aspect}
-                    displayContext={displayContext}
+                <MashUnitTestResult
+                    key={testResult._id}
+                    testResult={testResult}
                 />
             );
 
@@ -58,20 +57,27 @@ class MashFeatureAspectList extends Component {
 
     render() {
 
-        const {featureAspects, displayContext} = this.props;
+        const {testResults} = this.props;
 
-        return(
-            <div>
-                {this.renderFeatureAspects(featureAspects, displayContext)}
-            </div>
-        )
+        if(testResults.length > 0) {
+            return (
+                <div>
+                    {this.renderTestResults(testResults)}
+                </div>
+            )
+        } else {
+            return (
+                <div className="unit-test-none">
+                    No unit tests found for this scenario
+                </div>
+            )
+        }
 
     }
 }
 
-MashFeatureAspectList.propTypes = {
-    featureAspects: PropTypes.array.isRequired,
-    displayContext: PropTypes.string.isRequired
+MashUnitTestList.propTypes = {
+    testResults: PropTypes.array.isRequired
 };
 
 
@@ -84,20 +90,18 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-MashFeatureAspectList = connect(mapStateToProps)(MashFeatureAspectList);
+MashUnitTestList = connect(mapStateToProps)(MashUnitTestList);
 
 
-export default MashFeatureAspectContainer = createContainer(({params}) => {
+export default MashUnitTestContainer = createContainer(({params}) => {
 
+    let testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.scenario);
 
-    let featureAspects = ClientContainerServices.getMashFeatureAspects(params.userContext);
-
-    console.log("Found " + featureAspects.length + " feature aspects for Container");
+    console.log("Found " + testResults.length + " unit tests for scenario " + params.scenario.designScenarioReferenceId + " and user " + params.scenario.userId)
 
     return{
-        featureAspects: featureAspects,
-        displayContext: params.displayContext
+        testResults: testResults
     }
 
 
-}, MashFeatureAspectList);
+}, MashUnitTestList);

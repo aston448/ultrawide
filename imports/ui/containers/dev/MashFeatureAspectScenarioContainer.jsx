@@ -10,10 +10,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignDevMashItem from '../../components/dev/DesignDevMashItem.jsx';
+import DesignDevMashItem            from '../../components/dev/DesignDevMashItem.jsx';
+import MashUnitTestScenario         from '../../components/dev/MashUnitTestScenario.jsx';
 
 // Ultrawide Services
-import {RoleType, ComponentType}    from '../../../constants/constants.js';
+import {RoleType, ComponentType, DisplayContext}    from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
@@ -55,21 +56,47 @@ class MashFeatureAspectScenarioList extends Component {
         });
     }
 
+    renderUnitScenarios(scenarios){
+
+        return scenarios.map((scenario) => {
+
+            return (
+                <MashUnitTestScenario
+                    key={scenario._id}
+                    scenario={scenario}
+                />
+            );
+
+        });
+    }
+
     render() {
 
-        const {scenarios} = this.props;
+        const {scenarios, displayContext} = this.props;
 
-        return(
-            <div>
-                {this.renderScenarios(scenarios)}
-            </div>
-        )
+        switch(displayContext){
+            case DisplayContext.VIEW_ACCEPTANCE_MASH:
+                return(
+                    <div>
+                        {this.renderScenarios(scenarios)}
+                    </div>
+                );
+                break;
+            case DisplayContext.VIEW_UNIT_MASH:
+                return(
+                    <div>
+                        {this.renderUnitScenarios(scenarios)}
+                    </div>
+                );
+                break;
+        }
 
     }
 }
 
 MashFeatureAspectScenarioList.propTypes = {
-    scenarios: PropTypes.array
+    scenarios: PropTypes.array.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 
@@ -87,11 +114,11 @@ MashFeatureAspectScenarioList = connect(mapStateToProps)(MashFeatureAspectScenar
 
 export default MashFeatureAspectScenarioContainer = createContainer(({params}) => {
 
-
     let scenarios = ClientContainerServices.getMashFeatureAspectScenarios(params.aspect);
 
     return{
-        scenarios: scenarios
+        scenarios: scenarios,
+        displayContext: params.displayContext
     }
 
 

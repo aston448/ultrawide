@@ -30,7 +30,7 @@ class DesignValidationServices{
         // The user must be a Designer
         // The Design must be removable
 
-        console.log("DESIGN REMOVE VALDATTION: Removable " + design.isRemovable + " Role: " + userRole);
+        //console.log("DESIGN REMOVE VALDATTION: Removable " + design.isRemovable + " Role: " + userRole);
 
         if(!design){ return DesignValidationErrors.DESIGN_NOT_EXIST }
 

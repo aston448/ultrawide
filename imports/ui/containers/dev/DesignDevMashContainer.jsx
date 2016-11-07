@@ -15,7 +15,7 @@ import MashFeatureAspectContainer   from '../../containers/dev/MashFeatureAspect
 import MashScenarioStepContainer    from '../../containers/dev/MashScenarioStepContainer.jsx';
 
 // Ultrawide Services
-import {RoleType, MashStatus, ComponentType}    from '../../../constants/constants.js';
+import {RoleType, DisplayContext, MashStatus, ComponentType}    from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
@@ -87,6 +87,11 @@ class DesignItemMashList extends Component {
         });
     }
 
+    // Render any Unit Test results relevant to Scenarios in this Feature
+    renderFeatureUnitTestsMash(unitTestMashData){
+
+    }
+
     render() {
 
         const {designMashItemData, currentUserRole, userContext} = this.props;
@@ -95,8 +100,10 @@ class DesignItemMashList extends Component {
 
         let panelHeader = '';
         let secondPanelHeader = '';
+        let unitTestsHeader = '';
         let itemHeader = '';
         let secondPanel = <div></div>;
+        let unitTestsPanel = <div></div>;
 
         const nameData = UserContextServices.getContextNameData(userContext);
 
@@ -112,6 +119,7 @@ class DesignItemMashList extends Component {
             case ComponentType.FEATURE:
                 panelHeader = 'Scenarios in ' + nameData.feature;
                 secondPanelHeader = 'Scenarios in ' + nameData.feature + ' NOT in Design';
+                unitTestsHeader = 'UNIT TEST results for Scenarios in ' + nameData.feature;
                 itemHeader = 'Scenario';
 
                 if(ClientMashDataServices.featureHasUnknownScenarios(userContext)){
@@ -138,6 +146,33 @@ class DesignItemMashList extends Component {
                             {this.renderUnknownDesignItemMash(designMashItemData)}
                         </Panel>;
                 }
+
+                unitTestsPanel =
+                    <Panel className="panel-text panel-text-body" header={unitTestsHeader}>
+                        {/*<InputGroup>*/}
+                            {/*<Grid className="close-grid">*/}
+                                {/*<Row>*/}
+                                    {/*<Col md={8} className="close-col">*/}
+                                        {/*{itemHeader}*/}
+                                    {/*</Col>*/}
+                                    {/*<Col md={2} className="close-col">*/}
+                                        {/*Status*/}
+                                    {/*</Col>*/}
+                                    {/*<Col md={2} className="close-col">*/}
+                                        {/*Test*/}
+                                    {/*</Col>*/}
+                                {/*</Row>*/}
+                            {/*</Grid>*/}
+                            {/*<InputGroup.Addon className="invisible">*/}
+                                {/*<div><Glyphicon glyph="star"/></div>*/}
+                            {/*</InputGroup.Addon>*/}
+                        {/*</InputGroup>*/}
+                        <MashFeatureAspectContainer params={{
+                            userContext: userContext,
+                            displayContext: DisplayContext.VIEW_UNIT_MASH
+                        }}/>
+                    </Panel>;
+
                 break;
             case ComponentType.FEATURE_ASPECT:
                 panelHeader = nameData.featureAspect + ' scenarios for ' + nameData.feature;
@@ -205,10 +240,12 @@ class DesignItemMashList extends Component {
                                         </InputGroup.Addon>
                                     </InputGroup>
                                     <MashFeatureAspectContainer params={{
-                                        userContext: userContext
+                                        userContext: userContext,
+                                        displayContext: DisplayContext.VIEW_ACCEPTANCE_MASH
                                     }}/>
                                 </Panel>
                                 {secondPanel}
+                                {unitTestsPanel}
                             </div>
                     } else {
                         // Just render the scenarios
