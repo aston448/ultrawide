@@ -125,8 +125,8 @@ class DesignComponentHeader extends Component{
                     nextProps.isDragging === this.props.isDragging
                 );
                 break;
-            case ViewType.WORK_PACKAGE_BASE_WORK:
-            case ViewType.WORK_PACKAGE_UPDATE_WORK:
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
                     nextProps.isOpen === this.props.isOpen
@@ -211,10 +211,10 @@ class DesignComponentHeader extends Component{
                 }
                 this.updateTitleText(newProps, newProps.designItem.componentNameRawNew);
                 break;
-            case ViewType.WORK_PACKAGE_BASE_WORK:
+            case ViewType.DEVELOP_BASE_WP:
                 this.updateTitleText(newProps, newProps.designItem.componentNameRaw);
                 break;
-            case ViewType.WORK_PACKAGE_UPDATE_WORK:
+            case ViewType.DEVELOP_UPDATE_WP:
                 this.updateTitleText(newProps, newProps.designItem.componentNameRawNew);
                 break;
 
@@ -303,14 +303,14 @@ class DesignComponentHeader extends Component{
 
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
-                case ViewType.WORK_PACKAGE_BASE_WORK:
+                case ViewType.DEVELOP_BASE_WP:
                     // For Design WP name data comes from original Design Component
                     existingRawText = props.designItem.componentNameRaw;
                     break;
 
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                case ViewType.WORK_PACKAGE_UPDATE_WORK:
+                case ViewType.DEVELOP_UPDATE_WP:
                     // For Update WP name data comes from original Design Update Component
                     existingRawText = props.designItem.componentNameRawNew;
                     break;

@@ -71,7 +71,7 @@ class ClientScenarioStepServices {
     logicalDeleteMashScenarioStep(view, mode, step, userContext){
 
         // Validate - must be in the Mash View
-        if(view === ViewType.WORK_PACKAGE_BASE_WORK || view === ViewType.WORK_PACKAGE_UPDATE_WORK){
+        if(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP){
             Meteor.call('scenario.logicalDeleteMashScenarioStep', step, userContext);
             return true;
         } else {

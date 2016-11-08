@@ -2,14 +2,16 @@
 
 // Meteor / React Services
 
+// Ultrawide Collections
+import {UserRoles}    from '../collections/users/user_roles.js';
 
 // Ultrawide Services
-import {RoleType} from '../constants/constants.js'
+import {RoleType, ViewType, MessageType} from '../constants/constants.js'
 import ClientUserContextServices from './apiClientUserContext.js'
 
 // REDUX services
 import store from '../redux/store'
-import {changeApplicationMode, setCurrentView, toggleDomainDictionary} from '../redux/actions'
+import {setCurrentUserName, setCurrentView, toggleDomainDictionary, updateUserMessage} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -46,6 +48,36 @@ class ClientLoginServices{
         }
     };
 
+    userLogin(userName, password){
+
+        console.log("Attempting login with : " + userName);
+
+        Meteor.loginWithPassword(userName, password, (error) => {
+
+            if(error){
+                store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: 'Invalid login credentials'}));
+            } else {
+                let userId = Meteor.userId();
+                console.log("LOGGED IN AS METEOR USER: " + userId);
+
+                const user = UserRoles.findOne({userId: userId});
+                if(user){
+                    // Properly logged in so retrieve user settings
+                    const userContext = ClientUserContextServices.getInitialSelectionSettings(userId);
+
+                    // And go to the home / role selection screen
+                    store.dispatch(setCurrentUserName(user.displayName));
+                    store.dispatch(setCurrentView(ViewType.CONFIGURE));
+
+                } else {
+                    store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: 'User not recognised'}));
+
+                }
+            }
+        });
+
+    }
+
     initialise(error, role){
         if(error){
             console.log("LOGIN FAILURE: " + error);
@@ -55,7 +87,7 @@ class ClientLoginServices{
             console.log("LOGGED IN AS METEOR USER: " + userId);
 
             // Update the redux current item settings from the stored DB data
-            const userContext = ClientUserContextServices.setInitialSelectionSettings(role, userId);
+            const userContext = ClientUserContextServices.getInitialSelectionSettings(role, userId);
 
             ClientUserContextServices.setViewFromUserContext(role, userContext);
         }

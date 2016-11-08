@@ -9,6 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
+import AppConfigureContainer                from  '../../containers/app/AppConfigureContainer.jsx';
 import DesignsContainer                     from  '../../containers/select/DesignsContainer.jsx';
 import DesignVersionsContainer              from  '../../containers/select/DesignVersionsContainer.jsx';
 import EditDesignContainer                  from  '../../containers/edit/EditDesignContainer.jsx';
@@ -44,10 +45,10 @@ class AppBody extends Component {
     }
 
     render() {
-        const {view, mode, currentUserItemContext} = this.props;
+        const {view, mode, userContext} = this.props;
 
-        if(currentUserItemContext) {
-            console.log("Rendering App Body.  Current DV = " + currentUserItemContext.designVersionId);
+        if(userContext) {
+            console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
         }
 
         // The body rendered depends on the current view
@@ -57,7 +58,15 @@ class AppBody extends Component {
             case ViewType.AUTHORISE:
                 // This is the default when the app starts...
                 bodyHtml =
-                    <AppLoginContainer/>;
+                    <AppLoginContainer params={{
+                        userContext: userContext
+                    }}/>;
+                break;
+            case ViewType.CONFIGURE:
+                bodyHtml =
+                    <AppConfigureContainer params={{
+                        userContext: userContext
+                    }}/>;
                 break;
             case ViewType.DESIGNS:
                 bodyHtml =
@@ -66,14 +75,14 @@ class AppBody extends Component {
             case ViewType.SELECT:
                 bodyHtml =
                     <DesignVersionsContainer params={{
-                        currentDesignId: currentUserItemContext.designId
+                        currentDesignId: userContext.designId
                     }}/>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 bodyHtml =
                     <EditDesignContainer params={{
-                        designVersionId: currentUserItemContext.designVersionId,
+                        designVersionId: userContext.designVersionId,
                         mode: mode,
                         view: view
                     }}/>;
@@ -83,8 +92,8 @@ class AppBody extends Component {
                 // And when user chooses a new design to edit, a published design to view or to edit a design update...
                 bodyHtml =
                     <EditDesignUpdateContainer params={{
-                        designVersionId: currentUserItemContext.designVersionId,
-                        designUpdateId: currentUserItemContext.designUpdateId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
                         mode: mode,
                         view: view
                     }}/>;
@@ -96,21 +105,21 @@ class AppBody extends Component {
                 // When manager user decides to edit or view a work package
                 bodyHtml =
                     <EditWorkPackageContainer params={{
-                        designVersionId: currentUserItemContext.designVersionId,
-                        designUpdateId: currentUserItemContext.designUpdateId,
-                        workPackageId: currentUserItemContext.workPackageId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
+                        workPackageId: userContext.workPackageId,
                         mode: mode,
                         view: view,
                     }}/>;
                 break;
-            case ViewType.WORK_PACKAGE_BASE_WORK:
-            case ViewType.WORK_PACKAGE_UPDATE_WORK:
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
                 // When a Developer decides to work on a Work Package
                 bodyHtml =
                     <EditDesignImplementationContainer params={{
-                        designVersionId: currentUserItemContext.designVersionId,
-                        designUpdateId: currentUserItemContext.designUpdateId,
-                        workPackageId: currentUserItemContext.workPackageId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
+                        workPackageId: userContext.workPackageId,
                         mode: mode,
                         view: view,
                     }}/>;
@@ -135,7 +144,7 @@ function mapStateToProps(state) {
     return {
         view: state.currentAppView,
         mode: state.currentViewMode,
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 

@@ -28,12 +28,12 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Login Container.  Login if logged out or switch roles if logged in
+// Configure Container.  Change user roles
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Login Screen
-class LoginScreen extends Component {
+class ConfigureScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -41,18 +41,22 @@ class LoginScreen extends Component {
 
     render() {
 
-        const {} = this.props;
+        const {user} = this.props;
 
-        // Show Login
+        console.log("rendering configure screen with user " + user);
+
+        // Show Configuration Screen
         return(
-            <UserLogin/>
+            <UserConfiguration
+                user={user}
+            />
         );
 
     }
 }
 
-LoginScreen.propTypes = {
-
+ConfigureScreen.propTypes = {
+    user:    PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -63,15 +67,21 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-LoginScreen = connect(mapStateToProps)(LoginScreen);
+ConfigureScreen = connect(mapStateToProps)(ConfigureScreen);
 
 
 
-export default AppLoginContainer = createContainer(({params}) => {
+export default AppConfigureContainer = createContainer(({params}) => {
 
-    console.log("AppLoginContainer");
+    console.log("AppConfigureContainer.  Params UserContext = " + params.userContext);
 
-    return{}
+    // TODO move to clientContainerServices
+
+    const currentUser = UserRoles.findOne({userId: params.userContext.userId});
+    console.log("AppConfigureContainer.  User = " + currentUser);
+    return{
+        user: currentUser
+    }
 
 
-}, LoginScreen);
+}, ConfigureScreen);

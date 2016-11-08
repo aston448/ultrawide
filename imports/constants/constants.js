@@ -12,18 +12,19 @@ export const RoleType = {
 // Determines what we are looking at
 export const ViewType = {
     AUTHORISE:                  'AUTHORISE',                // Login screen
-    DESIGNS:                    'DESIGNS',                  // Designs screen
-    SELECT:                     'SELECT',                   // Main Selection Screen
-    DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',                 // Edit an unpublished design version
-    DESIGN_PUBLISHED_VIEW:      'DESIGN_PUBLISHED_VIEW',           // View a published Design Version
-    DESIGN_UPDATE_EDIT:         'DESIGN_UPDATE_EDIT',              // Edit a Design Update
-    DESIGN_UPDATE_VIEW:         'DESIGN_UPDATE_VIEW',              // View a Design Update
+    CONFIGURE:                  'CONFIGURE',                // Change user role and settings
+    DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
+    SELECT:                     'SELECT',                   // Main Selection Screen once in a Design
+    DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',          // Edit an unpublished design version
+    DESIGN_PUBLISHED_VIEW:      'DESIGN_PUBLISHED_VIEW',    // View a published Design Version
+    DESIGN_UPDATE_EDIT:         'DESIGN_UPDATE_EDIT',       // Edit a Design Update
+    DESIGN_UPDATE_VIEW:         'DESIGN_UPDATE_VIEW',       // View a Design Update
     WORK_PACKAGE_BASE_EDIT:     'WORK_PACKAGE_BASE_EDIT',   // Edit a Work Package content for a Design Version
     WORK_PACKAGE_UPDATE_EDIT:   'WORK_PACKAGE_UPDATE_EDIT', // Edit a Work Package content for a Design Update
     WORK_PACKAGE_BASE_VIEW:     'WORK_PACKAGE_BASE_VIEW',   // View a Work Package content for a Design Version
     WORK_PACKAGE_UPDATE_VIEW:   'WORK_PACKAGE_UPDATE_VIEW', // View a Work Package content for a Design Update
-    WORK_PACKAGE_BASE_WORK:     'WORK_PACKAGE_BASE_WORK',   // Work with adopted base work package as a developer
-    WORK_PACKAGE_UPDATE_WORK:   'WORK_PACKAGE_UPDATE_WORK'  // Work with adopted update work package as a developer
+    DEVELOP_BASE_WP:            'DEVELOP_BASE_WP',          // Work with adopted base work package as a developer
+    DEVELOP_UPDATE_WP:          'DEVELOP_UPDATE_WP'         // Work with adopted update work package as a developer
 
 };
 
@@ -165,6 +166,12 @@ export const UserDevScenarioStepStatus = {
     STEP_DEV_ONLY:              'STEP_DEV_ONLY',        // Step implemented but not in design
     STEP_LINKED:                'STEP_LINKED',          // We have decided this step is present in the Design too
     STEP_INVALID:               'STEP_INVALID'
+};
+
+export const LocationType = {
+    LOCATION_FEATURE_FILES:         'Feature Files Location:',
+    LOCATION_FEATURE_TEST_OUTPUT:   'Feature Test Output File:',
+    LOCATION_UNIT_TEST_OUTPUT:      'Unit Test Output File:'
 };
 
 export const DevTestTag = {

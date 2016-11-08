@@ -53,6 +53,8 @@ class AppHeaderData extends Component {
                     // Not logged in so no info known
                     headerData = 'Please log in...';
                     break;
+                case ViewType.CONFIGURE:
+                    break;
                 case ViewType.DESIGNS:
                     // Only here if no design is known or want to change to new design
                     if(currentDesign) {
@@ -106,7 +108,7 @@ class AppHeaderData extends Component {
                     break;
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
-                case ViewType.WORK_PACKAGE_BASE_WORK:
+                case ViewType.DEVELOP_BASE_WP:
                     headerData =
                         <div>
                             <span className="header-title">DESIGN: </span>
@@ -119,7 +121,7 @@ class AppHeaderData extends Component {
                     break;
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                case ViewType.WORK_PACKAGE_UPDATE_WORK:
+                case ViewType.DEVELOP_UPDATE_WP:
                     headerData =
                         <div>
                             <span className="header-title">DESIGN: </span>

@@ -308,6 +308,38 @@ input {
 .button-group-left{
     margin: 0 5px 0 0;
 }
+/* -- Role Selection ------------------------------------------------------------------------------------------------ */
+
+.role-button-active{
+    background-color: lightgoldenrodyellow;
+}
+
+.role-button-disabled{
+    color: darkgrey;
+    background-color: lightgrey;
+}
+
+.well-designer{
+    margin: 20px;
+    height: 400px;
+    color: white;
+    background-color: mediumseagreen;
+}
+
+.well-developer{
+    margin: 20px;
+    height: 400px;
+    color: white;
+    background-color: indianred;
+}
+
+.well-manager{
+    margin: 20px;
+    height: 400px;
+    color: white;
+    background-color: steelblue;
+}
+
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */
 

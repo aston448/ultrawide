@@ -57,7 +57,7 @@ class ClientMashDataServices {
         // Need to update the mash data and, if step comes from Dev, add step to Design
         log((msg) => console.log(msg), LogLevel.DEBUG, "Relocate Mash Step: View: {}, Mode: {}, DropContext: {} UserContext: {}", view, mode, targetContext, userContext);
         // Validation
-        if((view === ViewType.WORK_PACKAGE_BASE_WORK || view === ViewType.WORK_PACKAGE_UPDATE_WORK) &&
+        if((view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP) &&
             mode === ViewMode.MODE_EDIT
             && targetContext === DisplayContext.EDIT_STEP_LINKED &&
             mashMoveDropAllowed(targetContext)
@@ -111,7 +111,7 @@ class ClientMashDataServices {
     exportFeatureScenario(view, scenarioReferenceId, userContext){
 
         // Validation - must be in Dev Work view and must be a feature in context
-        if((view === ViewType.WORK_PACKAGE_BASE_WORK || view === ViewType.WORK_PACKAGE_UPDATE_WORK) && userContext.featureReferenceId != 'NONE'){
+        if((view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP) && userContext.featureReferenceId != 'NONE'){
 
             // To do this we update the scenario and its steps as linked and then re-export the Feature
             Meteor.call('mash.exportScenario', scenarioReferenceId, userContext);

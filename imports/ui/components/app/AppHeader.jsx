@@ -56,6 +56,11 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setViewDesigns();
     }
 
+    onGoToConfigure(){
+        // Back to Selection view
+        ClientAppHeaderServices.setViewConfigure();
+    }
+
     onGoToSelection(){
         // Back to Selection view
         ClientAppHeaderServices.setViewSelection();
@@ -104,8 +109,11 @@ class AppHeader extends Component {
         let domainDictionaryButton =
             <Button bsSize="xs" bsStyle={domStyle} onClick={ () => this.onToggleDomainDictionary(domainDictionaryVisible)}>Domain</Button>;
 
+        let configureScreenButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Home</Button>;
+
         let selectionScreenButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Home</Button>;
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection</Button>;
 
         let refreshTestsButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext)}>Get Test Results</Button>;
@@ -132,14 +140,19 @@ class AppHeader extends Component {
         switch(view){
             case ViewType.AUTHORISE:
                 break;
+            case ViewType.CONFIGURE:
+                headerUserInfo = userData;
+                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
+                break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
                 headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
+                headerBottomActions = <ButtonToolbar>{configureScreenButton}</ButtonToolbar>;
                 break;
             case ViewType.SELECT:
                 headerUserInfo = userData;
                 headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
-                headerBottomActions = <ButtonToolbar>{designsButton}</ButtonToolbar>;
+                headerBottomActions = <ButtonToolbar>{designsButton}{configureScreenButton}</ButtonToolbar>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -163,6 +176,7 @@ class AppHeader extends Component {
                     <ButtonToolbar>
                         {domainDictionaryButton}
                         {selectionScreenButton}
+                        {configureScreenButton}
                     </ButtonToolbar>;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -177,6 +191,7 @@ class AppHeader extends Component {
                         </ButtonGroup>
                         {domainDictionaryButton}
                         {selectionScreenButton}
+                        {configureScreenButton}
                     </ButtonToolbar>;
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -187,16 +202,18 @@ class AppHeader extends Component {
                     <ButtonToolbar>
                         {domainDictionaryButton}
                         {selectionScreenButton}
+                        {configureScreenButton}
                     </ButtonToolbar>;
                 break;
-            case ViewType.WORK_PACKAGE_BASE_WORK:
-            case ViewType.WORK_PACKAGE_UPDATE_WORK:
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
                 headerUserInfo = userData;
                 headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
                 headerBottomActions =
                     <ButtonToolbar>
                         {domainDictionaryButton}
                         {selectionScreenButton}
+                        {configureScreenButton}
                         {refreshTestsButton}
                         {exportToDevButton}
                     </ButtonToolbar>;

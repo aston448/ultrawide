@@ -198,9 +198,9 @@ class ClientWorkPackageServices {
 
         // Switch to Dev View
         if(userContext.designUpdateId === 'NONE') {
-            store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_WORK));
+            store.dispatch(setCurrentView(ViewType.DEVELOP_BASE_WP));
         } else {
-            store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_WORK));
+            store.dispatch(setCurrentView(ViewType.DEVELOP_UPDATE_WP));
         }
     }
 

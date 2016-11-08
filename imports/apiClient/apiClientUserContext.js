@@ -38,19 +38,8 @@ import {setCurrentView, changeApplicationMode, setCurrentRole, setCurrentUserNam
 class ClientUserContextServices {
 
 
-    setInitialSelectionSettings(role, userId){
-        // TODO pass in proper user
+    getInitialSelectionSettings(userId){
 
-        // What role has logged in?  Set global state.
-        store.dispatch(setCurrentRole(role));
-
-
-        // Set the user name
-        const userData = UserRoles.findOne({userId: userId});
-
-        if(userData){
-            store.dispatch(setCurrentUserName(userData.displayName));
-        }
 
         // Get the stored context for the user
         // Get last known state from the DB
@@ -286,9 +275,12 @@ class ClientUserContextServices {
 
     setViewFromUserContext(role, userItemContext){
 
+        // First set the chosen user role
+        store.dispatch(setCurrentRole(role));
+
         // Decide where to go depending on the user context
         if(userItemContext){
-            console.log("LOGIN CONTEXT: Design: " + userItemContext.designId);
+            console.log("CONTEXT: Design: " + userItemContext.designId);
 
             switch(role){
                 case RoleType.DESIGNER:
