@@ -101,9 +101,11 @@ class DesignItemMashList extends Component {
         let panelHeader = '';
         let secondPanelHeader = '';
         let unitTestsHeader = '';
+        let unLinkedUnitTestsHeader = '';
         let itemHeader = '';
         let secondPanel = <div></div>;
         let unitTestsPanel = <div></div>;
+        let unlinkedUnitTestsPanel = <div></div>;
 
         const nameData = UserContextServices.getContextNameData(userContext);
 
@@ -117,9 +119,10 @@ class DesignItemMashList extends Component {
                 itemHeader = 'Feature';
                 break;
             case ComponentType.FEATURE:
-                panelHeader = 'Scenarios in ' + nameData.feature;
+                panelHeader = 'ACCEPTANCE TEST results for Scenarios in ' + nameData.feature;
                 secondPanelHeader = 'Scenarios in ' + nameData.feature + ' NOT in Design';
                 unitTestsHeader = 'UNIT TEST results for Scenarios in ' + nameData.feature;
+                unlinkedUnitTestsHeader = 'UNIT TESTs not linked to Scenarios - consider changing Suite name?';
                 itemHeader = 'Scenario';
 
                 if(ClientMashDataServices.featureHasUnknownScenarios(userContext)){
@@ -149,30 +152,21 @@ class DesignItemMashList extends Component {
 
                 unitTestsPanel =
                     <Panel className="panel-text panel-text-body" header={unitTestsHeader}>
-                        {/*<InputGroup>*/}
-                            {/*<Grid className="close-grid">*/}
-                                {/*<Row>*/}
-                                    {/*<Col md={8} className="close-col">*/}
-                                        {/*{itemHeader}*/}
-                                    {/*</Col>*/}
-                                    {/*<Col md={2} className="close-col">*/}
-                                        {/*Status*/}
-                                    {/*</Col>*/}
-                                    {/*<Col md={2} className="close-col">*/}
-                                        {/*Test*/}
-                                    {/*</Col>*/}
-                                {/*</Row>*/}
-                            {/*</Grid>*/}
-                            {/*<InputGroup.Addon className="invisible">*/}
-                                {/*<div><Glyphicon glyph="star"/></div>*/}
-                            {/*</InputGroup.Addon>*/}
-                        {/*</InputGroup>*/}
                         <MashFeatureAspectContainer params={{
                             userContext:    userContext,
                             displayContext: DisplayContext.VIEW_UNIT_MASH,
                             view:           view
                         }}/>
                     </Panel>;
+
+                unlinkedUnitTestsPanel =
+                        <Panel className="panel-text panel-text-body" header={unLinkedUnitTestsHeader}>
+                            <MashUnitTestContainer params={{
+                                userContext:    userContext,
+                                displayContext: DisplayContext.VIEW_UNIT_UNLINKED,
+                                view:           view
+                            }}/>
+                        </Panel>;
 
                 break;
             case ComponentType.FEATURE_ASPECT:
@@ -221,33 +215,41 @@ class DesignItemMashList extends Component {
                     if(ClientMashDataServices.featureHasAspects(userContext)){
                         mainPanel =
                             <div>
-                                <Panel className="panel-text panel-text-body" header={panelHeader}>
-                                    <InputGroup>
-                                        <Grid className="close-grid">
-                                            <Row>
-                                                <Col md={8} className="close-col">
-                                                    {itemHeader}
-                                                </Col>
-                                                <Col md={2} className="close-col">
-                                                    Status
-                                                </Col>
-                                                <Col md={2} className="close-col">
-                                                    Test
-                                                </Col>
-                                            </Row>
-                                        </Grid>
-                                        <InputGroup.Addon className="invisible">
-                                            <div><Glyphicon glyph="star"/></div>
-                                        </InputGroup.Addon>
-                                    </InputGroup>
-                                    <MashFeatureAspectContainer params={{
-                                        userContext:    userContext,
-                                        displayContext: DisplayContext.VIEW_ACCEPTANCE_MASH,
-                                        view:           view
-                                    }}/>
-                                </Panel>
-                                {secondPanel}
-                                {unitTestsPanel}
+                                <Grid>
+                                    <Row>
+                                        <Col md={6} className="scroll-col">
+                                            <Panel className="panel-text panel-text-body" header={panelHeader}>
+                                                <InputGroup>
+                                                    <Grid className="close-grid">
+                                                        <Row>
+                                                            <Col md={8} className="close-col">
+                                                                {itemHeader}
+                                                            </Col>
+                                                            <Col md={2} className="close-col">
+                                                                Status
+                                                            </Col>
+                                                            <Col md={2} className="close-col">
+                                                                Test
+                                                            </Col>
+                                                        </Row>
+                                                    </Grid>
+                                                    <InputGroup.Addon className="invisible">
+                                                        <div><Glyphicon glyph="star"/></div>
+                                                    </InputGroup.Addon>
+                                                </InputGroup>
+                                                <MashFeatureAspectContainer params={{
+                                                    userContext:    userContext,
+                                                    displayContext: DisplayContext.VIEW_ACCEPTANCE_MASH,
+                                                    view:           view
+                                                }}/>
+                                            </Panel>
+                                            {secondPanel}
+                                        </Col>
+                                        <Col md={6} className="scroll-col">
+                                            {unitTestsPanel}
+                                        </Col>
+                                    </Row>
+                                </Grid>
                             </div>
                     } else {
                         // Just render the scenarios

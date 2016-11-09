@@ -56,7 +56,7 @@ class MashFeatureAspectScenarioList extends Component {
         });
     }
 
-    renderUnitScenarios(scenarios){
+    renderUnitScenarios(scenarios, displayContext){
 
         return scenarios.map((scenario) => {
 
@@ -64,6 +64,7 @@ class MashFeatureAspectScenarioList extends Component {
                 <MashUnitTestScenario
                     key={scenario._id}
                     scenario={scenario}
+                    displayContext={displayContext}
                 />
             );
 
@@ -83,9 +84,10 @@ class MashFeatureAspectScenarioList extends Component {
                 );
                 break;
             case DisplayContext.VIEW_UNIT_MASH:
+            case DisplayContext.VIEW_UNIT_UNLINKED:
                 return(
                     <div>
-                        {this.renderUnitScenarios(scenarios)}
+                        {this.renderUnitScenarios(scenarios, displayContext)}
                     </div>
                 );
                 break;

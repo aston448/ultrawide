@@ -8,7 +8,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
+import {DisplayContext, ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
 import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
@@ -50,17 +50,39 @@ class MashUnitTestScenario extends Component {
     render(){
         const { scenario, displayContext, userContext } = this.props;
 
-        // All this is is the Scenario Name plus a list of its scenarios
+        let item = '';
+
+        switch(displayContext){
+            case DisplayContext.VIEW_UNIT_MASH:
+                // All this is is the Scenario Name plus a list of its scenarios
+                item = <div>
+                    <InputGroup>
+                        <div className={"mash-unit-test-scenario"}>
+                            {scenario.mashItemName}
+                        </div>
+                    </InputGroup>
+                    <MashUnitTestContainer params={{
+                        scenario: scenario,
+                        displayContext: displayContext,
+                        userContext: userContext
+                    }}/>
+                </div>;
+                break;
+            case DisplayContext.VIEW_UNIT_UNLINKED:
+                // Here there is no linked Scenario
+                item = <div>
+                    <MashUnitTestContainer params={{
+                        scenario: scenario,
+                        displayContext: displayContext,
+                        userContext: userContext
+                    }}/>
+                </div>;
+                break;
+        }
+
         return(
             <div>
-                <InputGroup>
-                    <div className={"mash-unit-test-scenario"}>
-                        {scenario.mashItemName}
-                    </div>
-                </InputGroup>
-                <MashUnitTestContainer params={{
-                    scenario: scenario
-                }}/>
+                {item}
             </div>
         )
     }
@@ -68,7 +90,8 @@ class MashUnitTestScenario extends Component {
 }
 
 MashUnitTestScenario.propTypes = {
-    scenario: PropTypes.object.isRequired
+    scenario: PropTypes.object,
+    displayContext: PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

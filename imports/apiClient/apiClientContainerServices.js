@@ -1051,6 +1051,14 @@ class ClientContainerServices{
 
     }
 
+    getMashUnlinkedUnitTestResults(userContext){
+
+        return UserUnitTestResults.find({
+            userId:                         userContext.userId,
+            designScenarioReferenceId:      'NONE'
+        }).fetch();
+    }
+
     getMashScenarioSteps(userContext){
         // Returns steps for the current scenario that are:
         // 1. In Design Only

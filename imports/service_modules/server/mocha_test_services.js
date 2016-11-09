@@ -31,9 +31,10 @@ class MochaTestServices{
             // Read the test results file
 
             const resultsFile = userContext.moduleTestResultsLocation;
+            let resultsText = '';
 
             try {
-                const resultsText = fs.readFileSync(resultsFile);
+                resultsText = fs.readFileSync(resultsFile);
             } catch (e){
                 console.log("Failed to open mocha tests file: " + e);
                 return;

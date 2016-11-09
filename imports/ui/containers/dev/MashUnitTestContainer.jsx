@@ -68,7 +68,7 @@ class MashUnitTestList extends Component {
         } else {
             return (
                 <div className="unit-test-none">
-                    No unit tests found for this scenario
+                    No unit tests found
                 </div>
             )
         }
@@ -95,9 +95,19 @@ MashUnitTestList = connect(mapStateToProps)(MashUnitTestList);
 
 export default MashUnitTestContainer = createContainer(({params}) => {
 
-    let testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.scenario);
+    let testResults = [];
 
-    console.log("Found " + testResults.length + " unit tests for scenario " + params.scenario.designScenarioReferenceId + " and user " + params.scenario.userId)
+    switch(params.displayContext){
+        case DisplayContext.VIEW_UNIT_MASH:
+            testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.scenario);
+            console.log("Found " + testResults.length + " unit tests for scenario " + params.scenario.designScenarioReferenceId + " and user " + params.scenario.userId) ;
+            break;
+
+        case DisplayContext.VIEW_UNIT_UNLINKED:
+            testResults = ClientContainerServices.getMashUnlinkedUnitTestResults(params.userContext);
+    }
+
+
 
     return{
         testResults: testResults

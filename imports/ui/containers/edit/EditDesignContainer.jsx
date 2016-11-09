@@ -158,13 +158,13 @@ class DesignApplicationsList extends Component {
                 layout =
                     <Grid>
                         <Row>
-                            <Col md={4} className="scroll-col">
+                            <Col md={3} className="scroll-col">
                                 {baseEditorComponent}
                             </Col>
                             <Col md={3}>
                                 {textContainer}
                             </Col>
-                            <Col md={5}>
+                            <Col md={6}>
                                 {mash}
                             </Col>
                         </Row>
