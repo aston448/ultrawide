@@ -59,7 +59,54 @@ describe('A new Design can only be added by a Designer', function () {
     });
 });
 
+describe('Only a Designer can update a Design name', function () {
 
+    describe('DesignValidationServices unit tests', function () {
+
+        it('returns VALID when a Designer updates a Design name', function () {
+
+            const otherDesigns = Designs.find({designName: 'Active Design'}).fetch();
+            const role = RoleType.DESIGNER;
+            chai.assert.equal(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), 'VALID', 'Attempt to add a design by a Designer returned INVALID!');
+        });
+
+        it('returns INVALID when a Developer updates a Design name', function () {
+
+            const otherDesigns = Designs.find({designName: 'Active Design'}).fetch();
+            const role = RoleType.DEVELOPER;
+            chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), 'VALID', 'Attempt to add a design by a Developer returned VALID!');
+        });
+
+        it('returns INVALID when a Manager updates a Design name', function () {
+
+            const otherDesigns = Designs.find({designName: 'Active Design'}).fetch();
+            const role = RoleType.MANAGER;
+            chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), 'VALID', 'Attempt to add a design by a Manager returned VALID!');
+        });
+
+    });
+});
+
+describe('A Design cannot be given the same name as another existing Design', function () {
+
+    describe('DesignValidationServices unit tests', function () {
+
+        it('returns VALID when a Designer updates a Design name to a new name', function () {
+
+            const otherDesigns = Designs.find({}).fetch();
+            const role = RoleType.DESIGNER;
+            chai.assert.equal(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), 'VALID', 'Attempt to update name to new name returned INVALID!');
+        });
+
+        it('returns INVALID when a Designer updates a Design name to an existing name', function () {
+
+            const otherDesigns = Designs.find({}).fetch();
+            const role = RoleType.DESIGNER;
+            chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'Active Design', otherDesigns), 'VALID', 'Attempt to update name to existing name returned VALID!');
+        });
+
+    });
+});
 
 describe('A Designer can remove a Design that is removable', function () {
 
