@@ -16,7 +16,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel } from '../constants/constants.js';
+import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 
 // REDUX services
@@ -242,7 +242,10 @@ class ClientUserContextServices {
                 featureReferenceId:         userContext.featureReferenceId,
                 featureAspectReferenceId:   userContext.featureAspectReferenceId,
                 scenarioReferenceId:        userContext.scenarioReferenceId,
-                scenarioStepId:             userContext.scenarioStepId
+                scenarioStepId:             userContext.scenarioStepId,
+                featureFilesLocation:       userContext.featureFilesLocation,
+                featureTestResultsLocation: userContext.featureTestResultsLocation,
+                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
@@ -262,7 +265,10 @@ class ClientUserContextServices {
                 featureReferenceId:         'NONE',
                 featureAspectReferenceId:   'NONE',
                 scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE'
+                scenarioStepId:             'NONE',
+                featureFilesLocation:       'NONE',
+                featureTestResultsLocation: 'NONE',
+                moduleTestResultsLocation:  'NONE',
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, false)); // Don't save - we are reading from DB here!
@@ -270,6 +276,48 @@ class ClientUserContextServices {
             return emptyContext;
         }
 
+
+    }
+
+    updateContextFilePath(type, userContext, newPath){
+
+        // Set to original values
+        let newFeatureFilesLocation = userContext.featureFilesLocation;
+        let newFeatureTestResultsLocation = userContext.featureTestResultsLocation;
+        let newModuleTestResultsLocation = userContext.moduleTestResultsLocation;
+
+        // Then update the one that changed
+        switch(type){
+            case LocationType.LOCATION_FEATURE_FILES:
+                newFeatureFilesLocation = newPath;
+                break;
+            case LocationType.LOCATION_FEATURE_TEST_OUTPUT:
+                newFeatureTestResultsLocation = newPath;
+                break;
+            case LocationType.LOCATION_UNIT_TEST_OUTPUT:
+                newModuleTestResultsLocation = newPath;
+                break;
+        }
+
+        // And dispatch a new context
+        const context = {
+            userId:                     userContext.userId,
+            designId:                   userContext.designId,
+            designVersionId:            userContext.designVersionId,
+            designUpdateId:             userContext.designUpdateId,
+            workPackageId:              userContext.workPackageId,
+            designComponentId:          userContext.designComponentId,
+            designComponentType:        userContext.designComponentType,
+            featureReferenceId:         userContext.featureReferenceId,
+            featureAspectReferenceId:   userContext.featureAspectReferenceId,
+            scenarioReferenceId:        userContext.scenarioReferenceId,
+            scenarioStepId:             userContext.scenarioStepId,
+            featureFilesLocation:       newFeatureFilesLocation,
+            featureTestResultsLocation: newFeatureTestResultsLocation,
+            moduleTestResultsLocation:  newModuleTestResultsLocation
+        };
+
+        store.dispatch(setCurrentUserItemContext(context, true));
 
     }
 

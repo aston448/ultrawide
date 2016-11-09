@@ -68,21 +68,21 @@ class UserConfiguration extends Component {
                         />
                     </Col>
                 </Row>
-                {/*<Row>*/}
-                    {/*<LocationInput*/}
-                        {/*type={LocationType.LOCATION_FEATURE_FILES}*/}
-                    {/*/>*/}
-                {/*</Row>*/}
-                {/*<Row>*/}
-                    {/*<LocationInput*/}
-                        {/*type={LocationType.LOCATION_FEATURE_TEST_OUTPUT}*/}
-                    {/*/>*/}
-                {/*</Row>*/}
-                {/*<Row>*/}
-                    {/*<LocationInput*/}
-                        {/*type={LocationType.LOCATION_UNIT_TEST_OUTPUT}*/}
-                    {/*/>*/}
-                {/*</Row>*/}
+                <Row>
+                    <LocationInput
+                        type={LocationType.LOCATION_FEATURE_FILES}
+                    />
+                </Row>
+                <Row>
+                    <LocationInput
+                        type={LocationType.LOCATION_FEATURE_TEST_OUTPUT}
+                    />
+                </Row>
+                <Row>
+                    <LocationInput
+                        type={LocationType.LOCATION_UNIT_TEST_OUTPUT}
+                    />
+                </Row>
             </Grid>
 
         );

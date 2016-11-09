@@ -7,10 +7,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
+import DesignComponentTarget        from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
-import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
+import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
+import DesignDevMashContainer       from '../dev/DesignDevMashContainer.jsx';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -18,7 +19,7 @@ import ClientDesignComponentServices from '../../../apiClient/apiClientDesignCom
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -65,7 +66,7 @@ class DesignApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, currentUserItemContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
+        const {baseApplications, userContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
 
         let layout = '';
 
@@ -94,7 +95,7 @@ class DesignApplicationsList extends Component {
                         <td className="control-table-data-app">
                             <DesignComponentAdd
                                 addText="Add Application"
-                                onClick={ () => this.onAddApplication(view, mode, currentUserItemContext.designVersionId)}
+                                onClick={ () => this.onAddApplication(view, mode, userContext.designVersionId)}
                             />
                         </td>
                     </tr>
@@ -105,8 +106,8 @@ class DesignApplicationsList extends Component {
         // Domain Dictionary
         let domainDictionary =
             <DomainDictionaryContainer params={{
-                designId: currentUserItemContext.designId,
-                designVersionId: currentUserItemContext.designVersionId
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId
             }}/>;
 
         // Create the layout depending on the current view...
@@ -122,12 +123,19 @@ class DesignApplicationsList extends Component {
             // Text and Scenario Steps for new design edit
             let textContainer =
                 <DesignComponentTextContainer params={{
-                    currentContext: currentUserItemContext,
+                    currentContext: userContext,
                     currentItemName: currentItemName,
                     mode: mode,
                     view: view,
                     displayContext: displayContext
                 }}/>;
+
+            let mash =
+                <Panel header="Implementation Status" className="panel-update panel-update-body">
+                    <DesignDevMashContainer params={{
+                        userContext: userContext
+                    }}/>
+                </Panel>;
 
             if(domainDictionaryVisible){
                 // Layout is DESIGN | TEXT | DICTIONARY
@@ -146,15 +154,18 @@ class DesignApplicationsList extends Component {
                         </Row>
                     </Grid>;
             } else {
-                // Layout is DESIGN | TEXT
+                // Layout is DESIGN | TEXT | MASH
                 layout =
                     <Grid>
                         <Row>
-                            <Col md={6} className="scroll-col">
+                            <Col md={4} className="scroll-col">
                                 {baseEditorComponent}
                             </Col>
-                            <Col md={6}>
+                            <Col md={3}>
                                 {textContainer}
+                            </Col>
+                            <Col md={5}>
+                                {mash}
                             </Col>
                         </Row>
                     </Grid>;
@@ -188,7 +199,7 @@ DesignApplicationsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserItemContext: state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
         currentItemName: state.currentDesignComponentName,
         view: state.currentAppView,
         mode: state.currentViewMode,

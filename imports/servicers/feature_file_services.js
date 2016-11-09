@@ -16,7 +16,7 @@ import {log} from '../common/utils.js';
 class FeatureFileServices{
 
     // Convert a whole base design feature into a Gherkin feature file
-    writeFeatureFile(featureReferenceId, userContext, filePath){
+    writeFeatureFile(featureReferenceId, userContext){
 
         // There are two contexts in which this function is called:
         // 1. Export a Feature File from a Design Feature
@@ -25,7 +25,7 @@ class FeatureFileServices{
         // In context 1 we want to include everything in the Design Feature
         // In context 2 we only want to include Scenario Steps that are LINKED in Ultrawide
 
-        log((msg) => console.log(msg), LogLevel.TRACE, 'Exporting feature file to {}', filePath);
+        log((msg) => console.log(msg), LogLevel.TRACE, 'Exporting feature file to {}', userContext.featureFilesLocation);
 
 
         const wp = WorkPackages.findOne({_id: userContext.workPackageId});
@@ -268,7 +268,7 @@ class FeatureFileServices{
             });
         }
 
-        fs.writeFileSync(filePath + fileName, fileText);
+        fs.writeFileSync(userContext.featureFilesLocation + fileName, fileText);
 
     };
 

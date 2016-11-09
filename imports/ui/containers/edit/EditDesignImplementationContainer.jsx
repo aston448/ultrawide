@@ -102,7 +102,7 @@ class DevApplicationsList extends Component {
         if(wpApplications) {
 
             if(domainDictionaryVisible) {
-                // Layout is DESIGN | DESIGN MASH | DEV MASH | DEV FILES | DICTIONARY
+                // Layout is DESIGN | MASH | DEV FILES | DICTIONARY
                 layout =
                     <Grid>
                         <Row>
@@ -122,7 +122,7 @@ class DevApplicationsList extends Component {
                     </Grid>;
 
             } else {
-                // Layout is DESIGN | DESIGN MASH | DEV MASH | DEV FILES
+                // Layout is DESIGN | MASH | DEV FILES
                 layout =
                     <Grid>
                         <Row>

@@ -1,6 +1,7 @@
 import fs from 'fs';
 
 import { UserRoles }                    from '../collections/users/user_roles.js';
+import { UserCurrentEditContext }       from '../collections/context/user_current_edit_context.js';
 import { Designs }                      from '../collections/design/designs.js';
 import { DesignVersions }               from '../collections/design/design_versions.js';
 import { DesignUpdates }                from '../collections/design_update/design_updates.js';
@@ -33,6 +34,9 @@ class ImpExServices{
 
         // User Data
         this.produceExportFile(UserRoles, 'USERS');
+
+        // User Context
+        this.produceExportFile(UserCurrentEditContext, 'USER_CONTEXT');
 
         // Designs
         this.produceExportFile(Designs, 'DESIGNS');
@@ -82,6 +86,7 @@ class ImpExServices{
 
         // Users - TODO - currently being created by fixtures
 
+        let usersMapping = [];
         let designsMapping = [];
         let designVersionsMapping = [];
         let designUpdatesMapping = [];
@@ -100,6 +105,79 @@ class ImpExServices{
         let workPackageComponentId = null;
         let featureBackgroundStepId = null;
         let scenarioStepId = null;
+
+
+        // User Data ===================================================================================================
+
+        // User context is completely reset except for the path information which is restored
+
+        let userData = '';
+        let userContextData = '';
+        let users = [];
+        let userContexts = [];
+
+        try {
+            userData = fs.readFileSync(path + 'USERS.EXP');
+            userContextData = fs.readFileSync(path + 'USER_CONTEXT.EXP');
+            users = JSON.parse(userData);
+            userContexts = JSON.parse(userContextData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open User export files: {}", e);
+        }
+
+        if(users.length > 0){
+
+            users.forEach((user) => {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Processing User : {}", user.displayName);
+
+                // Create a new Meteor account
+                let userId = Accounts.createUser(
+                    {
+                        username: user.userName,
+                        password: user.userName
+                    }
+                );
+
+                UserRoles.insert({
+                    userId: userId,
+                    userName: user.userName,
+                    displayName: user.displayName,
+                    isDesigner: user.isDesigner,
+                    isDeveloper: user.isDeveloper,
+                    isManager: user.isManager
+                });
+
+                usersMapping.push({oldId: user.userId, newId: userId});
+
+                // And create some basic new User Context
+                userContexts.forEach((userContext) => {
+
+                    if(userContext.userId === user.userId){
+                        // This context relates to the old user id so insert a new context, just restoring path info
+
+                        UserCurrentEditContext.insert({
+                            userId:                     userId,             // New User Id
+                            designId:                   'NONE',
+                            designVersionId:            'NONE',
+                            designUpdateId:             'NONE',
+                            workPackageId:              'NONE',
+                            designComponentId:          'NONE',
+                            designComponentType:        'NONE',
+
+                            featureReferenceId:         'NONE',
+                            featureAspectReferenceId:   'NONE',
+                            scenarioReferenceId:        'NONE',
+                            scenarioStepId:             'NONE',
+
+                            featureFilesLocation:       userContext.featureFilesLocation,
+                            featureTestResultsLocation: userContext.featureTestResultsLocation,
+                            moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                        });
+                    }
+                })
+
+            });
+        }
 
 
         // Design Items ================================================================================================

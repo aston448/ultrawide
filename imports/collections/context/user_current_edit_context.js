@@ -16,10 +16,15 @@ let Schema = new SimpleSchema({
     workPackageId:              {type: String, defaultValue: 'NONE'},       // Current work package (if any)
     designComponentId:          {type: String, defaultValue: 'NONE'},       // The actual component (if any)
     designComponentType:        {type: String, defaultValue: 'NONE'},       // Useful information when displaying DEV Mash
+
     featureReferenceId:         {type: String, defaultValue: 'NONE'},       // DEV Mash Feature Ref (if any)
     featureAspectReferenceId:   {type: String, defaultValue: 'NONE'},       // DEV Mash Feature Aspect Ref (if any)
     scenarioReferenceId:        {type: String, defaultValue: 'NONE'},       // DEV Mash Scenario Ref (if any)
     scenarioStepId:             {type: String, defaultValue: 'NONE'},       // DEV Mash Step Ref (if any)
+
+    featureFilesLocation:       {type: String, defaultValue: 'NONE'},   // Location of feature files in application being tested
+    featureTestResultsLocation: {type: String, defaultValue: 'NONE'},   // Location of JSON output file(s) for feature tests
+    moduleTestResultsLocation:  {type: String, defaultValue: 'NONE'},   // Location of JSON output file(s) for unit / module tests
 });
 
 UserCurrentEditContext.attachSchema(Schema);

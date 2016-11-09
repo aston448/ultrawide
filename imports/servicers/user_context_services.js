@@ -18,16 +18,19 @@ class UserContextServices{
         // Add the new one
         UserCurrentEditContext.insert(
             {
-                userId:                 context.userId,
-                designId:               context.designId,
-                designVersionId:        context.designVersionId,
-                designUpdateId:         context.designUpdateId,
-                workPackageId:          context.workPackageId,
-                designComponentId:      context.designComponentId,
-                designComponentType:    context.designComponentType,
-                featureReferenceId:     context.featureReferenceId,
-                scenarioReferenceId:    context.scenarioReferenceId,
-                scenarioStepId:         context.scenarioStepId
+                userId:                     context.userId,
+                designId:                   context.designId,
+                designVersionId:            context.designVersionId,
+                designUpdateId:             context.designUpdateId,
+                workPackageId:              context.workPackageId,
+                designComponentId:          context.designComponentId,
+                designComponentType:        context.designComponentType,
+                featureReferenceId:         context.featureReferenceId,
+                scenarioReferenceId:        context.scenarioReferenceId,
+                scenarioStepId:             context.scenarioStepId,
+                featureFilesLocation:       context.featureFilesLocation,
+                featureTestResultsLocation: context.featureTestResultsLocation,
+                moduleTestResultsLocation:  context.moduleTestResultsLocation
             }
         )
     };

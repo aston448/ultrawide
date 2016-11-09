@@ -55,8 +55,8 @@ class UserLogin extends Component {
     }
 
     // Temp dev timesaver
-    onLoginUser1(){
-        ClientLoginServices.userLogin('user1', 'user1');
+    onLoginUser(userName, password){
+        ClientLoginServices.userLogin(userName, password);
     }
 
     render() {
@@ -76,8 +76,14 @@ class UserLogin extends Component {
                     <Button onClick={() => this.onLogin()}>
                         Submit
                     </Button>
-                    <Button onClick={() => this.onLoginUser1()}>
-                        Login user1
+                    <Button onClick={() => this.onLoginUser('gloria', 'gloria')}>
+                        Login Designer
+                    </Button>
+                    <Button onClick={() => this.onLoginUser('hugh', 'hugh')}>
+                        Login Developer
+                    </Button>
+                    <Button onClick={() => this.onLoginUser('miles', 'miles')}>
+                        Login Manager
                     </Button>
                 </form>
             </Well>

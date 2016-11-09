@@ -27,14 +27,12 @@ class ClientFeatureFileServices {
 
     writeFeatureFile(featureReferenceId, userContext){
 
-        // Get location data
-        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
 
-        if(featureReferenceId && devContext) {
+        if(featureReferenceId && userContext.featureFilesLocation != 'NONE') {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}', devContext.featureFilesLocation);
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}', userContext.featureFilesLocation);
 
-            Meteor.call('featureFiles.writeFeatureFile', featureReferenceId, userContext, devContext.featureFilesLocation);
+            Meteor.call('featureFiles.writeFeatureFile', featureReferenceId, userContext);
             return true;
 
         } else {

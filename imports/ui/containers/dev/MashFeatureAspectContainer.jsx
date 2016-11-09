@@ -90,7 +90,7 @@ MashFeatureAspectList = connect(mapStateToProps)(MashFeatureAspectList);
 export default MashFeatureAspectContainer = createContainer(({params}) => {
 
 
-    let featureAspects = ClientContainerServices.getMashFeatureAspects(params.userContext);
+    let featureAspects = ClientContainerServices.getMashFeatureAspects(params.userContext, params.view);
 
     console.log("Found " + featureAspects.length + " feature aspects for Container");
 

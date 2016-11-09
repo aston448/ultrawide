@@ -29,8 +29,15 @@ class MochaTestServices{
             UserUnitTestResults.remove({userId: userContext.userId});
 
             // Read the test results file
-            const resultsFile = process.env["PWD"] + '/mocha-unit-output.json';
-            const resultsText = fs.readFileSync(resultsFile);
+
+            const resultsFile = userContext.moduleTestResultsLocation;
+
+            try {
+                const resultsText = fs.readFileSync(resultsFile);
+            } catch (e){
+                console.log("Failed to open mocha tests file: " + e);
+                return;
+            }
 
             const cleanText = this.cleanResults(resultsText.toString());
 

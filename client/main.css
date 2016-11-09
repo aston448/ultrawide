@@ -321,25 +321,28 @@ input {
 
 .well-designer{
     margin: 20px;
-    height: 400px;
+    height: 300px;
     color: white;
     background-color: mediumseagreen;
 }
 
 .well-developer{
     margin: 20px;
-    height: 400px;
+    height: 300px;
     color: white;
     background-color: indianred;
 }
 
 .well-manager{
     margin: 20px;
-    height: 400px;
+    height: 300px;
     color: white;
     background-color: steelblue;
 }
 
+.path-item{
+    margin: 30px;
+}
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */
 

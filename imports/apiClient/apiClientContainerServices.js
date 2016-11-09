@@ -998,9 +998,12 @@ class ClientContainerServices{
 
     };
 
-    getMashFeatureAspects(userContext){
+    getMashFeatureAspects(userContext, view){
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Getting mash feature aspects for component type {}", userContext.designComponentType);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Getting mash feature aspects for component {} userId: {} DV: {} DU: {} WP: {} FRef: {}",
+            userContext.designComponentType, userContext.userId, userContext.designVersionId,
+            userContext.designUpdateId, userContext.workPackageId, userContext.featureReferenceId);
+
 
         if(userContext.designComponentType === ComponentType.FEATURE){
 

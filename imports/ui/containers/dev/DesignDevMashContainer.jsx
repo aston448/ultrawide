@@ -94,7 +94,7 @@ class DesignItemMashList extends Component {
 
     render() {
 
-        const {designMashItemData, currentUserRole, userContext} = this.props;
+        const {designMashItemData, currentUserRole, userContext, view} = this.props;
 
         console.log("Rendering mash container with user context component type " + userContext.designComponentType);
 
@@ -168,8 +168,9 @@ class DesignItemMashList extends Component {
                             {/*</InputGroup.Addon>*/}
                         {/*</InputGroup>*/}
                         <MashFeatureAspectContainer params={{
-                            userContext: userContext,
-                            displayContext: DisplayContext.VIEW_UNIT_MASH
+                            userContext:    userContext,
+                            displayContext: DisplayContext.VIEW_UNIT_MASH,
+                            view:           view
                         }}/>
                     </Panel>;
 
@@ -240,8 +241,9 @@ class DesignItemMashList extends Component {
                                         </InputGroup.Addon>
                                     </InputGroup>
                                     <MashFeatureAspectContainer params={{
-                                        userContext: userContext,
-                                        displayContext: DisplayContext.VIEW_ACCEPTANCE_MASH
+                                        userContext:    userContext,
+                                        displayContext: DisplayContext.VIEW_ACCEPTANCE_MASH,
+                                        view:           view
                                     }}/>
                                 </Panel>
                                 {secondPanel}
@@ -301,8 +303,9 @@ DesignItemMashList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserRole: state.currentUserRole,
-        userContext: state.currentUserItemContext
+        currentUserRole:    state.currentUserRole,
+        userContext:        state.currentUserItemContext,
+        view:               state.currentAppView
     }
 }
 

@@ -73,7 +73,7 @@ class RoleSelect extends Component {
 
         return(
             <Well className={wellStyle}>
-                <Button enabled={active} className={roleButtonStyle} bsSize="large" block onClick={() => this.onRoleSelect(type, userContext, active)}>{roleButtonText}</Button>
+                <Button className={roleButtonStyle} bsSize="large" block onClick={() => this.onRoleSelect(type, userContext, active)}>{roleButtonText}</Button>
                 {roleText}
             </Well>
         )

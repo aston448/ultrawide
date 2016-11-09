@@ -55,7 +55,10 @@ class ClientDesignServices{
                 featureReferenceId:         'NONE',
                 featureAspectReferenceId:   'NONE',
                 scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE'
+                scenarioStepId:             'NONE',
+                featureFilesLocation:       userContext.featureFilesLocation,
+                featureTestResultsLocation: userContext.featureTestResultsLocation,
+                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -112,19 +115,22 @@ class ClientDesignServices{
                     messageText: 'Design removed successfully'
                 }));
 
-                // Set no current user context
+                // Set no current user item context but keep locations
                 const context = {
-                    userId: userContext.userId,
-                    designId: 'NONE',
-                    designVersionId: 'NONE',
-                    designUpdateId: 'NONE',
-                    workPackageId: 'NONE',
-                    designComponentId: 'NONE',
-                    designComponentType: 'NONE',
-                    featureReferenceId: 'NONE',
-                    featureAspectReferenceId: 'NONE',
-                    scenarioReferenceId: 'NONE',
-                    scenarioStepId: 'NONE'
+                    userId:                     userContext.userId,
+                    designId:                   'NONE',
+                    designVersionId:            'NONE',
+                    designUpdateId:             'NONE',
+                    workPackageId:              'NONE',
+                    designComponentId:          'NONE',
+                    designComponentType:        'NONE',
+                    featureReferenceId:         'NONE',
+                    featureAspectReferenceId:   'NONE',
+                    scenarioReferenceId:        'NONE',
+                    scenarioStepId:             'NONE',
+                    featureFilesLocation:       userContext.featureFilesLocation,
+                    featureTestResultsLocation: userContext.featureTestResultsLocation,
+                    moduleTestResultsLocation:  userContext.moduleTestResultsLocation
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));

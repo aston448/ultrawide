@@ -28,11 +28,10 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Configure Container.  Change user roles
+// Configure Container.  Change user roles and set file paths
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-// Login Screen
 class ConfigureScreen extends Component {
     constructor(props) {
         super(props);

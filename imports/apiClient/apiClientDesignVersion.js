@@ -9,6 +9,8 @@ import {DesignUpdates} from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
 import {ViewType, ViewMode, DesignVersionStatus} from '../constants/constants.js';
+import ClientMashDataServices   from '../apiClient/apiClientMashData.js';
+import ClientContainerServices  from '../apiClient/apiClientContainerServices.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -43,12 +45,15 @@ class ClientDesignVersionServices{
             featureReferenceId:         'NONE',
             featureAspectReferenceId:   'NONE',
             scenarioReferenceId:        'NONE',
-            scenarioStepId:             'NONE'
+            scenarioStepId:             'NONE',
+            featureFilesLocation:       userContext.featureFilesLocation,
+            featureTestResultsLocation: userContext.featureTestResultsLocation,
+            moduleTestResultsLocation:  userContext.moduleTestResultsLocation
         };
 
         store.dispatch(setCurrentUserItemContext(context, true));
 
-        return true;
+        return context;
 
     };
 
@@ -75,7 +80,16 @@ class ClientDesignVersionServices{
         if(dv && (dv.designVersionStatus === DesignVersionStatus.VERSION_NEW || dv.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_DRAFT)) {
 
             // Ensure that the current version is the version we chose to edit
-            this.setDesignVersion(userContext, designVersionToEditId);
+            let updatedContext = this.setDesignVersion(userContext, designVersionToEditId);
+
+            // Subscribe to Dev data
+            let loading = ClientContainerServices.getDevData();
+
+            // Get the latest DEV data for the Mash
+            ClientMashDataServices.createDevMashData(updatedContext);
+
+            // Get the latest test results
+            ClientMashDataServices.updateTestData(updatedContext);
 
             // Switch to the design editor view
             store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
@@ -97,7 +111,16 @@ class ClientDesignVersionServices{
     viewDesignVersion(userContext, designVersionToViewId, dvStatus){
 
         // Ensure that the current version is the version we chose to view
-        this.setDesignVersion(userContext, designVersionToViewId);
+        let updatedContext = this.setDesignVersion(userContext, designVersionToViewId);
+
+        // Subscribe to Dev data
+        let loading = ClientContainerServices.getDevData();
+
+        // Get the latest DEV data for the Mash
+        ClientMashDataServices.createDevMashData(updatedContext);
+
+        // Get the latest test results
+        ClientMashDataServices.updateTestData(updatedContext);
 
         switch(dvStatus){
             case DesignVersionStatus.VERSION_NEW:

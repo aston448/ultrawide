@@ -33,15 +33,12 @@ class ClientMashDataServices {
 
     createDevMashData(userContext){
 
-        // Get location data
-        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
-
         log((msg) => console.log(msg), LogLevel.DEBUG, 'Creating user dev mash data for user {} with Design {}, Design Version {} Work Package {} and Test Location {}',
-            userContext.userId, userContext.designId, userContext.designVersionId, userContext.workPackageId, devContext.featureFilesLocation);
+            userContext.userId, userContext.designId, userContext.designVersionId, userContext.workPackageId, userContext.featureFilesLocation);
 
-        if(userContext.designId != 'NONE' && userContext.designVersionId != 'NONE' && devContext.featureFilesLocation != 'NONE') {
+        if(userContext.designId != 'NONE' && userContext.designVersionId != 'NONE' && userContext.featureFilesLocation != 'NONE') {
 
-            Meteor.call('mash.loadUserFeatureFileData', userContext, devContext.featureFilesLocation);
+            Meteor.call('mash.loadUserFeatureFileData', userContext, userContext.featureFilesLocation);
 
             Meteor.call('mash.createMashData', userContext);
             return true;
@@ -90,10 +87,7 @@ class ClientMashDataServices {
     }
 
     updateTestData(userContext){
-        // Get location data
-        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
-
-        Meteor.call('mash.updateTestData', userContext, devContext.featureTestResultsLocation);
+        Meteor.call('mash.updateTestData', userContext, userContext.featureTestResultsLocation);
     };
 
     featureHasAspects(userContext){
@@ -150,17 +144,20 @@ class ClientMashDataServices {
 
             // For this function we update the user context first to the feature being exported
             const context = {
-                userId: userContext.userId,
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                workPackageId: userContext.workPackageId,
-                designComponentId: component._id,
-                designComponentType: ComponentType.FEATURE,
-                featureReferenceId: mashItem.designFeatureReferenceId,
-                featureAspectReferenceId: 'NONE',
-                scenarioReferenceId: 'NONE',
-                scenarioStepId: 'NONE'
+                userId:                     userContext.userId,
+                designId:                   userContext.designId,
+                designVersionId:            userContext.designVersionId,
+                designUpdateId:             userContext.designUpdateId,
+                workPackageId:              userContext.workPackageId,
+                designComponentId:          component._id,
+                designComponentType:        ComponentType.FEATURE,
+                featureReferenceId:         mashItem.designFeatureReferenceId,
+                featureAspectReferenceId:   'NONE',
+                scenarioReferenceId:        'NONE',
+                scenarioStepId:             'NONE',
+                featureFilesLocation:       userContext.featureFilesLocation,
+                featureTestResultsLocation: userContext.featureTestResultsLocation,
+                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

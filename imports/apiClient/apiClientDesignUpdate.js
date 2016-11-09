@@ -44,7 +44,10 @@ class ClientDesignUpdateServices {
                 featureReferenceId:         'NONE',
                 featureAspectReferenceId:   'NONE',
                 scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE'
+                scenarioStepId:             'NONE',
+                featureFilesLocation:       userContext.featureFilesLocation,
+                featureTestResultsLocation: userContext.featureTestResultsLocation,
+                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -198,7 +201,10 @@ class ClientDesignUpdateServices {
                     featureReferenceId:         'NONE',
                     featureAspectReferenceId:   'NONE',
                     scenarioReferenceId:        'NONE',
-                    scenarioStepId:             'NONE'
+                    scenarioStepId:             'NONE',
+                    featureFilesLocation:       userContext.featureFilesLocation,
+                    featureTestResultsLocation: userContext.featureTestResultsLocation,
+                    moduleTestResultsLocation:  userContext.moduleTestResultsLocation
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));
