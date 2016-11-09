@@ -25,6 +25,15 @@ class DesignValidationApi{
 
         return DesignValidationServices.validateAddDesign(userRole);
 
+    };
+
+    validateUpdateDesignName(userRole, newName, designId){
+
+        // Get all other designs apart from this one
+        const otherDesigns = Designs.find({_id: {$ne: designId}}).fetch();
+
+        return DesignValidationServices.validateUpdateDesignName(userRole, newName, otherDesigns);
+
     }
 
     validateRemoveDesign(userRole, designId){

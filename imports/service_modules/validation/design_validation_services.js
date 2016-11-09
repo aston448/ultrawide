@@ -22,12 +22,25 @@ class DesignValidationServices{
     validateAddDesign(userRole){
 
         // To add a Design, user must be a Designer
-
         if(!(userRole === RoleType.DESIGNER)){ return DesignValidationErrors.DESIGN_INVALID_ROLE_ADD }
 
         return 'VALID';
 
-    }
+    };
+
+    validateUpdateDesignName(userRole, newName, otherDesigns){
+
+        // To update a Design Name, user must be a Designer
+        if(!(userRole === RoleType.DESIGNER)){ return DesignValidationErrors.DESIGN_INVALID_ROLE_UPDATE }
+
+        // The new name must not be the same as other Designs
+        otherDesigns.forEach((design) => {
+            if(design.designName === newName){ return DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE}
+        });
+
+        return 'VALID';
+
+    };
 
     validateRemoveDesign(userRole, design){
 

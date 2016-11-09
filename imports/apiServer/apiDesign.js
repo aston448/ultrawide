@@ -18,7 +18,7 @@ import  UserContextServices     from '../servicers/user_context_services.js';
 
 import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
 
-import { addDesign, removeDesign } from '../apiValidatedMethods/design_methods.js'
+import { addDesign, updateDesignName, removeDesign } from '../apiValidatedMethods/design_methods.js'
 
 
 class ServerDesignApi {
@@ -30,6 +30,20 @@ class ServerDesignApi {
         addDesign.call(
             {
                 userRole: userRole
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateDesignName(userRole, designId, newName, callback){
+
+        updateDesignName.call(
+            {
+                userRole: userRole,
+                designId: designId,
+                newName:  newName
             },
             (err, result) => {
                 callback(err, result);
@@ -59,23 +73,6 @@ export default new ServerDesignApi();
 
 // Meteor methods
 Meteor.methods({
-
-    // Design Management -----------------------------------------------------------------------------------------------
-
-    //TODO Add / Remove Designs : DesignServices
-    'design.addNewDesign'(){
-        console.log('Adding new Design');
-        DesignServices.addDesign(true); // This call always creates a new default Design Version
-    },
-
-    'design.updateDesignName'(designId, newName){
-        console.log('Updating Design Name');
-        DesignServices.updateDesignName(designId, newName);
-    },
-
-
-
-
 
     // Design Component Management -------------------------------------------------------------------------------------
 

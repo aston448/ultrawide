@@ -33,6 +33,38 @@ export const addDesign = new ValidatedMethod({
 
 });
 
+export const updateDesignName = new ValidatedMethod({
+
+    name: 'design.updateDesignName',
+
+    validate: new SimpleSchema({
+        userRole: {type: String},
+        designId: {type: String},
+        newName:  {type: String}
+    }).validator(),
+
+    run({userRole, designId, newName}){
+
+        const result = DesignValidationApi.validateUpdateDesignName(userRole, newName, designId);
+
+        console.log("Update design name validation result: " + result);
+
+        if (result != 'VALID') {
+            throw new Meteor.Error('design.updateDesignName.failValidation', result)
+        }
+
+        console.log("Updating Design Name");
+
+        try {
+            DesignServices.updateDesignName(designId, newName);
+        } catch (e) {
+            console.log(e);
+            throw new Meteor.Error('design.updateDesignName.fail', e)
+        }
+    }
+
+});
+
 export const removeDesign = new ValidatedMethod({
 
     name: 'design.removeDesign',

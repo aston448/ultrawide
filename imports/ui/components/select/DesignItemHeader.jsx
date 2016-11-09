@@ -82,7 +82,7 @@ class DesignItemHeader extends Component{
         console.log("EDIT");
     }
 
-    saveItemName(currentItemType, currentItemId){
+    saveItemName(userRole, currentItemType, currentItemId){
         event.preventDefault();
         // TODO: Possible validation of names for these items - no duplicates?
 
@@ -90,7 +90,7 @@ class DesignItemHeader extends Component{
 
         switch(currentItemType){
             case ItemType.DESIGN:
-                ClientDesignServices.saveDesignName(currentItemId, newName);
+                ClientDesignServices.saveDesignName(userRole, currentItemId, newName);
                 break;
             case ItemType.DESIGN_VERSION:
                 ClientDesignVersionServices.saveDesignVersionName(currentItemId, newName);
@@ -230,7 +230,7 @@ class DesignItemHeader extends Component{
                             onKeyPress={(event) => this.handleNameKeyEvents(event, currentItemType, currentItemId)}
                         />
                     </div>
-                    <InputGroup.Addon onClick={ () => this.saveItemName(currentItemType, currentItemId)}>
+                    <InputGroup.Addon onClick={ () => this.saveItemName(userRole, currentItemType, currentItemId)}>
                         <div className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoItemNameChange()}>
