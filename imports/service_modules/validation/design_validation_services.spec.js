@@ -65,7 +65,7 @@ describe('A Designer can remove a Design that is removable', function () {
 
 });
 
-describe('A Design can only be remove by a Designer', function () {
+describe('A Design can only be removed by a Designer', function () {
 
     describe('DesignValidationServices unit tests', function () {
 

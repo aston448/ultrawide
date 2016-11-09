@@ -105,6 +105,8 @@ export default MashUnitTestContainer = createContainer(({params}) => {
 
         case DisplayContext.VIEW_UNIT_UNLINKED:
             testResults = ClientContainerServices.getMashUnlinkedUnitTestResults(params.userContext);
+            console.log("Found " + testResults.length + " unlinked unit tests") ;
+            break;
     }
 
 

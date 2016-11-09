@@ -101,7 +101,7 @@ class DesignItemMashList extends Component {
         let panelHeader = '';
         let secondPanelHeader = '';
         let unitTestsHeader = '';
-        let unLinkedUnitTestsHeader = '';
+        let unlinkedUnitTestsHeader = '';
         let itemHeader = '';
         let secondPanel = <div></div>;
         let unitTestsPanel = <div></div>;
@@ -160,7 +160,7 @@ class DesignItemMashList extends Component {
                     </Panel>;
 
                 unlinkedUnitTestsPanel =
-                        <Panel className="panel-text panel-text-body" header={unLinkedUnitTestsHeader}>
+                        <Panel className="panel-text panel-text-body" header={unlinkedUnitTestsHeader}>
                             <MashUnitTestContainer params={{
                                 userContext:    userContext,
                                 displayContext: DisplayContext.VIEW_UNIT_UNLINKED,
@@ -247,6 +247,7 @@ class DesignItemMashList extends Component {
                                         </Col>
                                         <Col md={6} className="scroll-col">
                                             {unitTestsPanel}
+                                            {unlinkedUnitTestsPanel}
                                         </Col>
                                     </Row>
                                 </Grid>

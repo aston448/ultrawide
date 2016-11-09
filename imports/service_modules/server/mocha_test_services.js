@@ -130,7 +130,7 @@ class MochaTestServices{
                             // Identity
                             userId:                      userContext.userId,
                             suiteName:                   testIdentity.testContext,
-                            testGroupName:               '',
+                            testGroupName:               testIdentity.testContext,
                             designScenarioReferenceId:   'NONE',
                             designAspectReferenceId:     'NONE',
                             designFeatureReferenceId:    'NONE',
