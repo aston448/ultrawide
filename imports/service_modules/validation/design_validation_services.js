@@ -21,6 +21,12 @@ class DesignValidationServices{
 
     validateAddDesign(userRole){
 
+        // To add a Design, user must be a Designer
+
+        if(!(userRole === RoleType.DESIGNER)){ return DesignValidationErrors.DESIGN_INVALID_ROLE_ADD }
+
+        return 'VALID';
+
     }
 
     validateRemoveDesign(userRole, design){

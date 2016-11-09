@@ -5,5 +5,6 @@
 export const DesignValidationErrors = {
     DESIGN_NOT_EXIST:               'Design does not exist!',
     DESIGN_INVALID_ROLE_REMOVE:     'Only a Designer can remove Designs',
+    DESIGN_INVALID_ROLE_ADD:        'Only a Designer can add Designs',
     DESIGN_NOT_REMOVABLE:           'A Design containing Features is not removable'
 };

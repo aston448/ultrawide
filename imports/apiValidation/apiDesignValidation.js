@@ -23,6 +23,8 @@ class DesignValidationApi{
 
     validateAddDesign(userRole){
 
+        return DesignValidationServices.validateAddDesign(userRole);
+
     }
 
     validateRemoveDesign(userRole, designId){

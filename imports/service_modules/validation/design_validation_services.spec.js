@@ -1,21 +1,12 @@
 import {Designs} from '../../collections/design/designs.js';
 
-import DesignServices from '../../servicers/design_services.js';
 import DesignValidationServices from '../../service_modules/validation/design_validation_services.js';
 
 import { RoleType } from '../../constants/constants.js';
 
-//import { Factory } from 'meteor/factory';
 import StubCollections from 'meteor/hwillson:stub-collections';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-// describe('A Designer can remove an empty Design', function () {
-//     it('rejects an attempt by a Developer', function () {
-//
-//         // Manager is not valid
-//         chai.assert.notEqual(DesignValidation.validateRemoveDesign(RoleType.DEVELOPER, designId), 'VALID', 'Attempt to remove a design by a Developer returned VALID!')
-//     });
-//
 
 beforeEach(function(){
 
@@ -40,6 +31,36 @@ afterEach(function(){
 
 });
 
+describe('A new Design can only be added by a Designer', function () {
+
+    describe('DesignValidationServices unit tests', function () {
+
+        it('returns VALID when a Designer adds a Design', function () {
+
+            const role = RoleType.DESIGNER;
+            chai.assert.equal(DesignValidationServices.validateAddDesign(role), 'VALID', 'Attempt to add a design by a Designer returned INVALID!');
+
+        });
+
+        it('returns INVALID when a Developer adds a Design', function () {
+
+            const role = RoleType.DEVELOPER;
+            chai.assert.notEqual(DesignValidationServices.validateAddDesign(role), 'VALID', 'Attempt to add a design by a Developer returned VALID!');
+
+        });
+
+
+        it('returns INVALID when a Manager adds a Design', function () {
+
+            const role = RoleType.MANAGER;
+            chai.assert.notEqual(DesignValidationServices.validateAddDesign(role), 'VALID', 'Attempt to add a design by a Manager returned VALID!');
+
+        });
+    });
+});
+
+
+
 describe('A Designer can remove a Design that is removable', function () {
 
     describe('DesignValidationServices unit tests', function () {
@@ -59,10 +80,7 @@ describe('A Designer can remove a Design that is removable', function () {
             chai.assert.notEqual(DesignValidationServices.validateRemoveDesign(role, design), 'VALID', 'Attempt to remove a non-removable design by a Designer returned VALID!');
 
         });
-
     });
-
-
 });
 
 describe('A Design can only be removed by a Designer', function () {

@@ -18,10 +18,24 @@ import  UserContextServices     from '../servicers/user_context_services.js';
 
 import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
 
-import { removeDesign } from '../apiValidatedMethods/design_methods.js'
+import { addDesign, removeDesign } from '../apiValidatedMethods/design_methods.js'
 
 
 class ServerDesignApi {
+
+    // Design Management -----------------------------------------------------------------------------------------------
+
+    addDesign(userRole, callback){
+
+        addDesign.call(
+            {
+                userRole: userRole
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
     removeDesign(userRole, designId, callback){
 
@@ -34,7 +48,6 @@ class ServerDesignApi {
                 callback(err, result);
             }
         );
-
     };
 
 }
@@ -61,15 +74,7 @@ Meteor.methods({
     },
 
 
-    //
-    // 'design.removeDesign'(userRole, designId){
-    //
-    //     if(DesignValidation.validateRemoveDesign(userRole, designId)) {
-    //         console.log('Removing Design');
-    //         DesignServices.removeDesign(designId);
-    //     }
-    //
-    // },
+
 
 
     // Design Component Management -------------------------------------------------------------------------------------

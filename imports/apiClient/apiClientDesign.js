@@ -34,8 +34,36 @@ class ClientDesignServices{
 
 
     // User has clicked Add Design in the designs list in the selection screen
-    addNewDesign(){
-        Meteor.call('design.addNewDesign');
+    addNewDesign(userRole){
+
+        // Client test validation
+        let result = DesignValidationApi.validateAddDesign(userRole);
+
+        if(result != 'VALID'){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - Remove Design server actions
+        ServerDesignApi.addDesign(userRole, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Remove Design client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Design added successfully.'
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
         return true;
     }
 
