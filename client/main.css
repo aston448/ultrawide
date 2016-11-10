@@ -242,7 +242,6 @@ input {
     font-size:  18px;
     font-weight: normal;
     letter-spacing: 8px;
-    color: darkgrey
 }
 
 .header-row-top{
@@ -251,7 +250,27 @@ input {
 
 .header-row-bottom{
     padding: 0 0 10px 0;
+
     border-bottom: 1px solid lightgrey
+}
+
+.designer{
+    color: white;
+    background-color: mediumseagreen;
+}
+
+.developer{
+    color: white;
+    background-color: indianred;
+}
+
+.manager{
+    color: white;
+    background-color: steelblue;
+}
+
+.no-role{
+    color: darkgrey;
 }
 
 .header-title{

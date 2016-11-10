@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode} from '../../../constants/constants.js'
+import {ViewType, ViewMode, RoleType} from '../../../constants/constants.js'
 import ClientAppHeaderServices from '../../../apiClient/apiClientAppHeader.js';
 import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
 import ClientIdentityServices from '../../../apiClient/apiIdentity';
@@ -137,6 +137,24 @@ class AppHeader extends Component {
                 {message.messageText}
             </Alert>
 
+        let roleClass = '';
+        switch(userRole){
+            case RoleType.DESIGNER:
+                roleClass = 'designer';
+                appName = appName + ' - DESIGN';
+                break;
+            case RoleType.DEVELOPER:
+                roleClass = 'developer';
+                appName = appName + '  - DEVELOP';
+                break;
+            case RoleType.MANAGER:
+                roleClass = 'manager';
+                appName = appName + '  - MANAGE';
+                break;
+            default:
+                roleClass = 'no-role';
+        }
+
         switch(view){
             case ViewType.AUTHORISE:
                 break;
@@ -236,10 +254,12 @@ class AppHeader extends Component {
             return (
 
                 <Grid>
-                    <Row className="header-row-top">
-                        <Col md={2}>
+                    <Row className={roleClass}>
+                        <Col md={12}>
                             <div className="ultrawide-logo">{appName}</div>
                         </Col>
+                    </Row>
+                    <Row className="header-row-top">
                         <Col md={3}>
                             {headerUserInfo}
                         </Col>
