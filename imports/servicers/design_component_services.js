@@ -16,7 +16,7 @@ import {getIdFromMap, log} from '../common/utils.js';
 class DesignComponentServices{
 
     // Add a new design component
-    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, defaultRawNarrative){
+    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, defaultRawNarrative, isNew){
 
         // Get the parent reference id (if there is a parent)
         let parentRefId = 'NONE';
@@ -49,7 +49,8 @@ class DesignComponentServices{
                 componentParentReferenceId:     parentRefId,
                 componentFeatureReferenceId:    featureRefId,
                 componentTextRaw:               defaultRawText,
-                componentNarrativeRaw:          defaultRawNarrative
+                componentNarrativeRaw:          defaultRawNarrative,
+                isNew:                          isNew
             },
 
             (error, result) => {
@@ -76,6 +77,10 @@ class DesignComponentServices{
 
                         // Make sure Design is no longer removable now that a feature added
                         DesignServices.setRemovable(designId);
+
+                        // And for Features add the default Feature Aspects
+                        // TODO - that could be user configurable!
+                        this.addDefaultFeatureAspects(designVersionId, result, defaultRawText, defaultRawNarrative);
                     }
 
                     // When inserting a new design component its parent becomes non-removable
@@ -98,6 +103,28 @@ class DesignComponentServices{
         );
 
     };
+
+    addDefaultFeatureAspects(designVersionId, featureId, defaultRawText, defaultRawNarrative){
+        this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawName('Interface'), defaultRawText, defaultRawNarrative, false);
+        this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawName('Conditions'), defaultRawText, defaultRawNarrative, false);
+        this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawName('Actions'), defaultRawText, defaultRawNarrative, false);
+        this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawName('Consequences'), defaultRawText, defaultRawNarrative, false);
+    }
+
+    getRawName(aspectName){
+        return {
+            "entityMap" : {  },
+            "blocks" : [
+                { "key" : "5efv7", "text" : aspectName,
+                    "type" : "unstyled",
+                    "depth" : 0,
+                    "inlineStyleRanges" : [ ],
+                    "entityRanges" : [ ],
+                    "data" : {  }
+                }
+            ]
+        };
+    }
 
     updateWorkPackages(designVersionId, newComponentId){
 
