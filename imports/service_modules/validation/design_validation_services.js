@@ -6,7 +6,7 @@
 
 // Ultrawide Services
 import { ViewType, RoleType } from '../../constants/constants.js';
-import { DesignValidationErrors } from '../../constants/validation_errors.js';
+import { Validation, DesignValidationErrors } from '../../constants/validation_errors.js';
 
 
 // =====================================================================================================================
@@ -24,7 +24,7 @@ class DesignValidationServices{
         // To add a Design, user must be a Designer
         if(!(userRole === RoleType.DESIGNER)){ return DesignValidationErrors.DESIGN_INVALID_ROLE_ADD }
 
-        return 'VALID';
+        return Validation.VALID;
 
     };
 
@@ -34,11 +34,18 @@ class DesignValidationServices{
         if(!(userRole === RoleType.DESIGNER)){ return DesignValidationErrors.DESIGN_INVALID_ROLE_UPDATE }
 
         // The new name must not be the same as other Designs
+        let duplicate = false;
         otherDesigns.forEach((design) => {
-            if(design.designName === newName){ return DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE}
+            if(design.designName === newName){
+                duplicate = true;
+            }
         });
 
-        return 'VALID';
+        if(duplicate){
+            return DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE
+        } else {
+            return Validation.VALID;
+        }
 
     };
 
@@ -57,7 +64,7 @@ class DesignValidationServices{
 
         if(!design.isRemovable){ return DesignValidationErrors.DESIGN_NOT_REMOVABLE }
 
-        return 'VALID';
+        return Validation.VALID;
 
     };
 
