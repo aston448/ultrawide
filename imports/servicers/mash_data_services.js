@@ -149,7 +149,7 @@ class MashDataServices{
             let devScenarioId = null;
 
             featureScenarios.forEach((devScenario) => {
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Found scenario: ", devScenario.scenario);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found scenario: ", devScenario.scenario);
 
                 // Initial default data
                 let devScenarioData = {
@@ -262,7 +262,7 @@ class MashDataServices{
                             devBackgroundStepData.stepIndex = designBackgroundStep.stepIndex;
                         }
 
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Inserting Background Step: {} as {}", devBackgroundStepData.stepFullName, devBackgroundStepData.stepStatus);
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Inserting Background Step: {} as {}", devBackgroundStepData.stepFullName, devBackgroundStepData.stepStatus);
 
                         UserDevFeatureScenarioSteps.insert({
                             // Identity
@@ -320,7 +320,7 @@ class MashDataServices{
                             devStepData.stepIndex = designStep.stepIndex;
                         }
 
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Inserting Dev Step: {} as {}", devStepData.stepFullName, devStepData.stepStatus);
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Inserting Dev Step: {} as {}", devStepData.stepFullName, devStepData.stepStatus);
 
                         previousStepId = UserDevFeatureScenarioSteps.insert({
                             // Identity
@@ -554,7 +554,7 @@ class MashDataServices{
             let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
             let tag = DevTestTag.TEST_TEST; // Default testing tag to Test
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Found WP Item: {} : {}", item.componentType, itemName);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Found WP Item: {} : {}", item.componentType, itemName);
 
             switch(item.componentType){
                 case ComponentType.FEATURE:
@@ -766,193 +766,202 @@ class MashDataServices{
             let itemName = item.componentName;
 
             let designItemParent = DesignComponents.findOne({_id: item.componentParentId});
+            if(designItemParent) {
 
-            let devFeature = null;
-            let devFeatureId = 'NONE';
-            let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
-            let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
-            let tag = DevTestTag.TEST_TEST; // Default testing tag to Test
+                let devFeature = null;
+                let devFeatureId = 'NONE';
+                let mashStatus = MashStatus.MASH_NOT_IMPLEMENTED;
+                let mashTestStatus = MashTestStatus.MASH_NOT_LINKED;
+                let tag = DevTestTag.TEST_TEST; // Default testing tag to Test
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Found DV Item: {} : {}", item.componentType, itemName);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found DV Item: {} : {}", item.componentType, itemName);
 
-            switch(item.componentType){
-                case ComponentType.FEATURE:
-                    // See if we have a corresponding Dev item
-                    devFeature = UserDevFeatures.findOne({
-                        userId: userContext.userId,
-                        featureName: itemName
-                    });
+                switch (item.componentType) {
+                    case ComponentType.FEATURE:
+                        // See if we have a corresponding Dev item
+                        devFeature = UserDevFeatures.findOne({
+                            userId: userContext.userId,
+                            featureName: itemName
+                        });
 
 
-                    if(devFeature){
-                        devFeatureId = devFeature._id;
-                        mashStatus = MashStatus.MASH_LINKED;
-                        mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
-                        tag = devFeature.featureTag;
-                    }
-
-                    // Add new Mash
-                    UserDesignDevMashData.insert(
-                        {
-                            // Identity
-                            userId:                         userContext.userId,
-                            designVersionId:                userContext.designVersionId,
-                            designUpdateId:                 userContext.designUpdateId,
-                            workPackageId:                  userContext.workPackageId,
-                            designComponentId:              item.componentId,
-                            mashComponentType:              ComponentType.FEATURE,
-                            designComponentReferenceId:     item.componentReferenceId,
-                            designFeatureReferenceId:       item.componentReferenceId,
-                            mashItemIndex:                  item.componentIndex,
-                            // Links
-                            devFeatureId:                   devFeatureId,
-                            // Data
-                            mashItemName:                   itemName,
-                            mashItemTag:                    tag,
-                            // Status
-                            mashStatus:                     mashStatus,
-                            mashTestStatus:                 mashTestStatus
+                        if (devFeature) {
+                            devFeatureId = devFeature._id;
+                            mashStatus = MashStatus.MASH_LINKED;
+                            mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
+                            tag = devFeature.featureTag;
                         }
-                    );
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "Inserted MASH feature: {} ", item.componentName);
-
-                    // For each Feature, check also for scenarios in this feature in Dev but NOT in Design
-                    let devOnlyScenarios = UserDevFeatureScenarios.find({
-                        userId:             userContext.userId,
-                        featureReferenceId: item.componentReferenceId,
-                        scenarioStatus:     UserDevScenarioStatus.SCENARIO_UNKNOWN
-                    }).fetch();
-
-                    devOnlyScenarios.forEach((scenario) => {
                         // Add new Mash
                         UserDesignDevMashData.insert(
                             {
                                 // Identity
-                                userId:                         userContext.userId,
-                                designVersionId:                userContext.designVersionId,
-                                designUpdateId:                 userContext.designUpdateId,
-                                workPackageId:                  userContext.workPackageId,
-                                designComponentId:              item.componentId,
-                                mashComponentType:              ComponentType.SCENARIO,
-                                designFeatureReferenceId:       item.componentReferenceId,
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId,
+                                workPackageId: userContext.workPackageId,
+                                designComponentId: item.componentId,
+                                mashComponentType: ComponentType.FEATURE,
+                                designComponentReferenceId: item.componentReferenceId,
+                                designFeatureReferenceId: item.componentReferenceId,
+                                mashItemIndex: item.componentIndex,
                                 // Links
-                                devFeatureId:                   devFeatureId,
-                                devScenarioId:                  scenario._id,
+                                devFeatureId: devFeatureId,
                                 // Data
-                                mashItemName:                   scenario.scenarioName,
-                                mashItemTag:                    scenario.scenarioTag,
+                                mashItemName: itemName,
+                                mashItemTag: tag,
                                 // Status
-                                mashStatus:                     MashStatus.MASH_NOT_DESIGNED,
-                                mashTestStatus:                 MashTestStatus.MASH_NOT_LINKED
+                                mashStatus: mashStatus,
+                                mashTestStatus: mashTestStatus
                             }
                         );
-                    });
-                    break;
 
-                case ComponentType.FEATURE_ASPECT:
-                    // There is no direct equivalent dev data - this is for organisation on the design side
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Inserted MASH feature: {} ", item.componentName);
 
-                    // However, link to the dev Feature for which this is an Aspect
-                    let parentFeatureName = '';
-                    const featureItem = DesignComponents.findOne({
-                        designVersionId:        userContext.designVersionId,
-                        componentReferenceId: item.componentFeatureReferenceId
-                    });
+                        // For each Feature, check also for scenarios in this feature in Dev but NOT in Design
+                        let devOnlyScenarios = UserDevFeatureScenarios.find({
+                            userId: userContext.userId,
+                            featureReferenceId: item.componentReferenceId,
+                            scenarioStatus: UserDevScenarioStatus.SCENARIO_UNKNOWN
+                        }).fetch();
 
-                    devFeature = UserDevFeatures.findOne({
-                        userId: userContext.userId,
-                        featureName: featureItem.componentName
-                    });
+                        devOnlyScenarios.forEach((scenario) => {
+                            // Add new Mash
+                            UserDesignDevMashData.insert(
+                                {
+                                    // Identity
+                                    userId: userContext.userId,
+                                    designVersionId: userContext.designVersionId,
+                                    designUpdateId: userContext.designUpdateId,
+                                    workPackageId: userContext.workPackageId,
+                                    designComponentId: item.componentId,
+                                    mashComponentType: ComponentType.SCENARIO,
+                                    designFeatureReferenceId: item.componentReferenceId,
+                                    // Links
+                                    devFeatureId: devFeatureId,
+                                    devScenarioId: scenario._id,
+                                    // Data
+                                    mashItemName: scenario.scenarioName,
+                                    mashItemTag: scenario.scenarioTag,
+                                    // Status
+                                    mashStatus: MashStatus.MASH_NOT_DESIGNED,
+                                    mashTestStatus: MashTestStatus.MASH_NOT_LINKED
+                                }
+                            );
+                        });
+                        break;
 
-                    if(devFeature){
-                        devFeatureId = devFeature._id;
-                        mashStatus = MashStatus.MASH_LINKED;
-                        mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
-                        tag = devFeature.featureTag;
-                    }
+                    case ComponentType.FEATURE_ASPECT:
+                        // There is no direct equivalent dev data - this is for organisation on the design side
 
-                    // Add new Mash
-                    UserDesignDevMashData.insert(
-                        {
-                            // Identity
-                            userId:                         userContext.userId,
-                            designVersionId:                userContext.designVersionId,
-                            designUpdateId:                 userContext.designUpdateId,
-                            workPackageId:                  userContext.workPackageId,
-                            designComponentId:              item.componentId,
-                            mashComponentType:              ComponentType.FEATURE_ASPECT,
-                            designComponentReferenceId:     item.componentReferenceId,
-                            designFeatureReferenceId:       item.componentFeatureReferenceId,
-                            mashItemIndex:                  item.componentIndex,
-                            // Links
-                            devFeatureId:                   devFeatureId,
-                            // Data
-                            mashItemName:                   itemName,
-                            mashItemTag:                    tag,
-                            // Status
-                            mashStatus:                     mashStatus,
-                            mashTestStatus:                 mashTestStatus
+                        // However, link to the dev Feature for which this is an Aspect
+                        let parentFeatureName = '';
+                        const featureItem = DesignComponents.findOne({
+                            designVersionId: userContext.designVersionId,
+                            componentReferenceId: item.componentFeatureReferenceId
+                        });
+
+                        if (featureItem) {
+
+                            devFeature = UserDevFeatures.findOne({
+                                userId: userContext.userId,
+                                featureName: featureItem.componentName
+                            });
+
+                            if (devFeature) {
+                                devFeatureId = devFeature._id;
+                                mashStatus = MashStatus.MASH_LINKED;
+                                mashTestStatus = MashTestStatus.MASH_PENDING;   // TODO - reference last test data
+                                tag = devFeature.featureTag;
+                            }
+
+                            // Add new Mash
+                            UserDesignDevMashData.insert(
+                                {
+                                    // Identity
+                                    userId: userContext.userId,
+                                    designVersionId: userContext.designVersionId,
+                                    designUpdateId: userContext.designUpdateId,
+                                    workPackageId: userContext.workPackageId,
+                                    designComponentId: item.componentId,
+                                    mashComponentType: ComponentType.FEATURE_ASPECT,
+                                    designComponentReferenceId: item.componentReferenceId,
+                                    designFeatureReferenceId: item.componentFeatureReferenceId,
+                                    mashItemIndex: item.componentIndex,
+                                    // Links
+                                    devFeatureId: devFeatureId,
+                                    // Data
+                                    mashItemName: itemName,
+                                    mashItemTag: tag,
+                                    // Status
+                                    mashStatus: mashStatus,
+                                    mashTestStatus: mashTestStatus
+                                }
+                            );
+
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Inserted MASH feature aspect: {} ", item.componentName);
+                        } else {
+                            log((msg) => console.log(msg), LogLevel.WARNING, "ORPHAN FEATURE ASPECT! Aspect Ref: {} Feature Ref: {} ", item.componentReferenceId, item.componentFeatureReferenceId);
                         }
-                    );
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "Inserted MASH feature aspect: {} ", item.componentName);
+                        break;
 
-                    break;
+                    case ComponentType.SCENARIO:
+                        // See if we have a corresponding Dev Scenario
+                        const devScenario = UserDevFeatureScenarios.findOne({
+                            userId: userContext.userId,
+                            scenarioName: itemName
+                        });
 
-                case ComponentType.SCENARIO:
-                    // See if we have a corresponding Dev Scenario
-                    const devScenario = UserDevFeatureScenarios.findOne({
-                        userId: userContext.userId,
-                        scenarioName: itemName
-                    });
+                        let devScenarioId = 'NONE';
 
-                    let devScenarioId = 'NONE';
-
-                    if(devScenario){
-                        devFeatureId = devScenario.userDevFeatureId;
-                        devScenarioId = devScenario._id;
-                        mashStatus = MashStatus.MASH_LINKED;
-                        mashTestStatus = MashTestStatus.MASH_PENDING;
-                        tag = devScenario.scenarioTag;
-                    }
-
-                    let featureAspectReferenceId = 'NONE';
-                    if(designItemParent.componentType === ComponentType.FEATURE_ASPECT){
-                        featureAspectReferenceId = designItemParent.componentReferenceId
-                    }
-
-                    // Add new Mash
-                    UserDesignDevMashData.insert(
-                        {
-                            // Identity
-                            userId:                         userContext.userId,
-                            designVersionId:                userContext.designVersionId,
-                            designUpdateId:                 userContext.designUpdateId,
-                            workPackageId:                  userContext.workPackageId,
-                            designComponentId:              item.componentId,
-                            mashComponentType:              ComponentType.SCENARIO,
-                            designComponentReferenceId:     item.componentReferenceId,
-                            designFeatureReferenceId:       item.componentFeatureReferenceId,
-                            designFeatureAspectReferenceId: featureAspectReferenceId,
-                            designScenarioReferenceId:      item.componentReferenceId,
-                            mashItemIndex:                  item.componentIndex,
-                            // Links
-                            devFeatureId:                   devFeatureId,
-                            devScenarioId:                  devScenarioId,
-                            // Data
-                            mashItemName:                   itemName,
-                            mashItemTag:                    tag,
-                            // Status
-                            mashStatus:                     mashStatus,
-                            mashTestStatus:                 mashTestStatus
+                        if (devScenario) {
+                            devFeatureId = devScenario.userDevFeatureId;
+                            devScenarioId = devScenario._id;
+                            mashStatus = MashStatus.MASH_LINKED;
+                            mashTestStatus = MashTestStatus.MASH_PENDING;
+                            tag = devScenario.scenarioTag;
                         }
-                    );
 
-                    // Create the scenario step mash data for this scenario
-                    this.createScenarioStepMashData(item.componentReferenceId, featureAspectReferenceId, item.componentFeatureReferenceId, userContext);
+                        let featureAspectReferenceId = 'NONE';
+                        if (designItemParent.componentType === ComponentType.FEATURE_ASPECT) {
+                            featureAspectReferenceId = designItemParent.componentReferenceId
+                        }
 
-                    break;
+                        // Add new Mash
+                        UserDesignDevMashData.insert(
+                            {
+                                // Identity
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId,
+                                workPackageId: userContext.workPackageId,
+                                designComponentId: item.componentId,
+                                mashComponentType: ComponentType.SCENARIO,
+                                designComponentReferenceId: item.componentReferenceId,
+                                designFeatureReferenceId: item.componentFeatureReferenceId,
+                                designFeatureAspectReferenceId: featureAspectReferenceId,
+                                designScenarioReferenceId: item.componentReferenceId,
+                                mashItemIndex: item.componentIndex,
+                                // Links
+                                devFeatureId: devFeatureId,
+                                devScenarioId: devScenarioId,
+                                // Data
+                                mashItemName: itemName,
+                                mashItemTag: tag,
+                                // Status
+                                mashStatus: mashStatus,
+                                mashTestStatus: mashTestStatus
+                            }
+                        );
+
+                        // Create the scenario step mash data for this scenario
+                        this.createScenarioStepMashData(item.componentReferenceId, featureAspectReferenceId, item.componentFeatureReferenceId, userContext);
+
+                        break;
+                }
+            } else {
+                log((msg) => console.log(msg), LogLevel.WARNING, "ORPHAN ITEM! Item Type: {} Item Id: {} Item Name: {} Item Parent: {}", item.componentType, item._id, item.componentName, item.componentParentId);
             }
         });
     }
@@ -977,7 +986,7 @@ class MashDataServices{
             isRemoved:                  false
         }).fetch();
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} feature background steps", backgroundSteps.length);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} feature background steps", backgroundSteps.length);
 
         // See if we have a corresponding Dev Scenario Step
         backgroundSteps.forEach((backgroundStep) => {
@@ -997,7 +1006,7 @@ class MashDataServices{
             }
 
             // Add new Mash
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding background step {} to scenario {} with mash status {}", backgroundStep.stepFullName, scenarioReferenceId, mashStatus);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding background step {} to scenario {} with mash status {}", backgroundStep.stepFullName, scenarioReferenceId, mashStatus);
             UserDesignDevMashData.insert(
                 {
                     // Identity
@@ -1105,7 +1114,7 @@ class MashDataServices{
 
         devSteps.forEach((devStep) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Checking for dev step {}", devStep.stepFullName);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Checking for dev step {}", devStep.stepFullName);
 
             // See if already exists
             const existingMashStep = UserDesignDevMashData.find({
@@ -1118,7 +1127,7 @@ class MashDataServices{
             });
 
             if(existingMashStep.count() == 0){
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding dev only step {} to scenario {}", devStep.stepFullName, scenarioReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding dev only step {} to scenario {}", devStep.stepFullName, scenarioReferenceId);
 
                 UserDesignDevMashData.insert(
                     {
@@ -1187,7 +1196,7 @@ class MashDataServices{
         }
 
         if(targetIndex > 0){
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Target Index =  {}", targetIndex);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Target Index =  {}", targetIndex);
             let previousIndex = 0;
 
             // Find the next smallest index in the current set of steps
@@ -1203,11 +1212,11 @@ class MashDataServices{
                 }
                 lastItem = step.mashItemIndex;
             });
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Previous Index =  {}", previousIndex);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Previous Index =  {}", previousIndex);
 
             newIndex = ((previousIndex + targetIndex) / 2);
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "New Index =  {}", newIndex);
+            log((msg) => console.log(msg), LogLevel.TRACE, "New Index =  {}", newIndex);
         }
 
         // This data needs to be added to the design.  This process also updates the Mash data with the new Design item details

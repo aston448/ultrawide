@@ -306,6 +306,15 @@ input {
     width: auto;
 }
 
+.close-grid-progress{
+    margin: 0;
+    padding: 0;
+    width: 16px;
+    height: 12px;
+    background-color: transparent;
+}
+
+
 .close-col{
     margin: 0;
     padding: 0;
@@ -660,6 +669,68 @@ input {
     background-color: transparent;
 }
 
+/* -- Progress indication ------------------------------------------------------------------------------------------- */
+
+.progress-empty{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 16px;
+    font-size: 10px;
+    background-color: lightgrey;
+}
+
+.progress-full{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 16px;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: lightblue;
+}
+
+.progress-red{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 7px;
+    background-color: red;
+}
+
+.progress-green{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 7px;
+    background-color: lightgreen;
+}
+
+.progress-pending{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 7px;
+    background-color: lightgrey;
+}
+.progress-invisible{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 7px;
+    color: transparent;
+    background-color: transparent;
+}
+
+.progress-impl-invisible{
+    margin: 0;
+    padding: 0;
+    height: 12px;
+    width: 16px;
+    color: transparent;
+    background-color: transparent;
+}
+
 /* -- Design Text --------------------------------------------------------------------------------------------------- */
 
 .text-underline{
@@ -770,6 +841,7 @@ input {
 }
 
 .invisible {
+    width: 14px;
     color: transparent;
 }
 

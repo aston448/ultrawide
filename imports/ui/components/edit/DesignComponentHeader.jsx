@@ -7,7 +7,7 @@ import React, { Component, PropTypes} from 'react';
 
 
 // Ultrawide GUI Components
-
+import ProgressIndicator from '../common/ProgressIndicator.jsx';
 
 // Ultrawide Services
 
@@ -69,7 +69,13 @@ class DesignComponentHeader extends Component{
             editable: false,
             highlighted: false,
             name: '',
-            editorState: EditorState.createEmpty()
+            editorState: EditorState.createEmpty(),
+            progressData: {
+                featureCount:       0,
+                scenarioCount:      0,
+                passingTestsCount:  0,
+                failingTestsCount:  0
+            }
         };
 
         this.onTitleChange = (editorState) => this.setState({editorState});
@@ -99,7 +105,8 @@ class DesignComponentHeader extends Component{
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.isDragging === this.props.isDragging
+                    nextProps.isDragging === this.props.isDragging &&
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue
                 );
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -177,6 +184,11 @@ class DesignComponentHeader extends Component{
                 if (newProps.currentItem.componentName != this.props.currentItem.componentName) {
                     this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
                 }
+
+                if(newProps.currentProgressDataValue != this.props.currentProgressDataValue) {
+                    this.getProgressData(newProps.currentItem, newProps.userContext, newProps.view);
+                }
+
                 break;
 
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -450,7 +462,7 @@ class DesignComponentHeader extends Component{
                 break;
         }
 
-    }
+    };
 
     // In scope view only, sets an item as in or out of scope for a Design Update or Work Package
     toggleScope(view, mode, context, userItemContext, currentItem){
@@ -474,11 +486,23 @@ class DesignComponentHeader extends Component{
                 }
         }
 
+    };
+
+    getProgressData(currentItem, userContext, view){
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+                this.setState({progressData: ClientDesignComponentServices.getProgressData(currentItem, userContext)});
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
+                // TODO
+        }
     }
 
     // Render the header of the design component - has tools in it depending on context
     render(){
-        const {currentItem, designItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userItemContext, isOpen} = this.props;
+        const {currentItem, designItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, isOpen} = this.props;
 
         // TODO - add all the tooltips required
         const tooltipEdit = (
@@ -489,6 +513,8 @@ class DesignComponentHeader extends Component{
 
 
         // Determine the look of the item ------------------------------------------------------------------------------
+
+
 
         // Delete item greyed out if not removable but not if logically deleted in update  || (currentItem.isRemoved && view === ViewType.EDIT_UPDATE)
         let deleteStyle = currentItem.isRemovable ? 'red' : 'lgrey';
@@ -571,7 +597,7 @@ class DesignComponentHeader extends Component{
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.toggleScope(view, mode, displayContext, userItemContext, currentItem)}>
+                    <InputGroup.Addon onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem)}>
                         <div className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <div className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
@@ -654,6 +680,15 @@ class DesignComponentHeader extends Component{
                     <InputGroup.Addon onClick={ () => this.undoComponentNameChange()}>
                         <div className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
+                    <InputGroup.Addon>
+                        <div className="invisible"><Glyphicon glyph="star"/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon>
+                        <div className="invisible"><Glyphicon glyph="star"/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon>
+                        <div className="invisible"><Glyphicon glyph="star"/></div>
+                    </InputGroup.Addon>
                 </InputGroup>
             </div>;
 
@@ -683,7 +718,7 @@ class DesignComponentHeader extends Component{
                                 </a>
                             </OverlayTrigger>
                         </InputGroup.Addon>
-                        <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userItemContext)}>
+                        <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                             <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
@@ -692,6 +727,20 @@ class DesignComponentHeader extends Component{
                                     <Glyphicon glyph="move"/>
                                 </div>)
                             }
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <ProgressIndicator
+                                indicatorType="IMPL"
+                                componentType={currentItem.componentType}
+                                progressData={this.state.progressData}
+                            />
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <ProgressIndicator
+                                indicatorType="TEST"
+                                componentType={currentItem.componentType}
+                                progressData={this.state.progressData}
+                            />
                         </InputGroup.Addon>
                     </InputGroup>
                 </div>
@@ -722,7 +771,7 @@ class DesignComponentHeader extends Component{
                             </a>
                         </OverlayTrigger>
                     </InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userItemContext)}>
+                    <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                         <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
@@ -806,8 +855,9 @@ DesignComponentHeader.propTypes = {
     mode: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
-    userItemContext: PropTypes.object.isRequired,
-    isOpen: PropTypes.bool.isRequired
+    userContext: PropTypes.object.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    currentProgressDataValue: PropTypes.bool.isRequired
 };
 
 // React DnD ===========================================================================================================

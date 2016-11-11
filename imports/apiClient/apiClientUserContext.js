@@ -18,6 +18,7 @@ import { WorkPackageComponents }    from '../collections/work/work_package_compo
 // Ultrawide Services
 import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel } from '../constants/constants.js';
 import { log } from '../common/utils.js';
+import ClientContainerServices from '../apiClient/apiClientContainerServices.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -346,6 +347,10 @@ class ClientUserContextServices {
                                 switch (designVersion.designVersionStatus) {
                                     case DesignVersionStatus.VERSION_NEW:
                                         // Straight to edit of new update
+
+                                        // Subscribe to Dev data as we'll need it for progress indications
+                                        let loading = ClientContainerServices.getDevData();
+
                                         store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
                                         store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
                                         return;

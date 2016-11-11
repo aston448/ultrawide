@@ -27,6 +27,10 @@ export const SET_CURRENT_USER_OPEN_WORK_PACKAGE_ITEMS = 'SET_CURRENT_USER_OPEN_W
 export const UPDATE_DESIGN_COMPONENT_NAME = 'UPDATE_DESIGN_COMPONENT_NAME';
 export const UPDATE_DESIGN_COMPONENT_RAW_NAME = 'UPDATE_DESIGN_COMPONENT_RAW_NAME';
 
+// This flag is toggled each time an update to test / design progress data is requested
+// Include it as a property in any components that should redraw
+export const UPDATE_PROGRESS_DATA = 'UPDATE_PROGRESS_DATA';
+
 // Messaging system
 export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
 
@@ -236,3 +240,10 @@ export function updateUserMessage(newMessage) {
     };
 }
 
+// Toggle between true and false to trigger re-renders of design when data is updated
+export function updateProgressData(newValue) {
+    console.log("ACTIONS: Progress data update: " + newValue);
+    return function (dispatch) {
+        dispatch({type: UPDATE_PROGRESS_DATA, newDataValue: newValue});
+    };
+}

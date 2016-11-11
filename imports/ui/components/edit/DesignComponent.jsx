@@ -77,7 +77,8 @@ class DesignComponent extends Component{
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.mode === this.props.mode
+                    nextProps.mode === this.props.mode &&
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue
                 );
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -304,7 +305,7 @@ class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext} = this.props;
+        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext, currentProgressDataValue} = this.props;
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -335,8 +336,9 @@ class DesignComponent extends Component{
                     mode={mode}
                     view={view}
                     displayContext={displayContext}
-                    userItemContext={userContext}
+                    userContext={userContext}
                     isOpen={this.state.open}
+                    currentProgressDataValue={currentProgressDataValue}
                 />
             </div>;
 
@@ -660,7 +662,8 @@ function mapStateToProps(state) {
         userContext: state.currentUserItemContext,
         openDesignItems: state.currentUserOpenDesignItems,
         openDesignUpdateItems: state.currentUserOpenDesignUpdateItems,
-        openWorkPackageItems: state.currentUserOpenWorkPackageItems
+        openWorkPackageItems: state.currentUserOpenWorkPackageItems,
+        currentProgressDataValue: state.currentProgressDataValue
     }
 }
 

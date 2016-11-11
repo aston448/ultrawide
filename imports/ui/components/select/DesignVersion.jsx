@@ -31,11 +31,12 @@ class DesignVersion extends Component {
         super(props);
     }
 
-    onEditDesignVersion(context, dv){
+    onEditDesignVersion(context, dv, currentProgressDataValue){
 
         ClientDesignVersionServices.editDesignVersion(
             context,
-            dv._id
+            dv._id,
+            currentProgressDataValue
         );
     }
 
@@ -85,7 +86,7 @@ class DesignVersion extends Component {
     }
 
     render() {
-        const {designVersion, userRole, currentUserItemContext} = this.props;
+        const {designVersion, userRole, currentUserItemContext, currentProgressDataValue} = this.props;
 
         let itemStyle = (designVersion._id === currentUserItemContext.designVersionId ? 'design-item di-active' : 'design-item');
 
@@ -100,7 +101,7 @@ class DesignVersion extends Component {
                     // Designers can Edit View or Publish
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(currentUserItemContext, designVersion)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(currentUserItemContext, designVersion, currentProgressDataValue)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(currentUserItemContext, designVersion)}>View</Button>
                             <Button bsSize="xs" onClick={ () => this.onPublishDesignVersion(currentUserItemContext, designVersion)}>Publish</Button>
                         </ButtonGroup>;
@@ -117,7 +118,7 @@ class DesignVersion extends Component {
                         buttons =
                             <ButtonGroup>
                                 <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(currentUserItemContext, designVersion)}>View</Button>
-                                <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(currentUserItemContext, designVersion)}>Edit</Button>
+                                <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(currentUserItemContext, designVersion, currentProgressDataValue)}>Edit</Button>
                                 <Button bsSize="xs" onClick={ () => this.onUnPublishDesignVersion(currentUserItemContext, designVersion)}>Unpublish</Button>
                                 <Button bsSize="xs" onClick={ () => this.onMergeUpdatesToNewDraftVersion(currentUserItemContext, designVersion)}>Create New from Updates</Button>
                             </ButtonGroup>;
@@ -189,7 +190,8 @@ DesignVersion.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext
+        currentUserItemContext: state.currentUserItemContext,
+        currentProgressDataValue: state.currentProgressDataValue
     }
 }
 

@@ -331,6 +331,15 @@ export default class Narrative extends React.Component {
                             <InputGroup.Addon onClick={ () => this.undoNarrativeChange()}>
                                 <div className="red"><Glyphicon glyph="arrow-left"/></div>
                             </InputGroup.Addon>
+                            <InputGroup.Addon>
+                                <div className="invisible"><Glyphicon glyph="star"/></div>
+                            </InputGroup.Addon>
+                            <InputGroup.Addon>
+                                <div className="invisible"><Glyphicon glyph="star"/></div>
+                            </InputGroup.Addon>
+                            <InputGroup.Addon>
+                                <div className="invisible"><Glyphicon glyph="star"/></div>
+                            </InputGroup.Addon>
                         </InputGroup>
                     </div>;
             } else {
@@ -347,6 +356,18 @@ export default class Narrative extends React.Component {
                         </div>
                         <InputGroup.Addon onClick={ () => this.editNarrative()}>
                             <div className="blue"><Glyphicon glyph="edit"/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <div className="invisible"><Glyphicon glyph="star"/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <div className="invisible"><Glyphicon glyph="star"/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <div className="invisible"><Glyphicon glyph="star"/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <div className="invisible"><Glyphicon glyph="star"/></div>
                         </InputGroup.Addon>
                     </InputGroup>;
 

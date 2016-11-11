@@ -202,10 +202,10 @@ export const MessageType = {
 };
 
 export const LogLevel = {
-    TRACE:      'TRACE: ',
-    DEBUG:      'DEBUG: ',
-    INFO:       'INFO:  ',
-    WARNING:    'WARNING',
-    ERROR:      'ERROR',
-    NONE:       'NONE'
+    TRACE:      'TRACE:   ',
+    DEBUG:      'DEBUG:   ',
+    INFO:       'INFO:    ',
+    WARNING:    'WARNING: ',
+    ERROR:      'ERROR:   ',
+    NONE:       'NONE:    '
 };

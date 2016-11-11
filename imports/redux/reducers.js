@@ -20,6 +20,7 @@ const initialState = {
     currentDesignComponentName: 'No Component',
     currentDesignComponentRawName: null,
     currentUserMessage: {messageType: MessageType.INFO, messageText: 'No message' },
+    currentProgressDataValue: false
 
 };
 
@@ -80,6 +81,10 @@ export function myApplication(state = initialState, action) {
         case Actions.UPDATE_USER_MESSAGE:
             return Object.assign({}, state, {
                 currentUserMessage: action.newUserMessage
+            });
+        case Actions.UPDATE_PROGRESS_DATA:
+            return Object.assign({}, state, {
+                currentProgressDataValue: action.newDataValue
             });
 
         default:

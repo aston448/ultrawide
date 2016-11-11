@@ -71,8 +71,8 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin();
     }
 
-    onRefreshTestData(userContext){
-        ClientMashDataServices.updateTestData(userContext)
+    onRefreshTestData(userContext, currentProgressDataValue){
+        ClientMashDataServices.updateMashData(userContext, currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
@@ -82,7 +82,7 @@ class AppHeader extends Component {
 
     render() {
 
-        const {mode, view, userRole, userName, userContext, message, domainDictionaryVisible} = this.props;
+        const {mode, view, userRole, userName, userContext, message, domainDictionaryVisible, currentProgressDataValue} = this.props;
 
         let appName = ClientIdentityServices.getApplicationName();
 
@@ -116,7 +116,7 @@ class AppHeader extends Component {
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection</Button>;
 
         let refreshTestsButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext)}>Get Test Results</Button>;
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext, currentProgressDataValue)}>Refresh Progress Data</Button>;
 
         let exportToDevButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
@@ -182,6 +182,7 @@ class AppHeader extends Component {
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
+                        {refreshTestsButton}
                         {domainDictionaryButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
@@ -304,7 +305,8 @@ function mapStateToProps(state) {
         userName: state.currentUserName,
         userContext: state.currentUserItemContext,
         message: state.currentUserMessage,
-        domainDictionaryVisible: state.domainDictionaryVisible
+        domainDictionaryVisible: state.domainDictionaryVisible,
+        currentProgressDataValue: state.currentProgressDataValue
     }
 }
 

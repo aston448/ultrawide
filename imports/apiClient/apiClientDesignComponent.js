@@ -3,11 +3,13 @@
 // Meteor / React Services
 
 // Ultrawide collections
-import {DesignComponents} from '../collections/design/design_components.js';
+import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
+import {UserUnitTestResults}    from '../collections/dev/user_unit_test_results.js';
+import {UserDesignDevMashData}  from '../collections/dev/user_design_dev_mash_data.js';
 
 // Ultrawide Services
-import {ViewType, ViewMode, DisplayContext, ComponentType, LogLevel} from '../constants/constants.js';
+import {ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel} from '../constants/constants.js';
 import {validateDesignComponentName, locationMoveDropAllowed, reorderDropAllowed, log} from '../common/utils.js';
 
 // REDUX services
@@ -340,6 +342,74 @@ class ClientDesignComponentServices{
         }
     };
 
+    // Get the relevant Design implementation progress data for this component
+    getProgressData(designComponent, userContext){
+
+        switch(designComponent.componentType){
+            case ComponentType.FEATURE:
+                // Get number of Scenarios defined
+                const scenarioCount = DesignComponents.find({
+                    designVersionId:                designComponent.designVersionId,
+                    componentType:                  ComponentType.SCENARIO,
+                    componentFeatureReferenceId:    designComponent.componentReferenceId
+                }).count();
+
+                // Get number of passing tests
+                const passingUnitTestsCount = UserUnitTestResults.find({
+                    userId:                         userContext.userId,
+                    designFeatureReferenceId:       designComponent.componentReferenceId,
+                    testOutcome:                    MashTestStatus.MASH_PASS
+                }).count();
+
+                const passingAcceptanceTestsCount = UserDesignDevMashData.find({
+                    userId:                         userContext.userId,
+                    designVersionId:                designComponent.designVersionId,
+                    designFeatureReferenceId:       designComponent.componentReferenceId,
+                    mashTestStatus:                 MashTestStatus.MASH_PASS
+                }).count();
+
+                // Get number of failing tests
+                const failingUnitTestsCount = UserUnitTestResults.find({
+                    userId:                         userContext.userId,
+                    designFeatureReferenceId:       designComponent.componentReferenceId,
+                    testOutcome:                    MashTestStatus.MASH_FAIL
+                }).count();
+
+                const failingAcceptanceTestsCount = UserDesignDevMashData.find({
+                    userId:                         userContext.userId,
+                    designVersionId:                designComponent.designVersionId,
+                    designFeatureReferenceId:       designComponent.componentReferenceId,
+                    mashTestStatus:                 MashTestStatus.MASH_FAIL
+                }).count();
+
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Progress for {}.  Pass: {} Fail: {} ", designComponent.componentName, passingUnitTestsCount + passingAcceptanceTestsCount, failingUnitTestsCount + failingAcceptanceTestsCount);
+
+                return({
+                    featureCount:       0,
+                    scenarioCount:      scenarioCount,
+                    passingTestsCount:  passingUnitTestsCount + passingAcceptanceTestsCount,
+                    failingTestsCount:  failingUnitTestsCount + failingAcceptanceTestsCount
+                });
+            case ComponentType.DESIGN_SECTION:
+                // TODO - make this nesting compatible - currently only supports one level
+                // Get number of Features defined
+                const featureCount = DesignComponents.find({
+                    designVersionId:                designComponent.designVersionId,
+                    componentType:                  ComponentType.FEATURE,
+                    componentParentReferenceId:     designComponent.componentReferenceId
+                }).count();
+
+
+                return({
+                    featureCount:       featureCount,
+                    scenarioCount:      0,
+                    passingTestsCount:  0,
+                    failingTestsCount:  0
+                });
+        }
+
+    }
 
 }
 

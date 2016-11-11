@@ -42,7 +42,7 @@ class MochaTestServices{
 
             const cleanText = this.cleanResults(resultsText.toString());
 
-            console.log(cleanText);
+            //console.log(cleanText);
 
             const resultsJson = JSON.parse(cleanText);
 

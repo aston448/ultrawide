@@ -15,7 +15,7 @@ import { mashMoveDropAllowed, log} from '../common/utils.js';
 
 // REDUX
 import store from '../redux/store'
-import {setCurrentUserItemContext} from '../redux/actions'
+import {setCurrentUserItemContext, updateProgressData} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -30,6 +30,17 @@ import {setCurrentUserItemContext} from '../redux/actions'
 // ---------------------------------------------------------------------------------------------------------------------
 
 class ClientMashDataServices {
+
+    // When calling this, ensure that data has been subscribed to
+    updateMashData(userContext, currentProgressDataValue){
+        // Get the latest DEV data for the Mash
+        this.createDevMashData(userContext);
+
+        // Get the latest test results
+        this.updateTestData(userContext);
+
+        store.dispatch(updateProgressData(!currentProgressDataValue));
+    }
 
     createDevMashData(userContext){
 
