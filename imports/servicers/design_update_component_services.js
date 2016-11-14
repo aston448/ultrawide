@@ -228,23 +228,31 @@ class DesignUpdateComponentServices{
     // Move a design update component to a new parent
     moveComponent(designUpdateComponentId, newParentId){
 
-        const parent = DesignUpdateComponents.findOne({_id: newParentId});
+        const newParent = DesignUpdateComponents.findOne({_id: newParentId});
+        const movingComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
         // Check for move back to old position
-        const oldParentId = DesignUpdateComponents.findOne({_id: designUpdateComponentId}).componentParentIdOld;
+        const oldParentId = movingComponent.componentParentIdOld;
 
         // Not moved if the old parent is the same as the new one
         let isMoved = (oldParentId != newParentId);
 
+        // If a Design Section, make sure the level gets changed correctly
+        let newLevel = movingComponent.componentLevel;
+
+        if(movingComponent.componentType === ComponentType.DESIGN_SECTION){
+            newLevel = newParent.componentLevel + 1;
+        }
 
         DesignUpdateComponents.update(
             {_id: designUpdateComponentId},
             {
                 $set:{
-                    componentParentIdNew: newParentId,
-                    componentParentReferenceIdNew: parent.componentReferenceId,
-                    componentFeatureReferenceIdNew: parent.componentFeatureReferenceIdNew,
-                    isMoved: isMoved
+                    componentParentIdNew:           newParentId,
+                    componentParentReferenceIdNew:  newParent.componentReferenceId,
+                    componentFeatureReferenceIdNew: newParent.componentFeatureReferenceIdNew,
+                    componentLevel:                 newLevel,
+                    isMoved:                        isMoved
                 }
             },
 

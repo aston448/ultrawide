@@ -328,16 +328,25 @@ class DesignComponentServices{
     moveComponent(designComponentId, newParentId){
 
         // Get the unique persistent reference for the parent
-        const parent = DesignComponents.findOne({_id: newParentId});
-        const oldParentId =  DesignComponents.findOne({_id: designComponentId}).componentParentId;
+        const newParent = DesignComponents.findOne({_id: newParentId});
+        const movingComponent = DesignComponents.findOne({_id: designComponentId});
+        const oldParentId =  movingComponent.componentParentId;
+
+        // If a Design Section, make sure the level gets changed correctly
+        let newLevel = movingComponent.componentLevel;
+
+        if(movingComponent.componentType === ComponentType.DESIGN_SECTION){
+            newLevel = newParent.componentLevel + 1;
+        }
 
         DesignComponents.update(
             {_id: designComponentId},
             {
                 $set:{
                     componentParentId:              newParentId,
-                    componentParentReferenceId:     parent.componentReferenceId,
-                    componentFeatureReferenceId:    parent.componentFeatureReferenceId
+                    componentParentReferenceId:     newParent.componentReferenceId,
+                    componentFeatureReferenceId:    newParent.componentFeatureReferenceId,
+                    componentLevel:                 newLevel
                 }
             },
 

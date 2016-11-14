@@ -182,8 +182,8 @@ export function locationMoveDropAllowed(itemType, targetType, viewType, inScope)
     // Is drop allowed for this item when moving a component to a new location?
     switch(itemType){
         case ComponentType.DESIGN_SECTION:
-            // Design Sections can only be moved to other design sections
-            return (targetType === ComponentType.DESIGN_SECTION);
+            // Design Sections can only be moved to other design sections or applications
+            return (targetType === ComponentType.DESIGN_SECTION || targetType === ComponentType.APPLICATION);
             break;
         case ComponentType.FEATURE:
             // Features can only be moved to other design sections
