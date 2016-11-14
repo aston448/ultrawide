@@ -28,25 +28,25 @@ import {setCurrentUserName, setCurrentView, toggleDomainDictionary, updateUserMe
 
 class ClientLoginServices{
 
-    createMeteorUser(role){
-        if(Meteor.isClient) {
-            console.log("CLIENT: Login");
-            switch (role) {
-                case RoleType.DESIGNER:
-                    Meteor.loginWithPassword('user1', 'user1', (error) => {this.initialise(error, role)});
-                    break;
-                case RoleType.DEVELOPER:
-                    Meteor.loginWithPassword('user2', 'user2', (error) => {this.initialise(error, role)});
-                    break;
-                case RoleType.MANAGER:
-                    Meteor.loginWithPassword('user3', 'user3', (error) => {this.initialise(error, role)});
-                    break;
-
-            }
-        } else {
-            console.log("SERVER: Login");
-        }
-    };
+    // createMeteorUser(role){
+    //     if(Meteor.isClient) {
+    //         console.log("CLIENT: Login");
+    //         switch (role) {
+    //             case RoleType.DESIGNER:
+    //                 Meteor.loginWithPassword('user1', 'user1', (error) => {this.initialise(error, role)});
+    //                 break;
+    //             case RoleType.DEVELOPER:
+    //                 Meteor.loginWithPassword('user2', 'user2', (error) => {this.initialise(error, role)});
+    //                 break;
+    //             case RoleType.MANAGER:
+    //                 Meteor.loginWithPassword('user3', 'user3', (error) => {this.initialise(error, role)});
+    //                 break;
+    //
+    //         }
+    //     } else {
+    //         console.log("SERVER: Login");
+    //     }
+    // };
 
     userLogin(userName, password){
 
@@ -63,7 +63,7 @@ class ClientLoginServices{
                 const user = UserRoles.findOne({userId: userId});
                 if(user){
                     // Properly logged in so retrieve user settings
-                    const userContext = ClientUserContextServices.getInitialSelectionSettings(userId);
+                    ClientUserContextServices.getInitialSelectionSettings(userId);
 
                     // And go to the home / role selection screen
                     store.dispatch(setCurrentUserName(user.displayName));
@@ -78,21 +78,21 @@ class ClientLoginServices{
 
     }
 
-    initialise(error, role){
-        if(error){
-            console.log("LOGIN FAILURE: " + error);
-        } else {
-
-            let userId = Meteor.userId();
-            console.log("LOGGED IN AS METEOR USER: " + userId);
-
-            // Update the redux current item settings from the stored DB data
-            const userContext = ClientUserContextServices.getInitialSelectionSettings(role, userId);
-
-            ClientUserContextServices.setViewFromUserContext(role, userContext);
-        }
-
-    }
+    // initialise(error, role){
+    //     if(error){
+    //         console.log("LOGIN FAILURE: " + error);
+    //     } else {
+    //
+    //         let userId = Meteor.userId();
+    //         console.log("LOGGED IN AS METEOR USER: " + userId);
+    //
+    //         // Update the redux current item settings from the stored DB data
+    //         const userContext = ClientUserContextServices.getInitialSelectionSettings(role, userId);
+    //
+    //         ClientUserContextServices.setViewFromUserContext(role, userContext);
+    //     }
+    //
+    // }
 
 }
 

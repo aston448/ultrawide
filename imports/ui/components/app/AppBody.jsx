@@ -144,7 +144,9 @@ function mapStateToProps(state) {
     return {
         view: state.currentAppView,
         mode: state.currentViewMode,
-        userContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext,
+        userViewOptions: state.currentUserViewOptions,
+        currentViewDataValue: state.currentViewOptionsDataValue
     }
 }
 

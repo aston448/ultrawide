@@ -12,6 +12,7 @@ const initialState = {
     currentAppView: ViewType.AUTHORISE,
     currentViewMode: ViewMode.MODE_VIEW,
     domainDictionaryVisible: false,
+    currentUserViewOptions: null,
     currentUserItemContext: null,
     currentUserDevContext: null,
     currentUserOpenDesignItems: [],
@@ -20,7 +21,8 @@ const initialState = {
     currentDesignComponentName: 'No Component',
     currentDesignComponentRawName: null,
     currentUserMessage: {messageType: MessageType.INFO, messageText: 'No message' },
-    currentProgressDataValue: false
+    currentProgressDataValue: false,
+    currentViewOptionsDataValue: false
 
 };
 
@@ -48,6 +50,10 @@ export function myApplication(state = initialState, action) {
         case Actions.TOGGLE_DOMAIN_DICTIONARY:
             return Object.assign({}, state, {
                 domainDictionaryVisible: action.isVisible
+            });
+        case Actions.SET_CURRENT_USER_VIEW_OPTIONS:
+            return Object.assign({}, state, {
+                currentUserViewOptions: action.newUserViewOptions
             });
         case Actions.SET_CURRENT_USER_ITEM_CONTEXT:
             console.log("Updated User Item Context: " + action.newUserItemContext);
@@ -85,6 +91,10 @@ export function myApplication(state = initialState, action) {
         case Actions.UPDATE_PROGRESS_DATA:
             return Object.assign({}, state, {
                 currentProgressDataValue: action.newDataValue
+            });
+        case Actions.UPDATE_VIEW_OPTIONS_DATA:
+            return Object.assign({}, state, {
+                currentViewOptionsDataValue: action.newDataValue
             });
 
         default:

@@ -11,6 +11,10 @@ Meteor.methods({
     'userContext.setCurrentUserContext'(context){
 
         UserContextServices.saveUserContext(context);
+    },
+
+    'userContext.setCurrentUserViewOptions'(viewOptions){
+        UserContextServices.saveUserViewOptions(viewOptions);
     }
 
 });

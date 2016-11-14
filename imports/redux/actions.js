@@ -11,6 +11,8 @@ export const SET_CURRENT_VIEW = 'SET_CURRENT_VIEW';
 export const SET_CURRENT_VIEW_MODE = 'SET_CURRENT_VIEW_MODE';
 export const TOGGLE_DOMAIN_DICTIONARY = 'TOGGLE_DOMAIN_DICTIONARY';
 
+export const SET_CURRENT_USER_VIEW_OPTIONS = 'SET_CURRENT_USER_VIEW_OPTIONS';
+
 // Indicates the current data item context for a user - i.e. what they are looking at
 export const SET_CURRENT_USER_ITEM_CONTEXT = 'SET_CURRENT_USER_ITEM_CONTEXT';
 
@@ -30,6 +32,10 @@ export const UPDATE_DESIGN_COMPONENT_RAW_NAME = 'UPDATE_DESIGN_COMPONENT_RAW_NAM
 // This flag is toggled each time an update to test / design progress data is requested
 // Include it as a property in any components that should redraw
 export const UPDATE_PROGRESS_DATA = 'UPDATE_PROGRESS_DATA';
+
+// Flag to trigger redraw on update of view options
+export const UPDATE_VIEW_OPTIONS_DATA = 'UPDATE_VIEW_OPTIONS_DATA';
+
 
 // Messaging system
 export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
@@ -72,6 +78,19 @@ export function toggleDomainDictionary(isVisible) {
     };
 }
 
+export function setCurrentUserViewOptions(viewOptions, saveToDb){
+
+     return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_VIEW_OPTIONS, newUserViewOptions: viewOptions});
+
+        // And persist the settings - only want to do this if we are changing them...
+        if(saveToDb) {
+            Meteor.call('userContext.setCurrentUserViewOptions', viewOptions);
+        }
+    };
+}
+
 // What any user is looking at or designer is working on or a developer is developing
 
 export function setCurrentUserItemContext(contextItem, saveToDb){
@@ -79,20 +98,6 @@ export function setCurrentUserItemContext(contextItem, saveToDb){
     console.log("ACTIONS: Current user context update: DE: " + contextItem.designId + " DV: " + contextItem.designVersionId + " DU: " + contextItem.designUpdateId + " WP: " + contextItem.workPackageId + " DC: " + contextItem.designComponentId);
 
     return function (dispatch) {
-
-        // let newContext = {
-        //     userId:                     contextItem.userId,
-        //     designId:                   contextItem.designId,
-        //     designVersionId:            contextItem.designVersionId,
-        //     designUpdateId:             contextItem.designUpdateId,
-        //     workPackageId:              contextItem.workPackageId,
-        //     designComponentId:          contextItem.designComponentId,
-        //     designComponentType:        contextItem.designComponentType,
-        //     featureReferenceId:         contextItem.featureReferenceId,
-        //     featureAspectReferenceId:   contextItem.featureAspectReferenceId,
-        //     scenarioReferenceId:        contextItem.scenarioReferenceId,
-        //     scenarioStepId:             contextItem.scenarioStepId
-        // };
 
         dispatch({type: SET_CURRENT_USER_ITEM_CONTEXT, newUserItemContext: contextItem});
 
@@ -245,5 +250,13 @@ export function updateProgressData(newValue) {
     console.log("ACTIONS: Progress data update: " + newValue);
     return function (dispatch) {
         dispatch({type: UPDATE_PROGRESS_DATA, newDataValue: newValue});
+    };
+}
+
+// Toggle between true and false to trigger re-renders of design when data is updated
+export function updateViewOptionsData(newValue) {
+    console.log("ACTIONS: View options data update: " + newValue);
+    return function (dispatch) {
+        dispatch({type: UPDATE_VIEW_OPTIONS_DATA, newDataValue: newValue});
     };
 }

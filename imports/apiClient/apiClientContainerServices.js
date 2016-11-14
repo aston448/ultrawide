@@ -46,7 +46,7 @@ class ClientContainerServices{
         // Subscribing to these here makes them available to the whole app...
         const urHandle = Meteor.subscribe('userRoles');
         const ucHandle = Meteor.subscribe('userCurrentEditContext');
-        const udHandle = Meteor.subscribe('userCurrentDevContext');
+        const uvHandle = Meteor.subscribe('userCurrentViewOptions');
         const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
         const dHandle = Meteor.subscribe('designs');
         const dvHandle = Meteor.subscribe('designVersions');
@@ -62,7 +62,7 @@ class ClientContainerServices{
         const loading = (
             !urHandle.ready()   ||
             !ucHandle.ready()   ||
-            !udHandle.ready()   ||
+            !uvHandle.ready()   ||
             !uuHandle.ready()   ||
             !dHandle.ready()    ||
             !dvHandle.ready()   ||

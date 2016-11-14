@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
-import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
+import { UserCurrentViewOptions }   from '../collections/context/user_current_view_options.js';
 import { UserRoles }                from '../collections/users/user_roles.js';
 import { Designs }                  from '../collections/design/designs.js';
 import { DesignVersions }           from '../collections/design/design_versions.js';
@@ -22,7 +22,7 @@ import ClientContainerServices from '../apiClient/apiClientContainerServices.js'
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, changeApplicationMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserDevContext, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
+import {setCurrentView, changeApplicationMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -45,6 +45,7 @@ class ClientUserContextServices {
         // Get the stored context for the user
         // Get last known state from the DB
         const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const userViewOptions = UserCurrentViewOptions.findOne({userId: userId});
 
         // Set default view settings for open items
         // TODO - could get persisted settings here
@@ -251,7 +252,6 @@ class ClientUserContextServices {
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
 
-            return userContext;
 
         } else {
             // No context saved so default to nothing
@@ -272,9 +272,61 @@ class ClientUserContextServices {
                 moduleTestResultsLocation:  'NONE',
             };
 
-            store.dispatch(setCurrentUserItemContext(emptyContext, false)); // Don't save - we are reading from DB here!
+            store.dispatch(setCurrentUserItemContext(emptyContext, true));
 
-            return emptyContext;
+        }
+
+        if(userViewOptions){
+
+            const viewOptions = {
+                userId:                     userId,
+                designDetailsVisible:       userViewOptions.designDetailsVisible,
+                designAccTestsVisible:      userViewOptions.designAccTestsVisible,
+                designUnitTestsVisible:     userViewOptions.designUnitTestsVisible,
+                designDomainDictVisible:    userViewOptions.designDomainDictVisible,
+                // Design Update Screen - Scope and Design always visible
+                updateDetailsVisible:       userViewOptions.updateDetailsVisible,
+                updateAccTestsVisible:      userViewOptions.updateAccTestsVisible,
+                updateUnitTestsVisible:     userViewOptions.updateUnitTestsVisible,
+                updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
+                // Work package editor - Scope and Design always visible
+                wpDetailsVisible:           userViewOptions.wpDetailsVisible,
+                wpDomainDictVisible:        userViewOptions.wpDomainDictVisible,
+                // Developer Screen - Design always visible
+                devDetailsVisible:          userViewOptions.devDetailsVisible,
+                devAccTestsVisible:         userViewOptions.devAccTestsVisible,
+                devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
+                devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
+                devDomainDictVisible:       userViewOptions.devDomainDictVisible
+            };
+
+            store.dispatch(setCurrentUserViewOptions(viewOptions, false)); // Don't save - we are reading from DB here!
+
+        } else {
+
+            const defaultOptions = {
+                userId:                     userId,
+                designDetailsVisible:       true,
+                designAccTestsVisible:      false,
+                designUnitTestsVisible:     false,
+                designDomainDictVisible:    true,
+                // Design Update Screen - Scope and Design always visible
+                updateDetailsVisible:       true,
+                updateAccTestsVisible:      false,
+                updateUnitTestsVisible:     false,
+                updateDomainDictVisible:    false,
+                // Work package editor - Scope and Design always visible
+                wpDetailsVisible:           true,
+                wpDomainDictVisible:        false,
+                // Developer Screen - Design always visible
+                devDetailsVisible:          false,
+                devAccTestsVisible:         true,
+                devUnitTestsVisible:        false,
+                devFeatureFilesVisible:     true,
+                devDomainDictVisible:       false
+            };
+
+            store.dispatch(setCurrentUserViewOptions(defaultOptions, true));
         }
 
 

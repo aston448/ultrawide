@@ -8,7 +8,7 @@ import {ViewType} from '../constants/constants.js'
 
 // REDUX services
 import store from '../redux/store'
-import {changeApplicationMode, setCurrentView, toggleDomainDictionary} from '../redux/actions'
+import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -31,9 +31,15 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    toggleDomainDictionary(currentState){
-        // Sets the Domain Dictionary visibility on or off
-        store.dispatch(toggleDomainDictionary(!currentState));
+    toggleViewOption(optionType, currentOptions, currentDataValue){
+        // Toggles a particular view option
+        let newOptions = currentOptions;
+
+        newOptions[optionType] = !currentOptions[optionType];
+
+        store.dispatch(setCurrentUserViewOptions(newOptions, true));
+        store.dispatch(updateViewOptionsData(!currentDataValue));
+
         return true;
     }
 

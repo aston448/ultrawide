@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, RoleType} from '../../../constants/constants.js'
+import {ViewType, ViewMode, ViewOptionType, RoleType} from '../../../constants/constants.js'
 import ClientAppHeaderServices from '../../../apiClient/apiClientAppHeader.js';
 import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
 import ClientIdentityServices from '../../../apiClient/apiIdentity';
@@ -46,9 +46,9 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode);
     }
 
-    onToggleDomainDictionary(domainDictionaryVisible){
+    onToggleViewOption(viewOptionType, currentOptions, currentViewDataValue){
         // Show / hide Domain Dictionary
-        ClientAppHeaderServices.toggleDomainDictionary(domainDictionaryVisible);
+        ClientAppHeaderServices.toggleViewOption(viewOptionType, currentOptions, currentViewDataValue);
     }
 
     onGoToDesigns(){
@@ -79,10 +79,20 @@ class AppHeader extends Component {
         ClientMashDataServices.exportFeatureUpdates(userContext);
     }
 
+    getOptionButtonStyle(viewOption, currentOptions){
+
+        if(currentOptions) {
+            return (currentOptions[viewOption] ? 'success' : 'default');
+        } else {
+            return 'default';
+        }
+
+    }
+
 
     render() {
 
-        const {mode, view, userRole, userName, userContext, message, domainDictionaryVisible, currentProgressDataValue} = this.props;
+        const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, currentProgressDataValue, currentViewDataValue} = this.props;
 
         let appName = ClientIdentityServices.getApplicationName();
 
@@ -91,6 +101,43 @@ class AppHeader extends Component {
         let headerBottomActions = '';
         let headerUserInfo = '';
 
+        let detailsOption= '';
+        let accTestOption = '';
+        let unitTestOption = '';
+        let dictOption = '';
+
+        // Get the correct user view options for the view context
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+                detailsOption = ViewOptionType.DESIGN_DETAILS;
+                accTestOption = ViewOptionType.DESIGN_ACC_TESTS;
+                unitTestOption = ViewOptionType.DESIGN_UNIT_TESTS;
+                dictOption = ViewOptionType.DESIGN_DICT;
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
+                detailsOption = ViewOptionType.UPDATE_DETAILS;
+                accTestOption = ViewOptionType.UPDATE_ACC_TESTS;
+                unitTestOption = ViewOptionType.UPDATE_UNIT_TESTS;
+                dictOption = ViewOptionType.UPDATE_DICT;
+                break;
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                detailsOption = ViewOptionType.WP_DETAILS;
+                dictOption = ViewOptionType.WP_DICT;
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                detailsOption = ViewOptionType.DEV_DETAILS;
+                accTestOption = ViewOptionType.DEV_ACC_TESTS;
+                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
+                dictOption = ViewOptionType.DEV_DICT;
+                break;
+        }
+
         let bsStyleEdit = (mode === ViewMode.MODE_EDIT ? 'success': 'default');
         let bsStyleView = (mode === ViewMode.MODE_VIEW ? 'success': 'default');
 
@@ -98,7 +145,7 @@ class AppHeader extends Component {
             <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
 
         let designsButton =
-            <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onGoToDesigns()}>Designs</Button>;
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
 
         let viewModeEditButton =
             <Button bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
@@ -106,14 +153,28 @@ class AppHeader extends Component {
         let viewModeViewButton =
             <Button bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW)}>VIEW</Button>;
 
+        // View Options Buttons
+        let scopeButton =
+            <Button bsSize="xs" bsStyle={'success'}>Scope</Button>;
+        let designButton =
+            <Button bsSize="xs" bsStyle={'success'}>Design</Button>;
+        let detailsButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
+        let accTestsButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(accTestOption, userViewOptions, currentViewDataValue)}>Feature Tests</Button>;
+        let unitTestsButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(unitTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
+        let filesButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
         let domainDictionaryButton =
-            <Button bsSize="xs" bsStyle={domStyle} onClick={ () => this.onToggleDomainDictionary(domainDictionaryVisible)}>Domain</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
+
 
         let configureScreenButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Home</Button>;
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Role</Button>;
 
         let selectionScreenButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection</Button>;
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestsButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext, currentProgressDataValue)}>Refresh Progress Data</Button>;
@@ -160,81 +221,166 @@ class AppHeader extends Component {
                 break;
             case ViewType.CONFIGURE:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
                 break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
-                headerBottomActions = <ButtonToolbar>{configureScreenButton}</ButtonToolbar>;
+                headerTopActions = <ButtonToolbar>{configureScreenButton}</ButtonToolbar>;
                 break;
             case ViewType.SELECT:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
-                headerBottomActions = <ButtonToolbar>{designsButton}{configureScreenButton}</ButtonToolbar>;
+                headerTopActions = <ButtonToolbar>{configureScreenButton}{designsButton}</ButtonToolbar>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_UPDATE_EDIT:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {refreshTestsButton}
+                        {selectionScreenButton}
+                        {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
                 headerBottomActions =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
-                        {refreshTestsButton}
-                        {domainDictionaryButton}
-                        {selectionScreenButton}
+                        <ButtonGroup>
+                            {designButton}
+                            {detailsButton}
+                            {accTestsButton}
+                            {unitTestsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 break;
             case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATE_VIEW:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
-                headerBottomActions =
+                headerTopActions =
                     <ButtonToolbar>
-                        {domainDictionaryButton}
+                        {refreshTestsButton}
                         {selectionScreenButton}
                         {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
+                headerBottomActions =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {designButton}
+                            {detailsButton}
+                            {accTestsButton}
+                            {unitTestsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
+                    </ButtonToolbar>;
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+                headerUserInfo = userData;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {refreshTestsButton}
+                        {selectionScreenButton}
+                        {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
+                headerBottomActions =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {viewModeEditButton}
+                            {viewModeViewButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {scopeButton}
+                            {designButton}
+                            {detailsButton}
+                            {accTestsButton}
+                            {unitTestsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
+                    </ButtonToolbar>;
+                break;
+            case ViewType.DESIGN_UPDATE_VIEW:
+                headerUserInfo = userData;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {refreshTestsButton}
+                        {selectionScreenButton}
+                        {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
+                headerBottomActions =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {scopeButton}
+                            {designButton}
+                            {detailsButton}
+                            {accTestsButton}
+                            {unitTestsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {selectionScreenButton}
+                        {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
                 headerBottomActions =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
-                        {domainDictionaryButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
+                        <ButtonGroup>
+                            {scopeButton}
+                            {designButton}
+                            {detailsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
-                headerBottomActions =
+                headerTopActions =
                     <ButtonToolbar>
-                        {domainDictionaryButton}
                         {selectionScreenButton}
                         {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
+                headerBottomActions =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {scopeButton}
+                            {designButton}
+                            {detailsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 headerUserInfo = userData;
-                headerTopActions = <ButtonToolbar>{logoutButton}</ButtonToolbar>;
-                headerBottomActions =
+                headerTopActions =
                     <ButtonToolbar>
-                        {domainDictionaryButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {refreshTestsButton}
                         {exportToDevButton}
+                        {selectionScreenButton}
+                        {configureScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
+                headerBottomActions =
+                    <ButtonToolbar>
+                        {scopeButton}
+                        {designButton}
+                        {detailsButton}
+                        {accTestsButton}
+                        {unitTestsButton}
+                        {domainDictionaryButton}
                     </ButtonToolbar>;
                 break;
             default:
@@ -256,8 +402,13 @@ class AppHeader extends Component {
 
                 <Grid>
                     <Row className={roleClass}>
-                        <Col md={12}>
+                        <Col md={11}>
                             <div className="ultrawide-logo">{appName}</div>
+                        </Col>
+                        <Col md={1}>
+                            <ButtonToolbar className="top-header-buttons">
+                                 {logoutButton}
+                            </ButtonToolbar>
                         </Col>
                     </Row>
                     <Row className="header-row-top">
@@ -267,7 +418,7 @@ class AppHeader extends Component {
                         <Col md={5}>
                             {headerMessage}
                         </Col>
-                        <Col md={1}>
+                        <Col md={4}>
                             {headerTopActions}
                         </Col>
                     </Row>
@@ -299,14 +450,15 @@ AppHeader.propTypes = {
 function mapStateToProps(state) {
 
     return {
-        mode: state.currentViewMode,
-        view: state.currentAppView,
-        userRole: state.currentUserRole,
-        userName: state.currentUserName,
-        userContext: state.currentUserItemContext,
-        message: state.currentUserMessage,
-        domainDictionaryVisible: state.domainDictionaryVisible,
-        currentProgressDataValue: state.currentProgressDataValue
+        mode:                       state.currentViewMode,
+        view:                       state.currentAppView,
+        userRole:                   state.currentUserRole,
+        userName:                   state.currentUserName,
+        userContext:                state.currentUserItemContext,
+        userViewOptions:            state.currentUserViewOptions,
+        message:                    state.currentUserMessage,
+        currentProgressDataValue:   state.currentProgressDataValue,
+        currentViewDataValue:       state.currentViewOptionsDataValue
     }
 }
 

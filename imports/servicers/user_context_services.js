@@ -4,7 +4,7 @@
 
 
 import {UserCurrentEditContext} from '../collections/context/user_current_edit_context.js'
-import {UserCurrentDevContext} from '../collections/context/user_current_dev_context.js'
+import {UserCurrentViewOptions} from '../collections/context/user_current_view_options.js'
 import {UserCurrentDevUpdates} from '../collections/design_update/user_current_dev_updates.js'
 
 class UserContextServices{
@@ -34,6 +34,36 @@ class UserContextServices{
             }
         )
     };
+
+    saveUserViewOptions(userViewOptions){
+
+        // Remove current options
+        UserCurrentViewOptions.remove({userId: userViewOptions.userId});
+
+        // And add new
+        UserCurrentViewOptions.insert({
+            userId:                     userViewOptions.userId,
+            designDetailsVisible:       userViewOptions.designDetailsVisible,
+            designAccTestsVisible:      userViewOptions.designAccTestsVisible,
+            designUnitTestsVisible:     userViewOptions.designUnitTestsVisible,
+            designDomainDictVisible:    userViewOptions.designDomainDictVisible,
+            // Design Update Screen - Scope and Design always visible
+            updateDetailsVisible:       userViewOptions.updateDetailsVisible,
+            updateAccTestsVisible:      userViewOptions.updateAccTestsVisible,
+            updateUnitTestsVisible:     userViewOptions.updateUnitTestsVisible,
+            updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
+            // Work package editor - Scope and Design always visible
+            wpDetailsVisible:           userViewOptions.wpDetailsVisible,
+            wpDomainDictVisible:        userViewOptions.wpDomainDictVisible,
+            // Developer Screen - Design always visible
+            devDetailsVisible:          userViewOptions.devDetailsVisible,
+            devAccTestsVisible:         userViewOptions.devAccTestsVisible,
+            devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
+            devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
+            devDomainDictVisible:       userViewOptions.devDomainDictVisible
+        });
+
+    }
 
     // saveUserDevContext(userId, designId, designVersionId, workPackageId, featureFilesLocation){
     //

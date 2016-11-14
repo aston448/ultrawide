@@ -78,7 +78,8 @@ class DesignComponent extends Component{
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue //&&
+                    //nextProps.currentViewDataValue === this.props.currentViewDataValue
                 );
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -305,7 +306,7 @@ class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext, currentProgressDataValue} = this.props;
+        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext, currentProgressDataValue, currentViewDataValue} = this.props;
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -339,6 +340,7 @@ class DesignComponent extends Component{
                     userContext={userContext}
                     isOpen={this.state.open}
                     currentProgressDataValue={currentProgressDataValue}
+                    //currentViewDataValue={currentViewDataValue}
                 />
             </div>;
 
@@ -657,13 +659,14 @@ DesignComponent.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        mode: state.currentViewMode,
-        view: state.currentAppView,
-        userContext: state.currentUserItemContext,
-        openDesignItems: state.currentUserOpenDesignItems,
-        openDesignUpdateItems: state.currentUserOpenDesignUpdateItems,
-        openWorkPackageItems: state.currentUserOpenWorkPackageItems,
-        currentProgressDataValue: state.currentProgressDataValue
+        mode:                       state.currentViewMode,
+        view:                       state.currentAppView,
+        userContext:                state.currentUserItemContext,
+        openDesignItems:            state.currentUserOpenDesignItems,
+        openDesignUpdateItems:      state.currentUserOpenDesignUpdateItems,
+        openWorkPackageItems:       state.currentUserOpenWorkPackageItems,
+        currentProgressDataValue:   state.currentProgressDataValue,
+        //currentViewDataValue:       state.currentViewOptionsDataValue
     }
 }
 

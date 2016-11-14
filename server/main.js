@@ -9,7 +9,7 @@ import '../imports/collections/design/feature_background_steps.js';
 import '../imports/collections/design/scenario_steps.js';
 import '../imports/collections/users/user_roles.js';
 import '../imports/collections/context/user_current_edit_context.js';
-import '../imports/collections/context/user_current_dev_context.js';
+import '../imports/collections/context/user_current_view_options.js';
 import '../imports/collections/design_update/user_current_dev_updates.js';
 import '../imports/collections/design/domain_dictionary.js';
 import '../imports/collections/work/work_packages.js';

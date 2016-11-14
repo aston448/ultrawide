@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
-import DesignDevMashContainer from '../dev/DesignDevMashContainer.jsx';
+import DesignDevMashContainer from '../dev/DesignDevFeatureMashContainer.jsx';
 import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
 import DevFilesContainer from '../dev/DevFilesContainer.jsx';
 
@@ -64,9 +64,37 @@ class DevApplicationsList extends Component {
 
     render() {
 
-        const {wpApplications, featureFiles, userContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
+        const {wpApplications, featureFiles, userContext, currentItemName, view, mode, viewOptions} = this.props;
 
         let layout = '';
+
+        // Get the correct display context
+        let displayContext = DisplayContext.BASE_VIEW;
+        switch(view){
+            case ViewType.DEVELOP_BASE_WP:
+                displayContext = DisplayContext.BASE_VIEW;
+                break;
+            case ViewType.DEVELOP_UPDATE_WP:
+                displayContext = DisplayContext.UPDATE_VIEW;
+                break;
+        }
+
+        let designDetails = '';
+        let featureTests = '';
+        let unitTests = '';
+        let devFiles = '';
+        let domainDictionary = '';
+        let displayedItems = 1;
+
+        // WHAT COMPONENTS ARE VISIBLE (Besides Design)
+
+        // Start by assuming only 2 cols
+        let col1width = 6;
+        let col2width = 6;
+        let col3width = 6;
+        let col4width = 6;
+        let col5width = 6;
+        let col6width = 6;
 
         // Working Design
         let design =
@@ -74,71 +102,247 @@ class DevApplicationsList extends Component {
                 {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN)}
             </Panel>;
 
-        // Mash
-        let mash =
-            <Panel header="Implementation Status" className="panel-update panel-update-body">
-                <DesignDevMashContainer params={{
-                    userContext: userContext
-                }}/>
-            </Panel>;
+        // Details
+        if(viewOptions.devDetailsVisible){
+            designDetails =
+                <DesignComponentTextContainer params={{
+                    currentContext: userContext,
+                    currentItemName: currentItemName,
+                    mode: mode,
+                    view: view,
+                    displayContext: displayContext
+                }}/>;
 
-        // Files
-        let devFiles =
-            <Panel header="Build Feature Files" className="panel-update panel-update-body">
-                <DevFilesContainer params={{
-                    userContext: userContext
-                }}/>
-            </Panel>;
+            displayedItems++;
+        }
+
+        // Feature Tests
+        if(viewOptions.devAccTestsVisible){
+            featureTests =
+                <Panel header="Feature Test Implementation" className="panel-update panel-update-body">
+                    <DesignDevFeatureMashContainer params={{
+                        userContext: userContext
+                    }}/>
+                </Panel>;
+
+            if(displayedItems == 2){
+                // There are now 3 cols so change widths
+                col1width = 4;
+                col2width = 4;
+                col3width = 4;
+                col4width = 4;
+                col5width = 4;
+                col6width = 4;
+            }
+
+            displayedItems++;
+        }
+
+        // Unit Tests
+        if(viewOptions.devUnitTestsVisible){
+            unitTests =
+                <Panel header="Module Test Implementation" className="panel-update panel-update-body">
+                    <DesignDevUnitMashContainer params={{
+                        userContext: userContext
+                    }}/>
+                </Panel>;
+
+            switch(displayedItems){
+                case 2:
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    break;
+                case 3:
+                    // There are now 4 cols so change widths
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    col6width = 3;
+                    break;
+            }
+            displayedItems++;
+        }
+
+        // Feature Files
+        if(viewOptions.devFeatureFilesVisible){
+            devFiles =
+                <Panel header="Build Feature Files" className="panel-update panel-update-body">
+                    <DevFilesContainer params={{
+                        userContext: userContext
+                    }}/>
+                </Panel>;
+
+            switch(displayedItems){
+                case 2:
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    break;
+                case 3:
+                    // There are now 4 cols so change widths
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    col6width = 3;
+                    break;
+                case 4:
+                    // There are now 5 cols so change widths
+                    col1width = 2;
+                    col2width = 2;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 2;
+                    col6width = 3;
+            }
+            displayedItems++;
+        }
 
         // Domain Dictionary
-        let domainDictionary =
-            <DomainDictionaryContainer params={{
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId
-            }}/>;
+        if(viewOptions.devDomainDictVisible) {
+            domainDictionary =
+                <DomainDictionaryContainer params={{
+                    designId: userContext.designId,
+                    designVersionId: userContext.designVersionId
+                }}/>;
+
+            switch(displayedItems){
+                case 2:
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    break;
+                case 3:
+                    // There are now 4 cols so change widths
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    col6width = 3;
+                    break;
+                case 4:
+                    // There are now 5 cols so change widths
+                    col1width = 2;
+                    col2width = 2;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 2;
+                    col6width = 2;
+                    break;
+                case 5:
+                    // There are now 6 cols so change widths
+                    col1width = 2;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 2;
+                    col6width = 2;
+                    break;
+            }
+            displayedItems++;
+        }
+
+
+
+
+
+        // Mash
+        // let mash =
+        //     <Panel header="Implementation Status" className="panel-update panel-update-body">
+        //         <DesignDevMashContainer params={{
+        //             userContext: userContext
+        //         }}/>
+        //     </Panel>;
+        //
+        // // Files
+        // let
+        //
+        // // Domain Dictionary
+        // let domainDictionary =
+        //     <DomainDictionaryContainer params={{
+        //         designId: userContext.designId,
+        //         designVersionId: userContext.designVersionId
+        //     }}/>;
 
 
         // Create the layout depending on the current view...
         if(wpApplications) {
 
-            if(domainDictionaryVisible) {
-                // Layout is DESIGN | MASH | DEV FILES | DICTIONARY
-                layout =
-                    <Grid>
-                        <Row>
-                            <Col md={2} className="scroll-col">
-                                {design}
-                            </Col>
-                            <Col md={5}>
-                                {mash}
-                            </Col>
-                            <Col md={2} className="scroll-col">
-                                {devFiles}
-                            </Col>
-                            <Col md={3} className="scroll-col">
-                                {domainDictionary}
-                            </Col>
-                        </Row>
-                    </Grid>;
+            let col1 =
+                <Col md={col1width} className="scroll-col">
+                    {design}
+                </Col>;
 
-            } else {
-                // Layout is DESIGN | MASH | DEV FILES
-                layout =
-                    <Grid>
-                        <Row>
-                            <Col md={3} className="scroll-col">
-                                {design}
-                            </Col>
-                            <Col md={6}>
-                                {mash}
-                            </Col>
-                            <Col md={3} className="scroll-col">
-                                {devFiles}
-                            </Col>
-                        </Row>
-                    </Grid>;
-
+            let col2 = '';
+            if(viewOptions.devDetailsVisible){
+                col2 =
+                    <Col md={col2width} className="scroll-col">
+                        {designDetails}
+                    </Col>;
             }
+
+            let col3 = '';
+            if(viewOptions.devAccTestsVisible){
+                col3 =
+                    <Col md={col3width} className="scroll-col">
+                        {featureTests}
+                    </Col>;
+            }
+
+            let col4 = '';
+            if(viewOptions.devUnitTestsVisible){
+                col4 =
+                    <Col md={col4width} className="scroll-col">
+                        {unitTests}
+                    </Col>;
+            }
+
+            let col5 = '';
+            if(viewOptions.devFeatureFilesVisible){
+                col5 =
+                    <Col md={col5width} className="scroll-col">
+                        {devFiles}
+                    </Col>;
+            }
+
+            let col6 = '';
+            if(viewOptions.devDomainDictVisible){
+                col6 =
+                    <Col md={col6width} className="scroll-col">
+                        {domainDictionary}
+                    </Col>;
+            }
+
+
+            // Make up the layout based on the view options
+            layout =
+                <Grid >
+                    <Row>
+                        {col1}
+                        {col2}
+                        {col3}
+                        {col4}
+                        {col5}
+                        {col6}
+                    </Row>
+                </Grid>;
 
             return (
                 <div>
@@ -150,6 +354,7 @@ class DevApplicationsList extends Component {
 
             return (
                 <div>
+                    No Data
                 </div>
             );
         }
@@ -167,11 +372,11 @@ DevApplicationsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext: state.currentUserItemContext,
-        currentItemName: state.currentDesignComponentName,
-        view: state.currentAppView,
-        mode: state.currentViewMode,
-        domainDictionaryVisible: state.domainDictionaryVisible
+        userContext:        state.currentUserItemContext,
+        currentItemName:    state.currentDesignComponentName,
+        view:               state.currentAppView,
+        mode:               state.currentViewMode,
+        viewOptions:        state.currentUserViewOptions
     }
 }
 

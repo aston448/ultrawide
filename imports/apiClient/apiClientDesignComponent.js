@@ -407,6 +407,15 @@ class ClientDesignComponentServices{
                     passingTestsCount:  0,
                     failingTestsCount:  0
                 });
+
+            default:
+
+                return({
+                    featureCount:       0,
+                    scenarioCount:      0,
+                    passingTestsCount:  0,
+                    failingTestsCount:  0
+                });
         }
 
     }

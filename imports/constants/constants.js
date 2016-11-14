@@ -34,6 +34,24 @@ export const ViewMode = {
     MODE_VIEW: 'MODE_VIEW'
 };
 
+export const ViewOptionType = {
+    DESIGN_DETAILS:     'designDetailsVisible',
+    DESIGN_ACC_TESTS:   'designAccTestsVisible',
+    DESIGN_UNIT_TESTS:  'designUnitTestsVisible',
+    DESIGN_DICT:        'designDomainDictVisible',
+    UPDATE_DETAILS:     'updateDetailsVisible',
+    UPDATE_ACC_TESTS:   'updateAccTestsVisible',
+    UPDATE_UNIT_TESTS:  'updateUnitTestsVisible',
+    UPDATE_DICT:        'updateDomainDictVisible',
+    WP_DETAILS:         'wpDetailsVisible',
+    WP_DICT:            'wpDomainDictVisible',
+    DEV_DETAILS:        'devDetailsVisible',
+    DEV_ACC_TESTS:      'devAccTestsVisible',
+    DEV_UNIT_TESTS:     'devUnitTestsVisible',
+    DEV_FILES:          'devFeatureFilesVisible',
+    DEV_DICT:           'devDomainDictVisible',
+};
+
 // Context specifies how and what information is displayed in common components
 export const DisplayContext = {
     BASE_EDIT:              'BASE_EDIT',            // Editable new design

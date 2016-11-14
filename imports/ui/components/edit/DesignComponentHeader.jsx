@@ -106,7 +106,8 @@ class DesignComponentHeader extends Component{
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.isDragging === this.props.isDragging &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue //&&
+                    //nextProps.currentViewDataValue === this.props.currentViewDataValue
                 );
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -857,6 +858,7 @@ DesignComponentHeader.propTypes = {
     displayContext: PropTypes.string.isRequired,
     userContext: PropTypes.object.isRequired,
     isOpen: PropTypes.bool.isRequired,
+    //currentViewDataValue: PropTypes.bool.isRequired,
     currentProgressDataValue: PropTypes.bool.isRequired
 };
 

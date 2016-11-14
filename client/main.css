@@ -244,6 +244,10 @@ input {
     letter-spacing: 8px;
 }
 
+.top-header-buttons{
+    padding: 2px 0 0 0;
+}
+
 .header-row-top{
     padding: 10px 0 10px 0;
 }
@@ -455,7 +459,7 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  16px;
     width: 100%;
-    color: black;
+    color: darkslategray;
     background-color: transparent;
 }
 
@@ -498,7 +502,7 @@ input {
     padding: 3px 0 0 0;
     font-size:  15px;
     font-weight: bold;
-    color: black;
+    color: darkred;
     background-color: transparent;
 }
 
@@ -767,7 +771,7 @@ input {
     padding: 0;
     margin: 0 0 10px 0;
     color: black;
-    background-color: transparent;
+    background-color: lightyellow;
 }
 
 
