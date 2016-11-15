@@ -37,17 +37,20 @@ export const ViewMode = {
 export const ViewOptionType = {
     DESIGN_DETAILS:     'designDetailsVisible',
     DESIGN_ACC_TESTS:   'designAccTestsVisible',
-    DESIGN_UNIT_TESTS:  'designUnitTestsVisible',
+    DESIGN_INT_TESTS:   'designIntTestsVisible',
+    DESIGN_MOD_TESTS:   'designModTestsVisible',
     DESIGN_DICT:        'designDomainDictVisible',
     UPDATE_DETAILS:     'updateDetailsVisible',
     UPDATE_ACC_TESTS:   'updateAccTestsVisible',
-    UPDATE_UNIT_TESTS:  'updateUnitTestsVisible',
+    UPDATE_INT_TESTS:   'updateIntTestsVisible',
+    UPDATE_MOD_TESTS:   'updateModTestsVisible',
     UPDATE_DICT:        'updateDomainDictVisible',
     WP_DETAILS:         'wpDetailsVisible',
     WP_DICT:            'wpDomainDictVisible',
     DEV_DETAILS:        'devDetailsVisible',
     DEV_ACC_TESTS:      'devAccTestsVisible',
-    DEV_UNIT_TESTS:     'devUnitTestsVisible',
+    DEV_INT_TESTS:      'devIntTestsVisible',
+    DEV_MOD_TESTS:      'devModTestsVisible',
     DEV_FILES:          'devFeatureFilesVisible',
     DEV_DICT:           'devDomainDictVisible',
 };
@@ -71,7 +74,10 @@ export const DisplayContext = {
     EDIT_STEP_DEV:          'EDIT_STEP_DEV',        // Step editor for Design-Dev Mash: Steps only in Dev
     VIEW_ACCEPTANCE_MASH:   'VIEW_ACCEPTANCE_MASH', // View of Scenarios in a Feature related to Acceptance tests
     VIEW_UNIT_MASH:         'VIEW_UNIT_MASH',       // View of related Unit Tests in the Design-Dev Mash
-    VIEW_UNIT_UNLINKED:     'VIEW_UNIT_UNLINKED'    // View of all unlinked unit tests
+    VIEW_UNIT_UNLINKED:     'VIEW_UNIT_UNLINKED',   // View of all unlinked unit tests
+    INT_TEST_FEATURE:       'INT_TEST_FEATURE',
+    INT_TEST_FEATURE_ASPECT:'INT_TEST_FEATURE_ASPECT',
+    INT_TEST_SCENARIO:      'INT_TEST_SCENARIO'
 };
 
 export const StepContext = {
@@ -188,9 +194,10 @@ export const UserDevScenarioStepStatus = {
 };
 
 export const LocationType = {
-    LOCATION_FEATURE_FILES:         'Feature Files Location:',
-    LOCATION_FEATURE_TEST_OUTPUT:   'Feature Test Output File:',
-    LOCATION_UNIT_TEST_OUTPUT:      'Unit Test Output File:'
+    LOCATION_FEATURE_FILES:             'Feature Files Location:',
+    LOCATION_ACCEPTANCE_TEST_OUTPUT:    'Acceptance Test Output File:',
+    LOCATION_INTEGRATION_TEST_OUTPUT:   'Integration Test Output File:',
+    LOCATION_MODULE_TEST_OUTPUT:        'Module Test Output File:'
 };
 
 export const DevTestTag = {

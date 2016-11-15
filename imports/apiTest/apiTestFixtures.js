@@ -13,9 +13,9 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { FeatureBackgroundSteps }   from '../collections/design/feature_background_steps.js';
 import { ScenarioSteps }            from '../collections/design/scenario_steps.js';
 import { DomainDictionary }         from '../collections/design/domain_dictionary.js';
-import { DesignDevFeatureMash }     from '../collections/dev/design_dev_feature_mash.js';
-import { DesignDevScenarioMash }    from '../collections/dev/design_dev_scenario_mash.js';
-import { DesignDevScenarioStepMash }from '../collections/dev/design_dev_scenario_step_mash.js';
+import { DesignDevFeatureMash }     from '../collections/tmp/design_dev_feature_mash.js';
+import { DesignDevScenarioMash }    from '../collections/tmp/design_dev_scenario_mash.js';
+import { DesignDevScenarioStepMash }from '../collections/tmp/design_dev_scenario_step_mash.js';
 import { UserDevFeatures }          from '../collections/dev/user_dev_features.js';
 
 import  ImpExServices     from '../servicers/import_export.js';

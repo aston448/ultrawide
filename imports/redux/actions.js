@@ -195,30 +195,30 @@ export function setCurrentUserOpenWorkPackageItems(userId, existingItems, compon
 
 }
 
-// Current Development Environment Context
-export function setCurrentUserDevContext(devContext, saveToDb) {
-    // Note that designUpdateIdsis an array
-    console.log("ACTIONS: Current user dev context update");
-
-    return function (dispatch) {
-
-        let newDevContext = {
-            designId:               designId,
-            designVersionId:        designVersionId,
-            designUpdateId:         designUpdateId,
-            workPackageId:          workPackageId,
-            featureFilesLocation:   featureFilesLocation,
-        };
-
-        dispatch({type: SET_CURRENT_USER_DEV_CONTEXT, newUserDevContext: devContext});
-
-        // And persist the settings - only want to do this if we are changing them...
-        //TODO proper user id
-        if(saveToDb) {
-            Meteor.call('userContext.setCurrentUserDevContext', userId, designId, designVersionId, workPackageId, featureFilesLocation);
-        }
-    };
-}
+// // Current Development Environment Context
+// export function setCurrentUserDevContext(devContext, saveToDb) {
+//     // Note that designUpdateIdsis an array
+//     console.log("ACTIONS: Current user dev context update");
+//
+//     return function (dispatch) {
+//
+//         let newDevContext = {
+//             designId:               designId,
+//             designVersionId:        designVersionId,
+//             designUpdateId:         designUpdateId,
+//             workPackageId:          workPackageId,
+//             featureFilesLocation:   featureFilesLocation,
+//         };
+//
+//         dispatch({type: SET_CURRENT_USER_DEV_CONTEXT, newUserDevContext: devContext});
+//
+//         // And persist the settings - only want to do this if we are changing them...
+//         //TODO proper user id
+//         if(saveToDb) {
+//             Meteor.call('userContext.setCurrentUserDevContext', userId, designId, designVersionId, workPackageId, featureFilesLocation);
+//         }
+//     };
+// }
 
 
 // Updates the current design component name if changed

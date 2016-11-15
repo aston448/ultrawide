@@ -40,15 +40,15 @@ class AppHeaderData extends Component {
 
     render() {
 
-        const {currentAppView, currentDesign, currentDesignVersion, currentDesignUpdate, currentWorkPackage} = this.props;
+        const {view, currentDesign, currentDesignVersion, currentDesignUpdate, currentWorkPackage} = this.props;
 
         // What is shown here depends on the current view
-        console.log("RENDERING HEADER " + currentAppView + ' ' + currentDesign + ' ' + currentDesignVersion);
+        console.log("RENDERING HEADER " + view + ' ' + currentDesign + ' ' + currentDesignVersion);
         let headerData = '';
 
         // Ignore renderings of this before we know where we are
-        if(currentAppView) {
-            switch (currentAppView) {
+        if(view) {
+            switch (view) {
                 case ViewType.AUTHORISE:
                     // Not logged in so no info known
                     headerData = 'Please log in...';
@@ -157,7 +157,7 @@ class AppHeaderData extends Component {
 
 
 AppHeaderData.propTypes = {
-    currentAppView: PropTypes.string,
+    view: PropTypes.string,
     currentDesign: PropTypes.object,
     currentDesignVersion: PropTypes.object,
     currentDesignUpdate: PropTypes.object,
@@ -168,8 +168,8 @@ AppHeaderData.propTypes = {
 export default AppHeaderDataContainer = createContainer(({params}) => {
 
     return ClientContainerServices.getApplicationHeaderData(
-        params.currentUserItemContext,
-        params.currentAppView
+        params.userContext,
+        params.view
     );
 
 

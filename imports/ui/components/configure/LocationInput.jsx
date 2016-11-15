@@ -75,12 +75,16 @@ class LocationInput extends Component {
                 labelText = 'Directory containing Cucumber Feature Files:';
                 placeholderText = userContext.featureFilesLocation;
                 break;
-            case LocationType.LOCATION_FEATURE_TEST_OUTPUT:
-                labelText = 'JSON File containing Cucumber Test Results:';
-                placeholderText = userContext.featureTestResultsLocation;
+            case LocationType.LOCATION_ACCEPTANCE_TEST_OUTPUT:
+                labelText = 'File containing Acceptance Test Results:';
+                placeholderText = userContext.acceptanceTestResultsLocation;
                 break;
-            case LocationType.LOCATION_UNIT_TEST_OUTPUT:
-                labelText = 'JSON File containing Mocha Module Test Results:';
+            case LocationType.LOCATION_INTEGRATION_TEST_OUTPUT:
+                labelText = 'File containing Integration Test Results:';
+                placeholderText = userContext.integrationTestResultsLocation;
+                break;
+            case LocationType.LOCATION_MODULE_TEST_OUTPUT:
+                labelText = 'File containing Module Test Results:';
                 placeholderText = userContext.moduleTestResultsLocation;
         }
 

@@ -5,8 +5,8 @@
 // Ultrawide collections
 import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
-import {UserUnitTestResults}    from '../collections/dev/user_unit_test_results.js';
-import {UserDesignDevMashData}  from '../collections/dev/user_design_dev_mash_data.js';
+import {UserModTestMashData}    from '../collections/dev/user_mod_test_mash_data.js';
+import {UserAccTestMashData}  from '../collections/dev/user_acc_test_mash_data.js';
 
 // Ultrawide Services
 import {ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel} from '../constants/constants.js';
@@ -73,20 +73,21 @@ class ClientDesignComponentServices{
 
             // Update context to new component
             const context = {
-                userId:                     Meteor.userId(),
-                designId:                   userContext.designId,
-                designVersionId:            userContext.designVersionId,
-                designUpdateId:             userContext.designUpdateId,
-                workPackageId:              userContext.workPackageId,
-                designComponentId:          newDesignComponentId,
-                designComponentType:        component.componentType,
-                featureReferenceId:         featureReferenceId,
-                featureAspectReferenceId:   featureAspectReferenceId,
-                scenarioReferenceId:        scenarioReferenceId,
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         Meteor.userId(),
+                designId:                       userContext.designId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designComponentId:              newDesignComponentId,
+                designComponentType:            component.componentType,
+                featureReferenceId:             featureReferenceId,
+                featureAspectReferenceId:       featureAspectReferenceId,
+                scenarioReferenceId:            scenarioReferenceId,
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -281,20 +282,21 @@ class ClientDesignComponentServices{
 
             // There can now be no component selected...
             const context = {
-                userId:                     Meteor.userId(),
-                designId:                   userContext.designId,
-                designVersionId:            userContext.designVersionId,
-                designUpdateId:             userContext.designUpdateId,
-                workPackageId:              userContext.workPackageId,
-                designComponentId:          'NONE',
-                designComponentType:        'NONE',
-                featureReferenceId:         'NONE',
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         Meteor.userId(),
+                designId:                       userContext.designId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designComponentId:              'NONE',
+                designComponentType:            'NONE',
+                featureReferenceId:             'NONE',
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -355,13 +357,13 @@ class ClientDesignComponentServices{
                 }).count();
 
                 // Get number of passing tests
-                const passingUnitTestsCount = UserUnitTestResults.find({
+                const passingUnitTestsCount = UserModTestMashData.find({
                     userId:                         userContext.userId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
                     testOutcome:                    MashTestStatus.MASH_PASS
                 }).count();
 
-                const passingAcceptanceTestsCount = UserDesignDevMashData.find({
+                const passingAcceptanceTestsCount = UserAccTestMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                designComponent.designVersionId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
@@ -369,13 +371,13 @@ class ClientDesignComponentServices{
                 }).count();
 
                 // Get number of failing tests
-                const failingUnitTestsCount = UserUnitTestResults.find({
+                const failingUnitTestsCount = UserModTestMashData.find({
                     userId:                         userContext.userId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
                     testOutcome:                    MashTestStatus.MASH_FAIL
                 }).count();
 
-                const failingAcceptanceTestsCount = UserDesignDevMashData.find({
+                const failingAcceptanceTestsCount = UserAccTestMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                designComponent.designVersionId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,

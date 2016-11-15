@@ -73,20 +73,21 @@ class ClientDesignServices{
         if(newDesignId != userContext.designId) {
 
             const context = {
-                userId:                     Meteor.userId(),
-                designId:                   newDesignId,
-                designVersionId:            'NONE',
-                designUpdateId:             'NONE',
-                workPackageId:              'NONE',
-                designComponentId:          'NONE',
-                designComponentType:        'NONE',
-                featureReferenceId:         'NONE',
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         Meteor.userId(),
+                designId:                       newDesignId,
+                designVersionId:                'NONE',
+                designUpdateId:                 'NONE',
+                workPackageId:                  'NONE',
+                designComponentId:              'NONE',
+                designComponentType:            'NONE',
+                featureReferenceId:             'NONE',
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -175,20 +176,21 @@ class ClientDesignServices{
 
                 // Set no current user item context but keep locations
                 const context = {
-                    userId:                     userContext.userId,
-                    designId:                   'NONE',
-                    designVersionId:            'NONE',
-                    designUpdateId:             'NONE',
-                    workPackageId:              'NONE',
-                    designComponentId:          'NONE',
-                    designComponentType:        'NONE',
-                    featureReferenceId:         'NONE',
-                    featureAspectReferenceId:   'NONE',
-                    scenarioReferenceId:        'NONE',
-                    scenarioStepId:             'NONE',
-                    featureFilesLocation:       userContext.featureFilesLocation,
-                    featureTestResultsLocation: userContext.featureTestResultsLocation,
-                    moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                    userId:                         userContext.userId,
+                    designId:                       'NONE',
+                    designVersionId:                'NONE',
+                    designUpdateId:                 'NONE',
+                    workPackageId:                  'NONE',
+                    designComponentId:              'NONE',
+                    designComponentType:            'NONE',
+                    featureReferenceId:             'NONE',
+                    featureAspectReferenceId:       'NONE',
+                    scenarioReferenceId:            'NONE',
+                    scenarioStepId:                 'NONE',
+                    featureFilesLocation:           userContext.featureFilesLocation,
+                    acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                    moduleTestResultsLocation:      userContext.moduleTestResultsLocation
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));

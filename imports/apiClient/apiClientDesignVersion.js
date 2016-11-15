@@ -35,20 +35,21 @@ class ClientDesignVersionServices{
     setDesignVersion(userContext, newDesignVersionId){
 
         const context = {
-            userId:                     Meteor.userId(),
-            designId:                   userContext.designId,       // Must be the same design
-            designVersionId:            newDesignVersionId,         // The new design version
-            designUpdateId:             'NONE',                     // Everything else reset for new Design
-            workPackageId:              'NONE',
-            designComponentId:          'NONE',
-            designComponentType:        'NONE',
-            featureReferenceId:         'NONE',
-            featureAspectReferenceId:   'NONE',
-            scenarioReferenceId:        'NONE',
-            scenarioStepId:             'NONE',
-            featureFilesLocation:       userContext.featureFilesLocation,
-            featureTestResultsLocation: userContext.featureTestResultsLocation,
-            moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+            userId:                         Meteor.userId(),
+            designId:                       userContext.designId,       // Must be the same design
+            designVersionId:                newDesignVersionId,         // The new design version
+            designUpdateId:                 'NONE',                     // Everything else reset for new Design
+            workPackageId:                  'NONE',
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE',
+            featureFilesLocation:           userContext.featureFilesLocation,
+            acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+            integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+            moduleTestResultsLocation:      userContext.moduleTestResultsLocation
         };
 
         store.dispatch(setCurrentUserItemContext(context, true));

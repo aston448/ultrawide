@@ -4,7 +4,7 @@
 
 import { Mongo } from 'meteor/mongo';
 
-export const UserUnitTestResults = new Mongo.Collection('userUnitTestResults');
+export const UserModTestMashData = new Mongo.Collection('userModTestMashData');
 
 let Schema = new SimpleSchema({
     // Identity
@@ -21,13 +21,13 @@ let Schema = new SimpleSchema({
     testOutcome:                {type: String},                         // Pending / Pass  Fail
 });
 
-UserUnitTestResults.attachSchema(Schema);
+UserModTestMashData.attachSchema(Schema);
 
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userUnitTestResults', function userUnitTestResultsPublication(){
-        return UserUnitTestResults.find({});
+    Meteor.publish('userModTestMashData', function userModTestMashDataPublication(){
+        return UserModTestMashData.find({});
     })
 }
 

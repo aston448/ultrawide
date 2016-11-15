@@ -83,6 +83,7 @@ class AppHeader extends Component {
 
         if(currentOptions) {
             return (currentOptions[viewOption] ? 'success' : 'default');
+
         } else {
             return 'default';
         }
@@ -103,7 +104,8 @@ class AppHeader extends Component {
 
         let detailsOption= '';
         let accTestOption = '';
-        let unitTestOption = '';
+        let intTestOption = '';
+        let modTestOption = '';
         let dictOption = '';
 
         // Get the correct user view options for the view context
@@ -112,14 +114,16 @@ class AppHeader extends Component {
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
                 accTestOption = ViewOptionType.DESIGN_ACC_TESTS;
-                unitTestOption = ViewOptionType.DESIGN_UNIT_TESTS;
+                intTestOption = ViewOptionType.DESIGN_INT_TESTS;
+                modTestOption = ViewOptionType.DESIGN_MOD_TESTS;
                 dictOption = ViewOptionType.DESIGN_DICT;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
                 detailsOption = ViewOptionType.UPDATE_DETAILS;
                 accTestOption = ViewOptionType.UPDATE_ACC_TESTS;
-                unitTestOption = ViewOptionType.UPDATE_UNIT_TESTS;
+                intTestOption = ViewOptionType.UPDATE_INT_TESTS;
+                modTestOption = ViewOptionType.UPDATE_MOD_TESTS;
                 dictOption = ViewOptionType.UPDATE_DICT;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -133,7 +137,8 @@ class AppHeader extends Component {
             case ViewType.DEVELOP_UPDATE_WP:
                 detailsOption = ViewOptionType.DEV_DETAILS;
                 accTestOption = ViewOptionType.DEV_ACC_TESTS;
-                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
+                intTestOption = ViewOptionType.DEV_INT_TESTS;
+                modTestOption = ViewOptionType.DEV_MOD_TESTS;
                 dictOption = ViewOptionType.DEV_DICT;
                 break;
         }
@@ -161,9 +166,11 @@ class AppHeader extends Component {
         let detailsButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
         let accTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(accTestOption, userViewOptions, currentViewDataValue)}>Feature Tests</Button>;
-        let unitTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(unitTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(accTestOption, userViewOptions, currentViewDataValue)}>Acceptance Tests</Button>;
+        let intTestsButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(intTestOption, userViewOptions, currentViewDataValue)}>Integration Tests</Button>;
+        let modTestsButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(modTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(modTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
         let filesButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
         let domainDictionaryButton =
@@ -216,6 +223,7 @@ class AppHeader extends Component {
                 roleClass = 'no-role';
         }
 
+        // Display the required buttons for the current view
         switch(view){
             case ViewType.AUTHORISE:
                 break;
@@ -249,7 +257,8 @@ class AppHeader extends Component {
                             {designButton}
                             {detailsButton}
                             {accTestsButton}
-                            {unitTestsButton}
+                            {intTestsButton}
+                            {modTestsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
@@ -269,7 +278,8 @@ class AppHeader extends Component {
                             {designButton}
                             {detailsButton}
                             {accTestsButton}
-                            {unitTestsButton}
+                            {intTestsButton}
+                            {modTestsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
@@ -294,7 +304,8 @@ class AppHeader extends Component {
                             {designButton}
                             {detailsButton}
                             {accTestsButton}
-                            {unitTestsButton}
+                            {intTestsButton}
+                            {modTestsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
@@ -315,7 +326,8 @@ class AppHeader extends Component {
                             {designButton}
                             {detailsButton}
                             {accTestsButton}
-                            {unitTestsButton}
+                            {intTestsButton}
+                            {modTestsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
@@ -379,7 +391,8 @@ class AppHeader extends Component {
                         {designButton}
                         {detailsButton}
                         {accTestsButton}
-                        {unitTestsButton}
+                        {intTestsButton}
+                        {modTestsButton}
                         {domainDictionaryButton}
                     </ButtonToolbar>;
                 break;
@@ -393,8 +406,8 @@ class AppHeader extends Component {
 
             if(userContext){
                 appData = <AppHeaderDataContainer params={{
-                    currentAppView: view,
-                    currentUserItemContext: userContext
+                    view: view,
+                    userContext: userContext
                 }}/>;
             }
 

@@ -4,29 +4,21 @@
 
 
 describe('UC 101 - Add New Design', function() {
-    it('A new Design can be added to Ultrawide by a Designer', function() {
+    it('A Designer can add a new Design to Ultrawide', function() {
 
         // Setup ===================================================================================================
         const expectedDesignName = 'New Design';
 
-
-
         // Execute =================================================================================================
-        server.call('test.addNewDesign');
+        server.call('test.addNewDesign', 'DESIGNER');
 
 
         // Verify ==================================================================================================
 
-        // Created 1 Design
-        let result = server.execute(() => {
-            const {Designs} = require('/imports/collections/design/designs.js');
-            return Designs.findOne({designName: 'New Design'});
-        });
-
-        expect(result);
-
-        // With correct data
-        expect(result.isRemovable).to.equal(true);
+        // Created a new removable Design
+        server.call('test.verifyNewDesign', (function(error, result){expect(!error);}));
 
     })
 });
+
+

@@ -75,12 +75,17 @@ class UserConfiguration extends Component {
                 </Row>
                 <Row>
                     <LocationInput
-                        type={LocationType.LOCATION_FEATURE_TEST_OUTPUT}
+                        type={LocationType.LOCATION_ACCEPTANCE_TEST_OUTPUT}
                     />
                 </Row>
                 <Row>
                     <LocationInput
-                        type={LocationType.LOCATION_UNIT_TEST_OUTPUT}
+                        type={LocationType.LOCATION_INTEGRATION_TEST_OUTPUT}
+                    />
+                </Row>
+                <Row>
+                    <LocationInput
+                        type={LocationType.LOCATION_MODULE_TEST_OUTPUT}
                     />
                 </Row>
             </Grid>

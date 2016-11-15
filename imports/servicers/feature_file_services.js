@@ -8,7 +8,7 @@ import {WorkPackages}                   from '../collections/work/work_packages.
 import {UserDevFeatures}                from '../collections/dev/user_dev_features.js';
 import {UserDevFeatureScenarios}        from '../collections/dev/user_dev_feature_scenarios.js';
 import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js';
-import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
+import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
 
 import {ComponentType, WorkPackageType, MashStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, LogLevel} from '../constants/constants.js';
 import {log} from '../common/utils.js';
@@ -126,7 +126,7 @@ class FeatureFileServices{
 
             if(existingFile){
                 // Get any tag assigned to this Scenario in Ultrawide
-                existingScenario = UserDesignDevMashData.findOne({
+                existingScenario = UserAccTestMashData.findOne({
                     userId:                         userContext.userId,
                     designVersionId:                userContext.designVersionId,
                     designUpdateId:                 userContext.designUpdateId,
@@ -158,7 +158,7 @@ class FeatureFileServices{
             scenarioSteps.forEach((step) => {
                 if(existingFile){
                     // Only add steps if they are currently stored as linked steps
-                    const mashStep = UserDesignDevMashData.findOne({
+                    const mashStep = UserAccTestMashData.findOne({
                         userId:                         userContext.userId,
                         designVersionId:                userContext.designVersionId,
                         designUpdateId:                 userContext.designUpdateId,

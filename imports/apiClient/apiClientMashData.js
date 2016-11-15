@@ -7,7 +7,7 @@ import { Meteor } from 'meteor/meteor';
 import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 import { DesignComponents }         from '../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { UserDesignDevMashData }    from '../collections/dev/user_design_dev_mash_data.js';
+import { UserAccTestMashData }    from '../collections/dev/user_acc_test_mash_data.js';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
@@ -98,17 +98,17 @@ class ClientMashDataServices {
     }
 
     updateTestData(userContext){
-        Meteor.call('mash.updateTestData', userContext, userContext.featureTestResultsLocation);
+        Meteor.call('mash.updateTestData', userContext, userContext.acceptanceTestResultsLocation);
     };
 
-    featureHasAspects(userContext){
+    featureHasAspects(userContext, featureComponentId){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Checking for feature aspects for feature {}", userContext.designComponentId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Checking for feature aspects for feature {}", featureComponentId);
 
         if(userContext.designUpdateId === 'NONE'){
-            return DesignComponents.find({componentParentId: userContext.designComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
+            return DesignComponents.find({componentParentId: featureComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
         } else {
-            return DesignUpdateComponents.find({componentParentIdNew: userContext.designComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
+            return DesignUpdateComponents.find({componentParentIdNew: featureComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;
         }
     };
 
@@ -155,20 +155,21 @@ class ClientMashDataServices {
 
             // For this function we update the user context first to the feature being exported
             const context = {
-                userId:                     userContext.userId,
-                designId:                   userContext.designId,
-                designVersionId:            userContext.designVersionId,
-                designUpdateId:             userContext.designUpdateId,
-                workPackageId:              userContext.workPackageId,
-                designComponentId:          component._id,
-                designComponentType:        ComponentType.FEATURE,
-                featureReferenceId:         mashItem.designFeatureReferenceId,
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         userContext.userId,
+                designId:                       userContext.designId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designComponentId:              component._id,
+                designComponentType:            ComponentType.FEATURE,
+                featureReferenceId:             mashItem.designFeatureReferenceId,
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -194,7 +195,7 @@ class ClientMashDataServices {
     };
 
     featureHasUnknownScenarios(userContext){
-        return UserDesignDevMashData.find({
+        return UserAccTestMashData.find({
             userId:                         userContext.userId,
             designVersionId:                userContext.designVersionId,
             designUpdateId:                 userContext.designUpdateId,
@@ -208,10 +209,10 @@ class ClientMashDataServices {
     // Returns true if mash item Feature has a Dev feature file
     featureIsImplemented(mashItemId){
 
-        const mashItem = UserDesignDevMashData.findOne({_id: mashItemId});
+        const mashItem = UserAccTestMashData.findOne({_id: mashItemId});
 
         // There must be a parent Feature
-        const parentFeature = UserDesignDevMashData.findOne({
+        const parentFeature = UserAccTestMashData.findOne({
             userId: mashItem.userId,
             designVersionId:                mashItem.designVersionId,
             designUpdateId:                 mashItem.designUpdateId,

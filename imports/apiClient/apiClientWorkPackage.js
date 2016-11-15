@@ -42,20 +42,21 @@ class ClientWorkPackageServices {
         if(newWorkPackageId != userContext.workPackageId) {
 
             const context = {
-                userId:                     Meteor.userId(),
-                designId:                   userContext.designId,
-                designVersionId:            userContext.designVersionId,
-                designUpdateId:             userContext.designUpdateId,
-                workPackageId:              newWorkPackageId,
-                designComponentId:          'NONE',
-                designComponentType:        'NONE',
-                featureReferenceId:         'NONE',
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         Meteor.userId(),
+                designId:                       userContext.designId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  newWorkPackageId,
+                designComponentId:              'NONE',
+                designComponentType:            'NONE',
+                featureReferenceId:             'NONE',
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

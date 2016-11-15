@@ -234,20 +234,21 @@ class ClientUserContextServices {
         if(userContext){
 
             const context = {
-                userId:                     userId,
-                designId:                   userContext.designId,
-                designVersionId:            userContext.designVersionId,
-                designUpdateId:             userContext.designUpdateId,
-                workPackageId:              userContext.workPackageId,
-                designComponentId:          userContext.designComponentId,
-                designComponentType:        userContext.designComponentType,
-                featureReferenceId:         userContext.featureReferenceId,
-                featureAspectReferenceId:   userContext.featureAspectReferenceId,
-                scenarioReferenceId:        userContext.scenarioReferenceId,
-                scenarioStepId:             userContext.scenarioStepId,
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         userId,
+                designId:                       userContext.designId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                workPackageId:                  userContext.workPackageId,
+                designComponentId:              userContext.designComponentId,
+                designComponentType:            userContext.designComponentType,
+                featureReferenceId:             userContext.featureReferenceId,
+                featureAspectReferenceId:       userContext.featureAspectReferenceId,
+                scenarioReferenceId:            userContext.scenarioReferenceId,
+                scenarioStepId:                 userContext.scenarioStepId,
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
@@ -256,20 +257,21 @@ class ClientUserContextServices {
         } else {
             // No context saved so default to nothing
             const emptyContext = {
-                userId:                     userId,
-                designId:                   'NONE',
-                designVersionId:            'NONE',
-                designUpdateId:             'NONE',
-                workPackageId:              'NONE',
-                designComponentId:          'NONE',
-                designComponentType:        'NONE',
-                featureReferenceId:         'NONE',
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       'NONE',
-                featureTestResultsLocation: 'NONE',
-                moduleTestResultsLocation:  'NONE',
+                userId:                         userId,
+                designId:                       'NONE',
+                designVersionId:                'NONE',
+                designUpdateId:                 'NONE',
+                workPackageId:                  'NONE',
+                designComponentId:              'NONE',
+                designComponentType:            'NONE',
+                featureReferenceId:             'NONE',
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           'NONE',
+                acceptanceTestResultsLocation:  'NONE',
+                integrationTestResultsLocation: 'NONE',
+                moduleTestResultsLocation:      'NONE',
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, true));
@@ -282,12 +284,14 @@ class ClientUserContextServices {
                 userId:                     userId,
                 designDetailsVisible:       userViewOptions.designDetailsVisible,
                 designAccTestsVisible:      userViewOptions.designAccTestsVisible,
-                designUnitTestsVisible:     userViewOptions.designUnitTestsVisible,
+                designIntTestsVisible:      userViewOptions.designIntTestsVisible,
+                designModTestsVisible:      userViewOptions.designModTestsVisible,
                 designDomainDictVisible:    userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       userViewOptions.updateDetailsVisible,
                 updateAccTestsVisible:      userViewOptions.updateAccTestsVisible,
-                updateUnitTestsVisible:     userViewOptions.updateUnitTestsVisible,
+                updateIntTestsVisible:      userViewOptions.updateIntTestsVisible,
+                updateModTestsVisible:      userViewOptions.updateModTestsVisible,
                 updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:           userViewOptions.wpDetailsVisible,
@@ -295,7 +299,8 @@ class ClientUserContextServices {
                 // Developer Screen - Design always visible
                 devDetailsVisible:          userViewOptions.devDetailsVisible,
                 devAccTestsVisible:         userViewOptions.devAccTestsVisible,
-                devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
+                devIntTestsVisible:         userViewOptions.devIntTestsVisible,
+                devModTestsVisible:         userViewOptions.devModTestsVisible,
                 devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
                 devDomainDictVisible:       userViewOptions.devDomainDictVisible
             };
@@ -308,12 +313,14 @@ class ClientUserContextServices {
                 userId:                     userId,
                 designDetailsVisible:       true,
                 designAccTestsVisible:      false,
-                designUnitTestsVisible:     false,
+                designIntTestsVisible:      false,
+                designModTestsVisible:      false,
                 designDomainDictVisible:    true,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       true,
                 updateAccTestsVisible:      false,
-                updateUnitTestsVisible:     false,
+                updateIntTestsVisible:      false,
+                updateModTestsVisible:      false,
                 updateDomainDictVisible:    false,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:           true,
@@ -321,7 +328,8 @@ class ClientUserContextServices {
                 // Developer Screen - Design always visible
                 devDetailsVisible:          false,
                 devAccTestsVisible:         true,
-                devUnitTestsVisible:        false,
+                devIntTestsVisible:         false,
+                devModTestsVisible:         false,
                 devFeatureFilesVisible:     true,
                 devDomainDictVisible:       false
             };
@@ -336,7 +344,8 @@ class ClientUserContextServices {
 
         // Set to original values
         let newFeatureFilesLocation = userContext.featureFilesLocation;
-        let newFeatureTestResultsLocation = userContext.featureTestResultsLocation;
+        let newAcceptanceTestResultsLocation = userContext.acceptanceTestResultsLocation;
+        let newIntegrationTestResultsLocation = userContext.integrationTestResultsLocation;
         let newModuleTestResultsLocation = userContext.moduleTestResultsLocation;
 
         // Then update the one that changed
@@ -344,30 +353,31 @@ class ClientUserContextServices {
             case LocationType.LOCATION_FEATURE_FILES:
                 newFeatureFilesLocation = newPath;
                 break;
-            case LocationType.LOCATION_FEATURE_TEST_OUTPUT:
-                newFeatureTestResultsLocation = newPath;
+            case LocationType.LOCATION_ACCEPTANCE_TEST_OUTPUT:
+                newAcceptanceTestResultsLocation = newPath;
                 break;
-            case LocationType.LOCATION_UNIT_TEST_OUTPUT:
+            case LocationType.LOCATION_MODULE_TEST_OUTPUT:
                 newModuleTestResultsLocation = newPath;
                 break;
         }
 
         // And dispatch a new context
         const context = {
-            userId:                     userContext.userId,
-            designId:                   userContext.designId,
-            designVersionId:            userContext.designVersionId,
-            designUpdateId:             userContext.designUpdateId,
-            workPackageId:              userContext.workPackageId,
-            designComponentId:          userContext.designComponentId,
-            designComponentType:        userContext.designComponentType,
-            featureReferenceId:         userContext.featureReferenceId,
-            featureAspectReferenceId:   userContext.featureAspectReferenceId,
-            scenarioReferenceId:        userContext.scenarioReferenceId,
-            scenarioStepId:             userContext.scenarioStepId,
-            featureFilesLocation:       newFeatureFilesLocation,
-            featureTestResultsLocation: newFeatureTestResultsLocation,
-            moduleTestResultsLocation:  newModuleTestResultsLocation
+            userId:                         userContext.userId,
+            designId:                       userContext.designId,
+            designVersionId:                userContext.designVersionId,
+            designUpdateId:                 userContext.designUpdateId,
+            workPackageId:                  userContext.workPackageId,
+            designComponentId:              userContext.designComponentId,
+            designComponentType:            userContext.designComponentType,
+            featureReferenceId:             userContext.featureReferenceId,
+            featureAspectReferenceId:       userContext.featureAspectReferenceId,
+            scenarioReferenceId:            userContext.scenarioReferenceId,
+            scenarioStepId:                 userContext.scenarioStepId,
+            featureFilesLocation:           newFeatureFilesLocation,
+            acceptanceTestResultsLocation:  newAcceptanceTestResultsLocation,
+            integrationTestResultsLocation: newIntegrationTestResultsLocation,
+            moduleTestResultsLocation:      newModuleTestResultsLocation
         };
 
         store.dispatch(setCurrentUserItemContext(context, true));

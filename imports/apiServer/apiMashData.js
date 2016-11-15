@@ -11,11 +11,11 @@ Meteor.methods({
     },
 
     'mash.createMashData'(userContext){
-        MashDataServices.createDesignDevMashData(userContext);
+        MashDataServices.createAccTestMashData(userContext);
     },
 
     'mash.updateTestData'(userContext, resultsPath){
-        MashDataServices.updateTestData(userContext, resultsPath);
+        MashDataServices.updateAcceptanceTestData(userContext, resultsPath);
     },
 
     'mash.updateMovedDesignStep'(designMashItemId){

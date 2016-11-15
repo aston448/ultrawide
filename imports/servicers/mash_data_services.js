@@ -9,7 +9,7 @@ import {WorkPackageComponents}          from '../collections/work/work_package_c
 import {UserDevFeatures}                from '../collections/dev/user_dev_features.js';
 import {UserDevFeatureScenarios}        from '../collections/dev/user_dev_feature_scenarios.js';
 import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js';
-import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
+import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
 import {UserCurrentDevContext}          from '../collections/context/user_current_dev_context.js';
 
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
@@ -17,7 +17,7 @@ import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFile
 import {log}                            from '../common/utils.js';
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from './scenario_services.js';
-import MochaTestServices                from '../service_modules/server/mocha_test_services.js';
+import MochaTestServices                from '../service_modules/server/test_results_processor_meteor_mocha.js';
 
 class MashDataServices{
 
@@ -489,7 +489,7 @@ class MashDataServices{
         };
     };
 
-    createDesignDevMashData(userContext){
+    createAccTestMashData(userContext){
 
         // Data created depends on context...
 
@@ -498,21 +498,21 @@ class MashDataServices{
 
         if(userContext.workPackageId != 'NONE'){
             // A work package is being used so create data related to that
-            this.createWpDevMashData(userContext);
+            this.createWpAccTestMashData(userContext);
         } else {
             // Otherwise we will be creating data for the whole design version or update for a view of progress
             if(userContext.designUpdateId != 'NONE'){
-                this.createDesignUpdateDevMashData(userContext);
+                this.createDesignUpdateAccTestMashData(userContext);
             } else {
-                this.createDesignVersionDevMashData(userContext);
+                this.createDesignVersionAccTestMashData(userContext);
             }
         }
     };
 
-    createWpDevMashData(userContext){
+    createWpAccTestMashData(userContext){
 
         // Remove existing WP Mash
-        UserDesignDevMashData.remove({
+        UserAccTestMashData.remove({
             userId:                     userContext.userId,
             designVersionId:            userContext.designVersionId,
             designUpdateId:             userContext.designUpdateId,
@@ -573,7 +573,7 @@ class MashDataServices{
                     }
 
                     // Add new Mash
-                    UserDesignDevMashData.insert(
+                    UserAccTestMashData.insert(
                         {
                             // Identity
                             userId:                         userContext.userId,
@@ -605,7 +605,7 @@ class MashDataServices{
 
                     devOnlyScenarios.forEach((scenario) => {
                         // Add new Mash
-                        UserDesignDevMashData.insert(
+                        UserAccTestMashData.insert(
                             {
                                 // Identity
                                 userId:                         userContext.userId,
@@ -658,7 +658,7 @@ class MashDataServices{
                     }
 
                     // Add new Mash
-                    UserDesignDevMashData.insert(
+                    UserAccTestMashData.insert(
                         {
                             // Identity
                             userId:                         userContext.userId,
@@ -706,7 +706,7 @@ class MashDataServices{
                     }
 
                     // Add new Mash
-                    UserDesignDevMashData.insert(
+                    UserAccTestMashData.insert(
                         {
                             // Identity
                             userId:                         userContext.userId,
@@ -740,13 +740,13 @@ class MashDataServices{
         });
     };
 
-    createDesignUpdateDevMashData(userContext){
+    createDesignUpdateAccTestMashData(userContext){
         // TODO
     };
 
-    createDesignVersionDevMashData(userContext){
+    createDesignVersionAccTestMashData(userContext){
         // Remove existing DV Mash
-        UserDesignDevMashData.remove({
+        UserAccTestMashData.remove({
             userId:                     userContext.userId,
             designVersionId:            userContext.designVersionId
         });
@@ -793,7 +793,7 @@ class MashDataServices{
                         }
 
                         // Add new Mash
-                        UserDesignDevMashData.insert(
+                        UserAccTestMashData.insert(
                             {
                                 // Identity
                                 userId: userContext.userId,
@@ -827,7 +827,7 @@ class MashDataServices{
 
                         devOnlyScenarios.forEach((scenario) => {
                             // Add new Mash
-                            UserDesignDevMashData.insert(
+                            UserAccTestMashData.insert(
                                 {
                                     // Identity
                                     userId: userContext.userId,
@@ -876,7 +876,7 @@ class MashDataServices{
                             }
 
                             // Add new Mash
-                            UserDesignDevMashData.insert(
+                            UserAccTestMashData.insert(
                                 {
                                     // Identity
                                     userId: userContext.userId,
@@ -929,7 +929,7 @@ class MashDataServices{
                         }
 
                         // Add new Mash
-                        UserDesignDevMashData.insert(
+                        UserAccTestMashData.insert(
                             {
                                 // Identity
                                 userId: userContext.userId,
@@ -1007,7 +1007,7 @@ class MashDataServices{
 
             // Add new Mash
             log((msg) => console.log(msg), LogLevel.TRACE, "Adding background step {} to scenario {} with mash status {}", backgroundStep.stepFullName, scenarioReferenceId, mashStatus);
-            UserDesignDevMashData.insert(
+            UserAccTestMashData.insert(
                 {
                     // Identity
                     userId:                         userContext.userId,
@@ -1073,7 +1073,7 @@ class MashDataServices{
             }
 
             // Add new Mash
-            UserDesignDevMashData.insert(
+            UserAccTestMashData.insert(
                 {
                     // Identity
                     userId:                         userContext.userId,
@@ -1117,7 +1117,7 @@ class MashDataServices{
             log((msg) => console.log(msg), LogLevel.TRACE, "Checking for dev step {}", devStep.stepFullName);
 
             // See if already exists
-            const existingMashStep = UserDesignDevMashData.find({
+            const existingMashStep = UserAccTestMashData.find({
                 userId:                         userContext.userId,
                 designVersionId:                userContext.designVersionId,
                 designUpdateId:                 userContext.designUpdateId,
@@ -1129,7 +1129,7 @@ class MashDataServices{
             if(existingMashStep.count() == 0){
                 log((msg) => console.log(msg), LogLevel.TRACE, "Adding dev only step {} to scenario {}", devStep.stepFullName, scenarioReferenceId);
 
-                UserDesignDevMashData.insert(
+                UserAccTestMashData.insert(
                     {
                         // Identity
                         userId:                         userContext.userId,
@@ -1168,7 +1168,7 @@ class MashDataServices{
     updateMovedDesignStep(mashDataItemId)  {
 
         // Mark this step as linked
-        UserDesignDevMashData.update(
+        UserAccTestMashData.update(
             {_id: mashDataItemId},
             {
                 $set: {
@@ -1188,11 +1188,11 @@ class MashDataServices{
         let targetIndex = 0;
         let newIndex = 0;
 
-        const movingStep = UserDesignDevMashData.findOne({_id: devMashItemId});
+        const movingStep = UserAccTestMashData.findOne({_id: devMashItemId});
         const currentScenarioId = userContext.scenarioReferenceId;
 
         if(targetMashItemId) {
-            targetIndex = UserDesignDevMashData.findOne({_id: targetMashItemId}).mashItemIndex;
+            targetIndex = UserAccTestMashData.findOne({_id: targetMashItemId}).mashItemIndex;
         }
 
         if(targetIndex > 0){
@@ -1228,7 +1228,7 @@ class MashDataServices{
     exportScenario(scenarioReferenceId, userContext){
 
         // Make out that this entire scenario is linked.  This should update the Scenario Entry and all the steps
-        UserDesignDevMashData.update(
+        UserAccTestMashData.update(
             {
                 userId:                         userContext.userId,
                 designVersionId:                userContext.designVersionId,
@@ -1256,11 +1256,11 @@ class MashDataServices{
 
         // Reload all the data
         this.loadUserFeatureFileData(userContext, devContext.featureFilesLocation);
-        this.createDesignDevMashData(userContext);
+        this.createAccTestMashData(userContext);
 
     }
 
-    updateTestData(userContext, resultsPath){
+    updateAcceptanceTestData(userContext, resultsPath){
 
         if(Meteor.isServer) {
             MochaTestServices.processTestResults(userContext);
@@ -1334,7 +1334,7 @@ class MashDataServices{
                         log((msg) => console.log(msg), LogLevel.TRACE, "Design Scenario is: {}", designScenario);
 
                         if(designFeature && designScenario) {
-                            UserDesignDevMashData.update(
+                            UserAccTestMashData.update(
                                 {
                                     userId:                         userContext.userId,
                                     designVersionId:                userContext.designVersionId,
@@ -1358,7 +1358,7 @@ class MashDataServices{
                             // And update the step results too
                             element.steps.forEach((step) => {
 
-                                UserDesignDevMashData.update(
+                                UserAccTestMashData.update(
                                     {
                                         userId:                         userContext.userId,
                                         designVersionId:                userContext.designVersionId,
@@ -1387,7 +1387,7 @@ class MashDataServices{
 
                 // Update the feature test status as well
                 if(designFeature){
-                    UserDesignDevMashData.update(
+                    UserAccTestMashData.update(
                         {
                             userId:                         userContext.userId,
                             designVersionId:                userContext.designVersionId,
@@ -1412,7 +1412,7 @@ class MashDataServices{
     // GENERIC FIND FUNCTIONS ==========================================================================================
 
     getFinalScenarioSteps(designScenarioReferenceId, userContext) {
-        return UserDesignDevMashData.find(
+        return UserAccTestMashData.find(
             {
                 userId: userContext.userId,
                 designVersionId: userContext.designVersionId,
@@ -1426,7 +1426,7 @@ class MashDataServices{
     };
 
     getDesignOnlyScenarioSteps(designScenarioReferenceId, userContext) {
-        return UserDesignDevMashData.find(
+        return UserAccTestMashData.find(
             {
                 userId: userContext.userId,
                 designVersionId: userContext.designVersionId,

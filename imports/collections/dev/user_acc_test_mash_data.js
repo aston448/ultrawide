@@ -1,12 +1,12 @@
 /**
- * Represents the mash of data between the Design and the Dev Build tests.  It is ephemeral data that is calculated as needed
+ * Represents the mash of data between the Design and the Dev Acceptance tests.  It is ephemeral data that is calculated as needed
  */
 
 import { Mongo } from 'meteor/mongo';
 
 import { DevTestTag } from '../../constants/constants.js';
 
-export const UserDesignDevMashData = new Mongo.Collection('userDesignDevMashData');
+export const UserAccTestMashData = new Mongo.Collection('userAccTestMashData');
 
 let Schema = new SimpleSchema({
     // Identity
@@ -38,14 +38,14 @@ let Schema = new SimpleSchema({
     mashTestStatus:                 {type: String},                         // If linked, latest test results status
 });
 
-UserDesignDevMashData.attachSchema(Schema);
+UserAccTestMashData.attachSchema(Schema);
 
 
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDesignDevMashData', function userDesignDevMashDataPublication(){
-        return UserDesignDevMashData.find({});
+    Meteor.publish('userAccTestMashData', function userAccTestMashDataPublication(){
+        return UserAccTestMashData.find({});
     })
 }
 

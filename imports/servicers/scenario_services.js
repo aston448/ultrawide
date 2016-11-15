@@ -1,7 +1,7 @@
 
 import {ScenarioSteps}                  from '../collections/design/scenario_steps.js';
 import {FeatureBackgroundSteps}         from '../collections/design/feature_background_steps.js';
-import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
+import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
 import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js'
 
 import {ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../constants/constants.js';
@@ -247,7 +247,7 @@ class ScenarioServices{
 
                     // And as we are adding Dev Mash item to the design, need to update the mash item with new design details
                     // Mark this step as linked with correct index and now referencing the new Design item
-                    UserDesignDevMashData.update(
+                    UserAccTestMashData.update(
                         {_id: mashItemId},
                         {
                             $set: {
@@ -473,7 +473,7 @@ class ScenarioServices{
                 this.logicallyDeleteDesignStep(step.designComponentId, step.stepContext);
 
                 // And change the item to be Dev only now...
-                UserDesignDevMashData.update(
+                UserAccTestMashData.update(
                     {_id: step._id},
                     {
                         $set:{
@@ -536,7 +536,7 @@ class ScenarioServices{
 
     deleteMashStepItem(mashItemId){
 
-        UserDesignDevMashData.remove(
+        UserAccTestMashData.remove(
             {_id: mashItemId}
         );
     };

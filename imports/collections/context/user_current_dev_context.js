@@ -8,7 +8,7 @@ export const UserCurrentDevContext = new Mongo.Collection('userCurrentDevContext
 let Schema = new SimpleSchema({
     userId:                     {type: String},                         // Meteor user id
     featureFilesLocation:       {type: String, defaultValue: 'NONE'},   // Location of feature files in application being tested
-    featureTestResultsLocation: {type: String, defaultValue: 'NONE'},   // Location of JSON output file(s) for feature tests
+    acceptanceTestResultsLocation: {type: String, defaultValue: 'NONE'},   // Location of JSON output file(s) for feature tests
 });
 
 UserCurrentDevContext.attachSchema(Schema);

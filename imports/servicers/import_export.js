@@ -150,31 +150,55 @@ class ImpExServices{
                 usersMapping.push({oldId: user.userId, newId: userId});
 
                 // And create some basic new User Context
-                userContexts.forEach((userContext) => {
+                if(userContexts.length > 0) {
+                    userContexts.forEach((userContext) => {
 
-                    if(userContext.userId === user.userId){
-                        // This context relates to the old user id so insert a new context, just restoring path info
+                        if (userContext.userId === user.userId) {
+                            // This context relates to the old user id so insert a new context, just restoring path info
 
-                        UserCurrentEditContext.insert({
-                            userId:                     userId,             // New User Id
-                            designId:                   'NONE',
-                            designVersionId:            'NONE',
-                            designUpdateId:             'NONE',
-                            workPackageId:              'NONE',
-                            designComponentId:          'NONE',
-                            designComponentType:        'NONE',
+                            UserCurrentEditContext.insert({
+                                userId: userId,             // New User Id
+                                designId: 'NONE',
+                                designVersionId: 'NONE',
+                                designUpdateId: 'NONE',
+                                workPackageId: 'NONE',
+                                designComponentId: 'NONE',
+                                designComponentType: 'NONE',
 
-                            featureReferenceId:         'NONE',
-                            featureAspectReferenceId:   'NONE',
-                            scenarioReferenceId:        'NONE',
-                            scenarioStepId:             'NONE',
+                                featureReferenceId: 'NONE',
+                                featureAspectReferenceId: 'NONE',
+                                scenarioReferenceId: 'NONE',
+                                scenarioStepId: 'NONE',
 
-                            featureFilesLocation:       userContext.featureFilesLocation,
-                            featureTestResultsLocation: userContext.featureTestResultsLocation,
-                            moduleTestResultsLocation:  userContext.moduleTestResultsLocation
-                        });
-                    }
-                })
+                                featureFilesLocation: userContext.featureFilesLocation,
+                                acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
+                                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                                moduleTestResultsLocation: userContext.moduleTestResultsLocation
+                            });
+                        }
+                    });
+                } else {
+                    // Use empty user context
+                    UserCurrentEditContext.insert({
+                        userId: userId,             // New User Id
+                        designId: 'NONE',
+                        designVersionId: 'NONE',
+                        designUpdateId: 'NONE',
+                        workPackageId: 'NONE',
+                        designComponentId: 'NONE',
+                        designComponentType: 'NONE',
+
+                        featureReferenceId: 'NONE',
+                        featureAspectReferenceId: 'NONE',
+                        scenarioReferenceId: 'NONE',
+                        scenarioStepId: 'NONE',
+
+                        featureFilesLocation: 'NONE',
+                        acceptanceTestResultsLocation: 'NONE',
+                        integrationTestResultsLocation: 'NONE',
+                        moduleTestResultsLocation: 'NONE'
+                    });
+                }
 
             });
         }

@@ -11,7 +11,7 @@ import {DesignUpdateComponents}         from '../../collections/design_update/de
 // import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js';
 // import {UserDesignDevMashData}          from '../collections/dev/user_design_dev_mash_data.js';
 // import {UserCurrentDevContext}          from '../collections/context/user_current_dev_context.js';
-import {UserUnitTestResults}            from '../../collections/dev/user_unit_test_results.js';
+import {UserModTestMashData}            from '../../collections/dev/user_mod_test_mash_data.js';
 
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
     UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../../constants/constants.js';
@@ -19,14 +19,14 @@ import {log}                            from '../../common/utils.js';
 // import FeatureFileServices              from './feature_file_services.js'
 // import ScenarioServices                 from './scenario_services.js';
 
-class MochaTestServices{
+class MeteorMochaTestServices{
 
     processTestResults(userContext){
 
         if(Meteor.isServer) {
 
             // Clear data for this user
-            UserUnitTestResults.remove({userId: userContext.userId});
+            UserModTestMashData.remove({userId: userContext.userId});
 
             // Read the test results file
 
@@ -102,7 +102,7 @@ class MochaTestServices{
                        let testContextGroup = this.getContextDetails(testIdentity.testContext, designScenario.scenarioName);
 
                        // Insert a linked record
-                       UserUnitTestResults.insert(
+                       UserModTestMashData.insert(
                            {
                                // Identity
                                userId:                      userContext.userId,
@@ -125,7 +125,7 @@ class MochaTestServices{
 
                 // If no scenarios matched, insert as non-linked test
                 if(!linked){
-                    UserUnitTestResults.insert(
+                    UserModTestMashData.insert(
                         {
                             // Identity
                             userId:                      userContext.userId,
@@ -195,4 +195,4 @@ class MochaTestServices{
     }
 }
 
-export default new MochaTestServices();
+export default new MeteorMochaTestServices();

@@ -34,20 +34,21 @@ class ClientDesignUpdateServices {
         if(newDesignUpdateId != userContext.designUpdateId) {
 
             const context = {
-                userId:                     Meteor.userId(),
-                designId:                   userContext.designId,           // Must be the same design
-                designVersionId:            userContext.designVersionId,    // Must be same design version
-                designUpdateId:             newDesignUpdateId,              // Update selected
-                workPackageId:              'NONE',
-                designComponentId:          'NONE',
-                designComponentType:        'NONE',
-                featureReferenceId:         'NONE',
-                featureAspectReferenceId:   'NONE',
-                scenarioReferenceId:        'NONE',
-                scenarioStepId:             'NONE',
-                featureFilesLocation:       userContext.featureFilesLocation,
-                featureTestResultsLocation: userContext.featureTestResultsLocation,
-                moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                userId:                         Meteor.userId(),
+                designId:                       userContext.designId,           // Must be the same design
+                designVersionId:                userContext.designVersionId,    // Must be same design version
+                designUpdateId:                 newDesignUpdateId,              // Update selected
+                workPackageId:                  'NONE',
+                designComponentId:              'NONE',
+                designComponentType:            'NONE',
+                featureReferenceId:             'NONE',
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE',
+                featureFilesLocation:           userContext.featureFilesLocation,
+                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -191,20 +192,21 @@ class ClientDesignUpdateServices {
             if (userContext.designUpdateId === designUpdateToDeleteId) {
 
                 const context = {
-                    userId:                     Meteor.userId(),
-                    designId:                   userContext.designId,
-                    designVersionId:            userContext.designVersionId,
-                    designUpdateId:             'NONE',
-                    workPackageId:              'NONE',
-                    designComponentId:          'NONE',
-                    designComponentType:        'NONE',
-                    featureReferenceId:         'NONE',
-                    featureAspectReferenceId:   'NONE',
-                    scenarioReferenceId:        'NONE',
-                    scenarioStepId:             'NONE',
-                    featureFilesLocation:       userContext.featureFilesLocation,
-                    featureTestResultsLocation: userContext.featureTestResultsLocation,
-                    moduleTestResultsLocation:  userContext.moduleTestResultsLocation
+                    userId:                         Meteor.userId(),
+                    designId:                       userContext.designId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 'NONE',
+                    workPackageId:                  'NONE',
+                    designComponentId:              'NONE',
+                    designComponentType:            'NONE',
+                    featureReferenceId:             'NONE',
+                    featureAspectReferenceId:       'NONE',
+                    scenarioReferenceId:            'NONE',
+                    scenarioStepId:                 'NONE',
+                    featureFilesLocation:           userContext.featureFilesLocation,
+                    acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                    moduleTestResultsLocation:      userContext.moduleTestResultsLocation
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));

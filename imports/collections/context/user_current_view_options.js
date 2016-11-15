@@ -10,12 +10,14 @@ let Schema = new SimpleSchema({
     // Base Design Screen - Design always visible
     designDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
     designAccTestsVisible:      {type: Boolean, defaultValue: false},       // Acceptance Tests view
-    designUnitTestsVisible:     {type: Boolean, defaultValue: false},       // Unit Tests view
-    designDomainDictVisible:    {type: Boolean, defaultValue: true},       // Domain Dictionary pane
+    designIntTestsVisible:      {type: Boolean, defaultValue: false},       // Integration Tests view
+    designModTestsVisible:      {type: Boolean, defaultValue: false},       // Module Tests view
+    designDomainDictVisible:    {type: Boolean, defaultValue: true},        // Domain Dictionary pane
     // Design Update Screen - Scope and Design always visible
     updateDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
     updateAccTestsVisible:      {type: Boolean, defaultValue: false},       // Acceptance Tests view
-    updateUnitTestsVisible:     {type: Boolean, defaultValue: false},       // Unit Tests view
+    updateIntTestsVisible:      {type: Boolean, defaultValue: false},       // Integration Tests view
+    updateModTestsVisible:      {type: Boolean, defaultValue: false},       // Module Tests view
     updateDomainDictVisible:    {type: Boolean, defaultValue: false},       // Domain Dictionary pane
     // Work package editor - Scope and Design always visible
     wpDetailsVisible:           {type: Boolean, defaultValue: true},        // The details pane
@@ -23,7 +25,8 @@ let Schema = new SimpleSchema({
     // Developer Screen - Design always visible
     devDetailsVisible:          {type: Boolean, defaultValue: false},       // The details pane
     devAccTestsVisible:         {type: Boolean, defaultValue: true},        // Acceptance Tests view
-    devUnitTestsVisible:        {type: Boolean, defaultValue: false},       // Unit Tests view
+    devIntTestsVisible:         {type: Boolean, defaultValue: true},        // Integration Tests view
+    devModTestsVisible:         {type: Boolean, defaultValue: false},       // Unit Tests view
     devFeatureFilesVisible:     {type: Boolean, defaultValue: true},        // Feature Files view
     devDomainDictVisible:       {type: Boolean, defaultValue: false},       // Domain Dictionary pane
 
