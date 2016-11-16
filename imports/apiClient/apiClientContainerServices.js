@@ -1007,13 +1007,16 @@ class ClientContainerServices{
                     // Return any FEATURE that is a child of this item
                     let returnData = [];
 
-                    const intTestMash = UserIntTestMashData.find({
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
-                        mashComponentType: ComponentType.FEATURE
-                    }).fetch();
+                    const intTestMash = UserIntTestMashData.find(
+                        {
+                            userId: userContext.userId,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId,
+                            workPackageId: userContext.workPackageId,
+                            mashComponentType: ComponentType.FEATURE
+                        },
+                        {sort:{mashItemIndex: 1}}
+                    ).fetch();
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Found {} Features in total", intTestMash.length);
 
@@ -1038,36 +1041,45 @@ class ClientContainerServices{
 
                 case ComponentType.FEATURE:
                     // Return any FEATURE ASPECT related to this Feature
-                    return UserIntTestMashData.find({
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
-                        mashComponentType: ComponentType.FEATURE_ASPECT,
-                        designFeatureReferenceId: selectedDesignComponent.componentReferenceId
-                    }).fetch();
+                    return UserIntTestMashData.find(
+                        {
+                            userId: userContext.userId,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId,
+                            workPackageId: userContext.workPackageId,
+                            mashComponentType: ComponentType.FEATURE_ASPECT,
+                            designFeatureReferenceId: selectedDesignComponent.componentReferenceId
+                        },
+                        {sort:{mashItemIndex: 1}}
+                    ).fetch();
 
                 case ComponentType.FEATURE_ASPECT:
                     // Return any SCENARIO data related to this Feature Aspect
-                    return UserIntTestMashData.find({
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
-                        mashComponentType: ComponentType.SCENARIO,
-                        designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
-                    }).fetch();
+                    return UserIntTestMashData.find(
+                        {
+                            userId: userContext.userId,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId,
+                            workPackageId: userContext.workPackageId,
+                            mashComponentType: ComponentType.SCENARIO,
+                            designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
+                        },
+                        {sort:{mashItemIndex: 1}}
+                    ).fetch();
 
                 case ComponentType.SCENARIO:
                     // Return any data related to this Scenario (at most one test)
-                    return UserIntTestMashData.find({
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
-                        mashComponentType: ComponentType.SCENARIO,
-                        designScenarioReferenceId: selectedDesignComponent.componentReferenceId
-                    }).fetch();
+                    return UserIntTestMashData.find(
+                        {
+                            userId: userContext.userId,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId,
+                            workPackageId: userContext.workPackageId,
+                            mashComponentType: ComponentType.SCENARIO,
+                            designScenarioReferenceId: selectedDesignComponent.componentReferenceId
+                        },
+                        {sort:{mashItemIndex: 1}}
+                    ).fetch();
 
                 default:
                     // No component or irrelevant component:

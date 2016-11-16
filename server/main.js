@@ -39,9 +39,9 @@ import '../imports/apiServer/apiFeatureFiles.js';
 import '../imports/apiServer/apiMashData.js';
 import '../imports/apiServer/apiFixtures.js';
 
-import '../test_framework/apiTest/apiClientTest.js';
-import '../test_framework/apiTest/apiServerCheck.js';
+import '../test_framework/apiTest/apiClientTestDesigns.js';
 import '../test_framework/apiTest/apiTestFixtures.js';
+import '../test_framework/apiTest/apiVerifyDesigns.js';
 
 // Meteor Validated Methods
 import '../imports/apiValidatedMethods/design_methods.js'

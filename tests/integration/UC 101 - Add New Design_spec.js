@@ -8,18 +8,18 @@ describe('UC 101 - Add New Design', function() {
         server.call('testFixtures.clearAllData');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('test.addNewDesign', RoleType.DEVELOPER);
+        server.call('testDesigns.addNewDesign', RoleType.DEVELOPER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No new design created
-        server.call('test.verifyNoNewDesign', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.noNewDesign', (function(error, result){expect(!error);}));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('test.addNewDesign', RoleType.MANAGER);
+        server.call('testDesigns.addNewDesign', RoleType.MANAGER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No new design created
-        server.call('test.verifyNoNewDesign', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.noNewDesign', (function(error, result){expect(!error);}));
 
     });
 
@@ -29,11 +29,11 @@ describe('UC 101 - Add New Design', function() {
         server.call('testFixtures.clearAllData');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('test.addNewDesign', RoleType.DESIGNER);
+        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Created a new removable Design
-        server.call('test.verifyNewDesign', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.newDesign', (function(error, result){expect(!error);}));
 
     });
 
@@ -43,12 +43,12 @@ describe('UC 101 - Add New Design', function() {
         server.call('testFixtures.clearAllData');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('test.addNewDesign', RoleType.DESIGNER);
+        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Created a new Design and a new Design Version linked to it
-        server.call('test.verifyNewDesign', (function(error, result){expect(!error);}));
-        server.call('test.verifyNewDesignVersion', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.newDesign', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.newDesignVersion', (function(error, result){expect(!error);}));
 
     })
 });

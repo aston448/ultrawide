@@ -867,11 +867,11 @@ input {
 }
 
 .mash-feature{
-    margin: 0;
-    padding: 4px 0 0 0px;
+    margin: 10px 0 0 0;
+    padding: 0;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
-    font-weight: normal;
+    font-weight: bold;
     color: darkred;
 }
 
