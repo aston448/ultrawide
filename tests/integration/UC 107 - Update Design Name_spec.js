@@ -14,7 +14,7 @@ describe('UC 107 - Update Design Name', function() {
         // Verify ------------------------------------------------------------------------------------------------------
         // No update to name
         server.call('verifyDesigns.designDoesNotExistCalled', 'Updated Name', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.designExistsCalled', 'New Name', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.designExistsCalled', 'New Design', (function(error, result){expect(!error);}));
         // And there is only one design
         server.call('verifyDesigns.designCountIs', 1, (function(error, result){expect(!error);}));
 
@@ -25,7 +25,7 @@ describe('UC 107 - Update Design Name', function() {
         // Verify ------------------------------------------------------------------------------------------------------
         // No update to name
         server.call('verifyDesigns.designDoesNotExistCalled', 'Updated Name', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.designExistsCalled', 'New Name', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.designExistsCalled', 'New Design', (function(error, result){expect(!error);}));
         // And there is only one design
         server.call('verifyDesigns.designCountIs', 1, (function(error, result){expect(!error);}));
     });
@@ -43,7 +43,7 @@ describe('UC 107 - Update Design Name', function() {
 
         // Verify ------------------------------------------------------------------------------------------------------
         // A Design still exists called new name
-        server.call('verifyDesigns.designExistsCalled', 'New Name', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.designExistsCalled', 'New Design', (function(error, result){expect(!error);}));
         // As well as the one we called Unique name
         server.call('verifyDesigns.designExistsCalled', 'Unique Name', (function(error, result){expect(!error);}));
         // And there are only 2 designs
@@ -62,7 +62,7 @@ describe('UC 107 - Update Design Name', function() {
         // Verify ------------------------------------------------------------------------------------------------------
         // Design name has changed
         server.call('verifyDesigns.designExistsCalled', 'My Name', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.designDoesNotExistCalled', 'New Name', (function(error, result){expect(!error);}));
+        server.call('verifyDesigns.designDoesNotExistCalled', 'New Design', (function(error, result){expect(!error);}));
         // And there is only one design
         server.call('verifyDesigns.designCountIs', 1, (function(error, result){expect(!error);}));
 
