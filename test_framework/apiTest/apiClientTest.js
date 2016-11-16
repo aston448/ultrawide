@@ -17,6 +17,15 @@ Meteor.methods({
         ClientDesignServices.addNewDesign(role);
     },
 
+    'test.verifyNoNewDesign'(){
+
+        const newDesign = Designs.findOne({designName: 'New Design'});
+
+        if(newDesign){
+            throw new Meteor.Error("FAIL", "New design was created!");
+        }
+    },
+
     'test.verifyNewDesign'(){
 
         const newDesign = Designs.findOne({designName: 'New Design'});
