@@ -24,14 +24,14 @@ import ClientIdentityServices from '../../imports/apiClient/apiIdentity.js';
 
 Meteor.methods({
 
-    'testfixtures.startup'(){
+    'testFixtures.clearAllData'(){
 
-        console.log('STARTUP...  Test Fixtures');
+        console.log('Test Fixtures: CLEAR DB!');
 
         // Abort reset if not the test instance of Ultrawide
         if(ClientIdentityServices.getApplicationName() != 'ULTRAWIDE TEST'){
 
-            console.log('STARTUP Test Fixtures: NOT TEST INSTANCE!!!');
+            console.log('Test Fixtures: NOT TEST INSTANCE!!!');
 
         } else {
 
@@ -48,7 +48,12 @@ Meteor.methods({
             DesignVersions.remove({});
             Designs.remove({});
 
-            // Clear current edit context
+            const featureFilesDir = '/Users/aston/WebstormProjects/ultrawide-test/tests/features/';
+            const accTestResults = '/Users/aston/WebstormProjects/shared/test/test_results.json';
+            const intTestResults = '/Users/aston/WebstormProjects/shared/test/mocha_results.json';
+            const modTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json'
+
+            // Clear current edit context for all users - but not the file locations
             UserCurrentEditContext.update(
                 {},
                 {
@@ -60,15 +65,18 @@ Meteor.methods({
                         designComponentId: 'NONE',
                         designComponentType: 'NONE',
                         featureReferenceId: 'NONE',
+                        featureAspectReferenceId: 'NONE',
                         scenarioReferenceId: 'NONE',
                         scenarioStepId: 'NONE',
+
+                        featureFilesLocation:           featureFilesDir,
+                        acceptanceTestResultsLocation:  accTestResults,
+                        integrationTestResultsLocation: intTestResults,
+                        moduleTestResultsLocation:      modTestResults
                     }
                 },
                 {multi: true}
             );
-
-            // Keep Dev context as was...
-
 
             // Make up a temporary user until login implemented
             // Recreate users only needed after a reset (may be recreated by normal fixtures anyway)
@@ -78,8 +86,8 @@ Meteor.methods({
                 // Create a new accounts
                 let designerUserId = Accounts.createUser(
                     {
-                        username: 'user1',
-                        password: 'user1'
+                        username: 'gloria',
+                        password: 'gloria'
                     }
                 );
 
@@ -88,14 +96,14 @@ Meteor.methods({
                     userName: 'gloria',
                     displayName: 'Gloria Slap',
                     isDesigner: true,
-                    isDeveloper: false,
+                    isDeveloper: true,
                     isManager: false
                 });
 
                 let developerUserId = Accounts.createUser(
                     {
-                        username: 'user2',
-                        password: 'user2'
+                        username: 'hugh',
+                        password: 'hugh'
                     }
                 );
 
@@ -110,8 +118,8 @@ Meteor.methods({
 
                 let managerUserId = Accounts.createUser(
                     {
-                        username: 'user3',
-                        password: 'user3'
+                        username: 'miles',
+                        password: 'miles'
                     }
                 );
 
@@ -124,40 +132,35 @@ Meteor.methods({
                     isManager: true
                 });
 
-                //TODO get proper root
-                const root = '/Users/aston/WebstormProjects/ultrawide-test';    //Meteor.rootPath;
 
-                console.log("Setting root path to " + root);
+                // Start new users with default context
 
-                // Start that user at the beginning.  Assume no settings yet
                 UserCurrentEditContext.insert({
                     userId: designerUserId,
-                });
-                UserCurrentDevContext.insert({
-                    userId: designerUserId,
-                    featureFilesLocation: root + '/tests/features/',
-                    featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
+                    featureFilesLocation:           featureFilesDir,
+                    acceptanceTestResultsLocation:  accTestResults,
+                    integrationTestResultsLocation: intTestResults,
+                    moduleTestResultsLocation:      modTestResults
                 });
 
                 UserCurrentEditContext.insert({
                     userId: developerUserId,
+                    featureFilesLocation:           featureFilesDir,
+                    acceptanceTestResultsLocation:  accTestResults,
+                    integrationTestResultsLocation: intTestResults,
+                    moduleTestResultsLocation:      modTestResults
                 });
-                UserCurrentDevContext.insert({
-                    userId: developerUserId,
-                    featureFilesLocation: root + '/tests/features/',
-                    featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
-                });
+
 
                 UserCurrentEditContext.insert({
                     userId: managerUserId,
+                    featureFilesLocation:           featureFilesDir,
+                    acceptanceTestResultsLocation:  accTestResults,
+                    integrationTestResultsLocation: intTestResults,
+                    moduleTestResultsLocation:      modTestResults
                 });
-                UserCurrentDevContext.insert({
-                    userId: managerUserId,
-                    featureFilesLocation: root + '/tests/features/',
-                    featureTestResultsLocation: '/Users/aston/WebstormProjects/shared/test/test_results.json'
-                });
+
             }
-
 
         }
 

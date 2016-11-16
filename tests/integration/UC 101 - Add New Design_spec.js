@@ -1,17 +1,15 @@
-//import {Designs} from '../../imports/collections/design/designs.js'
-//import ClientDesignServices from '../../imports/apiClient/apiClientDesign.js';
 
-
+import {RoleType} from '../../imports/constants/constants.js'
 
 describe('UC 101 - Add New Design', function() {
     it('A Designer can add a new Design to Ultrawide', function() {
 
         // Setup ===================================================================================================
         const expectedDesignName = 'New Design';
+        server.call('testFixtures.clearAllData');
 
         // Execute =================================================================================================
-        server.call('test.addNewDesign', 'DESIGNER');
-
+        server.call('test.addNewDesign', RoleType.DESIGNER);
 
         // Verify ==================================================================================================
 
