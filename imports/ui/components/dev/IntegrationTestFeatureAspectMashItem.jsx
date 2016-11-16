@@ -53,9 +53,10 @@ class IntegrationTestFeatureAspectMashItem extends Component {
                     </div>
                 </InputGroup>
                 <IntegrationTestScenarioMashContainer params={{
-                    parentMash: mashItem,
+                    userContext:    userContext,
+                    parentMash:     mashItem,
                     displayContext: DisplayContext.INT_TEST_FEATURE_ASPECT
-                }}/>;
+                }}/>
             </div>
         )
     }

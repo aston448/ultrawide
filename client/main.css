@@ -866,6 +866,15 @@ input {
     background-color: transparent;
 }
 
+.mash-feature{
+    margin: 0;
+    padding: 4px 0 0 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+    color: darkred;
+}
+
 .mash-aspect {
     margin: 0;
     padding: 2px 0 0 0px;
@@ -873,7 +882,25 @@ input {
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
     font-weight: bold;
-    color: darkred;
+    color: black;
+}
+
+.mash-scenario {
+    margin: 0;
+    padding: 0 0 0 10px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    background-color: transparent;
+}
+
+.mash-scenario-result {
+    margin: 0;
+    padding: 0 0 0 0px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    background-color: transparent;
 }
 
 .mash-unit-test-scenario{
@@ -930,7 +957,7 @@ input {
 }
 
 .mash-not-linked {
-    color: transparent;
+    color: lightgrey;
 }
 
 .mash-not-implemented {

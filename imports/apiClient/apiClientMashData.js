@@ -32,12 +32,12 @@ import {setCurrentUserItemContext, updateProgressData} from '../redux/actions'
 class ClientMashDataServices {
 
     // When calling this, ensure that data has been subscribed to
-    updateMashData(userContext, currentProgressDataValue){
+    updateMashData(viewOptions, userContext, currentProgressDataValue){
         // Get the latest DEV data for the Mash
         this.createDevMashData(userContext);
 
         // Get the latest test results
-        this.updateTestData(userContext);
+        this.updateTestData(viewOptions, userContext);
 
         store.dispatch(updateProgressData(!currentProgressDataValue));
     }
@@ -97,8 +97,8 @@ class ClientMashDataServices {
 
     }
 
-    updateTestData(userContext){
-        Meteor.call('mash.updateTestData', userContext, userContext.acceptanceTestResultsLocation);
+    updateTestData(viewOptions, userContext){
+        Meteor.call('mash.updateTestData', viewOptions, userContext);
     };
 
     featureHasAspects(userContext, featureComponentId){

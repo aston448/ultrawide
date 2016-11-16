@@ -6,19 +6,14 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
-import { UserRoles }            from '../../../collections/users/user_roles.js';
 
 // Ultrawide GUI Components
 import UserLogin                from '../../components/login/UserLogin.jsx';
-import UserConfiguration        from '../../components/configure/UserConfiguration.jsx';
-
 
 // Ultrawide Services
 import {ViewType}               from '../../../constants/constants.js'
 
-
 // Bootstrap
-
 
 // REDUX services
 import {connect} from 'react-redux';

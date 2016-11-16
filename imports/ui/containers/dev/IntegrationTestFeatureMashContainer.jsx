@@ -10,16 +10,19 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignDevMashItem            from '../../components/dev/DesignDevMashItem.jsx';
-import MashFeatureAspectContainer   from '../../containers/dev/MashFeatureAspectContainer.jsx';
-import MashScenarioStepContainer    from '../../containers/dev/MashScenarioStepContainer.jsx';
+import IntegrationTestFeatureMashItem               from '../../components/dev/IntegrationTestFeatureMashItem.jsx';
+import IntegrationTestFeatureAspectMashContainer    from '../../containers/dev/IntegrationTestFeatureAspectMashContainer.jsx';
+import IntegrationTestScenarioMashContainer         from '../../containers/dev/IntegrationTestScenarioMashContainer.jsx';
 
 // Ultrawide Services
-import {RoleType, DisplayContext, MashStatus, ComponentType}    from '../../../constants/constants.js';
+import {RoleType, DisplayContext, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
+import {log} from '../../../common/utils.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
 import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
+
+
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -96,7 +99,7 @@ class IntegrationTestFeatureMashList extends Component {
 
     render() {
 
-        const {designMashItemData, currentUserRole, userContext, view} = this.props;
+        const {designMashItemData, userContext} = this.props;
 
         console.log("Rendering integration mash container with user context component type " + userContext.designComponentType);
 
@@ -146,9 +149,8 @@ class IntegrationTestFeatureMashList extends Component {
                         mainPanel =
                             <Panel className="panel-text panel-text-body" header={panelHeader}>
                                <IntegrationTestFeatureAspectMashContainer params={{
-                                    userContext:    userContext,
-                                    displayContext: DisplayContext.VIEW_ACCEPTANCE_MASH,
-                                    view:           view
+                                   userContext:     userContext,
+                                   featureMash:     null
                                 }}/>
                             </Panel>
 
@@ -158,8 +160,7 @@ class IntegrationTestFeatureMashList extends Component {
                             <Panel className="panel-text panel-text-body" header={panelHeader}>
                                 <IntegrationTestScenarioMashContainer params={{
                                     userContext:    userContext,
-                                    displayContext: DisplayContext.INT_TEST_FEATURE,
-                                    view:           view
+                                    parentMash:     null
                                 }}/>
                             </Panel>;
                     }
@@ -169,8 +170,7 @@ class IntegrationTestFeatureMashList extends Component {
                         <Panel className="panel-text panel-text-body" header={panelHeader}>
                             <IntegrationTestScenarioMashContainer params={{
                                 userContext:    userContext,
-                                displayContext: DisplayContext.INT_TEST_FEATURE_ASPECT,
-                                view:           view
+                                parentMash:     null
                             }}/>
                         </Panel>;
                     break;
@@ -180,8 +180,7 @@ class IntegrationTestFeatureMashList extends Component {
                         <Panel className="panel-text panel-text-body" header={panelHeader}>
                             <IntegrationTestScenarioMashContainer params={{
                                 userContext:    userContext,
-                                displayContext: DisplayContext.INT_TEST_SCENARIO,
-                                view:           view
+                                parentMash:     null
                             }}/>
                         </Panel>;
             }
@@ -204,9 +203,7 @@ IntegrationTestFeatureMashList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserRole:    state.currentUserRole,
-        userContext:        state.currentUserItemContext,
-        view:               state.currentAppView
+        userContext:        state.currentUserItemContext
     }
 }
 
@@ -217,7 +214,9 @@ IntegrationTestFeatureMashList = connect(mapStateToProps)(IntegrationTestFeature
 export default IntegrationTestFeatureMashContainer = createContainer(({params}) => {
 
 
-    let designMashItemData = ClientContainerServices.getDesignIntegrationTestMashData(params.userContext);
+    let designMashItemData = ClientContainerServices.getDesignIntegrationTestMashData(params.userContext, null);
+
+    log((msg) => console.log(msg), LogLevel.DEBUG, "Integration design mash data returned {} features", designMashItemData.length);
 
     return{
         designMashItemData

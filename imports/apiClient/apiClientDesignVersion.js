@@ -73,7 +73,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  Must be a new design to be editable
-    editDesignVersion(userContext, designVersionToEditId, currentProgressDataValue){
+    editDesignVersion(viewOptions, userContext, designVersionToEditId, currentProgressDataValue){
 
         // Validation - only new or draft published design versions can be edited
         const dv = DesignVersions.findOne({_id: designVersionToEditId});
@@ -86,8 +86,8 @@ class ClientDesignVersionServices{
             // Subscribe to Dev data
             let loading = ClientContainerServices.getDevData();
 
-            // Get the latest DEV data and Test Results for the Mash
-            // ClientMashDataServices.updateMashData(updatedContext, currentProgressDataValue);
+            // Get the latest test results
+            ClientMashDataServices.updateTestData(viewOptions, userContext);
 
             // Switch to the design editor view
             store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
@@ -106,7 +106,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to view a design version.  Any DV can be viewed.
-    viewDesignVersion(userContext, designVersionToViewId, dvStatus){
+    viewDesignVersion(viewOptions, userContext, designVersionToViewId, dvStatus){
 
         // Ensure that the current version is the version we chose to view
         let updatedContext = this.setDesignVersion(userContext, designVersionToViewId);
@@ -118,7 +118,7 @@ class ClientDesignVersionServices{
         ClientMashDataServices.createDevMashData(updatedContext);
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(updatedContext);
+        ClientMashDataServices.updateTestData(viewOptions, userContext);
 
         switch(dvStatus){
             case DesignVersionStatus.VERSION_NEW:

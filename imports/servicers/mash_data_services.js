@@ -19,6 +19,9 @@ import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from './scenario_services.js';
 import MochaTestServices                from '../service_modules/server/test_results_processor_meteor_mocha.js';
 
+import IntegrationTestServices          from '../service_modules/server/integration_test_services.js';
+import ModuleTestServices               from '../service_modules/server/module_test_services.js';
+
 class MashDataServices{
 
     loadUserFeatureFileData(userContext){
@@ -1260,14 +1263,29 @@ class MashDataServices{
 
     }
 
-    updateAcceptanceTestData(userContext, resultsPath){
+    updateTestData(userContext, viewOptions){
 
-        if(Meteor.isServer) {
-            MochaTestServices.processTestResults(userContext);
+        if(viewOptions.designAccTestsVisible || viewOptions.devAccTestsVisible){
+            this.updateAcceptanceTestData(userContext);
         }
 
+        if(viewOptions.designIntTestsVisible || viewOptions.devIntTestsVisible){
+            IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
+        }
+
+        if(viewOptions.designModTestsVisible || viewOptions.devModTestsVisible){
+            ModuleTestServices.getModuleTestResults('METEOR_MOCHA', userContext);
+        }
+    }
+
+    updateAcceptanceTestData(userContext){
+
+        // if(Meteor.isServer) {
+        //     MochaTestServices.processTestResults(userContext);
+        // }
+
         // Read the test results file
-        const resultsText = fs.readFileSync(resultsPath);
+        const resultsText = fs.readFileSync(userContext.acceptanceTestResultsLocation);
 
         let results = JSON.parse(resultsText);
 

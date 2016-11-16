@@ -1,7 +1,8 @@
 
 import { Meteor } from 'meteor/meteor';
 
-import  MashDataServices     from '../servicers/mash_data_services.js';
+import  MashDataServices            from '../servicers/mash_data_services.js';
+import  IntegrationTestServices     from '../service_modules/server/integration_test_services.js';
 
 // Meteor methods
 Meteor.methods({
@@ -12,10 +13,11 @@ Meteor.methods({
 
     'mash.createMashData'(userContext){
         MashDataServices.createAccTestMashData(userContext);
+        IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
     },
 
-    'mash.updateTestData'(userContext, resultsPath){
-        MashDataServices.updateAcceptanceTestData(userContext, resultsPath);
+    'mash.updateTestData'(viewOptions, userContext){
+        MashDataServices.updateTestData(viewOptions, userContext);
     },
 
     'mash.updateMovedDesignStep'(designMashItemId){

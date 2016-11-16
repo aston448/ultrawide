@@ -84,9 +84,10 @@ class WorkPackage extends Component {
         );
     };
 
-    onDevelopWorkPackage(context, wp){
+    onDevelopWorkPackage(viewOptions, context, wp){
 
         ClientWorkPackageServices.developWorkPackage(
+            viewOptions,
             context,
             wp._id
         );
@@ -131,11 +132,11 @@ class WorkPackage extends Component {
     // }
 
     render() {
-        const {workPackage, userRole, currentUserItemContext, currentUserDevContext} = this.props;
+        const {workPackage, userRole, viewOptions, userContext} = this.props;
 
         // Display as selected if this is the current WP in the user context
-        console.log("Rendering WP " + workPackage._id + " Current WP is " + currentUserItemContext.workPackageId);
-        let itemStyle = (workPackage._id === currentUserItemContext.workPackageId ? 'design-item di-active' : 'design-item');
+        console.log("Rendering WP " + workPackage._id + " Current WP is " + userContext.workPackageId);
+        let itemStyle = (workPackage._id === userContext.workPackageId ? 'design-item di-active' : 'design-item');
 
 
         let buttons = '';
@@ -150,10 +151,10 @@ class WorkPackage extends Component {
                     // Managers can edit, delete or publish a new WP
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(currentUserItemContext, workPackage)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(currentUserItemContext, workPackage)}>View</Button>
-                            <Button bsSize="xs" onClick={ () => this.onDeleteWorkPackage(currentUserItemContext, workPackage)}>Delete</Button>
-                            <Button bsSize="xs" onClick={ () => this.onPublishWorkPackage(currentUserItemContext, workPackage)}>Publish</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userContext, workPackage)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userContext, workPackage)}>Delete</Button>
+                            <Button bsSize="xs" onClick={ () => this.onPublishWorkPackage(userContext, workPackage)}>Publish</Button>
                         </ButtonGroup>;
                 }
                 break;
@@ -164,10 +165,10 @@ class WorkPackage extends Component {
                     buttons =
                         <div>
                             <ButtonGroup className="button-group-left">
-                                <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(currentUserItemContext, workPackage)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
                             </ButtonGroup>
                             <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onDevelopWorkPackage(currentUserItemContext, workPackage)}>Develop</Button>
+                                <Button bsSize="xs" onClick={ () => this.onDevelopWorkPackage(viewOptions, userContext, workPackage)}>Develop</Button>
                             </ButtonGroup>
                         </div>
                     // options =
@@ -182,8 +183,8 @@ class WorkPackage extends Component {
                     // Managers can view or edit the WP
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(currentUserItemContext, workPackage)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(currentUserItemContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userContext, workPackage)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
                         </ButtonGroup>
                     // options =
                     //     <FormGroup>
@@ -206,15 +207,15 @@ class WorkPackage extends Component {
                         <div>
                             <ButtonGroup className="button-group-left">
                                 <Button bsSize="xs"
-                                        onClick={ () => this.onViewWorkPackage(currentUserItemContext, workPackage)}>View</Button>
+                                        onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
                             </ButtonGroup>
                         </div>
                 } else {
                     // Managers can view or edit the WP
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(currentUserItemContext, workPackage)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(currentUserItemContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userContext, workPackage)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
                         </ButtonGroup>
                 }
                 break;
@@ -222,7 +223,7 @@ class WorkPackage extends Component {
                 // View only for everyone
                 buttons =
                     <ButtonGroup>
-                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(currentUserItemContext, designUpdate)}>View</Button>
+                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userContext, designUpdate)}>View</Button>
                     </ButtonGroup>;
                 break;
         }
@@ -235,7 +236,7 @@ class WorkPackage extends Component {
                     currentItemName={workPackage.workPackageName}
                     currentItemVersion=''
                     currentItemStatus={workPackage.workPackageStatus}
-                    onSelectItem={ () => this.setNewWorkPackageActive(currentUserItemContext, workPackage) }
+                    onSelectItem={ () => this.setNewWorkPackageActive(userContext, workPackage) }
                 />
                 {/*{options}*/}
                 {buttons}
@@ -251,9 +252,9 @@ WorkPackage.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext,
-        currentUserDevContext: state.currentUserDevContext
+        userRole:               state.currentUserRole,
+        viewOptions:            state.currentUserViewOptions,
+        userContext:            state.currentUserItemContext
     }
 }
 

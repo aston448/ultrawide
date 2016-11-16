@@ -356,6 +356,9 @@ class ClientUserContextServices {
             case LocationType.LOCATION_ACCEPTANCE_TEST_OUTPUT:
                 newAcceptanceTestResultsLocation = newPath;
                 break;
+            case LocationType.LOCATION_INTEGRATION_TEST_OUTPUT:
+                newIntegrationTestResultsLocation = newPath;
+                break;
             case LocationType.LOCATION_MODULE_TEST_OUTPUT:
                 newModuleTestResultsLocation = newPath;
                 break;

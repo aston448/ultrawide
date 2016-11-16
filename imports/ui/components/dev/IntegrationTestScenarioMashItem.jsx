@@ -7,6 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import TextLookups from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -40,17 +41,25 @@ class IntegrationTestScenarioMashItem extends Component {
     render(){
         const { mashItem, userContext } = this.props;
 
+        const testStyle = mashItem.mashTestStatus;
+
         return(
-            <div>
-                <InputGroup>
-                    <span className={"mash-scenario"}>
-                        {mashItem.designComponentName}
-                    </span>
-                    <span className={"mash-scenario-result"}>
-                        {mashItem.mashTestStatus}
-                    </span>
-                </InputGroup>
-            </div>
+
+            <Grid>
+                <Row>
+                    <Col md={9}>
+                        <div className={'mash-scenario '  + testStyle}>
+                            {mashItem.designComponentName}
+                        </div>
+                    </Col>
+                    <Col md={3}>
+                        <div className={'mash-scenario-result ' + testStyle}>
+                            {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                        </div>
+                    </Col>
+                </Row>
+            </Grid>
+
         )
     }
 

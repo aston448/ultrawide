@@ -12,7 +12,8 @@ import DesignComponentAdd               from '../../components/common/DesignComp
 import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 import DesignDevFeatureMashContainer    from '../dev/DesignDevFeatureMashContainer.jsx';
-import DesignDevUnitMashContainer       from '../dev/DesignDevUnitMashContainer.jsx'
+import DesignDevUnitMashContainer       from '../dev/DesignDevUnitMashContainer.jsx';
+import IntegrationTestFeatureMashContainer  from '../dev/IntegrationTestFeatureMashContainer.jsx';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';

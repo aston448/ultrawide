@@ -1,9 +1,9 @@
-
+import fs from 'fs';
 import {MashTestStatus, LogLevel}   from '../../constants/constants.js';
-import {log}        from '../../common/utils.js'
-;
-class ChimpMochaTestServices{
+import {log}        from '../../common/utils.js';
 
+// Plugin class to read test results from a screen scraped chimp mocha JSON reported file
+class ChimpMochaTestServices{
 
     getJsonTestResults(resultsFile){
 

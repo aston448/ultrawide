@@ -981,8 +981,10 @@ class ClientContainerServices{
         if(mashCurrentItem){
             // We don't want the main selection from the design - we want local mash data
             selectionComponentId = mashCurrentItem.designComponentId;
-            selectionComponentType = mashCurrentItem.designComponentType;
+            selectionComponentType = mashCurrentItem.mashComponentType;
         }
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Mash Data for component type {} with id {} ", selectionComponentType, selectionComponentId);
 
         // Get user context current Design Component
         let selectedDesignComponent = null;
@@ -996,6 +998,9 @@ class ClientContainerServices{
                 selectedDesignComponent = DesignUpdateComponents.findOne({_id: selectionComponentId})
             }
 
+            log((msg) => console.log(msg), LogLevel.TRACE, "User context is USER: {}, DV: {}, DU: {}, WP: {}",
+            userContext.userId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
+
             switch (selectionComponentType) {
                 case ComponentType.APPLICATION:
                 case ComponentType.DESIGN_SECTION:
@@ -1007,8 +1012,10 @@ class ClientContainerServices{
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
                         workPackageId: userContext.workPackageId,
-                        designComponentType: ComponentType.FEATURE
-                    });
+                        mashComponentType: ComponentType.FEATURE
+                    }).fetch();
+
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Found {} Features in total", intTestMash.length);
 
                     intTestMash.forEach((mashItem) => {
 
@@ -1023,6 +1030,7 @@ class ClientContainerServices{
                             returnData.push(mashItem);
                         }
 
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} descendant Features", returnData.length);
 
                     });
 
@@ -1035,7 +1043,7 @@ class ClientContainerServices{
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
                         workPackageId: userContext.workPackageId,
-                        designComponentType: ComponentType.FEATURE_ASPECT,
+                        mashComponentType: ComponentType.FEATURE_ASPECT,
                         designFeatureReferenceId: selectedDesignComponent.componentReferenceId
                     }).fetch();
 
@@ -1046,7 +1054,7 @@ class ClientContainerServices{
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
                         workPackageId: userContext.workPackageId,
-                        designComponentType: ComponentType.SCENARIO,
+                        mashComponentType: ComponentType.SCENARIO,
                         designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
                     }).fetch();
 
@@ -1057,7 +1065,7 @@ class ClientContainerServices{
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
                         workPackageId: userContext.workPackageId,
-                        designComponentType: ComponentType.SCENARIO,
+                        mashComponentType: ComponentType.SCENARIO,
                         designScenarioReferenceId: selectedDesignComponent.componentReferenceId
                     }).fetch();
 
@@ -1098,7 +1106,7 @@ class ClientContainerServices{
                     componentReferenceId: parentRefId
                 }).componentParentReferenceId;
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentrefId, parent.componentReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
 
                 // Return true if match
                 if(parentRefId === parent.componentReferenceId){
@@ -1132,7 +1140,7 @@ class ClientContainerServices{
                     componentReferenceId: parentRefId
                 }).componentParentReferenceIdNew;
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentrefId, parent.componentReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
 
                 // Return true if match
                 if(parentRefId === parent.componentReferenceId){

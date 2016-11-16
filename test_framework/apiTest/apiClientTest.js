@@ -1,11 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Designs }                  from '../collections/design/designs.js';
+import { Designs }                  from '../../imports/collections/design/designs.js';
 // import { UserRoles }                from '../collections/users/user_roles.js';
 // import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
 
-import  ClientLoginServices     from '../apiClient/apiClientLogin.js';
-import  ClientDesignServices    from '../apiClient/apiClientDesign.js'
+import  ClientLoginServices     from '../../imports/apiClient/apiClientLogin.js';
+import  ClientDesignServices    from '../../imports/apiClient/apiClientDesign.js'
 
 Meteor.methods({
 

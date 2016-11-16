@@ -186,7 +186,7 @@ class ClientWorkPackageServices {
         }
     };
 
-    developWorkPackage(userContext, wpToDevelopId){
+    developWorkPackage(viewOptions, userContext, wpToDevelopId){
 
         // Set the current context
         let updatedContext = this.setWorkPackage(userContext, wpToDevelopId);
@@ -198,7 +198,7 @@ class ClientWorkPackageServices {
         ClientMashDataServices.createDevMashData(updatedContext);
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(updatedContext);
+        ClientMashDataServices.updateTestData(viewOptions, updatedContext);
 
         // Switch to Dev View
         if(userContext.designUpdateId === 'NONE') {

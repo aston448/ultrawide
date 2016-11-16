@@ -71,8 +71,8 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin();
     }
 
-    onRefreshTestData(userContext, currentProgressDataValue){
-        ClientMashDataServices.updateMashData(userContext, currentProgressDataValue)
+    onRefreshTestData(viewOptions, userContext, currentProgressDataValue){
+        ClientMashDataServices.updateMashData(viewOptions, userContext, currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
@@ -99,7 +99,8 @@ class AppHeader extends Component {
 
         // The header display depends on the current application View
         let headerTopActions = '';
-        let headerBottomActions = '';
+        let headerBottomActionsOne = '';
+        let headerBottomActionsTwo = '';
         let headerUserInfo = '';
 
         let detailsOption= '';
@@ -184,7 +185,7 @@ class AppHeader extends Component {
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestsButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext, currentProgressDataValue)}>Refresh Progress Data</Button>;
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userViewOptions, userContext, currentProgressDataValue)}>Refresh Progress Data</Button>;
 
         let exportToDevButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
@@ -247,12 +248,15 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsOne =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
+                    </ButtonToolbar>;
+                headerBottomActionsTwo =
+                    <ButtonToolbar>
                         <ButtonGroup>
                             {designButton}
                             {detailsButton}
@@ -272,7 +276,7 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {designButton}
@@ -293,12 +297,15 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsOne =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
+                    </ButtonToolbar>;
+                headerBottomActionsTwo =
+                    <ButtonToolbar>
                         <ButtonGroup>
                             {scopeButton}
                             {designButton}
@@ -319,7 +326,7 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {scopeButton}
@@ -341,12 +348,15 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsOne =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
+                    </ButtonToolbar>;
+                headerBottomActionsTwo =
+                    <ButtonToolbar>
                         <ButtonGroup>
                             {scopeButton}
                             {designButton}
@@ -364,7 +374,7 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
                             {scopeButton}
@@ -385,7 +395,7 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
-                headerBottomActions =
+                headerBottomActionsTwo =
                     <ButtonToolbar>
                         {scopeButton}
                         {designButton}
@@ -436,11 +446,14 @@ class AppHeader extends Component {
                         </Col>
                     </Row>
                     <Row className="header-row-bottom">
-                        <Col md={8}>
+                        <Col md={6}>
                             {appData}
                         </Col>
+                        <Col md={2}>
+                            {headerBottomActionsOne}
+                        </Col>
                         <Col md={4}>
-                            {headerBottomActions}
+                            {headerBottomActionsTwo}
                         </Col>
                     </Row>
                 </Grid>

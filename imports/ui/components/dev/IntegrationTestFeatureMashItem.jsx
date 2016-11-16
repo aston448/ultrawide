@@ -60,13 +60,14 @@ class IntegrationTestFeatureMashItem extends Component {
         if(this.hasFeatureAspects(userContext, mashItem.designComponentId)){
             container =
                 <IntegrationTestFeatureAspectMashContainer params={{
-                    featureMash: mashItem,
-                    displayContext: DisplayContext.INT_TEST_FEATURE
+                    userContext:    userContext,
+                    featureMash:    mashItem
                 }}/>;
         } else {
             container =
                 <IntegrationTestScenarioMashContainer params={{
-                    parentMash: mashItem,
+                    userContext:    userContext,
+                    parentMash:     mashItem,
                     displayContext: DisplayContext.INT_TEST_FEATURE
                 }}/>;
         }

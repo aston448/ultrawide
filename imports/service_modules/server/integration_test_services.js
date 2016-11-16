@@ -69,6 +69,7 @@ class IntegrationTestServices {
                 }
 
                 designItemList.push({
+                    itemId:         designItem._id,
                     itemName:       designItem.componentName,
                     itemType:       designItem.componentType,
                     itemRef:        designItem.componentReferenceId,
@@ -90,6 +91,7 @@ class IntegrationTestServices {
                 }
 
                 designItemList.push({
+                    itemId:         designItem._id,
                     itemName:       designItem.componentNameNew,
                     itemType:       designItem.componentType,
                     itemRef:        designItem.componentReferenceId,
@@ -111,9 +113,10 @@ class IntegrationTestServices {
                     designVersionId:                userContext.designVersionId,
                     designUpdateId:                 userContext.designUpdateId,
                     workPackageId:                  userContext.workPackageId,
-                    mashComponentType:              ComponentType.SCENARIO,
+                    mashComponentType:              designItem.itemType,
                     designComponentName:            designItem.itemName,
-                    designComponentReferenceId:     designItem.scenarioRef,
+                    designComponentId:              designItem.itemId,
+                    designComponentReferenceId:     designItem.itemRef,
                     designFeatureReferenceId:       designItem.featureRef,
                     designFeatureAspectReferenceId: designItem.aspectRef,
                     designScenarioReferenceId:      designItem.scenarioRef,
@@ -152,7 +155,7 @@ class IntegrationTestServices {
                     {_id: designScenario._id},
                     {
                         $set:{
-                            suiteName: testResult.fullName,
+                            suiteName: testResult.testFullName,
                             testName: testResult.testName,
                             // Status
                             mashStatus: MashStatus.MASH_LINKED,
@@ -162,7 +165,8 @@ class IntegrationTestServices {
                 );
 
             } else {
-                // This result matched no Designscenario so insert it as Dev only
+                log((msg) => console.log(msg), LogLevel.TRACE, "Inserting unknown test scenario {} + {}", testResult.testName, testResult.fullName);
+                // This result matched no Design scenario so insert it as Dev only
                 UserIntTestMashData.insert(
                     {
                         // Design Identity
@@ -171,13 +175,14 @@ class IntegrationTestServices {
                         designUpdateId:                 userContext.designUpdateId,
                         workPackageId:                  userContext.workPackageId,
                         mashComponentType:              ComponentType.SCENARIO,
+                        designComponentName:            'NONE',
                         designComponentReferenceId:     'NONE',
                         designFeatureReferenceId:       'NONE',
                         designFeatureAspectReferenceId: 'NONE',
                         designScenarioReferenceId:      'NONE',
                         mashItemIndex:                  0,
                         // Actual Dev Tests
-                        suiteName:                      testResult.fullName,
+                        suiteName:                      testResult.testFullName,
                         testName:                       testResult.testName,
                         // Status
                         mashStatus:                     MashStatus.MASH_NOT_DESIGNED,
