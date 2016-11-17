@@ -247,7 +247,7 @@ class DesignComponent extends Component{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
                 // Adding to the design itself
-                ClientDesignComponentServices.addSectionToDesignSection(view, mode, sectionItem);
+                ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, sectionItem);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 // Adding to a design update

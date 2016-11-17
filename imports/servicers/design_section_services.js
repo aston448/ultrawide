@@ -1,7 +1,5 @@
-/**
- * Created by aston on 29/08/2016.
- */
 
+import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 
 class DesignSectionServices{
 
@@ -10,7 +8,7 @@ class DesignSectionServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "New Design Section",
+                { "key" : "5efv7", "text" : DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
@@ -27,7 +25,7 @@ class DesignSectionServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "Text relevant to this section may be entered here...",
+                { "key" : "5efv7", "text" : DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],

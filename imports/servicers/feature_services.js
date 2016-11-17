@@ -1,7 +1,5 @@
-/**
- * Created by aston on 24/07/2016.
- */
 
+import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 
 class FeatureServices{
 
@@ -10,7 +8,7 @@ class FeatureServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "New Feature or Use Case",
+                { "key" : "5efv7", "text" : DefaultComponentNames.NEW_FEATURE_NAME,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
@@ -27,7 +25,7 @@ class FeatureServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "New Feature Aspect",
+                { "key" : "5efv7", "text" : DefaultComponentNames.NEW_FEATURE_ASPECT_NAME,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
@@ -47,7 +45,7 @@ class FeatureServices{
                 [
                     {
                         "key" : "5efv7",
-                        "text" : "As a \nI want to \nSo that I can ",
+                        "text" : DefaultComponentNames.NEW_NARRATIVE_TEXT,
                         "type" : "unstyled",
                         "depth" : 0,
                         "inlineStyleRanges" : [ ],
@@ -63,7 +61,7 @@ class FeatureServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "Text relevant to this feature may be entered here...",
+                { "key" : "5efv7", "text" : DefaultDetailsText.NEW_FEATURE_DETAILS,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],

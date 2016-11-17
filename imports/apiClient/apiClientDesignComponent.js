@@ -6,15 +6,22 @@
 import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 import {UserModTestMashData}    from '../collections/dev/user_mod_test_mash_data.js';
-import {UserAccTestMashData}  from '../collections/dev/user_acc_test_mash_data.js';
+import {UserIntTestMashData}    from '../collections/dev/user_int_test_mash_data.js';
+import {UserAccTestMashData}    from '../collections/dev/user_acc_test_mash_data.js';
 
 // Ultrawide Services
-import {ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel} from '../constants/constants.js';
-import {validateDesignComponentName, locationMoveDropAllowed, reorderDropAllowed, log} from '../common/utils.js';
+import { ComponentType, MashTestStatus, LogLevel, MessageType} from '../constants/constants.js';
+import { DesignComponentMessages } from '../constants/message_texts.js';
+import { Validation } from '../constants/validation_errors.js';
+
+import ServerDesignComponentApi      from '../apiServer/apiDesignComponent.js';
+import DesignComponentValidationApi  from '../apiValidation/apiDesignComponentValidation.js';
+
+import {log} from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -30,7 +37,464 @@ import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignCo
 
 class ClientDesignComponentServices{
 
-    // User selected a design component
+
+    // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
+
+    // User saved a change to design component name --------------------------------------------------------------------
+    updateComponentName(view, mode, designComponentId, newPlainText, newRawText){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateUpdateComponentName(view, mode, designComponentId, newPlainText);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.updateComponentName(view, mode, designComponentId, newPlainText, newRawText, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Update Component Name Actions:
+
+                // Temp update for the redux state to the local new value - otherwise does not get changed in time
+                // This allows the text area to immediately display any updates to current component name
+                store.dispatch(updateDesignComponentName(newPlainText));
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignComponentMessages.MSG_COMPONENT_NAME_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User saved changes to Narrative in a Feature --------------------------------------------------------------------
+    updateFeatureNarrative(view, mode, designComponentId, newPlainText, newRawText){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateUpdateFeatureNarrative(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.updateFeatureNarrative(view, mode, designComponentId, newPlainText, newRawText, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Update Feature Narrative Actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignComponentMessages.MSG_FEATURE_NARRATIVE_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User clicked Add Application in the main Design Applications container ------------------------------------------
+    addApplicationToDesignVersion(view, mode, designVersionId) {
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.addApplicationToDesignVersion(view, mode, designVersionId, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Add Application Actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignComponentMessages.MSG_NEW_APPLICATION_ADDED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User clicked Add Design Section inside an Application component -------------------------------------------------
+    addDesignSectionToApplication(view, mode, parentComponent){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.addDesignSectionToApplication(view, mode, parentComponent.designVersionId, parentComponent._id, (err, result) => {
+
+            if(err){
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Add Design Section Actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User clicked Add Sub Section inside a Design Section ------------------------------------------------------------
+    addDesignSectionToDesignSection(view, mode, parentComponent){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.addDesignSectionToDesignSection(
+            view,
+            mode,
+            parentComponent.designVersionId,
+            parentComponent._id,
+            parentComponent.componentLevel,
+            (err, result) => {
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Add Design Section Actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
+                    }));
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User clicked Add Feature inside a Design Section ----------------------------------------------------------------
+    addFeatureToDesignSection(view, mode, parentComponent){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.addFeatureToDesignSection(
+            view,
+            mode,
+            parentComponent.designVersionId,
+            parentComponent._id,
+            (err, result) => {
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Add Feature Actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_NEW_FEATURE_ADDED
+                    }));
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User clicked Add Feature Aspect inside a Feature ----------------------------------------------------------------
+    addFeatureAspectToFeature(view, mode, parentComponent){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.addFeatureAspectToFeature(
+            view,
+            mode,
+            parentComponent.designVersionId,
+            parentComponent._id,
+            (err, result) => {
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Add Feature Aspect Actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_NEW_FEATURE_ASPECT_ADDED
+                    }));
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+
+    };
+
+    // User clicked Add Scenario in either a Feature or Feature Aspect -------------------------------------------------
+    addScenario(view, mode, parentComponent){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.addScenario(
+            view,
+            mode,
+            parentComponent.designVersionId,
+            parentComponent._id,
+            (err, result) => {
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Add Scenario Actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_NEW_SCENARIO_ADDED
+                    }));
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User clicked Delete for a design component ----------------------------------------------------------------------
+    removeDesignComponent(view, mode, designComponent, userContext){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateRemoveDesignComponent(view, mode, designComponent._id);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.removeDesignComponent(
+            view,
+            mode,
+            designComponent._id,
+            designComponent.componentParentId,
+            (err, result) => {
+
+                console.log("SCENARIO CALLBACK");
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Remove Design Component Actions:
+
+                    // There can now be no component selected...
+                    const context = {
+                        userId:                         Meteor.userId(),
+                        designId:                       userContext.designId,
+                        designVersionId:                userContext.designVersionId,
+                        designUpdateId:                 userContext.designUpdateId,
+                        workPackageId:                  userContext.workPackageId,
+                        designComponentId:              'NONE',
+                        designComponentType:            'NONE',
+                        featureReferenceId:             'NONE',
+                        featureAspectReferenceId:       'NONE',
+                        scenarioReferenceId:            'NONE',
+                        scenarioStepId:                 'NONE',
+                        featureFilesLocation:           userContext.featureFilesLocation,
+                        acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                        integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                        moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                    };
+
+                    store.dispatch(setCurrentUserItemContext(context, true));
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_DESIGN_COMPONENT_REMOVED
+                    }));
+
+                    console.log("SCENARIO REMOVED");
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User dragged a component to a new location in the design --------------------------------------------------------
+    moveDesignComponent(view, mode, displayContext, movingComponentId, newParentComponentId){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateMoveDesignComponent(view, mode, displayContext, movingComponentId, newParentComponentId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.moveDesignComponent(
+            view,
+            mode,
+            displayContext,
+            movingComponentId,
+            newParentComponentId,
+            (err, result) => {
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Move Component Actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_DESIGN_COMPONENT_MOVED
+                    }));
+
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User dragged a component to a new position in its current list --------------------------------------------------
+    reorderDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId){
+
+        // Client validation
+        let result = DesignComponentValidationApi.validateReorderDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call
+        ServerDesignComponentApi.reorderDesignComponent(
+            view,
+            mode,
+            displayContext,
+            movingComponentId,
+            targetComponentId,
+            (err, result) => {
+
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Reorder Component Actions:
+
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_DESIGN_COMPONENT_REORDERED
+                    }));
+
+                }
+            }
+        );
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+
+    // LOCAL CLIENT ACTIONS ============================================================================================
+
+    // User selected a design component --------------------------------------------------------------------------------
     setDesignComponent(newDesignComponentId, userContext){
         if(newDesignComponentId != userContext.designComponentId) {
 
@@ -99,7 +563,7 @@ class ClientDesignComponentServices{
         return false;
     };
 
-    // User opened or closed a design component
+    // User opened or closed a design component ------------------------------------------------------------------------
     setOpenClosed(designComponent, currentList, newState){
 
         if(designComponent.componentType === ComponentType.FEATURE){
@@ -175,176 +639,7 @@ class ClientDesignComponentServices{
         }
     };
 
-    // User saved a change to design component name
-    updateComponentName(designComponent, newPlainText, newRawText){
-
-        // Make sure the name being saved is unique in this design version
-        if(validateDesignComponentName(designComponent, newPlainText)) {
-            Meteor.call('design.saveComponentName', designComponent._id, newPlainText, newRawText);
-
-            // Temp update for the redux state to the local new value - otherwise does not get changed in time
-            // This allows the text area to immediately display any updates to current component name
-            store.dispatch(updateDesignComponentName(newPlainText));
-
-            return true;
-
-        } else {
-            return false;
-        }
-    };
-
-    // User saved changes to Narrative in a Feature
-    updateFeatureNarrative(view, mode, designComponentId, newPlainText, newRawText){
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.saveFeatureNarrative', designComponentId, newRawText, newPlainText);
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Add Application in the main Design Applications container
-    addApplicationToDesignVersion(view, mode, designVersionId) {
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if (view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.addNewApplication', designVersionId);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Add Design Section inside an Application component
-    addDesignSectionToApplication(view, mode, parentComponent){
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.addNewSectionToApplication', parentComponent.designVersionId, parentComponent._id);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Add Sub Section inside a Design Section
-    addSectionToDesignSection(view, mode, parentComponent){
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.addNewSectionToDesignSection', parentComponent.designVersionId, parentComponent._id, parentComponent.componentLevel);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Add Feature inside a Design Section
-    addFeatureToDesignSection(view, mode, parentComponent){
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.addNewFeature', parentComponent.designVersionId, parentComponent._id);
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Add Feature Aspect inside a Feature
-    addFeatureAspectToFeature(view, mode, parentComponent){
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.addNewFeatureAspectToFeature', parentComponent.designVersionId, parentComponent._id);
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Add Scenario in either a Feature or Feature Aspect
-    addScenario(view, mode, parentComponent){
-
-        // Validate - can only do this if editing a new design and in edit mode
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('design.addNewScenario', parentComponent.designVersionId, parentComponent._id);
-        } else {
-            return false;
-        }
-    };
-
-    // User clicked Delete for a design component
-    deleteComponent(view, mode, component, userContext){
-
-        // Validation - must be editing new design in edit mode and item must be removable
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT && component.isRemovable) {
-            Meteor.call('design.deleteComponent', component._id, component.componentParentId);
-
-            // There can now be no component selected...
-            const context = {
-                userId:                         Meteor.userId(),
-                designId:                       userContext.designId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                workPackageId:                  userContext.workPackageId,
-                designComponentId:              'NONE',
-                designComponentType:            'NONE',
-                featureReferenceId:             'NONE',
-                featureAspectReferenceId:       'NONE',
-                scenarioReferenceId:            'NONE',
-                scenarioStepId:                 'NONE',
-                featureFilesLocation:           userContext.featureFilesLocation,
-                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
-            };
-
-            store.dispatch(setCurrentUserItemContext(context, true));
-            return true;
-
-        } else {
-            return false;
-        }
-    };
-
-    // User dragged a component to a new location in the design
-    moveComponent(view, mode, context, movingComponent, newParentComponent){
-
-        // Validation - must be editing new design in edit mode and component must be allowed to drop...
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT && context === DisplayContext.BASE_EDIT &&
-            locationMoveDropAllowed(
-                movingComponent.componentType,
-                newParentComponent.componentType,
-                view, newParentComponent.isInScope)
-        ){
-            Meteor.call('design.moveComponent', movingComponent._id, newParentComponent._id);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // User dragged a component to a new position in its current list
-    reorderComponent(view, mode, context, movingComponent, targetComponent){
-
-        log((msg) => console.log(msg), LogLevel.TRACE, "Moving design component.  View: {} Mode: {} Context: {}", view, mode, context);
-
-        // Validation - must be editing new design in edit mode and component must be allowed to drop...
-        if(view === ViewType.DESIGN_NEW_EDIT && mode === ViewMode.MODE_EDIT && context === DisplayContext.BASE_EDIT &&
-            reorderDropAllowed(
-                movingComponent,
-                targetComponent)
-        ){
-            // The target component is the one in the list above which the drop will be made
-            log((msg) => console.log(msg), LogLevel.TRACE, "OK to reorder...");
-            Meteor.call('design.reorderComponent', movingComponent._id, targetComponent._id);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // Get the relevant Design implementation progress data for this component
+    // User chose to refresh implementation progress data --------------------------------------------------------------
     getProgressData(designComponent, userContext){
 
         switch(designComponent.componentType){
@@ -363,6 +658,13 @@ class ClientDesignComponentServices{
                     testOutcome:                    MashTestStatus.MASH_PASS
                 }).count();
 
+                const passingIntegrationTestsCount = UserIntTestMashData.find({
+                    userId:                         userContext.userId,
+                    designVersionId:                designComponent.designVersionId,
+                    designFeatureReferenceId:       designComponent.componentReferenceId,
+                    mashTestStatus:                 MashTestStatus.MASH_PASS
+                }).count();
+
                 const passingAcceptanceTestsCount = UserAccTestMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                designComponent.designVersionId,
@@ -377,6 +679,13 @@ class ClientDesignComponentServices{
                     testOutcome:                    MashTestStatus.MASH_FAIL
                 }).count();
 
+                const failingIntegrationTestsCount = UserIntTestMashData.find({
+                    userId:                         userContext.userId,
+                    designVersionId:                designComponent.designVersionId,
+                    designFeatureReferenceId:       designComponent.componentReferenceId,
+                    mashTestStatus:                 MashTestStatus.MASH_FAIL
+                }).count();
+
                 const failingAcceptanceTestsCount = UserAccTestMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                designComponent.designVersionId,
@@ -385,13 +694,13 @@ class ClientDesignComponentServices{
                 }).count();
 
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Progress for {}.  Pass: {} Fail: {} ", designComponent.componentName, passingUnitTestsCount + passingAcceptanceTestsCount, failingUnitTestsCount + failingAcceptanceTestsCount);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Progress for {}.  Pass: {} Fail: {} ", designComponent.componentName, passingUnitTestsCount + passingAcceptanceTestsCount + passingAcceptanceTestsCount, failingUnitTestsCount + failingIntegrationTestsCount + failingAcceptanceTestsCount);
 
                 return({
                     featureCount:       0,
                     scenarioCount:      scenarioCount,
-                    passingTestsCount:  passingUnitTestsCount + passingAcceptanceTestsCount,
-                    failingTestsCount:  failingUnitTestsCount + failingAcceptanceTestsCount
+                    passingTestsCount:  passingUnitTestsCount + passingIntegrationTestsCount + passingAcceptanceTestsCount,
+                    failingTestsCount:  failingUnitTestsCount + failingIntegrationTestsCount + failingAcceptanceTestsCount
                 });
             case ComponentType.DESIGN_SECTION:
                 // TODO - make this nesting compatible - currently only supports one level

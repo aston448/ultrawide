@@ -4,7 +4,8 @@ import {FeatureBackgroundSteps}         from '../collections/design/feature_back
 import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
 import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js'
 
-import {ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../constants/constants.js';
+import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../constants/constants.js';
+import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 
 class ScenarioServices{
 
@@ -13,7 +14,7 @@ class ScenarioServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "New Scenario",
+                { "key" : "5efv7", "text" : DefaultComponentNames.NEW_SCENARIO_NAME,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
@@ -30,7 +31,7 @@ class ScenarioServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "Text relevant to this scenario may be entered here...",
+                { "key" : "5efv7", "text" : DefaultDetailsText.NEW_SCENARIO_DETAILS,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],

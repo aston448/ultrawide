@@ -17,7 +17,7 @@ import DesignServices                   from './design_services.js';
 import DesignVersionServices            from './design_version_services.js';
 import DesignUpdateServices             from './design_update_services.js';
 import WorkPackageServices              from './work_package_services.js';
-import DomainDictionaryServices         from '../service_modules/server/domain_dictionary_services.js';
+import DomainDictionaryServices         from './domain_dictionary_services.js';
 import DesignComponentServices          from './design_component_services.js';
 import DesignUpdateComponentServices    from './design_update_component_services.js';
 import ScenarioServices                 from './scenario_services.js';

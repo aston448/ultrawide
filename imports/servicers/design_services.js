@@ -2,14 +2,16 @@
  * Created by aston on 22/09/2016.
  */
 
-import {Designs} from '../collections/design/designs.js'
-import {DesignComponents} from '../collections/design/design_components.js'
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js'
-import {DesignVersions} from '../collections/design/design_versions.js'
-import {DesignUpdates} from '../collections/design_update/design_updates.js'
-import {WorkPackages} from '../collections/work/work_packages.js'
-import {WorkPackageComponents} from '../collections/work/work_package_components.js'
+import {Designs}                    from '../collections/design/designs.js'
+import {DesignComponents}           from '../collections/design/design_components.js'
+import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js'
+import {DesignVersions}             from '../collections/design/design_versions.js'
+import {DesignUpdates}              from '../collections/design_update/design_updates.js'
+import {WorkPackages}               from '../collections/work/work_packages.js'
+import {WorkPackageComponents}      from '../collections/work/work_package_components.js'
+
 import {DesignVersionStatus, ComponentType} from '../constants/constants.js';
+import { DefaultItemNames, DefaultDetailsText } from '../constants/default_names.js';
 
 import DesignVersionServices from './design_version_services.js';
 
@@ -25,14 +27,19 @@ class DesignServices{
 
         let designId = Designs.insert(
             {
-                designName: 'New Design'
+                designName: DefaultItemNames.NEW_DESIGN_NAME
             }
         );
 
         if(designId && createDesignVersion){
             console.log("Creating Design Version for Design: " + designId);
 
-            DesignVersionServices.addNewDesignVersion(designId, 'First Draft', '0.1', DesignVersionStatus.VERSION_NEW);
+            DesignVersionServices.addNewDesignVersion(
+                designId,
+                DefaultItemNames.NEW_DESIGN_VERSION_NAME,
+                DefaultItemNames.NEW_DESIGN_VERSION_NUMBER,
+                DesignVersionStatus.VERSION_NEW
+            );
 
         }
 

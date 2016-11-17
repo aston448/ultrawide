@@ -17,10 +17,10 @@ import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFile
 import {log}                            from '../common/utils.js';
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from './scenario_services.js';
-import MochaTestServices                from '../service_modules/server/test_results_processor_meteor_mocha.js';
+import MochaTestServices                from '../service_modules/from_server/test_results_processor_meteor_mocha.js';
 
-import IntegrationTestServices          from '../service_modules/server/integration_test_services.js';
-import ModuleTestServices               from '../service_modules/server/module_test_services.js';
+import IntegrationTestServices          from './integration_test_services.js';
+import ModuleTestServices               from './module_test_services.js';
 
 class MashDataServices{
 

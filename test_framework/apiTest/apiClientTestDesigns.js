@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
+import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 
 import  ClientDesignServices    from '../../imports/apiClient/apiClientDesign.js'
 
@@ -16,6 +17,15 @@ Meteor.methods({
 
         ClientDesignServices.saveDesignName(role, design._id, newName);
 
+    },
+
+    'testDesigns.selectDesign'(newDesign){
+
+        const design = Designs.findOne({designName: newDesign});
+        const userId = Meteor.userId();
+        const userContext = UserCurrentEditContext.findOne({userId: userId});
+
+        ClientDesignServices.setDesign(userContext, design._id);
     }
 
 });

@@ -45,4 +45,7 @@ import '../test_framework/apiTest/apiVerifyDesigns.js';
 
 // Meteor Validated Methods
 import '../imports/apiValidatedMethods/design_methods.js'
+import '../imports/apiValidatedMethods/design_component_methods.js'
+
+//import '../imports/service_modules/server/design_component_service_modules.js'
 

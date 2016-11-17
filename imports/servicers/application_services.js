@@ -1,7 +1,5 @@
-/**
- * Created by aston on 17/08/2016.
- */
 
+import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 
 class ApplicationServices{
 
@@ -10,7 +8,7 @@ class ApplicationServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "New Application",
+                { "key" : "5efv7", "text" : DefaultComponentNames.NEW_APPLICATION_NAME,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
@@ -27,7 +25,7 @@ class ApplicationServices{
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : "A high level description of the application may be entered here",
+                { "key" : "5efv7", "text" : DefaultDetailsText.NEW_APPLICATION_DETAILS,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],

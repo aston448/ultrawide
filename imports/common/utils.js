@@ -95,37 +95,37 @@ export function getComponentClass(currentItem, view, context, isNarrative){
     }
 }
 
-export function validateDesignComponentName(component,  newName){
-
-    // A design component with the same name as another component is not allowed.  This is because it describes a specific bit of functionality
-    // and the same description implies ambiguity.  Also the name will act as a key to tests.
-
-    // However the rule does not apply to Design Sections and Feature Aspects which may well want to have the same titles
-    if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
-        return true;
-    }
-
-    // Problem if any components of the same name in this design version (apart from the current one)
-    let existingComponents = DesignComponents.find({_id:{$ne: component._id}, designVersionId: component.designVersionId, componentName: newName});
-
-    let message = '';
-
-    if (existingComponents.count() > 0){
-        console.log("Error: " + newName + " already exists");
-
-        message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design version'};
-
-        // Post message to global state so it wil appear in header
-        store.dispatch(updateUserMessage(message));
-        return false;
-    }
-
-    message = {messageType: MessageType.SUCCESS, messageText: 'Name saved successfully'};
-
-    // Post message to global state so it wil appear in header
-    store.dispatch(updateUserMessage(message));
-    return true;
-}
+// export function validateDesignComponentName(component,  newName){
+//
+//     // A design component with the same name as another component is not allowed.  This is because it describes a specific bit of functionality
+//     // and the same description implies ambiguity.  Also the name will act as a key to tests.
+//
+//     // However the rule does not apply to Design Sections and Feature Aspects which may well want to have the same titles
+//     if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
+//         return true;
+//     }
+//
+//     // Problem if any components of the same name in this design version (apart from the current one)
+//     let existingComponents = DesignComponents.find({_id:{$ne: component._id}, designVersionId: component.designVersionId, componentName: newName});
+//
+//     let message = '';
+//
+//     if (existingComponents.count() > 0){
+//         console.log("Error: " + newName + " already exists");
+//
+//         message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design version'};
+//
+//         // Post message to global state so it wil appear in header
+//         store.dispatch(updateUserMessage(message));
+//         return false;
+//     }
+//
+//     message = {messageType: MessageType.SUCCESS, messageText: 'Name saved successfully'};
+//
+//     // Post message to global state so it wil appear in header
+//     store.dispatch(updateUserMessage(message));
+//     return true;
+// }
 
 export function validateDesignUpdateComponentName(component, newName){
 

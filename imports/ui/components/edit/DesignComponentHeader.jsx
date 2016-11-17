@@ -370,7 +370,7 @@ class DesignComponentHeader extends Component{
         // Handle custom commands
         if(command === 'editor-save'){
             // Save the title on ENTER
-            this.saveComponentName(this.props.view);
+            this.saveComponentName(this.props.view, this.props.mode);
             return true;
         }
 
@@ -416,7 +416,7 @@ class DesignComponentHeader extends Component{
     }
 
     // Save changes to the design component name
-    saveComponentName(view){
+    saveComponentName(view, mode){
 
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
@@ -429,11 +429,11 @@ class DesignComponentHeader extends Component{
         switch (view){
             case ViewType.DESIGN_NEW_EDIT:
                 // Updates to the base design
-                success = ClientDesignComponentServices.updateComponentName(item, plainText, rawText);
+                success = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 // Updates to a design update
-                success = ClientDesignUpdateComponentServices.updateComponentName(item, plainText, rawText);
+                success = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item, plainText, rawText);
                 break;
         }
 
@@ -450,7 +450,7 @@ class DesignComponentHeader extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
-                ClientDesignComponentServices.deleteComponent(view, mode, item, userContext);
+                ClientDesignComponentServices.removeDesignComponent(view, mode, item, userContext);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 if(item.isRemoved){
@@ -675,7 +675,7 @@ class DesignComponentHeader extends Component{
                             readOnly={false}
                         />
                     </div>
-                    <InputGroup.Addon onClick={ () => this.saveComponentName(view)}>
+                    <InputGroup.Addon onClick={ () => this.saveComponentName(view, mode)}>
                         <div className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoComponentNameChange()}>
@@ -895,8 +895,8 @@ const componentSource = {
 
                 switch (props.view) {
                     case ViewType.DESIGN_NEW_EDIT:
-                        // Validates dop allowed and then moves component
-                        ClientDesignComponentServices.moveComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);
+                        // Validates drop allowed and then moves component
+                        ClientDesignComponentServices.moveDesignComponent(props.view, props.mode, props.displayContext, item.component._id, dropResult.targetItem._id);
                         break;
                     case ViewType.DESIGN_UPDATE_EDIT:
                         ClientDesignUpdateComponentServices.moveComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);
@@ -908,7 +908,7 @@ const componentSource = {
 
                 switch (props.view) {
                     case ViewType.DESIGN_NEW_EDIT:
-                        ClientDesignComponentServices.reorderComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);
+                        ClientDesignComponentServices.reorderDesignComponent(props.view, props.mode, props.displayContext, item.component._id, dropResult.targetItem._id);
                         break;
                     case ViewType.DESIGN_UPDATE_EDIT:
                         ClientDesignUpdateComponentServices.reorderComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);

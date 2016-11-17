@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import  DomainDictionaryServices        from '../service_modules/server/domain_dictionary_services.js';
+import  DomainDictionaryServices        from '../servicers/domain_dictionary_services.js';
 
 
 Meteor.methods({

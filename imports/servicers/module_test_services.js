@@ -1,14 +1,14 @@
 import fs from 'fs';
 
-import {DesignComponents}               from '../../collections/design/design_components.js';
-import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
+import {DesignComponents}               from '../collections/design/design_components.js';
+import {DesignUpdateComponents}         from '../collections/design_update/design_update_components.js';
 
-import {UserModTestMashData}            from '../../collections/dev/user_mod_test_mash_data.js';
+import {UserModTestMashData}            from '../collections/dev/user_mod_test_mash_data.js';
 
-import {ComponentType, MashStatus, MashTestStatus, LogLevel} from '../../constants/constants.js';
-import {log}                            from '../../common/utils.js';
+import {ComponentType, MashStatus, MashTestStatus, LogLevel} from '../constants/constants.js';
+import {log}                            from '../common/utils.js';
 
-import MeteorMochaTestServices          from '../server/test_results_processor_meteor_mocha.js';
+import MeteorMochaTestServices          from '../service_modules/from_server/test_results_processor_meteor_mocha.js';
 
 class ModuleTestServices{
 

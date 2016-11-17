@@ -45,6 +45,7 @@ Meteor.methods({
     },
 
     'verifyDesigns.designExistsCalled'(designName){
+
         const design = Designs.findOne({designName: designName});
 
         if(design){
@@ -55,6 +56,7 @@ Meteor.methods({
     },
 
     'verifyDesigns.designDoesNotExistCalled'(designName){
+        
         const design = Designs.findOne({designName: designName});
 
         if(design){

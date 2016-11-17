@@ -2,6 +2,7 @@
 import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
 import DesignServices           from '../servicers/design_services.js';
 
+import { Validation } from '../constants/validation_errors.js'
 
 export const addDesign = new ValidatedMethod({
 
@@ -15,13 +16,9 @@ export const addDesign = new ValidatedMethod({
 
         const result = DesignValidationApi.validateAddDesign(userRole);
 
-        console.log("Add design validation result: " + result);
-
-        if (result != 'VALID') {
+        if (result != Validation.VALID) {
             throw new Meteor.Error('design.addDesign.failValidation', result)
         }
-
-        console.log("Adding Design");
 
         try {
             DesignServices.addDesign(true);
@@ -47,13 +44,9 @@ export const updateDesignName = new ValidatedMethod({
 
         const result = DesignValidationApi.validateUpdateDesignName(userRole, newName, designId);
 
-        console.log("Update design name validation result: " + result);
-
-        if (result != 'VALID') {
+        if (result != Validation.VALID) {
             throw new Meteor.Error('design.updateDesignName.failValidation', result)
         }
-
-        console.log("Updating Design Name");
 
         try {
             DesignServices.updateDesignName(designId, newName);
@@ -78,13 +71,9 @@ export const removeDesign = new ValidatedMethod({
 
         const result = DesignValidationApi.validateRemoveDesign(userRole, designId);
 
-        console.log("Remove design validation result: " + result);
-
-        if (result != 'VALID') {
+        if (result != Validation.VALID) {
             throw new Meteor.Error('design.removeDesign.failValidation', result)
         }
-
-        console.log("Removing Design");
 
         try {
             DesignServices.removeDesign(designId);
