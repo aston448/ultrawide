@@ -44,7 +44,7 @@ Meteor.methods({
             const featureFilesDir = '/Users/aston/WebstormProjects/ultrawide-test/tests/features/';
             const accTestResults = '/Users/aston/WebstormProjects/shared/test/test_results.json';
             const intTestResults = '/Users/aston/WebstormProjects/shared/test/mocha_results.json';
-            const modTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json'
+            const modTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json';
 
             // Clear current edit context for all users - but not the file locations
             UserCurrentEditContext.update(
@@ -75,7 +75,7 @@ Meteor.methods({
             // Recreate users only needed after a reset (may be recreated by normal fixtures anyway)
             if (UserRoles.find({}).count() === 0) {
 
-                console.log('Inserting data...');
+                console.log('Inserting user data...');
                 // Create a new accounts
                 let designerUserId = Accounts.createUser(
                     {
@@ -89,7 +89,7 @@ Meteor.methods({
                     userName: 'gloria',
                     displayName: 'Gloria Slap',
                     isDesigner: true,
-                    isDeveloper: true,
+                    isDeveloper: false,
                     isManager: false
                 });
 

@@ -1,14 +1,24 @@
 import {RoleType} from '../../imports/constants/constants.js'
 
+beforeEach(function(){
+    server.call('testFixtures.clearAllData');
+});
+
+afterEach(function(){
+    server.call('testLogout');
+});
+
 describe('UC 107 - Update Design Name', function() {
 
     it('Only a Designer can update a Design name', function() {
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testFixtures.clearAllData');
+        server.call('testLoginAs', RoleType.DESIGNER);
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
 
         // Execute -----------------------------------------------------------------------------------------------------
         // Give Developer a go...
+        server.call('testLogout');
+        server.call('testLoginAs', RoleType.DEVELOPER);
         server.call('testDesigns.updateDesignName', RoleType.DEVELOPER, 'New Design', 'Updated Name');
 
         // Verify ------------------------------------------------------------------------------------------------------
@@ -20,6 +30,8 @@ describe('UC 107 - Update Design Name', function() {
 
         // Execute -----------------------------------------------------------------------------------------------------
         // Give Manager a go...
+        server.call('testLogout');
+        server.call('testLoginAs', RoleType.MANAGER);
         server.call('testDesigns.updateDesignName', RoleType.MANAGER, 'New Design', 'Updated Name');
 
         // Verify ------------------------------------------------------------------------------------------------------
@@ -33,7 +45,7 @@ describe('UC 107 - Update Design Name', function() {
     it('A Design cannot be given the same name as another existing Design', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testFixtures.clearAllData');
+        server.call('testLoginAs', RoleType.DESIGNER);
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, 'New Design', 'Unique Name');
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
@@ -53,7 +65,7 @@ describe('UC 107 - Update Design Name', function() {
     it('A Designer can edit a Design name to a new value', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testFixtures.clearAllData');
+        server.call('testLoginAs', RoleType.DESIGNER);
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
 
         // Execute -----------------------------------------------------------------------------------------------------

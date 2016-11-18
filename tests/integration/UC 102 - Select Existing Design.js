@@ -1,11 +1,19 @@
 
 import {RoleType} from '../../imports/constants/constants.js'
 
+beforeEach(function(){
+    server.call('testFixtures.clearAllData');
+});
+
+afterEach(function(){
+    server.call('testLogout');
+});
+
 describe('UC 102 - Select Existing Design', function() {
 
     it('An existing Design can be selected as the working Design', function() {
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testFixtures.clearAllData');
+        server.call('testLoginAs', RoleType.DESIGNER);
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, 'New Design', 'Design1');
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
@@ -28,7 +36,7 @@ describe('UC 102 - Select Existing Design', function() {
     it('When a new Design is selected previous user context is cleared', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testFixtures.clearAllData');
+        server.call('testLoginAs', RoleType.DESIGNER);
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, 'New Design', 'Design1');
         // This sets all edit context items to "DUMMY"
