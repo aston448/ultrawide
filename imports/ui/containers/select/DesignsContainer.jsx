@@ -39,8 +39,8 @@ class DesignsList extends Component {
 
     }
 
-    addNewDesign() {
-        ClientDesignServices.addNewDesign();
+    addNewDesign(role) {
+        ClientDesignServices.addNewDesign(role);
     }
 
     renderDesignList(designs){
@@ -66,7 +66,7 @@ class DesignsList extends Component {
                 <div className="design-item-add">
                     <DesignComponentAdd
                         addText="Add Design"
-                        onClick={ () => this.addNewDesign()}
+                        onClick={ () => this.addNewDesign(currentUserRole)}
                     />
                 </div>
         }

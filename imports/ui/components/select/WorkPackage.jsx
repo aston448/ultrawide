@@ -135,7 +135,7 @@ class WorkPackage extends Component {
         const {workPackage, userRole, viewOptions, userContext} = this.props;
 
         // Display as selected if this is the current WP in the user context
-        console.log("Rendering WP " + workPackage._id + " Current WP is " + userContext.workPackageId);
+        //console.log("Rendering WP " + workPackage._id + " Current WP is " + userContext.workPackageId);
         let itemStyle = (workPackage._id === userContext.workPackageId ? 'design-item di-active' : 'design-item');
 
 

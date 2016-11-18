@@ -1,8 +1,8 @@
 
-import {DomainDictionary} from '../collections/design/domain_dictionary.js';
+import {DomainDictionary} from '../../collections/design/domain_dictionary.js';
 
-import {LogLevel} from '../constants/constants.js';
-import {log} from '../common/utils.js';
+import {LogLevel} from '../../constants/constants.js';
+import {log} from '../../common/utils.js';
 
 class DomainDictionaryServices{
 

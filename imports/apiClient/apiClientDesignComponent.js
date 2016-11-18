@@ -362,7 +362,7 @@ class ClientDesignComponentServices{
             designComponent.componentParentId,
             (err, result) => {
 
-                console.log("SCENARIO CALLBACK");
+                //console.log("SCENARIO CALLBACK");
 
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
@@ -398,7 +398,7 @@ class ClientDesignComponentServices{
                         messageText: DesignComponentMessages.MSG_DESIGN_COMPONENT_REMOVED
                     }));
 
-                    console.log("SCENARIO REMOVED");
+                    //console.log("SCENARIO REMOVED");
                 }
             }
         );

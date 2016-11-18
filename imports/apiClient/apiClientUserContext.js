@@ -394,7 +394,7 @@ class ClientUserContextServices {
 
         // Decide where to go depending on the user context
         if(userItemContext){
-            console.log("CONTEXT: Design: " + userItemContext.designId);
+            //console.log("CONTEXT: Design: " + userItemContext.designId);
 
             switch(role){
                 case RoleType.DESIGNER:
@@ -487,7 +487,7 @@ class ClientUserContextServices {
 
 
         } else {
-            console.log("NO LOGIN CONTEXT...");
+            //console.log("NO LOGIN CONTEXT...");
             store.dispatch(setCurrentView(ViewType.SELECT));
         }
 

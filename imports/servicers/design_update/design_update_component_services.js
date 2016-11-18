@@ -2,16 +2,16 @@
  * Created by aston on 15/09/2016.
  */
 
-import { DesignVersions } from '../collections/design/design_versions.js';
-import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
-import { DesignComponents } from '../collections/design/design_components.js';
+import { DesignVersions } from '../../collections/design/design_versions.js';
+import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
+import { DesignComponents } from '../../collections/design/design_components.js';
 
-import { ComponentType, LogLevel } from '../constants/constants.js';
+import { ComponentType, LogLevel } from '../../constants/constants.js';
 
-import  DesignServices              from './design_services.js';
+import  DesignServices              from '../design/design_services.js';
 import  DesignUpdateServices        from './design_update_services.js';
 
-import {getIdFromMap, log} from '../common/utils.js';
+import {getIdFromMap, log} from '../../common/utils.js';
 
 class DesignUpdateComponentServices{
 
@@ -77,9 +77,9 @@ class DesignUpdateComponentServices{
             (error, result) => {
                 if(error){
                     // Error handler
-                    console.log("Insert Design Update Component - Error: " + error);
+                    //console.log("Insert Design Update Component - Error: " + error);
                 } else {
-                    console.log("Insert Design Update Component - Success: " + result);
+                    //console.log("Insert Design Update Component - Success: " + result);
 
                     // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
                     // always be the _id of the component that was created first.  So for components added in a design new edit
@@ -116,9 +116,9 @@ class DesignUpdateComponentServices{
                             (error, result) => {
                                 if(error) {
                                     // Error handler
-                                    console.log("Update non-removable - Error: " + error);
+                                    //console.log("Update non-removable - Error: " + error);
                                 } else {
-                                    console.log("Update non-removable - Success for: " + parentId);
+                                    //console.log("Update non-removable - Success for: " + parentId);
                                 }
                             }
                         );
@@ -259,9 +259,9 @@ class DesignUpdateComponentServices{
             (error, result) => {
                 if(error) {
                     // Error handler
-                    console.log("Design Update Move - Error: " + error);
+                    //console.log("Design Update Move - Error: " + error);
                 } else {
-                    console.log("Design Update Move - Success: " + result);
+                    //console.log("Design Update Move - Success: " + result);
 
                     // Make sure new Parent is now not removable as it must have a child
                     DesignUpdateComponents.update(
@@ -343,7 +343,7 @@ class DesignUpdateComponentServices{
 
         // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.
         if(indexDiff < 0.001){
-            console.log("Index reset!");
+            //console.log("Index reset!");
 
             // Get the components in current order
             const resetComponents = DesignUpdateComponents.find(
@@ -381,7 +381,7 @@ class DesignUpdateComponentServices{
 
         // If no components then leave as default of 100
         if(peerComponents.count() > 0){
-            console.log("Highest peer is " + peerComponents.fetch()[0].componentNameOld);
+            //console.log("Highest peer is " + peerComponents.fetch()[0].componentNameOld);
 
             let newIndex = peerComponents.fetch()[0].componentIndexOld + 100;
 
@@ -515,10 +515,10 @@ class DesignUpdateComponentServices{
             (error, result) => {
                 if(error) {
                     // Error handler
-                    console.log("Save Design Update Component Name Error: " + error);
+                    //console.log("Save Design Update Component Name Error: " + error);
                     return false;
                 } else {
-                    console.log("Save Design Update Component Name Success: " + result);
+                    //console.log("Save Design Update Component Name Success: " + result);
                     return true;
                 }
             }
@@ -531,7 +531,7 @@ class DesignUpdateComponentServices{
 
         let componentOldNarrative = DesignUpdateComponents.findOne({_id: featureId}).componentNarrativeOld;
 
-        console.log("old narrative: " + componentOldNarrative + " New narrative: " + newNarrative);
+        //console.log("old narrative: " + componentOldNarrative + " New narrative: " + newNarrative);
 
         let changed = (newNarrative != componentOldNarrative);
 
@@ -548,9 +548,9 @@ class DesignUpdateComponentServices{
             (error, result) => {
                 if(error) {
                     // Error handler
-                    console.log("Save Design Update Narrative Error: " + error);
+                    //console.log("Save Design Update Narrative Error: " + error);
                 } else {
-                    console.log("Save Design Update Narrative Success: " + result);
+                    //console.log("Save Design Update Narrative Success: " + result);
                 }
             }
         );
@@ -571,9 +571,9 @@ class DesignUpdateComponentServices{
                 (error, result) => {
                     if (error) {
                         // Error handler
-                        console.log("Remove Design Update Component Error: " + error);
+                        //console.log("Remove Design Update Component Error: " + error);
                     } else {
-                        console.log("Remove Design Update Component Success: " + result);
+                        //console.log("Remove Design Update Component Success: " + result);
 
                         // When removing a design component its parent may become removable
                         if (this.hasNoChildren(parentId)) {
@@ -603,9 +603,9 @@ class DesignUpdateComponentServices{
                 (error, result) => {
                     if (error) {
                         // Error handler
-                        console.log("Logical Delete Design Update Component Error: " + error);
+                        //console.log("Logical Delete Design Update Component Error: " + error);
                     } else {
-                        console.log("Logical Delete Design Update Component Success: " + result);
+                        //console.log("Logical Delete Design Update Component Success: " + result);
 
                         // When removing a design component its parent may become removable
                         if (this.hasNoChildren(parentId)) {
@@ -640,9 +640,9 @@ class DesignUpdateComponentServices{
             (error, result) => {
                 if (error) {
                     // Error handler
-                    console.log("Logical Restore Design Update Component Error: " + error);
+                    //console.log("Logical Restore Design Update Component Error: " + error);
                 } else {
-                    console.log("Logical Restore Design Update Component Success: " + result);
+                    //console.log("Logical Restore Design Update Component Success: " + result);
 
                     // When restoring a design component its parent (if there is one) will become non-removable
                     if(parentId != 'NONE') {
@@ -665,14 +665,14 @@ class DesignUpdateComponentServices{
     // Check to see if parent is not logically deleted
     isDeleted(designUpdateComponentParentId){
 
-        console.log("checking to see if " + designUpdateComponentParentId + " is removed...");
+        //console.log("checking to see if " + designUpdateComponentParentId + " is removed...");
 
         // OK if there actually is no parent
         if(designUpdateComponentParentId === 'NONE'){
             return false;
         }
 
-        console.log("Not top level...")
+        //console.log("Not top level...")
 
         // Otherwise OK if parent is not removed
         return parent = DesignUpdateComponents.findOne({_id: designUpdateComponentParentId}).isRemoved;

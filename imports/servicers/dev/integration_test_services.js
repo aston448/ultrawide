@@ -1,14 +1,14 @@
 
 // Collections
-import { UserIntTestMashData }      from '../collections/dev/user_int_test_mash_data.js';
-import { DesignComponents }         from '../collections/design/design_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
+import { UserIntTestMashData }      from '../../collections/dev/user_int_test_mash_data.js';
+import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide services
-import { ComponentType, MashStatus, MashTestStatus, LogLevel }   from '../constants/constants.js';
-import {log}        from '../common/utils.js'
+import { ComponentType, MashStatus, MashTestStatus, LogLevel }   from '../../constants/constants.js';
+import {log}        from '../../common/utils.js'
 
-import ChimpMochaTestServices from '../service_modules/from_server/test_results_processor_chimp_mocha.js';
+import ChimpMochaTestServices from '../../service_modules/dev/test_results_processor_chimp_mocha.js';
 
 
 class IntegrationTestServices {

@@ -43,7 +43,7 @@ export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
 // Sets the current user role - one user can change roles if allowed to
 export function setCurrentRole(role) {
     return function (dispatch) {
-        console.log("ACTIONS: Role to " + role);
+        //console.log("ACTIONS: Role to " + role);
         dispatch({type: SET_CURRENT_USER_ROLE, newUserRole: role});
     };
 }
@@ -51,7 +51,7 @@ export function setCurrentRole(role) {
 // Sets the current user name
 export function setCurrentUserName(name) {
     return function (dispatch) {
-        console.log("ACTIONS: User name to " + name);
+        //console.log("ACTIONS: User name to " + name);
         dispatch({type: SET_CURRENT_USER_NAME, newUserName: name});
     };
 }
@@ -59,7 +59,7 @@ export function setCurrentUserName(name) {
 // Sets the current user view
 export function setCurrentView(view) {
     return function (dispatch) {
-        console.log("ACTIONS: View to " + view);
+        //console.log("ACTIONS: View to " + view);
         dispatch({type: SET_CURRENT_VIEW, newView: view});
     };
 }
@@ -95,7 +95,7 @@ export function setCurrentUserViewOptions(viewOptions, saveToDb){
 
 export function setCurrentUserItemContext(contextItem, saveToDb){
 
-    console.log("ACTIONS: Current user context update: DE: " + contextItem.designId + " DV: " + contextItem.designVersionId + " DU: " + contextItem.designUpdateId + " WP: " + contextItem.workPackageId + " DC: " + contextItem.designComponentId);
+    //console.log("ACTIONS: Current user context update: DE: " + contextItem.designId + " DV: " + contextItem.designVersionId + " DU: " + contextItem.designUpdateId + " WP: " + contextItem.workPackageId + " DC: " + contextItem.designComponentId);
 
     return function (dispatch) {
 
@@ -224,7 +224,7 @@ export function setCurrentUserOpenWorkPackageItems(userId, existingItems, compon
 // Updates the current design component name if changed
 export function updateDesignComponentName(designComponentName) {
     return function (dispatch) {
-        console.log("ACTIONS: New component name: " + designComponentName);
+        //console.log("ACTIONS: New component name: " + designComponentName);
         dispatch({type: UPDATE_DESIGN_COMPONENT_NAME, newDesignComponentName: designComponentName});
     };
 }
@@ -232,14 +232,14 @@ export function updateDesignComponentName(designComponentName) {
 // Updates the current design component raw name data if changed
 export function updateDesignComponentRawName(designComponentRawName) {
     return function (dispatch) {
-        console.log("ACTIONS: New component raw name: " + designComponentRawName);
+        //console.log("ACTIONS: New component raw name: " + designComponentRawName);
         dispatch({type: UPDATE_DESIGN_COMPONENT_RAW_NAME, newDesignComponentRawName: designComponentRawName});
     };
 }
 
 // Updates the current design component name if changed
 export function updateUserMessage(newMessage) {
-    console.log("ACTIONS: New message: " + newMessage);
+    //console.log("ACTIONS: New message: " + newMessage);
     return function (dispatch) {
         dispatch({type: UPDATE_USER_MESSAGE, newUserMessage: newMessage});
     };
@@ -247,7 +247,7 @@ export function updateUserMessage(newMessage) {
 
 // Toggle between true and false to trigger re-renders of design when data is updated
 export function updateProgressData(newValue) {
-    console.log("ACTIONS: Progress data update: " + newValue);
+    //console.log("ACTIONS: Progress data update: " + newValue);
     return function (dispatch) {
         dispatch({type: UPDATE_PROGRESS_DATA, newDataValue: newValue});
     };
@@ -255,7 +255,7 @@ export function updateProgressData(newValue) {
 
 // Toggle between true and false to trigger re-renders of design when data is updated
 export function updateViewOptionsData(newValue) {
-    console.log("ACTIONS: View options data update: " + newValue);
+    //console.log("ACTIONS: View options data update: " + newValue);
     return function (dispatch) {
         dispatch({type: UPDATE_VIEW_OPTIONS_DATA, newDataValue: newValue});
     };

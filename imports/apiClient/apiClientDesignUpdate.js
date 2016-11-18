@@ -101,7 +101,7 @@ class ClientDesignUpdateServices {
                 {fields: {_id: 1}}
             );
 
-            console.log("Setting open DU Items: " + designUpdateOpenComponents.count());
+            //console.log("Setting open DU Items: " + designUpdateOpenComponents.count());
 
             let duArr = [];
             designUpdateOpenComponents.forEach((component) => {

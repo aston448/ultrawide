@@ -67,7 +67,7 @@ class FeaturesList extends Component {
                 );
             });
         } else {
-            console.log("NULL COMPONENTS FOR FEATURES!")
+            //console.log("NULL COMPONENTS FOR FEATURES!")
         }
     }
 

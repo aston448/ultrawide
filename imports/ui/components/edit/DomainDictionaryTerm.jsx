@@ -99,7 +99,7 @@ class DomainDictionaryTerm extends Component {
 
         if(newRawText){
             // Immediate update of latest text
-            console.log("Updating definition with " + newRawText);
+            //console.log("Updating definition with " + newRawText);
             currentContent = convertFromRaw(newRawText);
 
 
@@ -117,10 +117,10 @@ class DomainDictionaryTerm extends Component {
         }
 
         // Got some content...
-        console.log("Updating definition editor with " + currentContent.getPlainText());
+        //console.log("Updating definition editor with " + currentContent.getPlainText());
 
         if (currentContent.hasText()) {
-            console.log("recreating txt");
+            //console.log("recreating txt");
             this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
         } else {
             this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
@@ -143,7 +143,7 @@ class DomainDictionaryTerm extends Component {
         // Handle custom commands
         if(command === 'editor-save'){
             // Save the title on ENTER
-            console.log("Saving...");
+            //console.log("Saving...");
 
             this.onSaveTermDefinition(this.props.dictionaryTerm, this.props.view, this.props.mode);
             return true;
@@ -153,7 +153,7 @@ class DomainDictionaryTerm extends Component {
         const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
 
         if (newState) {
-            console.log("New state...");
+            //console.log("New state...");
             this.onTextChange(newState);
             return true;
         }
@@ -174,7 +174,7 @@ class DomainDictionaryTerm extends Component {
     // Start editing the term
     editTermName(){
         event.preventDefault();
-        console.log("EDIT TERM");
+        //console.log("EDIT TERM");
 
         // Cancels any definition editing going on...
         //this.undoTermDefinitionEdit();
@@ -185,7 +185,7 @@ class DomainDictionaryTerm extends Component {
     // Start editing the definition
     editTermDefinition(){
         event.preventDefault();
-        console.log("EDIT DEFINITION");
+        //console.log("EDIT DEFINITION");
 
         // Cancels any term editing going on
         //this.undoTermEdit();
@@ -196,7 +196,7 @@ class DomainDictionaryTerm extends Component {
     // Cancel editing the term
     undoTermEdit(){
         event.preventDefault();
-        console.log("UNDO");
+        //console.log("UNDO");
         this.setState({termNameValue: this.props.dictionaryTerm.domainTermNew});
         this.setState({termEditable: false});
     }
@@ -204,7 +204,7 @@ class DomainDictionaryTerm extends Component {
     // Cancel editing the definition
     undoTermDefinitionEdit(){
         event.preventDefault();
-        console.log("UNDO");
+        //console.log("UNDO");
 
         // Reset the text in case changed on screen
         this.updateText();
@@ -229,7 +229,7 @@ class DomainDictionaryTerm extends Component {
                 this.editTermDefinition()
             }
         } else {
-            console.log("Failed to update term name");
+            //console.log("Failed to update term name");
         }
 
     }
@@ -237,7 +237,7 @@ class DomainDictionaryTerm extends Component {
     // Save changes to the term definition
     onSaveTermDefinition(term, view, mode){
         event.preventDefault();
-        console.log("UPDATE TERM DEFINITION");
+        //console.log("UPDATE TERM DEFINITION");
 
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
@@ -248,14 +248,14 @@ class DomainDictionaryTerm extends Component {
             // Finished editing
             this.setState({definitionEditable: false});
         } else {
-            console.log("Failed to update definition");
+            //console.log("Failed to update definition");
         }
 
     }
 
     onDeleteTerm(term, view, mode){
         event.preventDefault();
-        console.log("REMOVE TERM");
+        //console.log("REMOVE TERM");
 
         let success = ClientDomainDictionaryServices.removeDictionaryTerm(view, mode, term._id);
     };

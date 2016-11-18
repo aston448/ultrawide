@@ -108,7 +108,7 @@ class ClientContainerServices{
 
     getApplicationHeaderData(userContext, view){
 
-        console.log("Getting header data for view: " + view + " and context design " + userContext.designId);
+        //console.log("Getting header data for view: " + view + " and context design " + userContext.designId);
 
         // The data required depends on the view
         if(userContext && view) {
@@ -178,7 +178,7 @@ class ClientContainerServices{
         // Get all the designs available
         const currentDesigns = Designs.find({});
 
-        console.log("Designs found: " + currentDesigns.count());
+        //console.log("Designs found: " + currentDesigns.count());
 
         return {
             designs: currentDesigns.fetch(),
@@ -194,7 +194,7 @@ class ClientContainerServices{
             // Get all the designs versions available
             const currentDesignVersions = DesignVersions.find({designId: currentDesignId});
 
-            console.log("Design Versions found: " + currentDesignVersions.count());
+            //console.log("Design Versions found: " + currentDesignVersions.count());
 
             return {
                 designVersions: currentDesignVersions.fetch(),
@@ -221,7 +221,7 @@ class ClientContainerServices{
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
 
-            console.log("Base WPs found found: " + currentWorkPackages.count());
+            //console.log("Base WPs found found: " + currentWorkPackages.count());
 
             return {
                 wpType: WorkPackageType.WP_BASE,
@@ -241,7 +241,7 @@ class ClientContainerServices{
     // Get a list of Work Packages for a Design Update
     getWorkPackagesForCurrentDesignUpdate(currentDesignVersionId, currentDesignUpdateId){
 
-        console.log("Looking for Update WPs for DV: " + currentDesignVersionId + " and DU: " + currentDesignUpdateId);
+        //console.log("Looking for Update WPs for DV: " + currentDesignVersionId + " and DU: " + currentDesignUpdateId);
 
         // No action if design version / update not yet set
         if (currentDesignVersionId != 'NONE'  && currentDesignUpdateId != 'NONE') {
@@ -257,7 +257,7 @@ class ClientContainerServices{
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
 
-            console.log("Update WPs found: " + currentWorkPackages.count());
+            //console.log("Update WPs found: " + currentWorkPackages.count());
 
             return {
                 wpType: WorkPackageType.WP_UPDATE,
@@ -285,7 +285,7 @@ class ClientContainerServices{
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
 
-            console.log("Design Updates found: " + currentDesignUpdates.count());
+            //console.log("Design Updates found: " + currentDesignUpdates.count());
 
             return {
                 designUpdates: currentDesignUpdates.fetch(),
@@ -303,7 +303,7 @@ class ClientContainerServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(view, designVersionId, designUpdateId, workPackageId){
 
-        console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
+        //console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
 
 
         const baseApplications = DesignComponents.find(
@@ -315,7 +315,7 @@ class ClientContainerServices{
         );
 
         let baseApplicationsArr = baseApplications.fetch();
-        console.log("Found " + baseApplicationsArr.length + " base applications.");
+        //console.log("Found " + baseApplicationsArr.length + " base applications.");
 
 
         // Get Update Apps if update Id provided
@@ -352,7 +352,7 @@ class ClientContainerServices{
 
 
             wpApplicationsArr = wpApps.fetch();
-            console.log("Found " + wpApplicationsArr.length + " WP applications.");
+            //console.log("Found " + wpApplicationsArr.length + " WP applications.");
 
             // Which applications are in the WP scope?
             const inScopeWpApps = WorkPackageComponents.find(
@@ -365,7 +365,7 @@ class ClientContainerServices{
             );
 
             wpApplicationsInScopeArr = inScopeWpApps.fetch();
-            console.log("Found " + wpApplicationsInScopeArr.length + " WP in scope applications.");
+            //console.log("Found " + wpApplicationsInScopeArr.length + " WP in scope applications.");
 
         }
 
@@ -406,7 +406,7 @@ class ClientContainerServices{
     getComponentDataForParentComponent(componentType, view, designVersionId, updateId, workPackageId, parentId, displayContext){
         let currentComponents = null;
 
-        console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
+        //console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
 
         switch(view)
         {
@@ -423,7 +423,7 @@ class ClientContainerServices{
                     {sort:{componentIndex: 1}}
                 );
 
-                console.log("Components found: " + currentComponents.count());
+                //console.log("Components found: " + currentComponents.count());
 
                 return {
                     components: currentComponents.fetch(),
@@ -436,7 +436,7 @@ class ClientContainerServices{
             case ViewType.DESIGN_UPDATE_VIEW:
                 // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
 
-                console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
+                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
@@ -501,7 +501,7 @@ class ClientContainerServices{
 
                 }
 
-                console.log("Design update components found: " + currentComponents.count());
+                //console.log("Design update components found: " + currentComponents.count());
 
                 return {
                     components: currentComponents.fetch(),
@@ -517,7 +517,7 @@ class ClientContainerServices{
             case ViewType.DEVELOP_UPDATE_WP:
                 // WORK PACKAGE: The minimal data that defines the SCOPE and the CONTENT (view) of the Work Package.
                 // This is not the actual design data which is retrieved separately where needed.
-                console.log("Looking for components for WP in context: " + displayContext + " for DV " + designVersionId + " WP " + workPackageId + " with parent " + parentId);
+                //console.log("Looking for components for WP in context: " + displayContext + " for DV " + designVersionId + " WP " + workPackageId + " with parent " + parentId);
 
                 switch(displayContext){
                     case DisplayContext.WP_SCOPE:
@@ -548,7 +548,7 @@ class ClientContainerServices{
                         break;
                 }
 
-                console.log("WP components found: " + currentComponents.count());
+                //console.log("WP components found: " + currentComponents.count());
 
                 if(currentComponents.count() > 0){
                     return {
@@ -684,7 +684,7 @@ class ClientContainerServices{
                     {sort:{stepIndex: 1}}
                 );
 
-                console.log("Scenario Steps found: " + scenarioSteps.count());
+                //console.log("Scenario Steps found: " + scenarioSteps.count());
 
                 return {
                     steps: scenarioSteps.fetch(),
@@ -711,7 +711,7 @@ class ClientContainerServices{
                             {sort:{stepIndex: 1}}
                         );
 
-                        console.log("Update Scenario Steps found: " + scenarioSteps.count());
+                        //console.log("Update Scenario Steps found: " + scenarioSteps.count());
 
                         // For updates, check if scenario is REALLY in scope
                         const scenario = DesignUpdateComponents.findOne(
@@ -743,7 +743,7 @@ class ClientContainerServices{
                             {sort:{stepIndex: 1}}
                         );
 
-                        console.log("Update Base Scenario Steps found: " + scenarioSteps.count());
+                        //console.log("Update Base Scenario Steps found: " + scenarioSteps.count());
 
                         break;
                 }
@@ -782,13 +782,13 @@ class ClientContainerServices{
 
                     // For an update the current item is the update item but we can also get its equivalent in the original design
                     if(currentUpdateComponent) {
-                        console.log("DCT Container: Update component is " + currentUpdateComponent.componentNameNew);
+                        //console.log("DCT Container: Update component is " + currentUpdateComponent.componentNameNew);
 
                         let updateItemReferenceId = currentUpdateComponent.componentReferenceId;
                         currentDesignComponent = DesignComponents.findOne({componentReferenceId: updateItemReferenceId});
 
                         if(currentDesignComponent) {
-                            console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
+                            //console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
                         }
                     }
                     break;
@@ -817,7 +817,7 @@ class ClientContainerServices{
     getDomainDictionaryTerms(designId, designVersionId){
 
         // Just want all terms relevant to this design / design version
-        console.log ("Looking for Domain Dictionary terms for Design: " + designId + " and Design Version: " + designVersionId);
+        //console.log ("Looking for Domain Dictionary terms for Design: " + designId + " and Design Version: " + designVersionId);
 
         const domainDictionaryItems = DomainDictionary.find(
             {
@@ -827,7 +827,7 @@ class ClientContainerServices{
             {sort:{sortingName: 1}}     // The sorting name is the term name except when term is first created
         );
 
-        console.log ("Domain Dictionary terms found: " + domainDictionaryItems.count());
+        //console.log ("Domain Dictionary terms found: " + domainDictionaryItems.count());
 
         return {
             dictionaryTerms: domainDictionaryItems.fetch()

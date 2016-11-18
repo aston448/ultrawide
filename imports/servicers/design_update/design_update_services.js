@@ -1,12 +1,12 @@
 
-import { DesignVersions } from '../collections/design/design_versions.js';
-import { DesignUpdates } from '../collections/design_update/design_updates.js';
-import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
-import { DesignComponents } from '../collections/design/design_components.js';
+import { DesignVersions } from '../../collections/design/design_versions.js';
+import { DesignUpdates } from '../../collections/design_update/design_updates.js';
+import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
+import { DesignComponents } from '../../collections/design/design_components.js';
 
 import DesignUpdateComponentServices from './design_update_component_services.js';
 
-import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType } from '../constants/constants.js';
+import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType } from '../../constants/constants.js';
 
 class DesignUpdateServices{
 
@@ -25,9 +25,9 @@ class DesignUpdateServices{
             (error, result) => {
                 if(error){
                     // Error handler
-                    console.log("Insert Design Update - Error: " + error);
+                    //console.log("Insert Design Update - Error: " + error);
                 } else {
-                    console.log("Insert Design Update - Success: " + result);
+                    //console.log("Insert Design Update - Success: " + result);
 
                     if(populateUpdate) {
                         this.populateDesignUpdate(designVersionId, result);
@@ -65,7 +65,7 @@ class DesignUpdateServices{
         let componentsUpdated = 0;
         let designId = DesignVersions.findOne({_id: designVersionId}).designId;
 
-        console.log("Inserting " + versionComponents.count() + " into Design Update Components");
+        //console.log("Inserting " + versionComponents.count() + " into Design Update Components");
 
         versionComponents.forEach((component) => {
 
@@ -108,12 +108,12 @@ class DesignUpdateServices{
                 (error, result) => {
                     if(error){
                         // Error handler
-                        console.log("Insert Design Update - Error: " + error);
+                        //console.log("Insert Design Update - Error: " + error);
                     } else {
                         componentsUpdated++;
 
                         if(componentsUpdated == componentsToUpdate){
-                            console.log("Insert Design Update - complete: " + componentsUpdated);
+                            //console.log("Insert Design Update - complete: " + componentsUpdated);
 
                             // Now update the parent ids as necessary to match the new PKs (_ids) on this data
                             this.fixParentIds(designVersionId, designUpdateId);
@@ -134,7 +134,7 @@ class DesignUpdateServices{
 
     // Change the old design parent ids to the ids for the new design update
     fixParentIds(designVersionId, designUpdateId){
-        console.log("Insert Design Update Components - Callback: ");
+        //console.log("Insert Design Update Components - Callback: ");
 
         //The correct parent id for the update will be the id of the component that has the reference id relating to the parent reference id
         let updateComponents = DesignUpdateComponents.find({designVersionId: designVersionId, designUpdateId: designUpdateId});
@@ -252,7 +252,7 @@ class DesignUpdateServices{
             {designUpdateId: designUpdateId},
             (error, result) => {
                 if(error){
-                    console.log("Error deleting DU components " + error);
+                    //console.log("Error deleting DU components " + error);
                 } else {
                     // OK so delete the update itself
                     DesignUpdates.remove({_id: designUpdateId});

@@ -3,7 +3,7 @@
  */
 import { Meteor } from 'meteor/meteor';
 
-import  UserContextServices     from '../servicers/user_context_services.js';
+import  UserContextServices     from '../servicers/context/user_context_services.js';
 
 // Meteor methods
 Meteor.methods({

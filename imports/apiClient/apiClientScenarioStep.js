@@ -114,7 +114,7 @@ class ClientScenarioStepServices {
 
     getSuggestedScenarioSteps(designId, currentStepId, currentInputText, stepContext, callback){
 
-        console.log("Getting matching steps for: " + currentInputText + " and current step id " + currentStepId);
+        //console.log("Getting matching steps for: " + currentInputText + " and current step id " + currentStepId);
 
         let potentialSteps = null;
 
@@ -151,12 +151,12 @@ class ClientScenarioStepServices {
                 let searchRegex = new RegExp(currentInputText, 'g');
                 let matchArr = [];
 
-                console.log("Matching step: " + step.stepText);
+                //console.log("Matching step: " + step.stepText);
                 matchArr = searchRegex.exec(step.stepText);
 
 
                 if(matchArr){
-                    console.log("Matched step: " + step.stepText);
+                    //console.log("Matched step: " + step.stepText);
 
                     matchingSteps.insert(
                         {

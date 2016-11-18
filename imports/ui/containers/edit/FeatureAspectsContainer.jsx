@@ -67,7 +67,7 @@ class FeatureAspectsList extends Component {
                 );
             });
         } else {
-            console.log("NULL COMPONENTS FOR FEATURE ASPECTS!")
+            //console.log("NULL COMPONENTS FOR FEATURE ASPECTS!")
         }
     }
 

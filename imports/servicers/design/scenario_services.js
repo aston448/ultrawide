@@ -1,46 +1,14 @@
 
-import {ScenarioSteps}                  from '../collections/design/scenario_steps.js';
-import {FeatureBackgroundSteps}         from '../collections/design/feature_background_steps.js';
-import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
-import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js'
+import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
+import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
+import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
+import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js'
 
-import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../constants/constants.js';
-import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
+import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../../constants/constants.js';
+import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js';
 
 class ScenarioServices{
 
-     getDefaultRawName(){
-
-        return {
-            "entityMap" : {  },
-            "blocks" : [
-                { "key" : "5efv7", "text" : DefaultComponentNames.NEW_SCENARIO_NAME,
-                    "type" : "unstyled",
-                    "depth" : 0,
-                    "inlineStyleRanges" : [ ],
-                    "entityRanges" : [ ],
-                    "data" : {  }
-                }
-            ]
-        };
-
-    };
-
-    getDefaultRawText(){
-
-        return {
-            "entityMap" : {  },
-            "blocks" : [
-                { "key" : "5efv7", "text" : DefaultDetailsText.NEW_SCENARIO_DETAILS,
-                    "type" : "unstyled",
-                    "depth" : 0,
-                    "inlineStyleRanges" : [ ],
-                    "entityRanges" : [ ],
-                    "data" : {  }
-                }
-            ]
-        };
-    };
 
     getDefaultRawStepText(stepText){
 
@@ -102,9 +70,9 @@ class ScenarioServices{
             (error, result) => {
                 if(error){
                     // Error handler
-                    console.log("Insert Feature Background Step - Error: " + error);
+                    //console.log("Insert Feature Background Step - Error: " + error);
                 } else {
-                    console.log("Insert Feature Background Step - Success: " + result);
+                    //console.log("Insert Feature Background Step - Success: " + result);
 
                     // Update the component reference to be the _id.
                     FeatureBackgroundSteps.update(
@@ -186,9 +154,9 @@ class ScenarioServices{
             (error, result) => {
                 if(error){
                     // Error handler
-                    console.log("Insert Scenario Step - Error: " + error);
+                    //console.log("Insert Scenario Step - Error: " + error);
                 } else {
-                    console.log("Insert Scenario Step - Success: " + result);
+                    //console.log("Insert Scenario Step - Success: " + result);
 
                     // Update the component reference to be the _id.
                     ScenarioSteps.update(
@@ -236,9 +204,9 @@ class ScenarioServices{
             (error, result) => {
                 if(error){
                     // Error handler
-                    console.log("Insert DEV Scenario Step - Error: " + error);
+                    //console.log("Insert DEV Scenario Step - Error: " + error);
                 } else {
-                    console.log("Insert DEV Scenario Step - Success: " + result);
+                    //console.log("Insert DEV Scenario Step - Success: " + result);
 
                     // Update the component reference to be the _id.
                     ScenarioSteps.update(
@@ -348,7 +316,7 @@ class ScenarioServices{
 
         // If no steps then leave as default
         if(otherSteps.count() > 0){
-            console.log("Highest step is " + otherSteps.fetch()[0].stepText);
+            //console.log("Highest step is " + otherSteps.fetch()[0].stepText);
 
             let newIndex = otherSteps.fetch()[0].stepIndex + 100;
 
@@ -394,9 +362,9 @@ class ScenarioServices{
                     },
                     (error, result) => {
                         if(error){
-                            console.log("Error saving Feature Background Step: " + error);
+                            //console.log("Error saving Feature Background Step: " + error);
                         } else {
-                            console.log("Feature Background Step Saved " + stepId);
+                            //console.log("Feature Background Step Saved " + stepId);
                         }
                     }
                 );
@@ -415,9 +383,9 @@ class ScenarioServices{
                     },
                     (error, result) => {
                         if(error){
-                            console.log("Error saving Scenario Step: " + error);
+                            //console.log("Error saving Scenario Step: " + error);
                         } else {
-                            console.log("Scenario Step Saved " + stepId);
+                            //console.log("Scenario Step Saved " + stepId);
                         }
                     }
                 );
@@ -434,9 +402,9 @@ class ScenarioServices{
                     {_id: stepId},
                     (error, result) => {
                         if (error) {
-                            console.log("Error removing Feature Background Step: " + error);
+                            //console.log("Error removing Feature Background Step: " + error);
                         } else {
-                            console.log("Feature Background Step Removed " + stepId);
+                            //console.log("Feature Background Step Removed " + stepId);
                         }
                     }
                 );
@@ -446,9 +414,9 @@ class ScenarioServices{
                     {_id: stepId},
                     (error, result) => {
                         if (error) {
-                            console.log("Error removing Scenario Step: " + error);
+                            //console.log("Error removing Scenario Step: " + error);
                         } else {
-                            console.log("Scenario Step Removed " + stepId);
+                            //console.log("Scenario Step Removed " + stepId);
                         }
                     }
                 );
@@ -508,9 +476,9 @@ class ScenarioServices{
                     },
                     (error, result) => {
                         if (error) {
-                            console.log("Error logically deleting Feature Background Step: " + error);
+                            //console.log("Error logically deleting Feature Background Step: " + error);
                         } else {
-                            console.log("Feature Background Step logically deleted " + stepId);
+                            //console.log("Feature Background Step logically deleted " + stepId);
                         }
                     }
                 );
@@ -525,9 +493,9 @@ class ScenarioServices{
                     },
                     (error, result) => {
                         if (error) {
-                            console.log("Error logically deleting Scenario Step: " + error);
+                            //console.log("Error logically deleting Scenario Step: " + error);
                         } else {
-                            console.log("Scenario Step logically deleted " + stepId);
+                            //console.log("Scenario Step logically deleted " + stepId);
                         }
                     }
                 );
@@ -560,9 +528,9 @@ class ScenarioServices{
             },
             (error, result) => {
                 if (error) {
-                    console.log("Error logically deleting Dev Scenario Step: " + error);
+                    //console.log("Error logically deleting Dev Scenario Step: " + error);
                 } else {
-                    console.log("Dev Scenario Step logically deleted " + mashStep.stepText);
+                    //console.log("Dev Scenario Step logically deleted " + mashStep.stepText);
                 }
             }
         );
@@ -590,11 +558,11 @@ class ScenarioServices{
         );
 
         let indexBelow = targetStep.stepIndex;
-        console.log("Index below = " + indexBelow);
+        //console.log("Index below = " + indexBelow);
 
         let indexAbove = 0;                                 // The default if nothing exists above
         const listMaxArrayIndex = peerSteps.count() -1;
-        console.log("List max = " + listMaxArrayIndex);
+        //console.log("List max = " + listMaxArrayIndex);
 
         const peerArray = peerSteps.fetch();
 
@@ -611,13 +579,13 @@ class ScenarioServices{
             i++;
         }
 
-        console.log("Index above = " + indexAbove);
+        //console.log("Index above = " + indexAbove);
 
         // The new index is half way between the above an below index - sort of Dewey Decimal system to avoid having to reindex everything every time
         const indexDiff = indexBelow - indexAbove;
         const newIndex = (indexBelow + indexAbove) / 2;
 
-        console.log("Setting new index for " + movingStepId + " to " + newIndex);
+        //console.log("Setting new index for " + movingStepId + " to " + newIndex);
 
         ScenarioSteps.update(
             {_id: movingStepId},
@@ -631,7 +599,7 @@ class ScenarioServices{
 
         // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.
         if(indexDiff < 0.001){
-            console.log("Steps Index reset!");
+            //console.log("Steps Index reset!");
 
             // Get the scenario steps in current order
             const resetSteps = ScenarioSteps.find(

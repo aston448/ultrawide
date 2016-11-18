@@ -1,23 +1,23 @@
 import fs from 'fs';
 
-import {DesignComponents}               from '../collections/design/design_components.js';
-import {DesignUpdateComponents}         from '../collections/design_update/design_update_components.js';
-import {FeatureBackgroundSteps}         from '../collections/design/feature_background_steps.js';
-import {ScenarioSteps}                  from '../collections/design/scenario_steps.js';
-import {WorkPackages}                   from '../collections/work/work_packages.js';
-import {WorkPackageComponents}          from '../collections/work/work_package_components.js';
-import {UserDevFeatures}                from '../collections/dev/user_dev_features.js';
-import {UserDevFeatureScenarios}        from '../collections/dev/user_dev_feature_scenarios.js';
-import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js';
-import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
-import {UserCurrentDevContext}          from '../collections/context/user_current_dev_context.js';
+import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
+import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
+import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
+import {WorkPackages}                   from '../../collections/work/work_packages.js';
+import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
+import {UserDevFeatures}                from '../../collections/dev/user_dev_features.js';
+import {UserDevFeatureScenarios}        from '../../collections/dev/user_dev_feature_scenarios.js';
+import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js';
+import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
+import {UserCurrentDevContext}          from '../../collections/context/user_current_dev_context.js';
 
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
-    UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../constants/constants.js';
-import {log}                            from '../common/utils.js';
+    UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../../constants/constants.js';
+import {log}                            from '../../common/utils.js';
 import FeatureFileServices              from './feature_file_services.js'
-import ScenarioServices                 from './scenario_services.js';
-import MochaTestServices                from '../service_modules/from_server/test_results_processor_meteor_mocha.js';
+import ScenarioServices                 from '../design/scenario_services.js';
+import MochaTestServices                from '../../service_modules/dev/test_results_processor_meteor_mocha.js';
 
 import IntegrationTestServices          from './integration_test_services.js';
 import ModuleTestServices               from './module_test_services.js';

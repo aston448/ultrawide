@@ -1,8 +1,8 @@
 
 import { Meteor } from 'meteor/meteor';
 
-import  MashDataServices            from '../servicers/mash_data_services.js';
-import  IntegrationTestServices     from '../servicers/integration_test_services.js';
+import  MashDataServices            from '../servicers/dev/mash_data_services.js';
+import  IntegrationTestServices     from '../servicers/dev/integration_test_services.js';
 
 // Meteor methods
 Meteor.methods({

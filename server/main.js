@@ -23,7 +23,6 @@ import '../imports/collections/dev/user_mod_test_mash_data.js';
 
 // Modules
 import '../imports/startup/server/fixtures.js';
-import '../imports/startup/server/data_create.js';
 
 // API
 import '../imports/apiServer/apiDesign.js';

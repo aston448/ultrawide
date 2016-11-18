@@ -478,7 +478,7 @@ class DesignComponent extends Component{
                     break;
                 case ComponentType.DESIGN_SECTION:
                     // A design section can have its own features or contain further design sections
-                    console.log("Rendering Design Section for " + currentItem._id);
+                    //console.log("Rendering Design Section for " + currentItem._id);
 
                     if (notEditable) {
                         // VIEW MODE
@@ -628,7 +628,7 @@ class DesignComponent extends Component{
                     bodyHtml = <div></div>;
                     break;
                 default:
-                    console.log("Unknown design component: " + currentItem.componentType);
+                    //console.log("Unknown design component: " + currentItem.componentType);
             }
         }
 

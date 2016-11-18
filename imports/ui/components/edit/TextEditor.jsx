@@ -51,7 +51,7 @@ export default class TextEditor extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log("Cons tructing...");
+        //console.log("Cons tructing...");
 
         this.onChange = (editorState) => this.setState({editorState});
         this.handleKeyCommand = this.handleKeyCommand.bind(this);
@@ -80,7 +80,7 @@ export default class TextEditor extends React.Component {
 
             EditorState.set(this.state.editorState, {decorator: compositeDecorator});
         } else {
-            console.log("User context NULL");
+            //console.log("User context NULL");
         }
 
         let currentContent = {};
@@ -113,12 +113,12 @@ export default class TextEditor extends React.Component {
             if (currentContent.hasText()) {
                 this.state = {editorState: EditorState.createWithContent(currentContent, compositeDecorator)};
             } else {
-                console.log("Using default content: " + defaultRawContent.toString());
+                //console.log("Using default content: " + defaultRawContent.toString());
                 defaultContent = convertFromRaw(defaultRawContent);
                 this.state = {editorState: EditorState.createWithContent(defaultContent, compositeDecorator)};
             }
         } else {
-            console.log("Using default content: " + defaultRawContent.toString());
+            //console.log("Using default content: " + defaultRawContent.toString());
             defaultContent = convertFromRaw(defaultRawContent);
             this.state = {editorState: EditorState.createWithContent(defaultContent, compositeDecorator)};
         }
@@ -164,7 +164,7 @@ export default class TextEditor extends React.Component {
 
     // Saves editor text to design component as RAW
     onSave(andClose){
-        console.log("SAVE");
+        //console.log("SAVE");
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
         Meteor.call('textEditor.saveText', this.props.designComponent._id, rawText);
         if (andClose) {
@@ -174,7 +174,7 @@ export default class TextEditor extends React.Component {
 
     onUndo(){
         event.preventDefault();
-        console.log("UNDO");
+        //console.log("UNDO");
         this.updateComponentText(this.props);
         this.setState({editable: false});
     }
@@ -190,7 +190,7 @@ export default class TextEditor extends React.Component {
     }
 
     render() {
-        console.log("Rendering...");
+        //console.log("Rendering...");
 
         const { designComponent, mode, view, context} = this.props;
 

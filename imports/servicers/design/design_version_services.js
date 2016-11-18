@@ -3,13 +3,13 @@
 // Meteor / React Services
 
 // Ultrawide Collections
-import {DesignVersions} from '../collections/design/design_versions.js';
-import {DesignUpdates} from '../collections/design_update/design_updates.js';
-import {DesignComponents} from '../collections/design/design_components.js';
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js'
+import {DesignVersions} from '../../collections/design/design_versions.js';
+import {DesignUpdates} from '../../collections/design_update/design_updates.js';
+import {DesignComponents} from '../../collections/design/design_components.js';
+import {DesignUpdateComponents} from '../../collections/design_update/design_update_components.js'
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction} from '../constants/constants.js';
+import {DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction} from '../../constants/constants.js';
 
 // =====================================================================================================================
 
@@ -34,9 +34,9 @@ class DesignVersionServices{
 
             (error, result) => {
                 if(error) {
-                    console.log("Create Design Version error: " + error);
+                    //console.log("Create Design Version error: " + error);
                 } else {
-                    console.log("Create Design Version success: " + result);
+                    //console.log("Create Design Version success: " + result);
                 }
             }
         );
@@ -110,9 +110,9 @@ class DesignVersionServices{
             (error, result) => {
                 if(error) {
                     // Error handler
-                    console.log("Error publishing DV: " + error);
+                    //console.log("Error publishing DV: " + error);
                 } else {
-                    console.log("Success publish DV: " + result);
+                    //console.log("Success publish DV: " + result);
                 }
             }
         )
@@ -133,9 +133,9 @@ class DesignVersionServices{
             (error, result) => {
                 if(error) {
                     // Error handler
-                    console.log("Error un-publishing DV: " + error);
+                    //console.log("Error un-publishing DV: " + error);
                 } else {
-                    console.log("Success un-publish DV: " + result);
+                    //console.log("Success un-publish DV: " + result);
                 }
             }
         )
@@ -152,7 +152,7 @@ class DesignVersionServices{
         // 6. Set the old DV to Published Final
 
 
-        console.log("MERGE: Creating new design version...");
+        //console.log("MERGE: Creating new design version...");
 
         // Get the current design version details
         const oldDesignVersion = DesignVersions.findOne({_id: designVersionId});
@@ -169,9 +169,9 @@ class DesignVersionServices{
             (error, result) => {
                 if(error) {
                     // Error handler
-                    console.log("Error creating new DV: " + error);
+                    //console.log("Error creating new DV: " + error);
                 } else {
-                    console.log("Success create new DV: " + result);
+                    //console.log("Success create new DV: " + result);
 
                     // Get a list of updates to be merged in and merge them
                     this.mergeStepCreateNewDesignComponents(designVersionId, result);
@@ -187,7 +187,7 @@ class DesignVersionServices{
         // Here we have to create a new set of design components for the new design version - the same as the old one...
         // ...and then merge in changes as required by the user.
 
-        console.log("MERGE: Creating new design components...");
+        //console.log("MERGE: Creating new design components...");
 
         // Get all the old version components
         const oldDesignComponents = DesignComponents.find({designVersionId: oldDesignVersionId});
@@ -227,7 +227,7 @@ class DesignVersionServices{
                 (error, result) => {
                     if (error) {
                         // Error handler
-                        console.log("Error creating new DV component: " + error);
+                        //console.log("Error creating new DV component: " + error);
                     } else {
 
                         componentsInserted++;
@@ -250,7 +250,7 @@ class DesignVersionServices{
     // Change the old design version parent ids to the ids for the new design version
     fixParentIds(oldDesignVersionId, newDesignVersionId, callbackFunction){
 
-        console.log("MERGE: Fixing parent Ids...");
+        //console.log("MERGE: Fixing parent Ids...");
 
         // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
 
@@ -280,7 +280,7 @@ class DesignVersionServices{
                 (error, result) => {
                     if (error) {
                         // Error handler
-                        console.log("Error updating new DV component parent id: " + error);
+                        //console.log("Error updating new DV component parent id: " + error);
                     } else {
 
                         componentsUpdated++;
@@ -301,7 +301,7 @@ class DesignVersionServices{
 
     mergeStepMergeUpdates(oldDesignVersionId, newDesignVersionId){
 
-        console.log("MERGE: Merging updates...");
+        //console.log("MERGE: Merging updates...");
 
         const updatesToMerge = DesignUpdates.find(
             {
@@ -413,7 +413,7 @@ class DesignVersionServices{
                     (error, result) => {
                         if (error) {
                             // Error handler
-                            console.log("Error creating new DV component: " + error);
+                            //console.log("Error creating new DV component: " + error);
                         } else {
 
                             componentsInserted++;
@@ -446,7 +446,7 @@ class DesignVersionServices{
 
     mergeStepRollForwardUpdates(oldDesignVersionId, newDesignVersionId){
 
-        console.log("MERGE: Rolling forward updates...");
+        //console.log("MERGE: Rolling forward updates...");
 
         const updatesToRollForward = DesignUpdates.find(
             {
@@ -531,7 +531,7 @@ class DesignVersionServices{
 
     mergeStepUpdateOldVersion(oldDesignVersionId){
 
-        console.log("MERGE: Updating old DV...");
+        //console.log("MERGE: Updating old DV...");
 
         DesignVersions.update(
             {_id: oldDesignVersionId},

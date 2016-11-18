@@ -52,7 +52,7 @@ class IntegrationTestFeatureMashList extends Component {
 
     renderFeatures(mashData){
 
-        console.log("Rendering mash list of length " + mashData.length);
+        //console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
             if(mashItem) {
@@ -101,7 +101,7 @@ class IntegrationTestFeatureMashList extends Component {
 
         const {designMashItemData, userContext} = this.props;
 
-        console.log("Rendering integration mash container with user context component type " + userContext.designComponentType);
+        //console.log("Rendering integration mash container with user context component type " + userContext.designComponentType);
 
         let panelHeader = '';
         let secondPanelHeader = '';

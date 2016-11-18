@@ -61,7 +61,7 @@ class DesignItemHeader extends Component{
 
     // Passes back the click to the parent component to get it selected as the current one
     setCurrentItem(){
-        console.log("SELECT " + this.props.currentItemType);
+        //console.log("SELECT " + this.props.currentItemType);
 
         if (typeof this.props.onSelectItem === 'function') {
             this.props.onSelectItem();
@@ -72,14 +72,14 @@ class DesignItemHeader extends Component{
     editItemName(){
         event.preventDefault();
         this.setState({nameEditable: true});
-        console.log("EDIT");
+        //console.log("EDIT");
     }
 
     // Allow editing of version text (if there is one)
     editItemVersion(){
         event.preventDefault();
         this.setState({versionEditable: true});
-        console.log("EDIT");
+        //console.log("EDIT");
     }
 
     saveItemName(userRole, currentItemType, currentItemId){
@@ -148,14 +148,14 @@ class DesignItemHeader extends Component{
 
     undoItemNameChange(){
         event.preventDefault();
-        console.log("UNDO NAME");
+        //console.log("UNDO NAME");
         this.setState({nameValue: this.props.currentItemName});
         this.setState({nameEditable: false});
     }
 
     undoItemVersionChange(){
         event.preventDefault();
-        console.log("UNDO VERSION");
+        //console.log("UNDO VERSION");
         this.setState({versionValue: this.props.currentItemVersion});
         this.setState({versionEditable: false});
     }

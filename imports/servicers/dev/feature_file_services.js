@@ -1,17 +1,17 @@
 import fs from 'fs';
 
-import {DesignComponents}               from '../collections/design/design_components.js';
-import {DesignUpdateComponents}         from '../collections/design_update/design_update_components.js';
-import {FeatureBackgroundSteps}         from '../collections/design/feature_background_steps.js';
-import {ScenarioSteps}                  from '../collections/design/scenario_steps.js';
-import {WorkPackages}                   from '../collections/work/work_packages.js';
-import {UserDevFeatures}                from '../collections/dev/user_dev_features.js';
-import {UserDevFeatureScenarios}        from '../collections/dev/user_dev_feature_scenarios.js';
-import {UserDevFeatureScenarioSteps}    from '../collections/dev/user_dev_feature_scenario_steps.js';
-import {UserAccTestMashData}          from '../collections/dev/user_acc_test_mash_data.js';
+import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
+import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
+import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
+import {WorkPackages}                   from '../../collections/work/work_packages.js';
+import {UserDevFeatures}                from '../../collections/dev/user_dev_features.js';
+import {UserDevFeatureScenarios}        from '../../collections/dev/user_dev_feature_scenarios.js';
+import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js';
+import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
 
-import {ComponentType, WorkPackageType, MashStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, LogLevel} from '../constants/constants.js';
-import {log} from '../common/utils.js';
+import {ComponentType, WorkPackageType, MashStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, LogLevel} from '../../constants/constants.js';
+import {log} from '../../common/utils.js';
 
 class FeatureFileServices{
 

@@ -113,7 +113,7 @@ class ScenarioStep extends Component {
 
         if(newRawText){
             // Immediate update of latest text
-            console.log("Updating step editor with " + newRawText);
+            //console.log("Updating step editor with " + newRawText);
             currentContent = convertFromRaw(newRawText);
         } else {
             // Getting stored text
@@ -129,13 +129,13 @@ class ScenarioStep extends Component {
         }
 
         // Got some content...
-        console.log("Updating step editor with " + currentContent.getPlainText());
+        //console.log("Updating step editor with " + currentContent.getPlainText());
         this.setState({stepText: currentContent.getPlainText()});
 
         // If editing update step suggestion
 
         if (currentContent.hasText()) {
-            console.log("recreating txt");
+            //console.log("recreating txt");
             this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
         } else {
             this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
@@ -163,7 +163,7 @@ class ScenarioStep extends Component {
         // Handle custom commands
         if(command === 'editor-save'){
             // Save the title on ENTER
-            console.log("Saving...");
+            //console.log("Saving...");
 
             this.onSaveStepText(this.props.scenarioStep, this.state.stepType, this.props.view, this.props.mode, this.props.parentInScope, this.props.stepContext);
             return true;
@@ -173,7 +173,7 @@ class ScenarioStep extends Component {
         const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
 
         if (newState) {
-            console.log("New state...");
+            //console.log("New state...");
             this.onTextChange(newState);
             return true;
         }
@@ -183,14 +183,14 @@ class ScenarioStep extends Component {
     // Start editing the step
     editStepText(){
         event.preventDefault();
-        console.log("EDIT");
+        //console.log("EDIT");
         this.setState({editable: true});
     }
 
     // Cancel editing the step
     undoStepTextEdit(){
         event.preventDefault();
-        console.log("UNDO");
+        //console.log("UNDO");
 
         // Reset the text in case changed on screen
         this.updateText();
@@ -203,14 +203,14 @@ class ScenarioStep extends Component {
     }
 
     onSetStepType(e){
-        console.log("Setting step type to " + e.target.value);
+        //console.log("Setting step type to " + e.target.value);
         this.setState({stepType: e.target.value})
     }
 
     // Save changes to the step text
     onSaveStepText(step, stepType, view, mode, parentInScope, stepContext){
         event.preventDefault();
-        console.log("UPDATE STEP TEXT");
+        //console.log("UPDATE STEP TEXT");
 
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
@@ -221,7 +221,7 @@ class ScenarioStep extends Component {
             // Finished editing
             this.setState({editable: false});
         } else {
-            console.log("Failed to update text");
+            //console.log("Failed to update text");
         }
 
     }
@@ -255,12 +255,12 @@ class ScenarioStep extends Component {
             case DisplayContext.EDIT_STEP_DEV:
             case DisplayContext.EDIT_STEP_DESIGN:
                 // In these cases its a logical delete with cleanup of Mash data
-                console.log("LOGICAL DELETE STEP");
+                //console.log("LOGICAL DELETE STEP");
                 ClientScenarioStepServices.logicalDeleteMashScenarioStep(view, mode, step, userContext);
                 break;
             default:
                 // Any other case actual delete of a Design item
-                console.log("REMOVE STEP");
+                //console.log("REMOVE STEP");
                 ClientScenarioStepServices.removeScenarioStep(view, mode, parentInScope, step._id, stepContext);
         }
     };
@@ -562,7 +562,7 @@ const componentSource = {
 
     // Start of drag gets the item being dragged
     beginDrag(props) {
-        console.log("DRAG!");
+        //console.log("DRAG!");
         return {
             component: props.scenarioStep,
             displayContext: props.displayContext
@@ -572,10 +572,10 @@ const componentSource = {
     // End of drag sees if it is allowed to be dropped and if so calls functions to update the data accordingly
     endDrag(props, monitor, component){
 
-        console.log("END DRAG!");
+        //console.log("END DRAG!");
 
         if (!monitor.didDrop) {
-            console.log("NO DROP");
+            //console.log("NO DROP");
             return;
         }
 
@@ -585,27 +585,27 @@ const componentSource = {
         if (dropResult) {
             if(dropResult.dragType === 'MOVE_REORDER') {
                 // Drop action when moving an item in the list to reorder it
-                console.log("DROP - REORDER");
+                //console.log("DROP - REORDER");
 
                 switch(props.displayContext){
                     case DisplayContext.EDIT_STEP_DESIGN:   // Adding design Step to Dev
                     case DisplayContext.EDIT_STEP_DEV:      // Adding Dev Step to Design
-                        console.log("RELOCATE MASH STEP");
+                        //console.log("RELOCATE MASH STEP");
                         ClientMashDataServices.relocateMashStep(props.view, props.mode, dropResult.displayContext, item.component, dropResult.targetItem, props.userContext);
                         break;
                     case DisplayContext.EDIT_STEP_LINKED:   // Reordering shared Design / Dev steps
                         // Reorder linked mas steps
-                        console.log("REORDER MASH");
+                        //console.log("REORDER MASH");
 
                         break;
                     default:
                         // Just reordering the steps in this current list
-                        console.log("REORDER STEPS");
+                        //console.log("REORDER STEPS");
                         ClientScenarioStepServices.reorderComponent(props.view, props.mode, props.displayContext, item.component, dropResult.targetItem);
                 }
             }
         } else {
-            console.log("NO DROP RESULT");
+            //console.log("NO DROP RESULT");
         }
     }
 };

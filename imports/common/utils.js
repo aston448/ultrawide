@@ -75,7 +75,7 @@ export function getComponentClass(currentItem, view, context, isNarrative){
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                console.log("Get Style with WP Active scope " + currentItem.componentActive)
+                //console.log("Get Style with WP Active scope " + currentItem.componentActive)
                 // For work package stuff is greyed out unless active
                 if(!currentItem.componentActive){
                     modifier = ' greyed-out';
@@ -148,7 +148,7 @@ export function validateDesignUpdateComponentName(component, newName){
     });
 
     if (existingComponents.count() > 0){
-        console.log("Error: " + newName + " already exists");
+        //console.log("Error: " + newName + " already exists");
 
         message = {messageType: MessageType.WARNING, messageText: 'Design component names must be unique in this design update'};
         store.dispatch(updateUserMessage(message));
@@ -165,7 +165,7 @@ export function validateDesignUpdateComponentName(component, newName){
         componentNewName: newName});
 
     if (existingParallelComponents.count() > 0){
-        console.log("Error: " + newName + " already exists in a parallel design update for a different item");
+        //console.log("Error: " + newName + " already exists in a parallel design update for a different item");
 
         message = {messageType: MessageType.WARNING, messageText: 'This component name already exists for a different component in another update to this design version'};
         store.dispatch(updateUserMessage(message));

@@ -1,6 +1,6 @@
 
 import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
-import DesignServices           from '../servicers/design_services.js';
+import DesignServices           from '../servicers/design/design_services.js';
 
 import { Validation } from '../constants/validation_errors.js'
 

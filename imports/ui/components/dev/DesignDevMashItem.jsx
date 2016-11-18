@@ -67,7 +67,7 @@ class DesignDevMashItem extends Component {
     render(){
         const { mashItem, view, userContext } = this.props;
 
-        console.log("Render mash item: " + mashItem);
+        //console.log("Render mash item: " + mashItem);
 
         let mashItemActions = '';
         let mashItemTest = '';

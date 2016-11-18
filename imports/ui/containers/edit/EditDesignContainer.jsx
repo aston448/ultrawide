@@ -67,7 +67,7 @@ class DesignApplicationsList extends Component {
     }
 
     componentWillReceiveProps(newProps){
-        console.log("DESIGN CONTAINER: NEW PROPS")
+        //console.log("DESIGN CONTAINER: NEW PROPS")
     }
 
 
@@ -77,7 +77,7 @@ class DesignApplicationsList extends Component {
 
         let layout = '';
 
-        console.log("Rendering applications list with view mode " + mode + " and current item name " + currentItemName);
+        //console.log("Rendering applications list with view mode " + mode + " and current item name " + currentItemName);
 
         let addComponent = '';
         let designDetails = '';

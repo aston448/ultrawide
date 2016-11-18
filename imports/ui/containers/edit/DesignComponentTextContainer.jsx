@@ -108,7 +108,7 @@ class DesignComponentText extends Component {
                 </div>;
 
             // Define panel 2 for Feature background steps if a Feature (could be for an update or base version)
-            console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
+            //console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
             if(mainComponent && mainComponent.componentType === ComponentType.FEATURE) {
                 panel2 =
                     <div>
@@ -127,7 +127,7 @@ class DesignComponentText extends Component {
             }
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
-            console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
+            //console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
             if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO) {
                 panel2 =
                     <div>

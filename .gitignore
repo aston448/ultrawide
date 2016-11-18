@@ -3,5 +3,5 @@ node_modules/
 backup/
 imports/client/
 mocha-output.json
-imports/service_modules/from_server/unit_modules/
+imports/service_modules/design/unit_modules/
 mocha-unit-output.json

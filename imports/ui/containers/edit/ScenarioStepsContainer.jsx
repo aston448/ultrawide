@@ -76,7 +76,7 @@ class ScenarioStepsList extends Component {
 
         let addScenarioStep = <div></div>;
 
-        console.log("Rendering scenario steps with Context " + displayContext + " and mode " + mode + " and inScope " + parentInScope );
+        //console.log("Rendering scenario steps with Context " + displayContext + " and mode " + mode + " and inScope " + parentInScope );
 
         // Adding new steps is allowed if in an editing context and not looking at background steps in a scenario
         if((view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope && stepContext != StepContext.STEP_FEATURE_SCENARIO){

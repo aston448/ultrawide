@@ -150,7 +150,7 @@ class ClientDesignUpdateSummary{
 
         const changedDesignComponents = DesignUpdateComponents.find({designUpdateId: designUpdateId, isNew: false, isRemoved: false, $or:[{isChanged: true}, {isTextChanged: true}]});
 
-        console.log("Found " + changedDesignComponents.count() + " changed design components for design update " + designUpdateId);
+        //console.log("Found " + changedDesignComponents.count() + " changed design components for design update " + designUpdateId);
 
         let updateFunctionalChanges = new Mongo.Collection(null);
 

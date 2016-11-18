@@ -64,7 +64,7 @@ LoginScreen = connect(mapStateToProps)(LoginScreen);
 
 export default AppLoginContainer = createContainer(({params}) => {
 
-    console.log("AppLoginContainer");
+    //console.log("AppLoginContainer");
 
     return{}
 

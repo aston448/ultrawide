@@ -44,7 +44,7 @@ class DesignUpdateSummaryList extends Component {
 
 
         if(changeData) {
-            console.log("Rendering functional Additions");
+            //console.log("Rendering functional Additions");
             return changeData.map((changeItem) => {
                 return(
                     <UpdateSummaryItem

@@ -13,14 +13,14 @@ import { FeatureBackgroundSteps }       from '../collections/design/feature_back
 import { DesignUpdateComponents }       from '../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }        from '../collections/work/work_package_components.js';
 
-import DesignServices                   from './design_services.js';
-import DesignVersionServices            from './design_version_services.js';
-import DesignUpdateServices             from './design_update_services.js';
-import WorkPackageServices              from './work_package_services.js';
-import DomainDictionaryServices         from './domain_dictionary_services.js';
-import DesignComponentServices          from './design_component_services.js';
-import DesignUpdateComponentServices    from './design_update_component_services.js';
-import ScenarioServices                 from './scenario_services.js';
+import DesignServices                   from './design/design_services.js';
+import DesignVersionServices            from './design/design_version_services.js';
+import DesignUpdateServices             from './design_update/design_update_services.js';
+import WorkPackageServices              from './work/work_package_services.js';
+import DomainDictionaryServices         from './design/domain_dictionary_services.js';
+import DesignComponentServices          from './design/design_component_services.js';
+import DesignUpdateComponentServices    from './design_update/design_update_component_services.js';
+import ScenarioServices                 from './design/scenario_services.js';
 
 import {getIdFromMap, log}              from '../common/utils.js';
 
@@ -387,7 +387,7 @@ class ImpExServices{
             designVersionId = null;
 
             dictionaryTerms.forEach((term) => {
-                console.log("Adding Dictionary Term " + term.domainTermNew);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Dictionary Term {}", term.domainTermNew);
 
                 designId = getIdFromMap(designsMapping, term.designId);
                 designVersionId = getIdFromMap(designVersionsMapping, term.designVersionId);

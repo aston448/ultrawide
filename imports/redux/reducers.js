@@ -56,7 +56,7 @@ export function myApplication(state = initialState, action) {
                 currentUserViewOptions: action.newUserViewOptions
             });
         case Actions.SET_CURRENT_USER_ITEM_CONTEXT:
-            console.log("Updated User Item Context: " + action.newUserItemContext);
+            //console.log("Updated User Item Context: " + action.newUserItemContext);
             return Object.assign({}, state, {
                 currentUserItemContext: action.newUserItemContext
             });

@@ -1,11 +1,11 @@
 
 
-import { WorkPackages } from '../collections/work/work_packages.js';
-import { WorkPackageComponents } from '../collections/work/work_package_components.js';
-import { DesignComponents } from '../collections/design/design_components.js';
-import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
+import { WorkPackages } from '../../collections/work/work_packages.js';
+import { WorkPackageComponents } from '../../collections/work/work_package_components.js';
+import { DesignComponents } from '../../collections/design/design_components.js';
+import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
 
-import { WorkPackageStatus, WorkPackageType, ComponentType } from '../constants/constants.js';
+import { WorkPackageStatus, WorkPackageType, ComponentType } from '../../constants/constants.js';
 
 class WorkPackageServices{
 
@@ -26,9 +26,9 @@ class WorkPackageServices{
             (error, result) => {
                 if(error){
                     // Error handler
-                    console.log("Insert WP - Error: " + error);
+                    //console.log("Insert WP - Error: " + error);
                 } else {
-                    console.log("Insert WP - Success: " + result);
+                    //console.log("Insert WP - Success: " + result);
 
                     // Now populate the work package components
                     if(populateWp) {
@@ -192,7 +192,7 @@ class WorkPackageServices{
             {workPackageId: workPackageId},
             (error, result) => {
                 if(error){
-                    console.log("Error deleting WP components " + error);
+                    //console.log("Error deleting WP components " + error);
                 } else {
                     // OK so delete the WP itself
                     WorkPackages.remove({_id: workPackageId});
@@ -207,9 +207,9 @@ class WorkPackageServices{
 
         if(wpComponent) {
             if(Meteor.isServer){
-                console.log("SERVER: Toggling scope for component ref: " + wpComponent._id + " to " + newScope);
+                //console.log("SERVER: Toggling scope for component ref: " + wpComponent._id + " to " + newScope);
             } else {
-                console.log("CLIENT: Toggling scope for component ref: " + wpComponent._id + " to " + newScope);
+                //console.log("CLIENT: Toggling scope for component ref: " + wpComponent._id + " to " + newScope);
             }
 
             let startingComponentRef = wpComponent.componentReferenceId;
@@ -315,7 +315,7 @@ class WorkPackageServices{
         if(childComponents.count() > 0){
             childComponents.forEach((child) => {
 
-                console.log("Setting child WP component " + child._id + " in scope.");
+                //console.log("Setting child WP component " + child._id + " in scope.");
 
                 if(child.componentType === ComponentType.FEATURE || child.componentType === ComponentType.SCENARIO){
                     // Features and Scenarios go Active

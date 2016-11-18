@@ -407,7 +407,7 @@ class AppHeader extends Component {
                     </ButtonToolbar>;
                 break;
             default:
-                console.log("Invalid view type");
+                //console.log("Invalid view type");
         }
 
         if (view) {

@@ -118,7 +118,7 @@ const componentTarget = {
             return;
         }
 
-        console.log("DROP! " + item.component.componentType + " on " + props.currentItem.componentType);
+        //console.log("DROP! " + item.component.componentType + " on " + props.currentItem.componentType);
 
         // Return the dropped item so the update can be made....
         return {

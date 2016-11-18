@@ -67,7 +67,7 @@ class ScenariosList extends Component {
                 );
             });
         } else {
-            console.log("NULL COMPONENTS FOR SCENARIOS!")
+            //console.log("NULL COMPONENTS FOR SCENARIOS!")
         }
     }
 
@@ -108,7 +108,7 @@ export default ScenariosContainer = createContainer(({params}) => {
         params.displayContext,
     );
 
-    console.log("Return data: " + returnData.components);
+    //console.log("Return data: " + returnData.components);
 
     return returnData;
 

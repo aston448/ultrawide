@@ -36,7 +36,7 @@ class IntegrationTestScenarioMashList extends Component {
 
     renderScenarios(mashData){
 
-        console.log("Rendering mash list of length " + mashData.length);
+        //console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
             if(mashItem) {

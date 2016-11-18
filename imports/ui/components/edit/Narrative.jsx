@@ -90,7 +90,7 @@ export default class Narrative extends React.Component {
             editorState: EditorState.createEmpty()
         };
 
-        console.log(" NARRATIVE: " + props.designComponent.componentName + " : " + props.designComponent.componentNarrative);
+        //console.log(" NARRATIVE: " + props.designComponent.componentName + " : " + props.designComponent.componentNarrative);
 
         this.updateNarrativeText(props);
 
@@ -98,7 +98,7 @@ export default class Narrative extends React.Component {
 
     // Set the editor text when it is first created...
     componentDidMount(){
-        console.log("Mounting...");
+        //console.log("Mounting...");
         //this.updateNarrativeText(this.props);
     }
 
@@ -151,7 +151,7 @@ export default class Narrative extends React.Component {
 
             EditorState.set(this.state.editorState, {decorator: compositeDecorator});
         } else {
-            console.log("Design Component NULL");
+            //console.log("Design Component NULL");
         }
 
         let currentContent = {};
@@ -164,7 +164,7 @@ export default class Narrative extends React.Component {
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.DEVELOP_BASE_WP:
-                console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
+                //console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
                 rawNarrative = props.designComponent.componentNarrativeRaw;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -175,7 +175,7 @@ export default class Narrative extends React.Component {
                 if(props.mode == DisplayContext.BASE_VIEW){
                     rawNarrative = props.designComponent.componentNarrativeRaw;
                 } else {
-                    console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
+                    //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
                     rawNarrative = props.designComponent.componentNarrativeRawNew;
                 }
                 break;
@@ -184,14 +184,14 @@ export default class Narrative extends React.Component {
         if (rawNarrative) {
 
             currentContent = convertFromRaw(rawNarrative);
-            console.log("Setting current narrative content as " + currentContent.getPlainText());
+            //console.log("Setting current narrative content as " + currentContent.getPlainText());
             if (currentContent.hasText()) {
                 this.state = {editorState: EditorState.createWithContent(currentContent, compositeDecorator)};
             } else {
                 this.state = {editorState: EditorState.createEmpty(compositeDecorator)}
             }
         } else {
-            console.log("NO RAW NARRATIVE");
+            //console.log("NO RAW NARRATIVE");
             this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
         }
     }
@@ -215,13 +215,13 @@ export default class Narrative extends React.Component {
 
     // Handles keyboard formatting
     handleKeyCommand(command) {
-        console.log("Handle key command...");
+        //console.log("Handle key command...");
         //const {editorState} = this.state;
 
         // Handle custom commands
         if(command === 'editor-save'){
             // Save the title on ENTER
-            console.log("Saving...");
+            //console.log("Saving...");
 
             this.saveNarrative(this.props.view, this.props.mode, this.props.designComponent._id);
             return true;
@@ -230,7 +230,7 @@ export default class Narrative extends React.Component {
         const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
 
         if (newState) {
-            console.log("New state...");
+            //console.log("New state...");
             this.onChange(newState);
             return true;
         }
@@ -239,7 +239,7 @@ export default class Narrative extends React.Component {
 
     undoNarrativeChange(){
         event.preventDefault();
-        console.log("UNDO");
+        //console.log("UNDO");
         this.updateNarrativeText(this.props);
         this.setState({editable: false});
     }
@@ -251,7 +251,7 @@ export default class Narrative extends React.Component {
 
     saveNarrative(view, mode, componentId){
         event.preventDefault();
-        console.log("SAVE");
+        //console.log("SAVE");
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
 
@@ -269,7 +269,7 @@ export default class Narrative extends React.Component {
     }
 
     blockStyles(contentBlock){
-        console.log("BLOCK STYLES with " + contentBlock.getType());
+        //console.log("BLOCK STYLES with " + contentBlock.getType());
         // switch(contentBlock.getType()){
         //     case 'unstyled':
         //         return 'red';
@@ -282,7 +282,7 @@ export default class Narrative extends React.Component {
     render() {
         const {designComponent, wpComponent, mode, displayContext, view} = this.props;
 
-        console.log("Rendering Narrative...");
+        //console.log("Rendering Narrative...");
 
         let itemStyle = getComponentClass(wpComponent, view, displayContext, true);
 

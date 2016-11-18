@@ -47,7 +47,7 @@ class DesignItemFeatureMashList extends Component {
 
     renderDesignItemMash(mashData){
 
-        console.log("Rendering mash list of length " + mashData.length);
+        //console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
             if(mashItem) {
@@ -73,7 +73,7 @@ class DesignItemFeatureMashList extends Component {
             }
         });
 
-        console.log("Rendering unknown mash list of length " + unknownMashData.length);
+        //console.log("Rendering unknown mash list of length " + unknownMashData.length);
 
         return unknownMashData.map((mashItem) => {
             if(mashItem) {
@@ -96,7 +96,7 @@ class DesignItemFeatureMashList extends Component {
 
         const {designMashItemData, currentUserRole, userContext, view} = this.props;
 
-        console.log("Rendering mash container with user context component type " + userContext.designComponentType);
+        //console.log("Rendering mash container with user context component type " + userContext.designComponentType);
 
         let panelHeader = '';
         let secondPanelHeader = '';

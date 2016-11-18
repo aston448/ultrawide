@@ -1,7 +1,7 @@
 
 import { Meteor } from 'meteor/meteor';
 
-import  FeatureFileServices     from '../servicers/feature_file_services.js';
+import  FeatureFileServices     from '../servicers/dev/feature_file_services.js';
 
 // Meteor methods
 Meteor.methods({

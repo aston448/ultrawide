@@ -89,7 +89,7 @@ class UpdateApplicationsList extends Component {
 
         let layout = '';
 
-        console.log("Rendering applications list with view mode " + mode + " and current item name " + currentItemName);
+        //console.log("Rendering applications list with view mode " + mode + " and current item name " + currentItemName);
 
         let addComponent = '';
 

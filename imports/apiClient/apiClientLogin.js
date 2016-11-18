@@ -50,7 +50,7 @@ class ClientLoginServices{
 
     userLogin(userName, password){
 
-        console.log("Attempting login with : " + userName);
+        //console.log("Attempting login with : " + userName);
 
         Meteor.loginWithPassword(userName, password, (error) => {
 
@@ -58,7 +58,7 @@ class ClientLoginServices{
                 store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: 'Invalid login credentials'}));
             } else {
                 let userId = Meteor.userId();
-                console.log("LOGGED IN AS METEOR USER: " + userId);
+                //console.log("LOGGED IN AS METEOR USER: " + userId);
 
                 const user = UserRoles.findOne({userId: userId});
                 if(user){

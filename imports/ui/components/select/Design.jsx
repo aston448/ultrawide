@@ -51,7 +51,7 @@ class Design extends Component {
     render() {
         const {design, userContext, userRole} = this.props;
 
-        console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
+        //console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
 
         // Active if this design is the current context design
         let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');

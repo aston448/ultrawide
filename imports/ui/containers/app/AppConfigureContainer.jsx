@@ -42,7 +42,7 @@ class ConfigureScreen extends Component {
 
         const {user} = this.props;
 
-        console.log("rendering configure screen with user " + user);
+        //console.log("rendering configure screen with user " + user);
 
         // Show Configuration Screen
         return(
@@ -72,12 +72,12 @@ ConfigureScreen = connect(mapStateToProps)(ConfigureScreen);
 
 export default AppConfigureContainer = createContainer(({params}) => {
 
-    console.log("AppConfigureContainer.  Params UserContext = " + params.userContext);
+    //console.log("AppConfigureContainer.  Params UserContext = " + params.userContext);
 
     // TODO move to clientContainerServices
 
     const currentUser = UserRoles.findOne({userId: params.userContext.userId});
-    console.log("AppConfigureContainer.  User = " + currentUser);
+    //console.log("AppConfigureContainer.  User = " + currentUser);
     return{
         user: currentUser
     }

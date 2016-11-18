@@ -10,7 +10,7 @@ import { ViewType, RoleType } from '../constants/constants.js';
 import { DesignComponentValidationErrors } from '../constants/validation_errors.js';
 
 import DesignComponentValidationServices from '../service_modules/validation/design_component_validation_services.js';
-import DesignComponentServices from '../servicers/design_component_services.js';
+import DesignComponentModules from '../service_modules/design/design_component_service_modules.js';
 
 // =====================================================================================================================
 
@@ -34,7 +34,7 @@ class DesignComponentValidationApi{
 
         if (designComponent.isRemovable){
             // Just double check....
-            if(DesignComponentServices.hasNoChildren(designComponentId)){
+            if(DesignComponentModules.hasNoChildren(designComponentId)){
                 return DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, designComponent);
             } else {
                 return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE;

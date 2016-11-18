@@ -48,7 +48,7 @@ class AppBody extends Component {
         const {view, mode, userContext} = this.props;
 
         if(userContext) {
-            console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
+            //console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
         }
 
         // The body rendered depends on the current view

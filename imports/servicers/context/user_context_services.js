@@ -3,9 +3,9 @@
  */
 
 
-import {UserCurrentEditContext} from '../collections/context/user_current_edit_context.js'
-import {UserCurrentViewOptions} from '../collections/context/user_current_view_options.js'
-import {UserCurrentDevUpdates} from '../collections/design_update/user_current_dev_updates.js'
+import {UserCurrentEditContext} from '../../collections/context/user_current_edit_context.js'
+import {UserCurrentViewOptions} from '../../collections/context/user_current_view_options.js'
+import {UserCurrentDevUpdates} from '../../collections/design_update/user_current_dev_updates.js'
 
 class UserContextServices{
 
