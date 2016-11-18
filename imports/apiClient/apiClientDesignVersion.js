@@ -35,7 +35,7 @@ class ClientDesignVersionServices{
     setDesignVersion(userContext, newDesignVersionId){
 
         const context = {
-            userId:                         Meteor.userId(),
+            userId:                         userContext.userId,
             designId:                       userContext.designId,       // Must be the same design
             designVersionId:                newDesignVersionId,         // The new design version
             designUpdateId:                 'NONE',                     // Everything else reset for new Design

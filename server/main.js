@@ -46,7 +46,6 @@ import '../imports/apiValidatedMethods/design_component_methods.js'
 // Integration test Framework
 import '../test_framework/apiTest/apiTestFixtures.js';
 
-import '../test_framework/apiTest/apiClientTestLogin.js';
 import '../test_framework/apiTest/apiClientTestUserContext'
 import '../test_framework/apiTest/apiClientTestDesigns.js';
 

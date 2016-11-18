@@ -42,7 +42,7 @@ class ClientWorkPackageServices {
         if(newWorkPackageId != userContext.workPackageId) {
 
             const context = {
-                userId:                         Meteor.userId(),
+                userId:                         userContext.userId,
                 designId:                       userContext.designId,
                 designVersionId:                userContext.designVersionId,
                 designUpdateId:                 userContext.designUpdateId,

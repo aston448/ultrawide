@@ -32,29 +32,38 @@ class ClientLoginServices{
 
         //console.log("Attempting login with : " + userName);
 
-        Meteor.loginWithPassword(userName, password, (error) => {
+        if(Meteor.isClient) {
 
-            if(error){
-                store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: 'Invalid login credentials'}));
-            } else {
-                let userId = Meteor.userId();
-                //console.log("LOGGED IN AS METEOR USER: " + userId);
+            Meteor.loginWithPassword(userName, password, (error) => {
 
-                const user = UserRoles.findOne({userId: userId});
-                if(user){
-                    // Properly logged in so retrieve user settings
-                    ClientUserContextServices.getInitialSelectionSettings(userId);
-
-                    // And go to the home / role selection screen
-                    store.dispatch(setCurrentUserName(user.displayName));
-                    store.dispatch(setCurrentView(ViewType.CONFIGURE));
-
+                if (error) {
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.ERROR,
+                        messageText: 'Invalid login credentials'
+                    }));
                 } else {
-                    store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: 'User not recognised'}));
+                    let userId = Meteor.userId();
+                    //console.log("LOGGED IN AS METEOR USER: " + userId);
 
+                    const user = UserRoles.findOne({userId: userId});
+                    if (user) {
+                        // Properly logged in so retrieve user settings
+                        ClientUserContextServices.getInitialSelectionSettings(userId);
+
+                        // And go to the home / role selection screen
+                        store.dispatch(setCurrentUserName(user.displayName));
+                        store.dispatch(setCurrentView(ViewType.CONFIGURE));
+
+                    } else {
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.ERROR,
+                            messageText: 'User not recognised'
+                        }));
+
+                    }
                 }
-            }
-        });
+            });
+        }
 
     }
 

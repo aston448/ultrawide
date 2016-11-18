@@ -34,7 +34,7 @@ class ClientDesignUpdateServices {
         if(newDesignUpdateId != userContext.designUpdateId) {
 
             const context = {
-                userId:                         Meteor.userId(),
+                userId:                         userContext.userId,
                 designId:                       userContext.designId,           // Must be the same design
                 designVersionId:                userContext.designVersionId,    // Must be same design version
                 designUpdateId:                 newDesignUpdateId,              // Update selected
@@ -192,7 +192,7 @@ class ClientDesignUpdateServices {
             if (userContext.designUpdateId === designUpdateToDeleteId) {
 
                 const context = {
-                    userId:                         Meteor.userId(),
+                    userId:                         userContext.userId,
                     designId:                       userContext.designId,
                     designVersionId:                userContext.designVersionId,
                     designUpdateId:                 'NONE',

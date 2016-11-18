@@ -373,7 +373,7 @@ class ClientDesignComponentServices{
 
                     // There can now be no component selected...
                     const context = {
-                        userId:                         Meteor.userId(),
+                        userId:                         userContext.userId,
                         designId:                       userContext.designId,
                         designVersionId:                userContext.designVersionId,
                         designUpdateId:                 userContext.designUpdateId,
@@ -537,7 +537,7 @@ class ClientDesignComponentServices{
 
             // Update context to new component
             const context = {
-                userId:                         Meteor.userId(),
+                userId:                         userContext.userId,
                 designId:                       userContext.designId,
                 designVersionId:                userContext.designVersionId,
                 designUpdateId:                 userContext.designUpdateId,

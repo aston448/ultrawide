@@ -166,7 +166,7 @@ class ClientDesignServices{
         if(newDesignId != userContext.designId) {
 
             const context = {
-                userId:                         Meteor.userId(),
+                userId:                         userContext.userId,
                 designId:                       newDesignId,
                 designVersionId:                'NONE',
                 designUpdateId:                 'NONE',

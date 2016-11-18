@@ -2,14 +2,16 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
+import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
 Meteor.methods({
 
-    'verifyUserContext.designIs'(designName){
+    'verifyUserContext.designIs'(designName, username){
 
-        const userId = Meteor.userId();
         const design = Designs.findOne({designName: designName});
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
 
         if(userContext.designId != design._id){
             throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: " + design._id);
@@ -17,90 +19,90 @@ Meteor.methods({
     },
 
     // Methods to verify that context is cleared
-    'verifyUserContext.designVersionIsNone'(){
+    'verifyUserContext.designVersionIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.designVersionId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design version id is: " + userContext.designVersionId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.designUpdateIsNone'(){
+    'verifyUserContext.designUpdateIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.designUpdateId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design update id is: " + userContext.designUpdateId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.workPackageIsNone'(){
+    'verifyUserContext.workPackageIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.workPackageId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context work package id is: " + userContext.workPackageId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.designComponentIsNone'(){
+    'verifyUserContext.designComponentIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.designComponentId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design component id is: " + userContext.designComponentId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.designComponentTypeIsNone'(){
+    'verifyUserContext.designComponentTypeIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.designComponentType != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design component type is: " + userContext.designComponentType + " expected: NONE");
         }
     },
 
-    'verifyUserContext.featureReferenceIsNone'(){
+    'verifyUserContext.featureReferenceIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.featureReferenceId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context feature reference is: " + userContext.featureReferenceId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.featureAspectReferenceIsNone'(){
+    'verifyUserContext.featureAspectReferenceIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.featureAspectReferenceId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context feature aspect reference is: " + userContext.featureAspectReferenceId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.scenarioReferenceIsNone'(){
+    'verifyUserContext.scenarioReferenceIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.scenarioReferenceId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context scenario reference is: " + userContext.scenarioReferenceId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.scenarioStepIsNone'(){
+    'verifyUserContext.scenarioStepIsNone'(username){
 
-        const userId = Meteor.userId();
-        const userContext = UserCurrentEditContext.findOne({userId: userId});
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         if(userContext.scenarioStepId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context scenario step reference is: " + userContext.scenarioStepId + " expected: NONE");
