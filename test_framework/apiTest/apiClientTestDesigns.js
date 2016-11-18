@@ -21,9 +21,9 @@ Meteor.methods({
 
     },
 
-    'testDesigns.selectDesign'(newDesign, userName){
+    'testDesigns.selectDesign'(designName, userName){
 
-        const design = Designs.findOne({designName: newDesign});
+        const design = Designs.findOne({designName: designName});
         const user = UserRoles.findOne({userName: userName});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
@@ -36,6 +36,14 @@ Meteor.methods({
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         ClientDesignServices.workDesign(userContext, RoleType.DESIGNER, design._id)
+    },
+
+    'testDesigns.removeDesign'(designName, userName, userRole){
+        const design = Designs.findOne({designName: designName});
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        ClientDesignServices.removeDesign(userContext, userRole, design._id)
     }
 
 });

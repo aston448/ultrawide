@@ -2,12 +2,13 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
+import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
 Meteor.methods({
 
     'verifyDesigns.noNewDesign'(){
 
-        const newDesign = Designs.findOne({designName: 'New Design'});
+        const newDesign = Designs.findOne({designName: DefaultItemNames.NEW_DESIGN_NAME});
 
         if(newDesign){
             throw new Meteor.Error("FAIL", "New design was created!");
@@ -16,7 +17,7 @@ Meteor.methods({
 
     'verifyDesigns.newDesign'(){
 
-        const newDesign = Designs.findOne({designName: 'New Design'});
+        const newDesign = Designs.findOne({designName: DefaultItemNames.NEW_DESIGN_NAME});
 
         if(newDesign){
             if(!newDesign.isRemovable){
@@ -30,7 +31,7 @@ Meteor.methods({
 
     'verifyDesigns.newDesignVersion'(){
 
-        const newDesign = Designs.findOne({designName: 'New Design'});
+        const newDesign = Designs.findOne({designName: DefaultItemNames.NEW_DESIGN_NAME});
         const newDesignVersion = DesignVersions.findOne({
             designId: newDesign._id,
             designVersionName: 'First Draft',

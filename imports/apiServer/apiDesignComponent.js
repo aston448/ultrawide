@@ -172,7 +172,7 @@ class ServerDesignComponentApi {
         );
     };
 
-    reorderDesignComponent(view, mode, designComponentId, targetComponentId, callback){
+    reorderDesignComponent(view, mode, displayContext, designComponentId, targetComponentId, callback){
 
         reorderDesignComponent.call(
             {
