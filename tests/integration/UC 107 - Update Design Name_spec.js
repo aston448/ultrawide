@@ -1,15 +1,15 @@
 import {RoleType} from '../../imports/constants/constants.js';
 import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
-beforeEach(function(){
-    server.call('testFixtures.clearAllData');
-});
-
-afterEach(function(){
-
-});
-
 describe('UC 107 - Update Design Name', function() {
+
+    beforeEach(function(){
+        server.call('testFixtures.clearAllData');
+    });
+
+    afterEach(function(){
+
+    });
 
     it('Only a Designer can update a Design name', function() {
         // Setup -------------------------------------------------------------------------------------------------------

@@ -1,15 +1,14 @@
 
 import {RoleType} from '../../imports/constants/constants.js'
 
-beforeEach(function(){
-    server.call('testFixtures.clearAllData');
-});
-
-afterEach(function(){
-
-});
-
 describe('UC 101 - Add New Design', function() {
+    beforeEach(function(){
+        server.call('testFixtures.clearAllData');
+    });
+
+    afterEach(function(){
+
+    });
 
     it('A new Design can only be added by a Designer', function() {
         // Setup -------------------------------------------------------------------------------------------------------

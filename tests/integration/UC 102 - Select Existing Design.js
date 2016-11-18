@@ -2,15 +2,16 @@
 import {RoleType} from '../../imports/constants/constants.js'
 import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
-beforeEach(function(){
-    server.call('testFixtures.clearAllData');
-});
-
-afterEach(function(){
-
-});
 
 describe('UC 102 - Select Existing Design', function() {
+
+    beforeEach(function(){
+        server.call('testFixtures.clearAllData');
+    });
+
+    afterEach(function(){
+
+    });
 
     it('An existing Design can be selected as the working Design', function() {
         // Setup -------------------------------------------------------------------------------------------------------
@@ -29,7 +30,7 @@ describe('UC 102 - Select Existing Design', function() {
         server.call('testDesigns.selectDesign', 'Design2', 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyUserContext.designIs', 'Design2', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIs', 'Design2', 'gloria', (function(error, result){expect(!error);}));
 
     });
 

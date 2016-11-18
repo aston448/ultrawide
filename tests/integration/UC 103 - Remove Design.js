@@ -10,7 +10,7 @@ describe('UC 103 - Remove Design', function() {
 
     });
 
-    it('A Design can only be removed if it has no Features', function() {
+    it('A Design can only be removed if it has no Features')//, function() {
         // Setup -------------------------------------------------------------------------------------------------------
 
 
@@ -27,7 +27,11 @@ describe('UC 103 - Remove Design', function() {
         // Verify ------------------------------------------------------------------------------------------------------
 
 
-    });
+   // });
+
+    it('A Design can only be removed by a Designer')
+
+    it('A Design without Features cannot be removed if it contains a Design Update with Features')
 
 
 });
