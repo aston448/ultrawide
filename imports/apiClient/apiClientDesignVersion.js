@@ -73,7 +73,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  Must be a new design to be editable
-    editDesignVersion(viewOptions, userContext, designVersionToEditId, currentProgressDataValue){
+    editDesignVersion(viewOptions, userContext, designVersionToEditId){
 
         // Validation - only new or draft published design versions can be edited
         const dv = DesignVersions.findOne({_id: designVersionToEditId});
