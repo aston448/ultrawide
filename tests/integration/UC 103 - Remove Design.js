@@ -7,7 +7,7 @@ describe('UC 103 - Remove Design', function() {
     });
 
     afterEach(function(){
-        server.call('testLogout');
+        server.call('testLogin.logout');
     });
 
     it('A Design can only be removed if it has no Features', function() {
