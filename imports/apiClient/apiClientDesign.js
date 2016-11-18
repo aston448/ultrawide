@@ -73,6 +73,7 @@ class ClientDesignServices{
         let result = DesignValidationApi.validateUpdateDesignName(userRole, newName, designId);
 
         if(result != Validation.VALID){
+            console.log("Save Design Name validation failed: " + result);
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
