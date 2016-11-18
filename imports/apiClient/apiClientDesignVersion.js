@@ -84,7 +84,9 @@ class ClientDesignVersionServices{
             let updatedContext = this.setDesignVersion(userContext, designVersionToEditId);
 
             // Subscribe to Dev data
-            let loading = ClientContainerServices.getDevData();
+            if(Meteor.isClient) {
+                let loading = ClientContainerServices.getDevData();
+            }
 
             // Get the latest test results
             ClientMashDataServices.updateTestData(viewOptions, userContext);
