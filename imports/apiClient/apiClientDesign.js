@@ -67,7 +67,7 @@ class ClientDesignServices{
     };
 
     // User saves an update to a Design name ---------------------------------------------------------------------------
-    saveDesignName(userRole, designId, newName){
+    updateDesignName(userRole, designId, newName){
 
         // Client test validation
         let result = DesignValidationApi.validateUpdateDesignName(userRole, newName, designId);
@@ -80,7 +80,7 @@ class ClientDesignServices{
         }
 
         // Real action call - Remove Design server actions
-        ServerDesignApi.addDesign(userRole, (err, result) => {
+        ServerDesignApi.updateDesignName(userRole, designId, newName, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

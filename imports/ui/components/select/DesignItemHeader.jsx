@@ -90,7 +90,7 @@ class DesignItemHeader extends Component{
 
         switch(currentItemType){
             case ItemType.DESIGN:
-                ClientDesignServices.saveDesignName(userRole, currentItemId, newName);
+                ClientDesignServices.updateDesignName(userRole, currentItemId, newName);
                 break;
             case ItemType.DESIGN_VERSION:
                 ClientDesignVersionServices.saveDesignVersionName(currentItemId, newName);

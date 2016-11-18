@@ -17,7 +17,7 @@ Meteor.methods({
 
         const design = Designs.findOne({designName: existingName});
 
-        ClientDesignServices.saveDesignName(role, design._id, newName);
+        ClientDesignServices.updateDesignName(role, design._id, newName);
 
     },
 
