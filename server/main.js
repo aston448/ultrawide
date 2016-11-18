@@ -38,13 +38,19 @@ import '../imports/apiServer/apiFeatureFiles.js';
 import '../imports/apiServer/apiMashData.js';
 import '../imports/apiServer/apiFixtures.js';
 
-import '../test_framework/apiTest/apiClientTestDesigns.js';
-import '../test_framework/apiTest/apiTestFixtures.js';
-import '../test_framework/apiTest/apiVerifyDesigns.js';
-
 // Meteor Validated Methods
 import '../imports/apiValidatedMethods/design_methods.js'
 import '../imports/apiValidatedMethods/design_component_methods.js'
 
-//import '../imports/service_modules/server/design_component_service_modules.js'
+
+// Integration test Framework
+import '../test_framework/apiTest/apiTestFixtures.js';
+
+import '../test_framework/apiTest/apiClientTestLogin.js';
+import '../test_framework/apiTest/apiClientTestUserContext'
+import '../test_framework/apiTest/apiClientTestDesigns.js';
+
+import '../test_framework/apiTest/apiVerifyDesigns.js';
+import '../test_framework/apiTest/apiVerifyUserContext'
+
 

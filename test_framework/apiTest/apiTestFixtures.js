@@ -71,8 +71,7 @@ Meteor.methods({
                 {multi: true}
             );
 
-            // Make up a temporary user until login implemented
-            // Recreate users only needed after a reset (may be recreated by normal fixtures anyway)
+            // Recreate users only needed after a reset
             if (UserRoles.find({}).count() === 0) {
 
                 console.log('Inserting user data...');
