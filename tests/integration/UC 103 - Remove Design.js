@@ -90,9 +90,9 @@ describe('UC 103 - Remove Design', function() {
         // Design should not exist
         server.call('verifyDesigns.designDoesNotExistCalled', 'Design1', (function(error, result){expect(!error);}));
         // Application should not exist
-        server.call('verifyDesignComponents.designComponentDoesNotExistCalled', ComponentType.APPLICATION, 'Application1');
+        server.call('verifyDesignComponents.componentDoesNotExistCalled', ComponentType.APPLICATION, 'Application1');
         // Design Section should not exist
-        server.call('verifyDesignComponents.designComponentDoesNotExistCalled', ComponentType.DESIGN_SECTION, 'Section1');
+        server.call('verifyDesignComponents.componentDoesNotExistCalled', ComponentType.DESIGN_SECTION, 'Section1');
 
 
 
