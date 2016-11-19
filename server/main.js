@@ -50,6 +50,7 @@ import '../test_framework/apiTest/apiClientTestUserContext'
 import '../test_framework/apiTest/apiClientTestDesigns.js';
 
 import '../test_framework/apiTest/apiVerifyDesigns.js';
+import '../test_framework/apiTest/apiVerifyDesignComponents.js';
 import '../test_framework/apiTest/apiVerifyUserContext'
 
 

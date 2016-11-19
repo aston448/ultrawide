@@ -70,7 +70,33 @@ describe('UC 103 - Remove Design', function() {
     it('A Design without Features cannot be removed if it contains a Design Update with Features');
 
 
+    it('When a Design is removed, all subcomponents of that Design are deleted', function() {
+        // Setup -------------------------------------------------------------------------------------------------------
+        // Work on Design1
+        server.call('testDesigns.workDesign', 'Design1', 'gloria');
+        // And edit the default Design Version
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        // Add an Application - Application1
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        // Add a Design Section - Section1
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
 
+        // Execute -----------------------------------------------------------------------------------------------------
+        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+
+        // Verify ------------------------------------------------------------------------------------------------------
+        // Design should not exist
+        server.call('verifyDesigns.designDoesNotExistCalled', 'Design1', (function(error, result){expect(!error);}));
+        // Application should not exist
+        server.call('verifyDesignComponents.designComponentDoesNotExistCalled', ComponentType.APPLICATION, 'Application1');
+        // Design Section should not exist
+        server.call('verifyDesignComponents.designComponentDoesNotExistCalled', ComponentType.DESIGN_SECTION, 'Section1');
+
+
+
+    });
 
 });
 
