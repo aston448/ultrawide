@@ -10,6 +10,7 @@ import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
 
 import { ViewType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
+import { DesignMessages } from '../constants/message_texts.js'
 
 // REDUX services
 import store from '../redux/store'
@@ -35,7 +36,7 @@ class ClientDesignServices{
     // User adds a new Design to Ultrawide -----------------------------------------------------------------------------
     addNewDesign(userRole){
 
-        // Client test validation
+        // Client validation
         let result = DesignValidationApi.validateAddDesign(userRole);
 
         if(result != Validation.VALID){
@@ -44,7 +45,7 @@ class ClientDesignServices{
             return false;
         }
 
-        // Real action call - Remove Design server actions
+        // Real action call - server actions
         ServerDesignApi.addDesign(userRole, (err, result) => {
 
             if (err) {
@@ -57,7 +58,7 @@ class ClientDesignServices{
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
-                    messageText: 'Design added successfully.'
+                    messageText: DesignMessages.MSG_DESIGN_ADDED
                 }));
             }
         });
@@ -69,7 +70,7 @@ class ClientDesignServices{
     // User saves an update to a Design name ---------------------------------------------------------------------------
     updateDesignName(userRole, designId, newName){
 
-        // Client test validation
+        // Client validation
         let result = DesignValidationApi.validateUpdateDesignName(userRole, newName, designId);
 
         if(result != Validation.VALID){
@@ -79,7 +80,7 @@ class ClientDesignServices{
             return false;
         }
 
-        // Real action call - Remove Design server actions
+        // Real action call - server actions
         ServerDesignApi.updateDesignName(userRole, designId, newName, (err, result) => {
 
             if (err) {
@@ -92,7 +93,7 @@ class ClientDesignServices{
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
-                    messageText: 'Design added successfully.'
+                    messageText: DesignMessages.MSG_DESIGN_NAME_UPDATED
                 }));
             }
         });
@@ -105,7 +106,7 @@ class ClientDesignServices{
     // User chooses to remove a Design ---------------------------------------------------------------------------------
     removeDesign(userContext, userRole, designId){
 
-        // Client test validation
+        // Client validation
         let result = DesignValidationApi.validateRemoveDesign(userRole, designId);
 
         if(result != Validation.VALID){
@@ -114,7 +115,7 @@ class ClientDesignServices{
             return false;
         }
 
-        // Real action call - Remove Design server actions
+        // Real action call - server actions
         ServerDesignApi.removeDesign(userRole, designId, (err, result) => {
 
             if (err) {
@@ -127,7 +128,7 @@ class ClientDesignServices{
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
-                    messageText: 'Design removed successfully'
+                    messageText: DesignMessages.MSG_DESIGN_REMOVED
                 }));
 
                 // Set no current user item context but keep locations

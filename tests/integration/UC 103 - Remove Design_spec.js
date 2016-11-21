@@ -29,7 +29,7 @@ describe('UC 103 - Remove Design', function() {
         // Work on Design1
         server.call('testDesigns.workDesign', 'Design1', 'gloria');
         // And edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
         // Add an Application - Application1
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
@@ -75,7 +75,7 @@ describe('UC 103 - Remove Design', function() {
         // Work on Design1
         server.call('testDesigns.workDesign', 'Design1', 'gloria');
         // And edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
         // Add an Application - Application1
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');

@@ -16,6 +16,18 @@ export const DesignValidationErrors = {
     DESIGN_NOT_REMOVABLE:           'A Design containing Features is not removable'
 };
 
+export const DesignVersionValidationErrors = {
+    DESIGN_VERSION_INVALID_ROLE_UPDATE:     'Only a Designer can update Design Version details',
+    DESIGN_VERSION_INVALID_ROLE_EDIT:       'Only a Designer can edit a Design Version',
+    DESIGN_VERSION_INVALID_ROLE_PUBLISH:    'Only a Designer can publish a Design Version',
+    DESIGN_VERSION_INVALID_NAME_DUPLICATE:  'Design Version name already exists for another version in this Design',
+    DESIGN_VERSION_INVALID_NUMBER_DUPLICATE:'Design Version number already exists for another version in this Design',
+    DESIGN_VERSION_INVALID_STATUS_EDIT:     'Only New or Draft Design Versions can be edited',
+    DESIGN_VERSION_INVALID_STATUS_PUBLISH:  'Only New Design Versions can be published',
+    DESIGN_VERSION_INVALID_STATUS_UNPUBLISH:'Only Draft Design Versions can be un-published',
+    DESIGN_VERSION_UPDATES_UNPUBLISH        :'A Design Version with Design Updates cannot be un-published'
+}
+
 export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_INVALID_VIEW_ADD:          'A Design Component can only be added in the Base Design Editor',
     DESIGN_COMPONENT_INVALID_MODE_ADD:          'A Design Component cannot be added in View Only mode',

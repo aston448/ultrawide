@@ -54,7 +54,7 @@ Meteor.methods({
 
     },
 
-    'testDesigns.editDesignVersion'(designName, designVersionName, userName){
+    'testDesigns.editDesignVersion'(designName, designVersionName, userName, userRole){
 
         const design = Designs.findOne({designName: designName});
         const designVersion = DesignVersions.findOne({designId: design._id, designVersionName: designVersionName});
@@ -63,7 +63,7 @@ Meteor.methods({
         const viewOptions = UserCurrentViewOptions.findOne({userId: user.userId});
 
 
-        ClientDesignVersionServices.editDesignVersion(viewOptions, userContext, designVersion._id)
+        ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id)
     },
 
 });

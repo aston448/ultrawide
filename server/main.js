@@ -48,8 +48,10 @@ import '../test_framework/apiTest/apiTestFixtures.js';
 
 import '../test_framework/apiTest/apiClientTestUserContext'
 import '../test_framework/apiTest/apiClientTestDesigns.js';
+import '../test_framework/apiTest/apiClientTestDesignVersions.js';
 
 import '../test_framework/apiTest/apiVerifyDesigns.js';
+import '../test_framework/apiTest/apiVerifyDesignVersions.js';
 import '../test_framework/apiTest/apiVerifyDesignComponents.js';
 import '../test_framework/apiTest/apiVerifyUserContext'
 

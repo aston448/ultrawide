@@ -93,7 +93,7 @@ class DesignItemHeader extends Component{
                 ClientDesignServices.updateDesignName(userRole, currentItemId, newName);
                 break;
             case ItemType.DESIGN_VERSION:
-                ClientDesignVersionServices.saveDesignVersionName(currentItemId, newName);
+                ClientDesignVersionServices.updateDesignVersionName(userRole, currentItemId, newName);
                 break;
             case ItemType.DESIGN_UPDATE:
                ClientDesignUpdateServices.saveDesignUpdateName(currentItemId, newName);
@@ -106,7 +106,7 @@ class DesignItemHeader extends Component{
         this.setState({nameEditable: false});
     }
 
-    saveItemVersion(currentItemType, currentItemId){
+    saveItemVersion(userRole, currentItemType, currentItemId){
         event.preventDefault();
         // TODO: Possible validation of versions for these items - no duplicates?
 
@@ -114,7 +114,7 @@ class DesignItemHeader extends Component{
 
         switch(currentItemType){
             case ItemType.DESIGN_VERSION:
-                ClientDesignVersionServices.saveDesignVersionNumber(currentItemId, newVersion);
+                ClientDesignVersionServices.updateDesignVersionNumber(userRole, currentItemId, newVersion);
                 break;
             case ItemType.DESIGN_UPDATE:
                 ClientDesignUpdateServices.saveDesignUpdateVersion(currentItemId, newVersion);
@@ -187,7 +187,7 @@ class DesignItemHeader extends Component{
                                 onKeyPress={(event) => this.handleVersionKeyEvents(event, currentItemType, currentItemId)}
                             />
                         </div>
-                        <InputGroup.Addon onClick={ () => this.saveItemVersion(currentItemType, currentItemId)}>
+                        <InputGroup.Addon onClick={ () => this.saveItemVersion(userRole, currentItemType, currentItemId)}>
                             <div className="green"><Glyphicon glyph="ok"/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon onClick={ () => this.undoItemVersionChange()}>

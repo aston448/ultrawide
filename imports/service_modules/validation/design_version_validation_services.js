@@ -1,0 +1,123 @@
+// == IMPORTS ==========================================================================================================
+
+// Meteor / React Services
+
+// Ultrawide Collections
+
+// Ultrawide Services
+import { ViewType, RoleType, DesignVersionStatus } from '../../constants/constants.js';
+import { Validation, DesignVersionValidationErrors } from '../../constants/validation_errors.js';
+
+
+// =====================================================================================================================
+
+// -- CLASS ------------------------------------------------------------------------------------------------------------
+//
+// Design Validation - Supports validations relating to a Design.  Module testable functions.
+//
+// ---------------------------------------------------------------------------------------------------------------------
+
+class DesignVersionValidationServices{
+
+    validateUpdateDesignVersionName(userRole, newName, otherVersions){
+
+        // User must be Designer
+        if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE }
+
+        // Name must not be same as other versions for this Design
+        let duplicate = false;
+        otherVersions.forEach((version) => {
+
+            if(version.designVersionName === newName){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_NAME_DUPLICATE;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateUpdateDesignVersionNumber(userRole, newNumber, otherVersions){
+
+        // User must be Designer
+        if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE }
+
+        // Number must not be same as other versions for this Design
+        let duplicate = false;
+        otherVersions.forEach((version) => {
+
+            if(version.designVersionNumber === newNumber){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_NUMBER_DUPLICATE;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateEditDesignVersion(userRole, designVersion){
+
+        // User must be Designer
+        if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_EDIT }
+
+        // Design Version must not be Final
+        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_FINAL){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATUS_EDIT;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateViewDesignVersion(){
+
+        // Currently no restrictions on viewing a Design Version
+        return Validation.VALID;
+    }
+
+    validatePublishDesignVersion(userRole, designVersion){
+
+        // User must be Designer
+        if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_PUBLISH }
+
+        // Design Version must be New
+        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_NEW){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATUS_PUBLISH;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateUnpublishDesignVersion(userRole, designVersion, dvUpdates){
+
+        // User must be Designer
+        if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_PUBLISH }
+
+
+        // Design Version must be Draft
+        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_DRAFT){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATUS_UNPUBLISH;
+        }
+
+        // Design Version must have no updates
+        if(dvUpdates.length > 0){
+            return DesignVersionValidationErrors.DESIGN_VERSION_UPDATES_UNPUBLISH;
+        }
+
+        // TODO - Add adoption validation
+
+        return Validation.VALID;
+    }
+
+}
+export default new DesignVersionValidationServices();
+

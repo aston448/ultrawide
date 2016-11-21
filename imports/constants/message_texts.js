@@ -2,6 +2,21 @@
  * Created by aston on 17/11/2016.
  */
 
+export const DesignMessages = {
+
+    MSG_DESIGN_ADDED:               'New Design added',
+    MSG_DESIGN_REMOVED:             'Design removed',
+    MSG_DESIGN_NAME_UPDATED:        'Design name updated'
+};
+
+export const DesignVersionMessages = {
+
+    MSG_DESIGN_VERSION_NAME_UPDATED:    'Design Version name updated',
+    MSG_DESIGN_VERSION_NUMBER_UPDATED:  'Design Version number updated',
+    MSG_DESIGN_VERSION_PUBLISHED:       'Design Version now Published Draft',
+    MSG_DESIGN_VERSION_UNPUBLISHED:     'Design Version reverted to New'
+};
+
 export const DesignComponentMessages = {
 
     MSG_NEW_APPLICATION_ADDED:      'New Application added',

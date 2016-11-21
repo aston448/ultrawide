@@ -31,60 +31,63 @@ class DesignVersion extends Component {
         super(props);
     }
 
-    onEditDesignVersion(viewOptions, context, dv, currentProgressDataValue){
+    onEditDesignVersion(userRole, viewOptions, userContext, dv, currentProgressDataValue){
 
         ClientDesignVersionServices.editDesignVersion(
+            userRole,
             viewOptions,
-            context,
+            userContext,
             dv._id,
             currentProgressDataValue
         );
     }
 
-    onViewDesignVersion(viewOptions, context, dv){
+    onViewDesignVersion(userRole, viewOptions, userContext, dv, currentProgressDataValue){
 
         ClientDesignVersionServices.viewDesignVersion(
+            userRole,
             viewOptions,
-            context,
-            dv._id,
-            dv.designVersionStatus
+            userContext,
+            dv,
+            currentProgressDataValue
         );
     }
 
-    onAdoptDesignVersion(context, dv){
+    onAdoptDesignVersion(userContext, dv){
 
     }
 
-    onPublishDesignVersion(context, dv){
+    onPublishDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.publishDesignVersion(
-            context,
+            userContext,
             dv._id
         );
     }
 
-    onUnPublishDesignVersion(context, dv){
+    onUnPublishDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.unpublishDesignVersion(
-            context,
+            userContext,
             dv._id
         );
     }
 
-    onMergeUpdatesToNewDraftVersion(context, dv){
+    onMergeUpdatesToNewDraftVersion(userContext, dv){
 
         ClientDesignVersionServices.mergeUpdatesToNewDraftVersion(
-            context,
+            userContext,
             dv._id
         );
     }
 
-    setNewDesignVersionActive(context, dv){
+    setNewDesignVersionActive(userContext, dv){
 
         ClientDesignVersionServices.setDesignVersion(
-            context,
+            userContext,
             dv._id
         );
+
     }
 
     render() {
@@ -103,9 +106,9 @@ class DesignVersion extends Component {
                     // Designers can Edit View or Publish
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(viewOptions, userContext, designVersion, currentProgressDataValue)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(viewOptions, userContext, designVersion)}>View</Button>
-                            <Button bsSize="xs" onClick={ () => this.onPublishDesignVersion(userContext, designVersion)}>Publish</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>
                         </ButtonGroup>;
 
                 } else {
@@ -119,9 +122,9 @@ class DesignVersion extends Component {
                         // Designers can view it, unpublish it if not adopted or create the next version from updates...
                         buttons =
                             <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userContext, designVersion)}>View</Button>
-                                <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(userContext, designVersion, currentProgressDataValue)}>Edit</Button>
-                                <Button bsSize="xs" onClick={ () => this.onUnPublishDesignVersion(userContext, designVersion)}>Unpublish</Button>
+                                <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>Edit</Button>
+                                <Button bsSize="xs" onClick={ () => this.onUnPublishDesignVersion(userRole, userContext, designVersion)}>Unpublish</Button>
                                 <Button bsSize="xs" onClick={ () => this.onMergeUpdatesToNewDraftVersion(userContext, designVersion)}>Create New from Updates</Button>
                             </ButtonGroup>;
                         break;
@@ -131,7 +134,7 @@ class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userContext, designVersion)}>View</Button>
+                                    <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
                                 </ButtonGroup>
                             </div>;
                             break;
@@ -140,7 +143,7 @@ class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userContext, designVersion)}>View</Button>
+                                    <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
                                 </ButtonGroup>
                             </div>;
                         break;
@@ -152,7 +155,7 @@ class DesignVersion extends Component {
                     // Developers can view or adopt a final design
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userContext, designVersion)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
                             <Button bsSize="xs" onClick={ () => this.onAdoptDesignVersion(userContext, designVersion)}>Adopt</Button>
                         </ButtonGroup>;
 
@@ -160,7 +163,7 @@ class DesignVersion extends Component {
                     // Designers can just view it
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userContext, designVersion)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
                         </ButtonGroup>;
                 }
                 break;

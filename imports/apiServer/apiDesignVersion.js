@@ -2,9 +2,11 @@
 
 // Meteor / React Services
 import { Meteor } from 'meteor/meteor';
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 // Ultrawide Services
 import  DesignVersionServices from '../servicers/design/design_version_services.js';
+import { updateDesignVersionName, updateDesignVersionNumber, publishDesignVersion, unpublishDesignVersion } from '../apiValidatedMethods/design_version_methods.js'
 
 // =====================================================================================================================
 
@@ -14,35 +16,74 @@ import  DesignVersionServices from '../servicers/design/design_version_services.
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
+
+class ServerDesignVersionApi {
+
+    updateDesignVersionName(userRole, designVersionId, newName, callback){
+
+        updateDesignVersionName.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId,
+                newName: newName
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateDesignVersionNumber(userRole, designVersionId, newNumber, callback){
+
+        updateDesignVersionNumber.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId,
+                newNumber: newNumber
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    publishDesignVersion(userRole, designVersionId, callback){
+
+        publishDesignVersion.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    unpublishDesignVersion(userRole, designVersionId, callback){
+
+        unpublishDesignVersion.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+}
+
+export default new ServerDesignVersionApi();
+
+
+
+
+
+
 Meteor.methods({
 
-    'designVersion.updateDesignVersionName'(designVersionId, newName){
-        //console.log("Updating design version name to "  + newName);
-
-        DesignVersionServices.updateDesignVersionName(designVersionId, newName);
-
-    },
-
-    'designVersion.updateDesignVersionNumber'(designVersionId, newNumber){
-        //console.log("Updating design version number to "  + newNumber);
-
-        DesignVersionServices.updateDesignVersionNumber(designVersionId, newNumber);
-
-    },
-
-    'designVersion.publishDesignVersion'(designVersionId){
-        //console.log("Publishing design version "  + designVersionId);
-
-        DesignVersionServices.publishDesignVersion(designVersionId);
-
-    },
-
-    'designVersion.unpublishDesignVersion'(designVersionId){
-        //console.log("Un-Publishing design version "  + designVersionId);
-
-        DesignVersionServices.unpublishDesignVersion(designVersionId);
-
-    },
 
     'designVersion.mergeUpdatesToNewDraftVersion'(designVersionId){
         //console.log("Merging design version updates to new version for "  + designVersionId);
