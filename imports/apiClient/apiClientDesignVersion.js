@@ -9,6 +9,7 @@ import {DesignUpdates} from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType } from '../constants/constants.js';
+import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 
 import ClientMashDataServices       from '../apiClient/apiClientMashData.js';
