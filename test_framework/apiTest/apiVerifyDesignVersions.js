@@ -7,12 +7,13 @@ import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
 Meteor.methods({
 
-    'verifyDesignVersions.designVersionStatusIs'(newStatus, userName){
+    'verifyDesignVersions.designVersionStatusIs'(designVersionName, newStatus, userName){
 
         const user = UserRoles.findOne({userName: userName});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
         const designVersion = DesignVersions.findOne({
-            _id: userContext.designVersionId
+            designId: userContext.designId,
+            designVersionName: designVersionName
         });
 
         if(designVersion.designVersionStatus === newStatus){
@@ -22,12 +23,13 @@ Meteor.methods({
         }
     },
 
-    'verifyDesignVersions.designVersionStatusIsNot'(newStatus, userName){
+    'verifyDesignVersions.designVersionStatusIsNot'(designVersionName, newStatus, userName){
 
         const user = UserRoles.findOne({userName: userName});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
         const designVersion = DesignVersions.findOne({
-            _id: userContext.designVersionId
+            designId: userContext.designId,
+            designVersionName: designVersionName
         });
 
         if(designVersion.designVersionStatus != newStatus){
