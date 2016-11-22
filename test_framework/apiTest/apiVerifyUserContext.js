@@ -23,6 +23,8 @@ Meteor.methods({
         // Assume that Design is set in user context before checking Design Version
         const user = UserRoles.findOne({userName: username});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        console.log('User Context for ' + username + " is DE: " + userContext.designId + " DV: " + userContext.designVersionId);
         const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
 
 

@@ -341,8 +341,6 @@ class ClientDesignVersionServices{
                 store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
         }
 
-
-
         return true;
     };
 
