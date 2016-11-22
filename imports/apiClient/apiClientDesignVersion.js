@@ -8,9 +8,10 @@ import {DesignVersions} from '../collections/design/design_versions.js';
 import {DesignUpdates} from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
+import { log } from '../common/utils.js';
 
 import ClientMashDataServices       from '../apiClient/apiClientMashData.js';
 import ClientContainerServices      from '../apiClient/apiClientContainerServices.js';
@@ -274,7 +275,7 @@ class ClientDesignVersionServices{
         }
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(viewOptions, userContext);
+        ClientMashDataServices.updateTestData(viewOptions, updatedContext);
 
         // Switch to the design editor view
         store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
@@ -294,6 +295,7 @@ class ClientDesignVersionServices{
         let result = DesignVersionValidationApi.validateViewDesignVersion();
 
         if(result != Validation.VALID){
+            log((msg) => console.log(msg), LogLevel.WARNING, result);
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -312,7 +314,7 @@ class ClientDesignVersionServices{
         ClientMashDataServices.createDevMashData(updatedContext);
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(viewOptions, userContext);
+        ClientMashDataServices.updateTestData(viewOptions, updatedContext);
 
 
         // Decide what the actual view should be.  A designer with a New or Draft DV
