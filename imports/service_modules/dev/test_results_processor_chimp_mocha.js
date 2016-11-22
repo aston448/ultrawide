@@ -32,9 +32,9 @@ class ChimpMochaTestServices{
 
 
             // Parse ---------------------------------------------------------------------------------------------------
-            if(cleanText.length > 0) {
-                let resultsJson = [];
+            let resultsJson = [];
 
+            if(cleanText.length > 0) {
                 try {
                     resultsJson = JSON.parse(cleanText);
                 } catch (e) {
