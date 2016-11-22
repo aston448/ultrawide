@@ -13,6 +13,8 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
     beforeEach(function(){
 
+        server.call('testFixtures.clearAllData');
+
         // Add  Design - Design1: will create default Design Version
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
