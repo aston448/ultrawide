@@ -7,6 +7,7 @@ import { DesignUpdateComponents }   from '../../collections/design_update/design
 // Ultrawide services
 import { ComponentType, MashStatus, MashTestStatus, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
+import ClientIdentityServices from '../../apiClient/apiIdentity.js';
 
 import ChimpMochaTestServices from '../../service_modules/dev/test_results_processor_chimp_mocha.js';
 
@@ -15,9 +16,15 @@ class IntegrationTestServices {
 
     getIntegrationTestResults(testType, userContext){
 
+        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
+        if(ClientIdentityServices.getApplicationName() != 'ULTRAWIDE'){
+            return;
+        }
+
         let resultsData = [];
 
-        // Call the correct results service to get the test data
+        // Call the correct results service to get the test data - if not TEST instance
+
         switch(testType){
             case 'CHIMP_MOCHA':
                 let testFile = userContext.integrationTestResultsLocation;
