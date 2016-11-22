@@ -289,7 +289,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersion, progressDataValue){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersionId, progressDataValue){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion();
@@ -303,7 +303,7 @@ class ClientDesignVersionServices{
         }
 
         // Ensure that the current version is the version we chose to view
-        let updatedContext = this.setDesignVersion(userContext, designVersion._id);
+        let updatedContext = this.setDesignVersion(userContext, designVersionId);
 
         // Subscribe to Dev data
         if(Meteor.isClient) {
