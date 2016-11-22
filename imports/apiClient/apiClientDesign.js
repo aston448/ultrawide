@@ -165,7 +165,7 @@ class ClientDesignServices{
     setDesign(userContext, newDesignId){
         // Set a new design as the current design if a new one chosen
 
-        if(newDesignId != userContext.designId) {
+        // if(newDesignId != userContext.designId) {
 
             const context = {
                 userId:                         userContext.userId,
@@ -188,10 +188,10 @@ class ClientDesignServices{
             store.dispatch(setCurrentUserItemContext(context, true));
 
             return true;
-        }
-
-        // Not an error - just indicates no change
-        return false;
+        // }
+        //
+        // // Not an error - just indicates no change
+        // return false;
     }
 
     workDesign(userContext, userRole, newDesignId){
