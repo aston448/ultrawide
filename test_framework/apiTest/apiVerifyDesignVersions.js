@@ -44,8 +44,7 @@ Meteor.methods({
         const user = UserRoles.findOne({userName: userName});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
         const designVersion = DesignVersions.findOne({
-            designId: userContext.designId,
-            designVersionId: userContext.designVersionId
+            _id: userContext.designVersionId
         });
 
         if(designVersion.designVersionName === designVersionName){
@@ -60,8 +59,7 @@ Meteor.methods({
         const user = UserRoles.findOne({userName: userName});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
         const designVersion = DesignVersions.findOne({
-            designId: userContext.designId,
-            designVersionId: userContext.designVersionId
+            _id: userContext.designVersionId
         });
 
         if(designVersion.designVersionNumber === designVersionNumber){
