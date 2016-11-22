@@ -34,6 +34,11 @@ Meteor.methods({
 
     'mash.exportFeatureConfiguration'(userContext){
         MashDataServices.exportFeatureConfiguration(userContext);
+    },
+
+    'mash.exportIntegrationTests'(userContext){
+        console.log('Exporting Integration Tests Data');
+        MashDataServices.exportIntegrationTests(userContext);
     }
 
 });

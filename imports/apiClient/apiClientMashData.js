@@ -10,12 +10,12 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { UserAccTestMashData }    from '../collections/dev/user_acc_test_mash_data.js';
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
+import { ComponentType, ViewType, ViewMode, DisplayContext, MessageType, MashStatus, LogLevel} from '../constants/constants.js';
 import { mashMoveDropAllowed, log} from '../common/utils.js';
 
 // REDUX
 import store from '../redux/store'
-import {setCurrentUserItemContext, updateProgressData} from '../redux/actions'
+import {setCurrentUserItemContext, updateProgressData, updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -193,6 +193,19 @@ class ClientMashDataServices {
             return false;
         }
     };
+
+    exportIntegrationTests(userContext){
+        //TODO - Integrate this properly
+        if(userContext.designComponentType === ComponentType.FEATURE){
+            Meteor.call('mash.exportIntegrationTests', userContext);
+            return true;
+        } else {
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.ERROR,
+                messageText: 'Select one Feature for this to work'
+            }));
+        }
+    }
 
     featureHasUnknownScenarios(userContext){
         return UserAccTestMashData.find({

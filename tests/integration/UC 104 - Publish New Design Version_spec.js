@@ -38,7 +38,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.DEVELOPER);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'hugh', (function(error, result){expect(!error);}))
+        server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'hugh', (function(error, result){expect(!error);}));
 
         // Setup -------------------------------------------------------------------------------------------------------
         // Make sure the design is in the user context

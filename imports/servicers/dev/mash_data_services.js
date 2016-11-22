@@ -1253,13 +1253,20 @@ class MashDataServices{
 
     exportFeatureConfiguration(userContext){
 
-        const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
+        //const devContext = UserCurrentDevContext.findOne({userId: userContext.userId});
+        // TODO Refactor this to use user context properly
 
-        FeatureFileServices.writeFeatureFile(userContext.featureReferenceId, userContext, devContext.featureFilesLocation);
+        FeatureFileServices.writeFeatureFile(userContext.featureReferenceId, userContext, userContext.featureFilesLocation);
 
         // Reload all the data
-        this.loadUserFeatureFileData(userContext, devContext.featureFilesLocation);
+        this.loadUserFeatureFileData(userContext, userContext.featureFilesLocation);
         this.createAccTestMashData(userContext);
+
+    }
+
+    exportIntegrationTests(userContext){
+
+        FeatureFileServices.writeIntegrationFile(userContext);
 
     }
 

@@ -21,4 +21,13 @@ Meteor.methods({
 
         ClientDesignVersionServices.publishDesignVersion(userRole, userContext, designVersion._id);
     },
+
+    'testDesignVersions.unpublishDesignVersion'(designVersionName, userName, userRole){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
+
+        ClientDesignVersionServices.unpublishDesignVersion(userRole, userContext, designVersion._id);
+    },
 });

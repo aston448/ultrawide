@@ -79,6 +79,10 @@ class AppHeader extends Component {
         ClientMashDataServices.exportFeatureUpdates(userContext);
     }
 
+    onExportIntegrationData(userContext){
+        ClientMashDataServices.exportIntegrationTests(userContext);
+    }
+
     getOptionButtonStyle(viewOption, currentOptions){
 
         if(currentOptions) {
@@ -190,6 +194,9 @@ class AppHeader extends Component {
         let exportToDevButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
 
+        let exportIntegrationButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportIntegrationData(userContext)}>Export Int Tests</Button>;
+
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
 
@@ -247,6 +254,7 @@ class AppHeader extends Component {
                         {selectionScreenButton}
                         {configureScreenButton}
                         {designsButton}
+                        {exportIntegrationButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
