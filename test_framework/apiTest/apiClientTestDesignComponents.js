@@ -39,6 +39,19 @@ Meteor.methods({
 
     },
 
+    'testDesignComponents.addDesignSectionToDesignSection'(sectionName){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        // And the parent component
+        const sectionComponent = DesignComponents.findOne({componentType: ComponentType.DESIGN_SECTION, componentName: sectionName});
+
+        ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, sectionComponent);
+
+    },
+
     'testDesignComponents.addFeatureToDesignSection'(sectionName){
 
         // Assume view is correct
@@ -49,6 +62,19 @@ Meteor.methods({
         const sectionComponent = DesignComponents.findOne({componentType: ComponentType.DESIGN_SECTION, componentName: sectionName});
 
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, sectionComponent);
+
+    },
+
+    'testDesignComponents.addFeatureAspectToFeature'(featureName){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        // And the parent component
+        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+
+        ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureComponent);
 
     },
 

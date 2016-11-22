@@ -28,5 +28,23 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignComponents.componentParentIs'(componentType, componentName, componentParentName){
+
+        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
+
+        let parentName = 'NONE';
+        if(parentComponent){
+            parentName = parentComponent.componentName;
+        }
+
+        if(parentName != componentParentName){
+            throw new Meteor.Error("FAIL", "Expected parent to be " + componentParentName + " but got " + parentName);
+        } else {
+            return true;
+        }
+
+    }
+
 });
 
