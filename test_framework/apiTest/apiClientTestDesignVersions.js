@@ -38,5 +38,15 @@ Meteor.methods({
         const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
 
         ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
-    }
+    },
+
+    'testDesignVersions.viewDesignVersion'(designVersionName, userName, userRole){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const viewOptions = UserCurrentViewOptions.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
+
+        ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+    },
 });
