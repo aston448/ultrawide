@@ -44,9 +44,11 @@ class DesignValidationApi{
         return DesignVersionValidationServices.validateEditDesignVersion(userRole, thisVersion);
     };
 
-    validateViewDesignVersion(){
+    validateViewDesignVersion(userRole, designVersionId){
 
-        return DesignVersionValidationServices.validateViewDesignVersion();
+        const thisVersion = DesignVersions.findOne({_id: designVersionId});
+
+        return DesignVersionValidationServices.validateViewDesignVersion(userRole, thisVersion);
     }
 
     validatePublishDesignVersion(userRole, designVersionId){

@@ -77,9 +77,13 @@ class DesignVersionValidationServices{
 
     };
 
-    validateViewDesignVersion(){
+    validateViewDesignVersion(userRole, designVersion){
 
-        // Currently no restrictions on viewing a Design Version
+        // User must be a Designer for New versions
+        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_NEW){
+            if((userRole != RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_VIEW_NEW }
+        }
+
         return Validation.VALID;
     }
 

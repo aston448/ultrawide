@@ -19,6 +19,7 @@ export const DesignValidationErrors = {
 export const DesignVersionValidationErrors = {
     DESIGN_VERSION_INVALID_ROLE_UPDATE:     'Only a Designer can update Design Version details',
     DESIGN_VERSION_INVALID_ROLE_EDIT:       'Only a Designer can edit a Design Version',
+    DESIGN_VERSION_INVALID_ROLE_VIEW_NEW:   'Only a Designer can view an unpublished Design Version',
     DESIGN_VERSION_INVALID_ROLE_PUBLISH:    'Only a Designer can publish a Design Version',
     DESIGN_VERSION_INVALID_NAME_DUPLICATE:  'Design Version name already exists for another version in this Design',
     DESIGN_VERSION_INVALID_NUMBER_DUPLICATE:'Design Version number already exists for another version in this Design',

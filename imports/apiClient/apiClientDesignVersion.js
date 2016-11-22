@@ -292,7 +292,7 @@ class ClientDesignVersionServices{
     viewDesignVersion(userRole, viewOptions, userContext, designVersion, progressDataValue){
 
         // Validation
-        let result = DesignVersionValidationApi.validateViewDesignVersion();
+        let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersion._id);
 
         if(result != Validation.VALID){
             log((msg) => console.log(msg), LogLevel.WARNING, result);
