@@ -32,12 +32,17 @@ class ChimpMochaTestServices{
 
 
             // Parse ---------------------------------------------------------------------------------------------------
-            let resultsJson = [];
+            if(cleanText.length > 0) {
+                let resultsJson = [];
 
-            try{
-                resultsJson = JSON.parse(cleanText);
-            } catch (e) {
-                log((msg) => console.log(msg), LogLevel.ERROR, "Failed to parse mocha tests file: {}", e);
+                try {
+                    resultsJson = JSON.parse(cleanText);
+                } catch (e) {
+                    log((msg) => console.log(msg), LogLevel.ERROR, "Failed to parse mocha tests file: {}", e);
+                    return [];
+                }
+            } else {
+                log((msg) => console.log(msg), LogLevel.WARNING, "No integration test data found", e);
                 return [];
             }
 
