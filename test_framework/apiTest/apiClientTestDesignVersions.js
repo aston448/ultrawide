@@ -47,6 +47,6 @@ Meteor.methods({
         const viewOptions = UserCurrentViewOptions.findOne({userId: user.userId});
         const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
 
-        ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+        ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion, false);
     },
 });

@@ -48,7 +48,7 @@ class DesignVersion extends Component {
             userRole,
             viewOptions,
             userContext,
-            dv._id,
+            dv,
             currentProgressDataValue
         );
     }
