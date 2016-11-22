@@ -6,7 +6,6 @@ import { UserCurrentEditContext }   from '../../imports/collections/context/user
 import { UserCurrentViewOptions }   from '../../imports/collections/context/user_current_view_options.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
-import ClientDesignServices             from '../../imports/apiClient/apiClientDesign.js'
 import ClientDesignVersionServices      from '../../imports/apiClient/apiClientDesignVersion.js';
 
 import {RoleType} from '../../imports/constants/constants.js';
@@ -30,4 +29,14 @@ Meteor.methods({
 
         ClientDesignVersionServices.unpublishDesignVersion(userRole, userContext, designVersion._id);
     },
+
+    'testDesignVersions.editDesignVersion'(designVersionName, userName, userRole){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const viewOptions = UserCurrentViewOptions.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
+
+        ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+    }
 });

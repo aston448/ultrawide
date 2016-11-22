@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
+import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
@@ -11,6 +12,19 @@ Meteor.methods({
         const design = Designs.findOne({designName: designName});
         const user = UserRoles.findOne({userName: username});
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+
+        if(userContext.designId != design._id){
+            throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: " + design._id);
+        }
+    },
+
+    'verifyUserContext.designVersionIs'(designVersionName, username){
+        // Assume that Design is set in user context before checking Design Version
+        const user = UserRoles.findOne({userName: username});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
+
 
 
         if(userContext.designId != design._id){
