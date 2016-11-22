@@ -27,8 +27,8 @@ Meteor.methods({
 
 
 
-        if(userContext.designId != design._id){
-            throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: " + design._id);
+        if(userContext.designVersionId != designVersion._id){
+            throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designVersionId + " expected: " + designVersion._id);
         }
     },
 
