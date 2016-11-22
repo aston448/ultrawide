@@ -451,8 +451,9 @@ class DesignComponentServices{
 
 
     // Save the narrative for a feature component
-    updateFeatureNarrative(featureId, rawText, plainText){
+    updateFeatureNarrative(featureId, plainText, rawText){
         if(Meteor.isServer) {
+            console.log
             DesignComponents.update(
                 {_id: featureId},
                 {

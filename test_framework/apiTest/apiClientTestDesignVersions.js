@@ -12,6 +12,14 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
+    'testDesignVersions.selectDesignVersion'(designVersionName, userName){
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
+
+        ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
+    },
+
     'testDesignVersions.publishDesignVersion'(designVersionName, userName, userRole){
 
         const user = UserRoles.findOne({userName: userName});
@@ -49,4 +57,23 @@ Meteor.methods({
 
         ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion, false);
     },
+
+    'testDesignVersions.updateDesignVersionName'(newName, userRole, userName){
+
+        // Assumption that DV is always selected before it can be updated
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        ClientDesignVersionServices.updateDesignVersionName(userRole, userContext.designVersionId, newName)
+    },
+
+    'testDesignVersions.updateDesignVersionNumber'(newNumber, userRole, userName){
+
+        // Assumption that DV is always selected before it can be updated
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        ClientDesignVersionServices.updateDesignVersionNumber(userRole, userContext.designVersionId, newNumber)
+    },
+
 });

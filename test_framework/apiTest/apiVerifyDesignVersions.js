@@ -38,4 +38,36 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "Expected DV status not to be " + newStatus);
         }
     },
+
+    'verifyDesignVersions.currentDesignVersionNameIs'(designVersionName, userName){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({
+            designId: userContext.designId,
+            designVersionId: userContext.designVersionId
+        });
+
+        if(designVersion.designVersionName === designVersionName){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected DV name to be " + designVersionName + " but got " + designVersion.designVersionName);
+        }
+    },
+
+    'verifyDesignVersions.currentDesignVersionNumberIs'(designVersionNumber, userName){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({
+            designId: userContext.designId,
+            designVersionId: userContext.designVersionId
+        });
+
+        if(designVersion.designVersionNumber === designVersionNumber){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected DV number to be " + designVersionNumber + " but got " + designVersion.designVersionNumber);
+        }
+    },
 });
