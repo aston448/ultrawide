@@ -45,20 +45,11 @@ export default class ProgressIndicator extends Component {
 
         const {indicatorType, componentType, progressData} = this.props;
 
-        let lGlyph = 'stop';
-        // let blGlyph = 'stop';
-        let rGlyph = 'stop';
-        // let brGlyph = 'stop';
-
         let iClass = 'progress-empty';
         let iCount = 0;
 
-        let lClass = 'progress-pending';
-        // let blClass = '';
-        let rClass = 'progress-pending';
-        // let brClass = 'progress-pending';
-
-
+        let passes = 'progress-pending';
+        let fails = 'progress-pending';
 
 
         switch(componentType){
@@ -73,8 +64,8 @@ export default class ProgressIndicator extends Component {
                         break;
                     case 'TEST':
                         // TODO - get summary data later
-                        lClass = 'progress-invisible';
-                        rClass = 'progress-invisible';
+                        passes = 'progress-invisible';
+                        fails = 'progress-invisible';
 
                 }
                 break;
@@ -91,11 +82,11 @@ export default class ProgressIndicator extends Component {
                     case 'TEST':
                         // Set tests
                         if(progressData.passingTestsCount > 0){
-                            lClass = 'progress-green';
+                            passes = 'progress-green';
                         }
 
                         if(progressData.failingTestsCount > 0){
-                            rClass = 'progress-red';
+                            fails = 'progress-red';
                         }
                 }
 
@@ -104,8 +95,8 @@ export default class ProgressIndicator extends Component {
                 break;
             default:
                 iClass = 'progress-impl-invisible';
-                lClass = 'progress-invisible';
-                rClass = 'progress-invisible';
+                passes = 'progress-invisible';
+                fails = 'progress-invisible';
         }
 
         let implSection =
@@ -117,10 +108,10 @@ export default class ProgressIndicator extends Component {
             <Grid className="close-grid-progress">
                 <Row>
                     <Col sm={6} className="close-col">
-                        <div className={lClass}> </div>
+                        <div className={passes}> </div>
                     </Col>
                     <Col sm={6} className="close-col">
-                        <div className={rClass}> </div>
+                        <div className={fails}> </div>
                     </Col>
                 </Row>
             </Grid>;

@@ -1015,7 +1015,7 @@ class ClientContainerServices{
                             workPackageId: userContext.workPackageId,
                             mashComponentType: ComponentType.FEATURE
                         },
-                        {sort:{mashItemIndex: 1}}
+                        {sort:{mashItemFeatureIndex: 1}, reactive:false}    // Features have their own sorting so as to get a global order
                     ).fetch();
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Found {} Features in total", intTestMash.length);
@@ -1050,7 +1050,7 @@ class ClientContainerServices{
                             mashComponentType: ComponentType.FEATURE_ASPECT,
                             designFeatureReferenceId: selectedDesignComponent.componentReferenceId
                         },
-                        {sort:{mashItemIndex: 1}}
+                        {sort:{mashItemIndex: 1}, reactive:false}
                     ).fetch();
 
                 case ComponentType.FEATURE_ASPECT:
@@ -1064,7 +1064,7 @@ class ClientContainerServices{
                             mashComponentType: ComponentType.SCENARIO,
                             designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
                         },
-                        {sort:{mashItemIndex: 1}}
+                        {sort:{mashItemIndex: 1}, reactive:false}
                     ).fetch();
 
                 case ComponentType.SCENARIO:
@@ -1078,7 +1078,7 @@ class ClientContainerServices{
                             mashComponentType: ComponentType.SCENARIO,
                             designScenarioReferenceId: selectedDesignComponent.componentReferenceId
                         },
-                        {sort:{mashItemIndex: 1}}
+                        {sort:{mashItemIndex: 1}, reactive:false}
                     ).fetch();
 
                 default:
@@ -1110,7 +1110,7 @@ class ClientContainerServices{
             // Iterate up until we reach top of tree
             found = false;
 
-            while(parentRefId != 'NONE' && !found){
+            while((parentRefId != 'NONE') && !found){
                 // Get next parent up
 
                 parentRefId = DesignComponents.findOne({
@@ -1144,7 +1144,7 @@ class ClientContainerServices{
             // Iterate up until we reach top of tree
             found = false;
 
-            while(parentRefId != 'NONE' && !found){
+            while((parentRefId != 'NONE') && !found){
                 // Get next parent up
 
                 parentRefId = DesignUpdateComponents.findOne({

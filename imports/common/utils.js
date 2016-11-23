@@ -304,8 +304,10 @@ export function log(callback, level, message, ...vars){
             finalMessage = finalMessage.replace('{}', item);
         });
 
+        let date = new Date();
+
         // Callback so the actual line number of the calling code is logged
-        callback(level + finalMessage);
+        callback(level + ' ' + date.getMinutes() + ':' + date.getSeconds() +'.' + date.getMilliseconds() + ' ' + finalMessage);
     }
 
 }

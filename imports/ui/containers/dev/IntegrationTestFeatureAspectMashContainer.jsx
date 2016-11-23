@@ -40,9 +40,13 @@ class IntegrationTestFeatureAspectsMashList extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return true;
+    }
+
     renderFeatureAspects(mashData){
 
-        //console.log("Rendering mash list of length " + mashData.length);
+        console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
             if(mashItem) {

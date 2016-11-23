@@ -42,23 +42,31 @@ class IntegrationTestFeatureAspectMashItem extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return (nextProps.userContext != this.props.userContext);
+    }
+
     render(){
         const { mashItem, userContext } = this.props;
 
-        return(
-            <div>
-                <InputGroup>
-                    <div className={"mash-aspect"}>
-                        {mashItem.designComponentName}
-                    </div>
-                </InputGroup>
-                <IntegrationTestScenarioMashContainer params={{
-                    userContext:    userContext,
-                    parentMash:     mashItem,
-                    displayContext: DisplayContext.INT_TEST_FEATURE_ASPECT
-                }}/>
-            </div>
-        )
+        if(mashItem.hasChildren){
+            return (
+                <div>
+                    <InputGroup>
+                        <div className={"mash-aspect"}>
+                            {mashItem.designComponentName}
+                        </div>
+                    </InputGroup>
+                    <IntegrationTestScenarioMashContainer params={{
+                        userContext: userContext,
+                        parentMash: mashItem,
+                        displayContext: DisplayContext.INT_TEST_FEATURE_ASPECT
+                    }}/>
+                </div>
+            )
+        } else {
+            return(<div></div>);
+        }
     }
 
 }

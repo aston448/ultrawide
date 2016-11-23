@@ -44,7 +44,7 @@ class TextLookups {
 
         switch(mashTestStatus){
             case MashTestStatus.MASH_NOT_LINKED:
-                return 'Not Implemented';
+                return 'No Test';
             case MashTestStatus.MASH_PENDING:
                 return 'Pending';
             case MashTestStatus.MASH_PASS:

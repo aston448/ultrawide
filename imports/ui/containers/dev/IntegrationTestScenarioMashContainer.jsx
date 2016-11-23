@@ -34,6 +34,10 @@ class IntegrationTestScenarioMashList extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return (nextProps.userContext != this.props.userContext);
+    }
+
     renderScenarios(mashData){
 
         //console.log("Rendering mash list of length " + mashData.length);

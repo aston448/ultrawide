@@ -48,40 +48,48 @@ class IntegrationTestFeatureMashItem extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return (nextProps.userContext != this.props.userContext);
+    }
+
     hasFeatureAspects(userContext, featureId){
-        return ClientMashDataServices.featureHasAspects(userContext, featureId)
+        return true;
     }
 
 
     render(){
         const { mashItem, userContext } = this.props;
 
-        let container = '';
-        if(this.hasFeatureAspects(userContext, mashItem.designComponentId)){
-            container =
-                <IntegrationTestFeatureAspectMashContainer params={{
-                    userContext:    userContext,
-                    featureMash:    mashItem
-                }}/>;
-        } else {
-            container =
-                <IntegrationTestScenarioMashContainer params={{
-                    userContext:    userContext,
-                    parentMash:     mashItem,
-                    displayContext: DisplayContext.INT_TEST_FEATURE
-                }}/>;
-        }
+        if(mashItem.hasChildren) {
+            let container = '';
+            if (this.hasFeatureAspects(userContext, mashItem.designComponentId)) {
+                container =
+                    <IntegrationTestFeatureAspectMashContainer params={{
+                        userContext: userContext,
+                        featureMash: mashItem
+                    }}/>;
+            } else {
+                container =
+                    <IntegrationTestScenarioMashContainer params={{
+                        userContext: userContext,
+                        parentMash: mashItem,
+                        displayContext: DisplayContext.INT_TEST_FEATURE
+                    }}/>;
+            }
 
-        return(
-            <div>
-                <InputGroup>
-                    <div className={"mash-feature"}>
-                        {mashItem.designComponentName}
-                    </div>
-                </InputGroup>
-                {container}
-            </div>
-        )
+            return (
+                <div>
+                    <InputGroup>
+                        <div className={"mash-feature"}>
+                            {mashItem.designComponentName}
+                        </div>
+                    </InputGroup>
+                    {container}
+                </div>
+            )
+        } else {
+            return (<div></div>);
+        }
     }
 
 }

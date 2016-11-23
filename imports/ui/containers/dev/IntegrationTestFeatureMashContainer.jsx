@@ -49,6 +49,10 @@ class IntegrationTestFeatureMashList extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return (nextProps.userContext != this.props.userContext);
+    }
+
 
     renderFeatures(mashData){
 
@@ -132,19 +136,19 @@ class IntegrationTestFeatureMashList extends Component {
         }
 
 
-        let mainPanel = 'Select a design item';
+        let mainPanel = 'Select a Feature';
 
         if(designMashItemData.length > 0) {
             switch(userContext.designComponentType){
-                case ComponentType.APPLICATION:
-                case ComponentType.DESIGN_SECTION:
-                    mainPanel =
-                        <Panel className="panel-text panel-text-body" header={panelHeader}>
-                            {this.renderFeatures(designMashItemData)}
-                        </Panel>;
-                    break;
+                // case ComponentType.APPLICATION:
+                // case ComponentType.DESIGN_SECTION:
+                //     mainPanel =
+                //         <Panel className="panel-text panel-text-body" header={panelHeader}>
+                //             {this.renderFeatures(designMashItemData)}
+                //         </Panel>;
+                //     break;
                 case ComponentType.FEATURE:
-                    // No reatures to render so go straight on to Feature Aspects (if any)
+                    // Render Aspects or Scenarios (if any)
                     if(ClientMashDataServices.featureHasAspects(userContext, userContext.designComponentId)){
                         mainPanel =
                             <Panel className="panel-text panel-text-body" header={panelHeader}>
