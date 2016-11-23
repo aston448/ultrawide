@@ -38,6 +38,10 @@ class IntegrationTestScenarioMashItem extends Component {
 
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        return true;
+    }
+
     render(){
         const { mashItem, userContext } = this.props;
 
@@ -47,12 +51,12 @@ class IntegrationTestScenarioMashItem extends Component {
 
             <Grid>
                 <Row>
-                    <Col md={9}>
+                    <Col md={10}>
                         <div className={'mash-scenario '  + testStyle}>
                             {mashItem.designComponentName}
                         </div>
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
                         <div className={'mash-scenario-result ' + testStyle}>
                             {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
                         </div>
