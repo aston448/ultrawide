@@ -32,7 +32,7 @@ Meteor.methods({
 
         const designComponentsCount = DesignComponents.find({componentType: componentType, componentName: componentName}).count();
 
-        if(designComponentCount === componentCount){
+        if(designComponentsCount === componentCount){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Found " + designComponentsCount + " components of type " + componentType + " with name " + componentName + ". Expecting " + componentCount);
