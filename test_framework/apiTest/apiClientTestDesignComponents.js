@@ -132,4 +132,16 @@ Meteor.methods({
 
     },
 
+    'testDesignComponents.updateComponentNameInMode'(componentType, oldName, newName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+
+        const component = DesignComponents.findOne({componentType: componentType, componentName: oldName});
+        const rawName = DesignComponentModules.getRawTextFor(newName);
+
+        ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName)
+
+    },
+
 });

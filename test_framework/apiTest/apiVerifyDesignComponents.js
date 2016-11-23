@@ -28,6 +28,17 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignComponents.componentCountCalledIs'(componentType, componentName, componentCount){
+
+        const designComponentsCount = DesignComponents.find({componentType: componentType, componentName: componentName}).count();
+
+        if(designComponentCount === componentCount){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Found " + designComponentsCount + " components of type " + componentType + " with name " + componentName + ". Expecting " + componentCount);
+        }
+    },
+
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentParentIs'(componentType, componentName, componentParentName){
 
