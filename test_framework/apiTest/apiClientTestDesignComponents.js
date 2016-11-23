@@ -114,7 +114,7 @@ Meteor.methods({
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
         const featureAspectComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: featureAspectName, componentParentId: featureComponent._id});
 
-        ClientDesignComponentServices.addScenario(view, mode, featureComponent);
+        ClientDesignComponentServices.addScenario(view, mode, featureAspectComponent);
 
     },
 
