@@ -271,8 +271,8 @@ export function getIdFromMap(map, oldId) {
 export function log(callback, level, message, ...vars){
 
     // Change these to change the output
-    // const logLevel = LogLevel.TRACE;
-     const logLevel = LogLevel.DEBUG;
+     const logLevel = LogLevel.TRACE;
+    // const logLevel = LogLevel.DEBUG;
     // const logLevel = LogLevel.INFO;
     // const logLevel = LogLevel.NONE;
 

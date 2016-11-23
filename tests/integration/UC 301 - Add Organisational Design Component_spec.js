@@ -41,7 +41,7 @@ describe('UC 301 - Add Organisational Design Component', function(){
         // Setup
         // Edit the default Design Version
         server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
-        // Add an Application - Application1
+        // Add an Application
         server.call('testDesignComponents.addApplication', 'gloria');
 
         // Execute
@@ -59,7 +59,7 @@ describe('UC 301 - Add Organisational Design Component', function(){
         // Setup
         // Edit the default Design Version
         server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
-        // Add an Application - Application1
+        // Add an Application
         server.call('testDesignComponents.addApplication', 'gloria');
         // Add a Design Section - update name to remove ambiguity
         server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
@@ -78,7 +78,7 @@ describe('UC 301 - Add Organisational Design Component', function(){
         // Setup
         // Edit the default Design Version
         server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
-        // Add an Application - Application1
+        // Add an Application
         server.call('testDesignComponents.addApplication', 'gloria');
         // Add a Design Section - update name to remove ambiguity
         server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);

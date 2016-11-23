@@ -26,6 +26,19 @@ Meteor.methods({
 
     },
 
+    'testDesignComponents.addApplicationInMode'(userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
+
+    },
+
     'testDesignComponents.addDesignSectionToApplication'(applicationName){
 
         // Assume view is correct
@@ -77,6 +90,34 @@ Meteor.methods({
         ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureComponent);
 
     },
+
+    'testDesignComponents.addScenarioToFeature'(featureName){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        // And the parent component
+        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+
+        ClientDesignComponentServices.addScenario(view, mode, featureComponent);
+
+    },
+
+    'testDesignComponents.addScenarioToFeatureAspect'(featureName, featureAspectName){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        // As Feature Aspects don't have to have unique names - and very likely won't - double check by getting the Feature too
+        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+        const featureAspectComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: featureAspectName, componentParentId: featureComponent._id});
+
+        ClientDesignComponentServices.addScenario(view, mode, featureComponent);
+
+    },
+
 
     'testDesignComponents.updateComponentName'(componentType, oldName, newName){
 

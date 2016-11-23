@@ -28,6 +28,7 @@ Meteor.methods({
         }
     },
 
+    // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentParentIs'(componentType, componentName, componentParentName){
 
         const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
