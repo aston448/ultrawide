@@ -45,7 +45,7 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 1);
 
@@ -276,7 +276,7 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Feature1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 1);
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 1);
