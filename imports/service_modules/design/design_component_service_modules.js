@@ -274,7 +274,7 @@ class DesignComponentModules{
 
         // If no components then leave as default
         if(peerComponents.length > 0){
-            console.log("Highest peer is " + peerComponents[0].componentName);
+            //console.log("Highest peer is " + peerComponents[0].componentName);
 
             let newIndex = peerComponents[0].componentIndex + 100;
 
