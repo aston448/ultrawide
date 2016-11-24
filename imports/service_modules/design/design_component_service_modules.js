@@ -263,13 +263,13 @@ class DesignComponentModules{
     setIndex(componentId, componentType, parentId){
 
         // Get the max index of OTHER components of this type under the same parent
-        const peerComponents = DesignComponents.find({_id: {$ne: componentId}, componentType: componentType, componentParentId: parentId}, {sort:{componentIndex: -1}});
+        const peerComponents = DesignComponents.find({_id: {$ne: componentId}, componentType: componentType, componentParentId: parentId}, {sort:{componentIndex: -1}}).fetch();
 
-        // If no components then leave as default of 100
-        if(peerComponents.count() > 0){
-            //console.log("Highest peer is " + peerComponents.fetch()[0].componentName);
+        // If no components then leave as default
+        if(peerComponents.length > 0){
+            console.log("Highest peer is " + peerComponents.fetch()[0].componentName);
 
-            let newIndex = peerComponents.fetch()[0].componentIndex + 100;
+            let newIndex = peerComponents[0].componentIndex + 100;
 
             DesignComponents.update(
                 {_id: componentId},
