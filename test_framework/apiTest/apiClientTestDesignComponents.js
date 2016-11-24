@@ -144,4 +144,17 @@ Meteor.methods({
 
     },
 
+    'testDesignComponents.removeComponent'(componentType, componentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        ClientDesignComponentServices.removeDesignComponent(view, mode, designComponent, userContext);
+
+    }
+
 });

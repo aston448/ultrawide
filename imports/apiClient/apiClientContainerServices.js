@@ -1050,7 +1050,7 @@ class ClientContainerServices{
                             mashComponentType: ComponentType.FEATURE_ASPECT,
                             designFeatureReferenceId: selectedDesignComponent.componentReferenceId
                         },
-                        {sort:{mashItemIndex: 1}, reactive:false}
+                        {sort:{mashItemIndex: 1}}
                     ).fetch();
 
                 case ComponentType.FEATURE_ASPECT:
@@ -1064,7 +1064,7 @@ class ClientContainerServices{
                             mashComponentType: ComponentType.SCENARIO,
                             designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
                         },
-                        {sort:{mashItemIndex: 1}, reactive:false}
+                        {sort:{mashItemIndex: 1}}
                     ).fetch();
 
                 case ComponentType.SCENARIO:
@@ -1078,7 +1078,7 @@ class ClientContainerServices{
                             mashComponentType: ComponentType.SCENARIO,
                             designScenarioReferenceId: selectedDesignComponent.componentReferenceId
                         },
-                        {sort:{mashItemIndex: 1}, reactive:false}
+                        {sort:{mashItemIndex: 1}}
                     ).fetch();
 
                 default:

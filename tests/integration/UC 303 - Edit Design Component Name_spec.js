@@ -136,7 +136,7 @@ describe('UC 303 - Edit Design Component Name', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
         server.call('testDesignComponents.addScenarioToFeature', 'Feature2');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario2');
-        // Check both features are there
+        // Check both scenarios are there
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 1);
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario2', 1);
 
