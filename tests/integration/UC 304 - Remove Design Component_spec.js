@@ -91,6 +91,11 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
+        // Need to remove the default Feature Aspects
+        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Interface', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Actions', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Conditions', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Consequences', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute
         server.call('testDesignComponents.removeComponent', ComponentType.FEATURE, 'Feature1', 'gloria', ViewMode.MODE_EDIT);
