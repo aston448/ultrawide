@@ -206,7 +206,7 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
 
@@ -227,7 +227,7 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
@@ -250,7 +250,7 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
@@ -273,7 +273,7 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
         server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
