@@ -41,53 +41,443 @@ describe('UC 305 - Move Design Component', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
         // Check Section1 position
         server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
         // Add a second app
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2');
 
-        // Execute - move Section1 from Application1 to Application2
+        // Execute - move Section1 to Application2
         server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'Section1', ComponentType.APPLICATION, 'Application2', ViewMode.MODE_EDIT);
 
         // Verify new parent
         server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application2');
     });
 
-    it('A Design Section may be moved into another Design Section');
+    it('A Design Section may be moved into another Design Section', function(){
 
-    it('A Design Section inside a Design Section may be moved to under an Application');
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section2');
+        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1');
+        // Check SubSection1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'SubSection1', 'Section1');
 
-    it('A Feature may be moved form one Design Section to another Design Section');
+        // Execute - move SubSection1 to Section2
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'SubSection1', ComponentType.DESIGN_SECTION, 'Section2', ViewMode.MODE_EDIT);
 
-    it('A Feature Aspect may be moved from one Feature to another Feature');
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'SubSection1', 'Section2');
+    });
 
-    it('A Scenario may be moved from a Feature to a Feature Aspect');
+    it('A Design Section inside a Design Section may be moved to under an Application', function() {
 
-    it('A Scenario may be moved from a Feature Aspect to a Feature');
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1');
+        // Check SubSection1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'SubSection1', 'Section1');
 
-    it('A Scenario may be moved from one Feature Aspect to another Feature Aspect');
+        // Execute - move SubSection1 to Application1
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'SubSection1', ComponentType.APPLICATION, 'Application1', ViewMode.MODE_EDIT);
 
-    it('A Scenario may be moved from one Feature to another Feature');
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'SubSection1', 'Application1');
+    });
+
+    it('A Feature may be moved from one Design Section to another Design Section', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section2');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        // Check Feature1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+
+        // Execute - move Feature1 to Section2
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE, 'Feature1', ComponentType.DESIGN_SECTION, 'Section2', ViewMode.MODE_EDIT);
+
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section2');
+    });
+
+    it('A Feature Aspect may be moved from one Feature to another Feature', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+
+
+        // Check Aspect1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+
+        // Execute - move Aspect1 to Feature2
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', ComponentType.FEATURE, 'Feature2', ViewMode.MODE_EDIT);
+
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature2');
+
+    });
+
+    it('A Scenario may be moved from a Feature to a Feature Aspect', function() {
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        // Check Scenario1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Feature1');
+
+        // Execute - move Scenario1 to Aspect1
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.FEATURE_ASPECT, 'Aspect1', ViewMode.MODE_EDIT);
+
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+    });
+
+    it('A Scenario may be moved from a Feature Aspect to a Feature', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        // Check Scenario1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+
+        // Execute - move Scenario1 to Feature1
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.FEATURE, 'Feature1', ViewMode.MODE_EDIT);
+
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Feature1');
+    });
+
+    it('A Scenario may be moved from one Feature Aspect to another Feature Aspect', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect2');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        // Check Scenario1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+
+        // Execute - move Scenario1 to Aspect2
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.FEATURE_ASPECT, 'Aspect2', ViewMode.MODE_EDIT);
+
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Feature1');
+    });
+
+    it('A Scenario may be moved from one Feature to another Feature', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
+        server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        // Check Scenario1 initial position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Feature1');
+
+        // Execute - move Scenario1 to Feature2
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.FEATURE, 'Feature2', ViewMode.MODE_EDIT);
+
+        // Verify new parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Feature2');
+    });
 
 
     // Conditions
-    it('Design Components can only be moved when in edit mode');
+    it('Design Components can only be moved when in edit mode', function(){
 
-    it('Applications cannot be moved to another location');
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        // Check Section1 position
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+        // Add a second app
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2');
 
-    it('Design Sections can only be moved to be inside other Design Sections or to be under an Application');
+        // Execute - move Section1 to Application2 in View Only mode
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'Section1', ComponentType.APPLICATION, 'Application2', ViewMode.MODE_VIEW);
 
-    it('Features can only be moved to be inside a Design Section');
+        // Verify move failed
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+    });
 
-    it('Feature Aspects can only be moved to be under a Feature');
+    it('Applications cannot be moved to other Applications or Design Sections or Features or Feature Aspects', function(){
 
-    it('Scenarios can only be moved to be under a Feature or Feature Aspect');
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
 
+        // Execute - try to move Application1 to Application2
+        server.call('testDesignComponents.moveComponent', ComponentType.APPLICATION, 'Application1', ComponentType.APPLICATION, 'Application2', ViewMode.MODE_EDIT);
+
+        // Verify - App still has no parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
+
+        // Execute - try to move Application1 to Section1
+        server.call('testDesignComponents.moveComponent', ComponentType.APPLICATION, 'Application1', ComponentType.DESIGN_SECTION, 'Section1', ViewMode.MODE_EDIT);
+
+        // Verify - App still has no parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
+
+        // Execute - try to move Application1 to Feature1
+        server.call('testDesignComponents.moveComponent', ComponentType.APPLICATION, 'Application1', ComponentType.FEATURE, 'Feature1', ViewMode.MODE_EDIT);
+
+        // Verify - App still has no parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
+
+        // Execute - try to move Application1 to Aspect1
+        server.call('testDesignComponents.moveComponent', ComponentType.APPLICATION, 'Application1', ComponentType.FEATURE_ASPECT, 'Aspect1', ViewMode.MODE_EDIT);
+
+        // Verify - App still has no parent
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
+    });
+
+    it('Design Sections cannot be moved to Features or Feature Aspects', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+
+        // Execute - try to move Section1 to Feature1
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'Section1', ComponentType.FEATURE, 'Feature1', ViewMode.MODE_EDIT);
+
+        // Verify - Section is still under App
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+
+        // Execute - try to move Section1 to Aspect1
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'Section1', ComponentType.FEATURE_ASPECT, 'Aspect1', ViewMode.MODE_EDIT);
+
+        // Verify - Section is still under App
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+    });
+
+    it('Features cannot be moved to Applications or other Features or Feature Aspects', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+
+        // Execute - try to move Feature1 to Application1
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE, 'Feature1', ComponentType.APPLICATION, 'Application1', ViewMode.MODE_EDIT);
+
+        // Verify - Feature is still under Section1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+
+        // Execute - try to move Feature1 to Feature2
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE, 'Feature1', ComponentType.FEATURE, 'Feature2', ViewMode.MODE_EDIT);
+
+        // Verify - Feature is still under Section1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+
+        // Execute - try to move Feature1 to Aspect1
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE, 'Feature1', ComponentType.FEATURE_ASPECT, 'Aspect1', ViewMode.MODE_EDIT);
+
+        // Verify - Feature is still under Section1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+    });
+
+    it('Feature Aspects cannot be moved to Applications or Design Sections or other Feature Aspects', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect2');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+
+        // Execute - try to move Aspect1 to Application1
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', ComponentType.APPLICATION, 'Application1', ViewMode.MODE_EDIT);
+
+        // Verify - Aspect is still under Feature1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+
+        // Execute - try to move Aspect1 to Section1
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', ComponentType.DESIGN_SECTION, 'Section1', ViewMode.MODE_EDIT);
+
+        // Verify - Aspect is still under Feature1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+
+        // Execute - try to move Aspect1 to Aspect2
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', ComponentType.FEATURE_ASPECT, 'Aspect2', ViewMode.MODE_EDIT);
+
+        // Verify - Aspect is still under Feature1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+    });
+
+    it('Scenarios cannot be moved to Applications or Design Sections', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+
+        // Execute - try to move Scenario1 to Application1
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.APPLICATION, 'Application1', ViewMode.MODE_EDIT);
+
+        // Verify - Scenario1 is still under Aspect1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+
+        // Execute - try to move Aspect1 to Section1
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.DESIGN_SECTION, 'Section1', ViewMode.MODE_EDIT);
+
+        // Verify - Scenario1 is still under Aspect1
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+    });
+
+    it('No Design Component can be moved to a Scenario', function(){
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario2');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario2', 'Aspect1');
+
+        // Try to move Application1 to Scenario1
+        server.call('testDesignComponents.moveComponent', ComponentType.APPLICATION, 'Application1', ComponentType.SCENARIO, 'Scenario1', ViewMode.MODE_EDIT);
+
+        // Verify - not moved
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, 'Application1', 'NONE');
+
+        // Try to move Section1 to Scenario1
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'Section1', ComponentType.SCENARIO, 'Scenario1', ViewMode.MODE_EDIT);
+
+        // Verify - not moved
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
+
+        // Try to move Feature1 to Scenario1
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE, 'Feature1', ComponentType.SCENARIO, 'Scenario1', ViewMode.MODE_EDIT);
+
+        // Verify - not moved
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, 'Feature1', 'Section1');
+
+        // Try to move Aspect1 to Scenario1
+        server.call('testDesignComponents.moveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', ComponentType.SCENARIO, 'Scenario1', ViewMode.MODE_EDIT);
+
+        // Verify - not moved
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Feature1');
+
+        // Try to move Scenario1 to Scenario2
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.SCENARIO, 'Scenario2', ViewMode.MODE_EDIT);
+
+        // Verify - not moved
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect1');
+
+    });
 
     // Consequences
     it('When a Design Section is moved its level changes according to where it is placed');
+
+    it('When a Feature Aspect is moved to a new Feature the feature reference for all its children is updated');
+
+    it('When a Scenario is moved to a new Feature its feature reference is updated');
 
     it('When a Design Component is moved in a base Design Version, any related Design Updates are updated');
 
