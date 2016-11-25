@@ -69,7 +69,26 @@ Meteor.methods({
             return true;
         }
 
-    }
+    },
+
+    // Note - be careful when testing to make sure that component names are unique before using this check
+    'verifyDesignComponents.componentFeatureIs'(componentType, componentName, componentFeature){
+
+        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const featureComponent = DesignComponents.findOne({componentReferenceId: designComponent.componentFeatureReferenceId});
+
+        let featureName = 'NONE';
+        if(featureComponent){
+            featureName = featureComponent.componentName;
+        }
+
+        if(featureName != componentFeature){
+            throw new Meteor.Error("FAIL", "Expected Feature to be " + componentFeature + " but got " + featureName);
+        } else {
+            return true;
+        }
+
+    },
 
 });
 

@@ -474,6 +474,7 @@ describe('UC 305 - Move Design Component', function(){
 
     // Consequences
     it('When a Design Section is moved its level changes according to where it is placed', function(){
+
         // Setup
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
@@ -501,7 +502,32 @@ describe('UC 305 - Move Design Component', function(){
 
     it('When a Feature Aspect is moved to a new Feature the feature reference for all its children is updated');
 
-    it('When a Scenario is moved to a new Feature its feature reference is updated');
+    it('When a Scenario is moved to a new Feature its feature reference is updated', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Aspect1', 'Feature1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
+        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature2');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect2');
+        server.call('verifyDesignComponents.componentFeatureIs', ComponentType.SCENARIO, 'Scenario1', 'Feature1');
+
+        // Execute - move Scenario1 to Aspect2
+        server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.FEATURE_ASPECT, 'Aspect2', ViewMode.MODE_EDIT);
+
+        // Validate - feature should now be Feature2
+        server.call('verifyDesignComponents.componentFeatureIs', ComponentType.SCENARIO, 'Scenario1', 'Feature2');
+
+    });
 
     it('When a Design Component is moved in a base Design Version, any related Design Updates are updated');
 
