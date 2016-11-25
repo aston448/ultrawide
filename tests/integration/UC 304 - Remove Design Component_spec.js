@@ -35,10 +35,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Scenario with no Scenario Steps may be removed from a Design Version', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
@@ -59,10 +57,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Feature Aspect with no Scenarios may be removed from a Design Version', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
@@ -81,10 +77,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Feature with no Feature Aspects or Scenarios may be removed from a Design Version', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
@@ -107,10 +101,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Design Section with no Features or sub sections may be removed from a Design Version', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
@@ -125,7 +117,6 @@ describe('UC 304 - Remove Design Component', function(){
     it('An Application with no Design sections may be removed from a Design Version', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
@@ -142,10 +133,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('Design Components can only be removed when in edit mode', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
 
@@ -159,10 +148,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('An Application may only be removed if it has no Design Sections', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
@@ -178,10 +165,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Design Section may only be removed if it has no sub sections', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
@@ -193,17 +178,15 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.removeComponent', ComponentType.DESIGN_SECTION, 'Section1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Section1', 1);
+        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
 
     });
 
     it ('A Design Section may only be removed if it has no Features', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
@@ -215,16 +198,14 @@ describe('UC 304 - Remove Design Component', function(){
         server.call('testDesignComponents.removeComponent', ComponentType.DESIGN_SECTION, 'Section1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Section1', 1);
+        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
     });
 
     it('A Feature may only be removed if it has no Feature Aspects', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
@@ -244,10 +225,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Feature may only be removed if it has no Scenarios', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
@@ -267,10 +246,8 @@ describe('UC 304 - Remove Design Component', function(){
     it('A Feature Aspect may only be removed if it has no Scenarios', function(){
 
         // Setup
-        // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
