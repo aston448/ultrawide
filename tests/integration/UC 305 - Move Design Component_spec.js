@@ -209,7 +209,7 @@ describe('UC 305 - Move Design Component', function(){
         server.call('testDesignComponents.moveComponent', ComponentType.SCENARIO, 'Scenario1', ComponentType.FEATURE_ASPECT, 'Aspect2', ViewMode.MODE_EDIT);
 
         // Verify new parent
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Feature1');
+        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, 'Scenario1', 'Aspect2');
     });
 
     it('A Scenario may be moved from one Feature to another Feature', function(){
