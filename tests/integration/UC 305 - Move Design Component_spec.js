@@ -515,7 +515,7 @@ describe('UC 305 - Move Design Component', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Aspect1', 'Feature1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature2');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect2');
