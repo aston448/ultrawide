@@ -473,7 +473,31 @@ describe('UC 305 - Move Design Component', function(){
     });
 
     // Consequences
-    it('When a Design Section is moved its level changes according to where it is placed');
+    it('When a Design Section is moved its level changes according to where it is placed', function(){
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1');
+        server.call('verifyDesignComponents.componentLevelIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        server.call('verifyDesignComponents.componentLevelIs', ComponentType.DESIGN_SECTION, 'SubSection1', 2);
+
+        // Execute - move sub section up to top level
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'SubSection1', ComponentType.APPLICATION, 'Application1', ViewMode.MODE_EDIT);
+
+        // Verify
+        server.call('verifyDesignComponents.componentLevelIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        server.call('verifyDesignComponents.componentLevelIs', ComponentType.DESIGN_SECTION, 'SubSection1', 1);
+
+        // Execute - move sub section back into Section1
+        server.call('testDesignComponents.moveComponent', ComponentType.DESIGN_SECTION, 'SubSection1', ComponentType.DESIGN_SECTION, 'Section1', ViewMode.MODE_EDIT);
+
+        // Verify
+        server.call('verifyDesignComponents.componentLevelIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        server.call('verifyDesignComponents.componentLevelIs', ComponentType.DESIGN_SECTION, 'SubSection1', 2);
+    });
 
     it('When a Feature Aspect is moved to a new Feature the feature reference for all its children is updated');
 

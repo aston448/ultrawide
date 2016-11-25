@@ -56,6 +56,19 @@ Meteor.methods({
             return true;
         }
 
+    },
+
+    // Note - be careful when testing to make sure that component names are unique before using this check
+    'verifyDesignComponents.componentLevelIs'(componentType, componentName, componentLevel){
+
+        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+
+        if(designComponent.componentLevel != componentLevel){
+            throw new Meteor.Error("FAIL", "Expected level to be " + componentLevel + " but got " + designComponent.componentLevel);
+        } else {
+            return true;
+        }
+
     }
 
 });
