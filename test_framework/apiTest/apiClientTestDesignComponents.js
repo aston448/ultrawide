@@ -8,7 +8,7 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
 import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
 
-import {RoleType, ViewType, ViewMode, ComponentType} from '../../imports/constants/constants.js';
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
@@ -153,7 +153,21 @@ Meteor.methods({
         const userContext = UserCurrentEditContext.findOne({userId: user.userId});
 
         const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+
         ClientDesignComponentServices.removeDesignComponent(view, mode, designComponent, userContext);
+
+    },
+
+    'testDesignComponents.moveComponent'(componentType, componentName, newParentType, newParentName, mode){
+
+        // Assume view and context is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const displayContext = DisplayContext.BASE_EDIT;
+
+        const movingComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const newParentComponent = DesignComponents.findOne({componentType: newParentType, componentName: newParentName});
+
+        ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
 
     }
 
