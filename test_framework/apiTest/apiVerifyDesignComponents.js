@@ -90,5 +90,20 @@ Meteor.methods({
 
     },
 
+    // Note - be careful when testing to make sure that component names are unique before using this check
+    'verifyDesignComponents.componentIsAboveComponent'(componentType, componentAboveName, componentBelowName){
+
+        const designComponentAbove = DesignComponents.findOne({componentType: componentType, componentName: componentAboveName});
+        const designComponentBelow = DesignComponents.findOne({componentType: componentType, componentName: componentBelowName});
+
+        // Components highest in the list have the lowest indexes
+        if(designComponentAbove.componentIndex >= designComponentBelow.componentIndex){
+            throw new Meteor.Error("FAIL", "Expected component " + componentAboveName + " to be above component " + componentBelowName + " in the list of " + componentType +"s");
+        } else {
+            return true;
+        }
+
+    },
+
 });
 

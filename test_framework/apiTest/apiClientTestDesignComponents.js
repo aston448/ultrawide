@@ -169,6 +169,19 @@ Meteor.methods({
 
         ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
 
+    },
+
+    'testDesignComponents.reorderComponent'(componentType, movingComponentName, targetComponentName, mode){
+
+        // Assume view and context is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const displayContext = DisplayContext.BASE_EDIT;
+
+        const movingComponent = DesignComponents.findOne({componentType: componentType, componentName: movingComponentName});
+        const targetComponent = DesignComponents.findOne({componentType: componentType, componentName: targetComponentName});
+
+        ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
+
     }
 
 });
