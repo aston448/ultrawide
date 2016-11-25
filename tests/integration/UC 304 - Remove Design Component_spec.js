@@ -84,12 +84,11 @@ describe('UC 304 - Remove Design Component', function(){
         // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
+        // Add design Section and Feature
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
         server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
         // Need to remove the default Feature Aspects
         server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Interface', 'gloria', ViewMode.MODE_EDIT);
@@ -114,7 +113,6 @@ describe('UC 304 - Remove Design Component', function(){
         // Add design Section and Feature and Scenario
         server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
 
         // Execute
@@ -130,8 +128,6 @@ describe('UC 304 - Remove Design Component', function(){
         // Add an App
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Add design Section and Feature and Scenario
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
         server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
 
         // Execute
