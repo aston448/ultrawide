@@ -193,11 +193,11 @@ describe('UC 306 - ReOrder Design Component List', function(){
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1, Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1, Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario2');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1, Aspect1');
+        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario3');
         // Check ordering is as created
         server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario1', 'Scenario2');
