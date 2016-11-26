@@ -1015,7 +1015,7 @@ class ClientContainerServices{
                             workPackageId: userContext.workPackageId,
                             mashComponentType: ComponentType.FEATURE
                         },
-                        {sort:{mashItemFeatureIndex: 1}, reactive:false}    // Features have their own sorting so as to get a global order
+                        {sort:{mashItemFeatureIndex: 1}}    // Features have their own sorting so as to get a global order
                     ).fetch();
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Found {} Features in total", intTestMash.length);

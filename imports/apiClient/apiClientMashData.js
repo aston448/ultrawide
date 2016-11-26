@@ -37,9 +37,9 @@ class ClientMashDataServices {
         this.createDevMashData(userContext);
 
         // Get the latest test results
-        this.updateTestData(viewOptions, userContext);
+        this.updateTestData(viewOptions, userContext, currentProgressDataValue);
 
-        store.dispatch(updateProgressData(!currentProgressDataValue));
+        //store.dispatch(updateProgressData(!currentProgressDataValue));
     }
 
     createDevMashData(userContext){
@@ -97,8 +97,10 @@ class ClientMashDataServices {
 
     }
 
-    updateTestData(viewOptions, userContext){
-        Meteor.call('mash.updateTestData', viewOptions, userContext);
+    updateTestData(viewOptions, userContext,currentProgressDataValue){
+        Meteor.call('mash.updateTestData', viewOptions, userContext, (err) => {
+            store.dispatch(updateProgressData(!currentProgressDataValue));
+        });
     };
 
     featureHasAspects(userContext, featureComponentId){

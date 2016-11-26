@@ -140,13 +140,13 @@ class IntegrationTestFeatureMashList extends Component {
 
         if(designMashItemData.length > 0) {
             switch(userContext.designComponentType){
-                // case ComponentType.APPLICATION:
-                // case ComponentType.DESIGN_SECTION:
-                //     mainPanel =
-                //         <Panel className="panel-text panel-text-body" header={panelHeader}>
-                //             {this.renderFeatures(designMashItemData)}
-                //         </Panel>;
-                //     break;
+                case ComponentType.APPLICATION:
+                case ComponentType.DESIGN_SECTION:
+                    mainPanel =
+                        <Panel className="panel-text panel-text-body" header={panelHeader}>
+                            {this.renderFeatures(designMashItemData)}
+                        </Panel>;
+                    break;
                 case ComponentType.FEATURE:
                     // Render Aspects or Scenarios (if any)
                     if(ClientMashDataServices.featureHasAspects(userContext, userContext.designComponentId)){

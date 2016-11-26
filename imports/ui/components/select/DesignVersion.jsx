@@ -60,6 +60,7 @@ class DesignVersion extends Component {
     onPublishDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.publishDesignVersion(
+            userRole,
             userContext,
             dv._id
         );
@@ -68,6 +69,7 @@ class DesignVersion extends Component {
     onUnPublishDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.unpublishDesignVersion(
+            userRole,
             userContext,
             dv._id
         );

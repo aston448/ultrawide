@@ -41,7 +41,7 @@ class DesignComponentServices{
             // Get the design id - this is added to the components for easier access to data
             let designId = DesignVersions.findOne({_id: designVersionId}).designId;
 
-            DesignComponents.insert(
+            let designComponentId = DesignComponents.insert(
                 {
                     componentReferenceId:           'TEMP',             // Will update this after component created
                     designId:                       designId,
@@ -57,60 +57,108 @@ class DesignComponentServices{
                     isNew:                          isNew
                 },
 
-                (error, result) => {
-                    if(error){
-                        // Error handler
-                        //console.log("Insert Design Component - Error: " + error);
-                    } else {
-                        //console.log("Insert Design Component - Success: " + result);
-
-                        // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
-                        // always be the _id of the component that was created first.  So for components added in a design update
-                        // it will be the design update component _id...
-                        DesignComponents.update(
-                            {_id: result},
-                            { $set: {componentReferenceId: result}}
-                        );
-
-                        // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
-                        if(componentType === ComponentType.FEATURE){
-                            DesignComponents.update(
-                                {_id: result},
-                                { $set:
-                                    {
-                                        componentFeatureReferenceId: result,
-                                        componentNarrative: DefaultComponentNames.NEW_NARRATIVE_TEXT,
-                                        componentNarrativeRaw: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
-                                    }
-                                }
-                            );
-
-                            // Make sure Design is no longer removable now that a feature added
-                            DesignServices.setRemovable(designId);
-
-                            // And for Features add the default Feature Aspects
-                            // TODO - that could be user configurable!
-                            DesignComponentModules.addDefaultFeatureAspects(designVersionId, result, defaultRawText);
-                        }
-
-                        // When inserting a new design component its parent becomes non-removable
-                        if(parentId) {
-                            DesignComponents.update(
-                                {_id: parentId},
-                                {$set: {isRemovable: false}}
-                            );
-                        }
-
-                        // Set the default index for a new component
-                        DesignComponentModules.setIndex(result, componentType, parentId);
-
-
-                        // Check for any WPs in this design version and add the components to them too
-                        DesignComponentModules.updateWorkPackages(designVersionId, result)
-
-                    }
-                }
+                // (error, result) => {
+                //     if(error){
+                //         // Error handler
+                //         //console.log("Insert Design Component - Error: " + error);
+                //     } else {
+                //         //console.log("Insert Design Component - Success: " + result);
+                //
+                //         // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
+                //         // always be the _id of the component that was created first.  So for components added in a design update
+                //         // it will be the design update component _id...
+                //         DesignComponents.update(
+                //             {_id: result},
+                //             { $set: {componentReferenceId: result}}
+                //         );
+                //
+                //         // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
+                //         if(componentType === ComponentType.FEATURE){
+                //             DesignComponents.update(
+                //                 {_id: result},
+                //                 { $set:
+                //                     {
+                //                         componentFeatureReferenceId: result,
+                //                         componentNarrative: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                //                         componentNarrativeRaw: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
+                //                     }
+                //                 }
+                //             );
+                //
+                //             // Make sure Design is no longer removable now that a feature added
+                //             DesignServices.setRemovable(designId);
+                //
+                //             // And for Features add the default Feature Aspects
+                //             // TODO - that could be user configurable!
+                //             DesignComponentModules.addDefaultFeatureAspects(designVersionId, result, defaultRawText);
+                //         }
+                //
+                //         // When inserting a new design component its parent becomes non-removable
+                //         if(parentId) {
+                //             DesignComponents.update(
+                //                 {_id: parentId},
+                //                 {$set: {isRemovable: false}}
+                //             );
+                //         }
+                //
+                //         // Set the default index for a new component
+                //         DesignComponentModules.setIndex(result, componentType, parentId);
+                //
+                //
+                //         // Check for any WPs in this design version and add the components to them too
+                //         DesignComponentModules.updateWorkPackages(designVersionId, result)
+                //
+                //     }
+                // }
             );
+
+            if(designComponentId){
+                // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
+                // always be the _id of the component that was created first.  So for components added in a design update
+                // it will be the design update component _id...
+                DesignComponents.update(
+                    {_id: designComponentId},
+                    { $set: {componentReferenceId: designComponentId}}
+                );
+
+                // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
+                if(componentType === ComponentType.FEATURE){
+                    DesignComponents.update(
+                        {_id: designComponentId},
+                        { $set:
+                            {
+                                componentFeatureReferenceId: designComponentId,
+                                componentNarrative: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                                componentNarrativeRaw: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
+                            }
+                        }
+                    );
+
+                    // Make sure Design is no longer removable now that a feature added
+                    DesignServices.setRemovable(designId);
+
+                    // And for Features add the default Feature Aspects
+                    // TODO - that could be user configurable!
+                    DesignComponentModules.addDefaultFeatureAspects(designVersionId, designComponentId, defaultRawText);
+                }
+
+                // When inserting a new design component its parent becomes non-removable
+                if(parentId) {
+                    DesignComponents.update(
+                        {_id: parentId},
+                        {$set: {isRemovable: false}}
+                    );
+                }
+
+                // Set the default index for a new component
+                DesignComponentModules.setIndex(designComponentId, componentType, parentId);
+
+
+                // Check for any WPs in this design version and add the components to them too
+                DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
+            }
+
+            return designComponentId;
         }
 
     };
