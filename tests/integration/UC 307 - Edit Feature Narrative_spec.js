@@ -28,7 +28,20 @@ describe('UC 307 - Edit Feature Narrative', function(){
 
 
     // Interface
-    it('Each Feature has a default Narrative template');
+    it('Each Feature has a default Narrative template', function(){
+
+        // Setup
+        server.call('testDesignComponents.addApplication', 'gloria');
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
+        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+
+        // Verify default Narrative template is there
+        let defaultNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
+        server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', defaultNarrative);
+    });
 
     it('Each Narrative has an option to edit it');
 
@@ -58,7 +71,6 @@ describe('UC 307 - Edit Feature Narrative', function(){
 
         // Verify
         server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', newNarrative);
-
     });
 
     it('A designer can edit but then discard changes to a Feature Narrative');
