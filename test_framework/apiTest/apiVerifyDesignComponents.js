@@ -115,7 +115,7 @@ Meteor.methods({
             featureNarrative = featureComponent.componentNarrative;
         }
 
-        if(featureNarrative !=  narrativeText){
+        if(featureNarrative.trim() !=  narrativeText.trim()){
             throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + featureNarrative);
         } else {
             return true;
