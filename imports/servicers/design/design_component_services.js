@@ -54,7 +54,6 @@ class DesignComponentServices{
                     componentParentReferenceId:     parentRefId,
                     componentFeatureReferenceId:    featureRefId,
                     componentTextRaw:               defaultRawText,
-                    componentNarrativeRaw:          defaultRawNarrative,
                     isNew:                          isNew
                 },
 
