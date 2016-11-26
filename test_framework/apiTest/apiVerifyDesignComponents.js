@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 
 import { DesignComponents }         from '../../imports/collections/design/design_components.js';
-import {DefaultItemNames}           from '../../imports/constants/default_names.js';
+import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
+import { ComponentType }            from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
@@ -104,6 +105,22 @@ Meteor.methods({
         }
 
     },
+
+    'verifyDesignComponents.featureNarrativeIs'(featureName, narrativeText){
+
+        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+
+        let featureNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
+        if(featureComponent){
+            featureNarrative = featureComponent.componentNarrative;
+        }
+
+        if(featureNarrative !=  narrativeText){
+            throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + featureNarrative);
+        } else {
+            return true;
+        }
+    }
 
 });
 

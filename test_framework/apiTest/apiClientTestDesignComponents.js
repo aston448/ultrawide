@@ -132,6 +132,17 @@ Meteor.methods({
 
     },
 
+    'testDesignComponents.updateFeatureNarrative'(featureName, newText, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+
+        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+        const newRawText = DesignComponentModules.getRawTextFor(newText);
+
+        ClientDesignComponentServices.updateFeatureNarrative(view, mode, featureComponent._id, newText, newRawText);
+    },
+
     'testDesignComponents.updateComponentNameInMode'(componentType, oldName, newName, mode){
 
         // Assume view is correct
