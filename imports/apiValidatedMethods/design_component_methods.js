@@ -152,7 +152,6 @@ export const addFeatureToDesignSection = new ValidatedMethod({
                 DefaultComponentNames.NEW_FEATURE_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_FEATURE_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_DETAILS),
-                DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
             );
         } catch (e) {
             console.log(e);

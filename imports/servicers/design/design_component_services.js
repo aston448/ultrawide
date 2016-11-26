@@ -8,6 +8,8 @@ import { WorkPackages }             from '../../collections/work/work_packages.j
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
+import { DefaultComponentNames } from '../../constants/default_names.js';
+
 import {getIdFromMap, log} from '../../common/utils.js';
 
 import  DesignServices     from './design_services.js';
@@ -18,7 +20,7 @@ class DesignComponentServices{
     // All code should run on Server only - but has to be accessible by client
 
     // Add a new design component
-    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, defaultRawNarrative, isNew){
+    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew){
 
         if(Meteor.isServer){
             // Get the parent reference id (if there is a parent)
@@ -71,11 +73,17 @@ class DesignComponentServices{
                             { $set: {componentReferenceId: result}}
                         );
 
-                        // If a Feature also update the Feature Ref Id to the new ID
+                        // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
                         if(componentType === ComponentType.FEATURE){
                             DesignComponents.update(
                                 {_id: result},
-                                { $set: {componentFeatureReferenceId: result}}
+                                { $set:
+                                    {
+                                        componentFeatureReferenceId: result,
+                                        componentNarrative: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                                        componentNarrativeRaw: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
+                                    }
+                                }
                             );
 
                             // Make sure Design is no longer removable now that a feature added
@@ -83,7 +91,7 @@ class DesignComponentServices{
 
                             // And for Features add the default Feature Aspects
                             // TODO - that could be user configurable!
-                            DesignComponentModules.addDefaultFeatureAspects(designVersionId, result, defaultRawText, defaultRawNarrative);
+                            DesignComponentModules.addDefaultFeatureAspects(designVersionId, result, defaultRawText);
                         }
 
                         // When inserting a new design component its parent becomes non-removable
