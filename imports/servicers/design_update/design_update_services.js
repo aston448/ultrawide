@@ -13,47 +13,43 @@ class DesignUpdateServices{
     // Add a new design update
     addNewDesignUpdate(designVersionId, populateUpdate){
 
-        // First Add a new Update record
-        const designUpdateId = DesignUpdates.insert(
-            {
-                designVersionId:            designVersionId,                                // The design version this is a change to
-                updateName:                 'New Design Update',                            // Identifier of this update - e.g. CR123
-                updateVersion:              '0.1',                                          // Update version number if required
-                updateStatus:               DesignUpdateStatus.UPDATE_NEW
-            },
+        if(Meteor.isServer) {
+            // First Add a new Update record
+            const designUpdateId = DesignUpdates.insert(
+                {
+                    designVersionId: designVersionId,                                // The design version this is a change to
+                    updateName: 'New Design Update',                            // Identifier of this update - e.g. CR123
+                    updateVersion: '0.1',                                          // Update version number if required
+                    updateStatus: DesignUpdateStatus.UPDATE_NEW
+                }
+            );
 
-            (error, result) => {
-                if(error){
-                    // Error handler
-                    //console.log("Insert Design Update - Error: " + error);
-                } else {
-                    //console.log("Insert Design Update - Success: " + result);
-
-                    if(populateUpdate) {
-                        this.populateDesignUpdate(designVersionId, result);
-                    }
-
+            if (designUpdateId) {
+                if (populateUpdate) {
+                    this.populateDesignUpdate(designVersionId, designUpdateId);
                 }
             }
-        );
 
-        return designUpdateId;
+            return designUpdateId;
+        }
     };
 
     importDesignUpdate(designVersionId, designUpdate){
 
-        let designUpdateId = DesignUpdates.insert(
-            {
-                designVersionId:            designVersionId,
-                updateName:                 designUpdate.updateName,
-                updateVersion:              designUpdate.updateVersion,
-                updateRawText:              designUpdate.updateRawText,
-                updateStatus:               designUpdate.updateStatus,
-                updateMergeAction:          designUpdate.updateMergeAction
-            }
-        );
+        if(Meteor.isServer) {
+            let designUpdateId = DesignUpdates.insert(
+                {
+                    designVersionId: designVersionId,
+                    updateName: designUpdate.updateName,
+                    updateVersion: designUpdate.updateVersion,
+                    updateRawText: designUpdate.updateRawText,
+                    updateStatus: designUpdate.updateStatus,
+                    updateMergeAction: designUpdate.updateMergeAction
+                }
+            );
 
-        return designUpdateId;
+            return designUpdateId;
+        }
     }
 
     // Copy the current base design version to a new update.  Initially the "new" values are the same as the current ones.
@@ -61,8 +57,6 @@ class DesignUpdateServices{
 
         // Here we want to copy the design version components to this update
         let versionComponents = DesignComponents.find({designVersionId: designVersionId});
-        let componentsToUpdate = versionComponents.count();
-        let componentsUpdated = 0;
         let designId = DesignVersions.findOne({_id: designVersionId}).designId;
 
         //console.log("Inserting " + versionComponents.count() + " into Design Update Components");
@@ -104,30 +98,15 @@ class DesignUpdateServices{
                     isInScope:                      false,
                     isParentScope:                  false,
                     isScopable:                     this.isScopable(component.componentType)             // A Scopable item can be picked as part of a change
-                },
-                (error, result) => {
-                    if(error){
-                        // Error handler
-                        //console.log("Insert Design Update - Error: " + error);
-                    } else {
-                        componentsUpdated++;
-
-                        if(componentsUpdated == componentsToUpdate){
-                            //console.log("Insert Design Update - complete: " + componentsUpdated);
-
-                            // Now update the parent ids as necessary to match the new PKs (_ids) on this data
-                            this.fixParentIds(designVersionId, designUpdateId);
-
-                            // Set only items with no children as removable
-                            this.setRemovable(designVersionId, designUpdateId);
-                        }
-                    }
                 }
             );
-        }
+        });
 
+        // Now update the parent ids as necessary to match the new PKs (_ids) on this data
+        this.fixParentIds(designVersionId, designUpdateId);
 
-        );
+        // Set only items with no children as removable
+        this.setRemovable(designVersionId, designUpdateId);
 
     };
 
@@ -208,57 +187,63 @@ class DesignUpdateServices{
 
     publishUpdate(designUpdateId){
 
-        DesignUpdates.update(
-            {_id: designUpdateId},
-            {
-                $set: {
-                    updateStatus: DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
-                    updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE    // By default include this update for the next DV
+        if(Meteor.isServer) {
+            DesignUpdates.update(
+                {_id: designUpdateId},
+                {
+                    $set: {
+                        updateStatus: DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                        updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE    // By default include this update for the next DV
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     updateDesignUpdateName(designUpdateId, newName){
 
-        DesignUpdates.update(
-            {_id: designUpdateId},
-            {
-                $set: {
-                    updateName: newName
+        if(Meteor.isServer) {
+            DesignUpdates.update(
+                {_id: designUpdateId},
+                {
+                    $set: {
+                        updateName: newName
+                    }
                 }
-            }
-        );
+            );
+        }
 
     };
 
     updateDesignUpdateVersion(designUpdateId, newVersion){
 
-        DesignUpdates.update(
-            {_id: designUpdateId},
-            {
-                $set: {
-                    updateVersion: newVersion
+        if(Meteor.isServer) {
+            DesignUpdates.update(
+                {_id: designUpdateId},
+                {
+                    $set: {
+                        updateVersion: newVersion
+                    }
                 }
-            }
-        );
+            );
+        }
 
     };
 
     removeUpdate(designUpdateId){
 
-        // Delete all components in the design update
-        DesignUpdateComponents.remove(
-            {designUpdateId: designUpdateId},
-            (error, result) => {
-                if(error){
-                    //console.log("Error deleting DU components " + error);
-                } else {
-                    // OK so delete the update itself
-                    DesignUpdates.remove({_id: designUpdateId});
-                }
+        if(Meteor.isServer) {
+            // Delete all components in the design update
+            let removedComponents = DesignUpdateComponents.remove(
+                {designUpdateId: designUpdateId}
+            );
+
+            if(removedComponents >= 0){
+
+                // OK so delete the update itself
+                DesignUpdates.remove({_id: designUpdateId});
             }
-        );
+        }
     };
 }
 

@@ -88,10 +88,7 @@ class DesignServices{
                 componentType: ComponentType.FEATURE
             });
 
-
             let isRemovable = (features.count() === 0 && updateFeatures.count() === 0);
-
-            //console.log("Setting Design Removable to " + isRemovable);
 
             Designs.update(
                 {_id: designId},

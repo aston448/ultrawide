@@ -57,59 +57,6 @@ class DesignComponentServices{
                     isNew:                          isNew
                 },
 
-                // (error, result) => {
-                //     if(error){
-                //         // Error handler
-                //         //console.log("Insert Design Component - Error: " + error);
-                //     } else {
-                //         //console.log("Insert Design Component - Success: " + result);
-                //
-                //         // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
-                //         // always be the _id of the component that was created first.  So for components added in a design update
-                //         // it will be the design update component _id...
-                //         DesignComponents.update(
-                //             {_id: result},
-                //             { $set: {componentReferenceId: result}}
-                //         );
-                //
-                //         // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
-                //         if(componentType === ComponentType.FEATURE){
-                //             DesignComponents.update(
-                //                 {_id: result},
-                //                 { $set:
-                //                     {
-                //                         componentFeatureReferenceId: result,
-                //                         componentNarrative: DefaultComponentNames.NEW_NARRATIVE_TEXT,
-                //                         componentNarrativeRaw: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
-                //                     }
-                //                 }
-                //             );
-                //
-                //             // Make sure Design is no longer removable now that a feature added
-                //             DesignServices.setRemovable(designId);
-                //
-                //             // And for Features add the default Feature Aspects
-                //             // TODO - that could be user configurable!
-                //             DesignComponentModules.addDefaultFeatureAspects(designVersionId, result, defaultRawText);
-                //         }
-                //
-                //         // When inserting a new design component its parent becomes non-removable
-                //         if(parentId) {
-                //             DesignComponents.update(
-                //                 {_id: parentId},
-                //                 {$set: {isRemovable: false}}
-                //             );
-                //         }
-                //
-                //         // Set the default index for a new component
-                //         DesignComponentModules.setIndex(result, componentType, parentId);
-                //
-                //
-                //         // Check for any WPs in this design version and add the components to them too
-                //         DesignComponentModules.updateWorkPackages(designVersionId, result)
-                //
-                //     }
-                // }
             );
 
             if(designComponentId){
@@ -163,226 +110,6 @@ class DesignComponentServices{
 
     };
 
-    // addDefaultFeatureAspects(designVersionId, featureId, defaultRawText, defaultRawNarrative){
-    //     this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawName('Interface'), defaultRawText, defaultRawNarrative, false);
-    //     this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawName('Conditions'), defaultRawText, defaultRawNarrative, false);
-    //     this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawName('Actions'), defaultRawText, defaultRawNarrative, false);
-    //     this.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawName('Consequences'), defaultRawText, defaultRawNarrative, false);
-    // }
-    //
-    // getRawName(aspectName){
-    //     return {
-    //         "entityMap" : {  },
-    //         "blocks" : [
-    //             { "key" : "5efv7", "text" : aspectName,
-    //                 "type" : "unstyled",
-    //                 "depth" : 0,
-    //                 "inlineStyleRanges" : [ ],
-    //                 "entityRanges" : [ ],
-    //                 "data" : {  }
-    //             }
-    //         ]
-    //     };
-    // }
-    //
-    // updateWorkPackages(designVersionId, newComponentId){
-    //
-    //     // See if any base WPs affected by this update
-    //     const workPackages = WorkPackages.find({
-    //         designVersionId:    designVersionId,
-    //         designUpdateId:     'NONE',
-    //         workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
-    //         workPackageType:    WorkPackageType.WP_BASE
-    //     }).fetch();
-    //
-    //     const component = DesignComponents.findOne({_id: newComponentId});
-    //
-    //     workPackages.forEach((wp) => {
-    //
-    //         WorkPackageComponents.insert(
-    //             {
-    //                 workPackageId:                  wp._id,
-    //                 workPackageType:                wp.workPackageType,
-    //                 componentId:                    component._id,
-    //                 componentReferenceId:           component.componentReferenceId,
-    //                 componentType:                  component.componentType,
-    //                 componentParentReferenceId:     component.componentParentReferenceId,
-    //                 componentFeatureReferenceId:    component.componentFeatureReferenceId,
-    //                 componentLevel:                 component.componentLevel,
-    //                 componentIndex:                 component.componentIndex,
-    //                 componentParent:                false,
-    //                 componentActive:                false       // Start by assuming nothing in scope
-    //             }
-    //         );
-    //     });
-    //
-    // };
-    //
-    // updateWorkPackageLocation(designComponentId, reorder){
-    //
-    //     const component = DesignComponents.findOne({_id: designComponentId});
-    //
-    //     // See if any base WPs affected by this update
-    //     const workPackages = WorkPackages.find({
-    //         designVersionId:    component.designVersionId,
-    //         designUpdateId:     'NONE',
-    //         workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
-    //         workPackageType:    WorkPackageType.WP_BASE
-    //     }).fetch();
-    //
-    //     console.log("Update WP Location WPs to update: " + workPackages.length);
-    //
-    //     workPackages.forEach((wp) => {
-    //         if(reorder){
-    //             // Just a reordering job so can keep the WP scope as it is
-    //             WorkPackageComponents.update(
-    //                 {
-    //                     workPackageId:                  wp._id,
-    //                     workPackageType:                wp.workPackageType,
-    //                     componentId:                    designComponentId
-    //                 },
-    //                 {
-    //                     $set:{
-    //                         componentParentReferenceId:     component.componentParentReferenceId,
-    //                         componentFeatureReferenceId:    component.componentFeatureReferenceId,
-    //                         componentLevel:                 component.componentLevel,
-    //                         componentIndex:                 component.componentIndex,
-    //                     }
-    //                 },
-    //                 {multi: true},
-    //                 (error, result) => {
-    //                     if(error) {
-    //                         // Error handler
-    //                         console.log("Update WP Location Error: " + error);
-    //                         return false;
-    //                     } else {
-    //                         console.log("Update WP Location Success: " + result);
-    //                         return true;
-    //                     }
-    //                 }
-    //             );
-    //         } else {
-    //             // Moved to a new section so will have to descope from WP
-    //             WorkPackageComponents.update(
-    //                 {
-    //                     workPackageId:                  wp._id,
-    //                     workPackageType:                wp.workPackageType,
-    //                     componentId:                    designComponentId
-    //                 },
-    //                 {
-    //                     $set:{
-    //                         componentParentReferenceId:     component.componentParentReferenceId,
-    //                         componentFeatureReferenceId:    component.componentFeatureReferenceId,
-    //                         componentLevel:                 component.componentLevel,
-    //                         componentIndex:                 component.componentIndex,
-    //                         componentParent:                false,      // Reset WP status
-    //                         componentActive:                false
-    //                     }
-    //                 },
-    //                 {multi: true},
-    //                 (error, result) => {
-    //                     if(error) {
-    //                         // Error handler
-    //                         console.log("Update WP Move Location Error: " + error);
-    //                         return false;
-    //                     } else {
-    //                         console.log("Update WP Move Location Success: " + result);
-    //                         return true;
-    //                     }
-    //                 }
-    //             );
-    //         }
-    //
-    //     });
-    // }
-    //
-    // removeWorkPackageItems(designComponentId, designVersionId){
-    //
-    //     // See if any base WPs affected by this update
-    //     const workPackages = WorkPackages.find({
-    //         designVersionId:    designVersionId,
-    //         designUpdateId:     'NONE',
-    //         workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
-    //         workPackageType:    WorkPackageType.WP_BASE
-    //     }).fetch();
-    //
-    //     workPackages.forEach((wp) => {
-    //         WorkPackageComponents.remove(
-    //             {
-    //                 workPackageId:                  wp._id,
-    //                 workPackageType:                wp.workPackageType,
-    //                 componentId:                    designComponentId
-    //             }
-    //         );
-    //     });
-    //
-    // };
-    //
-    // // Called when restoring data after a reset
-    // importComponent(designId, designVersionId, component){
-    //
-    //     // Fix missing feature refs
-    //     let componentFeatureReferenceId = component.componentFeatureReferenceId;
-    //     if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceId === 'NONE'){
-    //         componentFeatureReferenceId = component.componentReferenceId;
-    //     }
-    //
-    //     const designComponentId = DesignComponents.insert(
-    //         {
-    //             // Identity
-    //             componentReferenceId:       component.componentReferenceId,
-    //             designId:                   designId,                               // Will be a new id for the restored data
-    //             designVersionId:            designVersionId,                        // Ditto
-    //             componentType:              component.componentType,
-    //             componentLevel:             component.componentLevel,
-    //             componentParentId:          component.componentParentId,            // This will be wrong and fixed by restore process
-    //             componentParentReferenceId: component.componentParentReferenceId,
-    //             componentFeatureReferenceId:componentFeatureReferenceId,
-    //             componentIndex:             component.componentIndex,
-    //
-    //             // Data
-    //             componentName:              component.componentName,
-    //             componentNameRaw:           component.componentNameRaw,
-    //             componentNarrative:         component.componentNarrative,
-    //             componentNarrativeRaw:      component.componentNarrativeRaw,
-    //             componentTextRaw:           component.componentTextRaw,
-    //
-    //             // State (shared and persistent only)
-    //             isRemovable:                component.isRemovable,
-    //             isRemoved:                  component.isRemoved,
-    //             isNew:                      component.isNew,
-    //             lockingUser:                component.lockingUser,
-    //             designUpdateId:             component.designUpdateId
-    //         }
-    //     );
-    //
-    //     return designComponentId;
-    //
-    // };
-    //
-    // // Resets parent ids after an import of data
-    // importRestoreParent(designComponentId, componentMap){
-    //
-    //     const designComponent = DesignComponents.findOne({_id: designComponentId});
-    //
-    //     const oldParentId = designComponent.componentParentId;
-    //     let newParentId = 'NONE';
-    //
-    //     if(oldParentId != 'NONE'){
-    //         newParentId = getIdFromMap(componentMap, oldParentId);
-    //     }
-    //
-    //     DesignComponents.update(
-    //         {_id: designComponentId},
-    //         {
-    //             $set:{
-    //                 componentParentId: newParentId
-    //             }
-    //         }
-    //     )
-    //
-    //
-    // }
 
     moveDesignComponent(designComponentId, newParentId){
 
@@ -399,7 +126,7 @@ class DesignComponentServices{
                 newLevel = newParent.componentLevel + 1;
             }
 
-            DesignComponents.update(
+            let updated = DesignComponents.update(
                 {_id: designComponentId},
                 {
                     $set: {
@@ -408,66 +135,36 @@ class DesignComponentServices{
                         componentFeatureReferenceId: newParent.componentFeatureReferenceId,
                         componentLevel: newLevel
                     }
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error: " + error);
-                    } else {
-                        //console.log("Success: " + result);
-
-                        // Make sure new Parent is now not removable as it must have a child
-                        DesignComponents.update(
-                            {_id: newParentId},
-                            {
-                                $set: {
-                                    isRemovable: false
-                                }
-                            }
-                        );
-
-                        // But the old parent may now be removable
-                        if (DesignComponentModules.hasNoChildren(oldParentId)) {
-                            DesignComponents.update(
-                                {_id: oldParentId},
-                                {$set: {isRemovable: true}}
-                            );
-                        }
-
-                        // Make sure this component is also moved in any work packages
-                        DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
-                    }
                 }
             );
 
+            if(updated > 0){
+                // Make sure new Parent is now not removable as it must have a child
+                DesignComponents.update(
+                    {_id: newParentId},
+                    {
+                        $set: {
+                            isRemovable: false
+                        }
+                    }
+                );
+
+                // But the old parent may now be removable
+                if (DesignComponentModules.hasNoChildren(oldParentId)) {
+                    DesignComponents.update(
+                        {_id: oldParentId},
+                        {$set: {isRemovable: true}}
+                    );
+                }
+
+                // Make sure this component is also moved in any work packages
+                DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
+            } else {
+                throw new Meteor.Error('designComponent.moveDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
+            }
+
         }
     }
-
-    // // Set any other components to no longer new
-    // setComponentsOld(designComponentId){
-    //     DesignComponents.update(
-    //         {
-    //             _id:     {$ne: designComponentId},
-    //             isNew:   true
-    //         },
-    //         {
-    //             $set:{
-    //                 isNew: false
-    //             }
-    //         },
-    //         {multi: true},
-    //
-    //         (error, result) => {
-    //             if(error){
-    //                 // Error handler
-    //                 console.log("Error: " + error);
-    //             } else {
-    //                 console.log("Success: " + result);
-    //             }
-    //         }
-    //     );
-    // }
 
 
     // Save text for a design component
@@ -480,7 +177,7 @@ class DesignComponentServices{
                 return true;
             }
 
-            DesignComponents.update(
+            let updated = DesignComponents.update(
                 {_id: designComponentId},
                 {
                     $set: {
@@ -488,19 +185,12 @@ class DesignComponentServices{
                         componentNameRaw: componentNameRaw,
                         isNew: false
                     }
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Save Design Component Name Error: " + error);
-                        return false;
-                    } else {
-                        //console.log("Save Design Component Name Success: " + result);
-                        return true;
-                    }
                 }
             );
+
+            if(updated === 0){
+                throw new Meteor.Error('designComponent.updateComponentName.noComponent', 'Design Component did not exist', designComponentId)
+            }
         }
     };
 
@@ -508,8 +198,8 @@ class DesignComponentServices{
     // Save the narrative for a feature component
     updateFeatureNarrative(featureId, plainText, rawText){
         if(Meteor.isServer) {
-            console.log
-            DesignComponents.update(
+
+            let updated = DesignComponents.update(
                 {_id: featureId},
                 {
                     $set: {
@@ -517,17 +207,12 @@ class DesignComponentServices{
                         componentNarrativeRaw: rawText,
                         isNew: false
                     }
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error: " + error);
-                    } else {
-                        //console.log("Success: " + result);
-                    }
                 }
             );
+
+            if(updated === 0){
+                throw new Meteor.Error('designComponent.updateFeatureNarrative.noComponent', 'Design Component did not exist', featureId)
+            }
         }
     };
 
@@ -536,62 +221,36 @@ class DesignComponentServices{
             // Deletes from the base design in initial edit mode are real deletes
             const designComponent = DesignComponents.findOne({_id: designComponentId});
 
-            DesignComponents.remove(
-                {_id: designComponentId},
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error: " + error);
-                    } else {
-                        //console.log("Success: " + result);
-
-                        // When removing a design component its parent may become removable
-                        if (DesignComponentModules.hasNoChildren(parentId)) {
-                            DesignComponents.update(
-                                {_id: parentId},
-                                {$set: {isRemovable: true}}
-                            )
-                        }
-
-                        // Remove component from any related work packages
-                        DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
-                    }
-                }
+            let removed = DesignComponents.remove(
+                {_id: designComponentId}
             );
 
-            // If this happened to be the last Feature, Design is now removable
-            if (designComponent.componentType === ComponentType.FEATURE) {
-                DesignServices.setRemovable(designComponent.designId);
+            if(removed > 0){
+
+                // When removing a design component its parent may become removable
+                if (DesignComponentModules.hasNoChildren(parentId)) {
+                    DesignComponents.update(
+                        {_id: parentId},
+                        {$set: {isRemovable: true}}
+                    )
+                }
+
+                // Remove component from any related work packages
+                DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
+
+                // If this happened to be the last Feature, Design is now removable
+                if (designComponent.componentType === ComponentType.FEATURE) {
+                    DesignServices.setRemovable(designComponent.designId);
+                }
+
+            } else {
+                throw new Meteor.Error('designComponent.removeDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
             }
+
+
         }
 
     };
-
-    // hasNoChildren(designComponentId){
-    //     return DesignComponents.find({componentParentId: designComponentId}).count() === 0;
-    // };
-    //
-    // setIndex(componentId, componentType, parentId){
-    //
-    //     // Get the max index of OTHER components of this type under the same parent
-    //     const peerComponents = DesignComponents.find({_id: {$ne: componentId}, componentType: componentType, componentParentId: parentId}, {sort:{componentIndex: -1}});
-    //
-    //     // If no components then leave as default of 100
-    //     if(peerComponents.count() > 0){
-    //         console.log("Highest peer is " + peerComponents.fetch()[0].componentName);
-    //
-    //         let newIndex = peerComponents.fetch()[0].componentIndex + 100;
-    //
-    //         DesignComponents.update(
-    //             {_id: componentId},
-    //             {
-    //                 $set:{
-    //                     componentIndex: newIndex
-    //                 }
-    //             }
-    //         );
-    //     }
-    // }
 
     // Move the component to a new position in its local list
     reorderDesignComponent(componentId, targetComponentId){

@@ -12,91 +12,66 @@ class UserContextServices{
     // Save
     saveUserContext(context){
 
-        // Remove the current context
-        UserCurrentEditContext.remove({userId: context.userId});
+        if(Meteor.isServer) {
+            // Remove the current context
+            UserCurrentEditContext.remove({userId: context.userId});
 
-        // Add the new one
-        UserCurrentEditContext.insert(
-            {
-                userId:                         context.userId,
-                designId:                       context.designId,
-                designVersionId:                context.designVersionId,
-                designUpdateId:                 context.designUpdateId,
-                workPackageId:                  context.workPackageId,
-                designComponentId:              context.designComponentId,
-                designComponentType:            context.designComponentType,
-                featureReferenceId:             context.featureReferenceId,
-                scenarioReferenceId:            context.scenarioReferenceId,
-                scenarioStepId:                 context.scenarioStepId,
-                featureFilesLocation:           context.featureFilesLocation,
-                acceptanceTestResultsLocation:  context.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: context.integrationTestResultsLocation,
-                moduleTestResultsLocation:      context.moduleTestResultsLocation
-            }
-        )
+            // Add the new one
+            UserCurrentEditContext.insert(
+                {
+                    userId:                         context.userId,
+                    designId:                       context.designId,
+                    designVersionId:                context.designVersionId,
+                    designUpdateId:                 context.designUpdateId,
+                    workPackageId:                  context.workPackageId,
+                    designComponentId:              context.designComponentId,
+                    designComponentType:            context.designComponentType,
+                    featureReferenceId:             context.featureReferenceId,
+                    scenarioReferenceId:            context.scenarioReferenceId,
+                    scenarioStepId:                 context.scenarioStepId,
+                    featureFilesLocation:           context.featureFilesLocation,
+                    acceptanceTestResultsLocation:  context.acceptanceTestResultsLocation,
+                    integrationTestResultsLocation: context.integrationTestResultsLocation,
+                    moduleTestResultsLocation:      context.moduleTestResultsLocation
+                }
+            );
+        }
     };
 
     saveUserViewOptions(userViewOptions){
 
-        // Remove current options
-        UserCurrentViewOptions.remove({userId: userViewOptions.userId});
+        if(Meteor.isServer) {
 
-        // And add new
-        UserCurrentViewOptions.insert({
-            userId:                     userViewOptions.userId,
-            designDetailsVisible:       userViewOptions.designDetailsVisible,
-            designAccTestsVisible:      userViewOptions.designAccTestsVisible,
-            designIntTestsVisible:      userViewOptions.designIntTestsVisible,
-            designModTestsVisible:      userViewOptions.designModTestsVisible,
-            designDomainDictVisible:    userViewOptions.designDomainDictVisible,
-            // Design Update Screen - Scope and Design always visible
-            updateDetailsVisible:       userViewOptions.updateDetailsVisible,
-            updateAccTestsVisible:      userViewOptions.updateAccTestsVisible,
-            updateIntTestsVisible:      userViewOptions.updateIntTestsVisible,
-            updateModTestsVisible:      userViewOptions.updateModTestsVisible,
-            updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
-            // Work package editor - Scope and Design always visible
-            wpDetailsVisible:           userViewOptions.wpDetailsVisible,
-            wpDomainDictVisible:        userViewOptions.wpDomainDictVisible,
-            // Developer Screen - Design always visible
-            devDetailsVisible:          userViewOptions.devDetailsVisible,
-            devAccTestsVisible:         userViewOptions.devAccTestsVisible,
-            devIntTestsVisible:         userViewOptions.devIntTestsVisible,
-            devModTestsVisible:         userViewOptions.devModTestsVisible,
-            devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
-            devDomainDictVisible:       userViewOptions.devDomainDictVisible
-        });
+            // Remove current options
+            UserCurrentViewOptions.remove({userId: userViewOptions.userId});
 
-    }
-
-    // saveUserDevContext(userId, designId, designVersionId, workPackageId, featureFilesLocation){
-    //
-    //     // Remove the current context
-    //     UserCurrentDevContext.remove({userId: userId});
-    //     UserCurrentDevUpdates.remove({userId: userId});
-    //
-    //     // Add the new one
-    //     UserCurrentDevContext.insert(
-    //         {
-    //             userId:                 userId,
-    //             designId:               designId,
-    //             designVersionId:        designVersionId,
-    //             workPackageId:          workPackageId,
-    //             featureFilesLocation:   featureFilesLocation
-    //         },
-    //         (error, result) => {
-    //             if(error){
-    //                 console.log("Failed to set user dev context: " + error);
-    //             } else {
-    //
-    //                 console.log("Success setting dev context");
-    //
-    //             }
-    //         }
-    //     );
-    // };
-
-
+            // And add new
+            UserCurrentViewOptions.insert({
+                userId:                         userViewOptions.userId,
+                designDetailsVisible:           userViewOptions.designDetailsVisible,
+                designAccTestsVisible:          userViewOptions.designAccTestsVisible,
+                designIntTestsVisible:          userViewOptions.designIntTestsVisible,
+                designModTestsVisible:          userViewOptions.designModTestsVisible,
+                designDomainDictVisible:        userViewOptions.designDomainDictVisible,
+                // Design Update Screen - Scope and Design always visible
+                updateDetailsVisible:           userViewOptions.updateDetailsVisible,
+                updateAccTestsVisible:          userViewOptions.updateAccTestsVisible,
+                updateIntTestsVisible:          userViewOptions.updateIntTestsVisible,
+                updateModTestsVisible:          userViewOptions.updateModTestsVisible,
+                updateDomainDictVisible:        userViewOptions.updateDomainDictVisible,
+                // Work package editor - Scope and Design always visible
+                wpDetailsVisible:               userViewOptions.wpDetailsVisible,
+                wpDomainDictVisible:            userViewOptions.wpDomainDictVisible,
+                // Developer Screen - Design always visible
+                devDetailsVisible:              userViewOptions.devDetailsVisible,
+                devAccTestsVisible:             userViewOptions.devAccTestsVisible,
+                devIntTestsVisible:             userViewOptions.devIntTestsVisible,
+                devModTestsVisible:             userViewOptions.devModTestsVisible,
+                devFeatureFilesVisible:         userViewOptions.devFeatureFilesVisible,
+                devDomainDictVisible:           userViewOptions.devDomainDictVisible
+            });
+        }
+    };
 }
 
 export default new UserContextServices();

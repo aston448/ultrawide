@@ -12,49 +12,46 @@ class WorkPackageServices{
     // Add a new Work Package
     addNewWorkPackage(designVersionId, designUpdateId, wpType, populateWp){
 
+        if(Meteor.isServer) {
+            const workPackageId = WorkPackages.insert(
+                {
+                    designVersionId: designVersionId,            // The design version this is work for
+                    designUpdateId: designUpdateId,             // Defaults if not Update WP
+                    workPackageType: wpType,                     // Either Base Version Implementation or Design Update Implementation
+                    workPackageName: 'New Work Package',         // Identifier of this work package
+                    workPackageStatus: WorkPackageStatus.WP_NEW,
 
-        const workPackageId = WorkPackages.insert(
-            {
-                designVersionId:            designVersionId,            // The design version this is work for
-                designUpdateId:             designUpdateId,             // Defaults if not Update WP
-                workPackageType:            wpType,                     // Either Base Version Implementation or Design Update Implementation
-                workPackageName:            'New Work Package',         // Identifier of this work package
-                workPackageStatus:          WorkPackageStatus.WP_NEW,
+                }
+            );
 
-            },
+            if(workPackageId){
 
-            (error, result) => {
-                if(error){
-                    // Error handler
-                    //console.log("Insert WP - Error: " + error);
-                } else {
-                    //console.log("Insert WP - Success: " + result);
-
-                    // Now populate the work package components
-                    if(populateWp) {
-                        this.populateWorkPackageComponents(result, designVersionId, designUpdateId, wpType);
-                    }
+                // Now populate the work package components
+                if (populateWp) {
+                    this.populateWorkPackageComponents(result, designVersionId, designUpdateId, wpType);
                 }
             }
-        );
 
-        return workPackageId;
+            return workPackageId;
+        }
     };
 
     importWorkPackage(designVersionId, designUpdateId, workPackage){
 
-        let workPackageId = WorkPackages.insert(
-            {
-                designVersionId:            designVersionId,
-                designUpdateId:             designUpdateId,
-                workPackageType:            workPackage.workPackageType,
-                workPackageName:            workPackage.workPackageName,
-                workPackageRawText:         workPackage.workPackageRawText,
-                workPackageStatus:          workPackage.workPackageStatus
-            }
-        );
+        if(Meteor.isServer) {
+            let workPackageId = WorkPackages.insert(
+                {
+                    designVersionId: designVersionId,
+                    designUpdateId: designUpdateId,
+                    workPackageType: workPackage.workPackageType,
+                    workPackageName: workPackage.workPackageName,
+                    workPackageRawText: workPackage.workPackageRawText,
+                    workPackageStatus: workPackage.workPackageStatus
+                }
+            );
 
-        return workPackageId;
+            return workPackageId;
+        }
     }
 
     // Populate WP with components from related Design Version ot Design Update
@@ -125,120 +122,145 @@ class WorkPackageServices{
     // Called when data is restored
     importComponent(workPackageId, designComponentId, wpComponent){
 
-        const wpComponentId = WorkPackageComponents.insert(
-            {
-                // Identity
-                workPackageId:              workPackageId,
-                workPackageType:            wpComponent.workPackageType,
-                componentId:                designComponentId,
-                componentReferenceId:       wpComponent.componentReferenceId,
-                componentParentReferenceId: wpComponent.componentParentReferenceId,
-                componentFeatureReferenceId:wpComponent.componentFeatureReferenceId,
-                componentType:              wpComponent.componentType,
-                componentLevel:             wpComponent.componentLevel,
-                componentIndex:             wpComponent.componentIndex,
+        if(Meteor.isServer) {
+            const wpComponentId = WorkPackageComponents.insert(
+                {
+                    // Identity
+                    workPackageId: workPackageId,
+                    workPackageType: wpComponent.workPackageType,
+                    componentId: designComponentId,
+                    componentReferenceId: wpComponent.componentReferenceId,
+                    componentParentReferenceId: wpComponent.componentParentReferenceId,
+                    componentFeatureReferenceId: wpComponent.componentFeatureReferenceId,
+                    componentType: wpComponent.componentType,
+                    componentLevel: wpComponent.componentLevel,
+                    componentIndex: wpComponent.componentIndex,
 
-                // Status
-                componentParent:            wpComponent.componentParent,
-                componentActive:            wpComponent.componentActive
-            }
-        );
+                    // Status
+                    componentParent: wpComponent.componentParent,
+                    componentActive: wpComponent.componentActive
+                }
+            );
 
-        return wpComponentId;
+            return wpComponentId;
+        }
     }
 
     publishWorkPackage(workPackageId){
 
-        WorkPackages.update(
-            {_id: workPackageId},
-            {
-                $set: {
-                    workPackageStatus: WorkPackageStatus.WP_AVAILABLE
+        if(Meteor.isServer) {
+            WorkPackages.update(
+                {_id: workPackageId},
+                {
+                    $set: {
+                        workPackageStatus: WorkPackageStatus.WP_AVAILABLE
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     completeWorkPackage(workPackageId){
 
-        WorkPackages.update(
-            {_id: workPackageId},
-            {
-                $set: {
-                    workPackageStatus: WorkPackageStatus.WP_COMPLETE
+        if(Meteor.isServer) {
+            WorkPackages.update(
+                {_id: workPackageId},
+                {
+                    $set: {
+                        workPackageStatus: WorkPackageStatus.WP_COMPLETE
+                    }
                 }
-            }
-        );
+            );
+        }
     };
 
     updateWorkPackageName(workPackageId, newName){
 
-        WorkPackages.update(
-            {_id: workPackageId},
-            {
-                $set: {
-                    workPackageName: newName
+        if(Meteor.isServer) {
+            WorkPackages.update(
+                {_id: workPackageId},
+                {
+                    $set: {
+                        workPackageName: newName
+                    }
                 }
-            }
-        );
+            );
+        }
 
     };
 
 
     removeWorkPackage(workPackageId){
 
-        // Delete all components in the work package
-        WorkPackageComponents.remove(
-            {workPackageId: workPackageId},
-            (error, result) => {
-                if(error){
-                    //console.log("Error deleting WP components " + error);
-                } else {
-                    // OK so delete the WP itself
-                    WorkPackages.remove({_id: workPackageId});
-                }
+        if(Meteor.isServer) {
+            // Delete all components in the work package
+            let removedComponents = WorkPackageComponents.remove(
+                {workPackageId: workPackageId}
+            );
+
+            if(removedComponents >= 0){
+
+                // OK so delete the WP itself
+                WorkPackages.remove({_id: workPackageId});
             }
-        );
+        }
     };
 
 
     // Store the scope state of a WP component
     toggleScope(wpComponent, newScope){
+        if(Meteor.isServer) {
+            if (wpComponent) {
+                let startingComponentRef = wpComponent.componentReferenceId;
+                let parentRefId = wpComponent.componentParentReferenceId;
+                let currentWpComponent = wpComponent;
+                const currentWorkPackage = wpComponent.workPackageId
 
-        if(wpComponent) {
-            if(Meteor.isServer){
-                //console.log("SERVER: Toggling scope for component ref: " + wpComponent._id + " to " + newScope);
-            } else {
-                //console.log("CLIENT: Toggling scope for component ref: " + wpComponent._id + " to " + newScope);
-            }
+                if (newScope) {
+                    // When a component is put in scope, all its parents come into scope as parents.
+                    // Also, putting a component in scope adds all its children.
+                    // Only Features and Scenarios are actively in scope - rest are just parent scope.
 
-            let startingComponentRef = wpComponent.componentReferenceId;
-            let parentRefId = wpComponent.componentParentReferenceId;
-            let currentWpComponent = wpComponent;
-            const currentWorkPackage = wpComponent.workPackageId
-
-            if (newScope) {
-                // When a component is put in scope, all its parents come into scope as parents.
-                // Also, putting a component in scope adds all its children.
-                // Only Features and Scenarios are actively in scope - rest are just parent scope.
-
-                // Mark current component as in scope
-                switch(currentWpComponent.componentType){
-                    case ComponentType.FEATURE:
-                    case ComponentType.SCENARIO:
-                        // Features and Scenarios are active items in a WP
-                        WorkPackageComponents.update(
-                            {_id: currentWpComponent._id},
-                            {
-                                $set: {
-                                    componentParent: true,
-                                    componentActive: true
+                    // Mark current component as in scope
+                    switch (currentWpComponent.componentType) {
+                        case ComponentType.FEATURE:
+                        case ComponentType.SCENARIO:
+                            // Features and Scenarios are active items in a WP
+                            WorkPackageComponents.update(
+                                {_id: currentWpComponent._id},
+                                {
+                                    $set: {
+                                        componentParent: true,
+                                        componentActive: true
+                                    }
                                 }
+                            );
+                            break;
+                        default:
+                            // Other items are just parents
+                            WorkPackageComponents.update(
+                                {_id: currentWpComponent._id},
+                                {
+                                    $set: {
+                                        componentParent: true
+                                    }
+                                }
+                            );
+                            break;
+                    }
+
+                    // Mark up all parents...  However these are all just parents even if a Feature as Feature was not explicitly selected
+                    while (parentRefId != 'NONE') {
+
+                        // Get the parent WP component
+                        currentWpComponent = WorkPackageComponents.findOne(
+                            {
+                                workPackageId: currentWorkPackage,
+                                componentReferenceId: parentRefId
                             }
                         );
-                        break;
-                    default:
-                        // Other items are just parents
+
+                        // Mark as a parent
                         WorkPackageComponents.update(
                             {_id: currentWpComponent._id},
                             {
@@ -247,57 +269,35 @@ class WorkPackageServices{
                                 }
                             }
                         );
-                        break;
-                }
 
-                // Mark up all parents...  However these are all just parents even if a Feature as Feature was not explicitly selected
-                while (parentRefId != 'NONE') {
+                        // And then move up to the next parent
+                        parentRefId = currentWpComponent.componentParentReferenceId;
 
-                    // Get the parent WP component
-                    currentWpComponent = WorkPackageComponents.findOne(
-                        {
-                            workPackageId: currentWorkPackage,
-                            componentReferenceId: parentRefId
-                        }
-                    );
+                    }
 
-                    // Mark as a parent
+                    // Mark up all children below the selected item...
+                    this.scopeChildren(currentWorkPackage, startingComponentRef);
+
+                } else {
+                    // When a component is put out of scope...
+                    // All children are taken out of scope.
+                    // Ny parent that no longer haschildren goes
+
+                    // Descope the component
                     WorkPackageComponents.update(
                         {_id: currentWpComponent._id},
                         {
                             $set: {
-                                componentParent: true
+                                componentParent: false,
+                                componentActive: false
                             }
                         }
                     );
 
-                    // And then move up to the next parent
-                    parentRefId = currentWpComponent.componentParentReferenceId;
+                    // And then all of its children
+                    this.deScopeChildren(currentWorkPackage, startingComponentRef);
 
                 }
-
-                // Mark up all children below the selected item...
-                this.scopeChildren(currentWorkPackage, startingComponentRef);
-
-            } else {
-                // When a component is put out of scope...
-                // All children are taken out of scope.
-                // Ny parent that no longer haschildren goes
-
-                // Descope the component
-                WorkPackageComponents.update(
-                    {_id: currentWpComponent._id},
-                    {
-                        $set: {
-                            componentParent: false,
-                            componentActive: false
-                        }
-                    }
-                );
-
-                // And then all of its children
-                this.deScopeChildren(currentWorkPackage, startingComponentRef);
-
             }
         }
     };

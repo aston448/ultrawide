@@ -32,14 +32,6 @@ class DesignVersionServices{
                     designVersionName: designVersionName,
                     designVersionNumber: designVersionNumber,
                     designVersionStatus: designVersionStatus
-                },
-
-                (error, result) => {
-                    if (error) {
-                        //console.log("Create Design Version error: " + error);
-                    } else {
-                        //console.log("Create Design Version success: " + result);
-                    }
                 }
             );
 
@@ -102,15 +94,6 @@ class DesignVersionServices{
                     $set: {
                         designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_DRAFT
                     }
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error publishing DV: " + error);
-                    } else {
-                        //console.log("Success publish DV: " + result);
-                    }
                 }
             );
         }
@@ -126,15 +109,6 @@ class DesignVersionServices{
                     $set: {
                         designVersionStatus: DesignVersionStatus.VERSION_NEW
                     }
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error un-publishing DV: " + error);
-                    } else {
-                        //console.log("Success un-publish DV: " + result);
-                    }
                 }
             );
         }
@@ -143,7 +117,7 @@ class DesignVersionServices{
     mergeUpdatesToNewDraftVersion(designVersionId){
 
         if(Meteor.isServer) {
-            // The steps are called in the success callback of the previous step where necessary.  Overall the steps are:
+            // Overall the steps are:
             // 1. Insert a new Design Version
             // 2. Create new design components for the new version as a copy of the old
             // 3. Update the parent ids for the new design components
@@ -158,27 +132,20 @@ class DesignVersionServices{
             const oldDesignVersion = DesignVersions.findOne({_id: designVersionId});
 
             // Create a new design version - note: this is the only way a new version can be created...
-            DesignVersions.insert(
+            let newDesignVersionId = DesignVersions.insert(
                 {
                     designId: oldDesignVersion.designId,
                     designVersionName: oldDesignVersion.designVersionName + ' with updates',
                     designVersionNumber: oldDesignVersion.designVersionNumber + ' ++',
                     designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_DRAFT
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error creating new DV: " + error);
-                    } else {
-                        //console.log("Success create new DV: " + result);
-
-                        // Get a list of updates to be merged in and merge them
-                        DesignVersionModules.mergeStepCreateNewDesignComponents(designVersionId, result);
-
-                    }
                 }
+
             );
+
+            if(newDesignVersionId){
+                // Get a list of updates to be merged in and merge them
+                DesignVersionModules.mergeStepCreateNewDesignComponents(designVersionId, newDesignVersionId);
+            }
         }
 
     };

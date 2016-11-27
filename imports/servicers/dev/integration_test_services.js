@@ -16,77 +16,79 @@ class IntegrationTestServices {
 
     getIntegrationTestResults(testType, userContext){
 
-        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
-        if(ClientIdentityServices.getApplicationName() != 'ULTRAWIDE'){
-            return;
+        if(Meteor.isServer) {
+
+            // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
+            if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
+                return;
+            }
+
+            let resultsData = [];
+
+            // Call the correct results service to get the test data - if not TEST instance
+
+            switch (testType) {
+                case 'CHIMP_MOCHA':
+                    let testFile = userContext.integrationTestResultsLocation;
+
+                    resultsData = ChimpMochaTestServices.getJsonTestResults(testFile);
+                    break;
+
+            }
+
+            // Now take that standard data and construct the integration mash from it
+
+            // Clear data for this user
+            UserIntTestMashData.remove({userId: userContext.userId});
+
+
+            // Get relevant Design Data to display in the Mash: Features, Feature Aspects and Scenarios
+            // But needs to be maintained in the order of the design.  This is a problem for Features when selecting the
+            // whole design or a parent Design Section of other Design Sections so we need to start by compiling an ordered list
+            // of Features and then adding in their children
+
+            // Get all Applications in Design in order
+            let designApplications = [];
+            if (userContext.designUpdateId === 'NONE') {
+                designApplications = DesignComponents.find(
+                    {
+                        designVersionId: userContext.designVersionId,
+                        componentType: ComponentType.APPLICATION
+                    },
+                    {sort: {componentIndex: 1}}).fetch();
+            } else {
+                designApplications = DesignUpdateComponents.find(
+                    {
+                        designVersionId: userContext.designVersionId,
+                        componentType: ComponentType.APPLICATION
+                    },
+                    {sort: {componentIndexNew: 1}}).fetch();
+            }
+
+            if (designApplications.length > 0) {
+
+                // Each feature, in order, will be given an index
+                let featureIndex = 0;
+
+                // Get the Design Sections in order for each Application
+                designApplications.forEach((application) => {
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data for application {}", application.componentName);
+
+                    // Recursively look for features in design sections under this Application
+                    featureIndex = this.getDesignSubSectionFeatures(userContext, application, featureIndex);
+
+                });
+
+                // And update the mash data from the actual test results
+                this.updateMashResults(resultsData, userContext);
+
+            } else {
+                // No point continuing
+                return;
+            }
+
         }
-
-        let resultsData = [];
-
-        // Call the correct results service to get the test data - if not TEST instance
-
-        switch(testType){
-            case 'CHIMP_MOCHA':
-                let testFile = userContext.integrationTestResultsLocation;
-
-                resultsData = ChimpMochaTestServices.getJsonTestResults(testFile);
-                break;
-
-        }
-
-        // Now take that standard data and construct the integration mash from it
-
-        // Clear data for this user
-        UserIntTestMashData.remove({userId: userContext.userId});
-
-
-        // Get relevant Design Data to display in the Mash: Features, Feature Aspects and Scenarios
-        // But needs to be maintained in the order of the design.  This is a problem for Features when selecting the
-        // whole design or a parent Design Section of other Design Sections so we need to start by compiling an ordered list
-        // of Features and then adding in their children
-
-        // Get all Applications in Design in order
-        let designApplications = [];
-        if(userContext.designUpdateId === 'NONE'){
-            designApplications = DesignComponents.find(
-                {
-                    designVersionId:    userContext.designVersionId,
-                    componentType:      ComponentType.APPLICATION
-                },
-                {sort:{componentIndex: 1}}).fetch();
-        } else {
-            designApplications = DesignUpdateComponents.find(
-                {
-                    designVersionId:    userContext.designVersionId,
-                    componentType:      ComponentType.APPLICATION
-                },
-                {sort:{componentIndexNew: 1}}).fetch();
-        }
-
-        if(designApplications.length > 0){
-
-            // Each feature, in order, will be given an index
-            let featureIndex = 0;
-
-            // Get the Design Sections in order for each Application
-            designApplications.forEach((application) => {
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data for application {}", application.componentName);
-
-                // Recursively look for features in design sections under this Application
-                featureIndex = this.getDesignSubSectionFeatures(userContext, application, featureIndex);
-
-            });
-
-            // And update the mash data from the actual test results
-            this.updateMashResults(resultsData, userContext);
-
-        } else {
-            // No point continuing
-            return;
-        }
-
-
     };
 
     getDesignSubSectionFeatures(userContext, parentComponent, featureIndex){

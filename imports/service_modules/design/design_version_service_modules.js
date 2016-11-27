@@ -19,12 +19,9 @@ class DesignVersionModules{
         const oldDesignComponents = DesignComponents.find({designVersionId: oldDesignVersionId});
 
         // Create an exact copy in the new DV
-        let componentsToInsert = oldDesignComponents.count();
-        let componentsInserted = 0;
-
         oldDesignComponents.forEach((oldComponent) => {
 
-            DesignComponents.insert(
+            let newDesignComponentId = DesignComponents.insert(
                 {
                     // Identity
                     componentReferenceId:       oldComponent.componentReferenceId,
@@ -48,41 +45,20 @@ class DesignVersionModules{
                     isRemoved:                  oldComponent.isRemoved,
                     isNew:                      oldComponent.isNew,
                     isOpen:                     oldComponent.isOpen
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error creating new DV component: " + error);
-                    } else {
-
-                        componentsInserted++;
-
-                        // When all components inserted...
-                        if(componentsInserted == componentsToInsert) {
-                            // Fix the parent ids
-                            this.fixParentIds(oldDesignVersionId, newDesignVersionId, this.mergeStepMergeUpdates(oldDesignVersionId, newDesignVersionId));
-
-                        }
-
-                    }
                 }
             );
 
         });
-    };
 
+        // Fix the parent ids
+        this.fixParentIds(oldDesignVersionId, newDesignVersionId, this.mergeStepMergeUpdates(oldDesignVersionId, newDesignVersionId));
+    };
 
     // Change the old design version parent ids to the ids for the new design version
     fixParentIds(oldDesignVersionId, newDesignVersionId, callbackFunction){
 
-        //console.log("MERGE: Fixing parent Ids...");
-
         // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
-
         const newDesignVersionComponents = DesignComponents.find({designVersionId: newDesignVersionId});
-        let componentsToUpdate = newDesignVersionComponents.count();
-        let componentsUpdated = 0;
 
         newDesignVersionComponents.forEach((component) => {
 
@@ -101,28 +77,15 @@ class DesignVersionModules{
                     $set:{
                         componentParentId: parentId
                     }
-                },
-
-                (error, result) => {
-                    if (error) {
-                        // Error handler
-                        //console.log("Error updating new DV component parent id: " + error);
-                    } else {
-
-                        componentsUpdated++;
-
-                        // When all components inserted...
-                        if(componentsUpdated == componentsToUpdate) {
-                            // All done - call the next step
-                            if(callbackFunction) {
-                                callbackFunction(oldDesignVersionId, newDesignVersionId);
-                            }
-                        }
-                    }
                 }
             );
 
         });
+
+        // All done - call the next step
+        if(callbackFunction) {
+            callbackFunction(oldDesignVersionId, newDesignVersionId);
+        }
     };
 
     mergeStepMergeUpdates(oldDesignVersionId, newDesignVersionId){
@@ -205,9 +168,6 @@ class DesignVersionModules{
 
             // Add any design components that are new.  They may be changed as well but as new they just need to be inserted
             newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true});
-            let componentsToInsert = newComponents.count();
-
-            let componentsInserted = 0;
 
             newComponents.forEach((newComponent) => {
                 DesignComponents.insert(
@@ -234,26 +194,12 @@ class DesignVersionModules{
                         isRemoved:                  false,
                         isNew:                      false,
                         isOpen:                     false
-                    },
-
-                    (error, result) => {
-                        if (error) {
-                            // Error handler
-                            //console.log("Error creating new DV component: " + error);
-                        } else {
-
-                            componentsInserted++;
-
-                            // When all components inserted...
-                            if (componentsInserted == componentsToInsert) {
-                                // Fix the parent ids
-                                this.fixParentIds(oldDesignVersionId, newDesignVersionId);
-                            }
-
-                        }
                     }
                 );
             });
+
+            // Fix the parent ids
+            this.fixParentIds(oldDesignVersionId, newDesignVersionId);
 
             // Set the update as now merged - no more editing allowed
             DesignUpdates.update(
