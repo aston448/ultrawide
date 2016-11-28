@@ -1,7 +1,7 @@
 import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 305 - Move Design Component', function(){
+describe('UC 145 - Move Design Component', function(){
 
     before(function(){
 

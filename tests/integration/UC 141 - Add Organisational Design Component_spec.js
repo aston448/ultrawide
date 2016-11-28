@@ -1,7 +1,7 @@
 import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 301 - Add Organisational Design Component', function(){
+describe('UC 141 - Add Organisational Design Component', function(){
 
     before(function(){
 

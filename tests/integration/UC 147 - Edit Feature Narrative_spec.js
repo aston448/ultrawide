@@ -1,7 +1,7 @@
 import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 307 - Edit Feature Narrative', function(){
+describe('UC 147 - Edit Feature Narrative', function(){
 
     before(function(){
 

@@ -1,7 +1,7 @@
 import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 302 - Add Functional Design Component', function(){
+describe('UC 142 - Add Functional Design Component', function(){
 
     before(function(){
 

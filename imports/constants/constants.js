@@ -11,6 +11,7 @@ export const RoleType = {
 
 // Determines what we are looking at
 export const ViewType = {
+    ADMIN:                      'ADMIN',                    // Backup / Restore / User Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
     CONFIGURE:                  'CONFIGURE',                // Change user role and settings
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
@@ -104,6 +105,11 @@ export const ComponentType = {
     SCENARIO_STEP:      'SCENARIO_STEP',
     BACKGROUND_STEP:    'BACKGROUND_STEP',
     DRAGGABLE_ITEM:     'DRAGGABLE'
+};
+
+export const DesignStatus = {
+    DESIGN_LIVE:                'Live',
+    DESIGN_ARCHIVED:            'Archived'
 };
 
 export const DesignVersionStatus = {

@@ -1,7 +1,7 @@
 import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 304 - Remove Design Component', function(){
+describe('UC 144 - Remove Design Component', function(){
 
     before(function(){
 

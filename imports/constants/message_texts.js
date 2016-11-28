@@ -2,6 +2,10 @@
  * Created by aston on 17/11/2016.
  */
 
+export const BackupMessages = {
+    MSG_DESIGN_BACKUP:              'Design backup saved'
+};
+
 export const DesignMessages = {
 
     MSG_DESIGN_ADDED:               'New Design added',

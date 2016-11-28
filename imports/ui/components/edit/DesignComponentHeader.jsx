@@ -362,6 +362,11 @@ class DesignComponentHeader extends Component{
             return 'editor-save';
         }
 
+        // Also Allow Ctrl + E as Edit
+        if (e.keyCode === 69 /* `E` key */ && hasCommandModifier(e)) {
+            return 'editor-edit';
+        }
+
         return getDefaultKeyBinding(e);
     }
 
@@ -371,6 +376,14 @@ class DesignComponentHeader extends Component{
         if(command === 'editor-save'){
             // Save the title on ENTER
             this.saveComponentName(this.props.view, this.props.mode);
+            return true;
+        }
+
+        if(command === 'editor-edit'){
+            // Go into Edit mode on cmd-E
+            if(this.state.editable === false) {
+                this.editComponentName();
+            }
             return true;
         }
 
@@ -707,6 +720,8 @@ class DesignComponentHeader extends Component{
                         <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
                             <Editor
                                 editorState={this.state.editorState}
+                                handleKeyCommand={this.handleTitleKeyCommand}
+                                keyBindingFn={this.keyBindings}
                                 spellCheck={false}
                                 ref="editorReadOnly"
                                 readOnly={true}

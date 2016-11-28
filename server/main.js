@@ -1,6 +1,8 @@
 // Stuff to be used by the server
 
 // Collections
+import '../imports/collections/app/app_global_data.js';
+import '../imports/collections/backup/design_backups.js';
 import '../imports/collections/design/designs.js';
 import '../imports/collections/design/design_versions.js';
 import '../imports/collections/design_update/design_updates.js';

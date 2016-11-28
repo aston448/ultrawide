@@ -7,6 +7,10 @@ export const Validation = {
     INVALID:                'INVALID'
 };
 
+export const BackupValidationErrors = {
+    BACKUP_DESIGN_INVALID_ROLE:     'Only a Manager or Designer can backup a Design'
+};
+
 export const DesignValidationErrors = {
     DESIGN_NOT_EXIST:               'Design does not exist!',
     DESIGN_INVALID_ROLE_REMOVE:     'Only a Designer can remove Designs',

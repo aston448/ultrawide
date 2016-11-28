@@ -1,7 +1,7 @@
 import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 306 - ReOrder Design Component List', function(){
+describe('UC 146 - ReOrder Design Component List', function(){
 
     before(function(){
 

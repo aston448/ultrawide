@@ -165,71 +165,7 @@ class DesignComponentModules{
 
     };
 
-    // Called when restoring data after a reset
-    importComponent(designId, designVersionId, component){
 
-        // Fix missing feature refs
-        let componentFeatureReferenceId = component.componentFeatureReferenceId;
-        if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceId === 'NONE'){
-            componentFeatureReferenceId = component.componentReferenceId;
-        }
-
-        const designComponentId = DesignComponents.insert(
-            {
-                // Identity
-                componentReferenceId:       component.componentReferenceId,
-                designId:                   designId,                               // Will be a new id for the restored data
-                designVersionId:            designVersionId,                        // Ditto
-                componentType:              component.componentType,
-                componentLevel:             component.componentLevel,
-                componentParentId:          component.componentParentId,            // This will be wrong and fixed by restore process
-                componentParentReferenceId: component.componentParentReferenceId,
-                componentFeatureReferenceId:componentFeatureReferenceId,
-                componentIndex:             component.componentIndex,
-
-                // Data
-                componentName:              component.componentName,
-                componentNameRaw:           component.componentNameRaw,
-                componentNarrative:         component.componentNarrative,
-                componentNarrativeRaw:      component.componentNarrativeRaw,
-                componentTextRaw:           component.componentTextRaw,
-
-                // State (shared and persistent only)
-                isRemovable:                component.isRemovable,
-                isRemoved:                  component.isRemoved,
-                isNew:                      component.isNew,
-                lockingUser:                component.lockingUser,
-                designUpdateId:             component.designUpdateId
-            }
-        );
-
-        return designComponentId;
-
-    };
-
-    // Resets parent ids after an import of data
-    importRestoreParent(designComponentId, componentMap){
-
-        const designComponent = DesignComponents.findOne({_id: designComponentId});
-
-        const oldParentId = designComponent.componentParentId;
-        let newParentId = 'NONE';
-
-        if(oldParentId != 'NONE'){
-            newParentId = getIdFromMap(componentMap, oldParentId);
-        }
-
-        DesignComponents.update(
-            {_id: designComponentId},
-            {
-                $set:{
-                    componentParentId: newParentId
-                }
-            }
-        )
-
-
-    }
 
     // Set any other components to no longer new
     setComponentsOld(designComponentId){

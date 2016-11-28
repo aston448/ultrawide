@@ -13,6 +13,7 @@ import DesignItemHeader from './DesignItemHeader.jsx';
 // Ultrawide Services
 import { ItemType } from '../../../constants/constants.js';
 import ClientDesignServices from '../../../apiClient/apiClientDesign.js';
+import ClientBackupServices from '../../../apiClient/apiClientBackup.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -48,6 +49,10 @@ class Design extends Component {
         ClientDesignServices.removeDesign(userContext, userRole, designId);
     }
 
+    onBackupDesign(userRole, designId){
+        ClientBackupServices.backupDesign(designId, userRole);
+    }
+
     render() {
         const {design, userContext, userRole} = this.props;
 
@@ -57,16 +62,17 @@ class Design extends Component {
         let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
 
         let buttons = '';
-        //if(design.isRemovable){
+        if(design.isRemovable){
             buttons = <ButtonGroup>
                 <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
                 <Button bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
             </ButtonGroup>
-        // } else {
-        //     buttons = <ButtonGroup>
-        //         <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
-        //     </ButtonGroup>
-        // }
+        } else {
+            buttons = <ButtonGroup>
+                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+                <Button bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>
+            </ButtonGroup>
+        }
 
         return (
             <div className={itemStyle}>
