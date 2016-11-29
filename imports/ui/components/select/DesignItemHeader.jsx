@@ -124,17 +124,17 @@ class DesignItemHeader extends Component{
         this.setState({versionEditable: false});
     }
 
-    handleNameKeyEvents(event, currentItemType, currentItemId) {
+    handleNameKeyEvents(userRole, event, currentItemType, currentItemId) {
         if(event.charCode === 13){
             // Enter Key
-            this.saveItemName(currentItemType, currentItemId);
+            this.saveItemName(userRole, currentItemType, currentItemId);
         }
     }
 
-    handleVersionKeyEvents(event, currentItemType, currentItemId) {
+    handleVersionKeyEvents(userRole, event, currentItemType, currentItemId) {
         if(event.charCode === 13){
             // Enter Key
-            this.saveItemVersion(currentItemType, currentItemId);
+            this.saveItemVersion(userRole, currentItemType, currentItemId);
         }
     }
 
@@ -184,7 +184,7 @@ class DesignItemHeader extends Component{
                                 value={this.state.versionValue}
                                 placeholder={currentItemVersion}
                                 onChange={(event) => this.handleVersionChange(event)}
-                                onKeyPress={(event) => this.handleVersionKeyEvents(event, currentItemType, currentItemId)}
+                                onKeyPress={(event) => this.handleVersionKeyEvents(userRole, event, currentItemType, currentItemId)}
                             />
                         </div>
                         <InputGroup.Addon onClick={ () => this.saveItemVersion(userRole, currentItemType, currentItemId)}>
@@ -227,7 +227,7 @@ class DesignItemHeader extends Component{
                             value={this.state.nameValue}
                             placeholder={currentItemName}
                             onChange={(event) => this.handleNameChange(event)}
-                            onKeyPress={(event) => this.handleNameKeyEvents(event, currentItemType, currentItemId)}
+                            onKeyPress={(event) => this.handleNameKeyEvents(userRole, event, currentItemType, currentItemId)}
                         />
                     </div>
                     <InputGroup.Addon onClick={ () => this.saveItemName(userRole, currentItemType, currentItemId)}>

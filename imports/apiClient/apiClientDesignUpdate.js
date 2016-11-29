@@ -6,8 +6,9 @@
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import {ViewType, ViewMode, ComponentType, MessageType} from '../constants/constants.js';
-import {DesignUpdateMessages} from '../constants/message_texts.js';
+import { ViewType, ViewMode, ComponentType, MessageType } from '../constants/constants.js';
+import { Validation } from '../constants/validation_errors.js';
+import { DesignUpdateMessages } from '../constants/message_texts.js';
 import DesignUpdateValidationApi from '../apiValidation/apiDesignUpdateValidation.js';
 import ServerDesignUpdateApi from '../apiServer/apiDesignUpdate.js';
 

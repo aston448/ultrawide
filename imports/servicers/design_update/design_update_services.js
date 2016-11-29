@@ -1,14 +1,9 @@
 
-import { DesignVersions } from '../../collections/design/design_versions.js';
 import { DesignUpdates } from '../../collections/design_update/design_updates.js';
 import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
-import { DesignComponents } from '../../collections/design/design_components.js';
 
-import DesignUpdateComponentServices from './design_update_component_services.js';
 import DesignUpdateModules from '../../service_modules/design_update/design_update_service_modules.js';
-import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
-
-import { DesignUpdateStatus, DesignUpdateMergeAction, ComponentType } from '../../constants/constants.js';
+import { DesignUpdateStatus, DesignUpdateMergeAction } from '../../constants/constants.js';
 
 class DesignUpdateServices{
 
