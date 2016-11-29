@@ -2,21 +2,24 @@
  * Created by aston on 15/09/2016.
  */
 
-import { DesignVersions } from '../../collections/design/design_versions.js';
-import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
-import { DesignComponents } from '../../collections/design/design_components.js';
+import { DesignVersions }           from '../../collections/design/design_versions.js';
+import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
+import { DesignComponents }         from '../../collections/design/design_components.js';
 
-import { ComponentType, LogLevel } from '../../constants/constants.js';
+import { ComponentType, LogLevel }  from '../../constants/constants.js';
+import { DefaultComponentNames }    from '../../constants/default_names.js';
 
-import  DesignServices              from '../design/design_services.js';
-import  DesignUpdateServices        from './design_update_services.js';
+import DesignServices               from '../design/design_services.js';
+import DesignUpdateServices         from './design_update_services.js';
+import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
+import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
 
 import {getIdFromMap, log} from '../../common/utils.js';
 
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, defaultNarrative, defaultRawNarrative){
+    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText){
         if(Meteor.isServer) {
             // Get the parent reference id (if there is a parent)
             let parentRefId = 'NONE';
@@ -54,10 +57,6 @@ class DesignUpdateComponentServices{
                     componentNameRawOld: defaultRawName,
                     componentNameNew: defaultName,
                     componentNameRawNew: defaultRawName,
-                    componentNarrativeOld: defaultNarrative,
-                    componentNarrativeNew: defaultNarrative,
-                    componentNarrativeRawOld: defaultRawNarrative,
-                    componentNarrativeRawNew: defaultRawNarrative,
                     componentTextRawOld: defaultRawText,
                     componentTextRawNew: defaultRawText,
 
@@ -84,14 +83,18 @@ class DesignUpdateComponentServices{
                     {$set: {componentReferenceId: newUpdateComponentId}}
                 );
 
-                // If a Feature also update the Feature Ref Id to the new ID
+                // If a Feature also update the Feature Ref Id to the new ID + add the default narrative
                 if (componentType === ComponentType.FEATURE) {
                     DesignUpdateComponents.update(
                         {_id: newUpdateComponentId},
                         {
                             $set: {
                                 componentFeatureReferenceIdOld: newUpdateComponentId,
-                                componentFeatureReferenceIdNew: newUpdateComponentId
+                                componentFeatureReferenceIdNew: newUpdateComponentId,
+                                componentNarrativeOld: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                                componentNarrativeNew: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                                componentNarrativeRawOld: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT),
+                                componentNarrativeRawNew: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
                             }
                         }
                     );
@@ -211,11 +214,11 @@ class DesignUpdateComponentServices{
 
 
     // Move a design update component to a new parent
-    moveComponent(designUpdateComponentId, newParentId){
+    moveComponent(componentId, newParentId){
 
         if(Meteor.isServer) {
             const newParent = DesignUpdateComponents.findOne({_id: newParentId});
-            const movingComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+            const movingComponent = DesignUpdateComponents.findOne({_id: componentId});
 
             // Check for move back to old position
             const oldParentId = movingComponent.componentParentIdOld;
@@ -231,7 +234,7 @@ class DesignUpdateComponentServices{
             }
 
             let updatedComponents = DesignUpdateComponents.update(
-                {_id: designUpdateComponentId},
+                {_id: componentId},
                 {
                     $set: {
                         componentParentIdNew: newParentId,
@@ -375,7 +378,7 @@ class DesignUpdateComponentServices{
             if(updatedComponents > 0){
                 // If setting in scope. make sure all parents have parent scope
                 // If setting out of scope, remove parent scope from any parents that do not have in scope children
-                this.updateParentScope(designUpdateComponentId, newScope);
+                DesignUpdateComponentModules.updateParentScope(designUpdateComponentId, newScope);
             }
         }
     }
@@ -384,7 +387,7 @@ class DesignUpdateComponentServices{
 
 
     // Save text for a design update component
-    saveDesignComponentName(designUpdateComponentId, componentNewName, componentNewNameRaw){
+    updateComponentName(designUpdateComponentId, componentNewName, componentNewNameRaw){
 
         if(Meteor.isServer) {
             // Item only counts as logically changed if the new name is still different to that in the existing design version.
@@ -410,7 +413,7 @@ class DesignUpdateComponentServices{
 
 
     // Save the narrative for a feature component
-    saveNarrative(featureId, newRawNarrative, newNarrative){
+    updateFeatureNarrative(featureId, newNarrative, newRawNarrative){
 
         if(Meteor.isServer) {
             let componentOldNarrative = DesignUpdateComponents.findOne({_id: featureId}).componentNarrativeOld;
@@ -433,7 +436,7 @@ class DesignUpdateComponentServices{
     };
 
 
-    deleteComponent(designUpdateComponentId, parentId){
+    removeComponent(designUpdateComponentId, parentId){
 
         if(Meteor.isServer) {
             // For a design update this is a logical delete it it was an existing item

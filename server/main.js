@@ -41,10 +41,11 @@ import '../imports/apiServer/apiMashData.js';
 import '../imports/apiServer/apiFixtures.js';
 
 // Meteor Validated Methods
-import '../imports/apiValidatedMethods/design_methods.js'
-
-import '../imports/apiValidatedMethods/design_update_methods.js'
-import '../imports/apiValidatedMethods/design_component_methods.js'
+import '../imports/apiValidatedMethods/design_methods.js';
+import '../imports/apiValidatedMethods/design_version_methods.js';
+import '../imports/apiValidatedMethods/design_update_methods.js';
+import '../imports/apiValidatedMethods/design_component_methods.js';
+import '../imports/apiValidatedMethods/design_update_component_methods';
 
 
 // Integration test Framework

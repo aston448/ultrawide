@@ -1164,12 +1164,9 @@ class ClientContainerServices{
 
         }
 
-
-
-
-
-
         // Iterate up until we reach top of tree
+        let parentId = '';
+
         while(parentId != 'NONE'){
             // Get next parent up
 

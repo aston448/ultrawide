@@ -31,22 +31,6 @@ export const DesignVersionValidationErrors = {
     DESIGN_VERSION_INVALID_STATUS_PUBLISH:  'Only New Design Versions can be published',
     DESIGN_VERSION_INVALID_STATUS_UNPUBLISH:'Only Draft Design Versions can be un-published',
     DESIGN_VERSION_UPDATES_UNPUBLISH        :'A Design Version with Design Updates cannot be un-published'
-}
-
-export const DesignComponentValidationErrors = {
-    DESIGN_COMPONENT_INVALID_VIEW_ADD:          'A Design Component can only be added in the Base Design Editor',
-    DESIGN_COMPONENT_INVALID_MODE_ADD:          'A Design Component cannot be added in View Only mode',
-    DESIGN_COMPONENT_INVALID_VIEW_EDIT:         'A Design Component can only be edited in the Base Design Editor',
-    DESIGN_COMPONENT_INVALID_MODE_EDIT:         'A Design Component cannot be edited in View Only mode',
-    DESIGN_COMPONENT_INVALID_VIEW_REMOVE:       'A Design Component can only be removed in the Base Design Editor',
-    DESIGN_COMPONENT_INVALID_MODE_REMOVE:       'A Design Component cannot be removed in View Only mode',
-    DESIGN_COMPONENT_INVALID_VIEW_MOVE:         'A Design Component can only be moved in the Base Design Editor',
-    DESIGN_COMPONENT_INVALID_MODE_MOVE:         'A Design Component cannot be moved in View Only mode',
-    DESIGN_COMPONENT_INVALID_CONTEXT_MOVE:      'A Design Component can only be moved within the Design Editor',
-    DESIGN_COMPONENT_INVALID_MOVE:              'This Design Component cannot be moved to the location where it was dropped',
-    DESIGN_COMPONENT_INVALID_REORDER:           'This Design Component cannot be moved to the location where it was dropped',
-    DESIGN_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Component cannot have the same name as another component of the same type in this Design Version',
-    DESIGN_COMPONENT_NOT_REMOVABLE:             'A Design Component containing other components is not removable.  Delete from bottom up to remove.'
 };
 
 export const DesignUpdateValidationErrors = {
@@ -64,3 +48,43 @@ export const DesignUpdateValidationErrors = {
     DESIGN_UPDATE_INVALID_ROLE_REMOVE:          'Only a Designer can remove Design Updates',
     DESIGN_UPDATE_NOT_REMOVABLE:                'Only new or unused Design Updates can be removed'
 };
+
+export const DesignComponentValidationErrors = {
+    DESIGN_COMPONENT_INVALID_VIEW_ADD:          'A Design Component can only be added in the Base Design Editor',
+    DESIGN_COMPONENT_INVALID_MODE_ADD:          'A Design Component cannot be added in View Only mode',
+    DESIGN_COMPONENT_INVALID_VIEW_EDIT:         'A Design Component can only be edited in the Base Design Editor',
+    DESIGN_COMPONENT_INVALID_MODE_EDIT:         'A Design Component cannot be edited in View Only mode',
+    DESIGN_COMPONENT_INVALID_VIEW_REMOVE:       'A Design Component can only be removed in the Base Design Editor',
+    DESIGN_COMPONENT_INVALID_MODE_REMOVE:       'A Design Component cannot be removed in View Only mode',
+    DESIGN_COMPONENT_INVALID_VIEW_MOVE:         'A Design Component can only be moved in the Base Design Editor',
+    DESIGN_COMPONENT_INVALID_MODE_MOVE:         'A Design Component cannot be moved in View Only mode',
+    DESIGN_COMPONENT_INVALID_CONTEXT_MOVE:      'A Design Component can only be moved within the Design Editor',
+    DESIGN_COMPONENT_INVALID_MOVE:              'This Design Component cannot be moved to the location where it was dropped',
+    DESIGN_COMPONENT_INVALID_REORDER:           'This Design Component cannot be moved to the location where it was dropped',
+    DESIGN_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Component cannot have the same name as another component of the same type in this Design Version',
+    DESIGN_COMPONENT_NOT_REMOVABLE:             'A Design Component containing other components is not removable.  Delete from bottom up to remove.'
+};
+
+export const DesignUpdateComponentValidationErrors = {
+    DESIGN_UPDATE_COMPONENT_INVALID_VIEW_ADD:          'A Design Update Component can only be added in the Design Update Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD:          'A Design Update Component cannot be added in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_VIEW_EDIT:         'A Design Update Component can only be edited in the Design Update Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT:         'A Design Update Component cannot be edited in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_VIEW_REMOVE:       'A Design Update Component can only be removed in the Design Update Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MODE_REMOVE:       'A Design Update Component cannot be removed in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_VIEW_RESTORE:      'A Design Update Component can only be restored in the Design Update Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MODE_RESTORE:      'A Design Update Component cannot be restored in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_VIEW_SCOPE:        'A Design Update Component can only be scoped in the Design Update Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MODE_SCOPE:        'A Design Update Component cannot be scoped in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_SCOPE:     'A Design Update Component cannot be scoped outside the scope pane',
+    DESIGN_UPDATE_COMPONENT_INVALID_VIEW_MOVE:         'A Design Update Component can only be moved in the Design Update Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MODE_MOVE:         'A Design Update Component cannot be moved in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_MOVE:      'A Design Update Component can only be moved within the Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_MOVE:              'This Design Update Component cannot be moved to the location where it was dropped',
+    DESIGN_UPDATE_COMPONENT_INVALID_REORDER:           'This Design Update Component cannot be moved to the location where it was dropped',
+    DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Update Component cannot have the same name as another component of the same type in this Design Version',
+    DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE:             'A Design Update Component containing other components is not removable.  Delete from bottom up to remove.',
+    DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE:            'A Design Update Component that is not removed is not restorable'
+};
+
+

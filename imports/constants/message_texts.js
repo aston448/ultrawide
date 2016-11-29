@@ -44,3 +44,20 @@ export const DesignComponentMessages = {
     MSG_DESIGN_COMPONENT_REORDERED: 'Design Component re-ordered'
 
 };
+
+export const DesignUpdateComponentMessages = {
+
+    MSG_NEW_APPLICATION_ADDED:      'New Application added to Update',
+    MSG_NEW_DESIGN_SECTION_ADDED:   'New Design Section added to Update',
+    MSG_NEW_FEATURE_ADDED:          'New Feature added to Update',
+    MSG_NEW_FEATURE_ASPECT_ADDED:   'New Feature Aspect added to Update',
+    MSG_NEW_SCENARIO_ADDED:         'New Scenario added to Update',
+    MSG_COMPONENT_NAME_UPDATED:     'Component name updated',
+    MSG_FEATURE_NARRATIVE_UPDATED:  'Feature narrative updated',
+    MSG_DESIGN_COMPONENT_REMOVED:   'Design Update Component logically deleted',
+    MSG_DESIGN_COMPONENT_RESTORED:  'Design Update Component restored',
+    MSG_DESIGN_COMPONENT_MOVED:     'Design Update Component moved',
+    MSG_DESIGN_COMPONENT_REORDERED: 'Design Update Component re-ordered',
+    MSG_DESIGN_COMPONENT_IN_SCOPE:  'Design Update Component in scope',
+    MSG_DESIGN_COMPONENT_OUT_SCOPE: 'Design Update Component out of scope'
+};

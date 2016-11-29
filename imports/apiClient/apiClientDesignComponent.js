@@ -362,8 +362,6 @@ class ClientDesignComponentServices{
             designComponent.componentParentId,
             (err, result) => {
 
-                //console.log("SCENARIO CALLBACK");
-
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
@@ -397,8 +395,6 @@ class ClientDesignComponentServices{
                         messageType: MessageType.INFO,
                         messageText: DesignComponentMessages.MSG_DESIGN_COMPONENT_REMOVED
                     }));
-
-                    //console.log("SCENARIO REMOVED");
                 }
             }
         );
@@ -496,6 +492,7 @@ class ClientDesignComponentServices{
 
     // User selected a design component --------------------------------------------------------------------------------
     setDesignComponent(newDesignComponentId, userContext){
+        console.log("Selected component with id " + newDesignComponentId);
         if(newDesignComponentId != userContext.designComponentId) {
 
             // See if any of the feature specific fields need setting

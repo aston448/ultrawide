@@ -446,7 +446,7 @@ class DesignComponentHeader extends Component{
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 // Updates to a design update
-                success = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item, plainText, rawText);
+                success = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
         }
 
