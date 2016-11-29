@@ -3,15 +3,17 @@
 // Meteor / React Services
 
 // Ultrawide Collections
-import {DesignUpdates} from '../collections/design_update/design_updates.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import {ViewType, ViewMode, ComponentType, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction} from '../constants/constants.js';
+import {ViewType, ViewMode, ComponentType, MessageType} from '../constants/constants.js';
+import {DesignUpdateMessages} from '../constants/message_texts.js';
+import DesignUpdateValidationApi from '../apiValidation/apiDesignUpdateValidation.js';
+import ServerDesignUpdateApi from '../apiServer/apiDesignUpdate.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentUserDevContext, setCurrentView, changeApplicationMode, setCurrentUserOpenDesignUpdateItems} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
 
@@ -28,7 +30,206 @@ import {setCurrentUserItemContext, setCurrentUserDevContext, setCurrentView, cha
 
 class ClientDesignUpdateServices {
 
-    // Sets the currently selected design update as part of the global state
+    // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
+
+    // User clicks Add New Update in Design Updates list for a Design Version ------------------------------------------
+    addNewDesignUpdate(userRole, designVersionId){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateAddDesignUpdate(userRole, designVersionId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.addDesignUpdate(userRole, designVersionId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_ADDED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User saves an update to a Design Update name --------------------------------------------------------------------
+    updateDesignUpdateName(userRole, designUpdateId, newName){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateUpdateDesignUpdateName(userRole, designUpdateId, newName);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.updateDesignUpdateName(userRole, designUpdateId, newName, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_NAME_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // User saves an update to a Design Update version -----------------------------------------------------------------
+    saveDesignUpdateVersion(userRole, designUpdateId, newVersion){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateUpdateDesignUpdateVersion(userRole, designUpdateId, newVersion);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.updateDesignUpdateVersion(userRole, designUpdateId, newVersion, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_VERSION_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    }
+
+
+
+    // User chose to publish a design update to make it available in draft form ----------------------------------------
+    publishDesignUpdate(userRole, userContext, designUpdateToPublishId){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validatePublishDesignUpdate(userRole, designUpdateToPublishId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.publishDesignUpdate(userRole, designUpdateToPublishId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+                // Ensure that the current update is the update we chose to publish
+                this.setDesignUpdate(userContext, designUpdateToPublishId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_PUBLISHED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+
+    // User chose to delete a design update ----------------------------------------------------------------------------
+    deleteDesignUpdate(userRole, userContext, designUpdateToDeleteId){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateRemoveDesignUpdate(userRole, designUpdateToDeleteId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.removeDesignUpdate(userRole, designUpdateToDeleteId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+                // Clear DU from user context
+                const context = {
+                    userId:                         userContext.userId,
+                    designId:                       userContext.designId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 'NONE',
+                    workPackageId:                  'NONE',
+                    designComponentId:              'NONE',
+                    designComponentType:            'NONE',
+                    featureReferenceId:             'NONE',
+                    featureAspectReferenceId:       'NONE',
+                    scenarioReferenceId:            'NONE',
+                    scenarioStepId:                 'NONE',
+                    featureFilesLocation:           userContext.featureFilesLocation,
+                    acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                    moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                };
+
+                store.dispatch(setCurrentUserItemContext(context, true));
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_REMOVED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // LOCAL CLIENT ACTIONS ============================================================================================
+
+    // Sets the currently selected design update as part of the global state -------------------------------------------
     setDesignUpdate(userContext, newDesignUpdateId){
 
         if(newDesignUpdateId != userContext.designUpdateId) {
@@ -60,168 +261,75 @@ class ClientDesignUpdateServices {
         return false;
     };
 
-    // User clicks Add New Update in Design Updates list for a Design Version
-    addNewDesignUpdate(designVersionId, designVersionStatus){
+    // User chose to edit a design update ------------------------------------------------------------------------------
+    editDesignUpdate(userRole, userContext, designUpdateToEditId){
 
-        // Validate - can only add design update to New or Draft Design Versions
-        if(designVersionStatus === DesignVersionStatus.VERSION_NEW || designVersionStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
-            Meteor.call('designUpdate.addNewUpdate', designVersionId, true);  // Always populate a new update
-            return true;
-        } else {
+        // Client validation
+        let result = DesignUpdateValidationApi.validateEditDesignUpdate(userRole, designUpdateToEditId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
-    };
 
-    // User saves an update to a Design Update name
-    saveDesignUpdateName(designUpdateId, newName){
-        Meteor.call('designUpdate.updateDesignUpdateName', designUpdateId, newName);
+        // Open the update scope down to the Feature level
+        const designUpdateOpenComponents = DesignUpdateComponents.find(
+            {
+                designUpdateId: designUpdateToEditId,
+                componentType: {$in:[ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            },
+            {fields: {_id: 1}}
+        );
+
+        let duArr = [];
+        designUpdateOpenComponents.forEach((component) => {
+            duArr.push(component._id);
+        });
+
+        store.dispatch(setCurrentUserOpenDesignUpdateItems(
+            userContext.userId,
+            duArr,
+            null,
+            true
+        ));
+
+        // Ensure that the current update is the update we chose to edit
+        this.setDesignUpdate(userContext, designUpdateToEditId);
+
+        // Edit mode
+        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+
+        // Switch to update edit view
+        store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
+
         return true;
-    }
 
-    // User saves an update to a Design Update version
-    saveDesignUpdateVersion(designUpdateId, newVersion){
-        Meteor.call('designUpdate.updateDesignUpdateVersion', designUpdateId, newVersion);
+    };
+
+    // User chose to view a Design Update ------------------------------------------------------------------------------
+    viewDesignUpdate(userRole, userContext, designUpdateToViewId){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateViewDesignUpdate(userRole, designUpdateToViewId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Ensure that the current update is the update we chose to view
+        this.setDesignUpdate(userContext, designUpdateToViewId);
+
+        // View mode
+        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+
+        // Switch to update view-only
+        store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+
         return true;
-    }
 
-    // User chose to edit a design update.
-    editDesignUpdate(userContext, designUpdateToEditId){
-
-        // Validation - only new and draft design updates can be edited
-        const du = DesignUpdates.findOne({_id: designUpdateToEditId});
-
-        if(du && (du.updateStatus != DesignUpdateStatus.UPDATE_MERGED)){
-
-            // Open the update scope down to the Feature level
-            const designUpdateOpenComponents = DesignUpdateComponents.find(
-                {
-                    designUpdateId: designUpdateToEditId,
-                    componentType: {$in:[ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-                },
-                {fields: {_id: 1}}
-            );
-
-            //console.log("Setting open DU Items: " + designUpdateOpenComponents.count());
-
-            let duArr = [];
-            designUpdateOpenComponents.forEach((component) => {
-                duArr.push(component._id);
-            });
-
-            store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                Meteor.userId(),
-                duArr,
-                null,
-                true
-            ));
-
-            // Ensure that the current update is the update we chose to edit
-            this.setDesignUpdate(userContext, designUpdateToEditId);
-
-            // Edit mode
-            store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
-
-            // Switch to update edit view
-            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
-
-            return true;
-
-        } else {
-            // Edit not allowed
-            //TODO Messaging
-            return false;
-        }
-    };
-
-    // User chose to publish a design update to make it available in draft form
-    publishDesignUpdate(userContext, designUpdateToPublishId){
-
-        // Validation - can only publish a new design update
-        const du = DesignUpdates.findOne({_id: designUpdateToPublishId});
-
-        if(du && (du.updateStatus === DesignUpdateStatus.UPDATE_NEW)){
-
-            // Ensure that the current update is the update we chose to publish
-            this.setDesignUpdate(userContext, designUpdateToPublishId);
-
-            // And update its status to published
-            Meteor.call('designUpdate.publishUpdate', designUpdateToPublishId);
-
-        } else {
-            // Publish not allowed
-            //TODO Messaging
-            return false;
-        }
-    };
-
-    // User chose to view a Design Update
-    viewDesignUpdate(userContext, designUpdateToViewId){
-
-        // Validation - all Design Updates can be viewed
-        const du = DesignUpdates.findOne({_id: designUpdateToViewId});
-
-        if(du){
-
-            // Ensure that the current update is the update we chose to view
-            this.setDesignUpdate(userContext, designUpdateToViewId);
-
-            // View mode
-            store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
-
-            // Switch to update view-only
-            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
-
-            return true;
-
-        } else {
-            // No design update!
-            //TODO Messaging
-            return false;
-        }
-    };
-
-    // User chose to delete a design update
-    deleteDesignUpdate(userContext, designUpdateToDeleteId){
-
-        // Validation - can only delete unpublished updates TODO: possibly non-adopted as well?
-        const du = DesignUpdates.findOne({_id: designUpdateToDeleteId});
-
-        if(du && (du.updateStatus === DesignUpdateStatus.UPDATE_NEW)){
-
-            // If the DU being deleted is the current one, set current DU to nothing
-            if (userContext.designUpdateId === designUpdateToDeleteId) {
-
-                const context = {
-                    userId:                         userContext.userId,
-                    designId:                       userContext.designId,
-                    designVersionId:                userContext.designVersionId,
-                    designUpdateId:                 'NONE',
-                    workPackageId:                  'NONE',
-                    designComponentId:              'NONE',
-                    designComponentType:            'NONE',
-                    featureReferenceId:             'NONE',
-                    featureAspectReferenceId:       'NONE',
-                    scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                    featureFilesLocation:           userContext.featureFilesLocation,
-                    acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                    moduleTestResultsLocation:      userContext.moduleTestResultsLocation
-                };
-
-                store.dispatch(setCurrentUserItemContext(context, true));
-            }
-
-            // And now actually remove the DU
-            Meteor.call('designUpdate.removeUpdate', designUpdateToDeleteId);
-
-            return true;
-
-        } else {
-            // Delete not allowed
-            //TODO Messaging
-            return false;
-        }
     };
 
 }

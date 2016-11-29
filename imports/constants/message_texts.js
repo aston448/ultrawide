@@ -18,7 +18,16 @@ export const DesignVersionMessages = {
     MSG_DESIGN_VERSION_NAME_UPDATED:    'Design Version name updated',
     MSG_DESIGN_VERSION_NUMBER_UPDATED:  'Design Version number updated',
     MSG_DESIGN_VERSION_PUBLISHED:       'Design Version now Published Draft',
-    MSG_DESIGN_VERSION_UNPUBLISHED:     'Design Version reverted to New'
+};
+
+export const DesignUpdateMessages = {
+
+    MSG_DESIGN_UPDATE_ADDED:            'New Design Update added',
+    MSG_DESIGN_UPDATE_NAME_UPDATED:     'Design Update name updated',
+    MSG_DESIGN_UPDATE_VERSION_UPDATED:  'Design Update version updated',
+    MSG_DESIGN_UPDATE_PUBLISHED:        'Design Update now Published Draft',
+    MSG_DESIGN_UPDATE_UNPUBLISHED:      'Design Update reverted to New',
+    MSG_DESIGN_UPDATE_REMOVED:          'Design Update removed',
 };
 
 export const DesignComponentMessages = {

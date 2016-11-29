@@ -52,9 +52,9 @@ class DesignUpdatesList extends Component {
         });
     }
 
-    addDesignUpdate(designVersionId, designVersionStatus){
+    addDesignUpdate(userRole, designVersionId){
         // Adds a new update and populates a set of design update components for editing
-        ClientDesignUpdateServices.addNewDesignUpdate(designVersionId, designVersionStatus)
+        ClientDesignUpdateServices.addNewDesignUpdate(userRole, designVersionId)
     }
 
     onDevelopDesignUpdates(){
@@ -63,7 +63,7 @@ class DesignUpdatesList extends Component {
 
     render() {
 
-        const {designUpdates, designVersionStatus, userRole, currentUserItemContext} = this.props;
+        const {designUpdates, designVersionStatus, userRole, userContext} = this.props;
 
         let panelContent = <div></div>;
         // let developerButtons = <div></div>;
@@ -76,7 +76,7 @@ class DesignUpdatesList extends Component {
         // }
 
         // When a design version is selected...
-        if(currentUserItemContext.designVersionId){
+        if(userContext.designVersionId){
             switch(designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
                     // No design updates available and none can be added...
@@ -106,7 +106,7 @@ class DesignUpdatesList extends Component {
                                 <div className="design-item-add">
                                     <DesignComponentAdd
                                         addText="Add Design Update"
-                                        onClick={ () => this.addDesignUpdate(currentUserItemContext.designVersionId, designVersionStatus)}
+                                        onClick={ () => this.addDesignUpdate(userRole, userContext.designVersionId)}
                                     />
                                 </div>
                             </div>;
@@ -135,13 +135,13 @@ class DesignUpdatesList extends Component {
                         <Col md={4} className="col">
                             <WorkPackagesContainer params={{
                                 wpType: WorkPackageType.WP_UPDATE,
-                                designVersionId: currentUserItemContext.designVersionId,
-                                designUpdateId: currentUserItemContext.designUpdateId
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId
                             }}/>
                         </Col>
                         <Col md={5} className="col">
                             <UpdateSummaryContainer params = {{
-                                designUpdateId: currentUserItemContext.designUpdateId
+                                designUpdateId: userContext.designUpdateId
                             }}/>
                         </Col>
                     </Row>
@@ -158,7 +158,7 @@ class DesignUpdatesList extends Component {
                         </Col>
                         <Col md={8} className="col">
                             <UpdateSummaryContainer params = {{
-                                designUpdateId: currentUserItemContext.designUpdateId
+                                designUpdateId: userContext.designUpdateId
                             }}/>
                         </Col>
                     </Row>
@@ -179,7 +179,7 @@ DesignUpdatesList.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 

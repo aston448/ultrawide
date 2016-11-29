@@ -96,7 +96,7 @@ class DesignItemHeader extends Component{
                 ClientDesignVersionServices.updateDesignVersionName(userRole, currentItemId, newName);
                 break;
             case ItemType.DESIGN_UPDATE:
-               ClientDesignUpdateServices.saveDesignUpdateName(currentItemId, newName);
+               ClientDesignUpdateServices.updateDesignUpdateName(userRole, currentItemId, newName);
                 break;
             case ItemType.WORK_PACKAGE:
                 ClientWorkPackageServices.saveWorkPackageName(currentItemId, newName);
@@ -117,7 +117,7 @@ class DesignItemHeader extends Component{
                 ClientDesignVersionServices.updateDesignVersionNumber(userRole, currentItemId, newVersion);
                 break;
             case ItemType.DESIGN_UPDATE:
-                ClientDesignUpdateServices.saveDesignUpdateVersion(currentItemId, newVersion);
+                ClientDesignUpdateServices.saveDesignUpdateVersion(userRole, currentItemId, newVersion);
                 break;
         }
 

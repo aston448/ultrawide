@@ -38,34 +38,38 @@ class DesignUpdate extends Component {
     //     this.setState({adopted: this.getUpdateAdoptionStatus(this.props.currentUserDevContext, this.props.designUpdate)});
     // }
 
-    onEditDesignUpdate(context, du){
+    onEditDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.editDesignUpdate(
-            context,
+            userRole,
+            userContext,
             du._id
         );
     };
 
-    onDeleteDesignUpdate(context, du){
+    onDeleteDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.deleteDesignUpdate(
-            context,
+            userRole,
+            userContext,
             du._id
         );
     };
 
-    onPublishDesignUpdate(context, du){
+    onPublishDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.publishDesignUpdate(
-            context,
+            userRole,
+            userContext,
             du._id
         );
     };
 
-    onViewDesignUpdate(context, du){
+    onViewDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.viewDesignUpdate(
-            context,
+            userRole,
+            userContext,
             du._id
         );
     }
@@ -121,10 +125,10 @@ class DesignUpdate extends Component {
     // }
 
     render() {
-        const {designUpdate, userRole, currentUserItemContext, currentUserDevContext} = this.props;
+        const {designUpdate, userRole, userContext, currentUserDevContext} = this.props;
 
         // Display as selected if this is the current DU in the user context
-        let itemStyle = (designUpdate._id === currentUserItemContext.designUpdateId ? 'design-item di-active' : 'design-item');
+        let itemStyle = (designUpdate._id === userContext.designUpdateId ? 'design-item di-active' : 'design-item');
 
         let buttons = '';
         let options = '';
@@ -138,9 +142,9 @@ class DesignUpdate extends Component {
                     // Designers can edit, delete or publish a new update
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(currentUserItemContext, designUpdate)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(currentUserItemContext, designUpdate)}>Delete</Button>
-                            <Button bsSize="xs" onClick={ () => this.onPublishDesignUpdate(currentUserItemContext, designUpdate)}>Publish</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>
+                            <Button bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>
                         </ButtonGroup>;
                 }
                 break;
@@ -150,17 +154,17 @@ class DesignUpdate extends Component {
                     buttons =
                         <div>
                             <ButtonGroup className="button-group-left">
-                                <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(currentUserItemContext, designUpdate)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
                             </ButtonGroup>
                             <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onDevelopDesignUpdate(currentUserItemContext, designUpdate)}>Develop this Update</Button>
+                                <Button bsSize="xs" onClick={ () => this.onDevelopDesignUpdate(userContext, designUpdate)}>Develop this Update</Button>
                             </ButtonGroup>
                         </div>
                     // options =
                     //     <FormGroup>
                     //         <Checkbox
                     //             checked={this.state.adopted}
-                    //             onChange={ (e) => this.setUpdateAdoptionStatus(e, designUpdate, currentUserDevContext.designUpdateIds, currentUserItemContext)}>
+                    //             onChange={ (e) => this.setUpdateAdoptionStatus(e, designUpdate, currentUserDevContext.designUpdateIds, userContext)}>
                     //             Select for Development
                     //         </Checkbox>
                     //     </FormGroup>;
@@ -168,8 +172,8 @@ class DesignUpdate extends Component {
                     // Designers can view or edit the update or specify how it is to be merged into the next Design Version
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(currentUserItemContext, designUpdate)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(currentUserItemContext, designUpdate)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
                         </ButtonGroup>
                     options =
                         <FormGroup>
@@ -189,7 +193,7 @@ class DesignUpdate extends Component {
                 // View only for everyone
                 buttons =
                     <ButtonGroup>
-                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(currentUserItemContext, designUpdate)}>View</Button>
+                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
                     </ButtonGroup>;
                 break;
         }
@@ -202,7 +206,7 @@ class DesignUpdate extends Component {
                     currentItemName={designUpdate.updateName}
                     currentItemVersion={designUpdate.updateVersion}
                     currentItemStatus={designUpdate.updateStatus}
-                    onSelectItem={ () => this.setNewDesignUpdateActive(currentUserItemContext, designUpdate) }
+                    onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
                 />
                 {options}
                 {buttons}
@@ -219,7 +223,7 @@ DesignUpdate.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
         currentUserDevContext: state.currentUserDevContext
     }
 }

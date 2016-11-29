@@ -10,45 +10,87 @@ import  ScenarioServices        from '../servicers/design/scenario_services.js';
 import DesignComponentModules               from '../service_modules/design/design_component_service_modules.js';
 import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 
+import { ValidatedMethod } from 'meteor/mdg:validated-method';
+
+import { addDesignUpdate, updateDesignUpdateName, updateDesignUpdateVersion, publishDesignUpdate, removeDesignUpdate } from '../apiValidatedMethods/design_update_methods.js'
+
+
+class ServerDesignUpdateApi {
+
+    addDesignUpdate(userRole, designVersionId, callback){
+
+        addDesignUpdate.call(
+            {
+                userRole:           userRole,
+                designVersionId:    designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateDesignUpdateName(userRole, designUpdateId, newName, callback){
+
+        updateDesignUpdateName.call(
+            {
+                userRole:       userRole,
+                designUpdateId: designUpdateId,
+                newName:        newName
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateDesignUpdateVersion(userRole, designUpdateId, newVersion, callback){
+
+        updateDesignUpdateVersion.call(
+            {
+                userRole:       userRole,
+                designUpdateId: designUpdateId,
+                newVersion:     newVersion
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    publishDesignUpdate(userRole, designUpdateId, callback){
+
+        publishDesignUpdate.call(
+            {
+                userRole:       userRole,
+                designUpdateId: designUpdateId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    removeDesignUpdate(userRole, designUpdateId, callback){
+
+        removeDesignUpdate.call(
+            {
+                userRole:       userRole,
+                designUpdateId: designUpdateId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+}
+
+export default new ServerDesignUpdateApi();
+
+
 // Meteor methods
 Meteor.methods({
-
-    // Design Update Management ----------------------------------------------------------------------------------------
-
-    // Add a new design update to a design version
-    'designUpdate.addNewUpdate'(designVersionId){
-
-        //console.log("Adding new design update...");
-        DesignUpdateServices.addNewDesignUpdate(designVersionId, true); // Always populate the update if calling from here
-    },
-
-    // Remove a design update - having previously validated that it is OK to do so
-    'designUpdate.removeUpdate'(designUpdateId){
-
-        //console.log("Removing design update " + designUpdateId);
-        DesignUpdateServices.removeUpdate(designUpdateId);
-    },
-
-    // Publish a new DU as Draft
-    'designUpdate.publishUpdate'(designUpdateId){
-
-        //console.log("Publishing design update " + designUpdateId);
-        DesignUpdateServices.publishUpdate(designUpdateId);
-    },
-
-    // Save the name for a design update
-    'designUpdate.updateDesignUpdateName'(designUpdateId, newName){
-
-        //console.log("Updating design update name to " + newName);
-        DesignUpdateServices.updateDesignUpdateName(designUpdateId, newName);
-    },
-
-    // Save the version number for a design update
-    'designUpdate.updateDesignUpdateVersion'(designUpdateId, newVersion){
-
-        //console.log("Updating design update version to " + newVersion);
-        DesignUpdateServices.updateDesignUpdateVersion(designUpdateId, newVersion);
-    },
 
     // Design Update Component Management ------------------------------------------------------------------------------
 

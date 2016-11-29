@@ -48,3 +48,19 @@ export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Component cannot have the same name as another component of the same type in this Design Version',
     DESIGN_COMPONENT_NOT_REMOVABLE:             'A Design Component containing other components is not removable.  Delete from bottom up to remove.'
 };
+
+export const DesignUpdateValidationErrors = {
+    DESIGN_UPDATE_NOT_EXIST:                    'design Update does not exist',
+    DESIGN_UPDATE_INVALID_ROLE_ADD:             'Only a Designer can add Design Updates',
+    DESIGN_UPDATE_INVALID_STATE_ADD:            'Design Updates can only be added to a Draft Design Version',
+    DESIGN_UPDATE_INVALID_ROLE_UPDATE:          'Only a Designer can update Design Update details',
+    DESIGN_UPDATE_INVALID_ROLE_EDIT:            'Only a Designer can edit a Design Update',
+    DESIGN_UPDATE_INVALID_STATE_EDIT:           'Completed design Updates canot be edited',
+    DESIGN_UPDATE_INVALID_ROLE_PUBLISH:         'Only a Designer can publish a Design Update',
+    DESIGN_UPDATE_INVALID_STATE_PUBLISH:        'Only new design Updates can be published',
+    DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW:        'New Design Updates can only be viewed by a Designer',
+    DESIGN_UPDATE_INVALID_NAME_DUPLICATE:       'Design Update name already exists for another update in this Design Version',
+    DESIGN_UPDATE_INVALID_VERSION_DUPLICATE:    'Design Update version already exists for another update in this Design Version',
+    DESIGN_UPDATE_INVALID_ROLE_REMOVE:          'Only a Designer can remove Design Updates',
+    DESIGN_UPDATE_NOT_REMOVABLE:                'Only new or unused Design Updates can be removed'
+};

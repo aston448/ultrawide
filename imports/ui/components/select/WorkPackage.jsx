@@ -223,7 +223,7 @@ class WorkPackage extends Component {
                 // View only for everyone
                 buttons =
                     <ButtonGroup>
-                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userContext, designUpdate)}>View</Button>
+                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
                     </ButtonGroup>;
                 break;
         }
