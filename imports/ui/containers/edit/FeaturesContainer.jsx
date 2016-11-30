@@ -13,7 +13,7 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 // Ultrawide Services
 import { DisplayContext, ComponentType } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 
 // Bootstrap
 
@@ -42,7 +42,7 @@ class FeaturesList extends Component {
     getDesignItem(feature, displayContext){
         // Design Item needed only in WP context (otherwise we already have it as the current item)
         if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
-            return ClientWorkPackageServices.getDesignItem(feature.componentId, feature.workPackageType);
+            return ClientWorkPackageComponentServices.getDesignItem(feature.componentId, feature.workPackageType);
         } else {
             return feature;
         }

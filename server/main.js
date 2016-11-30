@@ -26,11 +26,12 @@ import '../imports/collections/dev/user_mod_test_mash_data.js';
 // Modules
 import '../imports/startup/server/fixtures.js';
 
-// API
+// Server API
 import '../imports/apiServer/apiDesign.js';
 import '../imports/apiServer/apiDesignVersion.js';
 import '../imports/apiServer/apiDesignUpdate.js';
 import '../imports/apiServer/apiWorkPackage.js';
+import '../imports/apiServer/apiWorkPackageComponent.js';
 import '../imports/apiServer/apiScenario.js';
 import '../imports/apiServer/apiTextEditor.js';
 import '../imports/apiServer/apiUserContext.js';
@@ -46,6 +47,8 @@ import '../imports/apiValidatedMethods/design_version_methods.js';
 import '../imports/apiValidatedMethods/design_update_methods.js';
 import '../imports/apiValidatedMethods/design_component_methods.js';
 import '../imports/apiValidatedMethods/design_update_component_methods.js';
+import '../imports/apiValidatedMethods/work_package_methods.js';
+import '../imports/apiValidatedMethods/work_package_component_methods.js';
 import '../imports/apiValidatedMethods/domain_dictionary_methods.js';
 
 

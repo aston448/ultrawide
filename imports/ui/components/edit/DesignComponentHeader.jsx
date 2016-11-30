@@ -13,7 +13,7 @@ import ProgressIndicator from '../common/ProgressIndicator.jsx';
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientWorkPackageServices            from '../../../apiClient/apiClientWorkPackage.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel} from '../../../constants/constants.js';
@@ -489,7 +489,7 @@ class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 // Update the WP components
-                if (ClientWorkPackageServices.toggleInScope(view, context, currentItem, newScope)){
+                if (ClientWorkPackageComponentServices.toggleInScope(view, context, currentItem._id, newScope)){
                     this.setState({inScope: newScope});
                 }
                 break;

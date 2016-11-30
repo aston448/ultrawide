@@ -31,6 +31,15 @@ export const DesignUpdateMessages = {
     MSG_DESIGN_UPDATE_REMOVED:          'Design Update removed',
 };
 
+export const WorkPackageMessages = {
+
+    MSG_WORK_PACKAGE_ADDED:             'New Work Package added',
+    MSG_WORK_PACKAGE_NAME_UPDATED:      'Work Package name updated',
+    MSG_WORK_PACKAGE_PUBLISHED:         'Work Package now Published Draft',
+    MSG_WORK_PACKAGE_UNPUBLISHED:       'Work Package reverted to New',
+    MSG_WORK_PACKAGE_REMOVED:           'Work Package removed',
+};
+
 export const DesignComponentMessages = {
 
     MSG_NEW_APPLICATION_ADDED:      'New Application added',
@@ -60,6 +69,11 @@ export const DesignUpdateComponentMessages = {
     MSG_DESIGN_COMPONENT_REORDERED: 'Design Update Component re-ordered',
     MSG_DESIGN_COMPONENT_IN_SCOPE:  'Design Update Component in scope',
     MSG_DESIGN_COMPONENT_OUT_SCOPE: 'Design Update Component out of scope'
+};
+
+export const WorkPackageComponentMessages = {
+    MSG_WP_COMPONENT_IN_SCOPE:      'Work Package Component in scope',
+    MSG_WP_COMPONENT_OUT_SCOPE:     'Work Package Component out of scope'
 };
 
 export const DomainDictionaryMessages = {

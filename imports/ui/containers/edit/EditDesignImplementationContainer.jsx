@@ -16,7 +16,7 @@ import DevFilesContainer from '../dev/DevFilesContainer.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
-import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
@@ -41,7 +41,7 @@ class DevApplicationsList extends Component {
     }
 
     getDesignItem(application){
-        return ClientWorkPackageServices.getDesignItem(application.componentId, application.workPackageType)
+        return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
     }
 
     // A list of top level applications in the work package(s)

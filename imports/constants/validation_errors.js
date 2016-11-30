@@ -34,19 +34,37 @@ export const DesignVersionValidationErrors = {
 };
 
 export const DesignUpdateValidationErrors = {
-    DESIGN_UPDATE_NOT_EXIST:                    'design Update does not exist',
+    DESIGN_UPDATE_NOT_EXIST:                    'Design Update does not exist',
     DESIGN_UPDATE_INVALID_ROLE_ADD:             'Only a Designer can add Design Updates',
     DESIGN_UPDATE_INVALID_STATE_ADD:            'Design Updates can only be added to a Draft Design Version',
     DESIGN_UPDATE_INVALID_ROLE_UPDATE:          'Only a Designer can update Design Update details',
     DESIGN_UPDATE_INVALID_ROLE_EDIT:            'Only a Designer can edit a Design Update',
-    DESIGN_UPDATE_INVALID_STATE_EDIT:           'Completed design Updates canot be edited',
+    DESIGN_UPDATE_INVALID_STATE_EDIT:           'Completed design Updates cannot be edited',
     DESIGN_UPDATE_INVALID_ROLE_PUBLISH:         'Only a Designer can publish a Design Update',
-    DESIGN_UPDATE_INVALID_STATE_PUBLISH:        'Only new design Updates can be published',
+    DESIGN_UPDATE_INVALID_STATE_PUBLISH:        'Only new Design Updates can be published',
     DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW:        'New Design Updates can only be viewed by a Designer',
     DESIGN_UPDATE_INVALID_NAME_DUPLICATE:       'Design Update name already exists for another update in this Design Version',
     DESIGN_UPDATE_INVALID_VERSION_DUPLICATE:    'Design Update version already exists for another update in this Design Version',
     DESIGN_UPDATE_INVALID_ROLE_REMOVE:          'Only a Designer can remove Design Updates',
     DESIGN_UPDATE_NOT_REMOVABLE:                'Only new or unused Design Updates can be removed'
+};
+
+export const WorkPackageValidationErrors = {
+    WORK_PACKAGE_NOT_EXIST:                     'Work Package does not exist',
+    WORK_PACKAGE_INVALID_ROLE_ADD:              'Only a Manager can add Work Packages',
+    WORK_PACKAGE_INVALID_STATE_ADD:             'Work Packages can only be added to draft Design Versions or Updates',
+    WORK_PACKAGE_INVALID_ROLE_UPDATE:           'Only a Manager can update Work Package details',
+    WORK_PACKAGE_INVALID_ROLE_EDIT:             'Only a Manager can edit a Work package scope',
+    WORK_PACKAGE_INVALID_STATE_EDIT:            'Completed Work Packages cannot be edited',
+    WORK_PACKAGE_INVALID_ROLE_PUBLISH:          'Only a Designer can publish a Design Update',
+    WORK_PACKAGE_INVALID_STATE_PUBLISH:         'Only new Work Packages can be published',
+    WORK_PACKAGE_INVALID_ROLE_VIEW_NEW:         'New Work Packages can only be viewed by a Manager',
+    WORK_PACKAGE_INVALID_NAME_DUPLICATE:        'Work Package name already exists for another Work Package in this Design Version',
+    WORK_PACKAGE_INVALID_ROLE_REMOVE:           'Only a Manager can remove Work Packages',
+    WORK_PACKAGE_NOT_REMOVABLE:                 'Only new or unadopted Work Packages can be removed',
+    WORK_PACKAGE_INVALID_ROLE_DEVELOP:          'Only a Developer can develop Work Packages',
+    WORK_PACKAGE_INVALID_STATE_DEVELOP:         'Only Adopted Work Packages can be developed',
+    WORK_PACKAGE_INVALID_TYPE:                  'Unknown type for Work Package'
 };
 
 export const DesignComponentValidationErrors = {
@@ -85,6 +103,11 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Update Component cannot have the same name as another component of the same type in this Design Version',
     DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE:             'A Design Update Component containing other components is not removable.  Delete from bottom up to remove.',
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE:            'A Design Update Component that is not removed is not restorable'
+};
+
+export const WorkPackageComponentValidationErrors = {
+    WORK_PACKAGE_COMPONENT_INVALID_VIEW_SCOPE:          'Work Package scope can only be changed in the Work Package editor',
+    WORK_PACKAGE_COMPONENT_INVALID_CONTEXT_SCOPE:       'Work Package scope can only be changed in the Work Package scope editor',
 };
 
 export const DomainDictionaryValidationErrors = {

@@ -49,20 +49,20 @@ class WorkPackagesList extends Component {
         });
     }
 
-    onAddWorkPackage(designVersionId, designUpdateId, designVersionStatus, wpType){
+    onAddWorkPackage(userRole, designVersionId, designUpdateId, wpType){
 
         if(designUpdateId) {
             // Adding Design Update WP
-            ClientWorkPackageServices.addNewWorkPackage(designVersionId, designUpdateId, designVersionStatus, wpType);
+            ClientWorkPackageServices.addNewWorkPackage(userRole, designVersionId, designUpdateId, wpType);
         } else {
             // Adding base Design Version WP
-            ClientWorkPackageServices.addNewWorkPackage(designVersionId, 'NONE', designVersionStatus, wpType);
+            ClientWorkPackageServices.addNewWorkPackage(userRole, designVersionId, 'NONE', wpType);
         }
     }
 
     render() {
 
-        const {wpType, workPackages, designVersionStatus, userRole, currentUserItemContext} = this.props;
+        const {wpType, workPackages, designVersionStatus, userRole, userContext} = this.props;
 
         let panelContent = <div></div>;
         let developerButtons = <div></div>;
@@ -73,7 +73,7 @@ class WorkPackagesList extends Component {
         }
 
         // When a design version is selected...
-        if(currentUserItemContext.designVersionId){
+        if(userContext.designVersionId){
             switch(designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
                     // No work packages available and none can be added...
@@ -101,9 +101,9 @@ class WorkPackagesList extends Component {
                                     <DesignComponentAdd
                                         addText="Add Work Package"
                                         onClick={ () => this.onAddWorkPackage(
-                                            currentUserItemContext.designVersionId,
-                                            currentUserItemContext.designUpdateId,
-                                            designVersionStatus,
+                                            userRole,
+                                            userContext.designVersionId,
+                                            userContext.designUpdateId,
                                             wpType
                                         )}
                                     />
@@ -139,7 +139,7 @@ WorkPackagesList.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 

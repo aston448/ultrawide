@@ -17,7 +17,7 @@ import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -42,7 +42,7 @@ class WorkPackageApplicationsList extends Component {
     }
 
     getDesignItem(application){
-        return ClientWorkPackageServices.getDesignItem(application.componentId, application.workPackageType)
+        return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
     }
 
 

@@ -1,44 +1,58 @@
 
-import WorkPackageServices from '../servicers/work/work_package_services.js';
+import { addWorkPackage, updateWorkPackageName, publishWorkPackage, removeWorkPackage } from '../apiValidatedMethods/work_package_methods.js'
 
-Meteor.methods({
+class ServerWorkPackageApi {
 
-    // Work Package Management -----------------------------------------------------------------------------------------
+    addWorkPackage(userRole, designVersionId, designUpdateId, workPackageType, callback){
+        addWorkPackage.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                workPackageType: workPackageType
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-    // Add a new WP to a design version or design update
-    'workPackage.addNewWorkPackage'(designVersionId, designUpdateId, wpType){
+    updateWorkPackageName(userRole, workPackageId, newName, callback){
+        updateWorkPackageName.call(
+            {
+                userRole: userRole,
+                workPackageId: workPackageId,
+                newName: newName
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-        //console.log("Adding new work package of type " + wpType);
-        WorkPackageServices.addNewWorkPackage(designVersionId, designUpdateId, wpType, true); // Always populate components
-    },
+    publishWorkPackage(userRole, workPackageId, callback){
+        publishWorkPackage.call(
+            {
+                userRole: userRole,
+                workPackageId: workPackageId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-    // Remove a WP - having previously validated that it is OK to do so
-    'workPackage.removeWorkPackage'(workPackageId){
+    removeWorkPackage(userRole, workPackageId, callback){
+        removeWorkPackage.call(
+            {
+                userRole: userRole,
+                workPackageId: workPackageId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+}
 
-        //console.log("Removing work package " + workPackageId);
-        WorkPackageServices.removeWorkPackage(workPackageId);
-    },
-
-    // Publish a new WP as Draft
-    'workPackage.publishWorkPackage'(workPackageId){
-
-        //console.log("Publishing work package " + workPackageId);
-        WorkPackageServices.publishWorkPackage(workPackageId);
-    },
-
-    // Save the name for a Work Package
-    'workPackage.updateWorkPackageName'(workPackageId, newName){
-
-        //console.log("Updating work package name to " + newName);
-        WorkPackageServices.updateWorkPackageName(workPackageId, newName);
-    },
-
-    // Toggle a component in or out of scope
-    'workPackage.toggleScope'(wpComponent, newScope){
-
-        //console.log("Toggling scope to " + newScope);
-        WorkPackageServices.toggleScope(wpComponent, newScope);
-    },
-
-
-});
+export default new ServerWorkPackageApi();

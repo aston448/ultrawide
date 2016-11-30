@@ -38,40 +38,40 @@ class WorkPackage extends Component {
         //this.setState({adopted: this.getUpdateAdoptionStatus(this.props.currentUserDevContext, this.props.designUpdate)});
     }
 
-    onEditWorkPackage(context, wp){
+    onEditWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.editWorkPackage(
-            context,
+            userRole,
+            userContext,
             wp._id,
             wp.workPackageType
         );
     };
 
-    onViewWorkPackage(context, wp){
+    onViewWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.viewWorkPackage(
-            context,
+            userRole,
+            userContext,
             wp._id,
             wp.workPackageType
         );
     }
 
-    onDeleteWorkPackage(context, wp){
+    onDeleteWorkPackage(userRole, userContext, wp){
 
-        ClientWorkPackageServices.deleteWorkPackage(
-            // context.designId,
-            // context.designVersionId,
-            // context.designUpdateId,
+        ClientWorkPackageServices.removeWorkPackage(
+            userRole,
+            userContext,
             wp._id
         );
     };
 
-    onPublishWorkPackage(context, wp){
+    onPublishWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.publishWorkPackage(
-            // context.designId,
-            // context.designVersionId,
-            // context.designUpdateId,
+            userRole,
+            userContext,
             wp._id
         );
     };
@@ -84,11 +84,12 @@ class WorkPackage extends Component {
         );
     };
 
-    onDevelopWorkPackage(viewOptions, context, wp){
+    onDevelopWorkPackage(userRole, userContext, viewOptions, wp){
 
         ClientWorkPackageServices.developWorkPackage(
+            userRole,
+            userContext,
             viewOptions,
-            context,
             wp._id
         );
     }
@@ -151,10 +152,10 @@ class WorkPackage extends Component {
                     // Managers can edit, delete or publish a new WP
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userContext, workPackage)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
-                            <Button bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userContext, workPackage)}>Delete</Button>
-                            <Button bsSize="xs" onClick={ () => this.onPublishWorkPackage(userContext, workPackage)}>Publish</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Delete</Button>
+                            <Button bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>
                         </ButtonGroup>;
                 }
                 break;
@@ -168,7 +169,7 @@ class WorkPackage extends Component {
                                 <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
                             </ButtonGroup>
                             <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onDevelopWorkPackage(viewOptions, userContext, workPackage)}>Develop</Button>
+                                <Button bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>
                             </ButtonGroup>
                         </div>
                     // options =
@@ -183,8 +184,8 @@ class WorkPackage extends Component {
                     // Managers can view or edit the WP
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userContext, workPackage)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
                         </ButtonGroup>
                     // options =
                     //     <FormGroup>
@@ -207,15 +208,15 @@ class WorkPackage extends Component {
                         <div>
                             <ButtonGroup className="button-group-left">
                                 <Button bsSize="xs"
-                                        onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
+                                        onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
                             </ButtonGroup>
                         </div>
                 } else {
                     // Managers can view or edit the WP
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userContext, workPackage)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
                         </ButtonGroup>
                 }
                 break;

@@ -22,7 +22,7 @@ import DesignComponentHeader    from './DesignComponentHeader.jsx';
 import {ComponentType, ViewMode, ViewType, DisplayContext, LogLevel} from '../../../constants/constants.js';
 import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 
 import { log }              from '../../../common/utils.js';
 
@@ -213,7 +213,7 @@ class DesignComponent extends Component{
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                ClientWorkPackageServices.setOpenClosed(this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
+                ClientWorkPackageComponentServices.setOpenClosed(this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
                 break;
         }
 

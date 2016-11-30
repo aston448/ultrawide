@@ -5,6 +5,5 @@ imports/client/
 mocha-output.json
 imports/service_modules/design/unit_modules/
 mocha-unit-output.json
-imports/service_modules/context/
-imports/service_modules/work/
+
 

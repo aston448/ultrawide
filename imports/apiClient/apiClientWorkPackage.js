@@ -3,21 +3,20 @@
 // Meteor / React Services
 
 // Ultrawide Collections
-import {WorkPackages} from '../collections/work/work_packages.js';
-import {DesignComponents} from '../collections/design/design_components.js';
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js'
-import {WorkPackageComponents} from '../collections/work/work_package_components.js'
-
 
 // Ultrawide Services
-import {ViewType, ViewMode, DisplayContext, DesignUpdateStatus, WorkPackageStatus, WorkPackageType, ComponentType} from '../constants/constants.js';
+import {ViewType, ViewMode, WorkPackageType, MessageType} from '../constants/constants.js';
+import { Validation } from '../constants/validation_errors.js';
+import { WorkPackageMessages } from '../constants/message_texts.js';
 
-import ClientContainerServices from './apiClientContainerServices.js';
-import ClientMashDataServices from './apiClientMashData.js';
+import WorkPackageValidationApi from '../apiValidation/apiWorkPackageValidation.js';
+import ServerWorkPackageApi     from '../apiServer/apiWorkPackage.js';
+import ClientContainerServices  from './apiClientContainerServices.js';
+import ClientMashDataServices   from './apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentUserOpenWorkPackageItems, setCurrentView, changeApplicationMode} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
 
@@ -33,6 +32,174 @@ import {setCurrentUserItemContext, setCurrentUserOpenWorkPackageItems, setCurren
 
 
 class ClientWorkPackageServices {
+
+    // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
+
+    // Manager adds a new Work Package to a Design Version or Design Update --------------------------------------------
+    addNewWorkPackage(userRole, designVersionId, designUpdateId, workPackageType){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateAddWorkPackage(userRole, designVersionId, designUpdateId, workPackageType);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.addWorkPackage(userRole, designVersionId, designUpdateId, workPackageType, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_ADDED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // Manager sets or updates Work Package name -----------------------------------------------------------------------
+    updateWorkPackageName(userRole, workPackageId, newName){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateUpdateWorkPackageName(userRole, workPackageId, newName);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.updateWorkPackageName(userRole, workPackageId, newName, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_NAME_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    }
+
+    // Manager chose to publish a WP to make it available in draft form ------------------------------------------------
+    publishWorkPackage(userRole, userContext, workPackageToPublishId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validatePublishWorkPackage(userRole, workPackageToPublishId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.publishWorkPackage(userRole, workPackageToPublishId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the published WP is set in the current user context
+                this.setWorkPackage(userContext, workPackageToPublishId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_PUBLISHED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // Manager chose to delete a WP ------------------------------------------------------------------------------------
+    removeWorkPackage(userRole, userContext, workPackageToDeleteId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateRemoveWorkPackage(userRole, workPackageToDeleteId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.removeWorkPackage(userRole, workPackageToDeleteId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Clear WP from user context
+                const context = {
+                    userId:                         userContext.userId,
+                    designId:                       userContext.designId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  'NONE',
+                    designComponentId:              'NONE',
+                    designComponentType:            'NONE',
+                    featureReferenceId:             'NONE',
+                    featureAspectReferenceId:       'NONE',
+                    scenarioReferenceId:            'NONE',
+                    scenarioStepId:                 'NONE',
+                    featureFilesLocation:           userContext.featureFilesLocation,
+                    acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                    moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                };
+
+                store.dispatch(setCurrentUserItemContext(context, true));
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_REMOVED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
+    // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Sets the currently selected work package as part of the global state
     setWorkPackage(userContext, newWorkPackageId){
@@ -68,125 +235,81 @@ class ClientWorkPackageServices {
         return userContext;
     };
 
-    // Gets the full details of a Design or Design Update item that relates to a Work Package item
-    getDesignItem(componentId, wpType){
+    // Manager chose to edit a Work Package ----------------------------------------------------------------------------
+    editWorkPackage(userRole, userContext, workPackageToEditId, wpType){
 
+        // Client validation
+        let result = WorkPackageValidationApi.validateEditWorkPackage(userRole, workPackageToEditId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Ensure that the current WP is the WP we chose to edit
+        this.setWorkPackage(userContext, workPackageToEditId);
+
+        // Edit mode
+        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+
+        // Switch to appropriate WP edit view
         switch(wpType){
             case WorkPackageType.WP_BASE:
-                return DesignComponents.findOne({_id: componentId});
+                store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_EDIT));
+                break;
             case WorkPackageType.WP_UPDATE:
-                return DesignUpdateComponents.findOne({_id: componentId});
-            default:
-                // Does not apply for non WP views as the current item IS the Design item.
-                return null;
+                store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_EDIT));
+                break;
         }
-    }
 
-    // User clicks Add New Work Package in Work Packages list for a Design Version
-    addNewWorkPackage(designVersionId, designUpdateId, designVersionStatus, workPackageType){
-
-        // Validate - can only add WP to Draft Design Versions
-        if(designVersionStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
-            Meteor.call('workPackage.addNewWorkPackage', designVersionId, designUpdateId, workPackageType);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    // User saves an update to a Work Package name
-    saveWorkPackageName(workPackageId, newName){
-        Meteor.call('workPackage.updateWorkPackageName', workPackageId, newName);
         return true;
-    }
 
-
-    // User chose to edit a Work Package.
-    editWorkPackage(userContext, workPackageToEditId, wpType){
-
-        // Validation - any non-completed WPs can be edited
-        const wp = WorkPackages.findOne({_id: workPackageToEditId});
-
-        if(wp && (wp.workPackageStatus != WorkPackageStatus.WP_COMPLETE)){
-
-            // Ensure that the current WP is the WP we chose to edit
-            this.setWorkPackage(userContext, workPackageToEditId);
-
-
-            // Edit mode
-            store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
-
-            // Switch to appropriate WP edit view
-            switch(wpType){
-                case WorkPackageType.WP_BASE:
-                    store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_EDIT));
-                    break;
-                case WorkPackageType.WP_UPDATE:
-                    store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_EDIT));
-                    break;
-            }
-
-            return true;
-
-        } else {
-            // Edit not allowed
-            //TODO Messaging
-            return false;
-        }
     };
 
-    // User chose to view a WP
-    viewWorkPackage(userContext, workPackageToViewId, wpType){
+    // User chose to view a Work Package -------------------------------------------------------------------------------
+    viewWorkPackage(userRole, userContext, workPackageToViewId, wpType){
 
-        // Validation - all WPs can be viewed
-        const wp = WorkPackages.findOne({_id: workPackageToViewId});
+        // Client validation
+        let result = WorkPackageValidationApi.validateViewWorkPackage(userRole, workPackageToEditId);
 
-        if(wp){
+        if(result != Validation.VALID){
 
-            // Ensure that the current update is the update we chose to view
-            this.setWorkPackage(userContext, workPackageToViewId);
-
-            // Switch to appropriate WP view
-            switch(wpType){
-                case WorkPackageType.WP_BASE:
-                    store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_VIEW));
-                    break;
-                case WorkPackageType.WP_UPDATE:
-                    store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_VIEW));
-                    break;
-            }
-
-            return true;
-
-        } else {
-            // No design update!
-            //TODO Messaging
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
+
+        // Ensure that the current update is the update we chose to view
+        this.setWorkPackage(userContext, workPackageToViewId);
+
+        // Switch to appropriate WP view
+        switch(wpType){
+            case WorkPackageType.WP_BASE:
+                store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_VIEW));
+                break;
+            case WorkPackageType.WP_UPDATE:
+                store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_VIEW));
+                break;
+        }
+
+        return true;
+
     };
 
-    // User chose to publish a WP to make it available in draft form
-    publishWorkPackage(workPackageToPublishId){
+    // Developer chose to work on a work package
+    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId){
 
-        // Validation - can only publish a new WP
-        const wp = WorkPackages.findOne({_id: workPackageToPublishId});
+        // Client validation
+        let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, wpToDevelopId);
 
-        if(wp && (wp.workPackageStatus === WorkPackageStatus.WP_NEW)){
+        if(result != Validation.VALID){
 
-            // Ensure that the current WP is the WP we chose to publish
-            // TODO
-
-            // And update its status to published
-            Meteor.call('workPackage.publishWorkPackage', workPackageToPublishId);
-
-        } else {
-            // Publish not allowed
-            //TODO Messaging
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
-    };
-
-    developWorkPackage(viewOptions, userContext, wpToDevelopId){
 
         // Set the current context
         let updatedContext = this.setWorkPackage(userContext, wpToDevelopId);
@@ -207,116 +330,6 @@ class ClientWorkPackageServices {
             store.dispatch(setCurrentView(ViewType.DEVELOP_UPDATE_WP));
         }
     }
-
-    // User chose to delete a WP
-    deleteWorkPackage(workPackageToDeleteId){
-
-        // Validation - can only delete unpublished WPs
-        const wp = WorkPackages.findOne({_id: workPackageToDeleteId});
-
-        if(wp && (wp.workPackageStatus === WorkPackageStatus.WP_NEW)){
-
-            // If the WP being deleted is the current one, set current WP to nothing
-            // TODO
-
-            // And now actually remove the WP
-            Meteor.call('workPackage.removeWorkPackage', workPackageToDeleteId);
-
-            return true;
-
-        } else {
-            // Delete not allowed
-            //TODO Messaging
-            return false;
-        }
-    };
-
-    // User put an item in the scope view in or out of scope for a Work Package
-    toggleInScope(view, context, wpComponent, newScope){
-
-        // Validate - can only do this if editing a WP for the scope context
-        if((view === ViewType.WORK_PACKAGE_BASE_EDIT || view === ViewType.WORK_PACKAGE_UPDATE_EDIT) && context === DisplayContext.WP_SCOPE){
-            Meteor.call('workPackage.toggleScope', wpComponent, newScope);
-            return true;
-        } else {
-            return false;
-        }
-
-    };
-
-    // User opened or closed a WP component
-    setOpenClosed(wpComponent, currentList, newState){
-
-        if(wpComponent.componentType === ComponentType.FEATURE){
-            // Open or close the whole feature
-            const featureComponents = WorkPackageComponents.find(
-                {
-                    workPackageId: wpComponent.workPackageId,
-                    componentFeatureReferenceId: wpComponent.componentFeatureReferenceId
-                }
-            );
-
-            featureComponents.forEach((component) => {
-                store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    Meteor.userId(),
-                    currentList,
-                    component._id,
-                    newState
-                ));
-            });
-
-        } else {
-
-            if(newState) {
-                // Just open or close the item
-                store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    Meteor.userId(),
-                    currentList,
-                    wpComponent._id,
-                    newState
-                ));
-            } else {
-                // Close all items below
-                this.closeChildren(wpComponent, currentList);
-            }
-        }
-
-        return true;
-    };
-
-    // Recursive function to close all children down to the bottom of the tree
-    closeChildren(wpComponent, currentList){
-
-        let childComponents = DesignUpdateComponents.find(
-            {
-                workPackageId: wpComponent.workPackageId,
-                componentParentReferenceId: wpComponent.componentReferenceId
-            }
-        );
-
-        if(childComponents.count() > 0){
-            childComponents.forEach((child) => {
-
-                store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    Meteor.userId(),
-                    currentList,
-                    wpComponent._id,
-                    false
-                ));
-
-                // Recursively call for these children
-                this.closeChildren(child, currentList)
-
-
-            });
-
-            return true;
-
-        } else {
-            return false;
-        }
-    };
-
 }
 
 export default new ClientWorkPackageServices();
