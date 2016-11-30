@@ -1,16 +1,20 @@
-// == IMPORTS ==========================================================================================================
+
 // Ultrawide Collections
-import { WorkPackageComponents } from '../../collections/work/work_package_components.js';
-import { DesignComponents } from '../../collections/design/design_components.js';
-import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
+import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
+import { DesignComponents }             from '../../collections/design/design_components.js';
+import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import { WorkPackageType, ComponentType } from '../../constants/constants.js';
-// =====================================================================================================================
 
-// =====================================================================================================================
-// Contains only functions called within Server functions called from the API
-// =====================================================================================================================
+//======================================================================================================================
+//
+// Server Modules for Work Package Items.
+//
+// Methods called from within main API methods
+//
+//======================================================================================================================
+
 class WorkPackageModules {
 
     // Populate WP with components from related Design Version ot Design Update

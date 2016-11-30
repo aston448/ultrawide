@@ -1,6 +1,4 @@
 
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
-
 import {
     addApplicationToDesignVersion,
     addDesignSectionToApplication,
@@ -18,6 +16,11 @@ import {
 } from '../apiValidatedMethods/design_update_component_methods.js'
 
 
+// =====================================================================================================================
+// Server API for Design Update Components
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerDesignUpdateComponentApi {
 
     addApplicationToDesignVersion(view, mode, designVersionId, designUpdateId, callback){

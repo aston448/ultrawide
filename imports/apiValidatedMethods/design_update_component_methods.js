@@ -1,13 +1,17 @@
 
-import DesignUpdateComponentValidationApi           from '../apiValidation/apiDesignUpdateComponentValidation.js';
-import DesignUpdateComponentServices                from '../servicers/design_update/design_update_component_services.js';
-import ScenarioServices                             from '../servicers/design/scenario_services.js';
-import DesignComponentModules                       from '../service_modules/design/design_component_service_modules.js';
-import DesignUpdateComponentModules                 from '../service_modules/design_update/design_update_component_service_modules.js';
-
 import { ComponentType } from '../constants/constants.js'
 import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
 import { Validation } from '../constants/validation_errors.js'
+
+import DesignUpdateComponentValidationApi           from '../apiValidation/apiDesignUpdateComponentValidation.js';
+import DesignUpdateComponentServices                from '../servicers/design_update/design_update_component_services.js';
+import DesignComponentModules                       from '../service_modules/design/design_component_service_modules.js';
+
+//======================================================================================================================
+//
+// Meteor Validated Methods for Design Update Components
+//
+//======================================================================================================================
 
 export const addApplicationToDesignVersion = new ValidatedMethod({
 

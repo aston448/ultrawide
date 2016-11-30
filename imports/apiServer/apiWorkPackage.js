@@ -1,6 +1,11 @@
 
 import { addWorkPackage, updateWorkPackageName, publishWorkPackage, removeWorkPackage } from '../apiValidatedMethods/work_package_methods.js'
 
+// =====================================================================================================================
+// Server API for Work Package Items
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerWorkPackageApi {
 
     addWorkPackage(userRole, designVersionId, designUpdateId, workPackageType, callback){

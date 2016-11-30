@@ -1,23 +1,17 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
-import { ViewType, RoleType, DesignVersionStatus, DesignUpdateStatus } from '../../constants/constants.js';
+import { RoleType, DesignVersionStatus, DesignUpdateStatus } from '../../constants/constants.js';
 import { Validation, DesignUpdateValidationErrors } from '../../constants/validation_errors.js';
 
-
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Update Validation - Supports validations relating to a Design Update
+// Validation Services for Design Update Items.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
-class DesignValidationServices{
+class DesignUpdateValidationServices{
 
     validateAddDesignUpdate(userRole, designVersionStatus){
 
@@ -139,5 +133,5 @@ class DesignValidationServices{
     };
 
 }
-export default new DesignValidationServices();
+export default new DesignUpdateValidationServices();
 

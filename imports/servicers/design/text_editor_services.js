@@ -1,9 +1,15 @@
-/**
- * Created by aston on 20/08/2016.
- */
 
-import { DesignComponents } from '../../collections/design/design_components.js';
-import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
+// Ultrawide Collections
+import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
+
+//======================================================================================================================
+//
+// Server Code for Details Text Editor.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class TextEditorServices{
 

@@ -1,23 +1,17 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
 
 // Ultrawide Collections
-import { DesignVersions } from '../collections/design/design_versions.js';
-import { DesignUpdates } from '../collections/design_update/design_updates.js';
-import { WorkPackages } from '../collections/work/work_packages.js';
+import { DesignVersions }   from '../collections/design/design_versions.js';
+import { DesignUpdates }    from '../collections/design_update/design_updates.js';
+import { WorkPackages }     from '../collections/work/work_packages.js';
 
 // Ultrawide Services
 import WorkPackageValidationServices from '../service_modules/validation/work_package_validation_services.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Work Package Validation - Supports validations relating to Work Packages
+// Validation API for Work Package Items
 //
-// ---------------------------------------------------------------------------------------------------------------------
-
+//======================================================================================================================
 
 class WorkPackageValidationApi {
 

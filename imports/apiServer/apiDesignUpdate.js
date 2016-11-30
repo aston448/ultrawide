@@ -1,20 +1,17 @@
 
-import { Meteor } from 'meteor/meteor';
+import {
+    addDesignUpdate,
+    updateDesignUpdateName,
+    updateDesignUpdateVersion,
+    publishDesignUpdate,
+    removeDesignUpdate
+} from '../apiValidatedMethods/design_update_methods.js'
 
-import {ComponentType} from '../constants/constants.js'
-
-import  DesignUpdateServices  from '../servicers/design_update/design_update_services.js';
-import  DesignUpdateComponentServices  from '../servicers/design_update/design_update_component_services.js';
-import  ScenarioServices        from '../servicers/design/scenario_services.js';
-
-import DesignComponentModules               from '../service_modules/design/design_component_service_modules.js';
-import { DefaultComponentNames, DefaultDetailsText } from '../constants/default_names.js';
-
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
-
-import { addDesignUpdate, updateDesignUpdateName, updateDesignUpdateVersion, publishDesignUpdate, removeDesignUpdate } from '../apiValidatedMethods/design_update_methods.js'
-
-
+// =====================================================================================================================
+// Server API for Design Update Items
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerDesignUpdateApi {
 
     addDesignUpdate(userRole, designVersionId, callback){

@@ -1,21 +1,15 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType } from '../../constants/constants.js';
 import { Validation, DomainDictionaryValidationErrors } from '../../constants/validation_errors.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Domain Dictionary Validation - Supports validations relating to the Domain Dictionary
+// Validation Services for Domain Dictionary.
 //
-// ---------------------------------------------------------------------------------------------------------------------
-
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 class DomainDictionaryValidationServices{
 
     validateAddNewTerm(userRole, view, mode){
@@ -36,7 +30,6 @@ class DomainDictionaryValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateUpdateTermName(userRole, view, mode, newTermName, otherTerms){
@@ -70,7 +63,6 @@ class DomainDictionaryValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateUpdateTermDefinition(userRole, view, mode){
@@ -91,7 +83,6 @@ class DomainDictionaryValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateRemoveTerm(userRole, view, mode){

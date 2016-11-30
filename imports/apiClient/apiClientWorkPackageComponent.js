@@ -1,11 +1,9 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide Collections
-import {DesignComponents} from '../collections/design/design_components.js';
+import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js'
-import {WorkPackageComponents} from '../collections/work/work_package_components.js'
+import {WorkPackageComponents}  from '../collections/work/work_package_components.js'
 
 // Ultrawide Services
 import { WorkPackageType, ComponentType, MessageType } from '../constants/constants.js';
@@ -20,17 +18,10 @@ import store from '../redux/store'
 import {setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Work Package Components
 //
-// Client Work Package Component Services - supports client calls for Work Package related activities
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 
 class ClientWorkPackageComponentServices {
 

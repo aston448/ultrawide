@@ -1,22 +1,17 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, ComponentType } from '../../constants/constants.js';
 import { Validation, DesignComponentValidationErrors } from '../../constants/validation_errors.js';
 
-import {locationMoveDropAllowed, reorderDropAllowed, log} from '../../common/utils.js';
+import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Validation - Supports validations relating to a Design
+// Validation Services for Design Components.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
 class DesignComponentValidationServices{
 
@@ -53,7 +48,6 @@ class DesignComponentValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateUpdateComponentName(view, mode, componentType, newName, existingComponents){
@@ -104,7 +98,6 @@ class DesignComponentValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
@@ -130,7 +123,6 @@ class DesignComponentValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent){

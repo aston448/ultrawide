@@ -1,25 +1,19 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
 
 // Ultrawide Collections
-import {DesignVersions} from '../../collections/design/design_versions.js';
-import {DesignUpdates} from '../../collections/design_update/design_updates.js';
-import {DesignComponents} from '../../collections/design/design_components.js';
-import {DesignUpdateComponents} from '../../collections/design_update/design_update_components.js'
+import {DesignVersions}             from '../../collections/design/design_versions.js';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction} from '../../constants/constants.js';
-import DesignVersionModules from '../../service_modules/design/design_version_service_modules.js';
+import { DesignVersionStatus }      from '../../constants/constants.js';
 
-// =====================================================================================================================
+import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
 
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Version Services - Entry point for Server Code testing
+// Server Code for Design Version Items.
 //
-// ---------------------------------------------------------------------------------------------------------------------
-
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class DesignVersionServices{
 

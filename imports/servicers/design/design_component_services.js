@@ -1,23 +1,27 @@
-/**
- * Created by aston on 14/08/2016.
- */
 
+// Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
 import { DesignComponents }         from '../../collections/design/design_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
-import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
+// Ultrawide Services
+import { ComponentType, LogLevel } from '../../constants/constants.js';
 import { DefaultComponentNames } from '../../constants/default_names.js';
+import { getIdFromMap, log } from '../../common/utils.js';
 
-import {getIdFromMap, log} from '../../common/utils.js';
+import DesignServices           from './design_services.js';
+import DesignComponentModules   from '../../service_modules/design/design_component_service_modules.js';
 
-import  DesignServices     from './design_services.js';
-
-import DesignComponentModules from '../../service_modules/design/design_component_service_modules.js';
+//======================================================================================================================
+//
+// Server Code for Design Components.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class DesignComponentServices{
-    // All code should run on Server only - but has to be accessible by client
 
     // Add a new design component
     addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew){

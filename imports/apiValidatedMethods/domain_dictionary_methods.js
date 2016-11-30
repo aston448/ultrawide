@@ -1,16 +1,14 @@
-// == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
-// Ultrawide Collections
-
-// Ultrawide Services
 import { Validation } from '../constants/validation_errors.js'
 
 import DomainDictionaryServices         from '../servicers/design/domain_dictionary_services.js';
 import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
 
-// =====================================================================================================================
+//======================================================================================================================
+//
+// Meteor Validated Methods for Domain Dictionary
+//
+//======================================================================================================================
 
 export const addNewTerm = new ValidatedMethod({
 

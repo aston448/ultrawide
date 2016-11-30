@@ -1,8 +1,18 @@
 
-import {DomainDictionary} from '../../collections/design/domain_dictionary.js';
+// Ultrawide Collections
+import { DomainDictionary } from '../../collections/design/domain_dictionary.js';
 
-import {LogLevel} from '../../constants/constants.js';
-import {log} from '../../common/utils.js';
+// Ultrawide services
+import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js'
+import DesignComponentServices from '../../service_modules/design/design_component_service_modules.js';
+
+//======================================================================================================================
+//
+// Server Code for Domain Dictionary.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class DomainDictionaryServices{
 
@@ -16,9 +26,9 @@ class DomainDictionaryServices{
                 {
                     designId: designId,
                     designVersionId: designVersionId,
-                    domainTermOld: 'New Domain Term',
-                    domainTermNew: 'New Domain Term',
-                    domainTextRaw: this.getDefaultDomainDefinitionTextRaw(),
+                    domainTermOld: DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME,
+                    domainTermNew: DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME,
+                    domainTextRaw: DesignComponentServices.getRawTextFor(DefaultDetailsText.NEW_DICTIONARY_ENTRY_TEXT),
                     sortingName: 'ZZZZZ' + now,       // Will appear at end of list.  If more than one new added, in order
                     markInDesign: true,
                     isNew: true,
@@ -115,22 +125,6 @@ class DomainDictionaryServices{
             DomainDictionary.remove({_id: termId});
         }
     };
-
-    getDefaultDomainDefinitionTextRaw(){
-
-        return {
-            "entityMap" : {  },
-            "blocks" : [
-                { "key" : "5efv7", "text" : "Enter definition for Domain Term here...",
-                    "type" : "unstyled",
-                    "depth" : 0,
-                    "inlineStyleRanges" : [ ],
-                    "entityRanges" : [ ],
-                    "data" : {  }
-                }
-            ]
-        };
-    }
 }
 
 export default new DomainDictionaryServices();

@@ -1,15 +1,20 @@
-// == IMPORTS ==========================================================================================================
+
 // Ultrawide Collections
-import { WorkPackageComponents } from '../../collections/work/work_package_components.js';
+import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType } from '../../constants/constants.js';
-import  WorkPackageModules from '../../service_modules/work/work_package_service_modules.js';
-// =====================================================================================================================
+import { ComponentType }            from '../../constants/constants.js';
 
-// =====================================================================================================================
-// Contains only functions called directly from the API and to be run on Server only
-// =====================================================================================================================
+import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
+
+//======================================================================================================================
+//
+// Server Code for Work Package Components.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
+
 class WorkPackageComponentServices{
 
     // Store the scope state of a WP component

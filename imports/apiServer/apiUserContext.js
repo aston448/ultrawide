@@ -1,6 +1,4 @@
-/**
- * Created by aston on 19/09/2016.
- */
+
 import { Meteor } from 'meteor/meteor';
 
 import  UserContextServices     from '../servicers/context/user_context_services.js';

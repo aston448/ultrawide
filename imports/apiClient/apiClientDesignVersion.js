@@ -1,11 +1,8 @@
 
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide Collections
 import {DesignVersions} from '../collections/design/design_versions.js';
-import {DesignUpdates} from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
@@ -23,18 +20,10 @@ import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Design Version Items
 //
-// Client Design Version Services - supports client calls for updates to Design Versions
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
-
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 class ClientDesignVersionServices{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
@@ -187,6 +176,7 @@ class ClientDesignVersionServices{
         return true;
     };
 
+    // TODO - REFACTOR
     // User chose to create a new draft design version with updates from the current version
     mergeUpdatesToNewDraftVersion(userContext, designVersionToUpdateId){
 
@@ -210,6 +200,7 @@ class ClientDesignVersionServices{
 
     }
 
+    // TODO
     // Developer user chose to adopt this design version as their working design
     adoptDesignVersion(){
 
@@ -222,7 +213,6 @@ class ClientDesignVersionServices{
 
 
     // LOCAL CLIENT ACTIONS ============================================================================================
-
 
     // Sets the currently selected design version as part of the global state
     setDesignVersion(userContext, newDesignVersionId){

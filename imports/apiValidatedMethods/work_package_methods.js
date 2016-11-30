@@ -1,16 +1,14 @@
-// == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
-// Ultrawide Collections
-
-// Ultrawide Services
 import { Validation } from '../constants/validation_errors.js'
 
 import WorkPackageServices         from '../servicers/work/work_package_services.js';
 import WorkPackageValidationApi    from '../apiValidation/apiWorkPackageValidation.js';
 
-// =====================================================================================================================
+//======================================================================================================================
+//
+// Meteor Validated Methods for Work Package Items
+//
+//======================================================================================================================
 
 export const addWorkPackage = new ValidatedMethod({
 

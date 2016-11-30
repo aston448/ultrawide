@@ -1,22 +1,17 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, ComponentType } from '../../constants/constants.js';
 import { Validation, DesignUpdateComponentValidationErrors } from '../../constants/validation_errors.js';
 
-import {locationMoveDropAllowed, reorderDropAllowed, log} from '../../common/utils.js';
+import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Update Component Validation - Supports validations relating to Design Update Components
+// Validation Services for Design Update Components.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
 class DesignUpdateComponentValidationServices{
 

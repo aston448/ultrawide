@@ -1,7 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide Collections
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
@@ -9,26 +7,19 @@ import {DesignUpdateComponents} from '../collections/design_update/design_update
 import { ViewType, ViewMode, ComponentType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignUpdateMessages } from '../constants/message_texts.js';
-import DesignUpdateValidationApi from '../apiValidation/apiDesignUpdateValidation.js';
-import ServerDesignUpdateApi from '../apiServer/apiDesignUpdate.js';
+
+import DesignUpdateValidationApi    from '../apiValidation/apiDesignUpdateValidation.js';
+import ServerDesignUpdateApi        from '../apiServer/apiDesignUpdate.js';
 
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Design Update Items
 //
-// Client Design Update Services - supports client calls for updates to Design Updates
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
-
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 class ClientDesignUpdateServices {
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================

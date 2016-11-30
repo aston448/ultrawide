@@ -1,9 +1,20 @@
 
-import { DesignUpdates } from '../../collections/design_update/design_updates.js';
-import { DesignUpdateComponents } from '../../collections/design_update/design_update_components.js';
+// Ultrawide Collections
+import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
+import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
-import DesignUpdateModules from '../../service_modules/design_update/design_update_service_modules.js';
+// Ultrawide Services
 import { DesignUpdateStatus, DesignUpdateMergeAction } from '../../constants/constants.js';
+
+import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
+
+//======================================================================================================================
+//
+// Server Code for Design Update Items.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class DesignUpdateServices{
 

@@ -1,7 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide Collections
 
 // Ultrawide Services
@@ -19,17 +17,10 @@ import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Work Package Items
 //
-// Client Work Package Services - supports client calls for Work Package related activities
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 
 class ClientWorkPackageServices {
 

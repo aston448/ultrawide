@@ -14,7 +14,8 @@ export const DefaultComponentNames = {
     NEW_FEATURE_NAME:               'New Feature or Use Case',
     NEW_NARRATIVE_TEXT:             'As a \nI want to \nSo that I can ',
     NEW_FEATURE_ASPECT_NAME:        'New Feature Aspect',
-    NEW_SCENARIO_NAME:              'New Scenario'
+    NEW_SCENARIO_NAME:              'New Scenario',
+    NEW_DICTIONARY_ENTRY_NAME:      'New Domain Term'
 
 };
 
@@ -24,5 +25,6 @@ export const DefaultDetailsText = {
     NEW_DESIGN_SECTION_DETAILS:     'Text relevant to this section may be entered here...',
     NEW_FEATURE_DETAILS:            'Text relevant to this feature may be entered here...',
     NEW_FEATURE_ASPECT_DETAILS:     '', // No details for feature aspects
-    NEW_SCENARIO_DETAILS:           'Text relevant to this scenario may be entered here...'
+    NEW_SCENARIO_DETAILS:           'Text relevant to this scenario may be entered here...',
+    NEW_DICTIONARY_ENTRY_TEXT:      'Enter definition for Domain Term here...'
 };

@@ -1,20 +1,15 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
 import { ViewType, DisplayContext } from '../../constants/constants.js';
 import { Validation, WorkPackageComponentValidationErrors } from '../../constants/validation_errors.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Work Package Component Validation - Supports validations relating to Work Package Scope Components
+// Validation Services for Work Package Components.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
 class WorkPackageComponentValidationServices{
 

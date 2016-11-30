@@ -1,16 +1,14 @@
-// == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
-// Ultrawide Collections
-
-// Ultrawide Services
 import { Validation } from '../constants/validation_errors.js'
 
 import WorkPackageComponentServices         from '../servicers/work/work_package_component_services.js';
 import WorkPackageComponentValidationApi    from '../apiValidation/apiWorkPackageComponentValidation.js';
 
-// =====================================================================================================================
+//======================================================================================================================
+//
+// Meteor Validated Methods for Work Package Components
+//
+//======================================================================================================================
 
 export const toggleInScope = new ValidatedMethod({
 

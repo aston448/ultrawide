@@ -1,25 +1,31 @@
-/**
- * Created by aston on 15/09/2016.
- */
 
+// Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-import { DesignComponents }         from '../../collections/design/design_components.js';
 
+// Ultrawide services
 import { ComponentType, LogLevel }  from '../../constants/constants.js';
 import { DefaultComponentNames }    from '../../constants/default_names.js';
+import { getIdFromMap, log }        from '../../common/utils.js';
 
 import DesignServices               from '../design/design_services.js';
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
 import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
 
-import {getIdFromMap, log} from '../../common/utils.js';
+//======================================================================================================================
+//
+// Server Code for Design Update Components.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
     addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText){
+
         if(Meteor.isServer) {
             // Get the parent reference id (if there is a parent)
             let parentRefId = 'NONE';

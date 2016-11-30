@@ -1,7 +1,5 @@
-/**
- * Created by aston on 22/09/2016.
- */
 
+// Ultrawide Collections
 import {Designs}                    from '../../collections/design/designs.js'
 import {DesignComponents}           from '../../collections/design/design_components.js'
 import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js'
@@ -10,10 +8,19 @@ import {DesignUpdates}              from '../../collections/design_update/design
 import {WorkPackages}               from '../../collections/work/work_packages.js'
 import {WorkPackageComponents}      from '../../collections/work/work_package_components.js'
 
+// Ultrawide Services
 import {DesignVersionStatus, ComponentType} from '../../constants/constants.js';
-import { DefaultItemNames, DefaultDetailsText } from '../../constants/default_names.js';
+import { DefaultItemNames } from '../../constants/default_names.js';
 
-import DesignVersionServices from './design_version_services.js';
+import DesignVersionServices        from './design_version_services.js';
+
+//======================================================================================================================
+//
+// Server Code for Design Items.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class DesignServices{
 

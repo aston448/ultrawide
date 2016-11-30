@@ -6,17 +6,15 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 // Ultrawide Services
 import  DesignVersionServices from '../servicers/design/design_version_services.js';
+// =====================================================================================================================
+
 import { updateDesignVersionName, updateDesignVersionNumber, publishDesignVersion, unpublishDesignVersion } from '../apiValidatedMethods/design_version_methods.js'
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Server API for Design Version Items
 //
-// Meteor Server Interface for Design Versions
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
-
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerDesignVersionApi {
 
     updateDesignVersionName(userRole, designVersionId, newName, callback){

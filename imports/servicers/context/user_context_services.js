@@ -1,11 +1,15 @@
-/**
- * Created by aston on 19/09/2016.
- */
 
-
+// Ultrawide Collections
 import {UserCurrentEditContext} from '../../collections/context/user_current_edit_context.js'
 import {UserCurrentViewOptions} from '../../collections/context/user_current_view_options.js'
-import {UserCurrentDevUpdates} from '../../collections/design_update/user_current_dev_updates.js'
+
+//======================================================================================================================
+//
+// Server Code for User Context.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class UserContextServices{
 

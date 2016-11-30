@@ -1,20 +1,15 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, WorkPackageType, DesignVersionStatus, DesignUpdateStatus, WorkPackageStatus } from '../../constants/constants.js';
+import { RoleType, WorkPackageType, DesignVersionStatus, DesignUpdateStatus, WorkPackageStatus } from '../../constants/constants.js';
 import { Validation, WorkPackageValidationErrors } from '../../constants/validation_errors.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Work Package Validation - Supports validations relating to Work Packages
+// Validation Services for Work Package Items.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
 class WorkPackageValidationServices{
 

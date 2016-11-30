@@ -1,6 +1,3 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
 
 // Ultrawide Collections
 import { DomainDictionary } from '../collections/design/domain_dictionary.js';
@@ -8,13 +5,11 @@ import { DomainDictionary } from '../collections/design/domain_dictionary.js';
 // Ultrawide Services
 import DomainDictionaryValidationServices from '../service_modules/validation/domain_dictionary_validation_services.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Domain Dictionary Validation - Supports validations relating to the Domain Dictionary
+// Validation API for Domain Dictionary
 //
-// ---------------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 
 class DomainDictionaryValidationApi{
 

@@ -1,16 +1,20 @@
-// == IMPORTS ==========================================================================================================
+
 // Ultrawide Collections
-import { WorkPackages } from '../../collections/work/work_packages.js';
-import { WorkPackageComponents } from '../../collections/work/work_package_components.js';
+import { WorkPackages }             from '../../collections/work/work_packages.js';
+import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { WorkPackageStatus } from '../../constants/constants.js';
-import  WorkPackageModules from '../../service_modules/work/work_package_service_modules.js';
-// =====================================================================================================================
+import { WorkPackageStatus }        from '../../constants/constants.js';
 
-// =====================================================================================================================
-// Contains only functions called directly from the API and to be run on Server only
-// =====================================================================================================================
+import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
+
+//======================================================================================================================
+//
+// Server Code for Work Package Items.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 class WorkPackageServices{
 
     // Add a new Work Package

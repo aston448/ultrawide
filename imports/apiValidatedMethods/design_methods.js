@@ -1,8 +1,14 @@
 
+import { Validation } from '../constants/validation_errors.js'
+
 import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
 import DesignServices           from '../servicers/design/design_services.js';
 
-import { Validation } from '../constants/validation_errors.js'
+//======================================================================================================================
+//
+// Meteor Validated Methods for Design Items
+//
+//======================================================================================================================
 
 export const addDesign = new ValidatedMethod({
 

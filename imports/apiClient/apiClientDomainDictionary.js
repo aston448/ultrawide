@@ -1,15 +1,12 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide Collections
 import {DomainDictionary}               from '../collections/design/domain_dictionary.js';
 
 // Ultrawide Services
-import { MessageType, DisplayContext, LogLevel} from '../constants/constants.js';
+import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DomainDictionaryMessages } from '../constants/message_texts.js';
-import { log} from '../common/utils.js';
 
 import ClientDomainDictionaryServices   from '../service_modules/client/client_domain_dictionary.js';
 import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
@@ -20,16 +17,10 @@ import store from '../redux/store'
 import {updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Domain Dictionary
 //
-// Client Domain Dictionary API - Supports client calls for actions relating to Scenario Steps
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 
 class ClientDomainDictionaryApi {
 

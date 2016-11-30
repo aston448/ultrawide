@@ -1,9 +1,11 @@
 
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
-
 import { addDesign, updateDesignName, removeDesign } from '../apiValidatedMethods/design_methods.js'
 
-
+// =====================================================================================================================
+// Server API for Design Items
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerDesignApi {
 
     addDesign(userRole, callback){

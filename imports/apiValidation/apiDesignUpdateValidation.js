@@ -1,23 +1,16 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
 
 // Ultrawide Collections
-import { DesignUpdates } from '../collections/design_update/design_updates.js';
-import { DesignVersions } from '../collections/design/design_versions.js';
+import { DesignUpdates }    from '../collections/design_update/design_updates.js';
+import { DesignVersions }   from '../collections/design/design_versions.js';
 
 // Ultrawide Services
-import { ViewType, RoleType } from '../constants/constants.js';
-
 import DesignUpdateValidationServices from '../service_modules/validation/design_update_validation_services.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Update Validation - Supports validations relating to a Design Update
+// Validation API for Design Update Items
 //
-// ---------------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 
 class DesignUpdateValidationApi{
 

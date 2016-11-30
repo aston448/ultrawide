@@ -1,25 +1,18 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
 
 // Ultrawide Collections
 import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ViewType, RoleType } from '../constants/constants.js';
 import { DesignUpdateComponentValidationErrors } from '../constants/validation_errors.js';
 
-import DesignUpdateComponentValidationServices from '../service_modules/validation/design_update_component_validation_services.js';
-import DesignUpdateComponentModules from '../service_modules/design_update/design_update_component_service_modules.js';
+import DesignUpdateComponentValidationServices  from '../service_modules/validation/design_update_component_validation_services.js';
+import DesignUpdateComponentModules             from '../service_modules/design_update/design_update_component_service_modules.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Update Component Validation - Supports validations relating to a Design Update Component.
-// Functions called from here must be module testable - no database access allowed!  So get data and pass to functions.
+// Validation API for Design Update Components
 //
-// ---------------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 
 class DesignUpdateComponentValidationApi{
 

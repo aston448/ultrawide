@@ -1,25 +1,18 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
 
 // Ultrawide Collections
-import { DesignVersions } from '../collections/design/design_versions.js';
-import { DesignUpdates } from '../collections/design_update/design_updates.js';
+import { DesignVersions }   from '../collections/design/design_versions.js';
+import { DesignUpdates }    from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
-import { ViewType, RoleType } from '../constants/constants.js';
-
 import DesignVersionValidationServices from '../service_modules/validation/design_version_validation_services.js';
 
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Version Validation - Supports validations relating to a Design Version
+// Validation API for Design Version Items
 //
-// ---------------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 
-class DesignValidationApi{
+class DesignVersionValidationApi{
 
     validateUpdateDesignVersionName(userRole, designVersionId, newName){
 
@@ -64,9 +57,6 @@ class DesignValidationApi{
         const dvUpdates = DesignUpdates.find({designVersionId: designVersionId}).fetch();
 
         return DesignVersionValidationServices.validateUnpublishDesignVersion(userRole, thisVersion, dvUpdates);
-    }
-
-
-
+    };
 }
-export default new DesignValidationApi();
+export default new DesignVersionValidationApi();

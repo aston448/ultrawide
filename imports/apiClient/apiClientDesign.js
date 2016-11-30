@@ -1,34 +1,24 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide Collections
 
 // Ultrawide Services
-import ServerDesignApi      from '../apiServer/apiDesign.js';
-import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
-
 import { ViewType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignMessages } from '../constants/message_texts.js'
+
+import ServerDesignApi      from '../apiServer/apiDesign.js';
+import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
 
 // REDUX services
 import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentView, updateUserMessage} from '../redux/actions'
 
-
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Design Items
 //
-// Client Design Services - Supports client calls for actions relating to a Design
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 class ClientDesignServices{
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================

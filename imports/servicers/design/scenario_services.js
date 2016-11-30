@@ -1,11 +1,21 @@
 
+// Ultrawide Collections
 import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
 import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
-import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
+import {UserAccTestMashData}            from '../../collections/dev/user_acc_test_mash_data.js';
 import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js'
 
+// Ultrawide Services
 import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../../constants/constants.js';
 import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js';
+
+//======================================================================================================================
+//
+// Server Code for Scenarios.
+//
+// Methods called directly by Server API
+//
+//======================================================================================================================
 
 class ScenarioServices{
 

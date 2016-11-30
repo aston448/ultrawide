@@ -1,21 +1,15 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
-import { ViewType, RoleType } from '../../constants/constants.js';
+import { RoleType } from '../../constants/constants.js';
 import { Validation, DesignValidationErrors } from '../../constants/validation_errors.js';
 
-
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Validation - Supports validations relating to a Design
+// Validation Services for Design Items.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
 class DesignValidationServices{
 
@@ -25,7 +19,6 @@ class DesignValidationServices{
         if(!(userRole === RoleType.DESIGNER)){ return DesignValidationErrors.DESIGN_INVALID_ROLE_ADD }
 
         return Validation.VALID;
-
     };
 
     validateUpdateDesignName(userRole, newName, otherDesigns){
@@ -46,7 +39,6 @@ class DesignValidationServices{
         } else {
             return Validation.VALID;
         }
-
     };
 
     validateRemoveDesign(userRole, design){
@@ -65,7 +57,6 @@ class DesignValidationServices{
         if(!design.isRemovable){ return DesignValidationErrors.DESIGN_NOT_REMOVABLE }
 
         return Validation.VALID;
-
     };
 
 }

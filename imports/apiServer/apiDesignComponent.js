@@ -1,6 +1,4 @@
 
-import { ValidatedMethod } from 'meteor/mdg:validated-method';
-
 import {
     addApplicationToDesignVersion,
     addDesignSectionToApplication,
@@ -15,7 +13,11 @@ import {
     reorderDesignComponent
 } from '../apiValidatedMethods/design_component_methods.js'
 
-
+// =====================================================================================================================
+// Server API for Design Components
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerDesignComponentApi {
 
     addApplicationToDesignVersion(view, mode, designVersionId, callback){

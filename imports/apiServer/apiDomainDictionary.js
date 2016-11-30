@@ -1,8 +1,11 @@
-import { Meteor } from 'meteor/meteor';
 
-import  DomainDictionaryServices        from '../servicers/design/domain_dictionary_services.js';
 import { addNewTerm, updateTermName, updateTermDefinition, removeTerm } from '../apiValidatedMethods/domain_dictionary_methods.js'
 
+// =====================================================================================================================
+// Server API for Domain Dictionary
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
 class ServerDomainDictionaryApi {
 
     addNewTerm(userRole, view, mode, designId, designVersionId, callback){

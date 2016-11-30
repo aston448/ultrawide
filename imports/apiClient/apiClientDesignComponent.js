@@ -1,7 +1,5 @@
 // == IMPORTS ==========================================================================================================
 
-// Meteor / React Services
-
 // Ultrawide collections
 import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
@@ -24,19 +22,11 @@ import store from '../redux/store'
 import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+// Client API for Design Components
 //
-// Client Design Component Services - Supports client calls for actions relating to a Design Component
-//
-// This class is the test entry point when not testing through the GUI.
-// Most functions validate and return true / false according to business rules even if there is implicit validation in the GUI
-// (E.g. buttons not being visible if action invalid)
-//
-// ---------------------------------------------------------------------------------------------------------------------
-
+// Calls validation for client and then, if required, server API to update server data
+// =====================================================================================================================
 class ClientDesignComponentServices{
-
 
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 

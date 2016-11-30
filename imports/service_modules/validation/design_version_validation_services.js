@@ -1,21 +1,15 @@
-// == IMPORTS ==========================================================================================================
-
-// Meteor / React Services
-
-// Ultrawide Collections
 
 // Ultrawide Services
-import { ViewType, RoleType, DesignVersionStatus } from '../../constants/constants.js';
+import { RoleType, DesignVersionStatus } from '../../constants/constants.js';
 import { Validation, DesignVersionValidationErrors } from '../../constants/validation_errors.js';
 
-
-// =====================================================================================================================
-
-// -- CLASS ------------------------------------------------------------------------------------------------------------
+//======================================================================================================================
 //
-// Design Validation - Supports validations relating to a Design.  Module testable functions.
+// Validation Services for Design Version Items.
 //
-// ---------------------------------------------------------------------------------------------------------------------
+// All services should make no data-access calls so as to be module testable
+//
+//======================================================================================================================
 
 class DesignVersionValidationServices{
 
@@ -38,7 +32,6 @@ class DesignVersionValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateUpdateDesignVersionNumber(userRole, newNumber, otherVersions){
@@ -60,7 +53,6 @@ class DesignVersionValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateEditDesignVersion(userRole, designVersion){
@@ -74,7 +66,6 @@ class DesignVersionValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateViewDesignVersion(userRole, designVersion){
@@ -98,7 +89,6 @@ class DesignVersionValidationServices{
         }
 
         return Validation.VALID;
-
     };
 
     validateUnpublishDesignVersion(userRole, designVersion, dvUpdates){

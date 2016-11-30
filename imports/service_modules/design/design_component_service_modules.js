@@ -1,12 +1,21 @@
-import { DesignVersions }           from '../../collections/design/design_versions.js';
+
+// Ultrawide Collections
 import { DesignComponents }         from '../../collections/design/design_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
+// Ultrawide Services
 import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
-import {getIdFromMap, log} from '../../common/utils.js';
 
 import  DesignComponentServices     from '../../servicers/design/design_component_services.js';
+
+//======================================================================================================================
+//
+// Server Modules for Design Component Items.
+//
+// Methods called from within main API methods
+//
+//======================================================================================================================
 
 class DesignComponentModules{
 
@@ -17,11 +26,11 @@ class DesignComponentModules{
         DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawTextFor('Consequences'), defaultRawText, false);
     }
 
-    getRawTextFor(aspectName){
+    getRawTextFor(plainText){
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : aspectName,
+                { "key" : "5efv7", "text" : plainText,
                     "type" : "unstyled",
                     "depth" : 0,
                     "inlineStyleRanges" : [ ],
