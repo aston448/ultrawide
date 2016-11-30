@@ -3,6 +3,7 @@
  */
 
 export const BackupMessages = {
+
     MSG_DESIGN_BACKUP:              'Design backup saved'
 };
 
@@ -42,7 +43,6 @@ export const DesignComponentMessages = {
     MSG_DESIGN_COMPONENT_REMOVED:   'Design Component removed',
     MSG_DESIGN_COMPONENT_MOVED:     'Design Component moved',
     MSG_DESIGN_COMPONENT_REORDERED: 'Design Component re-ordered'
-
 };
 
 export const DesignUpdateComponentMessages = {
@@ -60,4 +60,12 @@ export const DesignUpdateComponentMessages = {
     MSG_DESIGN_COMPONENT_REORDERED: 'Design Update Component re-ordered',
     MSG_DESIGN_COMPONENT_IN_SCOPE:  'Design Update Component in scope',
     MSG_DESIGN_COMPONENT_OUT_SCOPE: 'Design Update Component out of scope'
+};
+
+export const DomainDictionaryMessages = {
+
+    MSG_DICTIONARY_ENTRY_CREATED:   'New Domain Dictionary entry created',
+    MSG_DICTIONARY_TERM_UPDATED:    'Domain Dictionary term name updated',
+    MSG_DICTIONARY_DEF_UPDATED:     'Domain Dictionary definition updated',
+    MSG_DICTIONARY_TERM_REMOVED:    'Domain Dictionary term removed'
 };

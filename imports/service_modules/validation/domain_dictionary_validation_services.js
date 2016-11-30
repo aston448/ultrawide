@@ -1,0 +1,119 @@
+// == IMPORTS ==========================================================================================================
+
+// Meteor / React Services
+
+// Ultrawide Collections
+
+// Ultrawide Services
+import { ViewType, ViewMode, RoleType } from '../../constants/constants.js';
+import { Validation, DomainDictionaryValidationErrors } from '../../constants/validation_errors.js';
+
+// =====================================================================================================================
+
+// -- CLASS ------------------------------------------------------------------------------------------------------------
+//
+// Domain Dictionary Validation - Supports validations relating to the Domain Dictionary
+//
+// ---------------------------------------------------------------------------------------------------------------------
+
+class DomainDictionaryValidationServices{
+
+    validateAddNewTerm(userRole, view, mode){
+
+        // To add a Term, user must be a Designer
+        if(userRole != RoleType.DESIGNER){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_ADD;
+        }
+
+        // View must be a Design Edit
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_ADD;
+        }
+
+        // Must be in edit mode
+        if(mode != ViewMode.MODE_EDIT){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_ADD;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateUpdateTermName(userRole, view, mode, newTermName, otherTerms){
+
+        // To edit a Term, user must be a Designer
+        if(userRole != RoleType.DESIGNER){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_EDIT;
+        }
+
+        // View must be a Design Edit
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
+        }
+
+        // Must be in edit mode
+        if(mode != ViewMode.MODE_EDIT){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_EDIT;
+        }
+
+        // New Term must not be an existing one
+        let duplicate = false;
+        otherTerms.forEach((term) => {
+
+            if (term.domainTermNew === newTermName){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_TERM_DUPLICATE;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateUpdateTermDefinition(userRole, view, mode){
+
+        // To edit a Term, user must be a Designer
+        if(userRole != RoleType.DESIGNER){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_EDIT;
+        }
+
+        // View must be a Design Edit
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
+        }
+
+        // Must be in edit mode
+        if(mode != ViewMode.MODE_EDIT){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_EDIT;
+        }
+
+        return Validation.VALID;
+
+    };
+
+    validateRemoveTerm(userRole, view, mode){
+
+        // To remove a Term, user must be a Designer
+        if(userRole != RoleType.DESIGNER){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_ROLE_EDIT;
+        }
+
+        // View must be a Design Edit
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT)){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_VIEW_EDIT;
+        }
+
+        // Must be in edit mode
+        if(mode != ViewMode.MODE_EDIT){
+            return DomainDictionaryValidationErrors.DICTIONARY_INVALID_MODE_EDIT;
+        }
+
+        return Validation.VALID;
+    }
+
+
+}
+export default new DomainDictionaryValidationServices();

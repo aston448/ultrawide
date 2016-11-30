@@ -29,7 +29,7 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Scenario Steps Data Container - selects data for Steps in a Scenario
+// Domain Dictionary Data Container
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -40,8 +40,8 @@ class DomainDictionary extends Component {
 
     }
 
-    addDictionaryTerm(view, mode, designId, designVersionId){
-        ClientDomainDictionaryServices.addNewDictionaryTerm(view, mode, designId, designVersionId);
+    onAddDictionaryTerm(userRole, view, mode, designId, designVersionId){
+        ClientDomainDictionaryServices.addNewDictionaryTerm(userRole, view, mode, designId, designVersionId);
     }
 
     // A list of Scenarios in a Feature or Feature Aspect
@@ -58,7 +58,7 @@ class DomainDictionary extends Component {
     }
 
     render() {
-        const {dictionaryTerms, view, mode, userItemContext} = this.props;
+        const {dictionaryTerms, userRole, view, mode, userItemContext} = this.props;
 
         let addDictionaryTerm = <div></div>;
 
@@ -71,7 +71,7 @@ class DomainDictionary extends Component {
                         <td className="control-table-data">
                             <DesignComponentAdd
                                 addText="Add new Domain Term"
-                                onClick={ () => this.addDictionaryTerm(view, mode, userItemContext.designId, userItemContext.designVersionId)}
+                                onClick={ () => this.onAddDictionaryTerm(userRole, view, mode, userItemContext.designId, userItemContext.designVersionId)}
                             />
                         </td>
                     </tr>
@@ -99,6 +99,7 @@ DomainDictionary.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
+        userRole: state.currentUserRole,
         view: state.currentAppView,
         mode: state.currentViewMode,
         userItemContext: state.currentUserItemContext
@@ -108,7 +109,7 @@ function mapStateToProps(state) {
 // Connect the Redux store to this component ensuring that its required state is mapped to props
 DomainDictionary = connect(mapStateToProps)(DomainDictionary);
 
-export default ScenarioStepsContainer = createContainer(({params}) => {
+export default DomainDictionaryContainer = createContainer(({params}) => {
 
     return ClientContainerServices.getDomainDictionaryTerms(
         params.designId,

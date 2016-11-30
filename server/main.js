@@ -45,7 +45,8 @@ import '../imports/apiValidatedMethods/design_methods.js';
 import '../imports/apiValidatedMethods/design_version_methods.js';
 import '../imports/apiValidatedMethods/design_update_methods.js';
 import '../imports/apiValidatedMethods/design_component_methods.js';
-import '../imports/apiValidatedMethods/design_update_component_methods';
+import '../imports/apiValidatedMethods/design_update_component_methods.js';
+import '../imports/apiValidatedMethods/domain_dictionary_methods.js';
 
 
 // Integration test Framework

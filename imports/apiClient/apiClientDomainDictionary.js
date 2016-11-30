@@ -1,17 +1,23 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import {DomainDictionary} from '../collections/design/domain_dictionary.js';
+import {DomainDictionary}               from '../collections/design/domain_dictionary.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, LogLevel} from '../constants/constants.js';
-import {reorderDropAllowed, log} from '../common/utils.js';
+import { MessageType, DisplayContext, LogLevel} from '../constants/constants.js';
+import { Validation } from '../constants/validation_errors.js';
+import { DomainDictionaryMessages } from '../constants/message_texts.js';
+import { log} from '../common/utils.js';
 
-import ClientDomainDictionaryServices from '../service_modules/client/client_domain_dictionary.js';
+import ClientDomainDictionaryServices   from '../service_modules/client/client_domain_dictionary.js';
+import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
+import ServerDomainDictionaryApi        from '../apiServer/apiDomainDictionary.js';
 
+// REDUX services
+import store from '../redux/store'
+import {updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
 
@@ -27,51 +33,149 @@ import ClientDomainDictionaryServices from '../service_modules/client/client_dom
 
 class ClientDomainDictionaryApi {
 
-    addNewDictionaryTerm(view, mode, designId, designVersionId) {
+    // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
-        // Validate - can only add if design is editable
-        if ((view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('domainDictionary.addNewTerm', designId, designVersionId);
-            return true;
-        } else {
+    // Designer adds a new Domain Dictionary Term ----------------------------------------------------------------------
+    addNewDictionaryTerm(userRole, view, mode, designId, designVersionId) {
+
+        // Client validation
+        let result = DomainDictionaryValidationApi.validateAddNewTerm(userRole, view, mode);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
 
+        // Real action call - server actions
+        ServerDomainDictionaryApi.addNewTerm(userRole, view, mode, designId, designVersionId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Remove Design client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DomainDictionaryMessages.MSG_DICTIONARY_ENTRY_CREATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
     };
 
-    updateDictionaryTerm(view, mode, termId, termTextNew) {
+    // Designer sets or changes a term name ----------------------------------------------------------------------------
+    updateDictionaryTerm(userRole, view, mode, termId, termTextNew) {
 
-        // Validate - can only update if design is editable
-        if ((view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('domainDictionary.updateTermName', termId, termTextNew);
-            return true;
-        } else {
+        // Client validation
+        let result = DomainDictionaryValidationApi.validateUpdateTermName(userRole, view, mode, termId, termTextNew);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
 
+        // Real action call - server actions
+        ServerDomainDictionaryApi.updateTermName(userRole, view, mode, termId, termTextNew, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DomainDictionaryMessages.MSG_DICTIONARY_TERM_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
     };
 
-    updateDictionaryTermDefinition(view, mode, termId, termDefinitionTextRaw) {
+    // Designer sets or updates a term definition ----------------------------------------------------------------------
+    updateDictionaryTermDefinition(userRole, view, mode, termId, termDefinitionTextRaw) {
 
-        // Validate - can only update if design is editable
-        if ((view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('domainDictionary.updateTermDefinition', termId, termDefinitionTextRaw);
-            return true;
-        } else {
+        // Client validation
+        let result = DomainDictionaryValidationApi.validateUpdateTermDefinition(userRole, view, mode);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
 
+        // Real action call - server actions
+        ServerDomainDictionaryApi.updateTermDefinition(userRole, view, mode, termId, termDefinitionTextRaw, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DomainDictionaryMessages.MSG_DICTIONARY_DEF_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
     };
 
-    removeDictionaryTerm(view, mode, termId) {
+    // Designer removes a term from the Dictionary ---------------------------------------------------------------------
+    removeDictionaryTerm(userRole, view, mode, termId) {
 
-        // Validate - can only remove if design is editable
-        if ((view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT) {
-            Meteor.call('domainDictionary.removeTerm', termId);
-        } else {
+        // Client validation
+        let result = DomainDictionaryValidationApi.validateRemoveTerm(userRole, view, mode);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
+
+        // Real action call - server actions
+        ServerDomainDictionaryApi.removeTerm(userRole, view, mode, termId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DomainDictionaryMessages.MSG_DICTIONARY_TERM_REMOVED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
     };
+
+    // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Get function to decorate Feature Narratives
     getNarrativeDecoratorFunction(){

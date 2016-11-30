@@ -68,6 +68,8 @@ class DomainDictionaryTerm extends Component {
         this.updateText();
     }
 
+    // LOCAL -----------------------------------------------------------------------------------------------------------
+
     // Set up the view from persisted settings
     componentDidMount(){
 
@@ -145,7 +147,7 @@ class DomainDictionaryTerm extends Component {
             // Save the title on ENTER
             //console.log("Saving...");
 
-            this.onSaveTermDefinition(this.props.dictionaryTerm, this.props.view, this.props.mode);
+            this.onSaveTermDefinition(this.props.userRole, this.props.view, this.props.mode, this.props.dictionaryTerm);
             return true;
         }
 
@@ -167,36 +169,25 @@ class DomainDictionaryTerm extends Component {
     handleNameKeyEvents(event) {
         if(event.charCode === 13){
             // Enter Key
-            this.onSaveTermName(this.props.dictionaryTerm, this.props.view, this.props.mode, this.state.termNameValue);
+            this.onSaveTermName(this.props.userRole, this.props.view, this.props.mode, this.props.dictionaryTerm, this.state.termNameValue);
         }
     }
 
     // Start editing the term
     editTermName(){
         event.preventDefault();
-        //console.log("EDIT TERM");
-
-        // Cancels any definition editing going on...
-        //this.undoTermDefinitionEdit();
-
         this.setState({termEditable: true});
     }
 
     // Start editing the definition
     editTermDefinition(){
         event.preventDefault();
-        //console.log("EDIT DEFINITION");
-
-        // Cancels any term editing going on
-        //this.undoTermEdit();
-
         this.setState({definitionEditable: true});
     }
 
     // Cancel editing the term
     undoTermEdit(){
         event.preventDefault();
-        //console.log("UNDO");
         this.setState({termNameValue: this.props.dictionaryTerm.domainTermNew});
         this.setState({termEditable: false});
     }
@@ -204,7 +195,6 @@ class DomainDictionaryTerm extends Component {
     // Cancel editing the definition
     undoTermDefinitionEdit(){
         event.preventDefault();
-        //console.log("UNDO");
 
         // Reset the text in case changed on screen
         this.updateText();
@@ -216,9 +206,10 @@ class DomainDictionaryTerm extends Component {
         // TODO - will have to store current term
     }
 
-    onSaveTermName(term, view, mode, newName){
+    // API CALLS -------------------------------------------------------------------------------------------------------
+    onSaveTermName(userRole, view, mode, term, newName){
 
-        let success = ClientDomainDictionaryServices.updateDictionaryTerm(view, mode, term._id, newName);
+        let success = ClientDomainDictionaryServices.updateDictionaryTerm(userRole, view, mode, term._id, newName);
 
         if(success){
             // Finished editing
@@ -228,41 +219,34 @@ class DomainDictionaryTerm extends Component {
             if(term.isNew){
                 this.editTermDefinition()
             }
-        } else {
-            //console.log("Failed to update term name");
         }
 
     }
 
     // Save changes to the term definition
-    onSaveTermDefinition(term, view, mode){
+    onSaveTermDefinition(userRole, view, mode, term){
         event.preventDefault();
-        //console.log("UPDATE TERM DEFINITION");
 
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
 
-        let success = ClientDomainDictionaryServices.updateDictionaryTermDefinition(view, mode, term._id, rawText);
+        let success = ClientDomainDictionaryServices.updateDictionaryTermDefinition(userRole, view, mode, term._id, rawText);
 
         if(success){
             // Finished editing
             this.setState({definitionEditable: false});
-        } else {
-            //console.log("Failed to update definition");
         }
 
     }
 
-    onDeleteTerm(term, view, mode){
+    onDeleteTerm(userRole, view, mode, term){
         event.preventDefault();
-        //console.log("REMOVE TERM");
-
-        let success = ClientDomainDictionaryServices.removeDictionaryTerm(view, mode, term._id);
+        let success = ClientDomainDictionaryServices.removeDictionaryTerm(userRole, view, mode, term._id);
     };
 
-
+    // RENDER ----------------------------------------------------------------------------------------------------------
     render() {
-        const {dictionaryTerm, view, mode, context} = this.props;
+        const {dictionaryTerm, userRole, view, mode} = this.props;
 
         // TODO - add all the tooltips required
         const tooltipEdit = (
@@ -283,7 +267,7 @@ class DomainDictionaryTerm extends Component {
                             onKeyPress={(event) => this.handleNameKeyEvents(event)}
                         />
                     </div>
-                    <InputGroup.Addon onClick={ () => this.onSaveTermName(dictionaryTerm, view, mode, this.state.termNameValue)}>
+                    <InputGroup.Addon onClick={ () => this.onSaveTermName(userRole, view, mode, dictionaryTerm, this.state.termNameValue)}>
                         <div className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoTermEdit()}>
@@ -301,7 +285,7 @@ class DomainDictionaryTerm extends Component {
                     <InputGroup.Addon onClick={ () => this.editTermName()}>
                         <div className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.onDeleteTerm(dictionaryTerm, view, mode)}>
+                    <InputGroup.Addon onClick={ () => this.onDeleteTerm(userRole, view, mode, dictionaryTerm)}>
                         <div className="red"><Glyphicon glyph="remove"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
@@ -323,7 +307,7 @@ class DomainDictionaryTerm extends Component {
                         />
                     </div>
 
-                    <InputGroup.Addon onClick={ () => this.onSaveTermDefinition(dictionaryTerm, view, mode)}>
+                    <InputGroup.Addon onClick={ () => this.onSaveTermDefinition(userRole, view, mode, dictionaryTerm)}>
                         <div className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoTermDefinitionEdit()}>
@@ -430,9 +414,10 @@ DomainDictionaryTerm.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
+        userRole: state.currentUserRole,
         view: state.currentAppView,
         mode: state.currentViewMode,
-        context: state.displayContext,
+        displayContext: state.displayContext,
         userContext: state.currentUserItemContext
     }
 }

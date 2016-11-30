@@ -1,38 +1,69 @@
 import { Meteor } from 'meteor/meteor';
 
 import  DomainDictionaryServices        from '../servicers/design/domain_dictionary_services.js';
+import { addNewTerm, updateTermName, updateTermDefinition, removeTerm } from '../apiValidatedMethods/domain_dictionary_methods.js'
 
+class ServerDomainDictionaryApi {
 
-Meteor.methods({
+    addNewTerm(userRole, view, mode, designId, designVersionId, callback){
+        addNewTerm.call(
+            {
+                userRole: userRole,
+                view: view,
+                mode: mode,
+                designId: designId,
+                designVersionId: designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-    // Add a new term to the domain dictionary
-    'domainDictionary.addNewTerm'(designId, designVersionId){
+    updateTermName(userRole, view, mode, termId, newName, callback){
+        updateTermName.call(
+            {
+                userRole: userRole,
+                view: view,
+                mode: mode,
+                termId: termId,
+                newName: newName
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-        //console.log('Adding new Domain Dictionary Term');
-        DomainDictionaryServices.addNewTerm(designId, designVersionId);
+    updateTermDefinition(userRole, view, mode, termId, newDefinitionRaw, callback){
+        updateTermDefinition.call(
+            {
+                userRole: userRole,
+                view: view,
+                mode: mode,
+                termId: termId,
+                newDefinitionRaw: newDefinitionRaw
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
-    },
+    removeTerm(userRole, view, mode, termId, callback){
+        removeTerm.call(
+            {
+                userRole: userRole,
+                view: view,
+                mode: mode,
+                termId: termId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+}
 
-    'domainDictionary.updateTermName'(termId, newTermName){
+export default new ServerDomainDictionaryApi();
 
-        //console.log('Updating Dictionary Term to ' + newTermName);
-        DomainDictionaryServices.updateTermName(termId, newTermName);
-
-    },
-
-    'domainDictionary.updateTermDefinition'(termId, newTermDefinitionTextRaw){
-
-        //console.log('Updating Dictionary Term Definition');
-        DomainDictionaryServices.updateTermDefinition(termId, newTermDefinitionTextRaw)
-
-    },
-
-    // Move a step to a new position in its current scenario
-    'domainDictionary.removeTerm'(termId){
-
-        //console.log('Removing Dictionary Term ' + termId);
-        DomainDictionaryServices.removeTerm(termId);
-
-    },
-
-});

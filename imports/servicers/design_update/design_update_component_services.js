@@ -10,7 +10,7 @@ import { ComponentType, LogLevel }  from '../../constants/constants.js';
 import { DefaultComponentNames }    from '../../constants/default_names.js';
 
 import DesignServices               from '../design/design_services.js';
-import DesignUpdateServices         from './design_update_services.js';
+import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
 import DesignComponentModules       from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
 
@@ -67,9 +67,9 @@ class DesignUpdateComponentServices{
                     isMoved: false,
                     isRemoved: false,
 
-                    isInScope: DesignUpdateServices.isScopable(componentType),         // If scopable then this must be in scope...
+                    isInScope: DesignUpdateModules.isScopable(componentType),         // If scopable then this must be in scope...
                     isParentScope: false,
-                    isScopable: DesignUpdateServices.isScopable(componentType)          // A Scopable item can be picked as part of a change
+                    isScopable: DesignUpdateModules.isScopable(componentType)          // A Scopable item can be picked as part of a change
                 }
             );
 

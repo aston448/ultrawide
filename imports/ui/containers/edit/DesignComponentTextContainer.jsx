@@ -128,7 +128,7 @@ class DesignComponentText extends Component {
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
             //console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
-            if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO) {
+            if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && mainComponent.componentFeatureReferenceId) {
                 panel2 =
                     <div>
                         <Panel className="panel-steps panel-steps-body" header={titleName}>
@@ -176,7 +176,7 @@ class DesignComponentText extends Component {
                     </div>;
 
                 // And define panel 4 for Base version scenario steps if a Scenario in an update
-                if(mainComponent.componentType === ComponentType.SCENARIO) {
+                if(currentDesignComponent && mainComponent.componentType === ComponentType.SCENARIO) {
                     panel4 =
                         <div>
                             <Panel className="panel-steps panel-steps-body" header="Scenario Steps">
@@ -186,7 +186,8 @@ class DesignComponentText extends Component {
                                         designId: currentDesignComponent.designId,
                                         designVersionId: currentDesignComponent.designVersionId,
                                         updateId: 'NONE',
-                                        scenarioReferenceId: currentDesignComponent.componentReferenceId
+                                        scenarioReferenceId: currentDesignComponent.componentReferenceId,
+                                        parentReferenceId: currentDesignComponent.componentReferenceId
                                     }}/>
 
                             </Panel>

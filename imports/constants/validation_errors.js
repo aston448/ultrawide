@@ -87,4 +87,14 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE:            'A Design Update Component that is not removed is not restorable'
 };
 
+export const DomainDictionaryValidationErrors = {
+    DICTIONARY_INVALID_ROLE_ADD:                        'Only a Designer can add a Domain Dictionary entry',
+    DICTIONARY_INVALID_VIEW_ADD:                        'A Domain Dictionary entry cannot be added in this view',
+    DICTIONARY_INVALID_MODE_ADD:                        'A Domain Dictionary entry cannot be added in View Only mode',
+    DICTIONARY_INVALID_ROLE_EDIT:                       'Only a Designer may edit the Domain Dictionary',
+    DICTIONARY_INVALID_VIEW_EDIT:                       'A Domain Dictionary entry cannot be edited in this view',
+    DICTIONARY_INVALID_MODE_EDIT:                       'A Domain Dictionary entry cannot be edited in View Only mode',
+    DICTIONARY_INVALID_TERM_DUPLICATE:                  'A dictionary entry already exists with the same name'
+};
+
 
