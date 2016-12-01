@@ -21,16 +21,18 @@ export const DesignValidationErrors = {
 };
 
 export const DesignVersionValidationErrors = {
-    DESIGN_VERSION_INVALID_ROLE_UPDATE:     'Only a Designer can update Design Version details',
-    DESIGN_VERSION_INVALID_ROLE_EDIT:       'Only a Designer can edit a Design Version',
-    DESIGN_VERSION_INVALID_ROLE_VIEW_NEW:   'Only a Designer can view an unpublished Design Version',
-    DESIGN_VERSION_INVALID_ROLE_PUBLISH:    'Only a Designer can publish a Design Version',
-    DESIGN_VERSION_INVALID_NAME_DUPLICATE:  'Design Version name already exists for another version in this Design',
-    DESIGN_VERSION_INVALID_NUMBER_DUPLICATE:'Design Version number already exists for another version in this Design',
-    DESIGN_VERSION_INVALID_STATUS_EDIT:     'Only New or Draft Design Versions can be edited',
-    DESIGN_VERSION_INVALID_STATUS_PUBLISH:  'Only New Design Versions can be published',
-    DESIGN_VERSION_INVALID_STATUS_UNPUBLISH:'Only Draft Design Versions can be un-published',
-    DESIGN_VERSION_UPDATES_UNPUBLISH        :'A Design Version with Design Updates cannot be un-published'
+    DESIGN_VERSION_INVALID_ROLE_UPDATE:         'Only a Designer can update Design Version details',
+    DESIGN_VERSION_INVALID_ROLE_EDIT:           'Only a Designer can edit a Design Version',
+    DESIGN_VERSION_INVALID_ROLE_VIEW_NEW:       'Only a Designer can view an unpublished Design Version',
+    DESIGN_VERSION_INVALID_ROLE_PUBLISH:        'Only a Designer can publish a Design Version',
+    DESIGN_VERSION_INVALID_NAME_DUPLICATE:      'Design Version name already exists for another version in this Design',
+    DESIGN_VERSION_INVALID_NUMBER_DUPLICATE:    'Design Version number already exists for another version in this Design',
+    DESIGN_VERSION_INVALID_STATE_EDIT:          'Only new or draft Design Versions can be edited',
+    DESIGN_VERSION_INVALID_STATE_PUBLISH:       'Only new Design Versions can be published',
+    DESIGN_VERSION_INVALID_STATE_UNPUBLISH:     'Only draft Design Versions can be un-published',
+    DESIGN_VERSION_UPDATES_UNPUBLISH:           'A Design Version with Design Updates cannot be un-published',
+    DESIGN_VERSION_INVALID_ROLE_NEXT:           'Only a Designer can create a new Design Version',
+    DESIGN_VERSION_INVALID_STATE_NEXT:          'Only a draft Design Version can be used to create a new Design Version'
 };
 
 export const DesignUpdateValidationErrors = {

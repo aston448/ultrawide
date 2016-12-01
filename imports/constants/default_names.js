@@ -3,7 +3,9 @@ export const DefaultItemNames = {
 
     NEW_DESIGN_NAME:                'New Design',
     NEW_DESIGN_VERSION_NAME:        'First Draft',
-    NEW_DESIGN_VERSION_NUMBER:      '0.1'
+    NEW_DESIGN_VERSION_NUMBER:      '0.1',
+    NEXT_DESIGN_VERSION_NAME:       'New Updatable Version',
+    NEXT_DESIGN_VERSION_NUMBER:     'x.x'
 
 };
 

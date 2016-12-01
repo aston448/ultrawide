@@ -75,9 +75,10 @@ class DesignVersion extends Component {
         );
     }
 
-    onMergeUpdatesToNewDraftVersion(userContext, dv){
+    onCreateNextDesignVersion(userRole, userContext, dv){
 
-        ClientDesignVersionServices.mergeUpdatesToNewDraftVersion(
+        ClientDesignVersionServices.createNextDesignVersion(
+            userRole,
             userContext,
             dv._id
         );
@@ -127,7 +128,7 @@ class DesignVersion extends Component {
                                 <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
                                 <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>Edit</Button>
                                 <Button bsSize="xs" onClick={ () => this.onUnPublishDesignVersion(userRole, userContext, designVersion)}>Unpublish</Button>
-                                <Button bsSize="xs" onClick={ () => this.onMergeUpdatesToNewDraftVersion(userContext, designVersion)}>Create New from Updates</Button>
+                                <Button bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next Design Version</Button>
                             </ButtonGroup>;
                         break;
                     case  RoleType.DEVELOPER:

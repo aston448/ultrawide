@@ -8,7 +8,13 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import  DesignVersionServices from '../servicers/design/design_version_services.js';
 // =====================================================================================================================
 
-import { updateDesignVersionName, updateDesignVersionNumber, publishDesignVersion, unpublishDesignVersion } from '../apiValidatedMethods/design_version_methods.js'
+import {
+    updateDesignVersionName,
+    updateDesignVersionNumber,
+    publishDesignVersion,
+    unpublishDesignVersion,
+    createNextDesignVersion
+} from '../apiValidatedMethods/design_version_methods.js'
 
 // =====================================================================================================================
 // Server API for Design Version Items
@@ -71,6 +77,19 @@ class ServerDesignVersionApi {
         );
     };
 
+    createNextDesignVersion(userRole, designVersionId, callback){
+
+        createNextDesignVersion.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
 }
 
 export default new ServerDesignVersionApi();
@@ -86,7 +105,7 @@ Meteor.methods({
     'designVersion.mergeUpdatesToNewDraftVersion'(designVersionId){
         //console.log("Merging design version updates to new version for "  + designVersionId);
 
-        DesignVersionServices.mergeUpdatesToNewDraftVersion(designVersionId);
+        DesignVersionServices.createNextDesignVersion(designVersionId);
 
     }
 

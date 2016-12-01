@@ -49,7 +49,7 @@ class ClientDesignVersionServices{
                 // Can't update screen here because of error
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
-                // Remove Design client actions:
+                // Client actions:
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -85,7 +85,7 @@ class ClientDesignVersionServices{
                 // Can't update screen here because of error
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
-                // Remove Design client actions:
+                // Client actions:
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -121,7 +121,7 @@ class ClientDesignVersionServices{
                 // Can't update screen here because of error
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
-                // Remove Design client actions:
+                // Client actions:
 
                 // Ensure that the current version is the version we chose to publish
                 this.setDesignVersion(userContext, designVersionToPublishId);
@@ -159,7 +159,7 @@ class ClientDesignVersionServices{
                 // Can't update screen here because of error
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
-                // Remove Design client actions:
+                // Client actions:
 
                 // Ensure that the current version is the version we chose to unpublish
                 this.setDesignVersion(userContext, designVersionToUnPublishId);
@@ -176,28 +176,42 @@ class ClientDesignVersionServices{
         return true;
     };
 
-    // TODO - REFACTOR
-    // User chose to create a new draft design version with updates from the current version
-    mergeUpdatesToNewDraftVersion(userContext, designVersionToUpdateId){
+    // User chose to create a new updatable Design Version from the current version and any updates selected
+    createNextDesignVersion(userRole, userContext, baseDesignVersionId){
 
-        // Validation - only draft versions can be updated to a new draft version
-        // We allow a new version even if there are not actually any updates to add or roll forward
+        // Client validation
+        let result = DesignVersionValidationApi.validateCreateNextDesignVersion(userRole, baseDesignVersionId);
 
-        const dv = DesignVersions.findOne({_id: designVersionToUpdateId});
+        if(result != Validation.VALID){
 
-        if(dv && (dv.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_DRAFT)) {
-
-            // Ensure that the current version is the version we chose to update
-            this.setDesignVersion(userContext, designVersionToUpdateId);
-
-            // Call the server code to do all the work
-            Meteor.call('designVersion.mergeUpdatesToNewDraftVersion', designVersionToUpdateId);
-
-            return true;
-        } else {
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return false;
         }
 
+        // Real action call - server actions
+        ServerDesignVersionApi.createNextDesignVersion(userRole, baseDesignVersionId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the current version is the version we chose to update from
+                this.setDesignVersion(userContext, baseDesignVersionId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignVersionMessages.MSG_DESIGN_VERSION_PUBLISHED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
     }
 
     // TODO

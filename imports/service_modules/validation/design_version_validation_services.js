@@ -62,7 +62,7 @@ class DesignVersionValidationServices{
 
         // Design Version must not be Final
         if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_FINAL){
-            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATUS_EDIT;
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
         }
 
         return Validation.VALID;
@@ -85,7 +85,7 @@ class DesignVersionValidationServices{
 
         // Design Version must be New
         if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_NEW){
-            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATUS_PUBLISH;
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_PUBLISH;
         }
 
         return Validation.VALID;
@@ -99,7 +99,7 @@ class DesignVersionValidationServices{
 
         // Design Version must be Draft
         if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_DRAFT){
-            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATUS_UNPUBLISH;
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UNPUBLISH;
         }
 
         // Design Version must have no updates
@@ -108,6 +108,21 @@ class DesignVersionValidationServices{
         }
 
         // TODO - Add adoption validation
+
+        return Validation.VALID;
+    };
+
+    validateCreateNextDesignVersion(userRole, designVersion){
+
+        // User must be Designer
+        if(!(userRole === RoleType.DESIGNER)){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_NEXT
+        }
+
+        // Design Version that new is based on must be Draft or Updatable
+        if(!(designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_DRAFT || designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE)){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT;
+        }
 
         return Validation.VALID;
     }

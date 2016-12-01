@@ -4,6 +4,7 @@ import {DesignVersions}             from '../../collections/design/design_versio
 
 // Ultrawide Services
 import { DesignVersionStatus }      from '../../constants/constants.js';
+import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
 
@@ -108,19 +109,16 @@ class DesignVersionServices{
         }
     };
 
-    mergeUpdatesToNewDraftVersion(designVersionId){
+    createNextDesignVersion(designVersionId){
 
         if(Meteor.isServer) {
             // Overall the steps are:
-            // 1. Insert a new Design Version
+            // 1. Insert a new Design Version as PUBLISHED UPDATABLE
             // 2. Create new design components for the new version as a copy of the old
             // 3. Update the parent ids for the new design components
             // 4. Merge in the updates from the old DV that are for merging
             // 5. Carry forward the updates from the old DV that are for carrying forward
             // 6. Set the old DV to Published Final
-
-
-            //console.log("MERGE: Creating new design version...");
 
             // Get the current design version details
             const oldDesignVersion = DesignVersions.findOne({_id: designVersionId});
@@ -129,9 +127,9 @@ class DesignVersionServices{
             let newDesignVersionId = DesignVersions.insert(
                 {
                     designId: oldDesignVersion.designId,
-                    designVersionName: oldDesignVersion.designVersionName + ' with updates',
-                    designVersionNumber: oldDesignVersion.designVersionNumber + ' ++',
-                    designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_DRAFT
+                    designVersionName: DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
+                    designVersionNumber: DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
+                    designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE
                 }
 
             );

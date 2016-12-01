@@ -58,5 +58,12 @@ class DesignVersionValidationApi{
 
         return DesignVersionValidationServices.validateUnpublishDesignVersion(userRole, thisVersion, dvUpdates);
     };
+
+    validateCreateNextDesignVersion(userRole, designVersionId){
+
+        const thisVersion = DesignVersions.findOne({_id: designVersionId});
+
+        return DesignVersionValidationServices.validateCreateNextDesignVersion(userRole, thisVersion);
+    }
 }
 export default new DesignVersionValidationApi();

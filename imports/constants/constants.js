@@ -114,7 +114,8 @@ export const DesignStatus = {
 
 export const DesignVersionStatus = {
     VERSION_NEW:                'NEW',          // Not available to users - may be freely updated.  Only for completely new designs.
-    VERSION_PUBLISHED_DRAFT:    'DRAFT',        // Base version and design updates available to users.  Changes only via design updates
+    VERSION_PUBLISHED_DRAFT:    'DRAFT',        // Base version available to users.  Remains editable by Designer.  Only for new designs.
+    VERSION_PUBLISHED_UPDATABLE:'UPDATABLE',    // Available to users. Changes only via design updates.
     VERSION_PUBLISHED_FINAL:    'FINAL'         // Fixed - no more changes
 };
 
