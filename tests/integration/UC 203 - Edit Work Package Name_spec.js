@@ -15,12 +15,13 @@ describe('UC 203 - Edit Work Package Name', function(){
 
         server.call('testFixtures.clearAllData');
 
-        // Add  Design - Design1: will create default Design Version - then set DV as DesignVersion1
+        // Add  Design - Design1: will create default Design Version - then set DV as DesignVersion1 and publish it
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
         // Add a new Work Package
         server.call('testDesigns.selectDesign', 'Design1', 'miles');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
