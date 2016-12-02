@@ -46,7 +46,8 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
         server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
 
         // Verify
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME,  'miles');
+        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
+        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
     });
 
 
