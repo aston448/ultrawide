@@ -96,5 +96,23 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackages.workPackageCalledCountIs'(workPackageName, workPackageCount, userName){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+
+        const workPackages = WorkPackages.find({
+            designVersionId: userContext.designVersionId,
+            designUpdateId: userContext.designUpdateId,
+            workPackageName: workPackageName
+        });
+
+        if(workPackageCount === workPackages.count()){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Found " + workPackages.count() + " Work Packages with name " + workPackageName + ". Expecting " + workPackageCount);
+        }
+    },
+
 });
 
