@@ -15,7 +15,8 @@ Meteor.methods({
         const workPackage = WorkPackages.findOne({
             designVersionId: userContext.designVersionId,
             designUpdateId: userContext.designUpdateId,
-            workPackageName: workPackageName});
+            workPackageName: workPackageName
+        });
 
         if(workPackage.workPackageStatus === newStatus){
             return true;
@@ -31,7 +32,8 @@ Meteor.methods({
         const workPackage = WorkPackages.findOne({
             designVersionId: userContext.designVersionId,
             designUpdateId: userContext.designUpdateId,
-            workPackageName: workPackageName});
+            workPackageName: workPackageName
+        });
 
         if(workPackage.workPackageStatus != newStatus){
             return true;
@@ -53,6 +55,44 @@ Meteor.methods({
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Expected WP name to be " + workPackageName + " but got " + workPackage.workPackageName);
+        }
+    },
+
+    'verifyWorkPackages.workPackageExistsCalled'(workPackageName, userName){
+
+        // For testing that WP creation succeeded.  Make sure WP is unique
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const workPackage = WorkPackages.findOne({
+            designVersionId: userContext.designVersionId,
+            designUpdateId: userContext.designUpdateId,
+            workPackageName: workPackageName
+        });
+
+        if(workPackage){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "No Work Package exists with name " + workPackageName);
+
+        }
+    },
+
+    'verifyWorkPackages.workPackageDoesNotExistCalled'(workPackageName, userName){
+
+        // For testing that WP creation failed.  Make sure WP is unique
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const workPackage = WorkPackages.findOne({
+            designVersionId: userContext.designVersionId,
+            designUpdateId: userContext.designUpdateId,
+            workPackageName: workPackageName
+        });
+
+        if(workPackage){
+            throw new Meteor.Error("FAIL", "A Work Package exists with name " + workPackageName);
+
+        } else {
+            return true;
         }
     },
 

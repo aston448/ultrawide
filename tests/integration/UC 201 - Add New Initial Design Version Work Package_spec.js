@@ -46,15 +46,51 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
         server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
 
         // Verify
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
+        server.call('verifyWorkPackages.workPackageExistsCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
     });
 
 
     // Conditions
-    it('Only a Manager can add new Initial Design Version Work Packages');
+    it('Only a Manager can add new Initial Design Version Work Packages', function() {
 
-    it('A Work Package cannot be added to a New Design Version');
+        // Setup
+        // Designer Publish DesignVersion1
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+
+        // Execute - Designer try to create WP
+        // Designer select DesignVersion1
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+        server.call('testWorkPackages.addNewWorkPackage', 'gloria', RoleType.DESIGNER, WorkPackageType.WP_BASE);
+
+        // Verify
+        server.call('verifyWorkPackages.workPackageDoesNotExistCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'gloria');
+
+        // Execute - Developer try to create WP
+        // Developer select DesignVersion1
+        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
+        server.call('testWorkPackages.addNewWorkPackage', 'hugh', RoleType.DEVELOPER, WorkPackageType.WP_BASE);
+
+        // Verify
+        server.call('verifyWorkPackages.workPackageDoesNotExistCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'hugh');
+
+    });
+
+    it('A Work Package cannot be added to a New Design Version', function() {
+
+        // Setup - leave the DV as New
+        // Manager select DesignVersion1
+        server.call('testDesigns.selectDesign', 'Design1', 'miles');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
+
+        // Execute - add WP as Manager
+        server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
+
+        // Verify
+        server.call('verifyWorkPackages.workPackageDoesNotExistCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
+
+    });
 
     it('A Work Package cannot be added to a Complete Design Version');
 
