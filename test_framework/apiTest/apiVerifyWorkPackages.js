@@ -51,10 +51,19 @@ Meteor.methods({
             _id: userContext.workPackageId
         });
 
-        if(workPackage.workPackageName === workPackageName){
-            return true;
+        if(workPackage) {
+            if (workPackage.workPackageName === workPackageName) {
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expected WP name to be " + workPackageName + " but got " + workPackage.workPackageName);
+            }
         } else {
-            throw new Meteor.Error("FAIL", "Expected WP name to be " + workPackageName + " but got " + workPackage.workPackageName);
+            // OK if NONE expected
+            if (workPackageName === 'NONE') {
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Not expecting no Work Package found");
+            }
         }
     },
 
