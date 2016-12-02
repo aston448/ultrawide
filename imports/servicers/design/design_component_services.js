@@ -316,10 +316,7 @@ class DesignComponentServices{
             } else {
                 throw new Meteor.Error('designComponent.removeDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
             }
-
-
         }
-
     };
 
     // Move the component to a new position in its local list

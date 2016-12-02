@@ -18,6 +18,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Add  Design - Design1: will create default Design Version
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        server
     });
 
     afterEach(function(){

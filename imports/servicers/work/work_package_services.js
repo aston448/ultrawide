@@ -5,6 +5,7 @@ import { WorkPackageComponents }    from '../../collections/work/work_package_co
 
 // Ultrawide Services
 import { WorkPackageStatus }        from '../../constants/constants.js';
+import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
 
@@ -26,7 +27,7 @@ class WorkPackageServices{
                     designVersionId: designVersionId,            // The design version this is work for
                     designUpdateId: designUpdateId,             // Defaults if not Update WP
                     workPackageType: wpType,                     // Either Base Version Implementation or Design Update Implementation
-                    workPackageName: 'New Work Package',         // Identifier of this work package
+                    workPackageName: DefaultItemNames.NEW_WORK_PACKAGE_NAME,         // Identifier of this work package
                     workPackageStatus: WorkPackageStatus.WP_NEW,
 
                 }

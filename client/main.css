@@ -803,7 +803,7 @@ input {
 .move-target-active{
     height: 44px;
     color: lightgrey;
-    background-color: white;
+    border: 1px solid yellowgreen;
 }
 
 /*.active-open{*/

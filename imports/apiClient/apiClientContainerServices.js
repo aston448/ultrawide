@@ -984,7 +984,7 @@ class ClientContainerServices{
             selectionComponentType = mashCurrentItem.mashComponentType;
         }
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Mash Data for component type {} with id {} ", selectionComponentType, selectionComponentId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data for component type {} with id {} ", selectionComponentType, selectionComponentId);
 
         // Get user context current Design Component
         let selectedDesignComponent = null;
