@@ -47,7 +47,9 @@ const {hasCommandModifier} = KeyBindingUtil;
 const styles = {
     domainTerm: {
         color: 'rgba(0, 0, 255, 1.0)',
-        fontWeight: 'normal'
+        //backgroundColor: 'rgba(240, 255, 240, 1.0)',
+        fontWeight: 'normal',
+        //textDecoration: 'underline'
     }
 };
 
