@@ -73,7 +73,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE, 'gloria');
         // And previous DV should be complete
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
     });
 
     it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version', function(){
@@ -100,7 +100,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE, 'gloria');
         // And previous DV should be complete
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
     });
 
 
