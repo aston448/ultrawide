@@ -23,23 +23,9 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
-        // Add Data to the Design Version
+        // Add Basic Data to the Design Version
         server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
-        // Application
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        // Design Section
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        // Feature - has 4 default Aspects
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        // Add Scenarios
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Conditions');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario2');
-
+        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
     });
 
     afterEach(function(){
