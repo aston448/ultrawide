@@ -10,7 +10,7 @@ Meteor.methods({
     'verifyDesignVersions.designVersionStatusIs'(designVersionName, newStatus, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
 
         if(designVersion.designVersionStatus === newStatus){
@@ -23,7 +23,7 @@ Meteor.methods({
     'verifyDesignVersions.designVersionStatusIsNot'(designVersionName, newStatus, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
         if(designVersion.designVersionStatus != newStatus){
             return true;
@@ -35,7 +35,7 @@ Meteor.methods({
     'verifyDesignVersions.currentDesignVersionNameIs'(designVersionName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
+        const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
 
         if(designVersion.designVersionName === designVersionName){
             return true;
@@ -47,7 +47,7 @@ Meteor.methods({
     'verifyDesignVersions.currentDesignVersionNumberIs'(designVersionNumber, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
+        const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
 
         if(designVersion.designVersionNumber === designVersionNumber){
             return true;
