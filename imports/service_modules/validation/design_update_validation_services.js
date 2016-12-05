@@ -20,8 +20,8 @@ class DesignUpdateValidationServices{
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_ADD;
         }
 
-        // The Design Version must be Published and still Draft
-        if(designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_DRAFT){
+        // The Design Version must be Updatable
+        if(designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE){
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_ADD;
         }
 

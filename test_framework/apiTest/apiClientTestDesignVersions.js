@@ -76,4 +76,13 @@ Meteor.methods({
         ClientDesignVersionServices.updateDesignVersionNumber(userRole, userContext.designVersionId, newNumber)
     },
 
+    'testDesignVersions.createNextDesignVersion'(currentDesignVersionName, userRole, userName){
+
+        const user = UserRoles.findOne({userName: userName});
+        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: currentDesignVersionName});
+
+        ClientDesignVersionServices.createNextDesignVersion(userRole, userContext, designVersion._id)
+    }
+
 });

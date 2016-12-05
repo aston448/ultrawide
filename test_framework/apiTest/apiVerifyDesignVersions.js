@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
+import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
@@ -68,4 +69,35 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "Expected DV number to be " + designVersionNumber + " but got " + designVersion.designVersionNumber);
         }
     },
+
+    'verifyDesignVersions.designVersionExistsCalled'(designName, designVersionName){
+
+        const design = Designs.findOne({designName: designName});
+        const designVersion = DesignVersions.findOne({
+            designId: design._id,
+            designVersionName: designVersionName
+        });
+
+        if(designVersion){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "No Design Version found with name " + designVersionName);
+        }
+    },
+
+    'verifyDesignVersions.designVersionDoesNotExistCalled'(designName, designVersionName){
+
+        const design = Designs.findOne({designName: designName});
+        const designVersion = DesignVersions.findOne({
+            designId: design._id,
+            designVersionName: designVersionName
+        });
+
+        if(designVersion){
+            throw new Meteor.Error("FAIL", "Not expecting Design Version found with name " + designVersionName);
+        } else {
+            return true;
+        }
+    },
+
 });

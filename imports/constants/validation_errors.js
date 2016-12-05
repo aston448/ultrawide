@@ -38,7 +38,7 @@ export const DesignVersionValidationErrors = {
 export const DesignUpdateValidationErrors = {
     DESIGN_UPDATE_NOT_EXIST:                    'Design Update does not exist',
     DESIGN_UPDATE_INVALID_ROLE_ADD:             'Only a Designer can add Design Updates',
-    DESIGN_UPDATE_INVALID_STATE_ADD:            'Design Updates can only be added to a Draft Design Version',
+    DESIGN_UPDATE_INVALID_STATE_ADD:            'Design Updates can only be added to an Updatable Design Version',
     DESIGN_UPDATE_INVALID_ROLE_UPDATE:          'Only a Designer can update Design Update details',
     DESIGN_UPDATE_INVALID_ROLE_EDIT:            'Only a Designer can edit a Design Update',
     DESIGN_UPDATE_INVALID_STATE_EDIT:           'Completed design Updates cannot be edited',

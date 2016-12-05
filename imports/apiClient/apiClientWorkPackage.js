@@ -263,7 +263,7 @@ class ClientWorkPackageServices {
     viewWorkPackage(userRole, userContext, workPackageToViewId, wpType){
 
         // Client validation
-        let result = WorkPackageValidationApi.validateViewWorkPackage(userRole, workPackageToEditId);
+        let result = WorkPackageValidationApi.validateViewWorkPackage(userRole, workPackageToViewId);
 
         if(result != Validation.VALID){
 

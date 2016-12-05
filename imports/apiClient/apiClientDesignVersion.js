@@ -333,7 +333,7 @@ class ClientDesignVersionServices{
                         store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
                         break;
 
-                    case DesignVersionStatus.VERSION_PUBLISHED_FINAL:
+                    case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
                         // For final design versions view is all you can do
                         store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
                         break;

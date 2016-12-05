@@ -112,7 +112,7 @@ class DesignUpdatesList extends Component {
                             </div>;
                     }
                     break;
-                case DesignVersionStatus.VERSION_PUBLISHED_FINAL:
+                case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
                     // Design updates may be viewed only
                     panelContent =
                         <div>

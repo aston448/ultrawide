@@ -49,8 +49,8 @@ describe('UC 141 - Add Organisational Design Component', function(){
         server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, DefaultComponentNames.NEW_APPLICATION_NAME);
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, DefaultComponentNames.NEW_APPLICATION_NAME);
     });
 
 
@@ -69,8 +69,8 @@ describe('UC 141 - Add Organisational Design Component', function(){
         server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
 
         // Verify - new component added
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
     });
 
     it('A Feature Aspect may be added to a Feature', function(){
@@ -91,8 +91,8 @@ describe('UC 141 - Add Organisational Design Component', function(){
         server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
 
         // Verify - new component added
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Feature1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Feature1');
     });
 
 

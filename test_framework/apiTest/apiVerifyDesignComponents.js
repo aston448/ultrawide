@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
+import { Designs }                  from '../../imports/collections/design/designs.js'
+import { DesignVersions }           from '../../imports/collections/design/design_versions.js'
 import { DesignComponents }         from '../../imports/collections/design/design_components.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import { ComponentType }            from '../../imports/constants/constants.js';
@@ -14,6 +16,25 @@ Meteor.methods({
             return true;
         } else {
             throw new Meteor.Error("FAIL", "No Design Component of type " + componentType + " exists with name " + componentName);
+        }
+    },
+
+    'verifyDesignComponents.componentExistsInDesignVersionCalled'(designName, designVersionName, componentType, componentName){
+
+        const design = Designs.findOne({designName: designName});
+        if(!design){
+            throw new Meteor.Error("FAIL", "Design " + designName + " not found.");
+        }
+        const designVersion = DesignVersions.findOne({designId: design._id, designVersionName: designVersionName});
+        if(!designVersion){
+            throw new Meteor.Error("FAIL", "Design Version " + designVersionName + " not found for Design " + designName);
+        }
+        const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+
+        if(designComponent){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "No Design Component of type " + componentType + " exists with name " + componentName + " in Design Version " + designVersionName + " for Design " + designName);
         }
     },
 
@@ -44,6 +65,35 @@ Meteor.methods({
     'verifyDesignComponents.componentParentIs'(componentType, componentName, componentParentName){
 
         const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
+
+        let parentName = 'NONE';
+        if(parentComponent){
+            parentName = parentComponent.componentName;
+        }
+
+        if(parentName != componentParentName){
+            throw new Meteor.Error("FAIL", "Expected parent to be " + componentParentName + " but got " + parentName);
+        } else {
+            return true;
+        }
+
+    },
+
+    'verifyDesignComponents.componentInDesignVersionParentIs'(designName, designVersionName, componentType, componentName, componentParentName){
+
+        const design = Designs.findOne({designName: designName});
+        if(!design){
+            throw new Meteor.Error("FAIL", "Design " + designName + " not found.");
+        }
+        const designVersion = DesignVersions.findOne({designId: design._id, designVersionName: designVersionName});
+        if(!designVersion){
+            throw new Meteor.Error("FAIL", "Design Version " + designVersionName + " not found for Design " + designName);
+        }
+        const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+        if(!designComponent){
+            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
+        }
         const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
 
         let parentName = 'NONE';

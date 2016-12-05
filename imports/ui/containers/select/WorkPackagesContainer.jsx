@@ -111,7 +111,7 @@ class WorkPackagesList extends Component {
                             </div>;
                     }
                     break;
-                case DesignVersionStatus.VERSION_PUBLISHED_FINAL:
+                case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
                     // Work Packages may be viewed only
                     panelContent =
                         <div>

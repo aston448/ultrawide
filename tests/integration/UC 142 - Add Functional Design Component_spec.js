@@ -18,7 +18,6 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Add  Design - Design1: will create default Design Version
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server
     });
 
     afterEach(function(){
@@ -50,8 +49,8 @@ describe('UC 142 - Add Functional Design Component', function(){
         server.call('testDesignComponents.addApplication', 'gloria');
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'NONE');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'NONE');
     });
 
     it('A Feature may be added to a Design Section', function(){
@@ -69,8 +68,8 @@ describe('UC 142 - Add Functional Design Component', function(){
         server.call('testDesignComponents.addFeatureToDesignSection', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
     });
 
     it('A Scenario may be added to a Feature', function(){
@@ -90,8 +89,8 @@ describe('UC 142 - Add Functional Design Component', function(){
         server.call('testDesignComponents.addScenarioToFeature', DefaultComponentNames.NEW_FEATURE_NAME);
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, DefaultComponentNames.NEW_FEATURE_NAME);
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, DefaultComponentNames.NEW_FEATURE_NAME);
     });
 
 
@@ -114,8 +113,8 @@ describe('UC 142 - Add Functional Design Component', function(){
         server.call('testDesignComponents.addScenarioToFeatureAspect', DefaultComponentNames.NEW_FEATURE_NAME, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsCalled', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME);
-        server.call('verifyDesignComponents.componentParentIs', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME);
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
     });
 
 

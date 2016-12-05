@@ -453,7 +453,7 @@ class ClientUserContextServices {
                                             return;
 
                                         }
-                                    case DesignVersionStatus.VERSION_PUBLISHED_FINAL:
+                                    case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
                                         // View that final design version
                                         store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
                                         return;

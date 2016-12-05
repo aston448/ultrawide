@@ -152,7 +152,7 @@ class DesignVersion extends Component {
                         break;
                 }
                 break;
-            case DesignVersionStatus.VERSION_PUBLISHED_FINAL:
+            case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
                 //TODO - Change all this
                 if(userRole === RoleType.DEVELOPER){
                     // Developers can view or adopt a final design
