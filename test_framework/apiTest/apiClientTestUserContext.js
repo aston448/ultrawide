@@ -2,17 +2,15 @@ import { Meteor } from 'meteor/meteor';
 
 
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
-import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
-import  ClientDesignServices    from '../../imports/apiClient/apiClientDesign.js'
+import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
     'testUserContext.setFullDummyEditContext'(userName){
 
         // Sets a dummy user context for test purposes
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         UserCurrentEditContext.update(
             {_id: userContext._id},

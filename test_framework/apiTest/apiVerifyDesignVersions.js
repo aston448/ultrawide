@@ -1,21 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 
-import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
-import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
-import {DefaultItemNames} from '../../imports/constants/default_names.js';
+
+import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
     'verifyDesignVersions.designVersionStatusIs'(designVersionName, newStatus, userName){
 
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
-        const designVersion = DesignVersions.findOne({
-            designId: userContext.designId,
-            designVersionName: designVersionName
-        });
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
+
 
         if(designVersion.designVersionStatus === newStatus){
             return true;
@@ -26,12 +22,8 @@ Meteor.methods({
 
     'verifyDesignVersions.designVersionStatusIsNot'(designVersionName, newStatus, userName){
 
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
-        const designVersion = DesignVersions.findOne({
-            designId: userContext.designId,
-            designVersionName: designVersionName
-        });
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
 
         if(designVersion.designVersionStatus != newStatus){
             return true;
@@ -42,11 +34,8 @@ Meteor.methods({
 
     'verifyDesignVersions.currentDesignVersionNameIs'(designVersionName, userName){
 
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
-        const designVersion = DesignVersions.findOne({
-            _id: userContext.designVersionId
-        });
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
 
         if(designVersion.designVersionName === designVersionName){
             return true;
@@ -57,11 +46,8 @@ Meteor.methods({
 
     'verifyDesignVersions.currentDesignVersionNumberIs'(designVersionNumber, userName){
 
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
-        const designVersion = DesignVersions.findOne({
-            _id: userContext.designVersionId
-        });
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId,designVersionName);
 
         if(designVersion.designVersionNumber === designVersionNumber){
             return true;

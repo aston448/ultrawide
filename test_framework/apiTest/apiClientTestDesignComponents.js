@@ -7,6 +7,7 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 
 import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
 import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
+import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 
@@ -19,8 +20,7 @@ Meteor.methods({
         const mode = ViewMode.MODE_EDIT;
 
         // Get user's Design Version Id as the one being worked on
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
 
@@ -32,8 +32,7 @@ Meteor.methods({
         const view = ViewType.DESIGN_NEW_EDIT;
 
         // Get user's Design Version Id as the one being worked on
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
 
@@ -160,8 +159,7 @@ Meteor.methods({
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
 
-        const user = UserRoles.findOne({userName: userName});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
 

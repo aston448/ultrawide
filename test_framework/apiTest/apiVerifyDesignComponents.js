@@ -6,6 +6,8 @@ import { DesignComponents }         from '../../imports/collections/design/desig
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import { ComponentType }            from '../../imports/constants/constants.js';
 
+import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+
 Meteor.methods({
 
     'verifyDesignComponents.componentExistsCalled'(componentType, componentName){
@@ -21,14 +23,9 @@ Meteor.methods({
 
     'verifyDesignComponents.componentExistsInDesignVersionCalled'(designName, designVersionName, componentType, componentName){
 
-        const design = Designs.findOne({designName: designName});
-        if(!design){
-            throw new Meteor.Error("FAIL", "Design " + designName + " not found.");
-        }
-        const designVersion = DesignVersions.findOne({designId: design._id, designVersionName: designVersionName});
-        if(!designVersion){
-            throw new Meteor.Error("FAIL", "Design Version " + designVersionName + " not found for Design " + designName);
-        }
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
         const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
 
         if(designComponent){
@@ -82,14 +79,9 @@ Meteor.methods({
 
     'verifyDesignComponents.componentInDesignVersionParentIs'(designName, designVersionName, componentType, componentName, componentParentName){
 
-        const design = Designs.findOne({designName: designName});
-        if(!design){
-            throw new Meteor.Error("FAIL", "Design " + designName + " not found.");
-        }
-        const designVersion = DesignVersions.findOne({designId: design._id, designVersionName: designVersionName});
-        if(!designVersion){
-            throw new Meteor.Error("FAIL", "Design Version " + designVersionName + " not found for Design " + designName);
-        }
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
         const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
         if(!designComponent){
             throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);

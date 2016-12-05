@@ -1,33 +1,23 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Designs }                  from '../../imports/collections/design/designs.js';
-import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
-import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
-import { UserRoles }                from '../../imports/collections/users/user_roles.js';
+import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
-    'verifyUserContext.designIs'(designName, username){
+    'verifyUserContext.designIs'(designName, userName){
 
-        const design = Designs.findOne({designName: designName});
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
-
+        const design = TestDataHelpers.getDesign(designName);
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designId != design._id){
             throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: " + design._id);
         }
     },
 
-    'verifyUserContext.designVersionIs'(designVersionName, username){
+    'verifyUserContext.designVersionIs'(designVersionName, userName){
         // Assume that Design is set in user context before checking Design Version
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
-
-        console.log('User Context for ' + username + " is DE: " + userContext.designId + " DV: " + userContext.designVersionId);
-        const designVersion = DesignVersions.findOne({designId: userContext.designId, designVersionName: designVersionName});
-
-
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
         if(userContext.designVersionId != designVersion._id){
             throw new Meteor.Error("FAIL", "User context design version id is: " + userContext.designVersionId + " expected: " + designVersion._id);
@@ -35,90 +25,81 @@ Meteor.methods({
     },
 
     // Methods to verify that context is cleared
-    'verifyUserContext.designVersionIsNone'(username){
+    'verifyUserContext.designVersionIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designVersionId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design version id is: " + userContext.designVersionId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.designUpdateIsNone'(username){
+    'verifyUserContext.designUpdateIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designUpdateId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design update id is: " + userContext.designUpdateId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.workPackageIsNone'(username){
+    'verifyUserContext.workPackageIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.workPackageId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context work package id is: " + userContext.workPackageId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.designComponentIsNone'(username){
+    'verifyUserContext.designComponentIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designComponentId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design component id is: " + userContext.designComponentId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.designComponentTypeIsNone'(username){
+    'verifyUserContext.designComponentTypeIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designComponentType != 'NONE'){
             throw new Meteor.Error("FAIL", "User context design component type is: " + userContext.designComponentType + " expected: NONE");
         }
     },
 
-    'verifyUserContext.featureReferenceIsNone'(username){
+    'verifyUserContext.featureReferenceIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.featureReferenceId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context feature reference is: " + userContext.featureReferenceId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.featureAspectReferenceIsNone'(username){
+    'verifyUserContext.featureAspectReferenceIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.featureAspectReferenceId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context feature aspect reference is: " + userContext.featureAspectReferenceId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.scenarioReferenceIsNone'(username){
+    'verifyUserContext.scenarioReferenceIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.scenarioReferenceId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context scenario reference is: " + userContext.scenarioReferenceId + " expected: NONE");
         }
     },
 
-    'verifyUserContext.scenarioStepIsNone'(username){
+    'verifyUserContext.scenarioStepIsNone'(userName){
 
-        const user = UserRoles.findOne({userName: username});
-        const userContext = UserCurrentEditContext.findOne({userId: user.userId});
+        const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.scenarioStepId != 'NONE'){
             throw new Meteor.Error("FAIL", "User context scenario step reference is: " + userContext.scenarioStepId + " expected: NONE");
