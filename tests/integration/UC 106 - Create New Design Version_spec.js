@@ -165,7 +165,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
 
         // Execute - try to create another new DV frm DesignVersion1
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
         // Verify - new DV not created
         server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
