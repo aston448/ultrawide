@@ -52,7 +52,7 @@ class TestDataHelpers {
     getDesignVersion(designId, designVersionName){
 
         const designVersion = DesignVersions.findOne({designId: designId, designVersionName: designVersionName});
-        const design = Designs.findOne({designName: designName});
+        const design = Designs.findOne({_id: designId});
 
         if(!designVersion){
             throw new Meteor.Error("FAIL", "Design Version " + designVersionName + " not found for Design " + design.designName);
