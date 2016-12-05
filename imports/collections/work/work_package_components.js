@@ -10,6 +10,7 @@ export const WorkPackageComponents = new Mongo.Collection('workPackageComponents
 
 let Schema = new SimpleSchema({
     // Identity
+    designVersionId:            {type: String},                                         // The Design Version for which this is a WP
     workPackageId:              {type: String},                                         // The WP containing this component
     workPackageType:            {type: String},                                         // Either Base Version Implementation or Design Update Implementation
     componentId:                {type: String},                                         // The local reference to the component in the DV / DU

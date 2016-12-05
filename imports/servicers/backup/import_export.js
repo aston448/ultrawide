@@ -664,6 +664,8 @@ class ImpExServices{
             // WP Component could be a Design Component or a Design Update Component
             workPackage = WorkPackages.findOne({_id: workPackageId});
 
+            let designVersionId = workPackage.designVersionId;
+
             switch (workPackage.workPackageType) {
                 case WorkPackageType.WP_BASE:
                     if(hasDesignComponents) {
@@ -685,6 +687,7 @@ class ImpExServices{
 
             if(!skip) {
                 let workPackageComponentId = WorkPackageServices.importComponent(
+                    designVersionId,
                     workPackageId,
                     wpDesignComponentId,
                     wpComponent

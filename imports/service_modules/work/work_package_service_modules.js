@@ -30,6 +30,7 @@ class WorkPackageModules {
 
                     WorkPackageComponents.insert(
                         {
+                            designVersionId:                designVersionId,
                             workPackageId:                  workPackageId,
                             workPackageType:                wpType,
                             componentId:                    component._id,
@@ -62,6 +63,7 @@ class WorkPackageModules {
 
                     WorkPackageComponents.insert(
                         {
+                            designVersionId:                designVersionId,
                             workPackageId:                  workPackageId,
                             workPackageType:                wpType,
                             componentId:                    component._id,

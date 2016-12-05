@@ -31,7 +31,7 @@ class ClientWorkPackageComponentServices {
     toggleInScope(view, displayContext, wpComponentId, newScope){
 
         // Client validation
-        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext);
+        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, wpComponentId);
 
         if(result != Validation.VALID){
 

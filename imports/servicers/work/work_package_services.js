@@ -66,12 +66,13 @@ class WorkPackageServices{
 
 
     // Called when data is restored
-    importComponent(workPackageId, designComponentId, wpComponent){
+    importComponent(designVersionId, workPackageId, designComponentId, wpComponent){
 
         if(Meteor.isServer) {
             const wpComponentId = WorkPackageComponents.insert(
                 {
                     // Identity
+                    designVersionId: designVersionId,
                     workPackageId: workPackageId,
                     workPackageType: wpComponent.workPackageType,
                     componentId: designComponentId,
