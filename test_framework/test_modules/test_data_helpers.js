@@ -182,12 +182,20 @@ class TestDataHelpers {
 
             // Get the component that has the expected parent
             designComponents.forEach((component) => {
-                let parentComponent = DesignComponents.findOne({
-                    _id: component.componentParentId
-                });
 
-                if(parentComponent.componentName === componentParentName){
-                    designComponent = component;
+                if(component.componentParentId != 'NONE') {
+                    let parentComponent = DesignComponents.findOne({
+                        _id: component.componentParentId
+                    });
+
+
+                    if (parentComponent.componentName === componentParentName) {
+                        designComponent = component;
+                    }
+                } else {
+                    if(componentParentName === 'NONE'){
+                        designComponent = component;
+                    }
                 }
             });
 
@@ -201,12 +209,19 @@ class TestDataHelpers {
 
             // Get the component that has the expected parent
             designComponents.forEach((component) => {
-                let parentComponent = DesignUpdateComponents.findOne({
-                    _id: component.componentParentId
-                });
 
-                if(parentComponent.componentNameNew === componentParentName){
-                    designComponent = component;
+                if(component.componentParentIdNew != 'NONE') {
+                    let parentComponent = DesignUpdateComponents.findOne({
+                        _id: component.componentParentIdNew
+                    });
+
+                    if (parentComponent.componentNameNew === componentParentName) {
+                        designComponent = component;
+                    } else {
+                        if(componentParentName === 'NONE'){
+                            designComponent = component;
+                        }
+                    }
                 }
             });
 
