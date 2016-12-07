@@ -6,13 +6,13 @@ import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
-    'verifyWorkPackageComponents.componentExistsCalled'(workPackageName, componentType, componentName, userName){
+    'verifyWorkPackageComponents.componentExistsCalled'(workPackageName, componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
         // This call will actually verify the component exists and return error if not
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentName);
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         return true;
     },

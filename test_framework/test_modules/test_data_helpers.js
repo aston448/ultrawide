@@ -13,6 +13,7 @@ import { UserCurrentEditContext }   from '../../imports/collections/context/user
 import { UserCurrentViewOptions }   from '../../imports/collections/context/user_current_view_options.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 
 class TestDataHelpers {
 
@@ -118,51 +119,6 @@ class TestDataHelpers {
 
     };
 
-    getWorkPackageComponent(designVersionId, designUpdateId, workPackageId, componentType, componentName){
-
-        let designComponent = null;
-        let designComponentRef = '';
-        let designUpdateName = 'NONE';
-        const designVersion = DesignVersions.findOne({_id: designVersionId});
-        const workPackage = WorkPackages.findOne({_id: workPackageId});
-
-        if(designUpdateId === 'NONE'){
-            designComponent = DesignComponents.findOne({
-                designVersionId: designVersionId,
-                componentType: componentType,
-                componentName:  componentName
-            });
-
-        } else {
-            designComponent = DesignUpdateComponents.findOne({
-                designVersionId: designVersionId,
-                designUpdateId: designUpdateId,
-                componentType: componentType,
-                componentNameNew:  componentName
-            });
-            designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
-        }
-
-        if(designComponent){
-            designComponentRef = designComponent.componentReferenceId;
-        } else {
-            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
-        }
-
-        const workPackageComponent = WorkPackageComponents.findOne({
-            designVersionId: designVersionId,
-            workPackageId: workPackageId,
-            componentReferenceId: designComponentRef
-        });
-
-        if(!workPackageComponent){
-            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName + " and Work Package " + workPackage.workPackageName);
-        }
-
-        return workPackageComponent;
-
-    };
-
     getWorkPackageComponentWithParent(designVersionId, designUpdateId, workPackageId, componentType, componentParentName, componentName){
         // Allows us to get a component by combination of name and parent name - so we can get Feature Aspects successfully
         let designComponents = [];
@@ -180,10 +136,10 @@ class TestDataHelpers {
                 componentName:  componentName
             }).fetch();
 
-            // Get the component that has the expected parent
-            designComponents.forEach((component) => {
+            // Get the component that has the expected parent for Feature Aspects or Design Sections
+            if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
+                designComponents.forEach((component) => {
 
-                if(component.componentParentId != 'NONE') {
                     let parentComponent = DesignComponents.findOne({
                         _id: component.componentParentId
                     });
@@ -192,12 +148,12 @@ class TestDataHelpers {
                     if (parentComponent.componentName === componentParentName) {
                         designComponent = component;
                     }
-                } else {
-                    if(componentParentName === 'NONE'){
-                        designComponent = component;
-                    }
-                }
-            });
+
+                });
+            } else {
+                // Names are unique so assume only one
+                designComponent = designComponents[0];
+            }
 
         } else {
             designComponents = DesignUpdateComponents.find({
@@ -207,10 +163,10 @@ class TestDataHelpers {
                 componentNameNew:  componentName
             }).fetch();
 
-            // Get the component that has the expected parent
-            designComponents.forEach((component) => {
+            // Get the component that has the expected parent for Feature Aspects or Design Sections
+            if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
+                designComponents.forEach((component) => {
 
-                if(component.componentParentIdNew != 'NONE') {
                     let parentComponent = DesignUpdateComponents.findOne({
                         _id: component.componentParentIdNew
                     });
@@ -222,8 +178,12 @@ class TestDataHelpers {
                             designComponent = component;
                         }
                     }
-                }
-            });
+
+                });
+            } else {
+                // Names are unique so assume only one
+                designComponent = designComponents[0];
+            }
 
             designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
         }

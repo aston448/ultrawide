@@ -49,15 +49,15 @@ describe('UC 231 - Add Design Component to Scope - Initial Design Version', func
         server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
 
         // Verify
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.APPLICATION, 'Application1', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Section1', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Section2', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.FEATURE, 'Feature1', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.FEATURE, 'Feature2', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Scenario1', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Scenario2', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Scenario3', 'miles');
-        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Scenario4', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        server.call('verifyWorkPackageComponents.componentExistsCalled', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
 
         // And verify correct parents
         server.call('verifyWorkPackageComponents.componentParentIs', 'WorkPackage1', ComponentType.APPLICATION, 'Application1', 'NONE', 'miles');
