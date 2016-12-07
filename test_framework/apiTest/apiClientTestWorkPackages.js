@@ -59,6 +59,14 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         ClientWorkPackageServices.updateWorkPackageName(userRole, userContext.workPackageId, newName)
+    },
+
+    'testWorkPackages.removeWorkPackage'(workPackageName, userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id)
     }
 
 });
