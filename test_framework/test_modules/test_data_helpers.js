@@ -6,6 +6,9 @@ import { Designs }                  from '../../imports/collections/design/desig
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
+import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
+import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserCurrentViewOptions }   from '../../imports/collections/context/user_current_view_options.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
@@ -86,6 +89,221 @@ class TestDataHelpers {
         return workPackage;
     };
 
+    getDesignComponent(designVersionId, designUpdateId, componentName){
+
+        let designComponent = null;
+        let designUpdateName = 'NONE';
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+
+        if(designUpdateId === 'NONE'){
+            designComponent = DesignComponents.findOne({
+                designVersionId: designVersionId,
+                componentName:  componentName
+            });
+
+        } else {
+            designComponent = DesignUpdateComponents.findOne({
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                componentNameNew:  componentName
+            });
+            designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
+        }
+
+        if(!designComponent){
+            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+        }
+
+        return designComponent;
+
+    };
+
+    getWorkPackageComponent(designVersionId, designUpdateId, workPackageId, componentType, componentName){
+
+        let designComponent = null;
+        let designComponentRef = '';
+        let designUpdateName = 'NONE';
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const workPackage = WorkPackages.findOne({_id: workPackageId});
+
+        if(designUpdateId === 'NONE'){
+            designComponent = DesignComponents.findOne({
+                designVersionId: designVersionId,
+                componentType: componentType,
+                componentName:  componentName
+            });
+
+        } else {
+            designComponent = DesignUpdateComponents.findOne({
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                componentType: componentType,
+                componentNameNew:  componentName
+            });
+            designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
+        }
+
+        if(designComponent){
+            designComponentRef = designComponent.componentReferenceId;
+        } else {
+            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+        }
+
+        const workPackageComponent = WorkPackageComponents.findOne({
+            designVersionId: designVersionId,
+            workPackageId: workPackageId,
+            componentReferenceId: designComponentRef
+        });
+
+        if(!workPackageComponent){
+            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName + " and Work Package " + workPackage.workPackageName);
+        }
+
+        return workPackageComponent;
+
+    };
+
+    getWorkPackageComponentWithParent(designVersionId, designUpdateId, workPackageId, componentType, componentParentName, componentName){
+        // Allows us to get a component by combination of name and parent name - so we can get Feature Aspects successfully
+        let designComponents = [];
+        let designComponent = null;
+        let parentComponent = null;
+        let designComponentRef = '';
+        let designUpdateName = 'NONE';
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const workPackage = WorkPackages.findOne({_id: workPackageId});
+
+        if(designUpdateId === 'NONE'){
+            designComponents = DesignComponents.find({
+                designVersionId: designVersionId,
+                componentType: componentType,
+                componentName:  componentName
+            }).fetch();
+
+            // Get the component that has the expected parent
+            designComponents.forEach((component) => {
+                let parentComponent = DesignComponents.findOne({
+                    _id: component.componentParentId
+                });
+
+                if(parentComponent.componentName === componentParentName){
+                    designComponent = component;
+                }
+            });
+
+        } else {
+            designComponents = DesignUpdateComponents.find({
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                componentType: componentType,
+                componentNameNew:  componentName
+            }).fetch();
+
+            // Get the component that has the expected parent
+            designComponents.forEach((component) => {
+                let parentComponent = DesignUpdateComponents.findOne({
+                    _id: component.componentParentId
+                });
+
+                if(parentComponent.componentNameNew === componentParentName){
+                    designComponent = component;
+                }
+            });
+
+            designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
+        }
+
+        if(designComponent){
+            designComponentRef = designComponent.componentReferenceId;
+        } else {
+            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+        }
+
+        const workPackageComponent = WorkPackageComponents.findOne({
+            designVersionId: designVersionId,
+            workPackageId: workPackageId,
+            componentReferenceId: designComponentRef
+        });
+
+        if(!workPackageComponent){
+            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName + " and Work Package " + workPackage.workPackageName);
+        }
+
+        return workPackageComponent;
+
+    };
+
+    getWorkPackageComponentParentName(designVersionId, designUpdateId, workPackageId, componentType, componentName){
+
+        let designComponent = null;
+        let designComponentParentRef = '';
+        let parentComponent = null;
+        let designUpdateName = 'NONE';
+        let parentComponentName = '';
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const workPackage = WorkPackages.findOne({_id: workPackageId});
+
+        if(designUpdateId === 'NONE'){
+            designComponent = DesignComponents.findOne({
+                designVersionId: designVersionId,
+                componentType: componentType,
+                componentName:  componentName
+            });
+
+            if(designComponent){
+                designComponentParentRef = designComponent.componentParentReferenceId;
+            } else {
+                throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            }
+
+            if(designComponentParentRef === 'NONE'){
+                return 'NONE';
+            } else {
+                parentComponent = DesignComponents.findOne({
+                    designVersionId: designVersionId,
+                    componentReferenceId: designComponentParentRef
+                });
+
+                if(parentComponent){
+                    return parentComponent.componentName;
+                } else {
+                    return 'NONE';
+                }
+            }
+
+        } else {
+            designComponent = DesignUpdateComponents.findOne({
+                designVersionId: designVersionId,
+                designUpdateId: designUpdateId,
+                componentType: componentType,
+                componentNameNew:  componentName
+            });
+            designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
+            if(designComponent){
+                designComponentParentRef = designComponent.componentParentReferenceIdNew;
+            } else {
+                throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            }
+
+            if(designComponentParentRef === 'NONE'){
+                return 'NONE';
+            } else {
+                parentComponent = DesignUpdateComponents.findOne({
+                    designVersionId: designVersionId,
+                    designUpdateId: designUpdateId,
+                    componentReferenceId: designComponentParentRef
+                });
+
+                if(parentComponent){
+                    return parentComponent.componentNameNew;
+                } else {
+                    return 'NONE';
+                }
+            }
+        }
+
+
+    }
 
 }
 
