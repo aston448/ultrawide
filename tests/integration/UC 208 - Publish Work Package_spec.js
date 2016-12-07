@@ -53,8 +53,8 @@ describe('UC 208 - Publish Work Package - Initial Design Version', function(){
 
         // Setup - Try Developer
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'hugh');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
+        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage1', 'hugh');
 
         // Execute
         server.call('testWorkPackages.publishWorkPackage', 'WorkPackage1', 'hugh', RoleType.DEVELOPER);
@@ -64,8 +64,8 @@ describe('UC 208 - Publish Work Package - Initial Design Version', function(){
 
         // Setup - Try Designer
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage1', 'gloria');
 
         // Execute
         server.call('testWorkPackages.publishWorkPackage', 'WorkPackage1', 'gloria', RoleType.DESIGNER);
