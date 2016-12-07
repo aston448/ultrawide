@@ -95,7 +95,7 @@ class WorkPackageComponentServices{
                 } else {
                     // When a component is put out of scope...
                     // All children are taken out of scope.
-                    // Ny parent that no longer haschildren goes
+                    // Any parent that no longer has children goes
 
                     // Descope the component
                     WorkPackageComponents.update(

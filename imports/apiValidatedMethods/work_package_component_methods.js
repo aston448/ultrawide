@@ -24,7 +24,7 @@ export const toggleInScope = new ValidatedMethod({
     run({view, displayContext, wpComponentId, newScope}){
 
         // Server validation
-        const result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext);
+        const result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, wpComponentId);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('workPackageComponent.toggleInScope.failValidation', result)
