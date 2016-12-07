@@ -322,7 +322,7 @@ describe('UC 232 - Remove Design Component from Scope - Initial Design Version',
         server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
 
         // Execute
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Actions', 'Scenario1', 'miles');
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
 
         // Verify - Scenario1 is out of scope - rest still in
         // Application1 is in parent scope
