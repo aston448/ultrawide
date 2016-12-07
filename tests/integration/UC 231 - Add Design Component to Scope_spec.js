@@ -5,6 +5,15 @@ describe('UC 231 - Add Design Component to Scope - Initial Design Version', func
 
     before(function(){
 
+
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         server.call('testFixtures.clearAllData');
 
         // Create a Design
@@ -24,15 +33,6 @@ describe('UC 231 - Add Design Component to Scope - Initial Design Version', func
         server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
         server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
         server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
-
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
     });
 
     afterEach(function(){
