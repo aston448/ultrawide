@@ -229,7 +229,7 @@ Meteor.methods({
         ClientDesignComponentServices.addScenario(view, mode, featureAspect4Component);
         const scenario4Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario4');
-        ClientDesignComponentServices.updateComponentName(view, mode, scenario4Component._id, 'Scenario24', rawName);
+        ClientDesignComponentServices.updateComponentName(view, mode, scenario4Component._id, 'Scenario4', rawName);
     }
 
 });
