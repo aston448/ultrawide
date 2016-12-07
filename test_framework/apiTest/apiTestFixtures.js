@@ -189,7 +189,7 @@ Meteor.methods({
         ClientDesignComponentServices.addDesignSectionToApplication(view, mode, application1Component);
         const section2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Section2');
-        ClientDesignComponentServices.updateComponentName(view, mode, section2Component._id, 'Section1', rawName);
+        ClientDesignComponentServices.updateComponentName(view, mode, section2Component._id, 'Section2', rawName);
 
         // Add Feature1 to Section 1
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section1Component);
