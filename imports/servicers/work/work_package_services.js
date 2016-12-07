@@ -107,6 +107,20 @@ class WorkPackageServices{
         }
     };
 
+    withdrawWorkPackage(workPackageId){
+
+        if(Meteor.isServer) {
+            WorkPackages.update(
+                {_id: workPackageId},
+                {
+                    $set: {
+                        workPackageStatus: WorkPackageStatus.WP_NEW
+                    }
+                }
+            );
+        }
+    };
+
     completeWorkPackage(workPackageId){
 
         if(Meteor.isServer) {

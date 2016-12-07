@@ -48,6 +48,13 @@ class WorkPackageValidationApi {
         return WorkPackageValidationServices.validatePublishWorkPackage(userRole, wp.workPackageStatus);
     };
 
+    validateWithdrawWorkPackage(userRole, workPackageId){
+
+        const wp = WorkPackages.findOne({_id: workPackageId});
+
+        return WorkPackageValidationServices.validateWithdrawWorkPackage(userRole, wp.workPackageStatus);
+    };
+
     validateRemoveWorkPackage(userRole, workPackageId){
 
         const wp = WorkPackages.findOne({_id: workPackageId});

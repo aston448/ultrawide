@@ -57,6 +57,7 @@ class DesignComponentModules{
 
             WorkPackageComponents.insert(
                 {
+                    designVersionId:                designVersionId,
                     workPackageId:                  wp._id,
                     workPackageType:                wp.workPackageType,
                     componentId:                    component._id,

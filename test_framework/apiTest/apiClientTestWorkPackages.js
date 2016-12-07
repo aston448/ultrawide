@@ -29,6 +29,14 @@ Meteor.methods({
         ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
     },
 
+    'testWorkPackages.withdrawWorkPackage'(workPackageName, userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
+    },
+
     'testWorkPackages.editWorkPackage'(workPackageName, workPackageType, userName, userRole){
 
         const userContext = TestDataHelpers.getUserContext(userName);

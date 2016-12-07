@@ -97,6 +97,34 @@ export const publishWorkPackage = new ValidatedMethod({
     }
 });
 
+export const withdrawWorkPackage = new ValidatedMethod({
+
+    name: 'workPackage.withdrawWorkPackage',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        workPackageId:      {type: String}
+    }).validator(),
+
+    run({userRole, workPackageId}){
+
+        // Server validation
+        const result = WorkPackageValidationApi.validateWithdrawWorkPackage(userRole, workPackageId);
+
+        if (result != Validation.VALID) {
+            throw new Meteor.Error('workPackage.withdrawWorkPackage.failValidation', result)
+        }
+
+        // Server action
+        try {
+            WorkPackageServices.withdrawWorkPackage(workPackageId);
+        } catch (e) {
+            console.log(e);
+            throw new Meteor.Error('workPackage.withdrawWorkPackage.fail', e)
+        }
+    }
+});
+
 export const removeWorkPackage = new ValidatedMethod({
 
     name: 'workPackage.removeWorkPackage',

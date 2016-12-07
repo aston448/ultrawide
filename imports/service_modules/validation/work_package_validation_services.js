@@ -82,6 +82,21 @@ class WorkPackageValidationServices{
         return Validation.VALID;
     };
 
+    validateWithdrawWorkPackage(userRole, wpStatus){
+
+        // To withdraw a WP, user must be a Manager
+        if(userRole != RoleType.MANAGER){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_WITHDRAW;
+        }
+
+        // Work Package must be Available
+        if(wpStatus != WorkPackageStatus.WP_AVAILABLE){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_WITHDRAW;
+        }
+
+        return Validation.VALID;
+    };
+
     validateRemoveWorkPackage(userRole, wpStatus){
 
         // To remove a WP, user must be a Manager

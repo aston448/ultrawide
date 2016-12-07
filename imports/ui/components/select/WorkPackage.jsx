@@ -76,6 +76,15 @@ class WorkPackage extends Component {
         );
     };
 
+    onUnpublishWorkPackage(userRole, userContext, wp){
+
+        ClientWorkPackageServices.withdrawWorkPackage(
+            userRole,
+            userContext,
+            wp._id
+        );
+    };
+
     setNewWorkPackageActive(context, wp){
 
         ClientWorkPackageServices.setWorkPackage(
@@ -186,6 +195,7 @@ class WorkPackage extends Component {
                         <ButtonGroup>
                             <Button bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onUnpublishWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>
                         </ButtonGroup>
                     // options =
                     //     <FormGroup>

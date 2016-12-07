@@ -134,6 +134,44 @@ class ClientWorkPackageServices {
         return true;
     };
 
+    // Manager chose to unpublish a WP to withdraw it ------------------------------------------------------------------
+    withdrawWorkPackage(userRole, userContext, workPackageToWithdrawId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateWithdrawWorkPackage(userRole, workPackageToWithdrawId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.withdrawWorkPackage(userRole, workPackageToWithdrawId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the published WP is set in the current user context
+                this.setWorkPackage(userContext, workPackageToWithdrawId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_WITHDRAWN
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
+
     // Manager chose to delete a WP ------------------------------------------------------------------------------------
     removeWorkPackage(userRole, userContext, workPackageToDeleteId){
 
