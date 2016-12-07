@@ -71,7 +71,7 @@ describe('UC 208 - Publish Work Package - Initial Design Version', function(){
         server.call('testWorkPackages.publishWorkPackage', 'WorkPackage1', 'gloria', RoleType.DESIGNER);
 
         // Validate
-        server.call('verifyWorkPackages.workPackageStatusIs', 'WorkPackage1', WorkPackageStatus.WP_NEW, 'glria');
+        server.call('verifyWorkPackages.workPackageStatusIs', 'WorkPackage1', WorkPackageStatus.WP_NEW, 'gloria');
     });
 
 });
