@@ -79,7 +79,7 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria', RoleType.DESIGNER);
 
         // Try as Developer
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
@@ -106,7 +106,7 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria', RoleType.DESIGNER);
 
         // Try as Developer
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');

@@ -51,6 +51,8 @@ export const updateDesignUpdateName = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateUpdateDesignUpdateName(userRole, designUpdateId, newName);
 
+        console.log(result);
+
         if (result != Validation.VALID) {
             throw new Meteor.Error('designUpdate.updateDesignUpdateName.failValidation', result)
         }
@@ -78,6 +80,8 @@ export const updateDesignUpdateRef = new ValidatedMethod({
     run({userRole, designUpdateId, newRef}){
 
         const result = DesignUpdateValidationApi.validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef);
+
+        console.log(result);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designUpdate.updateDesignUpdateRef.failValidation', result)
