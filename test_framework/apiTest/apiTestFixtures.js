@@ -164,6 +164,11 @@ Meteor.methods({
 
     },
 
+    'textFixtures.clearDesignUpdates'(){
+        DesignUpdateComponents.remove({});
+        DesignUpdates.remove({});
+    },
+
     'testFixtures.AddBasicDesignData'(designName, designVersionName){
 
         // Add an Application, Design Sections, Features and Scenarios as basic data for a Design

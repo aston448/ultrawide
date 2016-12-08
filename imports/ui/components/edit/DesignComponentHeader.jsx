@@ -404,7 +404,7 @@ class DesignComponentHeader extends Component{
         if (typeof this.props.onToggleOpen === 'function') {
             this.props.onToggleOpen();
         }
-        this.setCurrentComponent();
+        //this.setCurrentComponent();
     }
 
     // Start editing the component name

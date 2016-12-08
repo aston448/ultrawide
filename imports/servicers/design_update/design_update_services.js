@@ -5,6 +5,7 @@ import { DesignUpdateComponents }   from '../../collections/design_update/design
 
 // Ultrawide Services
 import { DesignUpdateStatus, DesignUpdateMergeAction } from '../../constants/constants.js';
+import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
 
@@ -26,8 +27,8 @@ class DesignUpdateServices{
             const designUpdateId = DesignUpdates.insert(
                 {
                     designVersionId:    designVersionId,                                // The design version this is a change to
-                    updateName:         'New Design Update',                            // Identifier of this update - e.g. CR123
-                    updateVersion:      '0.1',                                          // Update version number if required
+                    updateName:         DefaultItemNames.NEW_DESIGN_UPDATE_NAME,        // Identifier of this update
+                    updateVersion:      DefaultItemNames.NEW_DESIGN_UPDATE_VERSION,     // Update version number if required
                     updateStatus:       DesignUpdateStatus.UPDATE_NEW
                 }
             );

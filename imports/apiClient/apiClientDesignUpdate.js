@@ -93,7 +93,7 @@ class ClientDesignUpdateServices {
     };
 
     // User saves an update to a Design Update version -----------------------------------------------------------------
-    saveDesignUpdateVersion(userRole, designUpdateId, newVersion){
+    updateDesignUpdateVersion(userRole, designUpdateId, newVersion){
 
         // Client validation
         let result = DesignUpdateValidationApi.validateUpdateDesignUpdateVersion(userRole, designUpdateId, newVersion);

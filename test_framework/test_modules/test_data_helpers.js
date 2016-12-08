@@ -70,6 +70,18 @@ class TestDataHelpers {
         return designVersion;
     };
 
+    getDesignUpdate(designVersionId, designUpdateName){
+
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+        const designUpdate = DesignUpdates.findOne({designVersionId: designVersionId, updateName: designUpdateName});
+
+        if(!designUpdate){
+            throw new Meteor.Error("FAIL", "Design Update " + designUpdateName + " not found for Design Version " + designVersion.designVersionName);
+        }
+
+        return designVersion;
+    }
+
     getWorkPackage(designVersionId, designUpdateId, workPackageName){
 
         const designVersion = DesignVersions.findOne({_id: designVersionId});
