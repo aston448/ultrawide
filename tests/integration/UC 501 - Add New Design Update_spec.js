@@ -119,6 +119,7 @@ describe('UC 501 - Add New Design Update', function(){
 
         // DesignVersion1 is now Complete
         // Check status is Complete
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
 
