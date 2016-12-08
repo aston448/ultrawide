@@ -79,16 +79,17 @@ class DesignUpdatesList extends Component {
         if(userContext.designVersionId){
             switch(designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
+                case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
                     // No design updates available and none can be added...
                     if(userRole === RoleType.DEVELOPER){
                         panelContent =
                             <div className="design-item-note">No Updates Yet</div>;
                     } else {
                         panelContent =
-                            <div className="design-item-note">Updates may only be added to a Draft design version...</div>;
+                            <div className="design-item-note">Updates may only be added to an Updatable Design Version...</div>;
                     }
                     break;
-                case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
+                case DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE:
                     if(userRole != RoleType.DESIGNER){
                         // Developers and Managers can't add design updates
                         panelContent =

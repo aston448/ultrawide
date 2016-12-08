@@ -131,6 +131,54 @@ class TestDataHelpers {
 
     };
 
+    getDesignUpdateComponentWithParent(designVersionId, designUpdateId, componentType, componentParentName, componentName){
+
+        let designUpdateComponents = [];
+        let designUpdateComponent = null;
+        let parentComponent = null;
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+
+
+        designUpdateComponents = DesignUpdateComponents.find({
+            designVersionId: designVersionId,
+            designUpdateId: designUpdateId,
+            componentType: componentType,
+            componentNameNew:  componentName
+        }).fetch();
+
+        // Get the component that has the expected parent for Feature Aspects or Design Sections
+        if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
+            designUpdateComponents.forEach((component) => {
+
+                parentComponent = DesignUpdateComponents.findOne({
+                    _id: component.componentParentIdNew
+                });
+
+                if (parentComponent.componentNameNew === componentParentName) {
+                    designUpdateComponent = component;
+                } else {
+                    if(componentParentName === 'NONE'){
+                        designUpdateComponent = component;
+                    }
+                }
+
+            });
+        } else {
+            // Names are unique so assume only one
+            designUpdateComponent = designComponents[0];
+        }
+
+        let designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
+
+
+        if(!designUpdateComponent){
+            throw new Meteor.Error("FAIL", "Design Update Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+        }
+
+        return designUpdateComponent;
+
+    };
+
     getWorkPackageComponentWithParent(designVersionId, designUpdateId, workPackageId, componentType, componentParentName, componentName){
         // Allows us to get a component by combination of name and parent name - so we can get Feature Aspects successfully
         let designComponents = [];
@@ -152,7 +200,7 @@ class TestDataHelpers {
             if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
                 designComponents.forEach((component) => {
 
-                    let parentComponent = DesignComponents.findOne({
+                    parentComponent = DesignComponents.findOne({
                         _id: component.componentParentId
                     });
 
