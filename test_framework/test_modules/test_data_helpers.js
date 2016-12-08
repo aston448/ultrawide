@@ -133,13 +133,12 @@ class TestDataHelpers {
 
     getDesignUpdateComponentWithParent(designVersionId, designUpdateId, componentType, componentParentName, componentName){
 
-        let designUpdateComponents = [];
         let designUpdateComponent = null;
         let parentComponent = null;
         const designVersion = DesignVersions.findOne({_id: designVersionId});
 
 
-        designUpdateComponents = DesignUpdateComponents.find({
+        const designUpdateComponents = DesignUpdateComponents.find({
             designVersionId: designVersionId,
             designUpdateId: designUpdateId,
             componentType: componentType,
@@ -165,7 +164,7 @@ class TestDataHelpers {
             });
         } else {
             // Names are unique so assume only one
-            designUpdateComponent = designComponents[0];
+            designUpdateComponent = designUpdateComponents[0];
         }
 
         let designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
