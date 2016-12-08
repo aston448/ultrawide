@@ -57,6 +57,7 @@ describe('UC 501 - Add New Design Update', function(){
     it('Only a Designer may add Design Updates', function(){
 
         // Setup - Developer
+        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'hugh');
 
         // Execute
@@ -66,6 +67,7 @@ describe('UC 501 - Add New Design Update', function(){
         server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'hugh');
 
         // Setup - Manager
+        server.call('testDesigns.selectDesign', 'Design1', 'miles');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'miles');
 
         // Execute
@@ -98,15 +100,9 @@ describe('UC 501 - Add New Design Update', function(){
 
     it('A Design Update cannot be added to a Draft Design Version', function(){
 
-        // Setup
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design2');
-        server.call('testDesigns.selectDesign', 'Design2', 'gloria');
-        // Name default new Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion21', RoleType.DESIGNER, 'gloria');
-        // Publish it to Draft
+        // Setup - following on from previous test
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
+        // Publish New DV to to Draft
         server.call('testDesignVersions.publishDesignVersion', 'DesignVersion21', 'gloria', RoleType.DESIGNER);
         // Check status is Draft
         server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion21', DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'gloria');
