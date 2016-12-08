@@ -8,7 +8,7 @@ import {UserIntTestMashData}    from '../collections/dev/user_int_test_mash_data
 import {UserAccTestMashData}    from '../collections/dev/user_acc_test_mash_data.js';
 
 // Ultrawide Services
-import { ComponentType, MashTestStatus, LogLevel, MessageType} from '../constants/constants.js';
+import { ComponentType, DisplayContext, MashTestStatus, LogLevel, MessageType} from '../constants/constants.js';
 import { DesignComponentMessages } from '../constants/message_texts.js';
 import { Validation } from '../constants/validation_errors.js';
 
@@ -481,7 +481,7 @@ class ClientDesignComponentServices{
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // User selected a design component --------------------------------------------------------------------------------
-    setDesignComponent(newDesignComponentId, userContext){
+    setDesignComponent(newDesignComponentId, userContext, displayContext){
         console.log("Selected component with id " + newDesignComponentId);
         if(newDesignComponentId != userContext.designComponentId) {
 
@@ -490,7 +490,7 @@ class ClientDesignComponentServices{
             let componentFeatureRef = '';
             let componentParentRef = '';
 
-            if(userContext.designUpdateId === 'NONE'){
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.BASE_VIEW){
                 component = DesignComponents.findOne({_id: newDesignComponentId});
                 componentFeatureRef = component.componentFeatureReferenceId;
                 componentParentRef = component.componentParentReferenceId;

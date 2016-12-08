@@ -51,7 +51,9 @@ class DesignComponentText extends Component {
 
         // Set the source data item
         let mainComponent = null;
+        let textTitle = '';
         let titleName = '';
+        let titleNameOld = '';
 
         switch(view)
         {
@@ -62,6 +64,8 @@ class DesignComponentText extends Component {
                 mainComponent = currentUpdateComponent;
                 if(mainComponent) {
                     titleName = mainComponent.componentNameNew;
+                    titleNameOld = mainComponent.componentNameOld;
+                    textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
                 break;
 
@@ -72,6 +76,7 @@ class DesignComponentText extends Component {
                 mainComponent = currentDesignComponent;
                 if(mainComponent) {
                     titleName = mainComponent.componentName;
+                    textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
                 break;
         }
@@ -89,7 +94,9 @@ class DesignComponentText extends Component {
 
             // Determine the look of the title
             //itemStyle = 'text-title'    //getComponentClass(mainComponent.componentType, mainComponent.componentLevel);
-            let textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
+
+
+
 
             // Panel 1 is always the main component text
             panel1 =
@@ -159,7 +166,7 @@ class DesignComponentText extends Component {
 
             // Define panel 3 for updates - base item text - only shown if a current component exists
             if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && currentDesignComponent){
-                let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(currentDesignComponent.componentType) + ' - ' + titleName;
+                let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(currentDesignComponent.componentType) + ' - ' + titleNameOld;
                 panel3 =
                     <div>
                         <Panel className="panel-text panel-text-body" header={baseTextTitle}>

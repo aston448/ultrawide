@@ -4,7 +4,8 @@ import { DesignUpdateComponents }   from '../../collections/design_update/design
 
 // Ultrawide Services
 import { ComponentType } from '../../constants/constants.js';
-
+import DesignUpdateComponentServices from '../../servicers/design_update/design_update_component_services.js';
+import DesignComponentModules from '../../service_modules/design/design_component_service_modules.js';
 //======================================================================================================================
 //
 // Server Modules for Design Update Components.
@@ -14,6 +15,13 @@ import { ComponentType } from '../../constants/constants.js';
 //======================================================================================================================
 
 class DesignUpdateComponentModules{
+
+    addDefaultFeatureAspects(designVersionId, designUpdateId, featureId, defaultRawText){
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, false);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, false);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, false);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, false);
+    }
 
     setIndex(componentId, componentType, parentId){
 

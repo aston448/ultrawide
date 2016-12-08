@@ -440,8 +440,7 @@ class ClientContainerServices{
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
-                    case DisplayContext.UPDATE_VIEW:
-                        // Display all components that should be in scope
+                        // Display all components that should be in scope plus stuff to add things to
                         switch(componentType){
                             case ComponentType.DESIGN_SECTION:
                                 // Always in scope so stuff can be added in the update
@@ -455,6 +454,27 @@ class ClientContainerServices{
                                     {sort:{componentIndexNew: 1}}
                                 );
                                 break;
+                            case ComponentType.FEATURE:
+                            case ComponentType.FEATURE_ASPECT:
+                            case ComponentType.SCENARIO:
+                                // Only get in scope items
+                                currentComponents = DesignUpdateComponents.find(
+                                    {
+                                        designVersionId: designVersionId,
+                                        designUpdateId: updateId,
+                                        componentType: componentType,
+                                        componentParentIdNew: parentId,
+                                        $or:[{isInScope: true}, {isParentScope: true}]
+                                    },
+                                    {sort:{componentIndexNew: 1}}
+                                );
+                                break;
+                        }
+                        break;
+                    case DisplayContext.UPDATE_VIEW:
+                        // Display all components that should be in scope
+                        switch(componentType){
+                            case ComponentType.DESIGN_SECTION:
                             case ComponentType.FEATURE:
                             case ComponentType.FEATURE_ASPECT:
                             case ComponentType.SCENARIO:

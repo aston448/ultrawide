@@ -43,7 +43,8 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
                 0,                          // Apps are at level 0
                 DefaultComponentNames.NEW_APPLICATION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_APPLICATION_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_APPLICATION_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_APPLICATION_DETAILS),
+                true
             );
         } catch (e) {
             console.log(e);
@@ -83,7 +84,8 @@ export const addDesignSectionToApplication = new ValidatedMethod({
                 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_DESIGN_SECTION_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS),
+                true
             );
         } catch (e) {
             console.log(e);
@@ -124,7 +126,8 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
                 parentLevel + 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_DESIGN_SECTION_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS),
+                true
             );
         } catch (e) {
             console.log(e);
@@ -165,6 +168,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
                 DefaultComponentNames.NEW_FEATURE_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_FEATURE_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_DETAILS),
+                true
             );
         } catch (e) {
             console.log(e);
@@ -204,7 +208,8 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
                 0,
                 DefaultComponentNames.NEW_FEATURE_ASPECT_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_FEATURE_ASPECT_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_ASPECT_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_ASPECT_DETAILS),
+                true
             );
         } catch (e) {
             console.log(e);
@@ -246,7 +251,8 @@ export const addScenario = new ValidatedMethod({
                 0,
                 DefaultComponentNames.NEW_SCENARIO_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_SCENARIO_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_SCENARIO_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_SCENARIO_DETAILS),
+                true
             );
         } catch (e) {
             console.log(e);

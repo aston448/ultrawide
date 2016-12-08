@@ -221,9 +221,9 @@ class DesignComponent extends Component{
     }
 
     // User selected this component - make it the current one
-    setNewDesignComponentActive(newItemId, currentContext){
+    setNewDesignComponentActive(newItemId, userContext, displayContext){
 
-        ClientDesignComponentServices.setDesignComponent(newItemId, currentContext)
+        ClientDesignComponentServices.setDesignComponent(newItemId, userContext, displayContext)
     }
 
     // Add a new section to an application component
@@ -333,7 +333,7 @@ class DesignComponent extends Component{
                     currentItem={currentItem}
                     designItem={designItem}
                     onToggleOpen={ () => this.toggleOpen()}
-                    onSelectItem={ () => this.setNewDesignComponentActive(activeComponentId, userContext)}
+                    onSelectItem={ () => this.setNewDesignComponentActive(activeComponentId, userContext, displayContext)}
                     mode={mode}
                     view={view}
                     displayContext={displayContext}

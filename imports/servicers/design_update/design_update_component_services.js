@@ -24,7 +24,7 @@ import DesignUpdateComponentModules from '../../service_modules/design_update/de
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText){
+    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew){
 
         if(Meteor.isServer) {
             // Get the parent reference id (if there is a parent)
@@ -67,7 +67,7 @@ class DesignUpdateComponentServices{
                     componentTextRawNew: defaultRawText,
 
                     // State is a new item
-                    isNew: true,                   // New item added to design
+                    isNew: isNew,                   // New item added to design
                     isChanged: false,                  // For now - will go to true when name is edited
                     isTextChanged: false,                  // For now - will go to true when text is edited
                     isMoved: false,
@@ -107,6 +107,10 @@ class DesignUpdateComponentServices{
 
                     // Make sure Design is no longer removable now that a feature added
                     DesignServices.setRemovable(designId);
+
+                    // And for Features add the default Feature Aspects
+                    // TODO - that could be user configurable!
+                    DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '');
                 }
 
                 // When inserting a new design component its parent becomes non-removable
@@ -120,10 +124,10 @@ class DesignUpdateComponentServices{
                 }
 
                 // Set the starting index for a new component (at end of list)
-                this.setIndex(newUpdateComponentId, componentType, parentId);
+                DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
 
                 // Ensure that all parents of the component are now in ParentScope
-                this.updateParentScope(newUpdateComponentId, true);
+                DesignUpdateComponentModules.updateParentScope(newUpdateComponentId, true);
             }
         }
     };
@@ -265,7 +269,7 @@ class DesignUpdateComponentServices{
                 );
 
                 // But the old parent may now be removable
-                if (this.hasNoChildren(oldParentId)) {
+                if (DesignUpdateComponentModules.hasNoChildren(oldParentId)) {
                     DesignUpdateComponents.update(
                         {_id: oldParentId},
                         {$set: {isRemovable: true}}
@@ -459,7 +463,7 @@ class DesignUpdateComponentServices{
                 if(removedComponents > 0){
 
                     // When removing a design component its parent may become removable
-                    if (this.hasNoChildren(parentId)) {
+                    if (DesignUpdateComponentModules.hasNoChildren(parentId)) {
                         DesignUpdateComponents.update(
                             {_id: parentId},
                             {$set: {isRemovable: true}}
@@ -488,7 +492,7 @@ class DesignUpdateComponentServices{
                 if(deletedComponents > 0){
 
                     // When removing a design component its parent may become removable
-                    if (this.hasNoChildren(parentId)) {
+                    if (DesignUpdateComponentModules.hasNoChildren(parentId)) {
                         DesignUpdateComponents.update(
                             {_id: parentId},
                             {$set: {isRemovable: true}}
