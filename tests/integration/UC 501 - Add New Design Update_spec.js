@@ -1,4 +1,4 @@
-import {RoleType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 501 - Add New Design Update', function(){
@@ -54,12 +54,84 @@ describe('UC 501 - Add New Design Update', function(){
 
 
     // Conditions
-    it('Only a Designer may add Design Updates');
+    it('Only a Designer may add Design Updates', function(){
 
-    it('A Design Update cannot be added to a New Design Version');
+        // Setup - Developer
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'hugh');
 
-    it('A Design Update cannot be added to a Draft Design Version');
+        // Execute
+        server.call('testDesignUpdates.addDesignUpdate', 'hugh', RoleType.DEVELOPER);
 
-    it('A Design Update cannot be added to a Complete Design Version');
+        // Verify
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'hugh');
+
+        // Setup - Manager
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'miles');
+
+        // Execute
+        server.call('testDesignUpdates.addDesignUpdate', 'miles', RoleType.MANAGER);
+
+        // Verify
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'miles');
+    });
+
+    it('A Design Update cannot be added to a New Design Version', function(){
+
+        // Setup
+        // Create a Design
+        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design2');
+        server.call('testDesigns.selectDesign', 'Design2', 'gloria');
+        // Name default new Design Version
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion21', RoleType.DESIGNER, 'gloria');
+        // Check status is New
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion21', DesignVersionStatus.VERSION_NEW, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
+
+        // Execute
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+
+        // Verify
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+    });
+
+    it('A Design Update cannot be added to a Draft Design Version', function(){
+
+        // Setup
+        // Create a Design
+        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design2');
+        server.call('testDesigns.selectDesign', 'Design2', 'gloria');
+        // Name default new Design Version
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion21', RoleType.DESIGNER, 'gloria');
+        // Publish it to Draft
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion21', 'gloria', RoleType.DESIGNER);
+        // Check status is Draft
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion21', DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
+
+        // Execute
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+
+        // Verify
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+    });
+
+    it('A Design Update cannot be added to a Complete Design Version', function(){
+
+        // DesignVersion1 is now Complete
+        // Check status is Complete
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+
+        // Execute
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+
+        // Verify
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+
+    });
 
 });
