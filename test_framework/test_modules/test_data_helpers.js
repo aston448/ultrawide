@@ -79,7 +79,7 @@ class TestDataHelpers {
             throw new Meteor.Error("FAIL", "Design Update " + designUpdateName + " not found for Design Version " + designVersion.designVersionName);
         }
 
-        return designVersion;
+        return designUpdate;
     }
 
     getWorkPackage(designVersionId, designUpdateId, workPackageName){
