@@ -93,10 +93,10 @@ class ClientDesignUpdateServices {
     };
 
     // User saves an update to a Design Update version -----------------------------------------------------------------
-    updateDesignUpdateVersion(userRole, designUpdateId, newVersion){
+    updateDesignUpdateReference(userRole, designUpdateId, newRef){
 
         // Client validation
-        let result = DesignUpdateValidationApi.validateUpdateDesignUpdateVersion(userRole, designUpdateId, newVersion);
+        let result = DesignUpdateValidationApi.validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -105,7 +105,7 @@ class ClientDesignUpdateServices {
         }
 
         // Real action call - server actions
-        ServerDesignUpdateApi.updateDesignUpdateVersion(userRole, designUpdateId, newVersion, (err, result) => {
+        ServerDesignUpdateApi.updateDesignUpdateRef(userRole, designUpdateId, newRef, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

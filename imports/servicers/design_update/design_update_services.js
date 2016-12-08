@@ -28,7 +28,7 @@ class DesignUpdateServices{
                 {
                     designVersionId:    designVersionId,                                // The design version this is a change to
                     updateName:         DefaultItemNames.NEW_DESIGN_UPDATE_NAME,        // Identifier of this update
-                    updateVersion:      DefaultItemNames.NEW_DESIGN_UPDATE_VERSION,     // Update version number if required
+                    updateReference:    DefaultItemNames.NEW_DESIGN_UPDATE_REF,     // Update version number if required
                     updateStatus:       DesignUpdateStatus.UPDATE_NEW
                 }
             );
@@ -50,7 +50,7 @@ class DesignUpdateServices{
                 {
                     designVersionId:    designVersionId,
                     updateName:         designUpdate.updateName,
-                    updateVersion:      designUpdate.updateVersion,
+                    updateReference:    designUpdate.updateReference,
                     updateRawText:      designUpdate.updateRawText,
                     updateStatus:       designUpdate.updateStatus,
                     updateMergeAction:  designUpdate.updateMergeAction
@@ -91,14 +91,14 @@ class DesignUpdateServices{
 
     };
 
-    updateDesignUpdateVersion(designUpdateId, newVersion){
+    updateDesignUpdateRef(designUpdateId, newRef){
 
         if(Meteor.isServer) {
             DesignUpdates.update(
                 {_id: designUpdateId},
                 {
                     $set: {
-                        updateVersion: newVersion
+                        updateReference: newRef
                     }
                 }
             );

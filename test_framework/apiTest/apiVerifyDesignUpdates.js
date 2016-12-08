@@ -43,15 +43,15 @@ Meteor.methods({
         }
     },
 
-    'verifyDesignUpdates.currentDesignUpdateVersionIs'(designUpdateVersion, userName){
+    'verifyDesignUpdates.currentDesignUpdateRefIs'(designUpdateRef, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
-        if(designUpdate.updateVersion === designUpdateVersion){
+        if(designUpdate.updateReference === designUpdateRef){
             return true;
         } else {
-            throw new Meteor.Error("FAIL", "Expected DU version to be " + designUpdateVersion + " but got " + designUpdate.updateVersion);
+            throw new Meteor.Error("FAIL", "Expected DU version to be " + designUpdateRef + " but got " + designUpdate.updateReference);
         }
     },
 

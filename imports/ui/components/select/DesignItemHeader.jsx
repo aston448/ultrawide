@@ -44,9 +44,9 @@ class DesignItemHeader extends Component{
         this.state = {
             open: false,
             nameEditable: false,
-            versionEditable: false,
+            refEditable: false,
             nameValue: this.props.currentItemName,
-            versionValue: this.props.currentItemVersion,
+            refValue: this.props.currentItemRef,
             highlighted: false,
         };
 
@@ -78,7 +78,7 @@ class DesignItemHeader extends Component{
     // Allow editing of version text (if there is one)
     editItemVersion(){
         event.preventDefault();
-        this.setState({versionEditable: true});
+        this.setState({refEditable: true});
         //console.log("EDIT");
     }
 
@@ -106,22 +106,22 @@ class DesignItemHeader extends Component{
         this.setState({nameEditable: false});
     }
 
-    saveItemVersion(userRole, currentItemType, currentItemId){
+    saveItemRef(userRole, currentItemType, currentItemId){
         event.preventDefault();
         // TODO: Possible validation of versions for these items - no duplicates?
 
-        let newVersion = this.state.versionValue;
+        let newRef = this.state.refValue;
 
         switch(currentItemType){
             case ItemType.DESIGN_VERSION:
-                ClientDesignVersionServices.updateDesignVersionNumber(userRole, currentItemId, newVersion);
+                ClientDesignVersionServices.updateDesignVersionNumber(userRole, currentItemId, newRef);
                 break;
             case ItemType.DESIGN_UPDATE:
-                ClientDesignUpdateServices.updateDesignUpdateVersion(userRole, currentItemId, newVersion);
+                ClientDesignUpdateServices.updateDesignUpdateReference(userRole, currentItemId, newRef);
                 break;
         }
 
-        this.setState({versionEditable: false});
+        this.setState({refEditable: false});
     }
 
     handleNameKeyEvents(userRole, event, currentItemType, currentItemId) {
@@ -134,7 +134,7 @@ class DesignItemHeader extends Component{
     handleVersionKeyEvents(userRole, event, currentItemType, currentItemId) {
         if(event.charCode === 13){
             // Enter Key
-            this.saveItemVersion(userRole, currentItemType, currentItemId);
+            this.saveItemRef(userRole, currentItemType, currentItemId);
         }
     }
 
@@ -142,8 +142,8 @@ class DesignItemHeader extends Component{
         this.setState({nameValue: event.target.value});
     }
 
-    handleVersionChange(event) {
-        this.setState({versionValue: event.target.value});
+    handleRefChange(event) {
+        this.setState({refValue: event.target.value});
     }
 
     undoItemNameChange(){
@@ -153,15 +153,15 @@ class DesignItemHeader extends Component{
         this.setState({nameEditable: false});
     }
 
-    undoItemVersionChange(){
+    undoItemRefChange(){
         event.preventDefault();
         //console.log("UNDO VERSION");
-        this.setState({versionValue: this.props.currentItemVersion});
-        this.setState({versionEditable: false});
+        this.setState({refValue: this.props.currentItemRef});
+        this.setState({refEditable: false});
     }
 
     render(){
-        const {currentItemId, currentItemName, currentItemVersion, currentItemStatus, currentItemType, userRole} = this.props;
+        const {currentItemId, currentItemName, currentItemRef, currentItemStatus, currentItemType, userRole} = this.props;
 
         // Show the status of items that have it when not editing
         let nameText = currentItemName;
@@ -169,38 +169,38 @@ class DesignItemHeader extends Component{
             nameText = nameText + ' (' + currentItemStatus + ')';
         }
 
-        let versionEditorEditing = <div></div>;
-        let versionEditorNotEditing = <div></div>;
-        let versionReadOnly = <div></div>;
+        let refEditorEditing = <div></div>;
+        let refEditorNotEditing = <div></div>;
+        let refReadOnly = <div></div>;
 
         // Versions and updates have a version component
         if(currentItemType == ItemType.DESIGN_VERSION || currentItemType === ItemType.DESIGN_UPDATE){
-            versionEditorEditing =
+            refEditorEditing =
                 <div>
                     <InputGroup>
                         <div className="editableItem">
                             <FormControl
                                 type="text"
-                                value={this.state.versionValue}
-                                placeholder={currentItemVersion}
-                                onChange={(event) => this.handleVersionChange(event)}
+                                value={this.state.refValue}
+                                placeholder={currentItemRef}
+                                onChange={(event) => this.handleRefChange(event)}
                                 onKeyPress={(event) => this.handleVersionKeyEvents(userRole, event, currentItemType, currentItemId)}
                             />
                         </div>
-                        <InputGroup.Addon onClick={ () => this.saveItemVersion(userRole, currentItemType, currentItemId)}>
+                        <InputGroup.Addon onClick={ () => this.saveItemRef(userRole, currentItemType, currentItemId)}>
                             <div className="green"><Glyphicon glyph="ok"/></div>
                         </InputGroup.Addon>
-                        <InputGroup.Addon onClick={ () => this.undoItemVersionChange()}>
+                        <InputGroup.Addon onClick={ () => this.undoItemRefChange()}>
                             <div className="red"><Glyphicon glyph="arrow-left"/></div>
                         </InputGroup.Addon>
                     </InputGroup>
                 </div>;
 
-            versionEditorNotEditing =
+            refEditorNotEditing =
                 <div onClick={ () => this.setCurrentItem()}>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
-                            <ControlLabel>{currentItemVersion}</ControlLabel>
+                            <ControlLabel>{currentItemRef}</ControlLabel>
                         </div>
                         <InputGroup.Addon onClick={ () => this.editItemVersion()}>
                             <div className="blue"><Glyphicon glyph="edit"/></div>
@@ -208,11 +208,11 @@ class DesignItemHeader extends Component{
                     </InputGroup>
                 </div>;
 
-            versionReadOnly =
+            refReadOnly =
                 <div onClick={ () => this.setCurrentItem()}>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
-                            <ControlLabel>{currentItemVersion}</ControlLabel>
+                            <ControlLabel>{currentItemRef}</ControlLabel>
                         </div>
                     </InputGroup>
                 </div>;
@@ -273,7 +273,7 @@ class DesignItemHeader extends Component{
 
                     titleClass = 'design-item-header greyed-out'
                 }
-                return (<div className={titleClass}>{nameReadOnly}{versionReadOnly}</div>);
+                return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
 
             case RoleType.MANAGER:
                 // Managers can edit Work Packages
@@ -289,25 +289,25 @@ class DesignItemHeader extends Component{
 
                         titleClass = 'design-item-header greyed-out'
                     }
-                    return (<div className={titleClass}>{nameReadOnly}{versionReadOnly}</div>);
+                    return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
                 }
 
             case RoleType.DESIGNER:
                 // Rest are Designer Views depending on the current state.  Designers do not see Work Packages
-                if (this.state.nameEditable && this.state.versionEditable) {
-                    return (<div className="design-item-header">{nameEditorEditing}{versionEditorEditing}</div>);
+                if (this.state.nameEditable && this.state.refEditable) {
+                    return (<div className="design-item-header">{nameEditorEditing}{refEditorEditing}</div>);
                 }
 
-                if (this.state.nameEditable && !this.state.versionEditable) {
-                    return (<div className="design-item-header">{nameEditorEditing}{versionEditorNotEditing}</div>);
+                if (this.state.nameEditable && !this.state.refEditable) {
+                    return (<div className="design-item-header">{nameEditorEditing}{refEditorNotEditing}</div>);
                 }
 
-                if (!this.state.nameEditable && this.state.versionEditable) {
-                    return (<div className="design-item-header">{nameEditorNotEditing}{versionEditorEditing}</div>);
+                if (!this.state.nameEditable && this.state.refEditable) {
+                    return (<div className="design-item-header">{nameEditorNotEditing}{refEditorEditing}</div>);
                 }
 
-                if (!this.state.nameEditable && !this.state.versionEditable) {
-                    return (<div className="design-item-header">{nameEditorNotEditing}{versionEditorNotEditing}</div>);
+                if (!this.state.nameEditable && !this.state.refEditable) {
+                    return (<div className="design-item-header">{nameEditorNotEditing}{refEditorNotEditing}</div>);
                 }
         }
 
@@ -318,7 +318,7 @@ class DesignItemHeader extends Component{
 DesignItemHeader.propTypes = {
     currentItemId: PropTypes.string.isRequired,
     currentItemName: PropTypes.string.isRequired,
-    currentItemVersion: PropTypes.string,
+    currentItemRef: PropTypes.string,
     currentItemStatus: PropTypes.string.isRequired,
     onSelectItem: PropTypes.func.isRequired
 };

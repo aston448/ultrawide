@@ -7,7 +7,7 @@ export const DefaultItemNames = {
     NEXT_DESIGN_VERSION_NAME:       'New Updatable Version',
     NEXT_DESIGN_VERSION_NUMBER:     'x.x',
     NEW_DESIGN_UPDATE_NAME:         'New Design Update',
-    NEW_DESIGN_UPDATE_VERSION:      'CR001',
+    NEW_DESIGN_UPDATE_REF:          'CR001',
     NEW_WORK_PACKAGE_NAME:          'New Work Package'
 
 };

@@ -103,7 +103,7 @@ class AppHeaderData extends Component {
                             <span className="header-data">{currentDesignVersion.designVersionNumber}</span>
                             <span className="header-title">UPDATE: </span>
                             <span className="header-data">{currentDesignUpdate.updateName}</span>
-                            <span className="header-data">{currentDesignUpdate.updateVersion}</span>
+                            <span className="header-data">{currentDesignUpdate.updateReference}</span>
                         </div>;
                     break;
                 case ViewType.WORK_PACKAGE_BASE_VIEW:

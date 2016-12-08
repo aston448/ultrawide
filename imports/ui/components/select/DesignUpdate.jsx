@@ -204,7 +204,7 @@ class DesignUpdate extends Component {
                     currentItemType={ItemType.DESIGN_UPDATE}
                     currentItemId={designUpdate._id}
                     currentItemName={designUpdate.updateName}
-                    currentItemVersion={designUpdate.updateVersion}
+                    currentItemVersion={designUpdate.updateReference}
                     currentItemStatus={designUpdate.updateStatus}
                     onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
                 />

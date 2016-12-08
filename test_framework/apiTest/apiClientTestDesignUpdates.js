@@ -58,12 +58,12 @@ Meteor.methods({
         ClientDesignUpdateServices.updateDesignUpdateName(userRole, userContext.designUpdateId, newName)
     },
 
-    'testDesignUpdates.updateDesignUpdateVersion'(newVersion, userRole, userName){
+    'testDesignUpdates.updateDesignUpdateRef'(newRef, userRole, userName){
 
         // Assumption that DU is always selected before it can be updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignUpdateServices.updateDesignUpdateVersion(userRole, userContext.designUpdateId, newVersion)
+        ClientDesignUpdateServices.updateDesignUpdateReference(userRole, userContext.designUpdateId, newRef)
     },
 
 });

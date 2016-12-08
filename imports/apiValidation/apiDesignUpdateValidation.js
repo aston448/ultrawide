@@ -32,13 +32,13 @@ class DesignUpdateValidationApi{
 
     };
 
-    validateUpdateDesignUpdateVersion(userRole, designUpdateId, newVersion){
+    validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef){
 
         // Get all other designs apart from this one
         const thisDesignUpdate = DesignUpdates.findOne({_id: designUpdateId});
         const otherDesignUpdates = DesignUpdates.find({_id: {$ne: designUpdateId}, designVersionId: thisDesignUpdate.designVersionId}).fetch();
 
-        return DesignUpdateValidationServices.validateUpdateDesignUpdateVersion(userRole, newVersion, otherDesignUpdates);
+        return DesignUpdateValidationServices.validateUpdateDesignUpdateReference(userRole, newRef, otherDesignUpdates);
 
     };
 

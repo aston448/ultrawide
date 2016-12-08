@@ -65,29 +65,29 @@ export const updateDesignUpdateName = new ValidatedMethod({
 
 });
 
-export const updateDesignUpdateVersion = new ValidatedMethod({
+export const updateDesignUpdateRef = new ValidatedMethod({
 
-    name: 'designUpdate.updateDesignUpdateVersion',
+    name: 'designUpdate.updateDesignUpdateRef',
 
     validate: new SimpleSchema({
         userRole:           {type: String},
         designUpdateId:     {type: String},
-        newVersion:         {type: String}
+        newRef:         {type: String}
     }).validator(),
 
-    run({userRole, designUpdateId, newVersion}){
+    run({userRole, designUpdateId, newRef}){
 
-        const result = DesignUpdateValidationApi.validateUpdateDesignUpdateVersion(userRole, designUpdateId, newVersion);
+        const result = DesignUpdateValidationApi.validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef);
 
         if (result != Validation.VALID) {
-            throw new Meteor.Error('designUpdate.updateDesignUpdateVersion.failValidation', result)
+            throw new Meteor.Error('designUpdate.updateDesignUpdateRef.failValidation', result)
         }
 
         try {
-            DesignUpdateServices.updateDesignUpdateVersion(designUpdateId, newVersion);
+            DesignUpdateServices.updateDesignUpdateRef(designUpdateId, newRef);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designUpdate.updateDesignUpdateVersion.fail', e)
+            throw new Meteor.Error('designUpdate.updateDesignUpdateRef.fail', e)
         }
     }
 

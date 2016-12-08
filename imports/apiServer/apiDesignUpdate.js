@@ -2,7 +2,7 @@
 import {
     addDesignUpdate,
     updateDesignUpdateName,
-    updateDesignUpdateVersion,
+    updateDesignUpdateRef,
     publishDesignUpdate,
     removeDesignUpdate
 } from '../apiValidatedMethods/design_update_methods.js'
@@ -41,13 +41,13 @@ class ServerDesignUpdateApi {
         );
     };
 
-    updateDesignUpdateVersion(userRole, designUpdateId, newVersion, callback){
+    updateDesignUpdateRef(userRole, designUpdateId, newRef, callback){
 
-        updateDesignUpdateVersion.call(
+        updateDesignUpdateRef.call(
             {
                 userRole:       userRole,
                 designUpdateId: designUpdateId,
-                newVersion:     newVersion
+                newRef:     newRef
             },
             (err, result) => {
                 callback(err, result);

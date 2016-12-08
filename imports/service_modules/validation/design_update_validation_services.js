@@ -52,25 +52,11 @@ class DesignUpdateValidationServices{
 
     };
 
-    validateUpdateDesignUpdateVersion(userRole, newVersion, otherDesignUpdates){
+    validateUpdateDesignUpdateReference(userRole, newRef, otherDesignUpdates){
 
         // To update a Design Update Name, user must be a Designer
         if(userRole != RoleType.DESIGNER){
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_UPDATE;
-        }
-
-        // The new name must not be the same as other Design Updates for the Design Version
-        let duplicate = false;
-        otherDesignUpdates.forEach((designUpdate) => {
-            if(designUpdate.updateVersion === newVersion){
-                duplicate = true;
-            }
-        });
-
-        if(duplicate){
-            return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_VERSION_DUPLICATE;
-        } else {
-            return Validation.VALID;
         }
 
     };
