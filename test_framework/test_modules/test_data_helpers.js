@@ -145,8 +145,8 @@ class TestDataHelpers {
             componentNameNew:  componentName
         }).fetch();
 
-        // Get the component that has the expected parent for Feature Aspects or Design Sections
-        if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
+        // Get the component that has the expected parent- except for Applications that have no parent
+        if(componentType != ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
                 parentComponent = DesignUpdateComponents.findOne({
@@ -163,12 +163,11 @@ class TestDataHelpers {
 
             });
         } else {
-            // Names are unique so assume only one
+            // Application names are unique so assume can be only one
             designUpdateComponent = designUpdateComponents[0];
         }
 
         let designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
-
 
         if(!designUpdateComponent){
             throw new Meteor.Error("FAIL", "Design Update Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
@@ -195,8 +194,8 @@ class TestDataHelpers {
                 componentName:  componentName
             }).fetch();
 
-            // Get the component that has the expected parent for Feature Aspects or Design Sections
-            if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
+            // Get the component that has the expected parent- except for Applications that have no parent
+            if(componentType != ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
                     parentComponent = DesignComponents.findOne({
@@ -210,7 +209,7 @@ class TestDataHelpers {
 
                 });
             } else {
-                // Names are unique so assume only one
+                // Application names are unique so assume can be only one
                 designComponent = designComponents[0];
             }
 
@@ -222,8 +221,8 @@ class TestDataHelpers {
                 componentNameNew:  componentName
             }).fetch();
 
-            // Get the component that has the expected parent for Feature Aspects or Design Sections
-            if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT) {
+            // Get the component that has the expected parent- except for Applications that have no parent
+            if(componentType != ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
                     let parentComponent = DesignUpdateComponents.findOne({
@@ -232,15 +231,10 @@ class TestDataHelpers {
 
                     if (parentComponent.componentNameNew === componentParentName) {
                         designComponent = component;
-                    } else {
-                        if(componentParentName === 'NONE'){
-                            designComponent = component;
-                        }
                     }
-
                 });
             } else {
-                // Names are unique so assume only one
+                // Application names are unique so assume can be only one
                 designComponent = designComponents[0];
             }
 

@@ -35,7 +35,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        // This wil throw an error if the component is not found
+        // This will throw an error if the component is not found
         const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
@@ -47,6 +47,25 @@ Meteor.methods({
         return true;
     },
 
+    'verifyDesignUpdateComponents.componentCountWithNameIs'(componentType, componentName, expectedCount, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const actualCount = DesignUpdateComponents.find({
+            designVersionId: userContext.designVersionId,
+            designUpdateId: userContext.designUpdateId,
+            componentType: componentType,
+            componentNameNew: componentName
+        }).count();
+
+        if(expectedCount != actualCount){
+            throw new Meteor.Error("FAIL", "Found " + actualCount + " components of type " + componentType + " with name " + componentName + ". Expecting " + expectedCount);
+        } else {
+            return true;
+        }
+    },
+
+
     'verifyDesignUpdateComponents.componentDoesNotExistCalled'(componentType, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -55,7 +74,7 @@ Meteor.methods({
             designVersionId: userContext.designVersionId,
             designUpdateId: userContext.designUpdateId,
             componentType: componentType,
-            componentName: componentName
+            componentNameNew: componentName
         });
 
         const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
