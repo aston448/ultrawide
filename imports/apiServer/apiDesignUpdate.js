@@ -4,6 +4,7 @@ import {
     updateDesignUpdateName,
     updateDesignUpdateRef,
     publishDesignUpdate,
+    withdrawDesignUpdate,
     removeDesignUpdate
 } from '../apiValidatedMethods/design_update_methods.js'
 
@@ -58,6 +59,19 @@ class ServerDesignUpdateApi {
     publishDesignUpdate(userRole, designUpdateId, callback){
 
         publishDesignUpdate.call(
+            {
+                userRole:       userRole,
+                designUpdateId: designUpdateId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    withdrawDesignUpdate(userRole, designUpdateId, callback){
+
+        withdrawDesignUpdate.call(
             {
                 userRole:       userRole,
                 designUpdateId: designUpdateId

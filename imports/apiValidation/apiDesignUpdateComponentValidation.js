@@ -27,21 +27,49 @@ class DesignUpdateComponentValidationApi{
 
         let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-        if (designUpdateComponent.isRemovable){
-            // Just double check....
-            if(DesignUpdateComponentModules.hasNoChildren(designUpdateComponentId)){
-                return DesignUpdateComponentValidationServices.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent);
+        if(designUpdateComponent.isNew){
+
+            // Added in this Design Update
+
+            // Only removable items (i.e. with no children) can be removed...
+            if (designUpdateComponent.isRemovable){
+                // Just double check....
+                if(DesignUpdateComponentModules.hasNoChildren(designUpdateComponentId)){
+                    return DesignUpdateComponentValidationServices.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent);
+                } else {
+                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;
+                }
             } else {
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;
             }
+
+        } else {
+
+            // Existing Item being logically deleted - we allow this and cascade to all children as long as there are no new items under it here or elsewhere
+            if(DesignUpdateComponentModules.hasNoNewChildrenInAnyUpdate(designUpdateComponentId)){
+
+                // Also check that no children have been put in scope in another update
+                if(DesignUpdateComponentModules.hasNoInScopeChildrenInOtherUpdates(designUpdateComponentId)) {
+                    return DesignUpdateComponentValidationServices.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent);
+                } else {
+                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_SCOPE;
+                }
+            } else {
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW;
+            }
         }
+
+
     };
 
     validateRestoreDesignUpdateComponent(view, mode, designUpdateComponentId){
 
         let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-        return DesignUpdateComponentValidationServices.validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent);
+        // Cannot restore a component if its parent is removed
+        const parentComponent = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+
+        return DesignUpdateComponentValidationServices.validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent, parentComponent);
     }
 
     validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponentId, newName){

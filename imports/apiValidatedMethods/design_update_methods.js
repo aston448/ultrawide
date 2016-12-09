@@ -124,6 +124,33 @@ export const publishDesignUpdate = new ValidatedMethod({
 
 });
 
+export const withdrawDesignUpdate = new ValidatedMethod({
+
+    name: 'designUpdate.withdrawDesignUpdate',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        designUpdateId:     {type: String}
+    }).validator(),
+
+    run({userRole, designUpdateId}){
+
+        const result = DesignUpdateValidationApi.validateWithdrawDesignUpdate(userRole, designUpdateId);
+
+        if (result != Validation.VALID) {
+            throw new Meteor.Error('designUpdate.withdrawDesignUpdate.failValidation', result)
+        }
+
+        try {
+            DesignUpdateServices.withdrawUpdate(designUpdateId);
+        } catch (e) {
+            console.log(e);
+            throw new Meteor.Error('designUpdate.withdrawDesignUpdate.fail', e)
+        }
+    }
+
+});
+
 export const removeDesignUpdate = new ValidatedMethod({
 
     name: 'designUpdate.removeDesignUpdate',

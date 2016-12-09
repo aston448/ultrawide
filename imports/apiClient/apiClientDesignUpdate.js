@@ -124,9 +124,7 @@ class ClientDesignUpdateServices {
 
         // Indicate that business validation passed
         return true;
-    }
-
-
+    };
 
     // User chose to publish a design update to make it available in draft form ----------------------------------------
     publishDesignUpdate(userRole, userContext, designUpdateToPublishId){
@@ -164,6 +162,41 @@ class ClientDesignUpdateServices {
         return true;
     };
 
+    // User chose to withdraw a published design update  ---------------------------------------------------------------
+    withdrawDesignUpdate(userRole, userContext, designUpdateToWithdrawId){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateWithdrawDesignUpdate(userRole, designUpdateToWithdrawId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.withdrawDesignUpdate(userRole, designUpdateToWithdrawId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+                // Ensure that the current update is the update we chose to withdraw
+                this.setDesignUpdate(userContext, designUpdateToWithdrawId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_WITHDRAWN
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+    };
 
     // User chose to delete a design update ----------------------------------------------------------------------------
     deleteDesignUpdate(userRole, userContext, designUpdateToDeleteId){

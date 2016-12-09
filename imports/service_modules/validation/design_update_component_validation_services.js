@@ -51,7 +51,7 @@ class DesignUpdateComponentValidationServices{
 
     };
 
-    validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent){
+    validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent, parentComponent){
 
         // Updates only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
@@ -66,6 +66,13 @@ class DesignUpdateComponentValidationServices{
         // Component must be restorable
         if(!designUpdateComponent.isRemoved){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE;
+        }
+
+        // Parent must not be removed - if there is one
+        if(parentComponent){
+            if(parentComponent.isRemoved){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE_PARENT;
+            }
         }
 
         return Validation.VALID;

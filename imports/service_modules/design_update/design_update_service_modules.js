@@ -72,8 +72,10 @@ class DesignUpdateModules{
         // Now update the parent ids as necessary to match the new PKs (_ids) on this data
         this.fixParentIds(designVersionId, designUpdateId);
 
+        // NOTE: All items populated here remain REMOVABLE as they are logically deleted when removed and we allow bulk deletes
+
         // Set only items with no children as removable
-        this.setRemovable(designVersionId, designUpdateId);
+        // this.setRemovable(designVersionId, designUpdateId);
 
     };
 

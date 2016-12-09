@@ -2,6 +2,7 @@
 // Ultrawide Collections
 import { DesignUpdates }    from '../collections/design_update/design_updates.js';
 import { DesignVersions }   from '../collections/design/design_versions.js';
+import { WorkPackages }     from '../collections/work/work_packages.js';
 
 // Ultrawide Services
 import DesignUpdateValidationServices from '../service_modules/validation/design_update_validation_services.js';
@@ -54,6 +55,17 @@ class DesignUpdateValidationApi{
         const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
 
         return DesignUpdateValidationServices.validatePublishDesignUpdate(userRole, designUpdate.updateStatus)
+    };
+
+    validateWithdrawDesignUpdate(userRole, designUpdateId){
+
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        const workPackageCount = WorkPackages.find({
+            designUpdateId: designUpdateId
+        }).count();
+
+        return DesignUpdateValidationServices.validateWithdrawDesignUpdate(userRole, designUpdate.updateStatus, workPackageCount);
+
     };
 
     validateViewDesignUpdate(userRole, designUpdateId){

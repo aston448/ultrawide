@@ -76,6 +76,21 @@ class DesignUpdateServices{
         }
     };
 
+    withdrawUpdate(designUpdateId){
+
+        if(Meteor.isServer) {
+            DesignUpdates.update(
+                {_id: designUpdateId},
+                {
+                    $set: {
+                        updateStatus:       DesignUpdateStatus.UPDATE_NEW,
+                        updateMergeAction:  DesignUpdateMergeAction.MERGE_IGNORE
+                    }
+                }
+            );
+        }
+    };
+
     updateDesignUpdateName(designUpdateId, newName){
 
         if(Meteor.isServer) {

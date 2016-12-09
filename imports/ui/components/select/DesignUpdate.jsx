@@ -65,6 +65,15 @@ class DesignUpdate extends Component {
         );
     };
 
+    onWithdrawDesignUpdate(userRole, userContext, du){
+
+        ClientDesignUpdateServices.withdrawDesignUpdate(
+            userRole,
+            userContext,
+            du._id
+        );
+    };
+
     onViewDesignUpdate(userRole, userContext, du){
 
         ClientDesignUpdateServices.viewDesignUpdate(
@@ -169,11 +178,12 @@ class DesignUpdate extends Component {
                     //         </Checkbox>
                     //     </FormGroup>;
                 } else {
-                    // Designers can view or edit the update or specify how it is to be merged into the next Design Version
+                    // Designers can view, edit or withdraw the update or specify how it is to be merged into the next Design Version
                     buttons =
                         <ButtonGroup>
                             <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
+                            <Button bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>
                         </ButtonGroup>
                     options =
                         <FormGroup>

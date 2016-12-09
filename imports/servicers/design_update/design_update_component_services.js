@@ -450,17 +450,18 @@ class DesignUpdateComponentServices{
 
         if(Meteor.isServer) {
             // For a design update this is a logical delete it it was an existing item
-            // If however it was new in the update, remove it completely
+            // If however it was new in the update and is removable, remove it completely
 
             let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
             if (designUpdateComponent.isNew) {
-                // Actually delete it
+
+                // Actually delete it - Validation has already confirmed it is removable
                 let removedComponents = DesignUpdateComponents.remove(
                     {_id: designUpdateComponentId}
                 );
 
-                if(removedComponents > 0){
+                if (removedComponents > 0) {
 
                     // When removing a design component its parent may become removable
                     if (DesignUpdateComponentModules.hasNoChildren(parentId)) {
@@ -478,32 +479,41 @@ class DesignUpdateComponentServices{
 
 
             } else {
-                // Logically delete it
+
+                // An existing component so Logically delete it for this and all updates
+                let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
                 let deletedComponents = DesignUpdateComponents.update(
-                    {_id: designUpdateComponentId},
+                    {designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId},
                     {
                         $set: {
                             isRemoved: true
                             // Keep isRemovable as is so that restore can work
                         }
-                    }
+                    },
+                    {multi: true}
                 );
 
                 if(deletedComponents > 0){
 
-                    // When removing a design component its parent may become removable
-                    if (DesignUpdateComponentModules.hasNoChildren(parentId)) {
-                        DesignUpdateComponents.update(
-                            {_id: parentId},
-                            {$set: {isRemovable: true}}
-                        );
-                    }
+                    // For scopable components set the deleted component as in scope only in the update where it was deleted
 
-                    // But if you logically delete the parent then a removed child is no longer restorable so mark it as not removable
                     DesignUpdateComponents.update(
-                        {componentParentIdNew: designUpdateComponentId, isRemoved: true},
-                        {$set: {isRemovable: false}}
+                        {_id: designUpdateComponentId, isScopable: true},
+                        {
+                            $set: {
+                                isInScope: true
+                            }
+                        }
                     );
+
+                    // For a logical delete we allow deletion of all children if we are allowing the delete
+                    // We would not allow it if any new Components are under the component being deleted
+                    // in this or any other Update.  This logic happens in Validation.
+
+                    // And we logically delete the components in all parallel updates to prevent contradictory instructions
+                    DesignUpdateComponentModules.logicallyDeleteChildrenForAllUpdates(designUpdateComponentId);
+
                 }
             }
         }
@@ -513,25 +523,34 @@ class DesignUpdateComponentServices{
 
         if(Meteor.isServer) {
             // Undo a logical delete
+            let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
             let restoredComponents = DesignUpdateComponents.update(
-                {_id: designUpdateComponentId, isRemoved: true},
+                {designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId, isRemoved: true},
                 {
                     $set: {
                         isRemoved: false,
                         isRemovable: true   // It can't have any children or it would not have been deletable
                     }
-                }
+                },
+                {multi: true}
             );
 
             if(restoredComponents > 0){
 
-                // When restoring a design component its parent (if there is one) will become non-removable
-                if (parentId != 'NONE') {
-                    DesignUpdateComponents.update(
-                        {_id: parentId},
-                        {$set: {isRemovable: false}}
-                    )
-                }
+                // For scopable components set the restored component as not in scope only in the update where it was deleted
+
+                DesignUpdateComponents.update(
+                    {_id: designUpdateComponentId, isScopable: true},
+                    {
+                        $set: {
+                            isInScope: false
+                        }
+                    }
+                );
+
+                // For a logical delete restore we allow restoration of all children - and are restored in all updates
+                DesignUpdateComponentModules.logicallyRestoreChildrenForAllUpdates(designUpdateComponentId);
             }
         }
     }

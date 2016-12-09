@@ -27,7 +27,7 @@ export const DesignUpdateMessages = {
     MSG_DESIGN_UPDATE_NAME_UPDATED:     'Design Update name updated',
     MSG_DESIGN_UPDATE_VERSION_UPDATED:  'Design Update version updated',
     MSG_DESIGN_UPDATE_PUBLISHED:        'Design Update now Published Draft',
-    MSG_DESIGN_UPDATE_UNPUBLISHED:      'Design Update reverted to New',
+    MSG_DESIGN_UPDATE_WITHDRAWN:        'Design Update reverted to New',
     MSG_DESIGN_UPDATE_REMOVED:          'Design Update removed',
 };
 

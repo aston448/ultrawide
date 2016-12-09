@@ -208,6 +208,11 @@ class DesignComponentHeader extends Component{
                     ){
                         this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                     }
+
+                    // Reflect any changes in scope
+                    this.setState({inScope: newProps.currentItem.isInScope});
+                    this.setState({parentScope: newProps.currentItem.isParentScope});
+
                 }
                 break;
 
@@ -251,9 +256,10 @@ class DesignComponentHeader extends Component{
         }
 
         // Decoration for Scenarios only - and not if greyed out in WP scope
-        log((msg) => console.log(msg), LogLevel.TRACE, "Decorator check: Component: {} Context: {}", props.currentItem.componentType, props.displayContext);
-
         if(props.currentItem.componentType === ComponentType.SCENARIO) {
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Decorator check: Component: {} Context: {}", props.currentItem.componentType, props.displayContext);
+
             // Item is a Scenario
             if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.UPDATE_SCOPE){
                 // We are in a WP or Update Scope context

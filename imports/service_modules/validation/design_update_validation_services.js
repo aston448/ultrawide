@@ -101,6 +101,26 @@ class DesignUpdateValidationServices{
         return Validation.VALID;
     }
 
+    validateWithdrawDesignUpdate(userRole, designUpdateStatus, workPackageCount){
+
+        // Only a designer can withdraw Design Updates
+        if(userRole != RoleType.DESIGNER){
+            return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_WITHDRAW;
+        }
+
+        // Only new Design Updates can be published
+        if(designUpdateStatus != DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT){
+            return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_WITHDRAW;
+        }
+
+        // Cannot withdraw if Update related to any WPs
+        if(workPackageCount > 0) {
+            return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_WPS_WITHDRAW;
+        }
+
+        return Validation.VALID;
+    }
+
     validateRemoveDesignUpdate(userRole, designUpdate){
 
         // To remove a design:

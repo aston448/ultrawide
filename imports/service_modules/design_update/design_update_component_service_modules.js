@@ -3,9 +3,10 @@
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ComponentType } from '../../constants/constants.js';
-import DesignUpdateComponentServices from '../../servicers/design_update/design_update_component_services.js';
-import DesignComponentModules from '../../service_modules/design/design_component_service_modules.js';
+import { ComponentType, LogLevel }      from '../../constants/constants.js';
+import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
+import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
+import { log }                          from '../../common/utils.js'
 //======================================================================================================================
 //
 // Server Modules for Design Update Components.
@@ -120,6 +121,117 @@ class DesignUpdateComponentModules{
         return DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId, isRemoved: false}).count() === 0;
     };
 
+    hasNoInScopeChildrenInOtherUpdates(designUpdateComponentId){
+
+        // We need to check that any instance of this component in other updates has no in scope children
+        const thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
+        // Get all other components that are this component in any other Update for the current Design Version
+        const otherInstances = DesignUpdateComponents.find({
+            id: {$ne: designUpdateComponentId},
+            designVersionId: thisComponent.designVersionId,
+            componentReferenceId: thisComponent.componentReferenceId
+        });
+
+        let noInScopeChildren = true;
+
+        otherInstances.forEach((instance) => {
+
+            // Want also to reject if the item being removed is itself in scope elsewhere
+            if(instance.isInScope && instance._id != designUpdateComponentId){
+                noInScopeChildren = false;
+            }
+
+            if(!this.hasNoInScopeChildren(instance._id)){
+                noInScopeChildren = false;
+            }
+        });
+
+        return noInScopeChildren;
+    }
+
+    hasNoNewChildrenInAnyUpdate(designUpdateComponentId){
+
+        // We need to check that any instance of this component in all updates has no new children
+        const thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
+        // Get all components that are this component in any Update for the current Design Version
+        const componentInstances = DesignUpdateComponents.find({designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId});
+
+        let noNewChildren = true;
+
+        componentInstances.forEach((instance) => {
+
+            if(!this.hasNoNewChildren(instance._id)){
+                noNewChildren = false;
+            }
+        });
+
+        return noNewChildren;
+    };
+
+    hasNoInScopeChildren(designUpdateComponentId){
+
+        let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for in scope children for component {}", designUpdateComponentId);
+
+        if(children.count() === 0){
+            // No more children so no new children
+            log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
+            return true;
+        } else {
+            // Are any in scope?
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+            let inScopeChild = false;
+            children.forEach((child) => {
+                if(child.isInScope){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "In scope child found");
+                    inScopeChild = true;
+                } else {
+
+                    // Search it for in scope children
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Looking for in scope children for component {}", child._id);
+                    inScopeChild = !this.hasNoInScopeChildren(child._id);
+                }
+            });
+
+            // Return false if in scope child found
+            return !inScopeChild;
+        }
+    };
+
+    hasNoNewChildren(designUpdateComponentId){
+
+        let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for new children for component {}", designUpdateComponentId);
+
+        if(children.count() === 0){
+            // No more children so no new children
+            log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
+            return true;
+        } else {
+            // Are any new?
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+            let newChild = false;
+            children.forEach((child) => {
+                if(child.isNew){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "New child found");
+                    newChild = true;
+                } else {
+
+                    // Search it for new children
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Looking for new children for component {}", child._id);
+                    newChild = !this.hasNoNewChildren(child._id);
+                }
+            });
+
+            // Return false if new child found
+            return !newChild;
+        }
+    };
+
     // Check to see if parent is not logically deleted
     isDeleted(designUpdateComponentParentId){
 
@@ -135,7 +247,118 @@ class DesignUpdateComponentModules{
         // Otherwise OK if parent is not removed
         return parent = DesignUpdateComponents.findOne({_id: designUpdateComponentParentId}).isRemoved;
 
-    }
+    };
+
+    logicallyDeleteChildrenForAllUpdates(designUpdateComponentId){
+
+        const thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
+        // Get all components that are this component in any Update for the current Design Version
+        const componentInstances = DesignUpdateComponents.find({designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId});
+
+        componentInstances.forEach((instance) => {
+            this.logicallyDeleteChildren(instance._id, designUpdateComponentId);
+        });
+
+    };
+
+    logicallyRestoreChildrenForAllUpdates(designUpdateComponentId){
+
+        const thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
+        // Get all components that are this component in any Update for the current Design Version
+        const componentInstances = DesignUpdateComponents.find({designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId});
+
+        componentInstances.forEach((instance) => {
+            this.logicallyRestoreChildren(instance._id);
+        });
+
+    };
+
+    // Recursive function to mark all children down to the bottom of the tree as removed
+    logicallyDeleteChildren(designUpdateComponentId, masterComponentId){
+
+        let childComponents = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
+
+        if(childComponents.count() > 0){
+            let inScope = false;
+            let parentScope = false;
+
+            childComponents.forEach((child) => {
+
+                // The scope is updated if you are the Update actually doing the delete
+                if(designUpdateComponentId === masterComponentId) {
+                    switch (child.componentType) {
+                        case ComponentType.FEATURE:
+                        case ComponentType.FEATURE_ASPECT:
+                        case ComponentType.SCENARIO:
+                            inScope = true;
+                            parentScope = true;
+                            break;
+                        default:
+                            inScope = false;
+                            parentScope = true;
+                            break;
+                    }
+                }
+
+                DesignUpdateComponents.update(
+                    {_id: child._id},
+                    {
+                        $set:{
+                            isRemoved: true,
+                            isInScope: inScope,     // Any Feature, Feature Aspect, Scenario removed is automatically in scope
+                            isParentScope: parentScope
+                        }
+                    }
+                );
+
+                // Recursively call for these children - if not a Scenario which is the bottom of the tree
+                if(child.componentType != ComponentType.SCENARIO) {
+                    this.logicallyDeleteChildren(child._id)
+                }
+
+            });
+
+            return true;
+
+        } else {
+            return false;
+        }
+    };
+
+    // Recursive function to mark all children down to the bottom of the tree as not removed
+    logicallyRestoreChildren(designUpdateComponentId){
+
+        let childComponents = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
+
+        if(childComponents.count() > 0){
+            childComponents.forEach((child) => {
+
+                DesignUpdateComponents.update(
+                    {_id: child._id},
+                    {
+                        $set:{
+                            isRemoved: false,
+                            isInScope: false,
+                            isParentScope: false
+                        }
+                    }
+                );
+
+                // Recursively call for these children - if not a Scenario which is the bottom of the tree
+                if(child.componentType != ComponentType.SCENARIO) {
+                    this.logicallyRestoreChildren(child._id)
+                }
+
+            });
+
+            return true;
+
+        } else {
+            return false;
+        }
+    };
 }
 
 export default new DesignUpdateComponentModules()
