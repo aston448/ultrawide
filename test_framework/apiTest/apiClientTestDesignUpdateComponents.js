@@ -14,11 +14,22 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName)
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
         ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true)
     },
 
+    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, mode, userName){
+
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+        const displayContext = DisplayContext.UPDATE_SCOPE;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+
+        ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false)
+    },
 
 
 });

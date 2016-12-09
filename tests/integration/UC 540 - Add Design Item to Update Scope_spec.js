@@ -154,17 +154,17 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
     });
 
-    it('A Design Update Component cannot be added to Design Update Scope if it has been removed in another Design Update');
+    it('A Feature cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
 
-    it('An Application cannot be directly added to Design Update Scope');
+    it('A Feature Aspect cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
 
-    it('A Design Section cannot be directly added to Design Update Scope');
+    it('A Scenario cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version')
 
     it('All Applications are in scope by default so that new Design Sections can be added');
 
     it('All Design Sections are in scope by default so that new Design Sections and Features can be added');
 
-    it('A Design Update Component cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
+
 
 
     // Consequences
