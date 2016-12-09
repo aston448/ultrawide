@@ -31,6 +31,22 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled'(componentType, parentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // This wil throw an error if the component is not found
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            parentName,
+            componentName
+        );
+
+        return true;
+    },
+
     'verifyDesignUpdateComponents.componentDoesNotExistCalled'(componentType, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

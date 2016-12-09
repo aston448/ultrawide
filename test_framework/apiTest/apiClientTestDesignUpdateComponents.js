@@ -1,7 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
 import ClientDesignUpdateComponentServices      from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
+import DesignComponentModules                   from '../../imports/service_modules/design/design_component_service_modules.js';
 import TestDataHelpers                          from '../test_modules/test_data_helpers.js'
+
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 
@@ -30,6 +32,146 @@ Meteor.methods({
 
         ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false)
     },
+
+
+    'testDesignUpdateComponents.addApplication'(userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId);
+    },
+
+    'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.APPLICATION,
+            targetParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, parentComponent);
+    },
+
+    'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.DESIGN_SECTION,
+            targetParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, parentComponent);
+    },
+
+    'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.FEATURE,
+            targetParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.addFeatureToDesignSection(view, mode, parentComponent);
+    },
+
+    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.FEATURE_ASPECT,
+            targetParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
+    },
+
+    'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.SCENARIO,
+            targetParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+    },
+
+    'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.SCENARIO,
+            targetParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+    },
+
+    'testDesignUpdateComponents.updateComponentName'(targetParentName, targetComponentName, newName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+        
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.SCENARIO,
+            targetParentName,
+            targetComponentName
+        );
+        
+        const newNameRaw = DesignComponentModules.getRawTextFor(newName);
+        
+        ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw)
+    }
 
 
 });
