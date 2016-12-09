@@ -91,7 +91,7 @@ Meteor.methods({
         const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
-            ComponentType.FEATURE,
+            ComponentType.DESIGN_SECTION,
             targetParentName,
             targetComponentName
         );
@@ -109,7 +109,7 @@ Meteor.methods({
         const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
-            ComponentType.FEATURE_ASPECT,
+            ComponentType.FEATURE,
             targetParentName,
             targetComponentName
         );
@@ -127,7 +127,7 @@ Meteor.methods({
         const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
-            ComponentType.SCENARIO,
+            ComponentType.FEATURE,
             targetParentName,
             targetComponentName
         );
@@ -145,7 +145,7 @@ Meteor.methods({
         const parentComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
-            ComponentType.SCENARIO,
+            ComponentType.FEATURE_ASPECT,
             targetParentName,
             targetComponentName
         );
@@ -153,7 +153,7 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
     },
 
-    'testDesignUpdateComponents.updateComponentName'(targetParentName, targetComponentName, newName, userName, mode){
+    'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -163,7 +163,7 @@ Meteor.methods({
         const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
-            ComponentType.SCENARIO,
+            componentType,
             targetParentName,
             targetComponentName
         );

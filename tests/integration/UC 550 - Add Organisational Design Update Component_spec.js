@@ -47,9 +47,9 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
 
         // Add Application
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
@@ -64,7 +64,6 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
 
         // Add new Section to original Application 1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -81,7 +80,6 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
 
         // Add new Section to original Section 1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -98,7 +96,6 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
 
         // Add new Section to original Section 1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -117,9 +114,9 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
 
         // Add Application
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_VIEW);
 
         // Verify
