@@ -502,7 +502,17 @@ class DesignUpdateComponentServices{
                         {_id: designUpdateComponentId, isScopable: true},
                         {
                             $set: {
-                                isInScope: true
+                                isInScope: true,
+                                isParentScope: true
+                            }
+                        }
+                    );
+
+                    DesignUpdateComponents.update(
+                        {_id: designUpdateComponentId, isScopable: false},
+                        {
+                            $set: {
+                                isParentScope: true
                             }
                         }
                     );
