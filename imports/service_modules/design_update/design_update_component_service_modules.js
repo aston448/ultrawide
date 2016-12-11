@@ -315,7 +315,7 @@ class DesignUpdateComponentModules{
 
                 // Recursively call for these children - if not a Scenario which is the bottom of the tree
                 if(child.componentType != ComponentType.SCENARIO) {
-                    this.logicallyDeleteChildren(child._id)
+                    this.logicallyDeleteChildren(child._id, masterDesignUpdateId)
                 }
 
             });
