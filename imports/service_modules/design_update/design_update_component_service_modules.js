@@ -257,7 +257,7 @@ class DesignUpdateComponentModules{
         const componentInstances = DesignUpdateComponents.find({designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId});
 
         componentInstances.forEach((instance) => {
-            this.logicallyDeleteChildren(instance._id, designUpdateComponentId);
+            this.logicallyDeleteChildren(instance._id, thisComponent.designUpdateId);
         });
 
     };
@@ -276,7 +276,7 @@ class DesignUpdateComponentModules{
     };
 
     // Recursive function to mark all children down to the bottom of the tree as removed
-    logicallyDeleteChildren(designUpdateComponentId, masterComponentId){
+    logicallyDeleteChildren(designUpdateComponentId, masterDesignUpdateId){
 
         let childComponents = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
 
@@ -287,7 +287,7 @@ class DesignUpdateComponentModules{
             childComponents.forEach((child) => {
 
                 // The scope is updated if you are the Update actually doing the delete
-                if(designUpdateComponentId === masterComponentId) {
+                if(child.designUpdateId === masterDesignUpdateId) {
                     switch (child.componentType) {
                         case ComponentType.FEATURE:
                         case ComponentType.FEATURE_ASPECT:
