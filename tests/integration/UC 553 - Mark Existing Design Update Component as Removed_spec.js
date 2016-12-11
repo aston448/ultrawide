@@ -70,7 +70,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsInParentScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -122,7 +122,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsInParentScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -176,7 +176,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsInParentScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -231,7 +231,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Feature1 Conditions is not removed
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -288,7 +288,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Scenario1 is removed and in scope
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Feature1 Conditions is not removed
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -343,7 +343,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -396,7 +396,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -459,7 +459,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -522,7 +522,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
@@ -576,7 +576,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
         // Scenario1
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
         // Feature1 Conditions
         server.call('verifyDesignUpdateComponents.componentIsInParentScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
