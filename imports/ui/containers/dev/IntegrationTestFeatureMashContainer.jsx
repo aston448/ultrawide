@@ -136,7 +136,7 @@ class IntegrationTestFeatureMashList extends Component {
         }
 
 
-        let mainPanel = 'Select a Feature';
+        let mainPanel = 'No data for this item - try refreshing test data';
 
         if(designMashItemData.length > 0) {
             switch(userContext.designComponentType){

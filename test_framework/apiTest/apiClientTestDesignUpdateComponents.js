@@ -171,6 +171,24 @@ Meteor.methods({
         const newNameRaw = DesignComponentModules.getRawTextFor(newName);
         
         ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw)
+    },
+
+    'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        ClientDesignUpdateComponentServices.logicallyDeleteComponent(view, mode, targetComponent);
     }
 
 

@@ -144,6 +144,44 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateComponents.componentIsRemoved'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isRemoved){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be removed");
+        }
+    },
+
+    'verifyDesignUpdateComponents.componentIsNotRemoved'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isRemoved){
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " NOT to be removed");
+        } else {
+            return true;
+        }
+    },
+
     'verifyDesignUpdateComponents.componentCountCalledIs'(componentType, componentName, componentCount){
 
         const designComponentsCount = DesignComponents.find({componentType: componentType, componentName: componentName}).count();
