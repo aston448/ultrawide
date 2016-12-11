@@ -485,8 +485,9 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
 
-        // And the new Scenario is not in scope for DesignUpdate1
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
+        // And the new Scenario is still in scope for DesignUpdate2
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', 'gloria', RoleType.DESIGNER);
+        server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
     });
 
     it('An existing Design Update Component cannot be removed if any Design Update Components inside it are in Scope in another Design Update', function(){

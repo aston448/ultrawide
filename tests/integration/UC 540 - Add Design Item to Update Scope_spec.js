@@ -52,7 +52,7 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
         // Feature1 now in scope
@@ -81,7 +81,7 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
         // Actions now in scope
@@ -109,7 +109,7 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
         // Scenario1 now in scope
@@ -141,13 +141,13 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
         // Add Scenario1 to first update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Execute - try to add Scenario1 to second update
         server.call('testDesignUpdates.selectDesignUpdate', 'DesignUpdate2', 'gloria');
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', 'gloria', RoleType.DESIGNER);
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify - Scenario and parent not in scope
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
@@ -158,7 +158,7 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
     it('A Feature Aspect cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
 
-    it('A Scenario cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version')
+    it('A Scenario cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
 
     it('All Applications are in scope by default so that new Design Sections can be added');
 

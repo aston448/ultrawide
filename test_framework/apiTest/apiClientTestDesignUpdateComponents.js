@@ -9,7 +9,7 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
-    'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, mode, userName){
+    'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode){
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -21,7 +21,7 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true)
     },
 
-    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, mode, userName){
+    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode){
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;

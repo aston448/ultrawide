@@ -48,11 +48,11 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
@@ -67,11 +67,11 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
@@ -85,11 +85,11 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', ViewMode.MODE_EDIT, 'gloria');
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
