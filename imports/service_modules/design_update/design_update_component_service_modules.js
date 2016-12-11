@@ -142,7 +142,7 @@ class DesignUpdateComponentModules{
                 noInScopeChildren = false;
             }
 
-            if(!this.hasNoInScopeChildren(instance._id)){
+            if(!this.hasNoInScopeChildren(instance._id, false)){
                 noInScopeChildren = false;
             }
         });
@@ -170,7 +170,7 @@ class DesignUpdateComponentModules{
         return noNewChildren;
     };
 
-    hasNoInScopeChildren(designUpdateComponentId){
+    hasNoInScopeChildren(designUpdateComponentId, inScopeChild){
 
         let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
 
@@ -179,11 +179,11 @@ class DesignUpdateComponentModules{
         if(children.count() === 0){
             // No more children so no new children
             log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
-            return true;
+            return !inScopeChild;
         } else {
             // Are any in scope?
             log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
-            let inScopeChild = false;
+
             children.forEach((child) => {
                 if(child.isInScope){
                     log((msg) => console.log(msg), LogLevel.TRACE, "In scope child found");
@@ -192,7 +192,7 @@ class DesignUpdateComponentModules{
 
                     // Search it for in scope children
                     log((msg) => console.log(msg), LogLevel.TRACE, "Looking for in scope children for component {}", child._id);
-                    inScopeChild = !this.hasNoInScopeChildren(child._id);
+                    inScopeChild = !this.hasNoInScopeChildren(child._id, inScopeChild);
                 }
             });
 
