@@ -162,7 +162,7 @@ class DesignUpdateComponentModules{
 
         componentInstances.forEach((instance) => {
 
-            if(!this.hasNoNewChildren(instance._id)){
+            if(!this.hasNoNewChildren(instance._id, false)){
                 noNewChildren = false;
             }
         });
@@ -201,20 +201,20 @@ class DesignUpdateComponentModules{
         }
     };
 
-    hasNoNewChildren(designUpdateComponentId){
+    hasNoNewChildren(designUpdateComponentId, newChild){
 
         let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Looking for new children for component {}", designUpdateComponentId);
 
         if(children.count() === 0){
-            // No more children so no new children
+            // No more children so return what the current findings are
             log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
-            return true;
+            return !newChild;
         } else {
             // Are any new?
             log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
-            let newChild = false;
+
             children.forEach((child) => {
                 if(child.isNew){
                     log((msg) => console.log(msg), LogLevel.TRACE, "New child found");
@@ -223,7 +223,7 @@ class DesignUpdateComponentModules{
 
                     // Search it for new children
                     log((msg) => console.log(msg), LogLevel.TRACE, "Looking for new children for component {}", child._id);
-                    newChild = !this.hasNoNewChildren(child._id);
+                    newChild = !this.hasNoNewChildren(child._id, newChild);
                 }
             });
 
