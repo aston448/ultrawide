@@ -189,7 +189,23 @@ Meteor.methods({
         );
 
         ClientDesignUpdateComponentServices.logicallyDeleteComponent(view, mode, targetComponent);
-    }
+    },
 
+    'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode){
 
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        ClientDesignUpdateComponentServices.restoreComponent(view, mode, targetComponent);
+    },
 });

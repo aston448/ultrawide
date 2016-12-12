@@ -38,7 +38,6 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-
     });
 
     afterEach(function(){
