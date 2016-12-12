@@ -89,15 +89,17 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.DESIGN_SECTION, 'Section1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'gloria');
     });
 
-    it('A Feature Aspect can be added to a Design Update Feature', function(){
+    it('A Feature Aspect can be added to an in Scope Design Update Feature', function(){
 
         //Setup - add a new Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Make sure Feature1 is in Scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
-        // Add new Section to original Section 1
+        // Add new Feature Aspect to Feature1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
@@ -121,6 +123,23 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
         // Verify
         server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'gloria');
+    });
+
+    it('A Feature Aspect cannot be added to a Feature that is not in Scope for the Design Update', function(){
+
+        //Setup - add a new Update
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Don't add Feature1 to scope
+
+        // Add new Feature Aspect to Feature1
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+
+        // Verify
+        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'gloria');
     });
 
     it('An organisational Design Update Component cannot be added to a component removed in this or another Design Update');

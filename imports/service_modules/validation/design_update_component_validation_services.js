@@ -15,7 +15,7 @@ import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js
 
 class DesignUpdateComponentValidationServices{
 
-    validateAddDesignUpdateComponent(view, mode){
+    validateAddDesignUpdateComponent(view, mode, parentComponent){
 
         // Additions only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
@@ -25,6 +25,22 @@ class DesignUpdateComponentValidationServices{
         // Additions not allowed in view only mode
         if(mode != ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD;
+        }
+
+        // Check that target is valid for adding to if there is one
+        if(parentComponent){
+            switch(parentComponent.componentType){
+                case ComponentType.FEATURE:
+                case ComponentType.FEATURE_ASPECT:
+                case ComponentType.SCENARIO:
+                    // Must be in scope to add stuff to them
+                    if(!parentComponent.isInScope){
+                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
+                    }
+                    break;
+                default:
+                    // Others don't matter
+            }
         }
 
         return Validation.VALID;

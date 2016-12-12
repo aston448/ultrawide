@@ -16,9 +16,17 @@ import DesignUpdateComponentModules             from '../service_modules/design_
 
 class DesignUpdateComponentValidationApi{
 
-    validateAddDesignUpdateComponent(view, mode){
+    validateAddDesignUpdateComponent(view, mode, parentComponentId){
 
-        return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode)
+        if(parentComponentId) {
+            const parentComponent = DesignUpdateComponents.findOne({_id: parentComponentId})
+            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, parentComponent);
+        } else{
+            // Means this is an application being added so no need to check target
+            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, null);
+        }
+
+
     };
 
     validateRemoveDesignUpdateComponent(view, mode, designUpdateComponentId){

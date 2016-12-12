@@ -100,7 +100,7 @@ class ClientDesignUpdateComponentServices{
     addApplicationToDesignVersion(view, mode, designVersionId, designUpdateId) {
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, null);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -134,7 +134,7 @@ class ClientDesignUpdateComponentServices{
     addDesignSectionToApplication(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -175,7 +175,7 @@ class ClientDesignUpdateComponentServices{
     addSectionToDesignSection(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -217,7 +217,7 @@ class ClientDesignUpdateComponentServices{
     addFeatureToDesignSection(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -258,7 +258,7 @@ class ClientDesignUpdateComponentServices{
     addFeatureAspectToFeature(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -299,7 +299,7 @@ class ClientDesignUpdateComponentServices{
     addScenario(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen

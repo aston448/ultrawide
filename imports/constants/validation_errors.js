@@ -92,6 +92,7 @@ export const DesignComponentValidationErrors = {
 export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_ADD:          'A Design Update Component can only be added in the Design Update Editor',
     DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD:          'A Design Update Component cannot be added in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD:     'A Design Update Component cannot be added to a Feature or Feature Aspect if it is not in scope',
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_EDIT:         'A Design Update Component can only be edited in the Design Update Design Editor',
     DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT:         'A Design Update Component cannot be edited in View Only mode',
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_REMOVE:       'A Design Update Component can only be removed in the Design Update Design Editor',
