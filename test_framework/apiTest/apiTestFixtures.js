@@ -178,11 +178,39 @@ Meteor.methods({
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
         let rawName = null;
 
+        // Data Available:
+        //
+        //  Application1
+        //      Section1
+        //          Feature1
+        //              Interface
+        //              Actions
+        //                  Scenario1
+        //                  Scenario444
+        //              Conditions
+        //                  Scenario2
+        //              Consequences
+        //      Section2
+        //          Feature2
+        //              Interface
+        //              Actions
+        //                  Scenario3
+        //              Conditions
+        //                  Scenario4
+        //              Consequences
+        //  Application999
+
         // Add Application1
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
         const application1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Application1');
         ClientDesignComponentServices.updateComponentName(view, mode, application1Component._id, 'Application1', rawName);
+
+        // Add Application99 in case a second Base App needed
+        ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
+        const application99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
+        rawName = DesignComponentModules.getRawTextFor('Application99');
+        ClientDesignComponentServices.updateComponentName(view, mode, application99Component._id, 'Application99', rawName);
 
         // Add Section1
         ClientDesignComponentServices.addDesignSectionToApplication(view, mode, application1Component);
@@ -214,6 +242,12 @@ Meteor.methods({
         const scenario1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario1');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario1Component._id, 'Scenario1', rawName);
+
+        // Add Scenario444 to Feature1 Actions
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component);
+        const scenario444Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
+        rawName = DesignComponentModules.getRawTextFor('Scenario444');
+        ClientDesignComponentServices.updateComponentName(view, mode, scenario1Component._id, 'Scenario444', rawName);
 
         // Add Scenario2 to Feature1 Conditions
         const featureAspect2Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Conditions', componentParentId: feature1Component._id});

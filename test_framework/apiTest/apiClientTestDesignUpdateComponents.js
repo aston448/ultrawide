@@ -235,4 +235,30 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
     },
 
+    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+        const displayContext = DisplayContext.UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const movingComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            movingComponentType,
+            movingComponentParentName,
+            movingComponentName
+        );
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            targetComponentType,
+            targetComponentParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
+    },
+
 });
