@@ -110,13 +110,14 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section2', 'Feature3', 'gloria');
     });
 
-    it('A new Scenario for a Design Update can be moved to a different Feature', function(){
+    it('A new Scenario for a Design Update can be moved to a different in Scope Feature', function(){
 
         // Setup - add new Scenario to Feature1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Feature1', 'Scenario99', 'gloria');
+        // Make sure the target is in scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute - move it to Feature2
         server.call(
@@ -130,12 +131,14 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Feature2', 'Scenario99', 'gloria');
     });
 
-    it('A new Scenario for a Design Update can be moved to a different Feature Aspect', function(){
+    it('A new Scenario for a Design Update can be moved to a different in Scope Feature Aspect', function(){
 
         // Setup - add new Scenario to Feature1 Actions
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
+        // Make sure the target is in scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute - move it to Feature2 Conditions
         server.call(
@@ -149,7 +152,7 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Conditions', 'Scenario99', 'gloria');
     });
 
-    it('A new Feature Aspect for a Design Update can be moved to a different Feature');
+    it('A new Feature Aspect for a Design Update can be moved to a different in Scope Feature');
 
 
     // Conditions
@@ -193,6 +196,8 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         // Rename Feature2 Actions to rule out any duplicate name problems
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'Actions1', 'gloria', ViewMode.MODE_EDIT);
+        // Make sure the target is in scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute - Try to move existing Feature1 Actions to Feature2
         server.call(
@@ -210,6 +215,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Setup
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        // Make sure the target is in scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute - Try to move existing Scenario1 to Feature1 Conditions
         server.call(
