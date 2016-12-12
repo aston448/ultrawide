@@ -407,6 +407,8 @@ export const moveDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponentId, targetComponentId);
 
+        console.log("MOVE DESIGN UPDATE COMPONENT: " + result);
+
         if (result != Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.moveDesignComponent.failValidation', result)
         }
