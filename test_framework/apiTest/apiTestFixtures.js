@@ -190,6 +190,11 @@ Meteor.methods({
         //              Conditions
         //                  Scenario2
         //              Consequences
+        //          Feature444
+        //              Interface
+        //              Actions
+        //              Conditions
+        //              Consequences
         //      Section2
         //          Feature2
         //              Interface
@@ -229,6 +234,12 @@ Meteor.methods({
         const feature1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature1');
         ClientDesignComponentServices.updateComponentName(view, mode, feature1Component._id, 'Feature1', rawName);
+
+        // Add Feature444 to Section 1
+        ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section1Component);
+        const feature444Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
+        rawName = DesignComponentModules.getRawTextFor('Feature444');
+        ClientDesignComponentServices.updateComponentName(view, mode, feature444Component._id, 'Feature444', rawName);
 
         // Add Feature2 to Section 2
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section2Component);

@@ -181,13 +181,13 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
 
         // Setup - verify that Feature1 is above Feature2
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
-        server.call('verifyDesignUpdateComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'Section1', 'Feature2', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'Section1', 'Feature444', 'gloria');
 
         // Execute
-        server.call('testDesignUpdateComponents.reorderDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature2', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.reorderDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature444', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify no change
-        server.call('verifyDesignUpdateComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'Section1', 'Feature2', 'gloria');
+        server.call('verifyDesignUpdateComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'Section1', 'Feature444', 'gloria');
     });
 
     it('An existing Feature Aspect from the Base Design Version cannot be reordered in a Design Update', function(){
