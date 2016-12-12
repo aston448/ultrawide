@@ -56,13 +56,15 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'gloria');
     });
 
-    it('A Scenario can be added to a Design Update Feature', function(){
+    it('A Scenario can be added to an in Scope Design Update Feature', function(){
 
         //Setup - add a new Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Make sure Feature1 is in Scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
         // Add new Scenario to original Feature 1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -72,13 +74,15 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
     });
 
-    it('A Scenario can be added to a Design Update Feature Aspect', function(){
+    it('A Scenario can be added to an in Scope Design Update Feature Aspect', function(){
 
         //Setup - add a new Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
         server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Make sure Feature1 Actions is in Scope
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
 
         // Add new Scenario to original Feature 1 Actions
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -99,6 +103,40 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Add Scenario
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
+
+        // Verify
+        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
+    });
+
+    it('A Scenario cannot be added to a Feature that is not in Scope for the Design Update', function(){
+
+        //Setup - add a new Update
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Feature1 not in scope
+
+        // Add new Scenario to original Feature 1
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+
+        // Verify
+        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
+    });
+
+    it('A Scenario cannot be added to a Feature Aspect that is not in Scope for the Design Update', function(){
+
+        //Setup - add a new Update
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Actions is not in scope
+
+        // Add new Scenario to original Feature 1 Actions
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
 
