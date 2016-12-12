@@ -132,6 +132,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Add Scenario
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1','gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.SCENARIO, 'Scenario1', 1, 'gloria');
         server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1, 'gloria');
@@ -174,6 +175,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Add Feature Aspect
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1','gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, 'Actions', 1, 'gloria');
         server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1, 'gloria');
@@ -218,6 +220,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Add New Feature Aspect to Feature1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         // Call it Aspect1
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
