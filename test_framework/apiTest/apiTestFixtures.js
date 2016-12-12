@@ -247,7 +247,7 @@ Meteor.methods({
         ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component);
         const scenario444Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario444');
-        ClientDesignComponentServices.updateComponentName(view, mode, scenario1Component._id, 'Scenario444', rawName);
+        ClientDesignComponentServices.updateComponentName(view, mode, scenario444Component._id, 'Scenario444', rawName);
 
         // Add Scenario2 to Feature1 Conditions
         const featureAspect2Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Conditions', componentParentId: feature1Component._id});
