@@ -374,6 +374,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Setup
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         // Add a new Scenario to Feature1 Actions
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute - Try to remove the whole Application
@@ -422,6 +423,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Add a new Scenario to Feature1 Actions in DesignUpdate2
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
 
