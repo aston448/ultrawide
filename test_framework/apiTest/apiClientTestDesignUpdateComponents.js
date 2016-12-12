@@ -235,7 +235,7 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
     },
 
-    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -253,7 +253,7 @@ Meteor.methods({
         const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
-            targetComponentType,
+            movingComponentType,
             targetComponentParentName,
             targetComponentName
         );
