@@ -104,6 +104,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_MOVE:         'A Design Update Component can only be moved in the Design Update Design Editor',
     DESIGN_UPDATE_COMPONENT_INVALID_MODE_MOVE:         'A Design Update Component cannot be moved in View Only mode',
     DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_MOVE:      'A Design Update Component can only be moved within the Design Editor',
+    DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE:    'Only new additions to the Design can be moved in a Design Update',
     DESIGN_UPDATE_COMPONENT_INVALID_MOVE:              'This Design Update Component cannot be moved to the location where it was dropped',
     DESIGN_UPDATE_COMPONENT_INVALID_REORDER:           'This Design Update Component cannot be moved to the location where it was dropped',
     DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Update Component cannot have the same name as another component of the same type in this Design Version',

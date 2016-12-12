@@ -146,6 +146,11 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_MOVE;
         }
 
+        // Only new components in the Design Update can be moved
+        if(!movingComponent.isNew){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE;
+        }
+
         // Moves must be to a valid destination
         if(!locationMoveDropAllowed(movingComponent.componentType, targetComponent.componentType, view, targetComponent.isInScope)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MOVE;
