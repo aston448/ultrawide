@@ -110,12 +110,13 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section2', 'Feature3', 'gloria');
     });
 
-    it('A new Scenario a the Design Update can be moved to a different Feature', function(){
+    it('A new Scenario for a Design Update can be moved to a different Feature', function(){
 
         // Setup - add new Scenario to Feature1
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
+        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Feature1', 'Scenario99', 'gloria');
 
         // Execute - move it to Feature2
         server.call(
@@ -129,7 +130,7 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Feature2', 'Scenario99', 'gloria');
     });
 
-    it('A new Scenario a the Design Update can be moved to a different Feature Aspect', function(){
+    it('A new Scenario for a Design Update can be moved to a different Feature Aspect', function(){
 
         // Setup - add new Scenario to Feature1 Actions
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -148,7 +149,7 @@ describe('UC 555 - Move Design Update Component', function(){
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Conditions', 'Scenario99', 'gloria');
     });
 
-    it('A new Feature Aspect a the Design Update can be moved to a different Feature');
+    it('A new Feature Aspect for a Design Update can be moved to a different Feature');
 
 
     // Conditions
