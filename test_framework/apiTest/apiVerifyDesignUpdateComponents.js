@@ -301,6 +301,7 @@ Meteor.methods({
     'verifyDesignUpdateComponents.featureNarrativeIs'(parentName, featureName, narrativeText, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
+
         const feature = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
@@ -308,6 +309,9 @@ Meteor.methods({
             parentName,
             featureName
         );
+
+        console.log("Feature narrative is: " + feature.componentNarrativeNew);
+        console.log("Expected narrative is: " + narrativeText);
 
         if(feature.componentNarrativeNew.trim() !=  narrativeText.trim()){
             throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + feature.componentNarrativeNew);
