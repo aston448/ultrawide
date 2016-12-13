@@ -76,10 +76,14 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
     it('A new Feature with no children in a Design Update can be removed', function(){
 
-        // Setup - add new Feature
+        // Setup - add new Feature - need to remove default Feature Aspects
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
         server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Interface', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Consequences', 'gloria', ViewMode.MODE_EDIT);
 
         // Remove Feature
         server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature3', 'gloria', ViewMode.MODE_EDIT);
@@ -92,6 +96,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Setup - add new Feature Aspect
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
 
@@ -114,7 +119,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
 
         // Remove Application
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria', ViewMode.MODE_VIEW);
 
         // Verify not removed
         server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria');
