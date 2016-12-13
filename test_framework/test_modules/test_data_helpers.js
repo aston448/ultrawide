@@ -170,6 +170,7 @@ class TestDataHelpers {
         let designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
 
         if(!designUpdateComponent){
+            console.log("Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName)
             throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
         }
 

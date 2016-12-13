@@ -65,7 +65,7 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
 
     it('A Designer may edit the Narrative of an existing Feature that is in Scope for the Design Update', function(){
 
-        const newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
+        let newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
 
         // Setup - add Feature to Scope
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -83,7 +83,7 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
     // Conditions
     it('A Design Update Feature Narrative cannot be edited in View Only mode', function(){
 
-        const newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
+        let newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
 
         // Setup
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
@@ -99,7 +99,7 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
 
     it('An existing Design Update Feature Narrative cannot be edited if the Feature is not in Scope', function(){
 
-        const newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
+        let newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
 
         // Setup - don't add Feature to Scope
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);

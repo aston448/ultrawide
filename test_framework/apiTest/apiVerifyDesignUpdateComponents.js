@@ -310,7 +310,7 @@ Meteor.methods({
         );
 
         if(feature.componentNarrativeNew.trim() !=  narrativeText.trim()){
-            throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + featureNarrative);
+            throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + feature.componentNarrativeNew);
         } else {
             return true;
         }
