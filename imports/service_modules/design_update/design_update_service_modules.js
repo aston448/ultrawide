@@ -51,6 +51,8 @@ class DesignUpdateModules{
                     componentNameNew:               component.componentName,
                     componentNameRawOld:            component.componentNameRaw,
                     componentNameRawNew:            component.componentNameRaw,
+                    componentNarrativeOld:          component.componentNarrative,
+                    componentNarrativeNew:          component.componentNarrative,
                     componentNarrativeRawOld:       component.componentNarrativeRaw,
                     componentNarrativeRawNew:       component.componentNarrativeRaw,
                     componentTextRawOld:            component.componentTextRaw,
