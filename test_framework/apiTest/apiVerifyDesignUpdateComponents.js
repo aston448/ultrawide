@@ -298,16 +298,18 @@ Meteor.methods({
 
     },
 
-    'verifyDesignUpdateComponents.featureNarrativeIs'(featureName, narrativeText){
+    'verifyDesignUpdateComponents.featureNarrativeIs'(parentName, featureName, narrativeText, userName){
 
-        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const feature = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.FEATURE,
+            parentName,
+            featureName
+        );
 
-        let featureNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
-        if(featureComponent){
-            featureNarrative = featureComponent.componentNarrative;
-        }
-
-        if(featureNarrative.trim() !=  narrativeText.trim()){
+        if(feature.componentNarrativeNew.trim() !=  narrativeText.trim()){
             throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + featureNarrative);
         } else {
             return true;

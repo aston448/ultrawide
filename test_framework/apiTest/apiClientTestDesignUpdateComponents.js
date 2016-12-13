@@ -261,4 +261,23 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
     },
 
+    'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const feature = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            ComponentType.FEATURE,
+            parentName,
+            featureName
+        );
+
+        const newRawText = DesignComponentModules.getRawTextFor(newPlainText);
+
+        ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText)
+    }
+
 });
