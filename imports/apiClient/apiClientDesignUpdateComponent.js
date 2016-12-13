@@ -337,7 +337,7 @@ class ClientDesignUpdateComponentServices{
     };
 
     // User clicked Delete for a design component when editing a Design Update -----------------------------------------
-    logicallyDeleteComponent(view, mode, designUpdateComponent){
+    removeComponent(view, mode, designUpdateComponent){
 
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent._id);

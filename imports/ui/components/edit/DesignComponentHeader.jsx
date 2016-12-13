@@ -479,7 +479,7 @@ class DesignComponentHeader extends Component{
                     ClientDesignUpdateComponentServices.restoreComponent(view, mode, item);
                 } else {
                     // Logicaly delete
-                    ClientDesignUpdateComponentServices.logicallyDeleteComponent(view, mode, item);
+                    ClientDesignUpdateComponentServices.removeComponent(view, mode, item);
                 }
                 break;
         }

@@ -174,6 +174,7 @@ Meteor.methods({
     },
 
     'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode){
+        // Called in the context of an EXISTING component
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -188,7 +189,26 @@ Meteor.methods({
             componentName
         );
 
-        ClientDesignUpdateComponentServices.logicallyDeleteComponent(view, mode, targetComponent);
+        ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
+    },
+
+    'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode){
+        // Called in the context of an NEW component
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
     },
 
     'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode){
@@ -278,6 +298,8 @@ Meteor.methods({
         const newRawText = DesignComponentModules.getRawTextFor(newPlainText);
 
         ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText)
-    }
+    },
+
+
 
 });
