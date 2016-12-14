@@ -16,6 +16,7 @@ import ClientAppHeaderServices from '../../../apiClient/apiClientAppHeader.js';
 import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
 import ClientIdentityServices from '../../../apiClient/apiIdentity';
 
+
 // Bootstrap
 import {Alert} from 'react-bootstrap';
 import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
@@ -51,6 +52,14 @@ class AppHeader extends Component {
         ClientAppHeaderServices.toggleViewOption(userContext, viewOptionType, currentOptions, currentViewDataValue);
     }
 
+    onZoomToFeatures(userContext){
+        ClientAppHeaderServices.setViewLevelFeatures(userContext);
+    }
+
+    onZoomToSections(userContext){
+        ClientAppHeaderServices.setViewLevelSections(userContext);
+    }
+
     onGoToDesigns(){
         // Back to Designs view
         ClientAppHeaderServices.setViewDesigns();
@@ -71,8 +80,8 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin();
     }
 
-    onRefreshTestData(viewOptions, userContext, currentProgressDataValue){
-        ClientMashDataServices.updateMashData(viewOptions, userContext, currentProgressDataValue)
+    onRefreshTestSummaryData(userContext){
+        ClientMashDataServices.updateTestSummaryData(userContext, this.state.currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
@@ -156,11 +165,16 @@ class AppHeader extends Component {
         let designsButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
 
+        // View Mode and Zoom buttons
         let viewModeEditButton =
             <Button bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
-
         let viewModeViewButton =
             <Button bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW)}>VIEW</Button>;
+
+        let viewFeatureLevelButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToFeatures(userContext)}>Go to Features</Button>;
+        let viewSectionLevelButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToSections(userContext)}>Go to Sections</Button>;
 
         // View Options Buttons
         let scopeButton =
@@ -189,8 +203,8 @@ class AppHeader extends Component {
         let selectionScreenButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
-        let refreshTestsButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userViewOptions, userContext, currentProgressDataValue)}>Refresh Progress Data</Button>;
+        let refreshTestSummaryButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestSummaryData(userContext)}>Refresh Test Summary</Button>;
 
         let exportToDevButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
@@ -251,10 +265,10 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {refreshTestsButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
+                        {configureScreenButton}
+                        {selectionScreenButton}
+                        {refreshTestSummaryButton}
                         {exportIntegrationButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
@@ -262,6 +276,10 @@ class AppHeader extends Component {
                         <ButtonGroup>
                             {viewModeEditButton}
                             {viewModeViewButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {viewFeatureLevelButton}
+                            {viewSectionLevelButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 headerBottomActionsTwo =

@@ -2,14 +2,16 @@
 
 // Meteor / React Services
 
+// Ultrawide Collections
+import { DesignComponents } from '../collections/design/design_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewOptionType } from '../constants/constants.js';
+import { ViewType, ViewOptionType, ComponentType } from '../constants/constants.js';
 import ClientMashDataServices from '../apiClient/apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
-import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData} from '../redux/actions'
+import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -47,6 +49,63 @@ class ClientAppHeaderServices{
         }
 
         return true;
+    }
+
+    setViewLevelFeatures(userContext){
+
+        // Open everything down to the Feature level - i.e. all Applications and Design Sections and close everything else
+        let componentArray = [];
+
+        if(userContext.designUpdateId === 'NONE'){
+
+            const designVersionOpenComponents = DesignComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+                },
+                {fields: {_id: 1}}
+            );
+
+            designVersionOpenComponents.forEach((component) => {
+                componentArray.push(component._id);
+            });
+
+            store.dispatch(setCurrentUserOpenDesignItems(
+                Meteor.userId(),
+                componentArray,
+                null,
+                true
+            ));
+        }
+    }
+
+    setViewLevelSections(userContext){
+
+        // Open everything down to the Section level - i.e. all Applications open
+        let componentArray = [];
+
+        if(userContext.designUpdateId === 'NONE'){
+
+            const designVersionOpenComponents = DesignComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentType: ComponentType.APPLICATION
+
+                },
+                {fields: {_id: 1}}
+            );
+
+            designVersionOpenComponents.forEach((component) => {
+                componentArray.push(component._id);
+            });
+
+            store.dispatch(setCurrentUserOpenDesignItems(
+                Meteor.userId(),
+                componentArray,
+                null,
+                true
+            ));
+        }
     }
 
     setViewDesigns() {

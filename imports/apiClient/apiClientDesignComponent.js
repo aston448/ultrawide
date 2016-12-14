@@ -596,34 +596,43 @@ class ClientDesignComponentServices{
     // Recursive function to close all children down to the bottom of the tree
     closeChildren(designComponent, currentList){
 
-        let childComponents = DesignComponents.find(
-            {
-                designVersionId: designComponent.designVersionId,
-                componentParentReferenceId: designComponent.componentReferenceId
+        // If component is open close it and move down to children
+        if(currentList.includes(designComponent._id)) {
+
+            let childComponents = DesignComponents.find(
+                {
+                    designVersionId: designComponent.designVersionId,
+                    componentParentReferenceId: designComponent.componentReferenceId
+                }
+            );
+
+            if(childComponents.count() > 0){
+                childComponents.forEach((child) => {
+
+
+
+                        store.dispatch(setCurrentUserOpenDesignItems(
+                            Meteor.userId(),
+                            currentList,
+                            designComponent._id,
+                            false
+                        ));
+
+                        // Recursively call for these children
+                        this.closeChildren(child, currentList)
+
+
+                });
+
+                return true;
+
+            } else {
+                return false;
             }
-        );
-
-        if(childComponents.count() > 0){
-            childComponents.forEach((child) => {
-
-                store.dispatch(setCurrentUserOpenDesignItems(
-                    Meteor.userId(),
-                    currentList,
-                    designComponent._id,
-                    false
-                ));
-
-                // Recursively call for these children
-                this.closeChildren(child, currentList)
-
-
-            });
-
-            return true;
-
         } else {
             return false;
         }
+
     };
 
     // User chose to refresh implementation progress data --------------------------------------------------------------
