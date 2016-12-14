@@ -22,6 +22,7 @@ import '../imports/collections/dev/user_dev_feature_scenarios.js';
 import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
 import '../imports/collections/dev/user_acc_test_mash_data.js';
 import '../imports/collections/dev/user_mod_test_mash_data.js';
+import '../imports/collections/dev/user_dev_test_summary_data.js';
 
 // Modules
 import '../imports/startup/server/fixtures.js';

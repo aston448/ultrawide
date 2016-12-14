@@ -31,6 +31,10 @@ import {setCurrentUserItemContext, updateProgressData, updateUserMessage} from '
 
 class ClientMashDataServices {
 
+    updateTestSummaryData(userContext){
+        Meteor.call('mash.updateTestSummary', userContext);
+    }
+
     // When calling this, ensure that data has been subscribed to
     updateMashData(viewOptions, userContext, currentProgressDataValue){
         // Get the latest DEV data for the Mash

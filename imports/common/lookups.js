@@ -1,4 +1,4 @@
-import {ComponentType, MashStatus, MashTestStatus} from '../constants/constants.js';
+import {ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -51,6 +51,20 @@ class TextLookups {
                 return 'Pass';
             case MashTestStatus.MASH_FAIL:
                 return 'Fail';
+        }
+    };
+
+    featureSummaryStatus(featureSummaryStatus){
+
+        switch(featureSummaryStatus){
+            case FeatureTestSummaryStatus.FEATURE_PASSING_TESTS:
+                return 'Tests are passing in this feature';
+            case FeatureTestSummaryStatus.FEATURE_FAILING_TESTS:
+                return 'Tests are failing in this feature';
+            case FeatureTestSummaryStatus.FEATURE_NO_TESTS:
+                return 'No tests in this feature';
+            default:
+                return 'No tests in this feature';
         }
     }
 

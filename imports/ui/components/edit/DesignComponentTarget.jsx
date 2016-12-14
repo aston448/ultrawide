@@ -43,7 +43,7 @@ class DesignComponentTarget extends Component{
 
     render(){
 
-        const {currentItem, designItem, displayContext, connectDropTarget, isOverCurrent, canDrop} = this.props;
+        const {currentItem, designItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
 
         //console.log("Rendering design component target: " + currentItem.componentName);
 
@@ -56,6 +56,8 @@ class DesignComponentTarget extends Component{
                         designItem={designItem}
                         isDragDropHovering={isOverCurrent && canDrop}
                         displayContext={displayContext}
+                        testSummary={testSummary}
+                        testSummaryData={testSummaryData}
                     />
                 </div>
             )
@@ -67,6 +69,8 @@ class DesignComponentTarget extends Component{
                         designItem={designItem}
                         isDragDropHovering={false}
                         displayContext={displayContext}
+                        testSummary={testSummary}
+                        testSummaryData={testSummaryData}
                     />
                 </div>
             )
@@ -79,7 +83,9 @@ DesignComponentTarget.propTypes = {
     designItem: PropTypes.object.isRequired,
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
-    mode: PropTypes.string.isRequired
+    mode: PropTypes.string.isRequired,
+    testSummary: PropTypes.bool.isRequired,
+    testSummaryData: PropTypes.object
 };
 
 // React DnD ===========================================================================================================

@@ -49,7 +49,7 @@ class DesignSectionsList extends Component {
 
     // A list of top level headings in the design
     renderDesignSections() {
-        const {components, displayContext, view, mode} = this.props;
+        const {components, displayContext, view, mode, testSummary} = this.props;
 
         return components.map((designSection) => {
 
@@ -61,6 +61,7 @@ class DesignSectionsList extends Component {
                     displayContext={displayContext}
                     view={view}
                     mode={mode}
+                    testSummary={testSummary}
                 />
             );
         });
@@ -84,7 +85,8 @@ DesignSectionsList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
-        mode: state.currentViewMode
+        mode: state.currentViewMode,
+        testSummary: state.currentUserViewOptions.designTestSummaryVisible
     }
 }
 

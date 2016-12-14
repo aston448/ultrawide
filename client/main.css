@@ -64,7 +64,7 @@ input {
     width: auto;
     margin: 0;
     min-height: 100%;
-    background: white;
+    background: transparent;
     padding: 0;
 }
 
@@ -308,6 +308,7 @@ input {
     margin: 0;
     padding: 0;
     width: auto;
+    background-color: transparent;
 }
 
 .close-grid-progress{
@@ -322,6 +323,7 @@ input {
 .close-col{
     margin: 0;
     padding: 0;
+    background-color: transparent;
 }
 
 .design-item-header{
@@ -570,7 +572,7 @@ input {
 }
 
 .item-indent-scenario{
-    width: 40px;
+    width: 30px;
 }
 
 .step-type-col{
@@ -942,6 +944,63 @@ input {
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  11px;
     background-color: transparent;
+}
+
+.test-summary-text{
+    margin: 0;
+    padding: 0 5px 0 10px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  10px;
+    background-color: transparent;
+}
+
+.test-summary-result{
+    margin: 0;
+    padding: 0 5px 0 10px;
+    border: none;
+    font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
+    font-size:  10px;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.scenario-test-row-pass{
+    margin: 0 0 0 0px;
+    border: 1px solid lightgrey;
+    background-color: #EEFFEE;
+}
+
+.scenario-test-row-fail{
+    margin: 0 0 0 0px;
+    border: 1px solid lightgrey;
+    background-color: #FFEEEE;
+}
+
+.scenario-test-row-untested{
+    margin: 0 0 0 0px;
+    border: 1px solid lightgrey;
+    background-color: #F9F9F9;
+}
+
+.non-summary-row{
+    background-color: transparent;
+}
+
+.feature-no-highlight{
+    color: darkgrey;
+}
+
+.feature-highlight-fail{
+    color: red;
+}
+
+.feature-highlight-pass{
+    color: green;
+}
+
+.feature-highlight-no-test{
+    color: darkblue;
 }
 
 .mash-linked {

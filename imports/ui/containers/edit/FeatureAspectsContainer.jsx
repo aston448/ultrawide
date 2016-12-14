@@ -50,7 +50,7 @@ class FeatureAspectsList extends Component {
 
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
-        const {components, displayContext, view, mode} = this.props;
+        const {components, displayContext, view, mode, testSummary} = this.props;
 
         if (components) {
             return components.map((featureAspect) => {
@@ -63,6 +63,7 @@ class FeatureAspectsList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
+                        testSummary={testSummary}
                     />
                 );
             });
@@ -89,7 +90,8 @@ FeatureAspectsList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
-        mode: state.currentViewMode
+        mode: state.currentViewMode,
+        testSummary: state.currentUserViewOptions.designTestSummaryVisible
     }
 }
 

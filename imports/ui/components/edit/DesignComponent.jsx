@@ -69,6 +69,7 @@ class DesignComponent extends Component{
                     nextState.highlighted === this.state.highlighted &&
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
+                    nextProps.testSummary === this.props.testSummary &&
                     nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
                     nextProps.openDesignItems.length === this.props.openDesignItems.length &&
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length &&
@@ -117,6 +118,7 @@ class DesignComponent extends Component{
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length
                 );
         }
+
     }
 
     componentDidMount(){
@@ -306,7 +308,7 @@ class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext, currentProgressDataValue, currentViewDataValue} = this.props;
+        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, currentProgressDataValue, currentViewDataValue} = this.props;
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -338,6 +340,8 @@ class DesignComponent extends Component{
                     view={view}
                     displayContext={displayContext}
                     userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
                     isOpen={this.state.open}
                     currentProgressDataValue={currentProgressDataValue}
                     //currentViewDataValue={currentViewDataValue}
@@ -410,6 +414,7 @@ class DesignComponent extends Component{
                     mode={mode}
                     displayContext={displayContext}
                     view={view}
+                    testSummary={testSummary}
                 />;
 
             let scenariosContainer =
@@ -652,7 +657,9 @@ DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
     designItem: PropTypes.object.isRequired,
     isDragDropHovering: PropTypes.bool.isRequired,
-    displayContext: PropTypes.string.isRequired
+    displayContext: PropTypes.string.isRequired,
+    testSummary: PropTypes.bool.isRequired,
+    testSummaryData: PropTypes.object
 };
 
 
@@ -662,6 +669,7 @@ function mapStateToProps(state) {
         mode:                       state.currentViewMode,
         view:                       state.currentAppView,
         userContext:                state.currentUserItemContext,
+        // viewOptions:                state.currentUserViewOptions,
         openDesignItems:            state.currentUserOpenDesignItems,
         openDesignUpdateItems:      state.currentUserOpenDesignUpdateItems,
         openWorkPackageItems:       state.currentUserOpenWorkPackageItems,

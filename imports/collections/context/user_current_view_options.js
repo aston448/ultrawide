@@ -9,9 +9,7 @@ let Schema = new SimpleSchema({
     userId:                     {type: String},                             // Meteor user id
     // Base Design Screen - Design always visible
     designDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
-    designAccTestsVisible:      {type: Boolean, defaultValue: false},       // Acceptance Tests view
-    designIntTestsVisible:      {type: Boolean, defaultValue: false},       // Integration Tests view
-    designModTestsVisible:      {type: Boolean, defaultValue: false},       // Module Tests view
+    designTestSummaryVisible:   {type: Boolean, defaultValue: false},       // Test Summary add-on
     designDomainDictVisible:    {type: Boolean, defaultValue: true},        // Domain Dictionary pane
     // Design Update Screen - Scope and Design always visible
     updateDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane

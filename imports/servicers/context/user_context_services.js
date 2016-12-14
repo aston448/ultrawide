@@ -53,9 +53,7 @@ class UserContextServices{
             UserCurrentViewOptions.insert({
                 userId:                         userViewOptions.userId,
                 designDetailsVisible:           userViewOptions.designDetailsVisible,
-                designAccTestsVisible:          userViewOptions.designAccTestsVisible,
-                designIntTestsVisible:          userViewOptions.designIntTestsVisible,
-                designModTestsVisible:          userViewOptions.designModTestsVisible,
+                designTestSummaryVisible:       userViewOptions.designTestSummaryVisible,
                 designDomainDictVisible:        userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:           userViewOptions.updateDetailsVisible,

@@ -49,11 +49,13 @@ class ScenariosList extends Component {
 
     // A list of Scenarios in a Feature or Feature Aspect
     renderScenarios() {
-        const {components, displayContext, view, mode} = this.props;
+        const {components, displayContext, view, mode, testSummary} = this.props;
 
         if(components)
         {
             return components.map((scenario) => {
+
+                let testSummaryData = ClientContainerServices.getTestSummaryData(scenario);
 
                 return (
                     <DesignComponentTarget
@@ -63,6 +65,8 @@ class ScenariosList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
+                        testSummary={testSummary}
+                        testSummaryData={testSummaryData}
                     />
                 );
             });
@@ -89,7 +93,8 @@ ScenariosList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
-        mode: state.currentViewMode
+        mode: state.currentViewMode,
+        testSummary: state.currentUserViewOptions.designTestSummaryVisible
     }
 }
 

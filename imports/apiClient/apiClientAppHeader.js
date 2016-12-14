@@ -4,7 +4,8 @@
 
 
 // Ultrawide Services
-import {ViewType} from '../constants/constants.js'
+import { ViewType, ViewOptionType } from '../constants/constants.js';
+import ClientMashDataServices from '../apiClient/apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -31,7 +32,7 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    toggleViewOption(optionType, currentOptions, currentDataValue){
+    toggleViewOption(userContext, optionType, currentOptions, currentDataValue){
         // Toggles a particular view option
         let newOptions = currentOptions;
 
@@ -39,6 +40,11 @@ class ClientAppHeaderServices{
 
         store.dispatch(setCurrentUserViewOptions(newOptions, true));
         store.dispatch(updateViewOptionsData(!currentDataValue));
+
+        if(optionType === ViewOptionType.DESIGN_TEST_SUMMARY && newOptions[optionType]){
+            // Summary is being switched on
+            ClientMashDataServices.updateTestSummaryData(userContext);
+        }
 
         return true;
     }

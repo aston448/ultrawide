@@ -50,10 +50,14 @@ class FeaturesList extends Component {
 
     // A list of Features in a Design Section
     renderFeatures() {
-        const {components, displayContext, view, mode} = this.props;
+        const {components, displayContext, view, mode, testSummary} = this.props;
 
         if(components) {
             return components.map((feature) => {
+
+                let testSummaryData = ClientContainerServices.getTestSummaryFeatureData(feature);
+
+                //console.log("Feature Test Summary data for feature " + feature.componentName + " is " + testSummaryData);
 
                 return (
                     <DesignComponentTarget
@@ -63,6 +67,8 @@ class FeaturesList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
+                        testSummary={testSummary}
+                        testSummaryData={testSummaryData}
                     />
                 );
             });
@@ -89,7 +95,8 @@ FeaturesList.propTypes = {
 function mapStateToProps(state) {
     return {
         view: state.currentAppView,
-        mode: state.currentViewMode
+        mode: state.currentViewMode,
+        testSummary: state.currentUserViewOptions.designTestSummaryVisible
     }
 }
 

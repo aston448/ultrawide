@@ -46,9 +46,9 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode);
     }
 
-    onToggleViewOption(viewOptionType, currentOptions, currentViewDataValue){
+    onToggleViewOption(userContext, viewOptionType, currentOptions, currentViewDataValue){
         // Show / hide Domain Dictionary
-        ClientAppHeaderServices.toggleViewOption(viewOptionType, currentOptions, currentViewDataValue);
+        ClientAppHeaderServices.toggleViewOption(userContext, viewOptionType, currentOptions, currentViewDataValue);
     }
 
     onGoToDesigns(){
@@ -108,6 +108,7 @@ class AppHeader extends Component {
         let headerUserInfo = '';
 
         let detailsOption= '';
+        let testSummaryOption = '';
         let accTestOption = '';
         let intTestOption = '';
         let modTestOption = '';
@@ -118,9 +119,7 @@ class AppHeader extends Component {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
-                accTestOption = ViewOptionType.DESIGN_ACC_TESTS;
-                intTestOption = ViewOptionType.DESIGN_INT_TESTS;
-                modTestOption = ViewOptionType.DESIGN_MOD_TESTS;
+                testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 dictOption = ViewOptionType.DESIGN_DICT;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -169,17 +168,19 @@ class AppHeader extends Component {
         let designButton =
             <Button bsSize="xs" bsStyle={'success'}>Design</Button>;
         let detailsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
+        let testSummaryButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
         let accTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(accTestOption, userViewOptions, currentViewDataValue)}>Acceptance Tests</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acceptance Tests</Button>;
         let intTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(intTestOption, userViewOptions, currentViewDataValue)}>Integration Tests</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, intTestOption, userViewOptions, currentViewDataValue)}>Integration Tests</Button>;
         let modTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(modTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(modTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(modTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, modTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
         let filesButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
         let domainDictionaryButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
 
 
         let configureScreenButton =
@@ -211,7 +212,7 @@ class AppHeader extends Component {
         let headerMessage =
             <Alert bsStyle={headerInfoStyle}>
                 {message.messageText}
-            </Alert>
+            </Alert>;
 
         let roleClass = '';
         switch(userRole){
@@ -268,10 +269,10 @@ class AppHeader extends Component {
                         <ButtonGroup>
                             {designButton}
                             {detailsButton}
-                            {accTestsButton}
-                            {intTestsButton}
-                            {modTestsButton}
                             {domainDictionaryButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {testSummaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;
@@ -289,10 +290,10 @@ class AppHeader extends Component {
                         <ButtonGroup>
                             {designButton}
                             {detailsButton}
-                            {accTestsButton}
-                            {intTestsButton}
-                            {modTestsButton}
                             {domainDictionaryButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {testSummaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;

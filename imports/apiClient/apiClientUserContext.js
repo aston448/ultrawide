@@ -289,9 +289,7 @@ class ClientUserContextServices {
             const viewOptions = {
                 userId:                     userId,
                 designDetailsVisible:       userViewOptions.designDetailsVisible,
-                designAccTestsVisible:      userViewOptions.designAccTestsVisible,
-                designIntTestsVisible:      userViewOptions.designIntTestsVisible,
-                designModTestsVisible:      userViewOptions.designModTestsVisible,
+                designTestSummaryVisible:   userViewOptions.designTestSummaryVisible,
                 designDomainDictVisible:    userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       userViewOptions.updateDetailsVisible,
@@ -318,9 +316,7 @@ class ClientUserContextServices {
             const defaultOptions = {
                 userId:                     userId,
                 designDetailsVisible:       true,
-                designAccTestsVisible:      false,
-                designIntTestsVisible:      false,
-                designModTestsVisible:      false,
+                designTestSummaryVisible:   false,
                 designDomainDictVisible:    true,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       true,

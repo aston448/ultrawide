@@ -37,9 +37,7 @@ export const ViewMode = {
 
 export const ViewOptionType = {
     DESIGN_DETAILS:     'designDetailsVisible',
-    DESIGN_ACC_TESTS:   'designAccTestsVisible',
-    DESIGN_INT_TESTS:   'designIntTestsVisible',
-    DESIGN_MOD_TESTS:   'designModTestsVisible',
+    DESIGN_TEST_SUMMARY:'designTestSummaryVisible',
     DESIGN_DICT:        'designDomainDictVisible',
     UPDATE_DETAILS:     'updateDetailsVisible',
     UPDATE_ACC_TESTS:   'updateAccTestsVisible',
@@ -225,6 +223,16 @@ export const MashTestStatus = {
     MASH_PASS:              'mash-pass',
     MASH_FAIL:              'mash-fail',
 };
+
+export const FeatureTestSummaryStatus = {
+    FEATURE_FAILING_TESTS:      'feature-failing-tests',
+    FEATURE_PASSING_TESTS:      'feature-passing-tests',
+    FEATURE_NO_TESTS:           'feature-no_tests',
+    FEATURE_NO_HIGHLIGHT:       'feature-no-highlight',
+    FEATURE_HIGHLIGHT_FAIL:     'feature-highlight-fail',
+    FEATURE_HIGHLIGHT_PASS:     'feature-highlight-pass',
+    FEATURE_HIGHLIGHT_NO_TEST:  'feature-highlight-no-test'
+}
 
 export const MessageType = {
     INFO:       'info',

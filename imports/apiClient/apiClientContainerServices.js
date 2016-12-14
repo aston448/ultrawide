@@ -21,6 +21,7 @@ import { UserDevFeatures }          from '../collections/dev/user_dev_features.j
 import { UserAccTestMashData }      from '../collections/dev/user_acc_test_mash_data.js';
 import { UserIntTestMashData }      from '../collections/dev/user_int_test_mash_data.js';
 import { UserModTestMashData }      from '../collections/dev/user_mod_test_mash_data.js';
+import { UserDevTestSummaryData }   from '../collections/dev/user_dev_test_summary_data.js';
 
 // Ultrawide GUI Components
 
@@ -91,6 +92,7 @@ class ClientContainerServices{
         const atHandle = Meteor.subscribe('userAccTestMashData');
         const itHandle = Meteor.subscribe('userIntTestMashData');
         const mtHandle = Meteor.subscribe('userModTestMashData');
+        const tsHandle = Meteor.subscribe('userDevTestSummaryData');
 
         const loading = (
             !dfHandle.ready()   ||
@@ -99,7 +101,8 @@ class ClientContainerServices{
             !ssHandle.ready()   ||
             !atHandle.ready()   ||
             !itHandle.ready()   ||
-            !mtHandle.ready()
+            !mtHandle.ready()   ||
+            !tsHandle.ready()
         );
 
         return loading;
@@ -1350,6 +1353,18 @@ class ClientContainerServices{
             designFiles: designFiles,
             unknownFiles: unknownFiles
         }
+
+    };
+
+    getTestSummaryData(scenario){
+
+        return UserDevTestSummaryData.findOne({scenarioReferenceId: scenario.componentReferenceId});
+
+    }
+
+    getTestSummaryFeatureData(feature){
+
+        return UserDevTestSummaryData.findOne({scenarioReferenceId: 'NONE', featureReferenceId: feature.componentReferenceId});
 
     }
 

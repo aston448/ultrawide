@@ -50,7 +50,7 @@ class DesignApplicationsList extends Component {
     }
 
     // A list of top level applications in the design / design update
-    renderApplications(applications, context, view, mode) {
+    renderApplications(applications, context, view, mode, testSummary) {
         return applications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -60,6 +60,7 @@ class DesignApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
+                    testSummary={testSummary}
                 />
             );
 
@@ -122,9 +123,6 @@ class DesignApplicationsList extends Component {
         let col1width = 6;
         let col2width = 6;
         let col3width = 6;
-        let col4width = 6;
-        let col5width = 6;
-        let col6width = 6;
 
         // Details
         if(viewOptions.designDetailsVisible){
@@ -140,102 +138,6 @@ class DesignApplicationsList extends Component {
             displayedItems++;
         }
 
-        // Acceptance Tests
-        if(viewOptions.designAccTestsVisible){
-            acceptanceTests =
-                <Panel header="Acceptance Test Implementation" className="panel-update panel-update-body">
-                    <DesignDevFeatureMashContainer params={{
-                        userContext: userContext
-                    }}/>
-                </Panel>;
-
-            if(displayedItems == 2){
-                // There are now 3 cols so change widths
-                col1width = 4;
-                col2width = 4;
-                col3width = 4;
-                col4width = 4;
-                col5width = 4;
-                col6width = 4;
-            }
-
-            displayedItems++;
-        }
-
-        // Integration Tests
-        if(viewOptions.designIntTestsVisible){
-            integrationTests =
-                <Panel header="Integration Test Implementation" className="panel-update panel-update-body">
-                    <IntegrationTestFeatureMashContainer params={{
-                        userContext: userContext
-                    }}/>
-                </Panel>;
-
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    break;
-            }
-
-            displayedItems++;
-        }
-
-        // Unit Tests
-        if(viewOptions.designModTestsVisible){
-            moduleTests =
-                <Panel header="Module Test Implementation" className="panel-update panel-update-body">
-                    <DesignDevUnitMashContainer params={{
-                        userContext: userContext
-                    }}/>
-                </Panel>;
-
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    break;
-                case 4:
-                    // There are now 5 cols so change widths
-                    col1width = 2;
-                    col2width = 2;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 2;
-                    col6width = 2;
-                    break;
-            }
-            displayedItems++;
-        }
-
         // Domain Dictionary
         if(viewOptions.designDomainDictVisible) {
             domainDictionary =
@@ -244,45 +146,41 @@ class DesignApplicationsList extends Component {
                     designVersionId: userContext.designVersionId
                 }}/>;
 
+            if(displayedItems == 2){
+                // There are now 3 cols so change widths
+                col1width = 4;
+                col2width = 4;
+                col3width = 4;
+            }
+
+            displayedItems++;
+        }
+
+        // Test Summary - this actually just makes col 1 wider
+        if(viewOptions.designTestSummaryVisible){
+
             switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
+                case 1:
+                    // Col 1 gets bigger
+                    col1width = 8;
                     col2width = 4;
                     col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
+                    break;
+                case 2:
+                    // Col 1 gets bigger
+                    col1width = 8;
+                    col2width = 4;
+                    col3width = 4;
                     break;
                 case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
+                    // Col 1 gets bigger
+                    col1width = 6;
                     col2width = 3;
                     col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    break;
-                case 4:
-                    // There are now 5 cols so change widths
-                    col1width = 2;
-                    col2width = 2;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 2;
-                    col6width = 2;
-                    break;
-                case 5:
-                    // There are now 6 cols so change widths
-                    col1width = 2;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 2;
                     break;
             }
         }
+
 
         // Create the layout depending on the current view...
         if(baseApplications) {
@@ -290,7 +188,7 @@ class DesignApplicationsList extends Component {
             // Root of New Design Editor
             let baseEditorComponent =
                 <div className="design-editor">
-                    {this.renderApplications(baseApplications, displayContext, view, mode)}
+                    {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
                     {addComponent}
                 </div>;
 
@@ -302,7 +200,6 @@ class DesignApplicationsList extends Component {
 
 
             // Optional display columns
-
             let col2 = '';
             if(viewOptions.designDetailsVisible){
                 col2 =
@@ -311,34 +208,11 @@ class DesignApplicationsList extends Component {
                     </Col>;
             }
 
+
             let col3 = '';
-            if(viewOptions.designAccTestsVisible){
+            if(viewOptions.designDomainDictVisible){
                 col3 =
                     <Col md={col3width} className="scroll-col">
-                        {acceptanceTests}
-                    </Col>;
-            }
-
-            let col4 = '';
-            if(viewOptions.designIntTestsVisible){
-                col4 =
-                    <Col md={col4width} className="scroll-col">
-                        {integrationTests}
-                    </Col>;
-            }
-
-            let col5 = '';
-            if(viewOptions.designModTestsVisible){
-                col5 =
-                    <Col md={col5width} className="scroll-col">
-                        {moduleTests}
-                    </Col>;
-            }
-
-            let col6 = '';
-            if(viewOptions.designDomainDictVisible){
-                col6 =
-                    <Col md={col6width} className="scroll-col">
                         {domainDictionary}
                     </Col>;
             }
@@ -351,9 +225,6 @@ class DesignApplicationsList extends Component {
                         {col1}
                         {col2}
                         {col3}
-                        {col4}
-                        {col5}
-                        {col6}
                     </Row>
                 </Grid>;
 

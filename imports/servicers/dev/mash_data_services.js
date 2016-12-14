@@ -1282,17 +1282,17 @@ class MashDataServices{
 
     updateTestData(userContext, viewOptions){
 
-        if(viewOptions.designAccTestsVisible || viewOptions.devAccTestsVisible){
-            this.updateAcceptanceTestData(userContext);
-        }
-
-        if(viewOptions.designIntTestsVisible || viewOptions.devIntTestsVisible){
-            IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
-        }
-
-        if(viewOptions.designModTestsVisible || viewOptions.devModTestsVisible){
-            ModuleTestServices.getModuleTestResults('METEOR_MOCHA', userContext);
-        }
+        // if(viewOptions.designAccTestsVisible || viewOptions.devAccTestsVisible){
+        //     this.updateAcceptanceTestData(userContext);
+        // }
+        //
+        // if(viewOptions.designIntTestsVisible || viewOptions.devIntTestsVisible){
+        //     IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
+        // }
+        //
+        // if(viewOptions.designModTestsVisible || viewOptions.devModTestsVisible){
+        //     ModuleTestServices.getModuleTestResults('METEOR_MOCHA', userContext);
+        // }
     }
 
     updateAcceptanceTestData(userContext){

@@ -7,7 +7,9 @@ import React, { Component, PropTypes} from 'react';
 
 
 // Ultrawide GUI Components
-import ProgressIndicator from '../common/ProgressIndicator.jsx';
+import ProgressIndicator    from '../common/ProgressIndicator.jsx';
+import TestSummary          from '../dev/TestSummary.jsx';
+import FeatureTestSummary   from '../dev/FeatureTestSummary.jsx';
 
 // Ultrawide Services
 
@@ -16,7 +18,7 @@ import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDe
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus} from '../../../constants/constants.js';
 import {getComponentClass, log} from '../../../common/utils.js';
 
 // Bootstrap
@@ -24,6 +26,7 @@ import {Checkbox}   from 'react-bootstrap';
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon}  from 'react-bootstrap';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 
@@ -100,6 +103,7 @@ class DesignComponentHeader extends Component{
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
                     nextState.inScope === this.state.inScope &&
+                    nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen &&
                     nextProps.currentItem.componentName === this.props.currentItem.componentName &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
@@ -188,9 +192,9 @@ class DesignComponentHeader extends Component{
                     this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
                 }
 
-                if(newProps.currentProgressDataValue != this.props.currentProgressDataValue) {
-                    this.getProgressData(newProps.currentItem, newProps.userContext, newProps.view);
-                }
+                // if(newProps.currentProgressDataValue != this.props.currentProgressDataValue) {
+                //     this.getProgressData(newProps.currentItem, newProps.userContext, newProps.view);
+                // }
 
                 break;
 
@@ -524,7 +528,7 @@ class DesignComponentHeader extends Component{
 
     // Render the header of the design component - has tools in it depending on context
     render(){
-        const {currentItem, designItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, isOpen} = this.props;
+        const {currentItem, designItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         // TODO - add all the tooltips required
         const tooltipEdit = (
@@ -752,20 +756,20 @@ class DesignComponentHeader extends Component{
                                 </div>)
                             }
                         </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            <ProgressIndicator
-                                indicatorType="IMPL"
-                                componentType={currentItem.componentType}
-                                progressData={this.state.progressData}
-                            />
-                        </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            <ProgressIndicator
-                                indicatorType="TEST"
-                                componentType={currentItem.componentType}
-                                progressData={this.state.progressData}
-                            />
-                        </InputGroup.Addon>
+                        {/*<InputGroup.Addon>*/}
+                            {/*<ProgressIndicator*/}
+                                {/*indicatorType="IMPL"*/}
+                                {/*componentType={currentItem.componentType}*/}
+                                {/*progressData={this.state.progressData}*/}
+                            {/*/>*/}
+                        {/*</InputGroup.Addon>*/}
+                        {/*<InputGroup.Addon>*/}
+                            {/*<ProgressIndicator*/}
+                                {/*indicatorType="TEST"*/}
+                                {/*componentType={currentItem.componentType}*/}
+                                {/*progressData={this.state.progressData}*/}
+                            {/*/>*/}
+                        {/*</InputGroup.Addon>*/}
                     </InputGroup>
                 </div>
             );
@@ -817,19 +821,21 @@ class DesignComponentHeader extends Component{
             inScope
         );
 
+        let designComponentElement = '';
+
         switch (displayContext){
             case DisplayContext.WP_SCOPE:
                 // All WP scope items are checkable
-                return (headerWithCheckbox);
+                designComponentElement = headerWithCheckbox;
                 break;
             case DisplayContext.UPDATE_SCOPE:
                 // Component displayed as part of Scope Selection
                 if(currentItem.isScopable) {
                     // Scope selectable Item
-                    return (headerWithCheckbox);
+                    designComponentElement = headerWithCheckbox;
                 } else {
                     // Scope non selectable Item
-                    return(viewOnlyScopeHeader);
+                    designComponentElement = viewOnlyScopeHeader;
                 }
                 break;
             case DisplayContext.BASE_VIEW:
@@ -837,7 +843,7 @@ class DesignComponentHeader extends Component{
             case DisplayContext.WP_VIEW:
             case DisplayContext.DEV_DESIGN:
                 // View only
-                return(viewOnlyHeader);
+                designComponentElement = viewOnlyHeader;
                 break;
             case DisplayContext.UPDATE_EDIT:
             case DisplayContext.BASE_EDIT:
@@ -845,7 +851,8 @@ class DesignComponentHeader extends Component{
                 switch (mode){
                     case  ViewMode.MODE_VIEW:
                         // View only
-                        return(viewOnlyHeader);
+                        designComponentElement = viewOnlyHeader;
+                        break;
 
                     case ViewMode.MODE_EDIT:
                         // Only editable if in scope for an update.  For new design all is in scope.
@@ -853,19 +860,102 @@ class DesignComponentHeader extends Component{
                             // Editable component
                             if (this.state.editable  && inScope) {
                                 // Being edited now...
-                                return (editingHeader);
+                                designComponentElement = editingHeader;
 
                             } else {
                                 // Not being edited now
-                                return (draggableHeader);
+                                designComponentElement = draggableHeader;
                             }
                         } else {
                             // Item is out of scope so cannot be edited or dragged
-                            return(viewOnlyHeader);
+                            designComponentElement = viewOnlyHeader;
                         }
+                        break;
                 }
                 break;
         }
+
+        // Finally, are we displaying the test summary as well as the design component?
+        if(testSummary){
+
+            switch(currentItem.componentType){
+
+                case ComponentType.FEATURE:
+                    let featureRowClass = 'scenario-test-row-untested';
+
+                    if(testSummaryData) {
+                        // Any failures at all it's a fail
+                        if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                            featureRowClass = 'scenario-test-row-fail'
+                        } else {
+                            // No failures so any passes its a pass for now
+                            if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                                featureRowClass = 'scenario-test-row-pass'
+                            }
+                        }
+                    }
+
+                    return(
+                        <Grid>
+                            <Row className={featureRowClass}>
+                                <Col md={8} className="close-col">
+                                    {designComponentElement}
+                                </Col>
+                                <Col md={4} className="close-col">
+                                    <FeatureTestSummary
+                                        testSummaryData={testSummaryData}
+                                    />
+                                </Col>
+                            </Row>
+                        </Grid>
+                    );
+                    break;
+
+                case ComponentType.SCENARIO:
+                    let rowClass = 'scenario-test-row-untested';
+
+                    // Any failures at all it's a fail
+                    if(testSummaryData.accTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.modTestFailCount > 0){
+                        rowClass = 'scenario-test-row-fail'
+                    } else {
+                        // No failures so any passes its a pass for now
+                        if(testSummaryData.accTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intTestStatus === MashTestStatus.MASH_PASS || testSummaryData.modTestPassCount > 0){
+                            rowClass = 'scenario-test-row-pass'
+                        }
+                    }
+
+                    return(
+                        <Grid>
+                            <Row className={rowClass}>
+                                <Col md={8} className="close-col">
+                                    {designComponentElement}
+                                </Col>
+                                <Col md={4} className="close-col">
+                                    <TestSummary
+                                        testSummaryData={testSummaryData}
+                                    />
+                                </Col>
+                            </Row>
+                        </Grid>
+                    );
+                    break;
+                default:
+                    return(
+                        <Grid>
+                            <Row className="non-summary-row">
+                                <Col md={8} className="close-col">
+                                    {designComponentElement}
+                                </Col>
+                                <Col md={4} className="close-col">
+                                </Col>
+                            </Row>
+                        </Grid>
+                    );
+            }
+        } else {
+            return(designComponentElement);
+        }
+
     }
 }
 
@@ -880,6 +970,8 @@ DesignComponentHeader.propTypes = {
     view: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
     userContext: PropTypes.object.isRequired,
+    testSummary: PropTypes.bool.isRequired,
+    testSummaryData: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
     //currentViewDataValue: PropTypes.bool.isRequired,
     currentProgressDataValue: PropTypes.bool.isRequired

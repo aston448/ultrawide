@@ -139,7 +139,7 @@ class DevApplicationsList extends Component {
         }
 
         // Unit Tests
-        if(viewOptions.devUnitTestsVisible){
+        if(viewOptions.devModTestsVisible){
             unitTests =
                 <Panel header="Module Test Implementation" className="panel-update panel-update-body">
                     <DesignDevUnitMashContainer params={{

@@ -49,10 +49,10 @@ class ChimpMochaTestServices{
 
             // Return Standard Data ------------------------------------------------------------------------------------
 
-            let returnData = [];
+            let returnData = new Mongo.Collection(null);
 
             resultsJson.passes.forEach((test) => {
-                returnData.push(
+                returnData.insert(
                     {
                         testName:           test.title,
                         testFullName:       test.fullTitle,
@@ -66,7 +66,7 @@ class ChimpMochaTestServices{
             });
 
             resultsJson.failures.forEach((test) => {
-                returnData.push(
+                returnData.insert(
                     {
                         testName:           test.title,
                         testFullName:       test.fullTitle,
@@ -80,7 +80,7 @@ class ChimpMochaTestServices{
             });
 
             resultsJson.pending.forEach((test) => {
-                returnData.push(
+                returnData.insert(
                     {
                         testName:           test.title,
                         testFullName:       test.fullTitle,

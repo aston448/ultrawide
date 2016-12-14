@@ -17,6 +17,7 @@ import {getComponentClass}                      from '../../../common/utils.js';
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 
@@ -280,7 +281,7 @@ export default class Narrative extends React.Component {
     }
 
     render() {
-        const {designComponent, wpComponent, mode, displayContext, view} = this.props;
+        const {designComponent, wpComponent, mode, displayContext, view, testSummary} = this.props;
 
         //console.log("Rendering Narrative...");
 
@@ -334,12 +335,12 @@ export default class Narrative extends React.Component {
                             <InputGroup.Addon>
                                 <div className="invisible"><Glyphicon glyph="star"/></div>
                             </InputGroup.Addon>
-                            <InputGroup.Addon>
-                                <div className="invisible"><Glyphicon glyph="star"/></div>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon>
-                                <div className="invisible"><Glyphicon glyph="star"/></div>
-                            </InputGroup.Addon>
+                            {/*<InputGroup.Addon>*/}
+                                {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
+                            {/*</InputGroup.Addon>*/}
+                            {/*<InputGroup.Addon>*/}
+                                {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
+                            {/*</InputGroup.Addon>*/}
                         </InputGroup>
                     </div>;
             } else {
@@ -363,20 +364,34 @@ export default class Narrative extends React.Component {
                         <InputGroup.Addon>
                             <div className="invisible"><Glyphicon glyph="star"/></div>
                         </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            <div className="invisible"><Glyphicon glyph="star"/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            <div className="invisible"><Glyphicon glyph="star"/></div>
-                        </InputGroup.Addon>
+                        {/*<InputGroup.Addon>*/}
+                            {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
+                        {/*</InputGroup.Addon>*/}
+                        {/*<InputGroup.Addon>*/}
+                            {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
+                        {/*</InputGroup.Addon>*/}
                     </InputGroup>;
 
             }
         }
 
-        return (
-            narrativeHtml
-        );
+        // Finally, are we displaying the test summary as well as the design component?
+        if(testSummary){
+            return(
+                <Grid>
+                    <Row>
+                        <Col md={8} className="close-col">
+                            {narrativeHtml}
+                        </Col>
+                        <Col md={4} className="close-col">
+                        </Col>
+                    </Row>
+                </Grid>
+            );
+        } else {
+            return(narrativeHtml);
+        }
+
     }
 }
 
@@ -385,5 +400,6 @@ Narrative.propTypes = {
     wpComponent: PropTypes.object,
     mode: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
-    view: PropTypes.string.isRequired
+    view: PropTypes.string.isRequired,
+    testSummary: PropTypes.bool.isRequired
 };
