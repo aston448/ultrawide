@@ -97,7 +97,14 @@ class TestSummary extends Component {
             )
         } else {
             return(
-                <div className="test-summary-text feature-no-highlight">No Data</div>)
+                <Grid className="close-grid">
+                    <Row>
+                        <Col md={12} className="close-col">
+                            <span className="test-summary-text feature-no-highlight">No data yet - refresh test summary</span>
+                        </Col>
+                    </Row>
+                </Grid>
+            )
         }
 
     }

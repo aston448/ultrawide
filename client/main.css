@@ -967,19 +967,19 @@ input {
 
 .scenario-test-row-pass{
     margin: 0 0 0 0px;
-    border: 1px solid lightgrey;
+    border: 1px solid transparent;
     background-color: #EEFFEE;
 }
 
 .scenario-test-row-fail{
     margin: 0 0 0 0px;
-    border: 1px solid lightgrey;
+    border: 1px solid transparent;
     background-color: #FFEEEE;
 }
 
 .scenario-test-row-untested{
     margin: 0 0 0 0px;
-    border: 1px solid lightgrey;
+    border: 1px solid transparent;
     background-color: #F9F9F9;
 }
 

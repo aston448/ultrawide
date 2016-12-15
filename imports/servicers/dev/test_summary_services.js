@@ -149,7 +149,7 @@ class TestSummaryServices {
 
         designFeatures.forEach((designFeature) =>{
 
-            //console.log("Getting summary data for Feature " + designFeature.componentName);
+            console.log("Getting summary data for Feature " + designFeature.componentName);
 
             let featureScenarios = UserDevTestSummaryData.find({featureReferenceId: designFeature.componentReferenceId}).fetch();
 

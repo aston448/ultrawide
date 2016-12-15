@@ -314,14 +314,15 @@ class DesignComponent extends Component{
 
         // Active component?  For Design Versions and Design Updates it is if the current user component is the Current Item
         // For Work Packages it is if the current user component is the Design Item
+        // Don't highlight if Test Summary being shown to avoid clutter
         let itemStyle = '';
 
         let workPackageItem = (displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.DEV_DESIGN);
 
         if(workPackageItem){
-            itemStyle = (designItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
+            itemStyle = (!testSummary && designItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         } else {
-            itemStyle = (currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
+            itemStyle = (!testSummary && currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         }
 
 

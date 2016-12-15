@@ -81,7 +81,7 @@ class AppHeader extends Component {
     }
 
     onRefreshTestSummaryData(userContext){
-        ClientMashDataServices.updateTestSummaryData(userContext, this.state.currentProgressDataValue)
+        ClientMashDataServices.updateTestSummaryData(userContext, this.props.currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
@@ -298,10 +298,10 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {refreshTestsButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
+                        {configureScreenButton}
+                        {selectionScreenButton}
+                        {refreshTestSummaryButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
