@@ -95,10 +95,14 @@ export default class TextEditor extends React.Component {
         switch(props.view){
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
                 rawText = props.designComponent.componentTextRaw;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 if(props.context === DisplayContext.BASE_VIEW){
                     rawText = props.designComponent.componentTextRaw;
                 } else {
@@ -106,6 +110,9 @@ export default class TextEditor extends React.Component {
                     rawText = props.designComponent.componentTextRawNew;
                 }
                 break;
+
+            default:
+                console.log("Unknown View Type!");
         }
 
         if (rawText) {

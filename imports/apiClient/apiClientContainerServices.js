@@ -236,7 +236,7 @@ class ClientContainerServices{
             return {
                 wpType: WorkPackageType.WP_BASE,
                 workPackages: [],
-                designVersionStatus: ''
+                designVersionStatus: null
             };
         }
     };
@@ -246,33 +246,40 @@ class ClientContainerServices{
 
         //console.log("Looking for Update WPs for DV: " + currentDesignVersionId + " and DU: " + currentDesignUpdateId);
 
-        // No action if design version / update not yet set
-        if (currentDesignVersionId != 'NONE'  && currentDesignUpdateId != 'NONE') {
-            // Get all the design updates available for the selected version
-            const currentWorkPackages = WorkPackages.find(
-                {
-                    designVersionId: currentDesignVersionId,
-                    designUpdateId: currentDesignUpdateId,
-                    workPackageType: WorkPackageType.WP_UPDATE
-                }
-            );
-
+        if(currentDesignVersionId != 'NONE') {
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
 
-            //console.log("Update WPs found: " + currentWorkPackages.count());
+            if (currentDesignUpdateId != 'NONE') {
 
-            return {
-                wpType: WorkPackageType.WP_UPDATE,
-                workPackages: currentWorkPackages.fetch(),
-                designVersionStatus: designVersionStatus
-            };
+                // Get all the WPs available for the selected update
+                const currentWorkPackages = WorkPackages.find(
+                    {
+                        designVersionId: currentDesignVersionId,
+                        designUpdateId: currentDesignUpdateId,
+                        workPackageType: WorkPackageType.WP_UPDATE
+                    }
+                );
+
+                return {
+                    wpType: WorkPackageType.WP_UPDATE,
+                    workPackages: currentWorkPackages.fetch(),
+                    designVersionStatus: designVersionStatus
+                };
+            } else {
+                return {
+                    wpType: WorkPackageType.WP_UPDATE,
+                    workPackages: [],
+                    designVersionStatus: designVersionStatus
+                };
+            }
 
         } else {
+
             return {
                 wpType: WorkPackageType.WP_UPDATE,
                 workPackages: [],
-                designVersionStatus: ''
+                designVersionStatus: null
             };
         }
     };
@@ -601,6 +608,8 @@ class ClientContainerServices{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
 
                 backgroundSteps = FeatureBackgroundSteps.find(
                     {
@@ -624,10 +633,13 @@ class ClientContainerServices{
 
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
                     case DisplayContext.UPDATE_VIEW:
+                    case DisplayContext.WP_VIEW:
                         // Update data wanted
                         backgroundSteps = FeatureBackgroundSteps.find(
                             {
@@ -682,6 +694,9 @@ class ClientContainerServices{
                     parentReferenceId: featureReferenceId,
                     parentInScope: featureInScope
                 };
+
+            default:
+                log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
         }
 
     }
@@ -786,14 +801,16 @@ class ClientContainerServices{
         let currentDesignComponent = null;
         let currentUpdateComponent = null;
 
-        if(userContext) {
+        if(userContext && userContext.designComponentId != 'NONE') {
 
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
+                    console.log("DCT Container: UC Design component is " + userContext.designComponentId);
                     currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+                    console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
                     break;
 
                 case ViewType.DESIGN_UPDATE_EDIT:

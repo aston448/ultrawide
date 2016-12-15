@@ -28,7 +28,7 @@ describe('UC 105 - Unpublish Design Version', function(){
         // Setup
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'gloria', (function(error, result){expect(!error);}));
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
 
         // Execute
         server.call('testDesignVersions.unpublishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
@@ -48,7 +48,7 @@ describe('UC 105 - Unpublish Design Version', function(){
         // Get Designer to publish it...
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'gloria', (function(error, result){expect(!error);}));
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
 
         // See if Developer can unpublish
         // Make sure the design is in the user context
@@ -59,7 +59,7 @@ describe('UC 105 - Unpublish Design Version', function(){
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'hugh', (function(error, result){expect(!error);}));
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'hugh', (function(error, result){expect(!error);}));
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'hugh', (function(error, result){expect(!error);}));
 
         // See if Manager can unpublish
         // Make sure the design is in the user context
@@ -70,7 +70,7 @@ describe('UC 105 - Unpublish Design Version', function(){
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'miles', (function(error, result){expect(!error);}));
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'miles', (function(error, result){expect(!error);}));
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'miles', (function(error, result){expect(!error);}));
     });
 
     it('A Design Version that has Design Updates cannot be unpublished');

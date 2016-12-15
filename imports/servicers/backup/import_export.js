@@ -511,6 +511,8 @@ class ImpExServices{
                 }
             }
         });
+
+        return designUpdatesMapping;
     };
 
     restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, hasDesignUpdates){
@@ -611,39 +613,44 @@ class ImpExServices{
 
         let designUpdateComponentsMapping = [];
 
-        newDesignUpdateComponentData.forEach((updateComponent) => {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
+        if(designsMapping && designVersionsMapping && designUpdatesMapping) {
 
-            let designId = getIdFromMap(designsMapping, updateComponent.designId);
-            let designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
-            let designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
+            newDesignUpdateComponentData.forEach((updateComponent) => {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
 
-            let designUpdateComponentId = DesignUpdateComponentServices.importComponent(
-                designId,
-                designVersionId,
-                designUpdateId,
-                updateComponent
-            );
+                let designId = getIdFromMap(designsMapping, updateComponent.designId);
+                let designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
+                let designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
 
-            if (designUpdateComponentId) {
-                // Map old component ids to new
-                designUpdateComponentsMapping.push({
-                    oldId: updateComponent._id,
-                    newId: designUpdateComponentId
-                });
-            }
+                let designUpdateComponentId = DesignUpdateComponentServices.importComponent(
+                    designId,
+                    designVersionId,
+                    designUpdateId,
+                    updateComponent
+                );
 
-        });
+                if (designUpdateComponentId) {
+                    // Map old component ids to new
+                    designUpdateComponentsMapping.push({
+                        oldId: updateComponent._id,
+                        newId: designUpdateComponentId
+                    });
+                }
 
-        // Update Design Update Component parents for the new design update components
-        designUpdateComponentsMapping.forEach((updateComponent) => {
-            DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
-        });
+            });
 
-        // Make sure Design is no longer removable
-        designsMapping.forEach((designMap) => {
-            DesignServices.setRemovable(designMap.newId);
-        });
+            // Update Design Update Component parents for the new design update components
+            designUpdateComponentsMapping.forEach((updateComponent) => {
+                DesignUpdateComponentServices.importRestoreParent(updateComponent.newId, designUpdateComponentsMapping)
+            });
+
+            // Make sure Design is no longer removable
+            designsMapping.forEach((designMap) => {
+                DesignServices.setRemovable(designMap.newId);
+            });
+        } else {
+            log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {}", designsMapping, designVersionsMapping, designUpdatesMapping);
+        }
 
         return designUpdateComponentsMapping;
     };

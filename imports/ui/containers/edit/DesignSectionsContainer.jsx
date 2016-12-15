@@ -13,7 +13,7 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 // Ultrawide Services
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
-import { ComponentType, DisplayContext } from '../../../constants/constants.js';
+import { ViewType, ComponentType, DisplayContext } from '../../../constants/constants.js';
 
 // Bootstrap
 
@@ -49,7 +49,25 @@ class DesignSectionsList extends Component {
 
     // A list of top level headings in the design
     renderDesignSections() {
-        const {components, displayContext, view, mode, testSummary} = this.props;
+        const {components, displayContext, view, mode, viewOptions} = this.props;
+
+        // Get the appropriate test summary flag for the view
+        let testSummary = false;
+
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+                testSummary = viewOptions.designTestSummaryVisible;
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
+                testSummary = viewOptions.updateTestSummaryVisible;
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                testSummary = viewOptions.devTestSummaryVisible;
+                break;
+        }
 
         return components.map((designSection) => {
 
@@ -86,7 +104,7 @@ function mapStateToProps(state) {
     return {
         view: state.currentAppView,
         mode: state.currentViewMode,
-        testSummary: state.currentUserViewOptions.designTestSummaryVisible
+        viewOptions: state.currentUserViewOptions
     }
 }
 

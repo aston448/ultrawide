@@ -1,10 +1,43 @@
-import {ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus} from '../constants/constants.js';
+import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
 // Could be changed to source from stored data ...
 
 class TextLookups {
+
+    viewText(view){
+
+        switch(view){
+            case ViewType.ADMIN:
+                return 'ADMINISTRATION';
+            case ViewType.AUTHORISE:
+                return 'LOGIN';
+            case ViewType.CONFIGURE:
+                return 'CONFIGURATION';
+            case ViewType.DESIGN_NEW_EDIT:
+                return 'DESIGN EDITOR';
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+                return 'DESIGN VIEW';
+            case ViewType.DESIGN_UPDATE_EDIT:
+                return 'DESIGN UPDATE EDITOR';
+            case ViewType.DESIGN_UPDATE_VIEW:
+                return 'DESIGN UPDATE VIEW';
+            case ViewType.DESIGNS:
+                return 'SELECT DESIGN';
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                return 'WORK PACKAGE IMPLEMENTATION';
+            case ViewType.SELECT:
+                return 'ITEM SELECTION';
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                return 'WORK PACKAGE SCOPING';
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                return 'WORK PACKAGE VIEW';
+        }
+    }
 
     componentTypeName(componentType){
 

@@ -41,15 +41,24 @@ class DesignUpdatesList extends Component {
 
     }
 
-    renderDesignUpdatesList(){
-        return this.props.designUpdates.map((designUpdate) => {
-            return (
-                <DesignUpdate
-                    key={designUpdate._id}
-                    designUpdate={designUpdate}
-                />
-            );
-        });
+    renderDesignUpdatesList(designUpdates){
+
+        console.log("rendering design updates list with " + designUpdates);
+
+        if(designUpdates.length > 0) {
+            return designUpdates.map((designUpdate) => {
+                return (
+                    <DesignUpdate
+                        key={designUpdate._id}
+                        designUpdate={designUpdate}
+                    />
+                );
+            });
+        } else {
+            return(
+                <div className="design-item-note">No Design Updates</div>
+            )
+        }
     }
 
     addDesignUpdate(userRole, designVersionId){
@@ -65,7 +74,96 @@ class DesignUpdatesList extends Component {
 
         const {designUpdates, designVersionStatus, userRole, userContext} = this.props;
 
-        let panelContent = <div></div>;
+        let updatesPanelContent = <div className="design-item-note">Select a Design Version</div>;
+
+        // The content depends on what sort of Design Version has been selected
+        if(designVersionStatus) {
+            switch (designVersionStatus) {
+                case DesignVersionStatus.VERSION_NEW:
+                case DesignVersionStatus.VERSION_DRAFT:
+                case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+
+                    // No Updates.  Just show the Work Packages
+                    return (
+                        <Grid>
+                            <Row>
+                                <Col md={6} className="col">
+                                    <WorkPackagesContainer params={{
+                                        wpType: WorkPackageType.WP_BASE,
+                                        designVersionId: userContext.designVersionId,
+                                        designUpdateId: userContext.designUpdateId
+                                    }}/>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    );
+                    break;
+                case DesignVersionStatus.VERSION_UPDATABLE:
+                case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+
+                    // These versions can have or have had Design Updates
+                    if (userRole != RoleType.DESIGNER) {
+                        // Developers and Managers can't add design updates
+                        updatesPanelContent =
+                            <div>
+                                {this.renderDesignUpdatesList(designUpdates)}
+                            </div>;
+                    } else {
+                        // Design updates may be added
+                        updatesPanelContent =
+                            <div>
+                                {this.renderDesignUpdatesList(designUpdates)}
+                                <div className="design-item-add">
+                                    <DesignComponentAdd
+                                        addText="Add Design Update"
+                                        onClick={ () => this.addDesignUpdate(userRole, userContext.designVersionId)}
+                                    />
+                                </div>
+                            </div>;
+                    }
+
+                    return (
+                        <Grid>
+                            <Row>
+                                <Col md={3} className="col">
+                                    <Panel header="Design Updates">
+                                        {updatesPanelContent}
+                                    </Panel>
+                                </Col>
+                                <Col md={4} className="col">
+                                    <WorkPackagesContainer params={{
+                                        wpType: WorkPackageType.WP_UPDATE,
+                                        designVersionId: userContext.designVersionId,
+                                        designUpdateId: userContext.designUpdateId
+                                    }}/>
+                                </Col>
+                                <Col md={5} className="col">
+                                    <UpdateSummaryContainer params={{
+                                        designUpdateId: userContext.designUpdateId
+                                    }}/>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    );
+                    break;
+                default:
+                    console.log("UNKNOWN Design Version Status: " + designVersionStatus)
+            }
+        } else {
+            // No version selected as yet
+            return (
+                <Grid>
+                    <Row>
+                        <Col md={6} className="col">
+                            <Panel header="Design Version Data">
+                                {updatesPanelContent}
+                            </Panel>
+                        </Col>
+                    </Row>
+                </Grid>
+            );
+        }
+
         // let developerButtons = <div></div>;
 
         // if(designUpdates.length > 0){
@@ -75,97 +173,97 @@ class DesignUpdatesList extends Component {
         //         </ButtonGroup>
         // }
 
-        // When a design version is selected...
-        if(userContext.designVersionId){
-            switch(designVersionStatus){
-                case DesignVersionStatus.VERSION_NEW:
-                case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
-                    // No design updates available and none can be added...
-                    if(userRole === RoleType.DEVELOPER){
-                        panelContent =
-                            <div className="design-item-note">No Updates Yet</div>;
-                    } else {
-                        panelContent =
-                            <div className="design-item-note">Updates may only be added to an Updatable Design Version...</div>;
-                    }
-                    break;
-                case DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE:
-                    if(userRole != RoleType.DESIGNER){
-                        // Developers and Managers can't add design updates
-                        panelContent =
-                            <div>
-                                {this.renderDesignUpdatesList()}
-                                {/*<div className="design-item-button">*/}
-                                    {/*{developerButtons}*/}
-                                {/*</div>*/}
-                            </div>;
-                    } else {
-                        // Design updates may be added
-                        panelContent =
-                            <div>
-                                {this.renderDesignUpdatesList()}
-                                <div className="design-item-add">
-                                    <DesignComponentAdd
-                                        addText="Add Design Update"
-                                        onClick={ () => this.addDesignUpdate(userRole, userContext.designVersionId)}
-                                    />
-                                </div>
-                            </div>;
-                    }
-                    break;
-                case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
-                    // Design updates may be viewed only
-                    panelContent =
-                        <div>
-                            {this.renderDesignUpdatesList()}
-                        </div>;
-                    break;
-            }
-        }
-
-        if(userRole === RoleType.MANAGER){
-            // Additional Work Package Column
-            return (
-                <Grid>
-                    <Row>
-                        <Col md={3} className="col">
-                            <Panel header="Design Updates">
-                                {panelContent}
-                            </Panel>
-                        </Col>
-                        <Col md={4} className="col">
-                            <WorkPackagesContainer params={{
-                                wpType: WorkPackageType.WP_UPDATE,
-                                designVersionId: userContext.designVersionId,
-                                designUpdateId: userContext.designUpdateId
-                            }}/>
-                        </Col>
-                        <Col md={5} className="col">
-                            <UpdateSummaryContainer params = {{
-                                designUpdateId: userContext.designUpdateId
-                            }}/>
-                        </Col>
-                    </Row>
-                </Grid>
-            );
-        } else {
-            return (
-                <Grid>
-                    <Row>
-                        <Col md={4} className="col">
-                            <Panel header="Design Updates">
-                                {panelContent}
-                            </Panel>
-                        </Col>
-                        <Col md={8} className="col">
-                            <UpdateSummaryContainer params = {{
-                                designUpdateId: userContext.designUpdateId
-                            }}/>
-                        </Col>
-                    </Row>
-                </Grid>
-            );
-        }
+        // // When a design version is selected...
+        // if(userContext.designVersionId){
+        //     switch(designVersionStatus){
+        //         case DesignVersionStatus.VERSION_NEW:
+        //         case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
+        //             // No design updates available and none can be added...
+        //             if(userRole === RoleType.DEVELOPER){
+        //                 updatesPanelContent =
+        //                     <div className="design-item-note">No Updates Yet</div>;
+        //             } else {
+        //                 updatesPanelContent =
+        //                     <div className="design-item-note">Updates may only be added to an Updatable Design Version...</div>;
+        //             }
+        //             break;
+        //         case DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE:
+        //             if(userRole != RoleType.DESIGNER){
+        //                 // Developers and Managers can't add design updates
+        //                 updatesPanelContent =
+        //                     <div>
+        //                         {this.renderDesignUpdatesList()}
+        //                         {/*<div className="design-item-button">*/}
+        //                             {/*{developerButtons}*/}
+        //                         {/*</div>*/}
+        //                     </div>;
+        //             } else {
+        //                 // Design updates may be added
+        //                 updatesPanelContent =
+        //                     <div>
+        //                         {this.renderDesignUpdatesList()}
+        //                         <div className="design-item-add">
+        //                             <DesignComponentAdd
+        //                                 addText="Add Design Update"
+        //                                 onClick={ () => this.addDesignUpdate(userRole, userContext.designVersionId)}
+        //                             />
+        //                         </div>
+        //                     </div>;
+        //             }
+        //             break;
+        //         case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
+        //             // Design updates may be viewed only
+        //             updatesPanelContent =
+        //                 <div>
+        //                     {this.renderDesignUpdatesList()}
+        //                 </div>;
+        //             break;
+        //     }
+        // }
+        //
+        // if(userRole === RoleType.MANAGER){
+        //     // Additional Work Package Column
+        //     return (
+        //         <Grid>
+        //             <Row>
+        //                 <Col md={3} className="col">
+        //                     <Panel header="Design Updates">
+        //                         {updatesPanelContent}
+        //                     </Panel>
+        //                 </Col>
+        //                 <Col md={4} className="col">
+        //                     <WorkPackagesContainer params={{
+        //                         wpType: WorkPackageType.WP_UPDATE,
+        //                         designVersionId: userContext.designVersionId,
+        //                         designUpdateId: userContext.designUpdateId
+        //                     }}/>
+        //                 </Col>
+        //                 <Col md={5} className="col">
+        //                     <UpdateSummaryContainer params = {{
+        //                         designUpdateId: userContext.designUpdateId
+        //                     }}/>
+        //                 </Col>
+        //             </Row>
+        //         </Grid>
+        //     );
+        // } else {
+        //     return (
+        //         <Grid>
+        //             <Row>
+        //                 <Col md={4} className="col">
+        //                     <Panel header="Design Updates">
+        //                         {updatesPanelContent}
+        //                     </Panel>
+        //                 </Col>
+        //                 <Col md={8} className="col">
+        //                     <UpdateSummaryContainer params = {{
+        //                         designUpdateId: userContext.designUpdateId
+        //                     }}/>
+        //                 </Col>
+        //             </Row>
+        //         </Grid>
+        //     );
+        // }
 
 
     }

@@ -21,7 +21,7 @@ class DesignUpdateValidationServices{
         }
 
         // The Design Version must be Updatable
-        if(designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE){
+        if(designVersionStatus != DesignVersionStatus.VERSION_UPDATABLE){
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_ADD;
         }
 

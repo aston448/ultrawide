@@ -56,10 +56,10 @@ describe('UC 106 - Create New Design Version', function(){
         // Select the new DV
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
         // And previous DV should be complete
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     });
 
     it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version', function(){
@@ -83,10 +83,10 @@ describe('UC 106 - Create New Design Version', function(){
         // Select the new DV
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
         // And previous DV should be complete
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     });
 
 
@@ -108,7 +108,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
         // And DV1 status should still be Draft
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'hugh');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT, 'hugh');
 
         // Execute as Manager
         server.call('testDesigns.selectDesign', 'Design1', 'miles');
@@ -120,7 +120,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
         // And DV1 status should still be Draft
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'miles');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT, 'miles');
 
     });
 
@@ -158,7 +158,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
         // And DV1 status should still be Complete
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     });
 
     it('A new Design Version may not be created from an Updatable Design Version if no Design Updates are selected for inclusion');

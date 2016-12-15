@@ -57,6 +57,8 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
+                    testSummary={false}
+                    testSummaryData={null}
                 />
             );
         });
@@ -73,6 +75,8 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
+                    testSummary={false}
+                    testSummaryData={null}
                 />
             );
         });
@@ -80,110 +84,274 @@ class WorkPackageApplicationsList extends Component {
 
     render() {
 
-        const {wpScopeApplications, wpViewApplications, currentUserItemContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
+        const {wpScopeApplications, wpViewApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
 
         let layout = '';
 
-        // Create the layout
-        if(wpScopeApplications) {
-            // Layout is SCOPE | WP | TEXT | opt DICT
+        // Scope for Work Package
+        let wpScopeComponent =
+            <Panel header="Work Package Scope" className="panel-update panel-update-body">
+                {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
+            </Panel>;
 
-            // Scope for Work Package
-            let wpScopeComponent =
-                <Panel header="Work Package Scope" className="panel-update panel-update-body">
-                    {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
-                </Panel>;
+        // Actual View of the WP
+        let wpViewComponent =
+            <Panel header="Work Package Content" className="panel-update panel-update-body">
+                {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode)}
+            </Panel>;
 
-            // Actual View of the WP
-            let wpViewComponent =
-                <Panel header="Work Package Content" className="panel-update panel-update-body">
-                    {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode)}
-                </Panel>;
+        // Initial assumption is only 2 cols showing
 
-            // Design Component Text / Scenario Steps
-            let wpTextHeader = '';
+        let col1width = 6;
+        let col2width = 6;
+        let col3width = 6;
+        let col4width = 6;
 
-            switch(view){
-                case ViewType.WORK_PACKAGE_BASE_EDIT:
-                    wpTextHeader = 'Text';
-                    break;
-                case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                    wpTextHeader = 'New and Old Text';
-                    break;
-            }
+        let wpTextComponent = '';
+        let domainDictionary = '';
 
-            let wpTextComponent = <div></div>
-                //TODO - Fix this - something broken here
-                // <Panel header={wpTextHeader}   className="panel-update panel-update-body">
-                //     <DesignComponentTextContainer params={{
-                //         currentContext: currentUserItemContext,
-                //         mode: ViewMode.MODE_VIEW,
-                //         view: view,
-                //         displayContext: DisplayContext.WP_VIEW
-                //     }}/>
-                // </Panel>;
+        let displayedItems = 2;
 
-            // Domain Dictionary
-            let domainDictionary =
-                <DomainDictionaryContainer params={{
-                    designId: currentUserItemContext.designId,
-                    designVersionId: currentUserItemContext.designVersionId
-                }}/>;
+        switch(view){
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 
-            if(domainDictionaryVisible) {
+                // Layout is WP | TEXT | opt DICT
+                // WHAT OPTIONAL COMPONENTS ARE VISIBLE (Besides Scope and WP)
+
+                // Start by assuming only 2 cols
+                col1width = 6;
+                col2width = 6;
+                col3width = 6;
+                col4width = 6;
+
+                // Details
+                let wpTextHeader = '';
+
+                switch(view){
+                    case ViewType.WORK_PACKAGE_BASE_EDIT:
+                        wpTextHeader = 'Text';
+                        break;
+                    case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                        wpTextHeader = 'New and Old Text';
+                        break;
+                }
+
+                if(userContext.designComponentId === 'NONE'){
+                    wpTextComponent = <div>Select a Design Component</div>
+                } else {
+                    wpTextComponent =
+                        <Panel header={wpTextHeader} className="panel-update panel-update-body">
+                            <DesignComponentTextContainer params={{
+                                currentContext: userContext,
+                                currentItemName: currentItemName,
+                                mode: ViewMode.MODE_VIEW,
+                                view: view,
+                                displayContext: DisplayContext.WP_VIEW
+                            }}/>
+                        </Panel>;
+                }
+
+
+                // Domain Dictionary
+                if(viewOptions.wpDomainDictVisible) {
+                    domainDictionary =
+                        <DomainDictionaryContainer params={{
+                            designId: userContext.designId,
+                            designVersionId: userContext.designVersionId
+                        }}/>;
+
+                        // There are now 3 cols
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                }
+
+                // Create the layout depending on the current view...
+
+                // Col 1 - Content
+                let col1 =
+                    <Col md={col1width} className="scroll-col">
+                        {wpViewComponent}
+                    </Col>;
+
+                // Col 2 - Details
+                let col2 =
+                    <Col md={col2width} className="scroll-col">
+                        {wpTextComponent}
+                    </Col>;
+
+
+                // Col 3 - Domain Dictionary - Optional
+                let col3 = '';
+                if(viewOptions.wpDomainDictVisible){
+                    col3 =
+                        <Col md={col3width} className="scroll-col">
+                            {domainDictionary}
+                        </Col>;
+                }
+
+                // Make up the layout based on the view options
                 layout =
-                    <Grid>
+                    <Grid >
                         <Row>
-                            <Col md={3}>
-                                {wpScopeComponent}
-                            </Col>
-                            <Col md={3}>
-                                {wpViewComponent}
-                            </Col>
-                            <Col md={3}>
+                            {col1}
+                            {col2}
+                            {col3}
+                        </Row>
+                    </Grid>;
+
+                return (
+                    <div>
+                        {layout}
+                    </div>
+                );
+
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+
+                // Create the layout
+                if(wpScopeApplications) {
+                    // Layout is SCOPE | WP | TEXT | opt DICT
+
+                    // WHAT OPTIONAL COMPONENTS ARE VISIBLE (Besides Scope and WP)
+
+                    // Start by assuming only 2 cols
+                    col1width = 6;
+                    col2width = 6;
+                    col3width = 6;
+                    col4width = 6;
+
+                    // Details
+                    if(viewOptions.wpDetailsVisible){
+                        let wpTextHeader = '';
+
+                        switch(view){
+                            case ViewType.WORK_PACKAGE_BASE_EDIT:
+                                wpTextHeader = 'Text';
+                                break;
+                            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                                wpTextHeader = 'New and Old Text';
+                                break;
+                        }
+
+                        if(userContext.designComponentId === 'NONE'){
+                            wpTextComponent = <div>Select a Design Component</div>
+                        } else {
+                            wpTextComponent =
+                                <Panel header={wpTextHeader} className="panel-update panel-update-body">
+                                    <DesignComponentTextContainer params={{
+                                        currentContext: userContext,
+                                        currentItemName: currentItemName,
+                                        mode: ViewMode.MODE_VIEW,
+                                        view: view,
+                                        displayContext: DisplayContext.WP_VIEW
+                                    }}/>
+                                </Panel>;
+                        }
+                        // Now 3 cols
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+
+                        displayedItems++;
+                    }
+
+                    // Domain Dictionary
+                    if(viewOptions.wpDomainDictVisible) {
+                        domainDictionary =
+                            <DomainDictionaryContainer params={{
+                                designId: userContext.designId,
+                                designVersionId: userContext.designVersionId
+                            }}/>;
+
+                        switch(displayedItems){
+                            case 2:
+                                // There are now 3 cols
+                                col1width = 4;
+                                col2width = 4;
+                                col3width = 4;
+                                col4width = 4;
+                                break;
+                            case 3:
+                                // There are now 4 cols
+                                col1width = 3;
+                                col2width = 3;
+                                col3width = 3;
+                                col4width = 3;
+                                break;
+                        }
+                    }
+
+                    // Create the layout depending on the current view...
+
+                    // Col 1 - Scope
+                    let col1 =
+                        <Col md={col1width} className="scroll-col">
+                            {wpScopeComponent}
+                        </Col>;
+
+                    // Col 2 - Content
+                    let col2 =
+                        <Col md={col2width} className="scroll-col">
+                            {wpViewComponent}
+                        </Col>;
+
+                    // Col 3 - Details - Optional
+                    let col3 = '';
+                    if(viewOptions.wpDetailsVisible){
+                        col3 =
+                            <Col md={col3width} className="scroll-col">
                                 {wpTextComponent}
-                            </Col>
-                            <Col md={3}>
+                            </Col>;
+                    }
+
+                    // Col 4 - Domain Dictionary - Optional
+                    let col4 = '';
+                    if(viewOptions.wpDomainDictVisible){
+                        col4 =
+                            <Col md={col4width} className="scroll-col">
                                 {domainDictionary}
-                            </Col>
-                        </Row>
-                    </Grid>;
-            } else {
-                layout =
-                    <Grid>
-                        <Row>
-                            <Col md={4}>
-                                {wpScopeComponent}
-                            </Col>
-                            <Col md={4}>
-                                {wpViewComponent}
-                            </Col>
-                            <Col md={4}>
-                                {wpTextComponent}
-                            </Col>
-                        </Row>
-                    </Grid>;
-            }
+                            </Col>;
+                    }
 
-            // Return the Application List
-            return (
-                <div>
-                    {layout}
-                </div>
-            );
 
-        } else {
-            return (
-                <div>
-                    No Data
-                </div>
-            );
+                    // Make up the layout based on the view options
+                    layout =
+                        <Grid >
+                            <Row>
+                                {col1}
+                                {col2}
+                                {col3}
+                                {col4}
+                            </Row>
+                        </Grid>;
+
+                    return (
+                        <div>
+                            {layout}
+                        </div>
+                    );
+
+                } else {
+                    return (
+                        <div>
+                            No Data
+                        </div>
+                    );
+                }
+                break;
+
+            default:
+                console.log("Unexpected View Type: " + view);
         }
 
 
     }
 }
-
 
 WorkPackageApplicationsList.propTypes = {
     wpScopeApplications: PropTypes.array.isRequired,
@@ -193,11 +361,11 @@ WorkPackageApplicationsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserItemContext: state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
+        viewOptions: state.currentUserViewOptions,
         currentItemName: state.currentDesignComponentName,
         view: state.currentAppView,
         mode: state.currentViewMode,
-        domainDictionaryVisible: state.domainDictionaryVisible
     }
 }
 

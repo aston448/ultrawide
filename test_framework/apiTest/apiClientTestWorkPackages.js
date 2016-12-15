@@ -9,8 +9,9 @@ Meteor.methods({
     'testWorkPackages.addNewWorkPackage'(userName, userRole, workPackageType){
 
         const userContext = TestDataHelpers.getUserContext(userName);
+        let openWpItems = [];
 
-        ClientWorkPackageServices.addNewWorkPackage(userRole, userContext.designVersionId, userContext.designUpdateId, workPackageType)
+        ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, workPackageType, openWpItems)
     },
 
     'testWorkPackages.selectWorkPackage'(workPackageName, userName){

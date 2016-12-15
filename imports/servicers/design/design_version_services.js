@@ -87,7 +87,7 @@ class DesignVersionServices{
 
                 {
                     $set: {
-                        designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_DRAFT
+                        designVersionStatus: DesignVersionStatus.VERSION_DRAFT
                     }
                 }
             );
@@ -129,7 +129,7 @@ class DesignVersionServices{
                     designId: oldDesignVersion.designId,
                     designVersionName: DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
                     designVersionNumber: DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
-                    designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE
+                    designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE
                 }
 
             );

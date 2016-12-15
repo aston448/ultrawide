@@ -24,7 +24,7 @@ class WorkPackageValidationServices{
             case WorkPackageType.WP_BASE:
 
                 // Work Packages can only be added to a Draft Design Version
-                if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_DRAFT){
+                if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_DRAFT){
                     return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_ADD;
                 }
                 break;
@@ -140,14 +140,14 @@ class WorkPackageValidationServices{
     validateDevelopWorkPackage(userRole, wpStatus){
 
         // To develop a WP, user must be a Developer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole != RoleType.DEVELOPER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_DEVELOP;
         }
 
         // Work Package must be Adopted TODO - add in by who
-        if(wpStatus != WorkPackageStatus.WP_ADOPTED){
-            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_DEVELOP;
-        }
+        // if(wpStatus != WorkPackageStatus.WP_ADOPTED){
+        //     return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_DEVELOP;
+        // }
 
         return Validation.VALID;
     };

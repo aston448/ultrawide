@@ -61,7 +61,7 @@ class DesignVersionValidationServices{
         if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_EDIT }
 
         // Design Version must not be Final
-        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_COMPLETE){
+        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_DRAFT_COMPLETE){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
         }
 
@@ -98,7 +98,7 @@ class DesignVersionValidationServices{
 
 
         // Design Version must be Draft
-        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_PUBLISHED_DRAFT){
+        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_DRAFT){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UNPUBLISH;
         }
 
@@ -120,7 +120,7 @@ class DesignVersionValidationServices{
         }
 
         // Design Version that new is based on must be Draft or Updatable
-        if(!(designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_DRAFT || designVersion.designVersionStatus === DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE)){
+        if(!(designVersion.designVersionStatus === DesignVersionStatus.VERSION_DRAFT || designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE)){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT;
         }
 

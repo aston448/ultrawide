@@ -175,7 +175,7 @@ class WorkPackage extends Component {
                     buttons =
                         <div>
                             <ButtonGroup className="button-group-left">
-                                <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userContext, workPackage)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
                             </ButtonGroup>
                             <ButtonGroup>
                                 <Button bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>

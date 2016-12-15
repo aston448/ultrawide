@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
 
 // Ultrawide Services
-import { DisplayContext, ComponentType } from '../../../constants/constants.js';
+import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 
@@ -50,9 +50,28 @@ class FeatureAspectsList extends Component {
 
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
-        const {components, displayContext, view, mode, testSummary} = this.props;
+        const {components, displayContext, view, mode, viewOptions} = this.props;
 
         if (components) {
+
+            // Get the appropriate test summary flag for the view
+            let testSummary = false;
+
+            switch(view){
+                case ViewType.DESIGN_NEW_EDIT:
+                case ViewType.DESIGN_PUBLISHED_VIEW:
+                    testSummary = viewOptions.designTestSummaryVisible;
+                    break;
+                case ViewType.DESIGN_UPDATE_EDIT:
+                case ViewType.DESIGN_UPDATE_VIEW:
+                    testSummary = viewOptions.updateTestSummaryVisible;
+                    break;
+                case ViewType.DEVELOP_BASE_WP:
+                case ViewType.DEVELOP_UPDATE_WP:
+                    testSummary = viewOptions.devTestSummaryVisible;
+                    break;
+            }
+
             return components.map((featureAspect) => {
 
                 return (
@@ -91,7 +110,7 @@ function mapStateToProps(state) {
     return {
         view: state.currentAppView,
         mode: state.currentViewMode,
-        testSummary: state.currentUserViewOptions.designTestSummaryVisible
+        viewOptions: state.currentUserViewOptions
     }
 }
 

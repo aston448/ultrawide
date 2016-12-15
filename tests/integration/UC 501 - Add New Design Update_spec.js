@@ -105,7 +105,7 @@ describe('UC 501 - Add New Design Update', function(){
         // Publish New DV to to Draft
         server.call('testDesignVersions.publishDesignVersion', 'DesignVersion21', 'gloria', RoleType.DESIGNER);
         // Check status is Draft
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion21', DesignVersionStatus.VERSION_PUBLISHED_DRAFT, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion21', DesignVersionStatus.VERSION_DRAFT, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
 
         // Execute
@@ -120,7 +120,7 @@ describe('UC 501 - Add New Design Update', function(){
         // DesignVersion1 is now Complete
         // Check status is Complete
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_PUBLISHED_COMPLETE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
 
         // Execute

@@ -12,10 +12,11 @@ import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.
 
 // Ultrawide Services
 import {ViewType, ViewMode, ViewOptionType, RoleType} from '../../../constants/constants.js'
-import ClientAppHeaderServices from '../../../apiClient/apiClientAppHeader.js';
-import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
-import ClientIdentityServices from '../../../apiClient/apiIdentity';
 
+import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
+import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
+import ClientIdentityServices       from '../../../apiClient/apiIdentity';
+import TextLookups                  from '../../../common/lookups.js';
 
 // Bootstrap
 import {Alert} from 'react-bootstrap';
@@ -177,10 +178,12 @@ class AppHeader extends Component {
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToSections(userContext)}>Go to Sections</Button>;
 
         // View Options Buttons
-        let scopeButton =
-            <Button bsSize="xs" bsStyle={'success'}>Scope</Button>;
-        let designButton =
-            <Button bsSize="xs" bsStyle={'success'}>Design</Button>;
+        let scopeFixedButton =
+            <Button bsSize="xs" bsStyle={'info'}>Scope</Button>;
+        let designFixedButton =
+            <Button bsSize="xs" bsStyle={'info'}>Design</Button>;
+        let detailsFixedButton =
+            <Button bsSize="xs" bsStyle={'info'}>Details</Button>;
         let detailsButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
         let testSummaryButton =
@@ -229,18 +232,20 @@ class AppHeader extends Component {
             </Alert>;
 
         let roleClass = '';
+        let viewText = TextLookups.viewText(view);
+
         switch(userRole){
             case RoleType.DESIGNER:
                 roleClass = 'designer';
-                appName = appName + ' - DESIGN';
+                appName = appName + ' - DESIGNER - ' + viewText;
                 break;
             case RoleType.DEVELOPER:
                 roleClass = 'developer';
-                appName = appName + '  - DEVELOP';
+                appName = appName + '  - DEVELOPER - ' + viewText;
                 break;
             case RoleType.MANAGER:
                 roleClass = 'manager';
-                appName = appName + '  - MANAGE';
+                appName = appName + '  - MANAGER - ' + viewText;
                 break;
             default:
                 roleClass = 'no-role';
@@ -269,7 +274,6 @@ class AppHeader extends Component {
                         {configureScreenButton}
                         {selectionScreenButton}
                         {refreshTestSummaryButton}
-                        {exportIntegrationButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
@@ -285,7 +289,7 @@ class AppHeader extends Component {
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {designButton}
+                            {designFixedButton}
                             {detailsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
@@ -306,7 +310,7 @@ class AppHeader extends Component {
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {designButton}
+                            {designFixedButton}
                             {detailsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
@@ -319,10 +323,10 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {refreshTestsButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
+                        {configureScreenButton}
+                        {selectionScreenButton}
+                        {refreshTestSummaryButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
@@ -334,13 +338,13 @@ class AppHeader extends Component {
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {scopeButton}
-                            {designButton}
+                            {scopeFixedButton}
+                            {designFixedButton}
                             {detailsButton}
-                            {accTestsButton}
-                            {intTestsButton}
-                            {modTestsButton}
                             {domainDictionaryButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {testSummaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;
@@ -348,21 +352,21 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {refreshTestsButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
+                        {configureScreenButton}
+                        {selectionScreenButton}
+                        {refreshTestSummaryButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {scopeButton}
-                            {designButton}
+                            {scopeFixedButton}
+                            {designFixedButton}
                             {detailsButton}
-                            {accTestsButton}
-                            {intTestsButton}
-                            {modTestsButton}
                             {domainDictionaryButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {testSummaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;
@@ -371,22 +375,15 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewModeEditButton}
-                            {viewModeViewButton}
-                        </ButtonGroup>
+                        {configureScreenButton}
+                        {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {scopeButton}
-                            {designButton}
+                            {scopeFixedButton}
+                            {designFixedButton}
                             {detailsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
@@ -397,16 +394,15 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
+                        {configureScreenButton}
+                        {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {scopeButton}
-                            {designButton}
-                            {detailsButton}
+                            {designFixedButton}
+                            {detailsFixedButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
@@ -416,7 +412,7 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {refreshTestsButton}
+                        {refreshTestSummaryButton}
                         {exportToDevButton}
                         {selectionScreenButton}
                         {configureScreenButton}
@@ -424,13 +420,15 @@ class AppHeader extends Component {
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
-                        {scopeButton}
-                        {designButton}
-                        {detailsButton}
-                        {accTestsButton}
-                        {intTestsButton}
-                        {modTestsButton}
-                        {domainDictionaryButton}
+                        <ButtonGroup>
+                            {scopeFixedButton}
+                            {designFixedButton}
+                            {detailsButton}
+                            {accTestsButton}
+                            {intTestsButton}
+                            {modTestsButton}
+                            {domainDictionaryButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 break;
             default:

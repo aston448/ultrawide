@@ -111,10 +111,11 @@ export const DesignStatus = {
 };
 
 export const DesignVersionStatus = {
-    VERSION_NEW:                'NEW',          // Not available to users - may be freely updated.  Only for completely new designs.
-    VERSION_PUBLISHED_DRAFT:    'DRAFT',        // Base version available to users.  Remains editable by Designer.  Only for new designs.
-    VERSION_PUBLISHED_UPDATABLE:'UPDATABLE',    // Available to users. Changes only via design updates.
-    VERSION_PUBLISHED_COMPLETE: 'COMPLETE'      // Fixed - no more changes
+    VERSION_NEW:                    'NEW',              // Not available to users - may be freely updated.  Only for completely new designs.
+    VERSION_DRAFT:                  'DRAFT',            // Base version available to users.  Remains editable by Designer.  Only for new designs.
+    VERSION_DRAFT_COMPLETE:         'COMPLETE',         // Draft Design Version now Completed
+    VERSION_UPDATABLE:              'UPDATABLE',        // Available to users. Changes only via design updates.
+    VERSION_UPDATABLE_COMPLETE:     'UPDATES_COMPLETE'  // Updatable Design Version now complete
 };
 
 export const DesignUpdateStatus = {

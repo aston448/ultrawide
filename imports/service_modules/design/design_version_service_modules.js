@@ -319,7 +319,7 @@ class DesignVersionModules{
             {_id: oldDesignVersionId},
             {
                 $set:{
-                    designVersionStatus: DesignVersionStatus.VERSION_PUBLISHED_COMPLETE
+                    designVersionStatus: DesignVersionStatus.VERSION_DRAFT_COMPLETE
                 }
             }
 

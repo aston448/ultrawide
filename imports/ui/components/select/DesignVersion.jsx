@@ -86,6 +86,7 @@ class DesignVersion extends Component {
 
     setNewDesignVersionActive(userContext, dv){
 
+        // Changing the design version updates the user context
         ClientDesignVersionServices.setDesignVersion(
             userContext,
             dv._id
@@ -105,6 +106,7 @@ class DesignVersion extends Component {
         // Designers can add / edit stuff
         switch (designVersion.designVersionStatus) {
             case DesignVersionStatus.VERSION_NEW:
+
                 if(userRole === RoleType.DESIGNER){
                     // Designers can Edit View or Publish
                     buttons =
@@ -119,7 +121,8 @@ class DesignVersion extends Component {
                     buttons = <div></div>;
                 }
                 break;
-            case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
+            case DesignVersionStatus.VERSION_DRAFT:
+
                 switch(userRole){
                     case RoleType.DESIGNER:
                         // Designers can view it, unpublish it if not adopted or create the next version from updates...
@@ -152,24 +155,40 @@ class DesignVersion extends Component {
                         break;
                 }
                 break;
-            case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
-                //TODO - Change all this
-                if(userRole === RoleType.DEVELOPER){
-                    // Developers can view or adopt a final design
-                    buttons =
-                        <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
-                            <Button bsSize="xs" onClick={ () => this.onAdoptDesignVersion(userContext, designVersion)}>Adopt</Button>
-                        </ButtonGroup>;
 
-                } else {
-                    // Designers can just view it
-                    buttons =
-                        <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
-                        </ButtonGroup>;
+            case DesignVersionStatus.VERSION_UPDATABLE:
+
+                // Designers can view edit and create a new version
+                // Others can view
+                switch(userRole) {
+                    case RoleType.DESIGNER:
+                        buttons =
+                            <ButtonGroup>
+                                <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>Edit</Button>
+                                <Button bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next Design Version</Button>
+                            </ButtonGroup>;
+                        break;
+                    default:
+                        buttons =
+                            <ButtonGroup>
+                                <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
+                            </ButtonGroup>;
+                        break;
                 }
                 break;
+            case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+            case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+
+                // View only
+                buttons =
+                    <ButtonGroup>
+                        <Button bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, currentProgressDataValue)}>View</Button>
+                    </ButtonGroup>;
+                break;
+
+            default:
+                console.log("Unknown Design Version Status: " + designVersion.designVersionStatus)
 
         }
 

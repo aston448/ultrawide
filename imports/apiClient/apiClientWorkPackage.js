@@ -1,9 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
+import { WorkPackages } from '../collections/work/work_packages.js';
+import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import {ViewType, ViewMode, WorkPackageType, MessageType} from '../constants/constants.js';
+import {ViewType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus, MessageType} from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { WorkPackageMessages } from '../constants/message_texts.js';
 
@@ -14,7 +16,7 @@ import ClientMashDataServices   from './apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage, setCurrentUserOpenWorkPackageItems} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -27,10 +29,10 @@ class ClientWorkPackageServices {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // Manager adds a new Work Package to a Design Version or Design Update --------------------------------------------
-    addNewWorkPackage(userRole, designVersionId, designUpdateId, workPackageType){
+    addNewWorkPackage(userRole, userContext, workPackageType, openWpItems){
 
         // Client validation
-        let result = WorkPackageValidationApi.validateAddWorkPackage(userRole, designVersionId, designUpdateId, workPackageType);
+        let result = WorkPackageValidationApi.validateAddWorkPackage(userRole, userContext.designVersionId, userContext.designUpdateId, workPackageType);
 
         if(result != Validation.VALID){
 
@@ -40,7 +42,7 @@ class ClientWorkPackageServices {
         }
 
         // Real action call - server actions
-        ServerWorkPackageApi.addWorkPackage(userRole, designVersionId, designUpdateId, workPackageType, (err, result) => {
+        ServerWorkPackageApi.addWorkPackage(userRole, userContext.designVersionId, userContext.designUpdateId, workPackageType, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -48,6 +50,26 @@ class ClientWorkPackageServices {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
+
+                // Set Applications in the WP as Open - actually setting all New WP App Components to open - but they should be
+                let wps = WorkPackages.find({workPackageStatus: WorkPackageStatus.WP_NEW}).fetch();
+
+                wps.forEach((wp) => {
+                    let wpApps = WorkPackageComponents.find({workPackageId: wp._id, componentType: ComponentType.APPLICATION}).fetch();
+
+                    wpApps.forEach((wpApp) => {
+                        if(!openWpItems.includes(wpApp._id)){
+                            openWpItems.push(wpApp._id);
+                        }
+                    });
+                });
+
+                store.dispatch(setCurrentUserOpenWorkPackageItems(
+                    userContext.userId,
+                    openWpItems,
+                    null,
+                    true
+                ));
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -280,8 +302,8 @@ class ClientWorkPackageServices {
         // Ensure that the current WP is the WP we chose to edit
         this.setWorkPackage(userContext, workPackageToEditId);
 
-        // Edit mode
-        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+        // Actually in View mode as you can't change the Design
+        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
 
         // Switch to appropriate WP edit view
         switch(wpType){
@@ -312,6 +334,9 @@ class ClientWorkPackageServices {
 
         // Ensure that the current update is the update we chose to view
         this.setWorkPackage(userContext, workPackageToViewId);
+
+        // Make sure in View only mode so no Design Editing
+        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
 
         // Switch to appropriate WP view
         switch(wpType){

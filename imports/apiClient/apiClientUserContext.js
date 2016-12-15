@@ -87,10 +87,12 @@ class ClientUserContextServices {
             });
 
 
-            // All Work Packages
+            // Work Packages - open in scope items down to Feature level
             const workPackageOpenComponents = WorkPackageComponents.find(
                 {
+                    $or: [{componentActive: true}, {componentParent: true}],
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+
                 },
                 {fields: {_id: 1}}
             );
@@ -293,9 +295,7 @@ class ClientUserContextServices {
                 designDomainDictVisible:    userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       userViewOptions.updateDetailsVisible,
-                updateAccTestsVisible:      userViewOptions.updateAccTestsVisible,
-                updateIntTestsVisible:      userViewOptions.updateIntTestsVisible,
-                updateModTestsVisible:      userViewOptions.updateModTestsVisible,
+                updateTestSummaryVisible:   userViewOptions.updateTestSummaryVisible,
                 updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:           userViewOptions.wpDetailsVisible,
@@ -305,6 +305,7 @@ class ClientUserContextServices {
                 devAccTestsVisible:         userViewOptions.devAccTestsVisible,
                 devIntTestsVisible:         userViewOptions.devIntTestsVisible,
                 devModTestsVisible:         userViewOptions.devModTestsVisible,
+                devTestSummaryVisible:      userViewOptions.devTestSummaryVisible,
                 devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
                 devDomainDictVisible:       userViewOptions.devDomainDictVisible
             };
@@ -320,9 +321,7 @@ class ClientUserContextServices {
                 designDomainDictVisible:    true,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       true,
-                updateAccTestsVisible:      false,
-                updateIntTestsVisible:      false,
-                updateModTestsVisible:      false,
+                updateTestSummaryVisible:   false,
                 updateDomainDictVisible:    false,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:           true,
@@ -332,6 +331,7 @@ class ClientUserContextServices {
                 devAccTestsVisible:         true,
                 devIntTestsVisible:         false,
                 devModTestsVisible:         false,
+                devTestSummaryVisible:      false,
                 devFeatureFilesVisible:     true,
                 devDomainDictVisible:       false
             };
@@ -421,8 +421,8 @@ class ClientUserContextServices {
                                         store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
                                         store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
                                         return;
-                                    case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
-                                    case DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE:
+                                    case DesignVersionStatus.VERSION_DRAFT:
+                                    case DesignVersionStatus.VERSION_UPDATABLE:
                                         // If there is an update in the context go to that otherwise go to selection
                                         if (userItemContext.designUpdateId) {
                                             // See what the status of this update is - is it editable?
@@ -456,7 +456,7 @@ class ClientUserContextServices {
                                             return;
 
                                         }
-                                    case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
+                                    case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                                         // View that final design version
                                         store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
                                         return;

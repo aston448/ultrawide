@@ -328,12 +328,12 @@ class ClientDesignVersionServices{
             case RoleType.DESIGNER:
                 switch(designVersion.designVersionStatus){
                     case DesignVersionStatus.VERSION_NEW:
-                    case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
+                    case DesignVersionStatus.VERSION_DRAFT:
                         // For new / draft design versions, viewing does not preclude switching to editing
                         store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
                         break;
 
-                    case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
+                    case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                         // For final design versions view is all you can do
                         store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
                         break;

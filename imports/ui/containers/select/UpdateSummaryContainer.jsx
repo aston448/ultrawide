@@ -60,9 +60,9 @@ class DesignUpdateSummaryList extends Component {
 
     render() {
 
-        const {functionalAdditions, functionalRemovals, functionalChanges, currentUserItemContext} = this.props;
+        const {functionalAdditions, functionalRemovals, functionalChanges, userContext} = this.props;
 
-        if(currentUserItemContext.designUpdateId) {
+        if(userContext.designUpdateId != 'NONE') {
 
             return (
                 <Panel header="Design Update Summary">
@@ -119,7 +119,7 @@ DesignUpdateSummaryList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 

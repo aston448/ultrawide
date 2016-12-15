@@ -44,7 +44,6 @@ class WorkPackageModules {
                             componentActive:                false       // Start by assuming nothing in scope
                         }
                     );
-
                 });
 
                 break;

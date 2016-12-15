@@ -13,9 +13,7 @@ let Schema = new SimpleSchema({
     designDomainDictVisible:    {type: Boolean, defaultValue: true},        // Domain Dictionary pane
     // Design Update Screen - Scope and Design always visible
     updateDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
-    updateAccTestsVisible:      {type: Boolean, defaultValue: false},       // Acceptance Tests view
-    updateIntTestsVisible:      {type: Boolean, defaultValue: false},       // Integration Tests view
-    updateModTestsVisible:      {type: Boolean, defaultValue: false},       // Module Tests view
+    updateTestSummaryVisible:   {type: Boolean, defaultValue: false},       // Test Summary add-on
     updateDomainDictVisible:    {type: Boolean, defaultValue: false},       // Domain Dictionary pane
     // Work package editor - Scope and Design always visible
     wpDetailsVisible:           {type: Boolean, defaultValue: true},        // The details pane
@@ -25,6 +23,7 @@ let Schema = new SimpleSchema({
     devAccTestsVisible:         {type: Boolean, defaultValue: true},        // Acceptance Tests view
     devIntTestsVisible:         {type: Boolean, defaultValue: true},        // Integration Tests view
     devModTestsVisible:         {type: Boolean, defaultValue: false},       // Unit Tests view
+    devTestSummaryVisible:      {type: Boolean, defaultValue: false},       // Test Summary add-on
     devFeatureFilesVisible:     {type: Boolean, defaultValue: true},        // Feature Files view
     devDomainDictVisible:       {type: Boolean, defaultValue: false},       // Domain Dictionary pane
 

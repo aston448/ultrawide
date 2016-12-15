@@ -61,56 +61,74 @@ class DesignVersionsList extends Component {
 
         const {designVersions, userRole, currentUserItemContext} = this.props;
 
-        switch(userRole){
-            case RoleType.DESIGNER:
+        // The Updates container contains either the Updates for an Updatatble Design Version or just the WPs for an initial version
+        return (
+            <Grid>
+                <Row>
+                    <Col md={3} className="col">
+                        <Panel header="Design Versions">
+                            {this.renderDesignVersionsList(designVersions)}
+                        </Panel>
+                    </Col>
+                    <Col md={9} className="col">
+                        <DesignUpdatesContainer params={{
+                            currentDesignVersionId: currentUserItemContext.designVersionId
+                        }}/>
+                    </Col>
+                </Row>
+            </Grid>
+        );
 
-                // Designers see the Designs and the Updates and can change them
-                return (
-                    <Grid>
-                        <Row>
-                            <Col md={3} className="col">
-                                <Panel header="Design Versions">
-                                    {this.renderDesignVersionsList(designVersions)}
-                                </Panel>
-                            </Col>
-                            <Col md={9} className="col">
-                                <DesignUpdatesContainer params={{
-                                    currentDesignVersionId: currentUserItemContext.designVersionId
-                                }}/>
-                            </Col>
-                        </Row>
-                    </Grid>
-                );
-
-                break;
-            case RoleType.DEVELOPER:
-            case RoleType.MANAGER:
-                // Developers and Managers see Work Packages too
-                return (
-                    <Grid>
-                        <Row>
-                            <Col md={2} className="col">
-                                <Panel header="Design Versions">
-                                    {this.renderDesignVersionsList(designVersions)}
-                                </Panel>
-                            </Col>
-                            <Col md={3} className="col">
-                                <WorkPackagesContainer params={{
-                                    wpType: WorkPackageType.WP_BASE,
-                                    designVersionId: currentUserItemContext.designVersionId,
-                                    designUpdateId: 'NONE'
-                                }}/>
-                            </Col>
-                            <Col md={7} className="col">
-                                <DesignUpdatesContainer params={{
-                                    currentDesignVersionId: currentUserItemContext.designVersionId
-                                }}/>
-                            </Col>
-                        </Row>
-                    </Grid>
-                );
-
-        }
+        // switch(userRole){
+        //     case RoleType.DESIGNER:
+        //
+        //         // Designers see the Designs and the Updates and can change them
+        //         return (
+        //             <Grid>
+        //                 <Row>
+        //                     <Col md={3} className="col">
+        //                         <Panel header="Design Versions">
+        //                             {this.renderDesignVersionsList(designVersions)}
+        //                         </Panel>
+        //                     </Col>
+        //                     <Col md={9} className="col">
+        //                         <DesignUpdatesContainer params={{
+        //                             currentDesignVersionId: currentUserItemContext.designVersionId
+        //                         }}/>
+        //                     </Col>
+        //                 </Row>
+        //             </Grid>
+        //         );
+        //
+        //         break;
+        //     case RoleType.DEVELOPER:
+        //     case RoleType.MANAGER:
+        //         // Developers and Managers see Work Packages too
+        //         return (
+        //             <Grid>
+        //                 <Row>
+        //                     <Col md={2} className="col">
+        //                         <Panel header="Design Versions">
+        //                             {this.renderDesignVersionsList(designVersions)}
+        //                         </Panel>
+        //                     </Col>
+        //                     <Col md={3} className="col">
+        //                         <WorkPackagesContainer params={{
+        //                             wpType: WorkPackageType.WP_BASE,
+        //                             designVersionId: currentUserItemContext.designVersionId,
+        //                             designUpdateId: 'NONE'
+        //                         }}/>
+        //                     </Col>
+        //                     <Col md={7} className="col">
+        //                         <DesignUpdatesContainer params={{
+        //                             currentDesignVersionId: currentUserItemContext.designVersionId
+        //                         }}/>
+        //                     </Col>
+        //                 </Row>
+        //             </Grid>
+        //         );
+        //
+        // }
 
     }
 }
