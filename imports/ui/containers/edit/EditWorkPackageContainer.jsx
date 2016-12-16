@@ -138,7 +138,10 @@ class WorkPackageApplicationsList extends Component {
                 }
 
                 if(userContext.designComponentId === 'NONE'){
-                    wpTextComponent = <div>Select a Design Component</div>
+                    wpTextComponent =
+                        <Panel header="Design Component Details" className="panel-update panel-update-body">
+                            <div className="design-item-note">Select a Design Component</div>
+                        </Panel>
                 } else {
                     wpTextComponent =
                         <Panel header={wpTextHeader} className="panel-update panel-update-body">
@@ -238,7 +241,10 @@ class WorkPackageApplicationsList extends Component {
                         }
 
                         if(userContext.designComponentId === 'NONE'){
-                            wpTextComponent = <div>Select a Design Component</div>
+                            wpTextComponent =
+                                <Panel header="Design Component Details" className="panel-update panel-update-body">
+                                    <div className="design-item-note">Select a Design Component</div>
+                                </Panel>
                         } else {
                             wpTextComponent =
                                 <Panel header={wpTextHeader} className="panel-update panel-update-body">

@@ -81,16 +81,12 @@ class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin();
     }
 
-    onRefreshTestSummaryData(userContext){
-        ClientMashDataServices.updateTestSummaryData(userContext, this.props.currentProgressDataValue)
+    onRefreshTestData(userContext, userViewOptions){
+        ClientMashDataServices.updateTestData(userContext, userViewOptions, this.props.currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
         ClientMashDataServices.exportFeatureUpdates(userContext);
-    }
-
-    onExportIntegrationData(userContext){
-        ClientMashDataServices.exportIntegrationTests(userContext);
     }
 
     getOptionButtonStyle(viewOption, currentOptions){
@@ -154,6 +150,7 @@ class AppHeader extends Component {
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
                 modTestOption = ViewOptionType.DEV_MOD_TESTS;
                 dictOption = ViewOptionType.DEV_DICT;
+                testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
                 break;
         }
 
@@ -206,14 +203,11 @@ class AppHeader extends Component {
         let selectionScreenButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
-        let refreshTestSummaryButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestSummaryData(userContext)}>Refresh Test Summary</Button>;
+        let refreshTestDataButton =
+            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(userContext, userViewOptions)}>Refresh Test Data</Button>;
 
         let exportToDevButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
-
-        let exportIntegrationButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportIntegrationData(userContext)}>Export Int Tests</Button>;
 
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
@@ -273,7 +267,7 @@ class AppHeader extends Component {
                         {designsButton}
                         {configureScreenButton}
                         {selectionScreenButton}
-                        {refreshTestSummaryButton}
+                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
@@ -305,7 +299,7 @@ class AppHeader extends Component {
                         {designsButton}
                         {configureScreenButton}
                         {selectionScreenButton}
-                        {refreshTestSummaryButton}
+                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
@@ -326,7 +320,7 @@ class AppHeader extends Component {
                         {designsButton}
                         {configureScreenButton}
                         {selectionScreenButton}
-                        {refreshTestSummaryButton}
+                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
@@ -355,7 +349,7 @@ class AppHeader extends Component {
                         {designsButton}
                         {configureScreenButton}
                         {selectionScreenButton}
-                        {refreshTestSummaryButton}
+                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
@@ -412,16 +406,14 @@ class AppHeader extends Component {
                 headerUserInfo = userData;
                 headerTopActions =
                     <ButtonToolbar>
-                        {refreshTestSummaryButton}
-                        {exportToDevButton}
-                        {selectionScreenButton}
-                        {configureScreenButton}
                         {designsButton}
+                        {configureScreenButton}
+                        {selectionScreenButton}
+                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {scopeFixedButton}
                             {designFixedButton}
                             {detailsButton}
                             {accTestsButton}
@@ -429,10 +421,13 @@ class AppHeader extends Component {
                             {modTestsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
+                        <ButtonGroup>
+                            {testSummaryButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 break;
             default:
-                //console.log("Invalid view type");
+                console.log("Invalid view type");
         }
 
         if (view) {

@@ -94,6 +94,7 @@ class DesignComponent extends Component{
                     nextState.inScope === this.state.inScope &&
                     nextState.parentScope === this.state.parentScope &&
                     nextState.editorState === this.state.editorState &&
+                    nextProps.testSummary === this.props.testSummary &&
                     nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
                     nextProps.openDesignUpdateItems.length === this.props.openDesignUpdateItems.length &&
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length &&
@@ -113,6 +114,7 @@ class DesignComponent extends Component{
                 return !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
+                    nextProps.testSummary === this.props.testSummary &&
                     nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
                     nextProps.openDesignItems.length === this.props.openDesignItems.length &&
                     nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length

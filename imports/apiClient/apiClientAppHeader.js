@@ -9,6 +9,7 @@ import { DesignComponents } from '../collections/design/design_components.js';
 import { ViewType, ViewOptionType, ComponentType } from '../constants/constants.js';
 import ClientMashDataServices from '../apiClient/apiClientMashData.js';
 
+
 // REDUX services
 import store from '../redux/store'
 import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems} from '../redux/actions'
@@ -43,9 +44,22 @@ class ClientAppHeaderServices{
         store.dispatch(setCurrentUserViewOptions(newOptions, true));
         store.dispatch(updateViewOptionsData(!currentDataValue));
 
-        if(optionType === ViewOptionType.DESIGN_TEST_SUMMARY && newOptions[optionType]){
-            // Summary is being switched on
-            ClientMashDataServices.updateTestSummaryData(userContext);
+        // Special action require for view options:
+        switch(optionType){
+            case ViewOptionType.DESIGN_TEST_SUMMARY:
+            case ViewOptionType.UPDATE_TEST_SUMMARY:
+            case ViewOptionType.DEV_TEST_SUMMARY:
+                if(newOptions[optionType]){
+                    // Summary is being switched on so load up the data
+                    ClientMashDataServices.updateTestSummaryData(userContext);
+                }
+                break;
+            case ViewOptionType.DEV_INT_TESTS:
+                if(newOptions[optionType]){
+                    ClientMashDataServices.updateIntegrationTestData(userContext);
+                }
+            default:
+              // No action
         }
 
         return true;

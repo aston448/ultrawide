@@ -97,12 +97,14 @@ export default class TextEditor extends React.Component {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.DEVELOP_BASE_WP:
                 rawText = props.designComponent.componentTextRaw;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DEVELOP_UPDATE_WP:
                 if(props.context === DisplayContext.BASE_VIEW){
                     rawText = props.designComponent.componentTextRaw;
                 } else {

@@ -61,6 +61,7 @@ class DesignComponentText extends Component {
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DEVELOP_UPDATE_WP:
                 mainComponent = currentUpdateComponent;
                 if(mainComponent) {
                     titleName = mainComponent.componentNameNew;
@@ -73,12 +74,16 @@ class DesignComponentText extends Component {
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.DEVELOP_BASE_WP:
                 mainComponent = currentDesignComponent;
                 if(mainComponent) {
                     titleName = mainComponent.componentName;
                     textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
                 break;
+
+            default:
+                console.log("Unknown view type: " + view);
         }
 
         // Could be up to 4 panels:
@@ -94,9 +99,6 @@ class DesignComponentText extends Component {
 
             // Determine the look of the title
             //itemStyle = 'text-title'    //getComponentClass(mainComponent.componentType, mainComponent.componentLevel);
-
-
-
 
             // Panel 1 is always the main component text
             panel1 =
@@ -126,7 +128,7 @@ class DesignComponentText extends Component {
                                 stepContext: StepContext.STEP_FEATURE,
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
-                                updateId: ((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) ? mainComponent.designUpdateId : 'NONE'),
+                                updateId: mainComponent.designUpdateId,
                                 parentReferenceId: mainComponent.componentReferenceId
                             }}/>
                         </Panel>
@@ -138,14 +140,14 @@ class DesignComponentText extends Component {
             if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && mainComponent.componentFeatureReferenceId) {
                 panel2 =
                     <div>
-                        <Panel className="panel-steps panel-steps-body" header={titleName}>
+                        <Panel className="panel-steps panel-steps-body" header={'Scenario Steps: ' + titleName}>
                             <ScenarioStepsContainer params={{
                                 view: view,
                                 displayContext: context,
                                 stepContext: StepContext.STEP_FEATURE_SCENARIO,
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
-                                updateId: ((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) ? mainComponent.designUpdateId : 'NONE'),
+                                updateId: mainComponent.designUpdateId,
                                 parentReferenceId: mainComponent.componentFeatureReferenceId
                             }}/>
                             <ScenarioStepsContainer params={{
@@ -154,7 +156,7 @@ class DesignComponentText extends Component {
                                 stepContext: StepContext.STEP_SCENARIO,
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
-                                updateId: ((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) ? mainComponent.designUpdateId : 'NONE'),
+                                updateId: mainComponent.designUpdateId,
                                 parentReferenceId: mainComponent.componentReferenceId
                             }}/>
                         </Panel>
@@ -186,7 +188,7 @@ class DesignComponentText extends Component {
                 if(currentDesignComponent && mainComponent.componentType === ComponentType.SCENARIO) {
                     panel4 =
                         <div>
-                            <Panel className="panel-steps panel-steps-body" header="Scenario Steps">
+                            <Panel className="panel-steps panel-steps-body" header={'Scenario Steps: ' + titleName}>
                                     <ScenarioStepsContainer params={{
                                         view: view,
                                         displayContext: DisplayContext.BASE_VIEW,

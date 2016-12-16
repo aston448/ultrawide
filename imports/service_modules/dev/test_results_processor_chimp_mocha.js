@@ -51,6 +51,8 @@ class ChimpMochaTestServices{
 
             let returnData = new Mongo.Collection(null);
 
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
+
             resultsJson.passes.forEach((test) => {
                 returnData.insert(
                     {

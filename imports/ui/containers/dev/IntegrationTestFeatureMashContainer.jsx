@@ -29,6 +29,7 @@ import {Panel} from 'react-bootstrap';
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
+import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -53,6 +54,9 @@ class IntegrationTestFeatureMashList extends Component {
         return true;
     }
 
+    onExportIntegrationData(userContext){
+        ClientMashDataServices.exportIntegrationTests(userContext);
+    }
 
     renderFeatures(mashData){
 
@@ -124,7 +128,19 @@ class IntegrationTestFeatureMashList extends Component {
                 panelHeader = 'Tests in ' + nameData.designSection;
                 break;
             case ComponentType.FEATURE:
-                panelHeader = 'Tests for ' + nameData.feature;
+                panelHeader =
+                    <Grid className="close-grid">
+                        <Row>
+                            <Col md={8} className="close-col">
+                                <div className="panel-grid-header">{'Tests for ' + nameData.feature}</div>
+                            </Col>
+                            <Col md={4}>
+                                <div className="pull-right">
+                                    <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportIntegrationData(userContext)}>Export as Test File</Button>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Grid>;
                 break;
             case ComponentType.FEATURE_ASPECT:
                 panelHeader = nameData.featureAspect + ' tests for ' + nameData.feature;

@@ -12,13 +12,16 @@ Meteor.methods({
         TestSummaryServices.refreshTestSummaryData(userContext, 'CHIMP_CUCUMBER', 'CHIMP_MOCHA', 'METEOR_MOCHA');
     },
 
+    'mash.updateIntegrationTestData'(userContext){
+        IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
+    },
+
     'mash.loadUserFeatureFileData'(userContext, filePath){
         MashDataServices.loadUserFeatureFileData(userContext, filePath);
     },
 
     'mash.createMashData'(userContext){
         MashDataServices.createAccTestMashData(userContext);
-        IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
     },
 
     'mash.updateTestData'(viewOptions, userContext){

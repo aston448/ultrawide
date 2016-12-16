@@ -9,10 +9,14 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
-import DesignDevMashContainer from '../dev/DesignDevFeatureMashContainer.jsx';
-import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
-import DevFilesContainer from '../dev/DevFilesContainer.jsx';
+import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentTextContainer         from '../edit/DesignComponentTextContainer.jsx';
+import DesignDevFeatureMashContainer        from '../dev/DesignDevFeatureMashContainer.jsx';
+import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
+import DesignDevUnitMashContainer           from '../dev/DesignDevUnitMashContainer.jsx';
+import IntegrationTestFeatureMashContainer  from '../dev/IntegrationTestFeatureMashContainer.jsx';
+import DomainDictionaryContainer            from './DomainDictionaryContainer.jsx';
+
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -45,7 +49,7 @@ class DevApplicationsList extends Component {
     }
 
     // A list of top level applications in the work package(s)
-    renderApplications(wpApplications, view, mode, context) {
+    renderApplications(wpApplications, view, mode, context, testSummary) {
         return wpApplications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -55,6 +59,7 @@ class DevApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
+                    testSummary={testSummary}
                 />
             );
 
@@ -81,10 +86,13 @@ class DevApplicationsList extends Component {
 
         let designDetails = '';
         let featureTests = '';
-        let unitTests = '';
         let devFiles = '';
+        let unitTests = '';
+        let intTests = '';
         let domainDictionary = '';
         let displayedItems = 1;
+
+        // Possible Layout is: DESIGN | DETAILS (opt) | ACCEPTANCE TESTS + FILES (opt) | INTEGRATION TESTS (opt) | MODULE TESTS (opt) | DOMAIN DICT (opt)
 
         // WHAT COMPONENTS ARE VISIBLE (Besides Design)
 
@@ -95,11 +103,18 @@ class DevApplicationsList extends Component {
         let col4width = 6;
         let col5width = 6;
         let col6width = 6;
+        let col7width = 6;
+
+        // console.log("View Options Dev Details: " + viewOptions.devDetailsVisible);
+        // console.log("View Options Dev Acc: " + viewOptions.devAccTestsVisible);
+        // console.log("View Options Dev Int: " + viewOptions.devIntTestsVisible);
+        // console.log("View Options Dev Mod: " + viewOptions.devModTestsVisible);
+        // console.log("View Options Dev Dict: " + viewOptions.devDomainDictVisible);
 
         // Working Design
         let design =
-            <Panel header="Work Package Design" className="panel-update panel-update-body">
-                {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN)}
+            <Panel header="Design Functionality in this Work Package" className="panel-update panel-update-body">
+                {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
             </Panel>;
 
         // Details
@@ -116,30 +131,86 @@ class DevApplicationsList extends Component {
             displayedItems++;
         }
 
-        // Feature Tests
+        // Acceptance (Feature) Tests
         if(viewOptions.devAccTestsVisible){
             featureTests =
-                <Panel header="Feature Test Implementation" className="panel-update panel-update-body">
+                <Panel header="Acceptance Test Implementation" className="panel-update panel-update-body">
                     <DesignDevFeatureMashContainer params={{
                         userContext: userContext
                     }}/>
                 </Panel>;
 
+            devFiles =
+                <Panel header="Build Feature Files" className="panel-update panel-update-body">
+                    <DevFilesContainer params={{
+                        userContext: userContext
+                    }}/>
+                </Panel>;
+
             if(displayedItems == 2){
-                // There are now 3 cols so change widths
-                col1width = 4;
-                col2width = 4;
-                col3width = 4;
-                col4width = 4;
-                col5width = 4;
-                col6width = 4;
+                // There are now 4 cols so change widths
+                col1width = 3;
+                col2width = 3;
+                col3width = 3;
+                col4width = 3;
+                col5width = 3;
+                col6width = 3;
+                col7width = 3;
             }
 
+            // Add 2 cols
+            displayedItems++;
             displayedItems++;
         }
 
-        // Unit Tests
+        // Integration Tests
+        if(viewOptions.devIntTestsVisible){
+
+            intTests =
+                <Panel header="Integration Test Implementation" className="panel-update panel-update-body">
+                    <IntegrationTestFeatureMashContainer params={{
+                        userContext: userContext
+                    }}/>
+                </Panel>;
+
+            switch(displayedItems){
+                case 2:
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    col7width = 4;
+                    break;
+                case 3:
+                    // There are now 4 cols so change widths
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    col6width = 3;
+                    col7width = 3;
+                    break;
+                case 4:
+                    // There are now 5 cols so change widths
+                    col1width = 3;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 3;
+                    col6width = 3;
+                    col7width = 3;
+                    break;
+            }
+            displayedItems++;
+        }
+
+        // Module Tests
         if(viewOptions.devModTestsVisible){
+
             unitTests =
                 <Panel header="Module Test Implementation" className="panel-update panel-update-body">
                     <DesignDevUnitMashContainer params={{
@@ -156,6 +227,7 @@ class DevApplicationsList extends Component {
                     col4width = 4;
                     col5width = 4;
                     col6width = 4;
+                    col7width = 4;
                     break;
                 case 3:
                     // There are now 4 cols so change widths
@@ -165,47 +237,27 @@ class DevApplicationsList extends Component {
                     col4width = 3;
                     col5width = 3;
                     col6width = 3;
-                    break;
-            }
-            displayedItems++;
-        }
-
-        // Feature Files
-        if(viewOptions.devFeatureFilesVisible){
-            devFiles =
-                <Panel header="Build Feature Files" className="panel-update panel-update-body">
-                    <DevFilesContainer params={{
-                        userContext: userContext
-                    }}/>
-                </Panel>;
-
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
+                    col7width = 3;
                     break;
                 case 4:
                     // There are now 5 cols so change widths
+                    col1width = 3;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 3;
+                    col6width = 3;
+                    col7width = 3;
+                    break;
+                case 5:
+                    // There are now 6 cols so change widths
                     col1width = 2;
                     col2width = 2;
-                    col3width = 3;
-                    col4width = 3;
+                    col3width = 2;
+                    col4width = 2;
                     col5width = 2;
-                    col6width = 3;
+                    col6width = 2;
+                    col7width = 2;
             }
             displayedItems++;
         }
@@ -227,6 +279,7 @@ class DevApplicationsList extends Component {
                     col4width = 4;
                     col5width = 4;
                     col6width = 4;
+                    col7width = 4;
                     break;
                 case 3:
                     // There are now 4 cols so change widths
@@ -236,15 +289,17 @@ class DevApplicationsList extends Component {
                     col4width = 3;
                     col5width = 3;
                     col6width = 3;
+                    col7width = 3;
                     break;
                 case 4:
                     // There are now 5 cols so change widths
-                    col1width = 2;
+                    col1width = 4;
                     col2width = 2;
-                    col3width = 3;
-                    col4width = 3;
+                    col3width = 2;
+                    col4width = 2;
                     col5width = 2;
                     col6width = 2;
+                    col7width = 2;
                     break;
                 case 5:
                     // There are now 6 cols so change widths
@@ -254,33 +309,91 @@ class DevApplicationsList extends Component {
                     col4width = 2;
                     col5width = 2;
                     col6width = 2;
+                    col7width = 2;
+                    break;
+                case 6:
+                    // There are now 7 cols so change widths
+                    col1width = 2;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 2;
+                    col6width = 1;
+                    col7width = 1;
                     break;
             }
             displayedItems++;
         }
 
+        // Test Summary - this actually just makes col 1 wider
+        if(viewOptions.devTestSummaryVisible){
 
-
-
-
-        // Mash
-        // let mash =
-        //     <Panel header="Implementation Status" className="panel-update panel-update-body">
-        //         <DesignDevMashContainer params={{
-        //             userContext: userContext
-        //         }}/>
-        //     </Panel>;
-        //
-        // // Files
-        // let
-        //
-        // // Domain Dictionary
-        // let domainDictionary =
-        //     <DomainDictionaryContainer params={{
-        //         designId: userContext.designId,
-        //         designVersionId: userContext.designVersionId
-        //     }}/>;
-
+            switch(displayedItems){
+                case 1:
+                    col1width = 12;
+                    col2width = 0;
+                    col3width = 0;
+                    col4width = 0;
+                    col5width = 0;
+                    col6width = 0;
+                    col7width = 0;
+                    break;
+                case 2:
+                    col1width = 8;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    col7width = 4;
+                    break;
+                case 3:
+                    col1width = 6;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    col6width = 3;
+                    col7width = 3;
+                    break;
+                case 4:
+                    col1width = 6;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 2;
+                    col6width = 2;
+                    col7width = 2;
+                    break;
+                case 5:
+                    col1width = 4;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 2;
+                    col6width = 2;
+                    col7width = 2;
+                    break;
+                case 6:
+                    col1width = 7;
+                    col2width = 1;
+                    col3width = 1;
+                    col4width = 1;
+                    col5width = 1;
+                    col6width = 1;
+                    col7width = 1;
+                    break;
+                case 7:
+                    col1width = 6;
+                    col2width = 1;
+                    col3width = 1;
+                    col4width = 1;
+                    col5width = 1;
+                    col6width = 1;
+                    col7width = 1;
+                    break;
+            }
+        }
 
         // Create the layout depending on the current view...
         if(wpApplications) {
@@ -307,25 +420,33 @@ class DevApplicationsList extends Component {
             }
 
             let col4 = '';
-            if(viewOptions.devUnitTestsVisible){
+            if(viewOptions.devAccTestsVisible){
                 col4 =
                     <Col md={col4width} className="scroll-col">
-                        {unitTests}
-                    </Col>;
-            }
-
-            let col5 = '';
-            if(viewOptions.devFeatureFilesVisible){
-                col5 =
-                    <Col md={col5width} className="scroll-col">
                         {devFiles}
                     </Col>;
             }
 
+            let col5 = '';
+            if(viewOptions.devIntTestsVisible){
+                col5 =
+                    <Col md={col5width} className="scroll-col">
+                        {intTests}
+                    </Col>;
+            }
+
             let col6 = '';
-            if(viewOptions.devDomainDictVisible){
+            if(viewOptions.devModTestsVisible){
                 col6 =
                     <Col md={col6width} className="scroll-col">
+                        {unitTests}
+                    </Col>;
+            }
+
+            let col7 = '';
+            if(viewOptions.devDomainDictVisible){
+                col7 =
+                    <Col md={col7width} className="scroll-col">
                         {domainDictionary}
                     </Col>;
             }
@@ -341,6 +462,7 @@ class DevApplicationsList extends Component {
                         {col4}
                         {col5}
                         {col6}
+                        {col7}
                     </Row>
                 </Grid>;
 

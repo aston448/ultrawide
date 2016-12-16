@@ -202,6 +202,14 @@ input {
     font-weight: normal;
 }
 
+.panel-grid-header{
+    margin: 0 10px 0 0px;
+    padding: 3px 0px 2px 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+}
+
 .input-group-addon {
     padding: 4px;
     font-size: 12px;
@@ -324,6 +332,10 @@ input {
     margin: 0;
     padding: 0;
     background-color: transparent;
+}
+
+.col-right{
+    float: right;
 }
 
 .design-item-header{

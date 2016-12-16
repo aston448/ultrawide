@@ -33,20 +33,41 @@ class ClientMashDataServices {
 
     updateTestSummaryData(userContext, currentProgressDataValue){
         Meteor.call('mash.updateTestSummary', userContext, (err) => {
-            store.dispatch(updateProgressData(!currentProgressDataValue));
+            //store.dispatch(updateProgressData(!currentProgressDataValue));
         });
     }
 
-    // When calling this, ensure that data has been subscribed to
-    updateMashData(viewOptions, userContext, currentProgressDataValue){
-        // Get the latest DEV data for the Mash
-        this.createDevMashData(userContext);
-
-        // Get the latest test results
-        this.updateTestData(viewOptions, userContext, currentProgressDataValue);
-
-        //store.dispatch(updateProgressData(!currentProgressDataValue));
+    updateIntegrationTestData(userContext){
+        Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
+            //store.dispatch(updateProgressData(!currentProgressDataValue));
+        });
     }
+
+    updateTestData(userContext, viewOptions){
+
+        if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
+            Meteor.call('mash.updateTestSummary', userContext, (err) => {
+                //store.dispatch(updateProgressData(!currentProgressDataValue));
+            });
+        }
+
+        if(viewOptions.devIntTestsVisible){
+            Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
+                //store.dispatch(updateProgressData(!currentProgressDataValue));
+            });
+        }
+    }
+
+    // // When calling this, ensure that data has been subscribed to
+    // updateMashData(viewOptions, userContext, currentProgressDataValue){
+    //     // Get the latest DEV data for the Mash
+    //     this.createDevMashData(userContext);
+    //
+    //     // Get the latest test results
+    //     this.updateTestData(viewOptions, userContext, currentProgressDataValue);
+    //
+    //     //store.dispatch(updateProgressData(!currentProgressDataValue));
+    // }
 
     createDevMashData(userContext){
 
@@ -103,11 +124,11 @@ class ClientMashDataServices {
 
     }
 
-    updateTestData(viewOptions, userContext,currentProgressDataValue){
-        Meteor.call('mash.updateTestData', viewOptions, userContext, (err) => {
-            store.dispatch(updateProgressData(!currentProgressDataValue));
-        });
-    };
+    // updateTestData(viewOptions, userContext,currentProgressDataValue){
+    //     Meteor.call('mash.updateTestData', viewOptions, userContext, (err) => {
+    //         store.dispatch(updateProgressData(!currentProgressDataValue));
+    //     });
+    // };
 
     featureHasAspects(userContext, featureComponentId){
 

@@ -126,6 +126,7 @@ class DesignComponentHeader extends Component{
                     nextState.inScope === this.state.inScope &&
                     nextState.parentScope === this.state.parentScope &&
                     nextState.editorState === this.state.editorState &&
+                    nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
@@ -143,6 +144,7 @@ class DesignComponentHeader extends Component{
             case ViewType.DEVELOP_UPDATE_WP:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
+                    nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen
                 );
         }

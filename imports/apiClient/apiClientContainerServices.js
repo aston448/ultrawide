@@ -610,6 +610,7 @@ class ClientContainerServices{
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.DEVELOP_BASE_WP:
 
                 backgroundSteps = FeatureBackgroundSteps.find(
                     {
@@ -635,6 +636,7 @@ class ClientContainerServices{
             case ViewType.DESIGN_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DEVELOP_UPDATE_WP:
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
@@ -710,6 +712,9 @@ class ClientContainerServices{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.DEVELOP_BASE_WP:
 
                 scenarioSteps = ScenarioSteps.find(
                     {
@@ -734,6 +739,9 @@ class ClientContainerServices{
 
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DEVELOP_UPDATE_WP:
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
@@ -793,6 +801,10 @@ class ClientContainerServices{
                     parentReferenceId: scenarioReferenceId,
                     parentInScope: scenarioInScope
                 };
+
+                break;
+            default:
+                log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
         }
     }
 
@@ -808,6 +820,8 @@ class ClientContainerServices{
                 case ViewType.DESIGN_PUBLISHED_VIEW:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
+                case ViewType.DEVELOP_BASE_WP:
+
                     console.log("DCT Container: UC Design component is " + userContext.designComponentId);
                     currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
                     console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
@@ -817,6 +831,7 @@ class ClientContainerServices{
                 case ViewType.DESIGN_UPDATE_VIEW:
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                case ViewType.DEVELOP_UPDATE_WP:
                     currentUpdateComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
 
 
@@ -832,6 +847,8 @@ class ClientContainerServices{
                         }
                     }
                     break;
+                default:
+                    console.log("Unknown view type: " + view);
             }
 
             return {
@@ -908,7 +925,7 @@ class ClientContainerServices{
 
                 features.forEach((feature) => {
 
-                    if(this.isDescendentOf(feature, selectedWpItem, userContext)){
+                    if(this.isDescendantOf(feature, selectedWpItem, userContext)){
                         wantedFeatures.push(feature);
                     }
                 });

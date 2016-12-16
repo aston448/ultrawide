@@ -40,10 +40,8 @@ export const ViewOptionType = {
     DESIGN_TEST_SUMMARY:'designTestSummaryVisible',
     DESIGN_DICT:        'designDomainDictVisible',
     UPDATE_DETAILS:     'updateDetailsVisible',
-    UPDATE_ACC_TESTS:   'updateAccTestsVisible',
-    UPDATE_INT_TESTS:   'updateIntTestsVisible',
-    UPDATE_MOD_TESTS:   'updateModTestsVisible',
     UPDATE_DICT:        'updateDomainDictVisible',
+    UPDATE_TEST_SUMMARY:'updateTestSummaryVisible',
     WP_DETAILS:         'wpDetailsVisible',
     WP_DICT:            'wpDomainDictVisible',
     DEV_DETAILS:        'devDetailsVisible',
@@ -52,6 +50,7 @@ export const ViewOptionType = {
     DEV_MOD_TESTS:      'devModTestsVisible',
     DEV_FILES:          'devFeatureFilesVisible',
     DEV_DICT:           'devDomainDictVisible',
+    DEV_TEST_SUMMARY:   'devTestSummaryVisible',
 };
 
 // Context specifies how and what information is displayed in common components
