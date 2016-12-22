@@ -147,15 +147,27 @@ class DevApplicationsList extends Component {
                     }}/>
                 </Panel>;
 
-            if(displayedItems == 2){
-                // There are now 4 cols so change widths
-                col1width = 3;
-                col2width = 3;
-                col3width = 3;
-                col4width = 3;
-                col5width = 3;
-                col6width = 3;
-                col7width = 3;
+            switch(displayedItems){
+                case 1:
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    col7width = 4;
+                    break;
+                case 2:
+                    // There are now 4 cols so change widths
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    col6width = 3;
+                    col7width = 3;
+                    break;
             }
 
             // Add 2 cols

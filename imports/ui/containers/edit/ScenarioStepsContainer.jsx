@@ -74,32 +74,43 @@ class ScenarioStepsList extends Component {
     render() {
         const {steps, displayContext, stepContext, parentReferenceId, parentInScope, view, mode, userContext} = this.props;
 
-        let addScenarioStep = <div></div>;
+        let addScenarioStep =
+            <table>
+                <tbody>
+                <tr>
+                    <td className="control-table-data">
+                        <DesignComponentAdd
+                            addText="Add scenario step"
+                            onClick={ () => this.addStep(view, mode, displayContext, stepContext, parentReferenceId, userContext, parentInScope)}
+                        />
+                    </td>
+                </tr>
+                </tbody>
+            </table>;
+
+        let addOn = <div></div>;
 
         //console.log("Rendering scenario steps with Context " + displayContext + " and mode " + mode + " and inScope " + parentInScope );
 
-        // Adding new steps is allowed if in an editing context and not looking at background steps in a scenario
-        if((view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope && stepContext != StepContext.STEP_FEATURE_SCENARIO){
+        // Adding new steps is allowed if in an editing context or work package development and not looking at background steps in a scenario
 
-            addScenarioStep =
-                <table>
-                    <tbody>
-                    <tr>
-                        <td className="control-table-data">
-                            <DesignComponentAdd
-                                addText="Add scenario step"
-                                onClick={ () => this.addStep(view, mode, displayContext, stepContext, parentReferenceId, userContext, parentInScope)}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_UPDATE_EDIT:
+                if(mode === ViewMode.MODE_EDIT && parentInScope && stepContext != StepContext.STEP_FEATURE_SCENARIO){
+                    addOn = addScenarioStep;
+                }
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+            case view === ViewType.DEVELOP_UPDATE_WP:
+                addOn = addScenarioStep;
+                break;
         }
 
         return (
             <div>
                 {this.renderSteps(steps, parentInScope, view, mode, displayContext, stepContext, userContext)}
-                {addScenarioStep}
+                {addOn}
             </div>
         );
     }

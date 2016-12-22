@@ -113,7 +113,7 @@ class ScenarioStep extends Component {
 
         if(newRawText){
             // Immediate update of latest text
-            //console.log("Updating step editor with " + newRawText);
+            console.log("Updating step editor with " + newRawText);
             currentContent = convertFromRaw(newRawText);
         } else {
             // Getting stored text
@@ -135,7 +135,7 @@ class ScenarioStep extends Component {
         // If editing update step suggestion
 
         if (currentContent.hasText()) {
-            //console.log("recreating txt");
+            console.log("recreating txt");
             this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
         } else {
             this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
@@ -208,13 +208,20 @@ class ScenarioStep extends Component {
     }
 
     // Save changes to the step text
-    onSaveStepText(step, stepType, view, mode, parentInScope, stepContext){
+    onSaveStepText(step, stepType, view, mode, parentInScope, stepContext, newRawText){
         event.preventDefault();
-        //console.log("UPDATE STEP TEXT");
+
 
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
-        let rawText = convertToRaw(this.state.editorState.getCurrentContent());
+        let rawText = null;
 
+        if(newRawText){
+            rawText = newRawText;
+        } else {
+            rawText = convertToRaw(this.state.editorState.getCurrentContent());
+        }
+
+        console.log("UPDATE STEP TEXT with " + plainText);
         let success = ClientScenarioStepServices.updateScenarioStepText(view, mode, parentInScope, step._id, stepType, plainText, rawText, stepContext);
 
         if(success){
@@ -243,7 +250,7 @@ class ScenarioStep extends Component {
 
         this.updateText(newRawText);
 
-        this.onSaveStepText(this.props.scenarioStep, this.props.scenarioStep.stepType, this.props.view, this.props.mode, this.props.parentInScope);
+        this.onSaveStepText(this.props.scenarioStep, this.props.scenarioStep.stepType, this.props.view, this.props.mode, this.props.parentInScope, this.props.stepContext, newRawText);
 
     }
 

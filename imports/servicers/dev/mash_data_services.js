@@ -16,13 +16,14 @@ import {UserCurrentDevContext}          from '../../collections/context/user_cur
 
 // Ultrawide Services
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
-    UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, LogLevel} from '../../constants/constants.js';
+    UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, ViewOptionType, LogLevel} from '../../constants/constants.js';
 import {log}                            from '../../common/utils.js';
 
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from '../design/scenario_services.js';
 import IntegrationTestServices          from './integration_test_services.js';
 import ModuleTestServices               from './module_test_services.js';
+import MashDataModules                  from '../../service_modules/dev/mash_data_service_modules.js';
 
 //======================================================================================================================
 //
@@ -33,6 +34,42 @@ import ModuleTestServices               from './module_test_services.js';
 //======================================================================================================================
 
 class MashDataServices{
+
+    updateTestMashData(userContext, viewOptions){
+
+        if(Meteor.isServer){
+
+            // User has chosen to update the test mash data.  Get and update what is needed for the current view
+
+            let testSummaryVisible = (viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible);
+
+            if(viewOptions.devAccTestsVisible || testSummaryVisible){
+                // Get latest Acc Tests Results
+                MashDataModules.getAcceptanceTestResults('CHIMP_CUCUMBER', userContext);
+            }
+
+            if(viewOptions.devIntTestsVisible || testSummaryVisible){
+                // Get latest Int Test Results
+                MashDataModules.getIntegrationTestResults('CHIMP_MOCHA', userContext);
+            }
+
+            if(viewOptions.devModTestsVisible || testSummaryVisible){
+                // Get latest Mod Test Results
+                MashDataModules.getModuleTestResults('METEOR_MOCHA', userContext);
+            }
+
+            if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devModTestsVisible){
+                // Recalculate the Design Mash data and add in the latest results
+                MashDataModules.calculateDesignMash(viewOptions, userContext)
+            }
+
+
+            if(testSummaryVisible){
+                // Recreate the summary mash
+            }
+
+        }
+    };
 
     loadUserFeatureFileData(userContext){
 

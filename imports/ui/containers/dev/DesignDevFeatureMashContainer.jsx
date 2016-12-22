@@ -167,24 +167,26 @@ class DesignItemFeatureMashList extends Component {
                 case ComponentType.FEATURE_ASPECT:
                     mainPanel =
                         <Panel className="panel-text panel-text-body" header={panelHeader}>
-                            <InputGroup>
-                                <Grid className="close-grid">
-                                    <Row>
-                                        <Col md={8} className="close-col">
-                                            {itemHeader}
-                                        </Col>
-                                        <Col md={2} className="close-col">
-                                            Status
-                                        </Col>
-                                        <Col md={2} className="close-col">
-                                            Test
-                                        </Col>
-                                    </Row>
-                                </Grid>
-                                <InputGroup.Addon className="invisible">
-                                    <div><Glyphicon glyph="star"/></div>
-                                </InputGroup.Addon>
-                            </InputGroup>
+                            <div>
+                                <InputGroup>
+                                    <Grid className="close-grid">
+                                        <Row>
+                                            <Col md={8} className="close-col">
+                                                {itemHeader}
+                                            </Col>
+                                            <Col md={2} className="close-col">
+                                                Status
+                                            </Col>
+                                            <Col md={2} className="close-col">
+                                                Test
+                                            </Col>
+                                        </Row>
+                                    </Grid>
+                                    <InputGroup.Addon className="invisible">
+                                        <div><Glyphicon glyph="star"/></div>
+                                    </InputGroup.Addon>
+                                </InputGroup>
+                            </div>
                             {this.renderDesignItemMash(designMashItemData)}
                         </Panel>;
                     break;

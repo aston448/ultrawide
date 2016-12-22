@@ -249,3 +249,15 @@ export const LogLevel = {
     ERROR:      'ERROR:   ',
     NONE:       'NONE:    '
 };
+
+export const TestType = {
+    ACCEPTANCE:     'Acceptance',
+    INTEGRATION:    'Integration',
+    MODULE:         'Module'
+};
+
+export const TestRunner = {
+    CHIMP_MOCHA:    'Chimp Mocha',
+    CHIMP_CUCUMBER: 'Chimp Cucumber',
+    METEOR_MOCHA:   'Meteor Mocha'
+}

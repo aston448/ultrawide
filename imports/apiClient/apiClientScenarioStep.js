@@ -82,9 +82,11 @@ class ClientScenarioStepServices {
     // User edited and saved Scenario Step text
     updateScenarioStepText(view, mode, parentInScope, stepId, stepType, newPlainText, newRawText, stepContext){
 
-        log((msg)=> console.log(msg), LogLevel.DEBUG, "Saving scenario step text with view: {} and mode: {} and in scope: {}", view, mode , parentInScope);
+        log((msg)=> console.log(msg), LogLevel.DEBUG, "Saving scenario step {} text with view: {} and mode: {} and in scope: {}", stepId, view, mode , parentInScope);
         // Validate - can only update if design is editable and for in-scope update scenarios
         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope){
+            log((msg)=> console.log(msg), LogLevel.DEBUG, "Saving scenario step text {} with context {}", newRawText.blocks[0].text, stepContext);
+
             Meteor.call('scenario.updateScenarioStepText', stepId, stepType, newPlainText, newRawText, stepContext);
             return true;
         } else {

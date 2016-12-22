@@ -1,11 +1,14 @@
 import fs from 'fs';
-import {MashTestStatus, LogLevel}   from '../../constants/constants.js';
+
+import {UserIntTestResults} from '../../collections/dev/user_int_test_results.js'
+
+import {TestType, MashTestStatus, LogLevel}   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js';
 
 // Plugin class to read test results from a screen scraped chimp mocha JSON reported file
 class ChimpMochaTestServices{
 
-    getJsonTestResults(resultsFile){
+    getJsonTestResults(resultsFile, userId, testType){
 
         if(Meteor.isServer) {
 
@@ -49,53 +52,67 @@ class ChimpMochaTestServices{
 
             // Return Standard Data ------------------------------------------------------------------------------------
 
-            let returnData = new Mongo.Collection(null);
+
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Results: Passes {}, Fails {}, Pending {}", resultsJson.passes.length, resultsJson.failures.length, resultsJson.pending.length,);
 
-            resultsJson.passes.forEach((test) => {
-                returnData.insert(
-                    {
-                        testName:           test.title,
-                        testFullName:       test.fullTitle,
-                        testResult:         MashTestStatus.MASH_PASS,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       test.duration,
-                        stackTrace:         ''
-                    }
-                );
-            });
+            switch(testType){
+                case TestType.INTEGRATION:
 
-            resultsJson.failures.forEach((test) => {
-                returnData.insert(
-                    {
-                        testName:           test.title,
-                        testFullName:       test.fullTitle,
-                        testResult:         MashTestStatus.MASH_FAIL,
-                        testError:          test.err.error,
-                        testErrorReason:    test.err.reason,
-                        testDuration:       test.duration,
-                        stackTrace:         test.err.stack
-                    }
-                );
-            });
+                    // Clear existing results for user
+                    UserIntTestResults.remove({userId: userId});
 
-            resultsJson.pending.forEach((test) => {
-                returnData.insert(
-                    {
-                        testName:           test.title,
-                        testFullName:       test.fullTitle,
-                        testResult:         MashTestStatus.MASH_PENDING,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       0,
-                        stackTrace:         ''
-                    }
-                );
-            });
+                    // Add latest results
+                    resultsJson.passes.forEach((test) => {
+                        UserIntTestResults.insert(
+                            {
+                                userId:             userId,
+                                testName:           test.title,
+                                testFullName:       test.fullTitle,
+                                testResult:         MashTestStatus.MASH_PASS,
+                                testError:          '',
+                                testErrorReason:    '',
+                                testDuration:       test.duration,
+                                stackTrace:         ''
+                            }
+                        );
+                    });
 
-            return returnData;
+                    resultsJson.failures.forEach((test) => {
+                        UserIntTestResults.insert(
+                            {
+                                userId:             userId,
+                                testName:           test.title,
+                                testFullName:       test.fullTitle,
+                                testResult:         MashTestStatus.MASH_FAIL,
+                                testError:          test.err.error,
+                                testErrorReason:    test.err.reason,
+                                testDuration:       test.duration,
+                                stackTrace:         test.err.stack
+                            }
+                        );
+                    });
+
+                    resultsJson.pending.forEach((test) => {
+                        UserIntTestResults.insert(
+                            {
+                                userId:             userId,
+                                testName:           test.title,
+                                testFullName:       test.fullTitle,
+                                testResult:         MashTestStatus.MASH_PENDING,
+                                testError:          '',
+                                testErrorReason:    '',
+                                testDuration:       0,
+                                stackTrace:         ''
+                            }
+                        );
+                    });
+
+                    break;
+                default:
+            }
+
+
 
         }
 
