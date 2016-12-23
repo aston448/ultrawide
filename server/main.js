@@ -16,13 +16,21 @@ import '../imports/collections/design_update/user_current_dev_updates.js';
 import '../imports/collections/design/domain_dictionary.js';
 import '../imports/collections/work/work_packages.js';
 import '../imports/collections/work/work_package_components.js';
+
 import '../imports/collections/dev/user_dev_features.js';
 import '../imports/collections/dev/user_dev_feature_background_steps.js';
 import '../imports/collections/dev/user_dev_feature_scenarios.js';
 import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
-import '../imports/collections/dev/user_acc_test_mash_data.js';
-import '../imports/collections/dev/user_mod_test_mash_data.js';
+
 import '../imports/collections/dev/user_dev_test_summary_data.js';
+
+import '../imports/collections/dev/user_acc_test_mash_data.js';
+import '../imports/collections/dev/user_int_test_mash_data'
+import '../imports/collections/dev/user_mod_test_mash_data.js';
+
+import '../imports/collections/dev/user_acc_test_results.js';
+import '../imports/collections/dev/user_int_test_results.js';
+import '../imports/collections/dev/user_mod_test_results.js';
 
 // Modules
 import '../imports/startup/server/fixtures.js';

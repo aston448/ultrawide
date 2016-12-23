@@ -162,9 +162,9 @@ class DesignApplicationsList extends Component {
             switch(displayedItems){
                 case 1:
                     // Col 1 gets bigger
-                    col1width = 8;
-                    col2width = 4;
-                    col3width = 4;
+                    col1width = 12;
+                    col2width = 0;
+                    col3width = 0;
                     break;
                 case 2:
                     // Col 1 gets bigger

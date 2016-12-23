@@ -900,10 +900,10 @@ class DesignComponentHeader extends Component{
                     return(
                         <Grid>
                             <Row className={featureRowClass}>
-                                <Col md={8} className="close-col">
+                                <Col md={7} className="close-col">
                                     {designComponentElement}
                                 </Col>
-                                <Col md={4} className="close-col">
+                                <Col md={5} className="close-col">
                                     <FeatureTestSummary
                                         testSummaryData={testSummaryData}
                                     />
@@ -931,10 +931,10 @@ class DesignComponentHeader extends Component{
                     return(
                         <Grid>
                             <Row className={rowClass}>
-                                <Col md={8} className="close-col">
+                                <Col md={7} className="close-col">
                                     {designComponentElement}
                                 </Col>
-                                <Col md={4} className="close-col">
+                                <Col md={5} className="close-col">
                                     <TestSummary
                                         testSummaryData={testSummaryData}
                                     />
@@ -947,10 +947,10 @@ class DesignComponentHeader extends Component{
                     return(
                         <Grid>
                             <Row className="non-summary-row">
-                                <Col md={8} className="close-col">
+                                <Col md={7} className="close-col">
                                     {designComponentElement}
                                 </Col>
-                                <Col md={4} className="close-col">
+                                <Col md={5} className="close-col">
                                 </Col>
                             </Row>
                         </Grid>

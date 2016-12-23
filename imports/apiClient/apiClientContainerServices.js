@@ -92,6 +92,9 @@ class ClientContainerServices{
         const atHandle = Meteor.subscribe('userAccTestMashData');
         const itHandle = Meteor.subscribe('userIntTestMashData');
         const mtHandle = Meteor.subscribe('userModTestMashData');
+        const arHandle = Meteor.subscribe('userAccTestResults');
+        const irHandle = Meteor.subscribe('userIntTestResults');
+        const mrHandle = Meteor.subscribe('userModTestResults');
         const tsHandle = Meteor.subscribe('userDevTestSummaryData');
 
         const loading = (
@@ -102,8 +105,13 @@ class ClientContainerServices{
             !atHandle.ready()   ||
             !itHandle.ready()   ||
             !mtHandle.ready()   ||
+            !arHandle.ready()   ||
+            !irHandle.ready()   ||
+            !mrHandle.ready()   ||
             !tsHandle.ready()
         );
+
+        console.log('Subscribing to Dev Data');
 
         return loading;
 

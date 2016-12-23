@@ -301,6 +301,13 @@ class AppHeader extends Component {
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
+                headerBottomActionsOne =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {viewFeatureLevelButton}
+                            {viewSectionLevelButton}
+                        </ButtonGroup>
+                    </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>

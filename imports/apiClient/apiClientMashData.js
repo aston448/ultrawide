@@ -45,17 +45,21 @@ class ClientMashDataServices {
 
     updateTestData(userContext, viewOptions){
 
-        if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
-            Meteor.call('mash.updateTestSummary', userContext, (err) => {
-                //store.dispatch(updateProgressData(!currentProgressDataValue));
-            });
-        }
+        Meteor.call('mash.updateTestData', userContext, viewOptions);
 
-        if(viewOptions.devIntTestsVisible){
-            Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
-                //store.dispatch(updateProgressData(!currentProgressDataValue));
-            });
-        }
+        // if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
+        //     Meteor.call('mash.updateTestSummary', userContext, (err) => {
+        //         //store.dispatch(updateProgressData(!currentProgressDataValue));
+        //     });
+        // }
+        //
+        // if(viewOptions.devIntTestsVisible){
+        //     Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
+        //         //store.dispatch(updateProgressData(!currentProgressDataValue));
+        //     });
+        // }
+
+
     }
 
     // // When calling this, ensure that data has been subscribed to

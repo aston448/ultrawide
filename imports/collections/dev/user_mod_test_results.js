@@ -1,5 +1,5 @@
 /**
- * User Acceptance Test Results.
+ * User Module Test Results.
  */
 
 import { Mongo } from 'meteor/mongo';

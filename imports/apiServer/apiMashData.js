@@ -8,13 +8,13 @@ import  IntegrationTestServices     from '../servicers/dev/integration_test_serv
 // Meteor methods
 Meteor.methods({
 
-    'mash.updateTestSummary'(userContext){
-        TestSummaryServices.refreshTestSummaryData(userContext, 'CHIMP_CUCUMBER', 'CHIMP_MOCHA', 'METEOR_MOCHA');
-    },
-
-    'mash.updateIntegrationTestData'(userContext){
-        IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
-    },
+    // 'mash.updateTestSummary'(userContext){
+    //     TestSummaryServices.refreshTestSummaryData(userContext, 'CHIMP_CUCUMBER', 'CHIMP_MOCHA', 'METEOR_MOCHA');
+    // },
+    //
+    // 'mash.updateIntegrationTestData'(userContext){
+    //     IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
+    // },
 
     'mash.loadUserFeatureFileData'(userContext, filePath){
         MashDataServices.loadUserFeatureFileData(userContext, filePath);
@@ -24,8 +24,8 @@ Meteor.methods({
         MashDataServices.createAccTestMashData(userContext);
     },
 
-    'mash.updateTestData'(viewOptions, userContext){
-        MashDataServices.updateTestData(viewOptions, userContext);
+    'mash.updateTestData'(userContext, viewOptions){
+        MashDataServices.updateTestMashData(userContext, viewOptions);
     },
 
     'mash.updateMovedDesignStep'(designMashItemId){

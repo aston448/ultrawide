@@ -380,10 +380,10 @@ export default class Narrative extends React.Component {
             return(
                 <Grid>
                     <Row>
-                        <Col md={8} className="close-col">
+                        <Col md={7} className="close-col">
                             {narrativeHtml}
                         </Col>
-                        <Col md={4} className="close-col">
+                        <Col md={5} className="close-col">
                         </Col>
                     </Row>
                 </Grid>
