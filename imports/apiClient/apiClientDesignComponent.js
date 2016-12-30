@@ -1,11 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide collections
-import {DesignComponents}       from '../collections/design/design_components.js';
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
-import {UserModTestMashData}    from '../collections/dev/user_mod_test_mash_data.js';
-import {UserIntTestMashData}    from '../collections/dev/user_int_test_mash_data.js';
-import {UserAccTestMashData}    from '../collections/dev/user_acc_test_mash_data.js';
+import {DesignComponents}           from '../collections/design/design_components.js';
+import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
+import {UserModTestMashData}        from '../collections/dev/user_mod_test_mash_data.js';
+import {UserWorkPackageMashData}    from '../collections/dev/user_work_package_mash_data.js';
+import {UserAccTestMashData}        from '../collections/dev/user_acc_test_mash_data.js';
 
 // Ultrawide Services
 import { ComponentType, DisplayContext, MashTestStatus, LogLevel, MessageType} from '../constants/constants.js';
@@ -654,11 +654,11 @@ class ClientDesignComponentServices{
                     testOutcome:                    MashTestStatus.MASH_PASS
                 }).count();
 
-                const passingIntegrationTestsCount = UserIntTestMashData.find({
+                const passingIntegrationTestsCount = UserWorkPackageMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                designComponent.designVersionId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
-                    mashTestStatus:                 MashTestStatus.MASH_PASS
+                    intMashTestStatus:                 MashTestStatus.MASH_PASS
                 }).count();
 
                 const passingAcceptanceTestsCount = UserAccTestMashData.find({
@@ -675,11 +675,11 @@ class ClientDesignComponentServices{
                     testOutcome:                    MashTestStatus.MASH_FAIL
                 }).count();
 
-                const failingIntegrationTestsCount = UserIntTestMashData.find({
+                const failingIntegrationTestsCount = UserWorkPackageMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                designComponent.designVersionId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
-                    mashTestStatus:                 MashTestStatus.MASH_FAIL
+                    intMashTestStatus:                 MashTestStatus.MASH_FAIL
                 }).count();
 
                 const failingAcceptanceTestsCount = UserAccTestMashData.find({

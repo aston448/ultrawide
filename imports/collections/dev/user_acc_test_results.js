@@ -8,8 +8,10 @@ export const UserAccTestResults = new Mongo.Collection('userAccTestResults');
 
 let Schema = new SimpleSchema({
     userId:             {type: String},                 // This user's results
-    testName:           {type: String},                 // Maps to Scenario name
-    testFullName:       {type: String},                 // For mocha type tests
+    componentType:      {type: String},                 // Scenario or Step
+    featureName:        {type: String},
+    scenarioName:       {type: String},                 // 
+    stepName:           {type: String},
     testResult:         {type: String},                 // Pass, Fail, Pending
     testError:          {type: String, optional: true}, // If fail
     testErrorReason:    {type: String, optional: true}, // If fail

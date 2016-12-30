@@ -24,6 +24,10 @@ Meteor.methods({
         MashDataServices.createAccTestMashData(userContext);
     },
 
+    'mash.populateWorkPackageMashData'(userContext){
+        MashDataServices.populateWorkPackageMashData(userContext);
+    },
+
     'mash.updateTestData'(userContext, viewOptions){
         MashDataServices.updateTestMashData(userContext, viewOptions);
     },

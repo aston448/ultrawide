@@ -371,11 +371,11 @@ class ClientWorkPackageServices {
         // Load dev data
         let loading = ClientContainerServices.getDevData();
 
-        // Get the latest DEV data for the Mash
-        //ClientMashDataServices.createDevMashData(updatedContext);
+        // Get the latest design data for the Mash
+        ClientMashDataServices.populateWorkPackageMashData(updatedContext);
 
         // Get the latest test results
-        //ClientMashDataServices.updateTestData(viewOptions, updatedContext);
+        ClientMashDataServices.updateTestData(updatedContext, viewOptions);
 
         // Switch to Dev View
         if(userContext.designUpdateId === 'NONE') {

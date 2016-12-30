@@ -10,9 +10,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import IntegrationTestFeatureMashItem               from './IntegrationTestFeatureMashItem.jsx';
-import IntegrationTestFeatureAspectMashContainer    from '../../containers/dev/IntegrationTestFeatureAspectMashContainer.jsx';
-import IntegrationTestScenarioMashContainer         from '../../containers/dev/IntegrationTestScenarioMashContainer.jsx';
+import IntegrationTestFeatureMashItem               from './WorkPackageFeatureMashItem.jsx';
+import IntegrationTestFeatureAspectMashContainer    from '../../containers/dev/WorkPackageFeatureAspectMashContainer.jsx';
+import IntegrationTestScenarioMashContainer         from '../../containers/dev/WorkPackageScenarioMashContainer.jsx';
 
 // Ultrawide Services
 import {RoleType, DisplayContext, MashStatus, ComponentType, LogLevel, FeatureTestSummaryStatus}    from '../../../constants/constants.js';

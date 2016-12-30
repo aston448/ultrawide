@@ -45,7 +45,7 @@ class IntegrationTestScenarioMashItem extends Component {
     render(){
         const { mashItem, userContext } = this.props;
 
-        const testStyle = mashItem.mashTestStatus;
+        const testStyle = mashItem.intMashTestStatus;
 
         return(
 
@@ -58,7 +58,7 @@ class IntegrationTestScenarioMashItem extends Component {
                     </Col>
                     <Col md={2}>
                         <div className={'mash-scenario-result ' + testStyle}>
-                            {TextLookups.mashTestStatus(mashItem.mashTestStatus)}
+                            {TextLookups.mashTestStatus(mashItem.intMashTestStatus)}
                         </div>
                     </Col>
                 </Row>

@@ -1,19 +1,25 @@
 
 // Ultrawide Collections
-import { DesignComponents }         from '../../collections/design/design_components.js';
-import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-import { WorkPackages }             from '../../collections/work/work_packages.js';
-import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
-import { UserIntTestMashData }      from '../../collections/dev/user_int_test_mash_data.js';
-import { UserIntTestResults }       from '../../collections/dev/user_int_test_results.js';
+import { DesignComponents }                 from '../../collections/design/design_components.js';
+import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
+import { FeatureBackgroundSteps }           from '../../collections/design/feature_background_steps.js';
+import { ScenarioSteps }                    from '../../collections/design/scenario_steps.js';
+import { WorkPackages }                     from '../../collections/work/work_packages.js';
+import { WorkPackageComponents }            from '../../collections/work/work_package_components.js';
+import { UserWorkPackageMashData }          from '../../collections/dev/user_work_package_mash_data.js';
+import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
+import { UserAccTestResults }               from '../../collections/dev/user_acc_test_results.js';
+import { UserIntTestResults }               from '../../collections/dev/user_int_test_results.js';
+import { UserModTestResults }               from '../../collections/dev/user_mod_test_results.js';
 
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
+import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, ScenarioStepStatus, ScenarioStepType, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
-import  DesignComponentServices     from '../../servicers/design/design_component_services.js';
+import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
 import ChimpMochaTestServices       from '../../service_modules/dev/test_results_processor_chimp_mocha.js';
+import ChimpCucumberTestServices    from '../../service_modules/dev/test_results_processor_chimp_cucumber.js';
 
 //======================================================================================================================
 //
@@ -27,6 +33,22 @@ class MashDataModules{
 
     getAcceptanceTestResults(testRunner, userContext){
 
+        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
+        if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
+            return;
+        }
+
+        // Call the correct results service to get the test data
+
+        switch (testRunner) {
+            case TestRunner.CHIMP_CUCUMBER:
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_CUCUMBER Results Data");
+                let testFile = userContext.acceptanceTestResultsLocation;
+
+                ChimpCucumberTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
+                break;
+
+        }
     };
 
     getIntegrationTestResults(testRunner, userContext){
@@ -35,8 +57,6 @@ class MashDataModules{
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
             return;
         }
-
-        let resultsData = [];
 
         // Call the correct results service to get the test data
 
@@ -58,17 +78,13 @@ class MashDataModules{
 
     };
 
-    calculateDesignMash(viewOptions, userContext){
+    calculateWorkPackageMash(userContext){
 
         // Clear the data we are refreshing
 
-        if(viewOptions.devIntTestsVisible) {
-
-            // Clear Integration data for this user
-            UserIntTestMashData.remove({userId: userContext.userId});
-        }
-
-        // TODO add ACC and MOD
+        // Clear Work Package Mash data for this user
+        UserWorkPackageMashData.remove({userId: userContext.userId});
+        UserWorkPackageFeatureStepData.remove({userId: userContext.userId});
 
         // Get relevant WP Design Data to display in the Mash: Features, Feature Aspects and Scenarios
         // But needs to be maintained in the order of the design.  This is a problem for Features when selecting the
@@ -100,18 +116,15 @@ class MashDataModules{
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data for application {}", application.componentReferenceId);
 
                 // Recursively look for features in design sections under this Application
-                featureIndex = this.getDesignSubSectionFeatures(userContext, viewOptions, application, featureIndex);
+                featureIndex = this.getDesignSubSectionFeatures(userContext, application, featureIndex);
 
             });
-
-            // And update the mash data from the actual test results
-            this.updateMashResults(userContext, viewOptions);
 
         }
 
     }
 
-    getDesignSubSectionFeatures(userContext, viewOptions, parentComponent, featureIndex){
+    getDesignSubSectionFeatures(userContext, parentComponent, featureIndex){
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "GET DESIGN SUB SECTION FEATURES.  Index {}", featureIndex);
 
@@ -150,11 +163,11 @@ class MashDataModules{
 
                 // Add Mash Data for these Features
                 log((msg) => console.log(msg), LogLevel.TRACE, "Before processing features index is {}", currentFeatureIndex);
-                currentFeatureIndex = this.processFeatures(userContext, viewOptions, features, currentFeatureIndex);
+                currentFeatureIndex = this.processFeatures(userContext, features, currentFeatureIndex);
                 log((msg) => console.log(msg), LogLevel.TRACE, "After processing features index is {}", currentFeatureIndex);
 
                 // Recursively look for deeper features
-                currentFeatureIndex = this.getDesignSubSectionFeatures(userContext, viewOptions, subsection, currentFeatureIndex);
+                currentFeatureIndex = this.getDesignSubSectionFeatures(userContext, subsection, currentFeatureIndex);
 
             });
             return currentFeatureIndex;
@@ -165,7 +178,7 @@ class MashDataModules{
 
     };
 
-    processFeatures(userContext, viewOptions, features, featureIndex){
+    processFeatures(userContext, features, featureIndex){
 
         let currentFeatureIndex = featureIndex;
 
@@ -265,42 +278,76 @@ class MashDataModules{
 
             }
 
-            if(viewOptions.devIntTestsVisible) {
+            UserWorkPackageMashData.insert(
+                {
+                    // Design Identity
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  userContext.workPackageId,
+                    mashComponentType:              ComponentType.FEATURE,
+                    designComponentName:            featureName,
+                    designComponentId:              feature.componentId,
+                    designComponentReferenceId:     feature.componentReferenceId,
+                    designFeatureReferenceId:       feature.componentReferenceId,
+                    designFeatureAspectReferenceId: 'NONE',
+                    designScenarioReferenceId:      'NONE',
+                    mashItemIndex:                  itemIndex,
+                    mashItemFeatureIndex:           currentFeatureIndex,
+                    // Status
+                    hasChildren:                    (designItemList.length > 0),
+                    // Test Data
+                    mashItemName:                   featureName,
+                    mashItemTag:                    DevTestTag.TEST_TEST,
+                    // Test Results - assume no tests until results are found
+                    accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                    accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                    intMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                    intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                    modMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                    modMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                }
 
-                UserIntTestMashData.insert(
+            );
+
+            // Also insert any Feature Background Steps
+            const backgroundSteps = FeatureBackgroundSteps.find({
+                designVersionId:    userContext.designVersionId,
+                designUpdateId:     userContext.designUpdateId,
+                featureReferenceId: feature.componentReferenceId
+            }).fetch();
+
+            backgroundSteps.forEach((backgroundStep) => {
+
+                UserWorkPackageFeatureStepData.insert(
                     {
-                        // Design Identity
-                        userId: userContext.userId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
-                        mashComponentType: ComponentType.FEATURE,
-                        designComponentName: featureName,
-                        designComponentId: feature.componentId,
-                        designComponentReferenceId: feature.componentReferenceId,
-                        designFeatureReferenceId: feature.componentReferenceId,
-                        designFeatureAspectReferenceId: 'NONE',
-                        designScenarioReferenceId: 'NONE',
-                        mashItemIndex: itemIndex,
-                        mashItemFeatureIndex: currentFeatureIndex,
-                        // Actual Dev Tests
-                        suiteName: 'NONE',
-                        testName: 'NONE',
-                        // Status
-                        hasChildren: (designItemList.length > 0),
-                        mashStatus: MashStatus.MASH_NOT_IMPLEMENTED,    // Assume no test until we find one
-                        mashTestStatus: MashTestStatus.MASH_NOT_LINKED
+                        userId:                         userContext.userId,
+                        designVersionId:                userContext.designVersionId,
+                        designUpdateId:                 userContext.designUpdateId,
+                        workPackageId:                  userContext.workPackageId,
+                        designComponentId:              backgroundStep._id,
+                        mashComponentType:              ComponentType.SCENARIO_STEP,
+                        designComponentName:            backgroundStep.stepFullName,
+                        designComponentReferenceId:     backgroundStep.stepReferenceId,
+                        designFeatureReferenceId:       feature.componentReferenceId,
+                        mashItemIndex:                  backgroundStep.stepIndex,
+                        mashItemFeatureIndex:           currentFeatureIndex,
+                        // Step Data
+                        stepContext:                    StepContext.STEP_FEATURE,
+                        stepType:                       backgroundStep.stepType,
+                        stepText:                       backgroundStep.stepText,
+                        stepTextRaw:                    backgroundStep.stepTextRaw,
+                        // Test Data
+                        mashItemName:                   backgroundStep.stepFullName,
+                        // Test Results
+                        accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                        accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                     }
-
                 );
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Inserted Int Test FEATURE {} with index {}", featureName, currentFeatureIndex);
-
-            }
-
-            // TODO add ACC and MOD versions
+            });
 
 
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Inserted Int Test FEATURE {} with index {}", featureName, currentFeatureIndex);
 
             // Increment the feature index
             currentFeatureIndex++;
@@ -308,36 +355,77 @@ class MashDataModules{
             // Insert all Feature children into the mash as the testing baseline
             designItemList.forEach((designItem) => {
 
-                if(viewOptions.devIntTestsVisible) {
+                UserWorkPackageMashData.insert(
+                    {
+                        // Design Identity
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
+                        workPackageId: userContext.workPackageId,
+                        mashComponentType: designItem.itemType,
+                        designComponentName: designItem.itemName,
+                        designComponentId: designItem.itemId,
+                        designComponentReferenceId: designItem.itemRef,
+                        designFeatureReferenceId: designItem.featureRef,
+                        designFeatureAspectReferenceId: designItem.aspectRef,
+                        designScenarioReferenceId: designItem.scenarioRef,
+                        mashItemIndex: designItem.index,
+                        mashItemFeatureIndex: designItem.featureIndex,
+                        // Status
+                        hasChildren: designItem.hasChildren,
+                        // Test Data
+                        mashItemName:                   designItem.itemName,
+                        mashItemTag:                    DevTestTag.TEST_TEST,
+                        // Test Results - assume no tests until results are found
+                        accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                        accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                        intMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                        intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                        modMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                        modMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                    }
+                );
 
-                    UserIntTestMashData.insert(
-                        {
-                            // Design Identity
-                            userId: userContext.userId,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId,
-                            workPackageId: userContext.workPackageId,
-                            mashComponentType: designItem.itemType,
-                            designComponentName: designItem.itemName,
-                            designComponentId: designItem.itemId,
-                            designComponentReferenceId: designItem.itemRef,
-                            designFeatureReferenceId: designItem.featureRef,
-                            designFeatureAspectReferenceId: designItem.aspectRef,
-                            designScenarioReferenceId: designItem.scenarioRef,
-                            mashItemIndex: designItem.index,
-                            mashItemFeatureIndex: designItem.featureIndex,
-                            // Actual Dev Tests
-                            suiteName: 'NONE',
-                            testName: 'NONE',
-                            // Status
-                            hasChildren: designItem.hasChildren,
-                            mashStatus: MashStatus.MASH_NOT_IMPLEMENTED,    // Assume no test until we find one
-                            mashTestStatus: MashTestStatus.MASH_NOT_LINKED
-                        }
-                    );
+                // Add any Scenario Steps too
+                if(designItem.itemType === ComponentType.SCENARIO){
+
+                    let scenarioSteps = ScenarioSteps.find({
+                        designVersionId:        userContext.designVersionId,
+                        designUpdateId:         userContext.designUpdateId,
+                        scenarioReferenceId:    designItem.scenarioRef
+                    }).fetch();
+
+                    scenarioSteps.forEach((step) => {
+
+                        UserWorkPackageFeatureStepData.insert(
+                            {
+                                userId:                         userContext.userId,
+                                designVersionId:                userContext.designVersionId,
+                                designUpdateId:                 userContext.designUpdateId,
+                                workPackageId:                  userContext.workPackageId,
+                                designComponentId:              step._id,
+                                mashComponentType:              ComponentType.SCENARIO_STEP,
+                                designComponentName:            step.stepFullName,
+                                designComponentReferenceId:     step.stepReferenceId,
+                                designFeatureReferenceId:       designItem.featureRef,
+                                designScenarioReferenceId:      designItem.scenarioRef,
+                                mashItemIndex:                  step.stepIndex,
+                                mashItemFeatureIndex:           currentFeatureIndex,
+                                // Step Data
+                                stepContext:                    StepContext.STEP_SCENARIO,
+                                stepType:                       step.stepType,
+                                stepText:                       step.stepText,
+                                stepTextRaw:                    step.stepTextRaw,
+                                // Test Data
+                                mashItemName:                   step.stepFullName,
+                                // Test Results
+                                accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                                accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                            }
+                        );
+                    });
                 }
 
-                // TODO add ACC and MOD
             });
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Mash data inserted");
@@ -353,6 +441,164 @@ class MashDataModules{
         // Run through the test results and update Mash where tests are found
 
         // TODO add ACC and MOD
+        if(viewOptions.devAccTestsVisible){
+
+            // Get the Acceptance test SCENARIO results for current user - STEP results are in separate data mash
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Acc Test Results for User {}", userContext.userId);
+
+            const accResultsData = UserAccTestResults.find({userId: userContext.userId, componentType: ComponentType.SCENARIO}).fetch();
+
+            if(accResultsData.length > 0){
+
+                accResultsData.forEach((testResult) => {
+
+                    // See if the test relates to a Scenario.  The tests should be structured so that the test names are Scenarios
+                    // For integration tests the Scenario should be the lowest level of test so the name should be unique
+                    // (Module tests should be used to test within a Scenario)
+
+                    let designScenario = UserWorkPackageMashData.findOne({
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
+                        workPackageId: userContext.workPackageId,
+                        mashComponentType: ComponentType.SCENARIO,
+                        designComponentName: testResult.scenarioName
+                    });
+
+                    if (designScenario) {
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Found test {}", testResult.scenarioName);
+                        // Update to a linked record
+                        UserWorkPackageMashData.update(
+                            {_id: designScenario._id},
+                            {
+                                $set: {
+                                    accMashStatus: MashStatus.MASH_LINKED,
+                                    accMashTestStatus: testResult.testResult
+                                }
+                            }
+                        );
+
+                    } else {
+
+                        // See if this is an unknown Scenario in a known Feature
+                        let designFeature = UserWorkPackageMashData.findOne({
+                            userId: userContext.userId,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId,
+                            workPackageId: userContext.workPackageId,
+                            mashComponentType: ComponentType.FEATURE,
+                            designComponentName: testResult.featureName
+                        });
+
+                        if(designFeature){
+
+                            // Add a new Mash entry for this scenario under the feature as "Not in Design"
+                            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding unknown Scenario {} for Feature {}", testResult.scenarioName, testResult.featureName);
+
+                            UserWorkPackageMashData.insert(
+                                {
+                                    // Design Identity
+                                    userId: userContext.userId,
+                                    designVersionId: userContext.designVersionId,
+                                    designUpdateId: userContext.designUpdateId,
+                                    workPackageId: userContext.workPackageId,
+                                    mashComponentType: ComponentType.SCENARIO,
+                                    designComponentName: 'NONE',
+                                    designComponentId: 'NONE',
+                                    designComponentReferenceId: 'NONE',
+                                    designFeatureReferenceId: designFeature.designFeatureReferenceId,
+                                    designFeatureAspectReferenceId: 'NONE',
+                                    designScenarioReferenceId: 'NONE',
+                                    // Status
+                                    hasChildren: false,
+                                    // Test Data
+                                    mashItemName:                   testResult.scenarioName,
+                                    mashItemTag:                    DevTestTag.TEST_TEST,
+                                    // Test Results
+                                    accMashStatus:                  MashStatus.MASH_NOT_DESIGNED,
+                                    accMashTestStatus:              testResult.testResult
+                                }
+                            );
+                        }
+                    }
+
+                    // And add the Scenario Step results too
+                    if(testResult.stepName != 'NONE') {
+
+                        let designScenario = UserWorkPackageMashData.findOne({
+                            userId: userContext.userId,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId,
+                            workPackageId: userContext.workPackageId,
+                            mashComponentType: ComponentType.SCENARIO,
+                            designComponentName: testResult.scenarioName
+                        });
+
+                        if(designScenario) {
+
+                            let designStep = UserWorkPackageFeatureStepData.findOne({
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId,
+                                workPackageId: userContext.workPackageId,
+                                designScenarioReferenceId: designScenario.designComponentReferenceId,
+                                designComponentName: testResult.stepName
+                            });
+
+                            if (designStep){
+
+                                UserWorkPackageFeatureStepData.update(
+                                    {_id: designStep._id},
+                                    {
+                                        $set: {
+                                            accMashStatus: MashStatus.MASH_LINKED,
+                                            accMashTestStatus: testResult.testResult
+                                        }
+                                    }
+                                );
+                            } else {
+
+                                // Insert Scenario Steps not in the Design if Scenario is in the Design
+                                let stepData = this.getTestStepData(testResult.stepName);
+
+                                UserWorkPackageFeatureStepData.insert(
+                                    {
+                                        userId:                         userContext.userId,
+                                        designVersionId:                userContext.designVersionId,
+                                        designUpdateId:                 userContext.designUpdateId,
+                                        workPackageId:                  userContext.workPackageId,
+                                        designComponentId:              'NONE',
+                                        mashComponentType:              ComponentType.SCENARIO_STEP,
+                                        designComponentName:            'NONE',
+                                        designComponentReferenceId:     'NONE',
+                                        designFeatureReferenceId:       designScenario.designFeatureReferenceId,
+                                        designScenarioReferenceId:      designScenario.designComponentReferenceId,
+                                        // Step Data
+                                        stepContext:                    StepContext.STEP_SCENARIO,
+                                        stepType:                       stepData.stepType,
+                                        stepText:                       stepData.stepText,
+                                        stepTextRaw:                    stepData.stepTextRaw,
+                                        // Test Data
+                                        mashItemName:                   testResult.stepName,
+                                        // Test Results
+                                        accMashStatus:                  MashStatus.MASH_NOT_DESIGNED,
+                                        accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                                    }
+                                );
+
+                            }
+                        }
+                    }
+
+                });
+
+
+
+            } else {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "No acceptance test results data");
+            }
+
+        }
 
         if(viewOptions.devIntTestsVisible) {
 
@@ -368,7 +614,7 @@ class MashDataModules{
                     // For integration tests the Scenario should be the lowest level of test so the name should be unique
                     // (Module tests should be used to test within a Scenario)
 
-                    let designScenario = UserIntTestMashData.findOne({
+                    let designScenario = UserWorkPackageMashData.findOne({
                         userId: userContext.userId,
                         designVersionId: userContext.designVersionId,
                         designUpdateId: userContext.designUpdateId,
@@ -380,45 +626,16 @@ class MashDataModules{
                     if (designScenario) {
                         log((msg) => console.log(msg), LogLevel.TRACE, "Found test {}", testResult.testName);
                         // Update to a linked record
-                        UserIntTestMashData.update(
+                        UserWorkPackageMashData.update(
                             {_id: designScenario._id},
                             {
                                 $set: {
-                                    suiteName: testResult.testFullName,
-                                    testName: testResult.testName,
-                                    // Status
-                                    mashStatus: MashStatus.MASH_LINKED,
-                                    mashTestStatus: testResult.testResult
+                                    intMashStatus: MashStatus.MASH_LINKED,
+                                    intMashTestStatus: testResult.testResult
                                 }
                             }
                         );
 
-                        // } else {
-                        //     log((msg) => console.log(msg), LogLevel.TRACE, "Inserting unknown test scenario {} + {}", testResult.testName, testResult.fullName);
-                        //     // This result matched no Design scenario so insert it as Dev only
-                        //     UserIntTestMashData.insert(
-                        //         {
-                        //             // Design Identity
-                        //             userId: userContext.userId,
-                        //             designVersionId: userContext.designVersionId,
-                        //             designUpdateId: userContext.designUpdateId,
-                        //             workPackageId: userContext.workPackageId,
-                        //             mashComponentType: ComponentType.SCENARIO,
-                        //             designComponentName: 'NONE',
-                        //             designComponentReferenceId: 'NONE',
-                        //             designFeatureReferenceId: 'NONE',
-                        //             designFeatureAspectReferenceId: 'NONE',
-                        //             designScenarioReferenceId: 'NONE',
-                        //             mashItemIndex: 0,
-                        //             mashItemFeatureIndex: 0,
-                        //             // Actual Dev Tests
-                        //             suiteName: testResult.testFullName,
-                        //             testName: testResult.testName,
-                        //             // Status
-                        //             mashStatus: MashStatus.MASH_NOT_DESIGNED,
-                        //             mashTestStatus: testResult.testResult
-                        //         }
-                        //     );
                     }
 
                 });
@@ -429,6 +646,20 @@ class MashDataModules{
 
 
 
+    };
+
+    getTestStepData(testStepName){
+
+        const firstSpace = testStepName.indexOf(' ');
+        let stepType = testStepName.substring(0, firstSpace).trim();
+        let stepText = testStepName.substring(firstSpace).trim();
+        let rawText = DesignComponentModules.getRawTextFor(stepText);
+
+        return {
+            stepType: stepType,
+            stepText: stepText,
+            rawText: rawText
+        }
     }
 
 }

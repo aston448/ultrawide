@@ -24,9 +24,8 @@ import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
 
 import '../imports/collections/dev/user_dev_test_summary_data.js';
 
-import '../imports/collections/dev/user_acc_test_mash_data.js';
-import '../imports/collections/dev/user_int_test_mash_data'
-import '../imports/collections/dev/user_mod_test_mash_data.js';
+import '../imports/collections/dev/user_work_package_mash_data.js';
+import '../imports/collections/dev/user_work_package_feature_step_data.js';
 
 import '../imports/collections/dev/user_acc_test_results.js';
 import '../imports/collections/dev/user_int_test_results.js';

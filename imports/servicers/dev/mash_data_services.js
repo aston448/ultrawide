@@ -36,11 +36,23 @@ import TestSummaryServices              from '../../servicers/dev/test_summary_s
 
 class MashDataServices{
 
-    updateTestMashData(userContext, viewOptions){
+    populateWorkPackageMashData(userContext){
+
+        // To be called when a Work Package is opened to get the basic mash data ready
 
         if(Meteor.isServer){
 
-            // User has chosen to update the test mash data.  Get and update what is needed for the current view
+            // Recalculate the Design Mash data and add in the latest results
+            MashDataModules.calculateWorkPackageMash(userContext)
+
+        }
+    }
+
+    updateTestMashData(userContext, viewOptions){
+
+        // User has chosen to update the test mash data with latest test results
+
+        if(Meteor.isServer){
 
             let testSummaryVisible = (viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible);
 
@@ -60,8 +72,8 @@ class MashDataServices{
             }
 
             if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devModTestsVisible){
-                // Recalculate the Design Mash data and add in the latest results
-                MashDataModules.calculateDesignMash(viewOptions, userContext)
+                // Add in the latest results
+                MashDataModules.updateMashResults(userContext, viewOptions)
             }
 
 

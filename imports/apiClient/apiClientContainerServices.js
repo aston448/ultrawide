@@ -5,23 +5,23 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import { UserRoles }                from '../collections/users/user_roles.js';
-import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
-import { Designs }                  from '../collections/design/designs.js';
-import { DesignVersions }           from '../collections/design/design_versions.js';
-import { DesignUpdates }            from '../collections/design_update/design_updates.js';
-import { WorkPackages }             from '../collections/work/work_packages.js';
-import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
-import { DesignComponents }         from '../collections/design/design_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { FeatureBackgroundSteps }   from '../collections/design/feature_background_steps.js';
-import { ScenarioSteps }            from '../collections/design/scenario_steps.js';
-import { DomainDictionary }         from '../collections/design/domain_dictionary.js';
-import { UserDevFeatures }          from '../collections/dev/user_dev_features.js';
-import { UserAccTestMashData }      from '../collections/dev/user_acc_test_mash_data.js';
-import { UserIntTestMashData }      from '../collections/dev/user_int_test_mash_data.js';
-import { UserModTestMashData }      from '../collections/dev/user_mod_test_mash_data.js';
-import { UserDevTestSummaryData }   from '../collections/dev/user_dev_test_summary_data.js';
+import { UserRoles }                        from '../collections/users/user_roles.js';
+import { UserCurrentEditContext }           from '../collections/context/user_current_edit_context.js';
+import { Designs }                          from '../collections/design/designs.js';
+import { DesignVersions }                   from '../collections/design/design_versions.js';
+import { DesignUpdates }                    from '../collections/design_update/design_updates.js';
+import { WorkPackages }                     from '../collections/work/work_packages.js';
+import { WorkPackageComponents }            from '../collections/work/work_package_components.js';
+import { DesignComponents }                 from '../collections/design/design_components.js';
+import { DesignUpdateComponents }           from '../collections/design_update/design_update_components.js';
+import { FeatureBackgroundSteps }           from '../collections/design/feature_background_steps.js';
+import { ScenarioSteps }                    from '../collections/design/scenario_steps.js';
+import { DomainDictionary }                 from '../collections/design/domain_dictionary.js';
+import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
+import { UserWorkPackageMashData }          from '../collections/dev/user_work_package_mash_data.js';
+import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
+import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
+import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
 
 // Ultrawide GUI Components
 
@@ -89,9 +89,8 @@ class ClientContainerServices{
         const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps');
         const fsHandle = Meteor.subscribe('userDevFeatureScenarios');
         const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps');
-        const atHandle = Meteor.subscribe('userAccTestMashData');
-        const itHandle = Meteor.subscribe('userIntTestMashData');
-        const mtHandle = Meteor.subscribe('userModTestMashData');
+        const wmHandle = Meteor.subscribe('userWorkPackageMashData');
+        const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData');
         const arHandle = Meteor.subscribe('userAccTestResults');
         const irHandle = Meteor.subscribe('userIntTestResults');
         const mrHandle = Meteor.subscribe('userModTestResults');
@@ -102,9 +101,8 @@ class ClientContainerServices{
             !dbHandle.ready()   ||
             !fsHandle.ready()   ||
             !ssHandle.ready()   ||
-            !atHandle.ready()   ||
-            !itHandle.ready()   ||
-            !mtHandle.ready()   ||
+            !wmHandle.ready()   ||
+            !wsHandle.ready()   ||
             !arHandle.ready()   ||
             !irHandle.ready()   ||
             !mrHandle.ready()   ||
@@ -945,7 +943,7 @@ class ClientContainerServices{
 
                 // Get feature mash data
                 wantedFeatures.forEach((feature) => {
-                    featureMash = UserAccTestMashData.findOne({
+                    featureMash = UserWorkPackageMashData.findOne({
                         userId:                     userContext.userId,
                         designVersionId:            userContext.designVersionId,
                         designUpdateId:             userContext.designUpdateId,
@@ -969,7 +967,7 @@ class ClientContainerServices{
 
                 let scenarioMashData = [];
 
-                scenarioMashData = UserAccTestMashData.find({
+                scenarioMashData = UserWorkPackageMashData.find({
                     userId:                     userContext.userId,
                     designVersionId:            userContext.designVersionId,
                     designUpdateId:             userContext.designUpdateId,
@@ -996,7 +994,7 @@ class ClientContainerServices{
 
                 let aspectScenarioMashData = [];
 
-                aspectScenarioMashData = UserAccTestMashData.find({
+                aspectScenarioMashData = UserWorkPackageMashData.find({
                     userId:                         userContext.userId,
                     designVersionId:                userContext.designVersionId,
                     designUpdateId:                 userContext.designUpdateId,
@@ -1036,7 +1034,7 @@ class ClientContainerServices{
 
     };
 
-    getDesignIntegrationTestMashData(userContext, mashCurrentItem){
+    getWorkPackageMashData(userContext, mashCurrentItem){
 
         // Return all the data that is relevant to the currently selected Design Item or item in the Mash
 
@@ -1072,7 +1070,7 @@ class ClientContainerServices{
                     // Return any FEATURE that is a child of this item
                     let returnData = [];
 
-                    const intTestMash = UserIntTestMashData.find(
+                    const intTestMash = UserWorkPackageMashData.find(
                         {
                             userId: userContext.userId,
                             designVersionId: userContext.designVersionId,
@@ -1106,7 +1104,7 @@ class ClientContainerServices{
 
                 case ComponentType.FEATURE:
                     // Return any FEATURE ASPECT related to this Feature
-                    return UserIntTestMashData.find(
+                    return UserWorkPackageMashData.find(
                         {
                             userId: userContext.userId,
                             designVersionId: userContext.designVersionId,
@@ -1120,7 +1118,7 @@ class ClientContainerServices{
 
                 case ComponentType.FEATURE_ASPECT:
                     // Return any SCENARIO data related to this Feature Aspect
-                    return UserIntTestMashData.find(
+                    return UserWorkPackageMashData.find(
                         {
                             userId: userContext.userId,
                             designVersionId: userContext.designVersionId,
@@ -1134,7 +1132,7 @@ class ClientContainerServices{
 
                 case ComponentType.SCENARIO:
                     // Return any data related to this Scenario (at most one test)
-                    return UserIntTestMashData.find(
+                    return UserWorkPackageMashData.find(
                         {
                             userId: userContext.userId,
                             designVersionId: userContext.designVersionId,
@@ -1151,6 +1149,54 @@ class ClientContainerServices{
                     return [];
             }
         }
+
+    }
+
+    getNonDesignAcceptanceScenarioData(userContext){
+
+        // For acceptance tests get any Scenarios found in the tests for a Design Feature that are not in the Design
+        let selectedDesignComponent = null;
+
+        if (userContext.designUpdateId === 'NONE') {
+            selectedDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId})
+        } else {
+            selectedDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId})
+        }
+
+        if(selectedDesignComponent){
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Looking for feature with ref id {}", selectedDesignComponent.componentReferenceId);
+
+            const feature = UserWorkPackageMashData.findOne({
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                workPackageId: userContext.workPackageId,
+                designFeatureReferenceId: selectedDesignComponent.componentReferenceId,
+                mashComponentType: ComponentType.FEATURE
+            });
+
+            if(feature){
+                let nonDesignedScenarios = UserWorkPackageMashData.find({
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
+                    workPackageId: userContext.workPackageId,
+                    mashComponentType: ComponentType.SCENARIO,
+                    accMashStatus: MashStatus.MASH_NOT_DESIGNED
+                }).fetch();
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} non-designed Scenarios", nonDesignedScenarios.length);
+
+                return nonDesignedScenarios;
+
+            } else {
+                return [];
+            }
+        } else {
+            return [];
+        }
+
 
     }
 
@@ -1260,7 +1306,7 @@ class ClientContainerServices{
 
         if(userContext.designComponentType === ComponentType.FEATURE){
 
-            return UserAccTestMashData.find(
+            return UserWorkPackageMashData.find(
                 {
                     userId:                         userContext.userId,
                     designVersionId:                userContext.designVersionId,
@@ -1280,7 +1326,7 @@ class ClientContainerServices{
 
     getMashFeatureAspectScenarios(aspect){
 
-        return UserAccTestMashData.find(
+        return UserWorkPackageMashData.find(
             {
                 userId:                         aspect.userId,
                 designVersionId:                aspect.designVersionId,
@@ -1318,9 +1364,9 @@ class ClientContainerServices{
         // 2. Linked across Design - Dev
         // 3. In Dev Only (but with Scenario that is in Design)
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Getting mash Scenario Steps for Scenario {}", userContext.scenarioReferenceId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting mash Scenario Steps for Scenario {}", userContext.scenarioReferenceId);
 
-        const designSteps = UserAccTestMashData.find(
+        const designSteps = UserWorkPackageFeatureStepData.find(
             {
                 userId:                         userContext.userId,
                 designVersionId:                userContext.designVersionId,
@@ -1328,12 +1374,12 @@ class ClientContainerServices{
                 workPackageId:                  userContext.workPackageId,
                 designScenarioReferenceId:      userContext.scenarioReferenceId,
                 mashComponentType:              ComponentType.SCENARIO_STEP,
-                mashStatus:                     MashStatus.MASH_NOT_IMPLEMENTED
+                accMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED
             },
             {sort: {mashItemIndex: 1}}
         ).fetch();
 
-        const linkedSteps = UserAccTestMashData.find(
+        const linkedSteps = UserWorkPackageFeatureStepData.find(
             {
                 userId:                         userContext.userId,
                 designVersionId:                userContext.designVersionId,
@@ -1341,14 +1387,12 @@ class ClientContainerServices{
                 workPackageId:                  userContext.workPackageId,
                 designScenarioReferenceId:      userContext.scenarioReferenceId,
                 mashComponentType:              ComponentType.SCENARIO_STEP,
-                mashStatus:                     MashStatus.MASH_LINKED
+                accMashStatus:                  MashStatus.MASH_LINKED
             },
             {sort: {mashItemIndex: 1}}
         ).fetch();
 
-        // For the linked steps we return the full Scenario Step Data so this can be edited
-
-        const devSteps = UserAccTestMashData.find(
+        const devSteps = UserWorkPackageFeatureStepData.find(
             {
                 userId:                         userContext.userId,
                 designVersionId:                userContext.designVersionId,
@@ -1356,7 +1400,7 @@ class ClientContainerServices{
                 workPackageId:                  userContext.workPackageId,
                 designScenarioReferenceId:      userContext.scenarioReferenceId,
                 mashComponentType:              ComponentType.SCENARIO_STEP,
-                mashStatus:                     MashStatus.MASH_NOT_DESIGNED
+                accMashStatus:                  MashStatus.MASH_NOT_DESIGNED
             },
             {sort: {mashItemIndex: 1}}
         ).fetch();

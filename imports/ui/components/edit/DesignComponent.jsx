@@ -58,6 +58,22 @@ class DesignComponent extends Component{
 
     shouldComponentUpdate(nextProps, nextState){
 
+        // Do refresh if this specific component is gaining or losing focus
+        let currentItemId = this.props.currentItem._id;
+
+        // But for WP need the Design Item Id
+        if(this.props.displayContext === DisplayContext.WP_VIEW || this.props.displayContext === DisplayContext.WP_SCOPE || this.props.displayContext === DisplayContext.DEV_DESIGN){
+            currentItemId = this.props.designItem._id;
+        }
+
+        if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId != currentItemId)){
+            return true;
+        }
+
+        if((nextProps.userContext.designComponentId != currentItemId) && (this.props.userContext.designComponentId === currentItemId)){
+            return true;
+        }
+
         // Optimisation.  No need to re-render this component if stuff that changes its look not changed
         switch (nextProps.view) {
             case ViewType.DESIGN_NEW_EDIT:
@@ -70,9 +86,6 @@ class DesignComponent extends Component{
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
-                    nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
-                    nextProps.openDesignItems.length === this.props.openDesignItems.length &&
-                    nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length &&
                     nextProps.currentItem.componentName === this.props.currentItem.componentName &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
@@ -95,9 +108,6 @@ class DesignComponent extends Component{
                     nextState.parentScope === this.state.parentScope &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
-                    nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
-                    nextProps.openDesignUpdateItems.length === this.props.openDesignUpdateItems.length &&
-                    nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
@@ -114,11 +124,8 @@ class DesignComponent extends Component{
                 return !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
-                    nextProps.testSummary === this.props.testSummary &&
-                    nextProps.userContext.designComponentId === this.props.userContext.designComponentId &&
-                    nextProps.openDesignItems.length === this.props.openDesignItems.length &&
-                    nextProps.openWorkPackageItems.length === this.props.openWorkPackageItems.length
-                );
+                    nextProps.testSummary === this.props.testSummary
+                 );
         }
 
     }
@@ -144,27 +151,37 @@ class DesignComponent extends Component{
     }
 
     componentWillReceiveProps(newProps){
-        // Change open state if REDUX state has changed
+        // Change open state if REDUX state has changed for this item
+
         switch(newProps.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
-                if(newProps.openDesignItems.length != this.props.openDesignItems.length){
+                if(
+                    (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.props.openDesignItems.includes(this.props.currentItem._id)) ||
+                    (!newProps.openDesignItems.includes(this.props.currentItem._id) && this.props.openDesignItems.includes(this.props.currentItem._id))
+                ){
                     this.setOpenState(newProps);
                 }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                if(newProps.openDesignUpdateItems.length != this.props.openDesignUpdateItems.length){
+                if(
+                    (newProps.openDesignUpdateItems.includes(this.props.currentItem._id) && !this.props.openDesignUpdateItems.includes(this.props.currentItem._id)) ||
+                    (!newProps.openDesignUpdateItems.includes(this.props.currentItem._id) && this.props.openDesignUpdateItems.includes(this.props.currentItem._id))
+                ){
                     this.setOpenState(newProps);
                 }
-                break;
+                   break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                if(newProps.openWorkPackageItems.length != this.props.openWorkPackageItems.length){
+                if(
+                    (newProps.openWorkPackageItems.includes(this.props.currentItem._id) && !this.props.openWorkPackageItems.includes(this.props.currentItem._id)) ||
+                    (!newProps.openWorkPackageItems.includes(this.props.currentItem._id) && this.props.openWorkPackageItems.includes(this.props.currentItem._id))
+                ){
                     this.setOpenState(newProps);
                 }
                 break;

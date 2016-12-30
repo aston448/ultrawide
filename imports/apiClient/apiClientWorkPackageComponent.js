@@ -94,18 +94,29 @@ class ClientWorkPackageComponentServices {
             const featureComponents = WorkPackageComponents.find(
                 {
                     workPackageId: wpComponent.workPackageId,
-                    componentFeatureReferenceId: wpComponent.componentFeatureReferenceId
+                    componentFeatureReferenceId: wpComponent.componentReferenceId
                 }
             );
 
             featureComponents.forEach((component) => {
-                store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    Meteor.userId(),
-                    currentList,
-                    component._id,
-                    newState
-                ));
+
+                if(!currentList.includes(component._id && newState))
+                {
+                    currentList.push(component._id);
+
+                } else {
+
+                    if(currentList.includes(component._id && !newState)){
+                        currentList.pop(component._id)
+                    }
+                }
             });
+
+            store.dispatch(setCurrentUserOpenWorkPackageItems(
+                Meteor.userId(),
+                currentList,
+                null, null, true
+            ));
 
         } else {
 

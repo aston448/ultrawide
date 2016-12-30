@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import IntegrationTestFeatureAspectMashItem   from '../../components/dev/IntegrationTestFeatureAspectMashItem.jsx';
+import WorkPackageFeatureAspectMashItem   from '../../components/dev/WorkPackageFeatureAspectMashItem.jsx';
 
 // Ultrawide Services
 import {RoleType, DisplayContext, MashStatus, ComponentType}    from '../../../constants/constants.js';
@@ -30,11 +30,11 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Design / Dev Integration Test Feature Aspect Mash Container - List of Feature Aspects in Integration Test Features
+// Design / Dev Feature Aspect Mash Container - List of Feature Aspects in WP Mash Features
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class IntegrationTestFeatureAspectsMashList extends Component {
+class WorkPackageFeatureAspectsMashList extends Component {
     constructor(props) {
         super(props);
 
@@ -44,16 +44,17 @@ class IntegrationTestFeatureAspectsMashList extends Component {
         return true;
     }
 
-    renderFeatureAspects(mashData){
+    renderFeatureAspects(mashData, displayContext){
 
         console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
             if(mashItem) {
                 return (
-                    <IntegrationTestFeatureAspectMashItem
+                    <WorkPackageFeatureAspectMashItem
                         key={mashItem._id}
                         mashItem={mashItem}
+                        displayContext={displayContext}
                     />
                 );
             }
@@ -62,19 +63,20 @@ class IntegrationTestFeatureAspectsMashList extends Component {
 
     render() {
 
-        const {designMashItemData, userContext, view} = this.props;
+        const {designMashItemData, displayContext, userContext, view} = this.props;
 
         return(
             <div>
-                {this.renderFeatureAspects(designMashItemData)}
+                {this.renderFeatureAspects(designMashItemData, displayContext)}
             </div>
         );
 
     }
 }
 
-IntegrationTestFeatureAspectsMashList.propTypes = {
-    designMashItemData: PropTypes.array
+WorkPackageFeatureAspectsMashList.propTypes = {
+    designMashItemData: PropTypes.array.isRequired,
+    displayContext: PropTypes.string.isRequired
 };
 
 
@@ -88,17 +90,18 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-IntegrationTestFeatureAspectsMashList = connect(mapStateToProps)(IntegrationTestFeatureAspectsMashList);
+WorkPackageFeatureAspectsMashList = connect(mapStateToProps)(WorkPackageFeatureAspectsMashList);
 
 
-export default IntegrationTestFeatureAspectMashContainer = createContainer(({params}) => {
+export default WorkPackageFeatureAspectMashContainer = createContainer(({params}) => {
 
 
-    let designMashItemData = ClientContainerServices.getDesignIntegrationTestMashData(params.userContext, params.featureMash);
+    let designMashItemData = ClientContainerServices.getWorkPackageMashData(params.userContext, params.featureMash);
 
     return{
-        designMashItemData
+        designMashItemData: designMashItemData,
+        displayContext: params.displayContext
     }
 
 
-}, IntegrationTestFeatureAspectsMashList);
+}, WorkPackageFeatureAspectsMashList);

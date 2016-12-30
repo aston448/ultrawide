@@ -125,16 +125,14 @@ class AppHeader extends Component {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
-                testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 dictOption = ViewOptionType.DESIGN_DICT;
+                testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
                 detailsOption = ViewOptionType.UPDATE_DETAILS;
-                accTestOption = ViewOptionType.UPDATE_ACC_TESTS;
-                intTestOption = ViewOptionType.UPDATE_INT_TESTS;
-                modTestOption = ViewOptionType.UPDATE_MOD_TESTS;
                 dictOption = ViewOptionType.UPDATE_DICT;
+                testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -191,7 +189,7 @@ class AppHeader extends Component {
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, intTestOption, userViewOptions, currentViewDataValue)}>Integration Tests</Button>;
         let modTestsButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(modTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, modTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
-        let filesButton =
+        let accFilesButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
         let domainDictionaryButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
@@ -424,6 +422,7 @@ class AppHeader extends Component {
                             {designFixedButton}
                             {detailsButton}
                             {accTestsButton}
+                            {accFilesButton}
                             {intTestsButton}
                             {modTestsButton}
                             {domainDictionaryButton}

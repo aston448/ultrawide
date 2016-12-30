@@ -107,7 +107,6 @@ class ChimpMochaTestServices{
                     });
 
                     break;
-                    // TODO MOD and ACC tests
                 default:
             }
 

@@ -5,8 +5,8 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import IntegrationTestFeatureAspectMashContainer    from '../../containers/dev/IntegrationTestFeatureAspectMashContainer.jsx';
-import IntegrationTestScenarioMashContainer         from '../../containers/dev/IntegrationTestScenarioMashContainer.jsx'
+import WorkPackageFeatureAspectMashContainer    from '../../containers/dev/WorkPackageFeatureAspectMashContainer.jsx';
+import WorkPackageScenarioMashContainer         from '../../containers/dev/WorkPackageScenarioMashContainer.jsx'
 
 // Ultrawide Services
 import {ViewType, DisplayContext, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -37,7 +37,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class IntegrationTestFeatureMashItem extends Component {
+class WorkPackageFeatureMashItem extends Component {
 
     constructor(props) {
         super(props);
@@ -53,27 +53,29 @@ class IntegrationTestFeatureMashItem extends Component {
     }
 
     hasFeatureAspects(userContext, featureId){
+        // TODO - implement properly
         return true;
     }
 
 
     render(){
-        const { mashItem, userContext } = this.props;
+        const { mashItem, displayContext, userContext } = this.props;
 
         if(mashItem.hasChildren) {
             let container = '';
             if (this.hasFeatureAspects(userContext, mashItem.designComponentId)) {
                 container =
-                    <IntegrationTestFeatureAspectMashContainer params={{
+                    <WorkPackageFeatureAspectMashContainer params={{
                         userContext: userContext,
-                        featureMash: mashItem
+                        featureMash: mashItem,
+                        displayContext: displayContext
                     }}/>;
             } else {
                 container =
-                    <IntegrationTestScenarioMashContainer params={{
+                    <WorkPackageScenarioMashContainer params={{
                         userContext: userContext,
                         parentMash: mashItem,
-                        displayContext: DisplayContext.INT_TEST_FEATURE
+                        displayContext: displayContext
                     }}/>;
             }
 
@@ -94,8 +96,9 @@ class IntegrationTestFeatureMashItem extends Component {
 
 }
 
-IntegrationTestFeatureMashItem.propTypes = {
+WorkPackageFeatureMashItem.propTypes = {
     mashItem: PropTypes.object.isRequired,
+    displayContext: PropTypes.string.isRequired
 
 };
 
@@ -107,6 +110,6 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-IntegrationTestFeatureMashItem = connect(mapStateToProps)(IntegrationTestFeatureMashItem);
+WorkPackageFeatureMashItem = connect(mapStateToProps)(WorkPackageFeatureMashItem);
 
-export default IntegrationTestFeatureMashItem;
+export default WorkPackageFeatureMashItem;

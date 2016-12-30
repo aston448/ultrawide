@@ -7,7 +7,7 @@ import { Meteor } from 'meteor/meteor';
 import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 import { DesignComponents }         from '../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { UserAccTestMashData }    from '../collections/dev/user_acc_test_mash_data.js';
+import { UserWorkPackageMashData }    from '../collections/dev/user_work_package_mash_data.js';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, MessageType, MashStatus, LogLevel} from '../constants/constants.js';
@@ -41,6 +41,13 @@ class ClientMashDataServices {
         Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
             //store.dispatch(updateProgressData(!currentProgressDataValue));
         });
+    }
+
+    populateWorkPackageMashData(userContext){
+
+        // Developer has opened a WP for development
+        Meteor.call('mash.populateWorkPackageMashData', userContext);
+
     }
 
     updateTestData(userContext, viewOptions){
@@ -241,7 +248,7 @@ class ClientMashDataServices {
     }
 
     featureHasUnknownScenarios(userContext){
-        return UserAccTestMashData.find({
+        return UserWorkPackageMashData.find({
             userId:                         userContext.userId,
             designVersionId:                userContext.designVersionId,
             designUpdateId:                 userContext.designUpdateId,
@@ -255,10 +262,10 @@ class ClientMashDataServices {
     // Returns true if mash item Feature has a Dev feature file
     featureIsImplemented(mashItemId){
 
-        const mashItem = UserAccTestMashData.findOne({_id: mashItemId});
+        const mashItem = UserWorkPackageMashData.findOne({_id: mashItemId});
 
         // There must be a parent Feature
-        const parentFeature = UserAccTestMashData.findOne({
+        const parentFeature = UserWorkPackageMashData.findOne({
             userId: mashItem.userId,
             designVersionId:                mashItem.designVersionId,
             designUpdateId:                 mashItem.designUpdateId,
@@ -267,7 +274,7 @@ class ClientMashDataServices {
             mashComponentType:              ComponentType.FEATURE
         });
 
-        // And if there is a Feature File it wil be linked
+        // And if there is a Feature File it will be linked
         return(parentFeature.mashStatus === MashStatus.MASH_LINKED);
 
     };

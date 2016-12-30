@@ -14,7 +14,7 @@ import DesignComponentTextContainer         from '../edit/DesignComponentTextCon
 import DesignDevFeatureMashContainer        from '../dev/DesignDevFeatureMashContainer.jsx';
 import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
 import DesignDevUnitMashContainer           from '../dev/DesignDevUnitMashContainer.jsx';
-import IntegrationTestFeatureMashContainer  from '../dev/IntegrationTestFeatureMashContainer.jsx';
+import WorkPackageFeatureMashContainer      from '../dev/WorkPackageFeatureMashContainer.jsx';
 import DomainDictionaryContainer            from './DomainDictionaryContainer.jsx';
 
 
@@ -135,10 +135,40 @@ class DevApplicationsList extends Component {
         if(viewOptions.devAccTestsVisible){
             featureTests =
                 <Panel header="Acceptance Test Implementation" className="panel-update panel-update-body">
-                    <DesignDevFeatureMashContainer params={{
-                        userContext: userContext
+                    <WorkPackageFeatureMashContainer params={{
+                        userContext: userContext,
+                        displayContext: DisplayContext.MASH_ACC_TESTS
                     }}/>
                 </Panel>;
+
+            switch(displayedItems){
+                case 1:
+                    // There are now 2 cols so change widths
+                    col1width = 6;
+                    col2width = 6;
+                    col3width = 6;
+                    col4width = 6;
+                    col5width = 6;
+                    col6width = 6;
+                    col7width = 6;
+                    break;
+                case 2:
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+                    col7width = 4;
+                    break;
+            }
+
+            displayedItems++;
+
+        }
+
+        if(viewOptions.devFeatureFilesVisible){
 
             devFiles =
                 <Panel header="Build Feature Files" className="panel-update panel-update-body">
@@ -170,8 +200,6 @@ class DevApplicationsList extends Component {
                     break;
             }
 
-            // Add 2 cols
-            displayedItems++;
             displayedItems++;
         }
 
@@ -180,8 +208,9 @@ class DevApplicationsList extends Component {
 
             intTests =
                 <Panel header="Integration Test Implementation" className="panel-update panel-update-body">
-                    <IntegrationTestFeatureMashContainer params={{
-                        userContext: userContext
+                    <WorkPackageFeatureMashContainer params={{
+                        userContext: userContext,
+                        displayContext: DisplayContext.MASH_INT_TESTS
                     }}/>
                 </Panel>;
 
@@ -432,7 +461,7 @@ class DevApplicationsList extends Component {
             }
 
             let col4 = '';
-            if(viewOptions.devAccTestsVisible){
+            if(viewOptions.devFeatureFilesVisible){
                 col4 =
                     <Col md={col4width} className="scroll-col">
                         {devFiles}
