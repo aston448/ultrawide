@@ -1,13 +1,15 @@
 
 // Ultrawide Collections
-import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
-import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
-import {UserAccTestMashData}            from '../../collections/dev/user_acc_test_mash_data.js';
-import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js'
+import { ScenarioSteps }                    from '../../collections/design/scenario_steps.js';
+import { FeatureBackgroundSteps }           from '../../collections/design/feature_background_steps.js';
+import { UserDevFeatureScenarioSteps }      from '../../collections/dev/user_dev_feature_scenario_steps.js';
+import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 
 // Ultrawide Services
 import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../../constants/constants.js';
 import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js';
+
+import MashDataModules                  from '../../service_modules/dev/mash_data_service_modules.js';
 
 //======================================================================================================================
 //
@@ -211,7 +213,7 @@ class ScenarioServices{
 
                 // And as we are adding Dev Mash item to the design, need to update the mash item with new design details
                 // Mark this step as linked with correct index and now referencing the new Design item
-                UserAccTestMashData.update(
+                UserWorkPackageFeatureStepData.update(
                     {_id: mashItemId},
                     {
                         $set: {
@@ -220,8 +222,8 @@ class ScenarioServices{
                             designScenarioStepReferenceId: newStepId,
                             stepTextRaw: this.getDefaultRawStepText(stepText),
                             mashItemIndex: stepIndex,
-                            mashStatus: MashStatus.MASH_LINKED,
-                            mashTestStatus: MashTestStatus.MASH_PENDING,
+                            accMashStatus: MashStatus.MASH_LINKED,
+                            accMashTestStatus: MashTestStatus.MASH_PENDING,
 
                         }
                     }
@@ -391,7 +393,7 @@ class ScenarioServices{
 
     logicalDeleteMashScenarioStep(step, userContext){
         if(Meteor.isServer) {
-            switch (step.mashStatus) {
+            switch (step.accMashStatus) {
                 case MashStatus.MASH_NOT_IMPLEMENTED:
 
                     // A Design Only Step - logically delete the Design Item
@@ -407,14 +409,7 @@ class ScenarioServices{
                     this.logicallyDeleteDesignStep(step.designComponentId, step.stepContext);
 
                     // And change the item to be Dev only now...
-                    UserAccTestMashData.update(
-                        {_id: step._id},
-                        {
-                            $set: {
-                                mashStatus: MashStatus.MASH_NOT_DESIGNED
-                            }
-                        }
-                    );
+                    MashDataModules.setTestStepMashStatus(step._id, MashStatus.MASH_NOT_DESIGNED, MashTestStatus.MASH_NOT_LINKED);
 
                     break;
                 case MashStatus.MASH_NOT_DESIGNED:
@@ -457,9 +452,8 @@ class ScenarioServices{
 
     deleteMashStepItem(mashItemId){
 
-        UserAccTestMashData.remove(
-            {_id: mashItemId}
-        );
+        MashDataModules.removeMashStep(mashItemId);
+
     };
 
 

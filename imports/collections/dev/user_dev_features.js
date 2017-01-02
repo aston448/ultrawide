@@ -17,6 +17,8 @@ let Schema = new SimpleSchema({
     featureNarrative:       {type: String, optional: true},         // Narrative with feature (if any)
     featureTag:             {type: String, optional: true},
     fileText:               {type: String},
+    // Link
+    designFeatureReference: {type: String, defaultValue: 'NONE'},   // Set if this is matched to a Design feature
     // Status
     featureFileStatus:      {type: String},                         // Stat us of feature file - where it came from or invalid
     featureStatus:          {type: String},                         // Status of feature - implemented or unknown and if in current WP

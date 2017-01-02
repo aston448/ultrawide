@@ -178,7 +178,7 @@ class DevApplicationsList extends Component {
                 </Panel>;
 
             switch(displayedItems){
-                case 1:
+                case 2:
                     // There are now 3 cols so change widths
                     col1width = 4;
                     col2width = 4;
@@ -188,7 +188,7 @@ class DevApplicationsList extends Component {
                     col6width = 4;
                     col7width = 4;
                     break;
-                case 2:
+                case 3:
                     // There are now 4 cols so change widths
                     col1width = 3;
                     col2width = 3;

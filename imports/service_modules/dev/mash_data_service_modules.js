@@ -11,6 +11,9 @@ import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_wor
 import { UserAccTestResults }               from '../../collections/dev/user_acc_test_results.js';
 import { UserIntTestResults }               from '../../collections/dev/user_int_test_results.js';
 import { UserModTestResults }               from '../../collections/dev/user_mod_test_results.js';
+import { UserDevFeatures }                  from '../../collections/dev/user_dev_features.js';
+import { UserDevFeatureScenarios }          from '../../collections/dev/user_dev_feature_scenarios.js';
+import { UserDevFeatureScenarioSteps }      from '../../collections/dev/user_dev_feature_scenario_steps.js';
 
 // Ultrawide Services
 import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, ScenarioStepStatus, ScenarioStepType, LogLevel } from '../../constants/constants.js';
@@ -30,6 +33,168 @@ import ChimpCucumberTestServices    from '../../service_modules/dev/test_results
 //======================================================================================================================
 
 class MashDataModules{
+
+    linkAcceptanceFilesToDesign(userContext){
+
+        // Run through the Design data and link anything that is present in a file
+        const wpMash = UserWorkPackageMashData.find({
+            userId:                 userContext.userId,
+            designVersionId:        userContext.designVersionId,
+            designUpdateId:         userContext.designUpdateId,
+            workPackageId:          userContext.workPackageId
+        }).fetch();
+
+        wpMash.forEach((wpItem) => {
+
+            switch(wpItem.mashComponentType){
+                case ComponentType.FEATURE:
+
+                    // Link the Feature if found in a Feature file
+
+                    let fileFeature = UserDevFeatures.findOne({
+                        userId: userContext.userId,
+                        featureReferenceId: wpItem.designComponentReferenceId,
+                    });
+
+                    if(fileFeature){
+                        UserWorkPackageMashData.update(
+                            {_id: wpItem._id},
+                            {
+                                $set:{
+                                    accMashStatus: MashStatus.MASH_LINKED
+                                }
+                            }
+                        );
+                    }
+                    break;
+
+                case ComponentType.SCENARIO:
+
+                    // Link the Scenario if found in a linked Feature
+                    let fileScenario = UserDevFeatureScenarios.findOne({
+                        userId: userContext.userId,
+                        featureReferenceId: wpItem.designFeatureReferenceId,
+                        scenarioReferenceId: wpItem.designComponentReferenceId
+                    });
+
+                    if(fileScenario){
+                        UserWorkPackageMashData.update(
+                            {_id: wpItem._id},
+                            {
+                                $set:{
+                                    accMashStatus: MashStatus.MASH_LINKED
+                                }
+                            }
+                        );
+
+                        // And now check the steps for this Scenario
+                        let designSteps = UserWorkPackageFeatureStepData.find({
+                            userId:                     userContext.userId,
+                            designVersionId:            userContext.designVersionId,
+                            designUpdateId:             userContext.designUpdateId,
+                            workPackageId:              userContext.workPackageId,
+                            designScenarioReferenceId:  wpItem.designComponentReferenceId
+                        }).fetch();
+
+                        designSteps.forEach((step) => {
+
+                            // Link the Scenario Step if found in a linked Scenario
+                            let fileScenarioStep = UserDevFeatureScenarioSteps.findOne({
+                                userId: userContext.userId,
+                                featureReferenceId: wpItem.designFeatureReferenceId,
+                                scenarioReferenceId: step.designScenarioReferenceId,
+                                scenarioStepReferenceId: step.designComponentReferenceId
+                            });
+
+                            if(fileScenarioStep){
+                                UserWorkPackageFeatureStepData.update(
+                                    {_id: step._id},
+                                    {
+                                        $set:{
+                                            accMashStatus: MashStatus.MASH_LINKED
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                    }
+
+                    break;
+
+            }
+        });
+
+        // And Run through the file data and add in any scenarios that are DEV only for Design Features
+        const devScenarios = UserDevFeatureScenarios.find({
+            userId: userContext.userId,
+            featureReferenceId: {$ne: 'NONE'},
+            scenarioReferenceId: 'NONE'
+        }).fetch();
+
+        devScenarios.forEach((scenario) => {
+
+            UserWorkPackageMashData.insert(
+                {
+                    // Design Identity
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
+                    workPackageId: userContext.workPackageId,
+                    mashComponentType: ComponentType.SCENARIO,
+                    designComponentName: 'NONE',
+                    designComponentId: 'NONE',
+                    designComponentReferenceId: 'NONE',
+                    designFeatureReferenceId: scenario.featureReferenceId,
+                    designFeatureAspectReferenceId: 'NONE',
+                    designScenarioReferenceId: 'NONE',
+                    // Status
+                    hasChildren: false,
+                    // Test Data
+                    mashItemName:                   scenario.scenarioName,
+                    mashItemTag:                    scenario.scenarioTag,
+                    // Test Results
+                    accMashStatus:                  MashStatus.MASH_NOT_DESIGNED,
+                    accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED
+                }
+            );
+        });
+
+        // And also add in any DEV only Scenario Steps for Design Scenarios
+        const devSteps = UserDevFeatureScenarioSteps.find({
+            userId: userContext.userId,
+            featureReferenceId: {$ne: 'NONE'},
+            scenarioReferenceId: {$ne: 'NONE'},
+            scenarioStepReferenceId: 'NONE'
+        }).fetch();
+
+        devSteps.forEach((step) => {
+
+            UserWorkPackageFeatureStepData.insert(
+                {
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    designUpdateId:                 userContext.designUpdateId,
+                    workPackageId:                  userContext.workPackageId,
+                    designComponentId:              'NONE',
+                    mashComponentType:              ComponentType.SCENARIO_STEP,
+                    designComponentName:            'NONE',
+                    designComponentReferenceId:     'NONE',
+                    designFeatureReferenceId:       step.featureReferenceId,
+                    designScenarioReferenceId:      step.scenarioReferenceId,
+                    // Step Data
+                    stepContext:                    StepContext.STEP_SCENARIO,
+                    stepType:                       step.stepType,
+                    stepText:                       step.stepText,
+                    stepTextRaw:                    step.stepTextRaw,
+                    // Test Data
+                    mashItemName:                   step.stepFullName,
+                    // Test Results
+                    accMashStatus:                  MashStatus.MASH_NOT_DESIGNED,
+                    accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED
+                }
+            );
+        });
+    }
 
     getAcceptanceTestResults(testRunner, userContext){
 
@@ -312,9 +477,10 @@ class MashDataModules{
 
             // Also insert any Feature Background Steps
             const backgroundSteps = FeatureBackgroundSteps.find({
-                designVersionId:    userContext.designVersionId,
-                designUpdateId:     userContext.designUpdateId,
-                featureReferenceId: feature.componentReferenceId
+                designVersionId:        userContext.designVersionId,
+                designUpdateId:         userContext.designUpdateId,
+                featureReferenceId:     feature.componentReferenceId,
+                isRemoved:              false
             }).fetch();
 
             backgroundSteps.forEach((backgroundStep) => {
@@ -392,7 +558,8 @@ class MashDataModules{
                     let scenarioSteps = ScenarioSteps.find({
                         designVersionId:        userContext.designVersionId,
                         designUpdateId:         userContext.designUpdateId,
-                        scenarioReferenceId:    designItem.scenarioRef
+                        scenarioReferenceId:    designItem.scenarioRef,
+                        isRemoved:              false
                     }).fetch();
 
                     scenarioSteps.forEach((step) => {
@@ -648,6 +815,26 @@ class MashDataModules{
 
     };
 
+    setTestStepMashStatus(mashStepId, stepStatus, stepTestStatus){
+
+        UserWorkPackageFeatureStepData.update(
+            {_id: mashStepId},
+            {
+                $set: {
+                    accMashStatus: stepStatus,
+                    accMashTestStatus: stepTestStatus
+                }
+            }
+        );
+
+    };
+
+    removeMashStep(mashStepId){
+        UserWorkPackageFeatureStepData.remove(
+            {_id: mashStepId}
+        );
+    }
+
     getTestStepData(testStepName){
 
         const firstSpace = testStepName.indexOf(' ');
@@ -660,7 +847,11 @@ class MashDataModules{
             stepText: stepText,
             rawText: rawText
         }
-    }
+    };
+
+
+
+
 
 }
 

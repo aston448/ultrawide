@@ -108,7 +108,7 @@ class ClientMashDataServices {
             && targetContext === DisplayContext.EDIT_STEP_LINKED &&
             mashMoveDropAllowed(targetContext)
         ){
-            if(movingComponent.mashStatus === MashStatus.MASH_NOT_IMPLEMENTED) {
+            if(movingComponent.accMashStatus === MashStatus.MASH_NOT_IMPLEMENTED) {
                 // A Design Item being added to the final config...
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Updating {} to Linked", movingComponent.stepText);
 
@@ -117,6 +117,7 @@ class ClientMashDataServices {
                 Meteor.call('mash.updateMovedDesignStep', movingComponent._id);
 
                 // And update the relevant feature file with the new step...
+                Meteor.call('mash.exportFeatureConfiguration', userContext);
 
                 return true;
             } else {
@@ -167,61 +168,63 @@ class ClientMashDataServices {
         }
     };
 
-    exportFeature(mashItem, userContext){
+    exportFeature(userContext){
 
-        // Get the actual Feature Component Id
-        let component = null;
+        Meteor.call('mash.exportFeatureConfiguration', userContext);
 
-        if(userContext.designUpdateId === 'NONE'){
-            component = DesignComponents.findOne({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.FEATURE,
-                componentReferenceId: mashItem.designComponentReferenceId
-            });
-        } else {
-            component  = DesignUpdateComponents.findOne({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                componentType: ComponentType.FEATURE,
-                componentReferenceId: mashItem.designComponentReferenceId
-            });
-        }
-
-        if(component) {
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Exporting feature ", (userContext.designUpdateId === 'NONE') ? component.componentName : component.componentNameNew);
-
-            // For this function we update the user context first to the feature being exported
-            const context = {
-                userId:                         userContext.userId,
-                designId:                       userContext.designId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                workPackageId:                  userContext.workPackageId,
-                designComponentId:              component._id,
-                designComponentType:            ComponentType.FEATURE,
-                featureReferenceId:             mashItem.designFeatureReferenceId,
-                featureAspectReferenceId:       'NONE',
-                scenarioReferenceId:            'NONE',
-                scenarioStepId:                 'NONE',
-                featureFilesLocation:           userContext.featureFilesLocation,
-                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
-            };
-
-            store.dispatch(setCurrentUserItemContext(context, true));
-
-            // And now we export the feature with the new context
-            Meteor.call('mash.exportFeatureConfiguration', context);
-
-            return true;
-        } else {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Cant export - cant find Feature for reference id {} ", mashItem.designComponentReferenceId);
-            return false;
-        }
+        // // Get the actual Feature Component Id
+        // let component = null;
+        //
+        // if(userContext.designUpdateId === 'NONE'){
+        //     component = DesignComponents.findOne({
+        //         designId: userContext.designId,
+        //         designVersionId: userContext.designVersionId,
+        //         componentType: ComponentType.FEATURE,
+        //         componentReferenceId: mashItem.designComponentReferenceId
+        //     });
+        // } else {
+        //     component  = DesignUpdateComponents.findOne({
+        //         designId: userContext.designId,
+        //         designVersionId: userContext.designVersionId,
+        //         designUpdateId: userContext.designUpdateId,
+        //         componentType: ComponentType.FEATURE,
+        //         componentReferenceId: mashItem.designComponentReferenceId
+        //     });
+        // }
+        //
+        // if(component) {
+        //
+        //     log((msg) => console.log(msg), LogLevel.DEBUG, "Exporting feature ", (userContext.designUpdateId === 'NONE') ? component.componentName : component.componentNameNew);
+        //
+        //     // For this function we update the user context first to the feature being exported
+        //     const context = {
+        //         userId:                         userContext.userId,
+        //         designId:                       userContext.designId,
+        //         designVersionId:                userContext.designVersionId,
+        //         designUpdateId:                 userContext.designUpdateId,
+        //         workPackageId:                  userContext.workPackageId,
+        //         designComponentId:              component._id,
+        //         designComponentType:            ComponentType.FEATURE,
+        //         featureReferenceId:             mashItem.designFeatureReferenceId,
+        //         featureAspectReferenceId:       'NONE',
+        //         scenarioReferenceId:            'NONE',
+        //         scenarioStepId:                 'NONE',
+        //         featureFilesLocation:           userContext.featureFilesLocation,
+        //         acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+        //         integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+        //         moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+        //     };
+        //
+        //     store.dispatch(setCurrentUserItemContext(context, true));
+        //
+        //     // And now we export the feature with the new context
+        //     Meteor.call('mash.exportFeatureConfiguration', context);
+        //
+        //     return true;
+        // } else {
+        //     log((msg) => console.log(msg), LogLevel.DEBUG, "Cant export - cant find Feature for reference id {} ", mashItem.designComponentReferenceId);
+        //     return false;
+        // }
     }
 
     exportFeatureUpdates(userContext){

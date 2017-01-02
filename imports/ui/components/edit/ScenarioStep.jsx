@@ -290,7 +290,7 @@ class ScenarioStep extends Component {
         switch(displayContext){
             case DisplayContext.EDIT_STEP_LINKED:
                 //index = scenarioStep.mashItemIndex;
-                switch(scenarioStep.mashTestStatus){
+                switch(scenarioStep.accMashTestStatus){
                     case MashTestStatus.MASH_PASS:
                         devStyle = 'green';
                         glyph = 'ok-circle';

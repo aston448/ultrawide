@@ -102,7 +102,7 @@ class ScenarioStepsList extends Component {
                 }
                 break;
             case ViewType.DEVELOP_BASE_WP:
-            case view === ViewType.DEVELOP_UPDATE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
                 addOn = addScenarioStep;
                 break;
         }

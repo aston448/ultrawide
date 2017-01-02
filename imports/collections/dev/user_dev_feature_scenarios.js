@@ -11,6 +11,7 @@ let Schema = new SimpleSchema({
     // Identity
     userId:                 {type: String},                         // Meteor user id
     userDevFeatureId:       {type: String},
+    // Links
     featureReferenceId:     {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
     scenarioReferenceId:    {type: String, optional: true},         // A unique ID that persists across design updates - populated if linked
     // Data

@@ -16,7 +16,7 @@ import WorkPackageTestScenarioMashContainer     from './WorkPackageScenarioMashC
 import AcceptanceTestsScenarioMashItem          from '../../components/dev/AcceptanceTestScenarioMashItem.jsx';
 
 // Ultrawide Services
-import {RoleType, DisplayContext, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
+import {RoleType, DisplayContext, UserDevFeatureStatus, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
 import {log} from '../../../common/utils.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
@@ -56,7 +56,7 @@ class WorkPackageFeatureMashList extends Component {
     }
 
     onExportFeatureFile(userContext){
-
+        ClientMashDataServices.exportFeature(userContext);
     }
 
     onExportIntegrationData(userContext){
@@ -97,7 +97,7 @@ class WorkPackageFeatureMashList extends Component {
 
     render() {
 
-        const {designMashItemData, nonDesignScenarioData, displayContext, userContext} = this.props;
+        const {designMashItemData, nonDesignScenarioData, existingFeatureFile, displayContext, userContext} = this.props;
 
         let panelHeader = '';
         let secondPanelHeader = '';
@@ -118,6 +118,14 @@ class WorkPackageFeatureMashList extends Component {
             case ComponentType.FEATURE:
                 switch(displayContext){
                     case DisplayContext.MASH_ACC_TESTS:
+
+                        // Button is to export a new file or update the existing one
+                        let exportText = 'Export Feature File';
+                        if(existingFeatureFile){
+                            //if(existingFeatureFile.featureStatus === UserDevFeatureStatus.FEATURE_IN_WP) {
+                                exportText = 'Update Feature File';
+                            //}
+                        }
                         panelHeader =
                             <Grid className="close-grid">
                                 <Row>
@@ -126,7 +134,7 @@ class WorkPackageFeatureMashList extends Component {
                                     </Col>
                                     <Col md={4}>
                                         <div className="pull-right">
-                                            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureFile(userContext)}>Export Feature File</Button>
+                                            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureFile(userContext)}>{exportText}</Button>
                                         </div>
                                     </Col>
                                 </Row>
@@ -259,6 +267,7 @@ class WorkPackageFeatureMashList extends Component {
 WorkPackageFeatureMashList.propTypes = {
     designMashItemData: PropTypes.array.isRequired,
     nonDesignScenarioData: PropTypes.array,
+    existingFeatureFile: PropTypes.object,
     displayContext: PropTypes.string.isRequired
 };
 
@@ -279,12 +288,14 @@ export default WorkPackageFeatureMashContainer = createContainer(({params}) => {
 
     let designMashItemData = ClientContainerServices.getWorkPackageMashData(params.userContext, null);
     let nonDesignScenarioData = ClientContainerServices.getNonDesignAcceptanceScenarioData(params.userContext);
+    let existingFeatureFile = ClientContainerServices.checkForExistingFeatureFile(params.userContext);
 
     log((msg) => console.log(msg), LogLevel.DEBUG, "Integration design mash data returned {} features", designMashItemData.length);
 
     return{
         designMashItemData: designMashItemData,
         nonDesignScenarioData: nonDesignScenarioData,
+        existingFeatureFile: existingFeatureFile,
         displayContext: params.displayContext
     }
 

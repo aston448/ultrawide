@@ -1200,6 +1200,26 @@ class ClientContainerServices{
 
     }
 
+    checkForExistingFeatureFile(userContext){
+
+        let featureName = '';
+
+        if(userContext.designComponentType === ComponentType.FEATURE){
+
+            // The selected Feature must relate to a design or design update feature...
+            if(userContext.designUpdateId === 'NONE'){
+                featureName = DesignComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentName
+            } else {
+                featureName = DesignUpdateComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentNameNew
+            }
+        }
+
+        const featureFile = UserDevFeatures.findOne({featureName: featureName});
+
+        return featureFile;
+
+    }
+
     isDescendantOf(child, parent, userContext){
 
         let parentRefId = 'NONE';

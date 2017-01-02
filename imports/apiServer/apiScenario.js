@@ -36,7 +36,7 @@ Meteor.methods({
     },
 
     'scenario.logicalDeleteMashScenarioStep'(step, userContext){
-        //console.log('Logically Deleting step ' + step.mashItemName);
+        console.log('Logically Deleting step ' + step.mashItemName);
         ScenarioServices.logicalDeleteMashScenarioStep(step, userContext)
     },
 
