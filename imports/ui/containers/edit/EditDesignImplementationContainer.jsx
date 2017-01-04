@@ -125,7 +125,7 @@ class DevApplicationsList extends Component {
                     currentItemName: currentItemName,
                     mode: mode,
                     view: view,
-                    displayContext: displayContext
+                    displayContext: DisplayContext.EDIT_STEP_WP_DEV
                 }}/>;
 
             displayedItems++;

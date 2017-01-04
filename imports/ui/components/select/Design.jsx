@@ -32,7 +32,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class Design extends Component {
+export class Design extends Component {
     constructor(props) {
         super(props);
     }
@@ -64,13 +64,13 @@ class Design extends Component {
         let buttons = '';
         if(design.isRemovable){
             buttons = <ButtonGroup>
-                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
-                <Button bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
+                <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+                <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
             </ButtonGroup>
         } else {
             buttons = <ButtonGroup>
-                <Button bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
-                <Button bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>
+                <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+                <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>
             </ButtonGroup>
         }
 
@@ -102,8 +102,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-Design = connect(mapStateToProps)(Design);
+export default connect(mapStateToProps)(Design);
 
-export default Design;
 
 

@@ -40,16 +40,22 @@ class ClientScenarioStepServices {
     }
 
     // User has added a new Scenario step
-    addNewScenarioStep(view, mode, scenarioReferenceId, userItemContext, scenarioInScope){
+    addNewScenarioStep(view, mode, scenarioReferenceId, userContext, scenarioInScope){
 
         // Validate - can only add if design is editable and for in-scope update scenarios
         log((msg)=> console.log(msg), LogLevel.DEBUG, "Adding scenario step with view: {} and mode: {} and in scope: {}", view, mode , scenarioInScope);
 
         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && scenarioInScope){
-            Meteor.call('scenario.addNewScenarioStep', scenarioReferenceId, userItemContext, scenarioInScope);
+            Meteor.call('scenario.addNewScenarioStep', scenarioReferenceId, userContext, scenarioInScope);
             return true;
         } else {
-            return false;
+            if(view === ViewType.DEVELOP_UPDATE_WP || view == ViewType.DEVELOP_BASE_WP){
+                Meteor.call('scenario.addNewScenarioStep', scenarioReferenceId, userContext, true);
+                return true;
+            } else {
+                return false;
+            }
+
         }
 
     };

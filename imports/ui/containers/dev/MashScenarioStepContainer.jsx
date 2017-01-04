@@ -11,6 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import ScenarioStep from '../../components/edit/ScenarioStep.jsx';
+import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 import MoveTarget   from '../../components/edit/MoveTarget.jsx';
 
 // Ultrawide Services
@@ -18,6 +19,7 @@ import {ViewMode, ViewType, DisplayContext, StepContext, ComponentType}    from 
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
+import ClientScenarioStepServices from '../../../apiClient/apiClientScenarioStep.js';
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -40,6 +42,11 @@ class MashScenarioStepsList extends Component {
 
     }
 
+    // addStep(view, mode, parentReferenceId, userContext, parentInScope){
+    //
+    //     ClientScenarioStepServices.addNewDevScenarioStep(view, mode, parentReferenceId, userContext, parentInScope);
+    //
+    // }
 
     renderSteps(steps, view, displayContext, userContext){
         return steps.map((step) => {
@@ -63,6 +70,21 @@ class MashScenarioStepsList extends Component {
 
         const {designSteps, linkedSteps, devSteps, userContext, view} = this.props;
 
+        // let addScenarioStep =
+        //     <table>
+        //         <tbody>
+        //         <tr>
+        //             <td className="control-table-data">
+        //                 <DesignComponentAdd
+        //                     addText="Add scenario step"
+        //                     onClick={ () => this.addStep(view, mode, userContext.scenarioReferenceId, userContext, true)}
+        //                 />
+        //             </td>
+        //         </tr>
+        //         </tbody>
+        //     </table>;
+
+
         let designPanel = <div></div>;
         if(designSteps.length > 0){
             designPanel =
@@ -76,6 +98,7 @@ class MashScenarioStepsList extends Component {
             linkedPanelData = <div>{this.renderSteps(linkedSteps, view, DisplayContext.EDIT_STEP_LINKED, userContext)}</div>;
         }
 
+        // Steps that are in the Design and in Dev.  New steps may be added here
         let linkedPanel =
             <Panel className="panel-text panel-text-body" header="Steps LINKED between DESIGN and BUILD">
                 {linkedPanelData}

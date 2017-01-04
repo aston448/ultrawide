@@ -103,7 +103,9 @@ class ScenarioStepsList extends Component {
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                addOn = addScenarioStep;
+                if(stepContext != StepContext.STEP_FEATURE_SCENARIO) {
+                    addOn = addScenarioStep;
+                }
                 break;
         }
 

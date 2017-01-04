@@ -505,14 +505,7 @@ class ScenarioStep extends Component {
 
 
         // Read only if in View mode or if step is background step in a Scenario context
-        if(mode === ViewMode.MODE_VIEW || stepContext === StepContext.STEP_FEATURE_SCENARIO){
-            // View mode on
-            return (
-                <div>
-                    {viewOnlyStep}
-                </div>
-            )
-        } else {
+
             switch(displayContext){
                 case DisplayContext.EDIT_STEP_DESIGN:
                 case DisplayContext.EDIT_STEP_DEV:
@@ -523,30 +516,69 @@ class ScenarioStep extends Component {
                         </div>
                     );
                     break;
-                default:
-                    // Anything else is in the main step editor and has a move target if not currently editing
-                    if (this.state.editable) {
-                        // Editing allowed
+                case DisplayContext.EDIT_STEP_WP_DEV:
+                    // Steps in Work Package Development are always editable and movable if not background steps
+                    if(stepContext === StepContext.STEP_FEATURE_SCENARIO){
+                        // View mode on
                         return (
                             <div>
-                                {editingStep}
+                                {viewOnlyStep}
                             </div>
                         )
                     } else {
+                        if (this.state.editable) {
+                            // Editing allowed
+                            return (
+                                <div>
+                                    {editingStep}
+                                </div>
+                            )
+                        } else {
+                            return (
+                                <div>
+                                    <MoveTarget
+                                        currentItem={scenarioStep}
+                                        displayContext={displayContext}
+                                        mode={mode}
+                                    />
+                                    {draggableStep}
+                                </div>
+                            )
+                        }
+                    }
+                    break;
+                default:
+                    // Anything else is editable and movable if not  in view mode or a background step
+                    if(mode === ViewMode.MODE_VIEW || stepContext === StepContext.STEP_FEATURE_SCENARIO){
+                        // View mode on
                         return (
                             <div>
-                                <MoveTarget
-                                    currentItem={scenarioStep}
-                                    displayContext={displayContext}
-                                    mode={mode}
-                                />
-                                {draggableStep}
+                                {viewOnlyStep}
                             </div>
                         )
+                    } else {
+                        if (this.state.editable) {
+                            // Editing allowed
+                            return (
+                                <div>
+                                    {editingStep}
+                                </div>
+                            )
+                        } else {
+                            return (
+                                <div>
+                                    <MoveTarget
+                                        currentItem={scenarioStep}
+                                        displayContext={displayContext}
+                                        mode={mode}
+                                    />
+                                    {draggableStep}
+                                </div>
+                            )
+                        }
                     }
             }
 
-        }
     }
 }
 
