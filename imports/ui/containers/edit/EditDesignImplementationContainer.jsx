@@ -254,8 +254,9 @@ class DevApplicationsList extends Component {
 
             unitTests =
                 <Panel header="Module Test Implementation" className="panel-update panel-update-body">
-                    <DesignDevUnitMashContainer params={{
-                        userContext: userContext
+                    <WorkPackageFeatureMashContainer params={{
+                        userContext: userContext,
+                        displayContext: DisplayContext.MASH_MOD_TESTS
                     }}/>
                 </Panel>;
 

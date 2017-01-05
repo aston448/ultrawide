@@ -239,7 +239,8 @@ class WorkPackageFeatureMashList extends Component {
                                     userContext: userContext
                                 }}/>;
                             break;
-                        default:
+                        case DisplayContext.MASH_INT_TESTS:
+                            // Just show the scenario result
                             mainPanel =
                                 <Panel className="panel-text panel-text-body" header={panelHeader}>
                                     <WorkPackageScenarioMashContainer params={{
@@ -248,6 +249,11 @@ class WorkPackageFeatureMashList extends Component {
                                         displayContext:  displayContext
                                     }}/>
                                 </Panel>;
+                            break;
+                        case DisplayContext.MASH_MOD_TESTS:
+                            // Show the module tests for the Scenario
+
+
                     }
 
 

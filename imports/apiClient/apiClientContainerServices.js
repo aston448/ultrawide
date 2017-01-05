@@ -20,6 +20,7 @@ import { DomainDictionary }                 from '../collections/design/domain_d
 import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
 import { UserWorkPackageMashData }          from '../collections/dev/user_work_package_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
+import { UserModTestMashData }              from '../collections/dev/user_mod_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
 
@@ -91,6 +92,7 @@ class ClientContainerServices{
         const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps');
         const wmHandle = Meteor.subscribe('userWorkPackageMashData');
         const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData');
+        const mmHandle = Meteor.subscribe('userModTestMashData');
         const arHandle = Meteor.subscribe('userAccTestResults');
         const irHandle = Meteor.subscribe('userIntTestResults');
         const mrHandle = Meteor.subscribe('userModTestResults');
@@ -103,6 +105,7 @@ class ClientContainerServices{
             !ssHandle.ready()   ||
             !wmHandle.ready()   ||
             !wsHandle.ready()   ||
+            !mmHandle.ready()   ||
             !arHandle.ready()   ||
             !irHandle.ready()   ||
             !mrHandle.ready()   ||
@@ -1361,10 +1364,10 @@ class ClientContainerServices{
     };
 
     // Get all unit test results relating to a specific Design Scenario
-    getMashScenarioUnitTestResults(scenario){
+    getMashScenarioModTestResults(userContext, scenario){
 
         return UserModTestMashData.find({
-            userId:                         scenario.userId,
+            userId:                         userContext.userId,
             designScenarioReferenceId:      scenario.designScenarioReferenceId,
         }).fetch();
 

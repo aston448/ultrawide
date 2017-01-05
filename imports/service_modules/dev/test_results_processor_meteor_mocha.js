@@ -3,15 +3,15 @@ import fs from 'fs';
 import {DesignComponents}               from '../../collections/design/design_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
-import {UserModTestMashData}            from '../../collections/dev/user_mod_test_mash_data.js';
+import { UserModTestResults }           from '../../collections/dev/user_mod_test_results';
 
-import {ComponentType, MashStatus, MashTestStatus, LogLevel} from '../../constants/constants.js';
+import {ComponentType, MashStatus, MashTestStatus, TestType, LogLevel} from '../../constants/constants.js';
 import {log} from '../../common/utils.js';
 
-// Plugin class to read test results from a screen scraped meteor -test mocha JSON reported file
+// Plugin class to read test results from a meteor -test mocha JSON reported file
 class MeteorMochaTestServices{
 
-    processTestResults(resultsFile){
+    getJsonTestResults(resultsFile, userId, testType){
 
         if(Meteor.isServer) {
 
@@ -26,16 +26,9 @@ class MeteorMochaTestServices{
             }
 
             // Clean ---------------------------------------------------------------------------------------------------
-            let cleanText = '';
-            try {
-                cleanText = this.cleanResults(resultsText.toString());
-            } catch (e) {
-                log((msg) => console.log(msg), LogLevel.ERROR, "Failed to clean meteor mocha tests file: {}", e);
-                return [];
-            }
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Cleaned file text is:\n {}", cleanText);
-
+            // No cleaning needed for this file
+            let cleanText = resultsText;
 
             // Parse ---------------------------------------------------------------------------------------------------
             let resultsJson = [];
@@ -47,76 +40,65 @@ class MeteorMochaTestServices{
                 return [];
             }
 
+            // Store Standard Data -------------------------------------------------------------------------------------
 
-            // Return Standard Data ------------------------------------------------------------------------------------
+            switch(testType){
+                case TestType.MODULE:
 
-            let returnData = [];
+                    // Clear existing results for user
+                    UserModTestResults.remove({userId: userId});
 
-            resultsJson.passes.forEach((test) => {
-                returnData.push(
-                    {
-                        testName:           test.title,
-                        testFullName:       test.fullTitle,
-                        testResult:         MashTestStatus.MASH_PASS,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       test.duration,
-                        stackTrace:         ''
-                    }
-                );
-            });
+                    // Add latest results
+                    resultsJson.passes.forEach((test) => {
+                        UserModTestResults.insert(
+                            {
+                                userId:             userId,
+                                testName:           test.title,
+                                testFullName:       test.fullTitle,
+                                testResult:         MashTestStatus.MASH_PASS,
+                                testError:          '',
+                                testErrorReason:    '',
+                                testDuration:       test.duration,
+                                stackTrace:         ''
+                            }
+                        );
+                    });
 
-            resultsJson.failures.forEach((test) => {
-                returnData.push(
-                    {
-                        testName:           test.title,
-                        testFullName:       test.fullTitle,
-                        testResult:         MashTestStatus.MASH_FAIL,
-                        testError:          test.err.error,
-                        testErrorReason:    test.err.reason,
-                        testDuration:       test.duration,
-                        stackTrace:         test.err.stack
-                    }
-                );
-            });
+                    resultsJson.failures.forEach((test) => {
+                        UserModTestResults.insert(
+                            {
+                                userId:             userId,
+                                testName:           test.title,
+                                testFullName:       test.fullTitle,
+                                testResult:         MashTestStatus.MASH_FAIL,
+                                testError:          test.err.error,
+                                testErrorReason:    test.err.reason,
+                                testDuration:       test.duration,
+                                stackTrace:         test.err.stack
+                            }
+                        );
+                    });
 
-            resultsJson.pending.forEach((test) => {
-                returnData.push(
-                    {
-                        testName:           test.title,
-                        testFullName:       test.fullTitle,
-                        testResult:         MashTestStatus.MASH_PENDING,
-                        testError:          '',
-                        testErrorReason:    '',
-                        testDuration:       0,
-                        stackTrace:         ''
-                    }
-                );
-            });
+                    resultsJson.pending.forEach((test) => {
+                        UserModTestResults.insert(
+                            {
+                                userId:             userId,
+                                testName:           test.title,
+                                testFullName:       test.fullTitle,
+                                testResult:         MashTestStatus.MASH_PENDING,
+                                testError:          '',
+                                testErrorReason:    '',
+                                testDuration:       0,
+                                stackTrace:         ''
+                            }
+                        );
+                    });
 
-            return returnData;
+                    break;
+                default:
+            }
 
         }
-    };
-
-    cleanResults(inputText){
-
-        let outputText = '';
-
-        let outputLines = inputText.split('\n');
-
-        outputLines.forEach((line) => {
-
-            if(line.startsWith('[34m')){
-
-                let actualTextStart = line.indexOf('[39m');
-                let finalLine = line.substring(actualTextStart + 5);
-                outputText += finalLine + '\n';
-            }
-        });
-
-        return outputText;
-
     };
 
 }

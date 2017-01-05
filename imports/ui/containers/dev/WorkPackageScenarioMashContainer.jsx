@@ -10,6 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import AcceptanceTestScenarioMashItem       from '../../components/dev/AcceptanceTestScenarioMashItem.jsx';
 import IntegrationTestScenarioMashItem      from '../../components/dev/IntegrationTestScenarioMashItem.jsx';
+import ModuleTestScenarioMashItem           from '../../components/dev/ModuleTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import { DisplayContext }    from '../../../constants/constants.js';
@@ -37,7 +38,7 @@ class WorkPackageScenarioMashList extends Component {
 
     shouldComponentUpdate(nextProps, nextState){
         return true;
-    }
+    };
 
     renderAcceptanceScenarios(mashData){
 
@@ -51,7 +52,7 @@ class WorkPackageScenarioMashList extends Component {
                 );
             }
         });
-    }
+    };
 
     renderIntegrationScenarios(mashData){
 
@@ -65,7 +66,21 @@ class WorkPackageScenarioMashList extends Component {
                 );
             }
         });
-    }
+    };
+
+    renderModuleScenarios(mashData){
+
+        return mashData.map((mashItem) => {
+            if(mashItem) {
+                return (
+                    <ModuleTestScenarioMashItem
+                        key={mashItem._id}
+                        mashItem={mashItem}
+                    />
+                );
+            }
+        });
+    };
 
     render() {
 
@@ -89,8 +104,12 @@ class WorkPackageScenarioMashList extends Component {
                 break;
 
             case DisplayContext.MASH_MOD_TESTS:
+                return(
+                    <div>
+                        {this.renderModuleScenarios(designMashItemData)}
+                    </div>
+                );
                 break;
-
         }
 
 

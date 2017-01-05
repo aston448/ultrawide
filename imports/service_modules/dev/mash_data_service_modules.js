@@ -7,6 +7,7 @@ import { ScenarioSteps }                    from '../../collections/design/scena
 import { WorkPackages }                     from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }            from '../../collections/work/work_package_components.js';
 import { UserWorkPackageMashData }          from '../../collections/dev/user_work_package_mash_data.js';
+import { UserModTestMashData }              from '../../collections/dev/user_mod_test_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 import { UserAccTestResults }               from '../../collections/dev/user_acc_test_results.js';
 import { UserIntTestResults }               from '../../collections/dev/user_int_test_results.js';
@@ -21,6 +22,7 @@ import { log } from '../../common/utils.js';
 
 import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
+import MeteorMochaTestServices      from '../../service_modules/dev/test_results_processor_meteor_mocha.js';
 import ChimpMochaTestServices       from '../../service_modules/dev/test_results_processor_chimp_mocha.js';
 import ChimpCucumberTestServices    from '../../service_modules/dev/test_results_processor_chimp_cucumber.js';
 
@@ -234,13 +236,26 @@ class MashDataModules{
                 break;
 
         }
-
-
-
     };
 
     getModuleTestResults(testRunner, userContext){
 
+        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
+        if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
+            return;
+        }
+
+        // Call the correct results service to get the test data
+
+        switch (testRunner) {
+            case TestRunner.METEOR_MOCHA:
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting METEOR_MOCHA Results Data");
+                let testFile = userContext.moduleTestResultsLocation;
+
+                MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.MODULE);
+                break;
+
+        }
     };
 
     calculateWorkPackageMash(userContext){
@@ -607,7 +622,6 @@ class MashDataModules{
 
         // Run through the test results and update Mash where tests are found
 
-        // TODO add ACC and MOD
         if(viewOptions.devAccTestsVisible){
 
             // Get the Acceptance test SCENARIO results for current user - STEP results are in separate data mash
@@ -811,8 +825,147 @@ class MashDataModules{
             }
         }
 
+        if(viewOptions.devModTestsVisible){
 
+            // Get the Module test results for current user
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Mod Test Results for User {}", userContext.userId);
 
+            // Remove current module test mash
+            UserModTestMashData.remove({userId: userContext.userId});
+
+            const modResultsData = UserModTestResults.find({userId: userContext.userId}).fetch();
+
+            const mashScenarios = UserWorkPackageMashData.find({
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                workPackageId: userContext.workPackageId,
+                mashComponentType: ComponentType.SCENARIO
+            }).fetch();
+
+            if(modResultsData.length > 0) {
+
+                // Parse Test Results
+                modResultsData.forEach((testResult) => {
+
+                    let testIdentity = {
+                        suite: testResult.testName,
+                        subSuite: testResult.testName
+                    };
+
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Mod Test Result: {}", testResult.testFullName);
+
+                    let linked = false;
+
+                    // See if the test relates to a Scenario
+                    mashScenarios.forEach((designScenario) => {
+
+                        if(testResult.testFullName.includes(designScenario.designComponentName)){
+
+                            log((msg) => console.log(msg), LogLevel.TRACE, "  Matched Scenario: {}", designScenario.designComponentName);
+
+                            testIdentity = this.getModTestIdentity(testResult.testFullName, designScenario.designComponentName, testResult.testName);
+
+                            // Update the Mash
+                            UserWorkPackageMashData.update(
+                                {_id: designScenario._id},
+                                {
+                                    $set: {
+                                        modMashStatus: MashStatus.MASH_LINKED,
+                                        modMashTestStatus: MashTestStatus.MASH_PENDING // Depends on the sum of all Module tests
+                                    }
+                                }
+                            );
+
+                            // Insert a child Module Test record
+                            UserModTestMashData.insert(
+                                {
+                                    // Identity
+                                    userId:                      userContext.userId,
+                                    suiteName:                   designScenario.designComponentName,
+                                    testGroupName:               testIdentity.subSuite,
+                                    designScenarioReferenceId:   designScenario.designScenarioReferenceId,
+                                    designAspectReferenceId:     designScenario.designFeatureAspectReferenceId,
+                                    designFeatureReferenceId:    designScenario.designFeatureReferenceId,
+                                    // Data
+                                    testName:                    testResult.testName,
+                                    // Status
+                                    mashStatus:                  MashStatus.MASH_LINKED,
+                                    testOutcome:                 testResult.testResult
+                                }
+                            );
+
+                            linked = true;
+                        }
+                    });
+
+                    // If no scenarios matched, insert as non-linked test
+                    if(!linked){
+                        UserModTestMashData.insert(
+                            {
+                                // Identity
+                                userId:                      userContext.userId,
+                                suiteName:                   testIdentity.suite,
+                                testGroupName:               testIdentity.subSuite,
+                                designScenarioReferenceId:   'NONE',
+                                designAspectReferenceId:     'NONE',
+                                designFeatureReferenceId:    'NONE',
+                                // Data
+                                testName:                    testResult.testName,
+                                // Status
+                                mashStatus:                  MashStatus.MASH_NOT_DESIGNED,
+                                testOutcome:                 testResult.testResult
+                            }
+                        );
+                    }
+                });
+
+                // Now update the mod test status of the scenario:
+                // Any failures = FAIL
+                // Any passes and no failures = PASS
+                // Neither = PENDING
+                mashScenarios.forEach((designScenario) => {
+
+                    const modPassCount = UserModTestMashData.find({
+                        userId:                     userContext.userId,
+                        designScenarioReferenceId:  designScenario.designScenarioReferenceId,
+                        mashStatus:                 MashStatus.MASH_LINKED,
+                        testOutcome:                MashTestStatus.MASH_PASS
+                    }).count();
+
+                    const modFailCount = UserModTestMashData.find({
+                        userId:                     userContext.userId,
+                        designScenarioReferenceId:  designScenario.designScenarioReferenceId,
+                        mashStatus:                 MashStatus.MASH_LINKED,
+                        testOutcome:                MashTestStatus.MASH_FAIL
+                    }).count();
+
+                    let scenarioTestStatus = MashTestStatus.MASH_PENDING;
+                    if(modPassCount > 0){
+                        scenarioTestStatus = MashTestStatus.MASH_PASS;
+                    }
+                    // Override if failures
+                    if(modFailCount > 0){
+                        scenarioTestStatus = MashTestStatus.MASH_FAIL;
+                    }
+
+                    // Update the Mash if no longer pending
+                    if(scenarioTestStatus != MashTestStatus.MASH_PENDING) {
+                        UserWorkPackageMashData.update(
+                            {_id: designScenario._id},
+                            {
+                                $set: {
+                                    modMashTestStatus: scenarioTestStatus
+                                }
+                            }
+                        );
+                    }
+                });
+
+            } else {
+                log((msg) => console.log(msg), LogLevel.DEBUG, "No module test results data");
+            }
+        }
     };
 
     setTestStepMashStatus(mashStepId, stepStatus, stepTestStatus){
@@ -848,6 +1001,47 @@ class MashDataModules{
             rawText: rawText
         }
     };
+
+    getModTestIdentity(fullTitle,  scenarioName, testName){
+
+        // A mod test full Title could be:
+        // SUITE...SCENARIO...SUBSUITE...TEST
+        // But SUITE and SUBSUITE might not be there
+
+        const scenarioStart = fullTitle.indexOf(scenarioName);
+        const testStart = fullTitle.indexOf(testName);
+
+        let suite = fullTitle.substring(0, scenarioStart).trim();
+        if(suite === ''){
+            suite = scenarioName;
+        }
+
+        return({
+            suite: suite,
+            subSuite: fullTitle.substring(scenarioStart + scenarioName.length, testStart).trim()
+        })
+    }
+
+    getTestIdentity(title, fullTitle){
+        let titleStart = fullTitle.indexOf(title);
+
+        return({
+            testName: title,
+            testContext: fullTitle.substring(0, titleStart)
+        });
+    };
+
+    getContextDetails(testContext, scenarioName){
+        // Given that the Scenario Name is part of the test context, anything else must be a test group
+        if(testContext.trim() === scenarioName.trim()) {
+            // No other context
+            return '';
+        } else {
+            // Return what is after the Scenario Name
+            return testContext.substring(scenarioName.length);
+        }
+
+    }
 
 
 

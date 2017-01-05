@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import MashUnitTestResult         from '../../components/dev/MashUnitTestResult.jsx';
+import MashModuleTestResult         from '../../components/dev/MashModuleTestResult.jsx';
 
 // Ultrawide Services
 import {RoleType, ComponentType, DisplayContext}    from '../../../constants/constants.js';
@@ -34,7 +34,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class MashUnitTestList extends Component {
+class MashModuleTestList extends Component {
     constructor(props) {
         super(props);
 
@@ -46,7 +46,7 @@ class MashUnitTestList extends Component {
         return testResults.map((testResult) => {
 
             return (
-                <MashUnitTestResult
+                <MashModuleTestResult
                     key={testResult._id}
                     testResult={testResult}
                 />
@@ -76,7 +76,7 @@ class MashUnitTestList extends Component {
     }
 }
 
-MashUnitTestList.propTypes = {
+MashModuleTestList.propTypes = {
     testResults: PropTypes.array.isRequired
 };
 
@@ -90,20 +90,20 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-MashUnitTestList = connect(mapStateToProps)(MashUnitTestList);
+MashModuleTestList = connect(mapStateToProps)(MashModuleTestList);
 
 
-export default MashUnitTestContainer = createContainer(({params}) => {
+export default MashModuleTestContainer = createContainer(({params}) => {
 
     let testResults = [];
 
     switch(params.displayContext){
-        case DisplayContext.VIEW_UNIT_MASH:
-            testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.scenario);
-            //console.log("Found " + testResults.length + " unit tests for scenario " + params.scenario.designScenarioReferenceId + " and user " + params.scenario.userId) ;
+        case DisplayContext.VIEW_MOD_MASH:
+            testResults = ClientContainerServices.getMashScenarioModTestResults(params.userContext, params.scenario);
+            console.log("Found " + testResults.length + " unit tests for scenario " + params.scenario.designScenarioReferenceId + " and user " + params.scenario.userId) ;
             break;
 
-        case DisplayContext.VIEW_UNIT_UNLINKED:
+        case DisplayContext.VIEW_MOD_UNLINKED:
             testResults = ClientContainerServices.getMashUnlinkedUnitTestResults(params.userContext);
             //console.log("Found " + testResults.length + " unlinked unit tests") ;
             break;
@@ -116,4 +116,4 @@ export default MashUnitTestContainer = createContainer(({params}) => {
     }
 
 
-}, MashUnitTestList);
+}, MashModuleTestList);
