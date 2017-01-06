@@ -1,4 +1,4 @@
-import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus} from '../constants/constants.js';
+import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -99,7 +99,20 @@ class TextLookups {
             default:
                 return 'No tests in this feature';
         }
-    }
+    };
+
+    mashTestTypes(displayContext){
+
+        let testType = '';
+        switch (displayContext){
+            case DisplayContext.MASH_ACC_TESTS:
+                return 'Acceptance';
+            case DisplayContext.MASH_INT_TESTS:
+                return 'Integration';
+            case DisplayContext.MASH_UNIT_TESTS:
+                return 'Unit';
+        }
+    };
 
 }
 

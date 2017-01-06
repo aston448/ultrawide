@@ -97,13 +97,13 @@ class DevApplicationsList extends Component {
         // WHAT COMPONENTS ARE VISIBLE (Besides Design)
 
         // Start by assuming only 2 cols
-        let col1width = 6;
-        let col2width = 6;
-        let col3width = 6;
-        let col4width = 6;
-        let col5width = 6;
-        let col6width = 6;
-        let col7width = 6;
+        let col1width = 5;
+        let col2width = 7;
+        let col3width = 7;
+        let col4width = 7;
+        let col5width = 7;
+        let col6width = 7;
+        let col7width = 7;
 
         // console.log("View Options Dev Details: " + viewOptions.devDetailsVisible);
         // console.log("View Options Dev Acc: " + viewOptions.devAccTestsVisible);
@@ -144,13 +144,13 @@ class DevApplicationsList extends Component {
             switch(displayedItems){
                 case 1:
                     // There are now 2 cols so change widths
-                    col1width = 6;
-                    col2width = 6;
-                    col3width = 6;
-                    col4width = 6;
-                    col5width = 6;
-                    col6width = 6;
-                    col7width = 6;
+                    col1width = 5;
+                    col2width = 7;
+                    col3width = 7;
+                    col4width = 7;
+                    col5width = 7;
+                    col6width = 7;
+                    col7width = 7;
                     break;
                 case 2:
                     // There are now 3 cols so change widths

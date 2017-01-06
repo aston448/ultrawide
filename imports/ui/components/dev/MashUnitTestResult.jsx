@@ -57,16 +57,18 @@ export class MashUnitTestResult extends Component {
         return(
             <Grid className="close-grid">
                 <Row>
-                    <Col md={10} className="close-col">
-                         <span className="unit-test-group">
+                    <Col md={3} className="close-col">
+                        <div className="unit-test-group">
                             {testResult.testGroupName + ': '}
-                        </span>
-                        <span className={"unit-test " + testStyle}>
+                        </div>
+                    </Col>
+                    <Col md={7} className="close-col">
+                        <div className={"unit-test " + testStyle}>
                             {testResult.testName}
-                        </span>
+                        </div>
                     </Col>
                     <Col md={2} className="close-col">
-                        <div className={"mash-item " + testStyle}>
+                        <div className={"unit-test " + testStyle}>
                             {TextLookups.mashTestStatus(testResult.testOutcome)}
                         </div>
                     </Col>

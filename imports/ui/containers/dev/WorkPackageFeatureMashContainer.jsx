@@ -18,6 +18,7 @@ import AcceptanceTestsScenarioMashItem          from '../../components/dev/Accep
 // Ultrawide Services
 import {RoleType, DisplayContext, UserDevFeatureStatus, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
 import {log} from '../../../common/utils.js';
+import TextLookups from '../../../common/lookups.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
@@ -105,15 +106,14 @@ class WorkPackageFeatureMashList extends Component {
         let itemHeader = '';
         let secondPanel = <div></div>;
 
-
         const nameData = UserContextServices.getContextNameData(userContext);
 
         switch(userContext.designComponentType){
             case ComponentType.APPLICATION:
-                panelHeader = 'Tests for ' + nameData.application;
+                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.application;
                 break;
             case ComponentType.DESIGN_SECTION:
-                panelHeader = 'Tests in ' + nameData.designSection;
+                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests in ' + nameData.designSection;
                 break;
             case ComponentType.FEATURE:
                 switch(displayContext){
@@ -130,7 +130,7 @@ class WorkPackageFeatureMashList extends Component {
                             <Grid className="close-grid">
                                 <Row>
                                     <Col md={8} className="close-col">
-                                        <div className="panel-grid-header">{'Tests for ' + nameData.feature}</div>
+                                        <div className="panel-grid-header">{TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature}</div>
                                     </Col>
                                     <Col md={4}>
                                         <div className="pull-right">
@@ -150,7 +150,7 @@ class WorkPackageFeatureMashList extends Component {
                             <Grid className="close-grid">
                                 <Row>
                                     <Col md={8} className="close-col">
-                                        <div className="panel-grid-header">{'Tests for ' + nameData.feature}</div>
+                                        <div className="panel-grid-header">{TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature}</div>
                                     </Col>
                                     <Col md={4}>
                                         <div className="pull-right">
@@ -161,17 +161,17 @@ class WorkPackageFeatureMashList extends Component {
                             </Grid>;
                          break;
                     case DisplayContext.MASH_UNIT_TESTS:
-                        panelHeader = 'Tests for ' + nameData.feature;
+                        panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
                         break;
                 }
 
                 break;
             case ComponentType.FEATURE_ASPECT:
-                panelHeader = nameData.featureAspect + ' tests for ' + nameData.feature;
+                panelHeader = nameData.featureAspect + ' ' + TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
                 itemHeader = 'Scenario';
                 break;
             case ComponentType.SCENARIO:
-                panelHeader = 'Test for ' + nameData.scenario;
+                panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for ' + nameData.scenario;
                 break;
         }
 
