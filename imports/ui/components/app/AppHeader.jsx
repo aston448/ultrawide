@@ -117,7 +117,7 @@ class AppHeader extends Component {
         let testSummaryOption = '';
         let accTestOption = '';
         let intTestOption = '';
-        let modTestOption = '';
+        let unitTestOption = '';
         let dictOption = '';
 
         // Get the correct user view options for the view context
@@ -146,7 +146,7 @@ class AppHeader extends Component {
                 detailsOption = ViewOptionType.DEV_DETAILS;
                 accTestOption = ViewOptionType.DEV_ACC_TESTS;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
-                modTestOption = ViewOptionType.DEV_MOD_TESTS;
+                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
                 dictOption = ViewOptionType.DEV_DICT;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
                 break;
@@ -187,8 +187,8 @@ class AppHeader extends Component {
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acceptance Tests</Button>;
         let intTestsButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, intTestOption, userViewOptions, currentViewDataValue)}>Integration Tests</Button>;
-        let modTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(modTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, modTestOption, userViewOptions, currentViewDataValue)}>Module Tests</Button>;
+        let unitTestsButton =
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
         let accFilesButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
         let domainDictionaryButton =
@@ -424,7 +424,7 @@ class AppHeader extends Component {
                             {accTestsButton}
                             {accFilesButton}
                             {intTestsButton}
-                            {modTestsButton}
+                            {unitTestsButton}
                             {domainDictionaryButton}
                         </ButtonGroup>
                         <ButtonGroup>

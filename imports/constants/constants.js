@@ -47,7 +47,7 @@ export const ViewOptionType = {
     DEV_DETAILS:        'devDetailsVisible',
     DEV_ACC_TESTS:      'devAccTestsVisible',
     DEV_INT_TESTS:      'devIntTestsVisible',
-    DEV_MOD_TESTS:      'devModTestsVisible',
+    DEV_UNIT_TESTS:     'devUnitTestsVisible',
     DEV_FILES:          'devFeatureFilesVisible',
     DEV_DICT:           'devDomainDictVisible',
     DEV_TEST_SUMMARY:   'devTestSummaryVisible',
@@ -72,11 +72,11 @@ export const DisplayContext = {
     EDIT_STEP_LINKED:       'EDIT_STEP_LINKED',     // Step editor for Design-Dev Mash: Steps linked across Design and Dev
     EDIT_STEP_DEV:          'EDIT_STEP_DEV',        // Step editor for Design-Dev Mash: Steps only in Dev
     VIEW_ACCEPTANCE_MASH:   'VIEW_ACCEPTANCE_MASH', // View of Scenarios in a Feature related to Acceptance tests
-    VIEW_MOD_MASH:          'VIEW_MOD_MASH',       // View of related Unit Tests in the Design-Dev Mash
-    VIEW_MOD_UNLINKED:      'VIEW_MOD_UNLINKED',   // View of all unlinked unit tests
+    VIEW_UNIT_MASH:         'VIEW_UNIT_MASH',       // View of related Unit Tests in the Design-Dev Mash
+    VIEW_UNIT_UNLINKED:     'VIEW_UNIT_UNLINKED',   // View of all unlinked unit tests
     MASH_ACC_TESTS:         'MASH_ACC_TESTS',
     MASH_INT_TESTS:         'MASH_INT_TESTS',
-    MASH_MOD_TESTS:         'MASH_MOD_TESTS',
+    MASH_UNIT_TESTS:        'MASH_UNIT_TESTS',
     INT_TEST_FEATURE:       'INT_TEST_FEATURE',
     INT_TEST_FEATURE_ASPECT:'INT_TEST_FEATURE_ASPECT',
     INT_TEST_SCENARIO:      'INT_TEST_SCENARIO'

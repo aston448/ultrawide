@@ -160,7 +160,7 @@ class WorkPackageFeatureMashList extends Component {
                                 </Row>
                             </Grid>;
                          break;
-                    case DisplayContext.MASH_MOD_TESTS:
+                    case DisplayContext.MASH_UNIT_TESTS:
                         panelHeader = 'Tests for ' + nameData.feature;
                         break;
                 }
@@ -250,7 +250,7 @@ class WorkPackageFeatureMashList extends Component {
                                     }}/>
                                 </Panel>;
                             break;
-                        case DisplayContext.MASH_MOD_TESTS:
+                        case DisplayContext.MASH_UNIT_TESTS:
                             // Show the module tests for the Scenario
 
 

@@ -918,11 +918,11 @@ class DesignComponentHeader extends Component{
 
                     if(testSummaryData) {
                         // Any failures at all it's a fail
-                        if (testSummaryData.accTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.modTestFailCount > 0) {
+                        if (testSummaryData.accTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.intTestStatus === MashTestStatus.MASH_FAIL || testSummaryData.unitTestFailCount > 0) {
                             rowClass = 'scenario-test-row-fail'
                         } else {
                             // No failures so any passes its a pass for now
-                            if (testSummaryData.accTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intTestStatus === MashTestStatus.MASH_PASS || testSummaryData.modTestPassCount > 0) {
+                            if (testSummaryData.accTestStatus === MashTestStatus.MASH_PASS || testSummaryData.intTestStatus === MashTestStatus.MASH_PASS || testSummaryData.unitTestPassCount > 0) {
                                 rowClass = 'scenario-test-row-pass'
                             }
                         }

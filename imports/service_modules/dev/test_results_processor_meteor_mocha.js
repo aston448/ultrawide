@@ -3,7 +3,7 @@ import fs from 'fs';
 import {DesignComponents}               from '../../collections/design/design_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
-import { UserModTestResults }           from '../../collections/dev/user_mod_test_results';
+import { UserUnitTestResults }           from '../../collections/dev/user_unit_test_results';
 
 import {ComponentType, MashStatus, MashTestStatus, TestType, LogLevel} from '../../constants/constants.js';
 import {log} from '../../common/utils.js';
@@ -46,11 +46,11 @@ class MeteorMochaTestServices{
                 case TestType.MODULE:
 
                     // Clear existing results for user
-                    UserModTestResults.remove({userId: userId});
+                    UserUnitTestResults.remove({userId: userId});
 
                     // Add latest results
                     resultsJson.passes.forEach((test) => {
-                        UserModTestResults.insert(
+                        UserUnitTestResults.insert(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -65,7 +65,7 @@ class MeteorMochaTestServices{
                     });
 
                     resultsJson.failures.forEach((test) => {
-                        UserModTestResults.insert(
+                        UserUnitTestResults.insert(
                             {
                                 userId:             userId,
                                 testName:           test.title,
@@ -80,7 +80,7 @@ class MeteorMochaTestServices{
                     });
 
                     resultsJson.pending.forEach((test) => {
-                        UserModTestResults.insert(
+                        UserUnitTestResults.insert(
                             {
                                 userId:             userId,
                                 testName:           test.title,

@@ -3,7 +3,7 @@ import fs from 'fs';
 import {DesignComponents}               from '../../collections/design/design_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
-import {UserModTestMashData}            from '../../collections/dev/user_mod_test_mash_data.js';
+import {UserUnitTestMashData}            from '../../collections/dev/user_unit_test_mash_data.js';
 
 import {ComponentType, MashStatus, MashTestStatus, LogLevel} from '../../constants/constants.js';
 import {log}                            from '../../common/utils.js';
@@ -18,16 +18,16 @@ import MeteorMochaTestServices          from '../../service_modules/dev/test_res
 //
 //======================================================================================================================
 
-class ModuleTestServices{
+class UnitTestServices{
 
-    getModuleTestResults(testType, userContext){
+    getUnitTestResults(testType, userContext){
 
         let resultsData = [];
 
         // Call the correct results service to get the test data
         switch(testType){
             case 'METEOR_MOCHA':
-                let testFile = userContext.moduleTestResultsLocation;
+                let testFile = userContext.unitTestResultsLocation;
 
                 resultsData = MeteorMochaTestServices.getJsonTestResults(testFile);
                 break;
@@ -35,7 +35,7 @@ class ModuleTestServices{
         }
 
         // Clear data for this user
-        UserModTestMashData.remove({userId: userContext.userId});
+        UserUnitTestMashData.remove({userId: userContext.userId});
 
         let designScenarios = [];
 
@@ -91,7 +91,7 @@ class ModuleTestServices{
                     let testContextGroup = this.getContextDetails(testIdentity.testContext, designScenario.scenarioName);
 
                     // Insert a linked record
-                    UserModTestMashData.insert(
+                    UserUnitTestMashData.insert(
                         {
                             // Identity
                             userId:                      userContext.userId,
@@ -114,7 +114,7 @@ class ModuleTestServices{
 
             // If no scenarios matched, insert as non-linked test
             if(!linked){
-                UserModTestMashData.insert(
+                UserUnitTestMashData.insert(
                     {
                         // Identity
                         userId:                      userContext.userId,
@@ -157,5 +157,5 @@ class ModuleTestServices{
     }
 }
 
-export default new ModuleTestServices();
+export default new UnitTestServices();
 

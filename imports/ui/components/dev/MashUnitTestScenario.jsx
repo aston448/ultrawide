@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashUnitTestContainer from '../../containers/dev/MashModuleTestContainer.jsx';
+import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
 import {DisplayContext, ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';

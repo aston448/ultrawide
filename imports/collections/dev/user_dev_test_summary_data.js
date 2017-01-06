@@ -12,8 +12,8 @@ let Schema = new SimpleSchema({
     featureReferenceId:             {type: String, defaultValue: 'NONE'},   // Set if known in Design
     accTestStatus:                  {type: String},                         // If linked, latest acceptance test results status
     intTestStatus:                  {type: String},                         // If linked, latest integration test results status
-    modTestPassCount:               {type: Number, defaultValue: 0},        // Number of module tests passing
-    modTestFailCount:               {type: Number, defaultValue: 0},        // Number of module tests failing
+    unitTestPassCount:               {type: Number, defaultValue: 0},        // Number of module tests passing
+    unitTestFailCount:               {type: Number, defaultValue: 0},        // Number of module tests failing
     featureSummaryStatus:           {type: String},                         // Summary of all tests in Feature
     featureTestPassCount:           {type: Number, defaultValue: 0},        // Number of tests passing in whole feature
     featureTestFailCount:           {type: Number, defaultValue: 0},        // Number of tests failing in whole feature

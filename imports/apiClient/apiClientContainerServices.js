@@ -20,7 +20,7 @@ import { DomainDictionary }                 from '../collections/design/domain_d
 import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
 import { UserWorkPackageMashData }          from '../collections/dev/user_work_package_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
-import { UserModTestMashData }              from '../collections/dev/user_mod_test_mash_data.js';
+import { UserUnitTestMashData }              from '../collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
 
@@ -92,10 +92,10 @@ class ClientContainerServices{
         const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps');
         const wmHandle = Meteor.subscribe('userWorkPackageMashData');
         const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData');
-        const mmHandle = Meteor.subscribe('userModTestMashData');
+        const mmHandle = Meteor.subscribe('userUnitTestMashData');
         const arHandle = Meteor.subscribe('userAccTestResults');
         const irHandle = Meteor.subscribe('userIntTestResults');
-        const mrHandle = Meteor.subscribe('userModTestResults');
+        const mrHandle = Meteor.subscribe('userUnitTestResults');
         const tsHandle = Meteor.subscribe('userDevTestSummaryData');
 
         const loading = (
@@ -1364,9 +1364,9 @@ class ClientContainerServices{
     };
 
     // Get all unit test results relating to a specific Design Scenario
-    getMashScenarioModTestResults(userContext, scenario){
+    getMashScenarioUnitTestResults(userContext, scenario){
 
-        return UserModTestMashData.find({
+        return UserUnitTestMashData.find({
             userId:                         userContext.userId,
             designScenarioReferenceId:      scenario.designScenarioReferenceId,
         }).fetch();
@@ -1375,7 +1375,7 @@ class ClientContainerServices{
 
     getMashUnlinkedUnitTestResults(userContext){
 
-        return UserModTestMashData.find({
+        return UserUnitTestMashData.find({
             userId:                         userContext.userId,
             designScenarioReferenceId:      'NONE'
         }).fetch();

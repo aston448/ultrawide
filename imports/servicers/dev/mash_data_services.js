@@ -22,8 +22,6 @@ import {log}                            from '../../common/utils.js';
 
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from '../design/scenario_services.js';
-import IntegrationTestServices          from './integration_test_services.js';
-import ModuleTestServices               from './module_test_services.js';
 import MashDataModules                  from '../../service_modules/dev/mash_data_service_modules.js';
 import MashFeatureFileModules           from '../../service_modules/dev/mash_feature_file_service_modules.js';
 import TestSummaryServices              from '../../servicers/dev/test_summary_services.js';
@@ -75,12 +73,12 @@ class MashDataServices{
                 MashDataModules.getIntegrationTestResults(TestRunner.CHIMP_MOCHA, userContext);
             }
 
-            if(viewOptions.devModTestsVisible || testSummaryVisible){
-                // Get latest Mod Test Results
-                MashDataModules.getModuleTestResults(TestRunner.METEOR_MOCHA, userContext);
+            if(viewOptions.devUnitTestsVisible || testSummaryVisible){
+                // Get latest Unit Test Results
+                MashDataModules.getUnitTestResults(TestRunner.METEOR_MOCHA, userContext);
             }
 
-            if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devModTestsVisible){
+            if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible){
                 // Add in the latest results
                 MashDataModules.updateMashResults(userContext, viewOptions)
             }
@@ -181,10 +179,6 @@ class MashDataServices{
 
         FeatureFileServices.writeFeatureFile(userContext.featureReferenceId, userContext);
 
-        // Reload all the data
-        //this.loadUserFeatureFileData(userContext, userContext.featureFilesLocation);
-        //this.createAccTestMashData(userContext);
-
     }
 
     exportIntegrationTests(userContext){
@@ -193,169 +187,6 @@ class MashDataServices{
 
     }
 
-    updateTestData(userContext, viewOptions){
-
-        // if(viewOptions.designAccTestsVisible || viewOptions.devAccTestsVisible){
-        //     this.updateAcceptanceTestData(userContext);
-        // }
-        //
-        // if(viewOptions.designIntTestsVisible || viewOptions.devIntTestsVisible){
-        //     IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
-        // }
-        //
-        // if(viewOptions.designModTestsVisible || viewOptions.devModTestsVisible){
-        //     ModuleTestServices.getModuleTestResults('METEOR_MOCHA', userContext);
-        // }
-    }
-
-    updateAcceptanceTestData(userContext){
-
-        // if(Meteor.isServer) {
-        //     MochaTestServices.processTestResults(userContext);
-        // }
-
-        // Read the test results file
-        const resultsText = fs.readFileSync(userContext.acceptanceTestResultsLocation);
-
-        let results = JSON.parse(resultsText);
-
-        log((msg) => console.log(msg), LogLevel.TRACE, "UPDATE TEST DATA: {}", results);
-
-        results.forEach((result) => {
-            if(result.keyword === 'Feature'){
-                const featureName = result.name;
-                let featureTestStatus = MashTestStatus.MASH_PASS;
-
-                let designFeature = null;
-                if(userContext.designUpdateId === 'NONE'){
-                    designFeature = DesignComponents.findOne({
-                        designId: userContext.designId,
-                        designVersionId: userContext.designVersionId,
-                        componentType: ComponentType.FEATURE,
-                        componentName: featureName
-                    });
-                } else {
-                    designFeature = DesignUpdateComponents.findOne({
-                        designId: userContext.designId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        componentType: ComponentType.FEATURE,
-                        componentNameNew: featureName
-                    });
-                }
-
-                result.elements.forEach((element) => {
-                    if(element.keyword === 'Scenario'){
-                        const scenarioName = element.name;
-                        let scenarioTestStatus = MashTestStatus.MASH_PASS;
-                        let scenarioError = '';
-                        element.steps.forEach((step) => {
-                            if(step.result.status != 'passed'){
-                                scenarioTestStatus = MashTestStatus.MASH_FAIL;
-                                featureTestStatus = MashTestStatus.MASH_FAIL;
-                                scenarioError = step.result.error_message;
-                            }
-
-
-                        });
-
-
-                        // Update the data for this scenario
-                        let designScenario = null;
-                        if(userContext.designUpdateId === 'NONE'){
-                            designScenario = DesignComponents.findOne({
-                                designId: userContext.designId,
-                                designVersionId: userContext.designVersionId,
-                                componentType: ComponentType.SCENARIO,
-                                componentName: scenarioName
-                            });
-                        } else {
-                            designScenario = DesignUpdateComponents.findOne({
-                                designId: userContext.designId,
-                                designVersionId: userContext.designVersionId,
-                                designUpdateId: userContext.designUpdateId,
-                                componentType: ComponentType.SCENARIO,
-                                componentNameNew: scenarioName
-                            });
-                        }
-
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Design Scenario is: {}", designScenario);
-
-                        if(designFeature && designScenario) {
-                            UserAccTestMashData.update(
-                                {
-                                    userId:                         userContext.userId,
-                                    designVersionId:                userContext.designVersionId,
-                                    designUpdateId:                 userContext.designUpdateId,
-                                    workPackageId:                  userContext.workPackageId,
-                                    mashComponentType:              ComponentType.SCENARIO,
-                                    designFeatureReferenceId:       designFeature.componentReferenceId,
-                                    designScenarioReferenceId:      designScenario.componentReferenceId,
-                                 },
-                                {
-                                    $set:{
-                                        mashTestStatus: scenarioTestStatus
-                                    }
-                                },
-                                (error, result) => {
-                                    log((msg) => console.log(msg), LogLevel.TRACE, "Updated {} scenario", result);
-                                }
-
-                            );
-
-                            // And update the step results too
-                            element.steps.forEach((step) => {
-
-                                UserAccTestMashData.update(
-                                    {
-                                        userId:                         userContext.userId,
-                                        designVersionId:                userContext.designVersionId,
-                                        designUpdateId:                 userContext.designUpdateId,
-                                        workPackageId:                  userContext.workPackageId,
-                                        mashComponentType:              ComponentType.SCENARIO_STEP,
-                                        designFeatureReferenceId:       designFeature.componentReferenceId,
-                                        designScenarioReferenceId:      designScenario.componentReferenceId,
-                                        stepText:                       step.name
-                                    },
-                                    {
-                                        $set:{
-                                            mashTestStatus: step.result.status === 'passed' ? MashTestStatus.MASH_PASS : MashTestStatus.MASH_FAIL
-                                        }
-                                    },
-                                    (error, result) => {
-                                        log((msg) => console.log(msg), LogLevel.TRACE, "Updated {} scenario step", result);
-                                    }
-                                )
-                            });
-                        }
-                    }
-                });
-
-                // TODO - Update this to set Feature Aspect and Feature Status by looking at the Scenarios within them...
-
-                // Update the feature test status as well
-                if(designFeature){
-                    UserAccTestMashData.update(
-                        {
-                            userId:                         userContext.userId,
-                            designVersionId:                userContext.designVersionId,
-                            designUpdateId:                 userContext.designUpdateId,
-                            workPackageId:                  userContext.workPackageId,
-                            mashComponentType:              ComponentType.FEATURE,
-                            designFeatureReferenceId:       designFeature.componentReferenceId,
-                        },
-                        {
-                            $set:{
-                                mashTestStatus: featureTestStatus
-                            }
-                        }
-
-                    );
-                }
-            }
-        });
-
-    };
 
     // GENERIC FIND FUNCTIONS ==========================================================================================
 

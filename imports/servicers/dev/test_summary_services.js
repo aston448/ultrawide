@@ -4,7 +4,7 @@ import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_tes
 import { DesignComponents }             from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
-import { UserModTestMashData }          from '../../collections/dev/user_mod_test_mash_data.js';
+import { UserUnitTestMashData }          from '../../collections/dev/user_unit_test_mash_data.js';
 
 // Ultrawide services
 import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, LogLevel }   from '../../constants/constants.js';
@@ -63,8 +63,8 @@ class TestSummaryServices {
 
             let acceptanceTestDisplay = MashTestStatus.MASH_NOT_LINKED;
             let integrationTestDisplay = MashTestStatus.MASH_NOT_LINKED;
-            let moduleTestPasses = 0;
-            let moduleTestFails = 0;
+            let unitTestPasses = 0;
+            let unitTestFails = 0;
 
             // See if we have any test results
 
@@ -92,13 +92,13 @@ class TestSummaryServices {
             }
 
             // Unit Tests
-            moduleTestPasses = UserModTestMashData.find({
+            unitTestPasses = UserUnitTestMashData.find({
                 userId:     userContext.userId,
                 designScenarioReferenceId: designScenario.componentReferenceId,
                 testOutcome: MashTestStatus.MASH_PASS
             }).count();
 
-            moduleTestFails= UserModTestMashData.find({
+            unitTestFails= UserUnitTestMashData.find({
                 userId:     userContext.userId,
                 designScenarioReferenceId: designScenario.componentReferenceId,
                 testOutcome: MashTestStatus.MASH_FAIL
@@ -112,8 +112,8 @@ class TestSummaryServices {
                 featureReferenceId:             featureReferenceId,
                 accTestStatus:                  acceptanceTestDisplay,
                 intTestStatus:                  integrationTestDisplay,
-                modTestPassCount:               moduleTestPasses,
-                modTestFailCount:               moduleTestFails,
+                unitTestPassCount:               unitTestPasses,
+                unitTestFailCount:               unitTestFails,
                 featureSummaryStatus:           FeatureTestSummaryStatus.FEATURE_NO_TESTS
             });
 
@@ -168,8 +168,8 @@ class TestSummaryServices {
                     hasResult = true;
                 }
 
-                if(featureScenario.modTestFailCount > 0) {
-                    failingTests += featureScenario.modTestFailCount;
+                if(featureScenario.unitTestFailCount > 0) {
+                    failingTests += featureScenario.unitTestFailCount;
                     hasResult = true;
                 }
 
@@ -184,8 +184,8 @@ class TestSummaryServices {
                     hasResult = true;
                 }
 
-                if(featureScenario.modTestPassCount > 0) {
-                    passingTests += featureScenario.modTestPassCount;
+                if(featureScenario.unitTestPassCount > 0) {
+                    passingTests += featureScenario.unitTestPassCount;
                     hasResult = true;
                 }
 
@@ -212,8 +212,8 @@ class TestSummaryServices {
                 featureReferenceId:             designFeature.componentReferenceId,
                 accTestStatus:                  MashTestStatus.MASH_NOT_LINKED,
                 intTestStatus:                  MashTestStatus.MASH_NOT_LINKED,
-                modTestPassCount:               0,
-                modTestFailCount:               0,
+                unitTestPassCount:               0,
+                unitTestFailCount:               0,
                 featureSummaryStatus:           featureTestStatus,
                 featureTestPassCount:           passingTests,
                 featureTestFailCount:           failingTests,

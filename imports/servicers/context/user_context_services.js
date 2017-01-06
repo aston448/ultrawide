@@ -36,7 +36,7 @@ class UserContextServices{
                     featureFilesLocation:           context.featureFilesLocation,
                     acceptanceTestResultsLocation:  context.acceptanceTestResultsLocation,
                     integrationTestResultsLocation: context.integrationTestResultsLocation,
-                    moduleTestResultsLocation:      context.moduleTestResultsLocation
+                    unitTestResultsLocation:      context.unitTestResultsLocation
                 }
             );
         }
@@ -57,9 +57,7 @@ class UserContextServices{
                 designDomainDictVisible:        userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:           userViewOptions.updateDetailsVisible,
-                updateAccTestsVisible:          userViewOptions.updateAccTestsVisible,
-                updateIntTestsVisible:          userViewOptions.updateIntTestsVisible,
-                updateModTestsVisible:          userViewOptions.updateModTestsVisible,
+                updateTestSummaryVisible:       userViewOptions.updateTestSummaryVisible,
                 updateDomainDictVisible:        userViewOptions.updateDomainDictVisible,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:               userViewOptions.wpDetailsVisible,
@@ -68,7 +66,7 @@ class UserContextServices{
                 devDetailsVisible:              userViewOptions.devDetailsVisible,
                 devAccTestsVisible:             userViewOptions.devAccTestsVisible,
                 devIntTestsVisible:             userViewOptions.devIntTestsVisible,
-                devModTestsVisible:             userViewOptions.devModTestsVisible,
+                devUnitTestsVisible:            userViewOptions.devUnitTestsVisible,
                 devFeatureFilesVisible:         userViewOptions.devFeatureFilesVisible,
                 devDomainDictVisible:           userViewOptions.devDomainDictVisible
             });

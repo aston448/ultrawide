@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashUnitTestContainer from '../../containers/dev/MashModuleTestContainer.jsx';
+import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -36,7 +36,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class MashModuleTestResult extends Component {
+export class MashUnitTestResult extends Component {
 
     constructor(props) {
         super(props);
@@ -77,7 +77,7 @@ export class MashModuleTestResult extends Component {
 
 }
 
-MashModuleTestResult.propTypes = {
+MashUnitTestResult.propTypes = {
     testResult: PropTypes.object.isRequired
 };
 
@@ -89,4 +89,4 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(MashModuleTestResult);
+export default connect(mapStateToProps)(MashUnitTestResult);

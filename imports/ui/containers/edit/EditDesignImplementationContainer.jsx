@@ -108,7 +108,7 @@ class DevApplicationsList extends Component {
         // console.log("View Options Dev Details: " + viewOptions.devDetailsVisible);
         // console.log("View Options Dev Acc: " + viewOptions.devAccTestsVisible);
         // console.log("View Options Dev Int: " + viewOptions.devIntTestsVisible);
-        // console.log("View Options Dev Mod: " + viewOptions.devModTestsVisible);
+        // console.log("View Options Dev Mod: " + viewOptions.devUnitTestsVisible);
         // console.log("View Options Dev Dict: " + viewOptions.devDomainDictVisible);
 
         // Working Design
@@ -250,13 +250,13 @@ class DevApplicationsList extends Component {
         }
 
         // Module Tests
-        if(viewOptions.devModTestsVisible){
+        if(viewOptions.devUnitTestsVisible){
 
             unitTests =
-                <Panel header="Module Test Implementation" className="panel-update panel-update-body">
+                <Panel header="Unit Test Implementation" className="panel-update panel-update-body">
                     <WorkPackageFeatureMashContainer params={{
                         userContext: userContext,
-                        displayContext: DisplayContext.MASH_MOD_TESTS
+                        displayContext: DisplayContext.MASH_UNIT_TESTS
                     }}/>
                 </Panel>;
 
@@ -478,7 +478,7 @@ class DevApplicationsList extends Component {
             }
 
             let col6 = '';
-            if(viewOptions.devModTestsVisible){
+            if(viewOptions.devUnitTestsVisible){
                 col6 =
                     <Col md={col6width} className="scroll-col">
                         {unitTests}

@@ -900,7 +900,7 @@ class ImpExServices{
                                 featureFilesLocation: userContext.featureFilesLocation,
                                 acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
                                 integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                                moduleTestResultsLocation: userContext.moduleTestResultsLocation
+                                unitTestResultsLocation: userContext.unitTestResultsLocation
                             });
                         }
                     });
@@ -923,7 +923,7 @@ class ImpExServices{
                         featureFilesLocation: 'NONE',
                         acceptanceTestResultsLocation: 'NONE',
                         integrationTestResultsLocation: 'NONE',
-                        moduleTestResultsLocation: 'NONE'
+                        unitTestResultsLocation: 'NONE'
                     });
                 }
 

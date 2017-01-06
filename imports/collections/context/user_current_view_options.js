@@ -22,7 +22,7 @@ let Schema = new SimpleSchema({
     devDetailsVisible:          {type: Boolean, defaultValue: false},       // The details pane
     devAccTestsVisible:         {type: Boolean, defaultValue: true},        // Acceptance Tests view
     devIntTestsVisible:         {type: Boolean, defaultValue: true},        // Integration Tests view
-    devModTestsVisible:         {type: Boolean, defaultValue: false},       // Unit Tests view
+    devUnitTestsVisible:         {type: Boolean, defaultValue: false},       // Unit Tests view
     devTestSummaryVisible:      {type: Boolean, defaultValue: false},       // Test Summary add-on
     devFeatureFilesVisible:     {type: Boolean, defaultValue: true},        // Feature Files view
     devDomainDictVisible:       {type: Boolean, defaultValue: false},       // Domain Dictionary pane

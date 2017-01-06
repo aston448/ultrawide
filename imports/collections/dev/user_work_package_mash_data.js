@@ -33,8 +33,8 @@ let Schema = new SimpleSchema({
     accMashTestStatus:              {type: String, optional: true},                     // If linked, latest test results status - Acceptance Tests
     intMashStatus:                  {type: String, optional: true},                     // Whether linked to dev or not and where originating - Integration Tests
     intMashTestStatus:              {type: String, optional: true},                     // If linked, latest test results status - Integration Tests
-    modMashStatus:                  {type: String, optional: true},                     // Whether linked to dev or not and where originating - Module Tests
-    modMashTestStatus:              {type: String, optional: true},                     // If linked, latest test results status - Module Tests
+    unitMashStatus:                  {type: String, optional: true},                     // Whether linked to dev or not and where originating - Module Tests
+    unitMashTestStatus:              {type: String, optional: true},                     // If linked, latest test results status - Module Tests
 });
 
 UserWorkPackageMashData.attachSchema(Schema);

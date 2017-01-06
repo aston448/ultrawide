@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashModuleTestContainer from '../../containers/dev/MashModuleTestContainer.jsx';
+import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
 import TextLookups from '../../../common/lookups.js';
@@ -25,11 +25,11 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Module Test Mash Scenario Component - One Scenario showing a list of Mod Test Results
+// Unit Test Mash Scenario Component - One Scenario showing a list of Mod Test Results
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class ModuleTestScenarioMashItem extends Component {
+export class UnitTestScenarioMashItem extends Component {
 
     constructor(props) {
         super(props);
@@ -47,7 +47,7 @@ export class ModuleTestScenarioMashItem extends Component {
     render(){
         const { mashItem, userContext } = this.props;
 
-        const testStyle = mashItem.modMashTestStatus;
+        const testStyle = mashItem.unitMashTestStatus;
 
         return(
             <div>
@@ -60,16 +60,16 @@ export class ModuleTestScenarioMashItem extends Component {
                         </Col>
                         <Col md={2}>
                             <div className={'mash-scenario-result ' + testStyle}>
-                                {TextLookups.mashTestStatus(mashItem.modMashTestStatus)}
+                                {TextLookups.mashTestStatus(mashItem.unitMashTestStatus)}
                             </div>
                         </Col>
                     </Row>
                 </Grid>
 
-                <MashModuleTestContainer params={{
+                <MashUnitTestContainer params={{
                     scenario: mashItem,
                     userContext: userContext,
-                    displayContext: DisplayContext.VIEW_MOD_MASH
+                    displayContext: DisplayContext.VIEW_UNIT_MASH
                 }}/>
             </div>
         );
@@ -77,7 +77,7 @@ export class ModuleTestScenarioMashItem extends Component {
 
 }
 
-ModuleTestScenarioMashItem.propTypes = {
+UnitTestScenarioMashItem.propTypes = {
     mashItem: PropTypes.object.isRequired,
 };
 
@@ -89,4 +89,4 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(ModuleTestScenarioMashItem);
+export default connect(mapStateToProps)(UnitTestScenarioMashItem);

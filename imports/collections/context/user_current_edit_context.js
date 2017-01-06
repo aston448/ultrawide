@@ -25,7 +25,7 @@ let Schema = new SimpleSchema({
     featureFilesLocation:           {type: String, defaultValue: 'NONE'},       // Location of feature files in application being tested
     acceptanceTestResultsLocation:  {type: String, defaultValue: 'NONE'},       // Name of JSON output file for acceptance tests
     integrationTestResultsLocation: {type: String, defaultValue: 'NONE'},       // Name of JSON output file for integration tests
-    moduleTestResultsLocation:      {type: String, defaultValue: 'NONE'},       // Name of JSON output file for module tests
+    unitTestResultsLocation:      {type: String, defaultValue: 'NONE'},       // Name of JSON output file for module tests
 });
 
 UserCurrentEditContext.attachSchema(Schema);

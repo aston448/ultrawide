@@ -137,7 +137,7 @@ class ClientDesignServices{
                     featureFilesLocation: userContext.featureFilesLocation,
                     acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
                     integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                    moduleTestResultsLocation: userContext.moduleTestResultsLocation
+                    unitTestResultsLocation: userContext.unitTestResultsLocation
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));
@@ -172,7 +172,7 @@ class ClientDesignServices{
                 featureFilesLocation:           userContext.featureFilesLocation,
                 acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
                 integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                unitTestResultsLocation:      userContext.unitTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));

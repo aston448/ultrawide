@@ -50,7 +50,7 @@ Meteor.methods({
             const featureFilesDir = '/Users/aston/WebstormProjects/ultrawide-test/tests/features/';
             const accTestResults = '/Users/aston/WebstormProjects/shared/test/test_results.json';
             const intTestResults = '/Users/aston/WebstormProjects/shared/test/mocha_results.json';
-            const modTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json';
+            const unitTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json';
 
             // Clear current edit context for all users - but not the file locations
             UserCurrentEditContext.update(
@@ -71,7 +71,7 @@ Meteor.methods({
                         featureFilesLocation:           featureFilesDir,
                         acceptanceTestResultsLocation:  accTestResults,
                         integrationTestResultsLocation: intTestResults,
-                        moduleTestResultsLocation:      modTestResults
+                        unitTestResultsLocation:      unitTestResults
                     }
                 },
                 {multi: true}
@@ -138,7 +138,7 @@ Meteor.methods({
                     featureFilesLocation:           featureFilesDir,
                     acceptanceTestResultsLocation:  accTestResults,
                     integrationTestResultsLocation: intTestResults,
-                    moduleTestResultsLocation:      modTestResults
+                    unitTestResultsLocation:      unitTestResults
                 });
 
                 UserCurrentEditContext.insert({
@@ -146,7 +146,7 @@ Meteor.methods({
                     featureFilesLocation:           featureFilesDir,
                     acceptanceTestResultsLocation:  accTestResults,
                     integrationTestResultsLocation: intTestResults,
-                    moduleTestResultsLocation:      modTestResults
+                    unitTestResultsLocation:      unitTestResults
                 });
 
 
@@ -155,7 +155,7 @@ Meteor.methods({
                     featureFilesLocation:           featureFilesDir,
                     acceptanceTestResultsLocation:  accTestResults,
                     integrationTestResultsLocation: intTestResults,
-                    moduleTestResultsLocation:      modTestResults
+                    unitTestResultsLocation:      unitTestResults
                 });
 
             }

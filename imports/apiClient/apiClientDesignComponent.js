@@ -3,7 +3,7 @@
 // Ultrawide collections
 import {DesignComponents}           from '../collections/design/design_components.js';
 import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
-import {UserModTestMashData}        from '../collections/dev/user_mod_test_mash_data.js';
+import {UserUnitTestMashData}        from '../collections/dev/user_unit_test_mash_data.js';
 import {UserWorkPackageMashData}    from '../collections/dev/user_work_package_mash_data.js';
 import {UserAccTestMashData}        from '../collections/dev/user_acc_test_mash_data.js';
 
@@ -375,7 +375,7 @@ class ClientDesignComponentServices{
                         featureFilesLocation:           userContext.featureFilesLocation,
                         acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
                         integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                        moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                        unitTestResultsLocation:      userContext.unitTestResultsLocation
                     };
 
                     store.dispatch(setCurrentUserItemContext(context, true));
@@ -538,7 +538,7 @@ class ClientDesignComponentServices{
                 featureFilesLocation:           userContext.featureFilesLocation,
                 acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
                 integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                unitTestResultsLocation:      userContext.unitTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
@@ -648,7 +648,7 @@ class ClientDesignComponentServices{
                 }).count();
 
                 // Get number of passing tests
-                const passingUnitTestsCount = UserModTestMashData.find({
+                const passingUnitTestsCount = UserUnitTestMashData.find({
                     userId:                         userContext.userId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
                     testOutcome:                    MashTestStatus.MASH_PASS
@@ -669,7 +669,7 @@ class ClientDesignComponentServices{
                 }).count();
 
                 // Get number of failing tests
-                const failingUnitTestsCount = UserModTestMashData.find({
+                const failingUnitTestsCount = UserUnitTestMashData.find({
                     userId:                         userContext.userId,
                     designFeatureReferenceId:       designComponent.componentReferenceId,
                     testOutcome:                    MashTestStatus.MASH_FAIL

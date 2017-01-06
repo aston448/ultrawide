@@ -256,7 +256,7 @@ class ClientUserContextServices {
                 featureFilesLocation:           userContext.featureFilesLocation,
                 acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
                 integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                moduleTestResultsLocation:      userContext.moduleTestResultsLocation
+                unitTestResultsLocation:      userContext.unitTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
@@ -279,7 +279,7 @@ class ClientUserContextServices {
                 featureFilesLocation:           'NONE',
                 acceptanceTestResultsLocation:  'NONE',
                 integrationTestResultsLocation: 'NONE',
-                moduleTestResultsLocation:      'NONE',
+                unitTestResultsLocation:      'NONE',
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, true));
@@ -304,7 +304,7 @@ class ClientUserContextServices {
                 devDetailsVisible:          userViewOptions.devDetailsVisible,
                 devAccTestsVisible:         userViewOptions.devAccTestsVisible,
                 devIntTestsVisible:         userViewOptions.devIntTestsVisible,
-                devModTestsVisible:         userViewOptions.devModTestsVisible,
+                devUnitTestsVisible:         userViewOptions.devUnitTestsVisible,
                 devTestSummaryVisible:      userViewOptions.devTestSummaryVisible,
                 devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
                 devDomainDictVisible:       userViewOptions.devDomainDictVisible
@@ -330,7 +330,7 @@ class ClientUserContextServices {
                 devDetailsVisible:          false,
                 devAccTestsVisible:         true,
                 devIntTestsVisible:         false,
-                devModTestsVisible:         false,
+                devUnitTestsVisible:         false,
                 devTestSummaryVisible:      false,
                 devFeatureFilesVisible:     true,
                 devDomainDictVisible:       false
@@ -348,7 +348,7 @@ class ClientUserContextServices {
         let newFeatureFilesLocation = userContext.featureFilesLocation;
         let newAcceptanceTestResultsLocation = userContext.acceptanceTestResultsLocation;
         let newIntegrationTestResultsLocation = userContext.integrationTestResultsLocation;
-        let newModuleTestResultsLocation = userContext.moduleTestResultsLocation;
+        let newUnitTestResultsLocation = userContext.unitTestResultsLocation;
 
         // Then update the one that changed
         switch(type){
@@ -362,7 +362,7 @@ class ClientUserContextServices {
                 newIntegrationTestResultsLocation = newPath;
                 break;
             case LocationType.LOCATION_MODULE_TEST_OUTPUT:
-                newModuleTestResultsLocation = newPath;
+                newUnitTestResultsLocation = newPath;
                 break;
         }
 
@@ -382,7 +382,7 @@ class ClientUserContextServices {
             featureFilesLocation:           newFeatureFilesLocation,
             acceptanceTestResultsLocation:  newAcceptanceTestResultsLocation,
             integrationTestResultsLocation: newIntegrationTestResultsLocation,
-            moduleTestResultsLocation:      newModuleTestResultsLocation
+            unitTestResultsLocation:      newUnitTestResultsLocation
         };
 
         store.dispatch(setCurrentUserItemContext(context, true));

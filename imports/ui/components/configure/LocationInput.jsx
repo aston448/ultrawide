@@ -85,7 +85,7 @@ class LocationInput extends Component {
                 break;
             case LocationType.LOCATION_MODULE_TEST_OUTPUT:
                 labelText = 'File containing Module Test Results:';
-                placeholderText = userContext.moduleTestResultsLocation;
+                placeholderText = userContext.unitTestResultsLocation;
         }
 
         let editingItem =

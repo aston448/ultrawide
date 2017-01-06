@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import AcceptanceTestScenarioMashItem       from '../../components/dev/AcceptanceTestScenarioMashItem.jsx';
 import IntegrationTestScenarioMashItem      from '../../components/dev/IntegrationTestScenarioMashItem.jsx';
-import ModuleTestScenarioMashItem           from '../../components/dev/ModuleTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem           from '../../components/dev/UnitTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import { DisplayContext }    from '../../../constants/constants.js';
@@ -73,7 +73,7 @@ class WorkPackageScenarioMashList extends Component {
         return mashData.map((mashItem) => {
             if(mashItem) {
                 return (
-                    <ModuleTestScenarioMashItem
+                    <UnitTestScenarioMashItem
                         key={mashItem._id}
                         mashItem={mashItem}
                     />
@@ -103,7 +103,7 @@ class WorkPackageScenarioMashList extends Component {
                 );
                 break;
 
-            case DisplayContext.MASH_MOD_TESTS:
+            case DisplayContext.MASH_UNIT_TESTS:
                 return(
                     <div>
                         {this.renderModuleScenarios(designMashItemData)}

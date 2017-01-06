@@ -82,9 +82,6 @@ class DesignApplicationsList extends Component {
 
         let addComponent = '';
         let designDetails = '';
-        let acceptanceTests = '';
-        let integrationTests = '';
-        let moduleTests = '';
         let domainDictionary = '';
         let displayedItems = 1;
 

@@ -75,11 +75,11 @@ class TestSummary extends Component {
                         </Col>
                         <Col md={3} className="close-col">
                             <span className="test-summary-text">Mod Pass:</span>
-                            <span className="test-summary-text">{testSummaryData.modTestPassCount}</span>
+                            <span className="test-summary-text">{testSummaryData.unitTestPassCount}</span>
                         </Col>
                         <Col md={3} className="close-col">
                             <span className="test-summary-text">Mod Fail:</span>
-                            <span className="test-summary-text">{testSummaryData.modTestFailCount}</span>
+                            <span className="test-summary-text">{testSummaryData.unitTestFailCount}</span>
                         </Col>
                     </Row>
                 </Grid>

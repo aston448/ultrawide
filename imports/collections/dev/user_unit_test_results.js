@@ -4,7 +4,7 @@
 
 import { Mongo } from 'meteor/mongo';
 
-export const UserModTestResults = new Mongo.Collection('userModTestResults');
+export const UserUnitTestResults = new Mongo.Collection('userUnitTestResults');
 
 let Schema = new SimpleSchema({
     userId:             {type: String},                 // This user's results
@@ -17,12 +17,12 @@ let Schema = new SimpleSchema({
     stackTrace:         {type: String, optional: true}, // If fail
 });
 
-UserModTestResults.attachSchema(Schema);
+UserUnitTestResults.attachSchema(Schema);
 
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userModTestResults', function userModTestResults(){
-        return UserModTestResults.find({});
+    Meteor.publish('userUnitTestResults', function userUnitTestResults(){
+        return UserUnitTestResults.find({});
     })
 }

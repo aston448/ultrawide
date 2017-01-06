@@ -7,11 +7,11 @@ import { ScenarioSteps }                    from '../../collections/design/scena
 import { WorkPackages }                     from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }            from '../../collections/work/work_package_components.js';
 import { UserWorkPackageMashData }          from '../../collections/dev/user_work_package_mash_data.js';
-import { UserModTestMashData }              from '../../collections/dev/user_mod_test_mash_data.js';
+import { UserUnitTestMashData }              from '../../collections/dev/user_unit_test_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 import { UserAccTestResults }               from '../../collections/dev/user_acc_test_results.js';
 import { UserIntTestResults }               from '../../collections/dev/user_int_test_results.js';
-import { UserModTestResults }               from '../../collections/dev/user_mod_test_results.js';
+import { UserUnitTestResults }               from '../../collections/dev/user_unit_test_results.js';
 import { UserDevFeatures }                  from '../../collections/dev/user_dev_features.js';
 import { UserDevFeatureScenarios }          from '../../collections/dev/user_dev_feature_scenarios.js';
 import { UserDevFeatureScenarioSteps }      from '../../collections/dev/user_dev_feature_scenario_steps.js';
@@ -238,7 +238,7 @@ class MashDataModules{
         }
     };
 
-    getModuleTestResults(testRunner, userContext){
+    getUnitTestResults(testRunner, userContext){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
@@ -250,7 +250,7 @@ class MashDataModules{
         switch (testRunner) {
             case TestRunner.METEOR_MOCHA:
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting METEOR_MOCHA Results Data");
-                let testFile = userContext.moduleTestResultsLocation;
+                let testFile = userContext.unitTestResultsLocation;
 
                 MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.MODULE);
                 break;
@@ -484,8 +484,8 @@ class MashDataModules{
                     accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                     intMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
                     intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                    modMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
-                    modMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                    unitMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                    unitMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                 }
 
             );
@@ -562,8 +562,8 @@ class MashDataModules{
                         accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                         intMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
                         intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                        modMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
-                        modMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                        unitMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
+                        unitMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                     }
                 );
 
@@ -825,15 +825,15 @@ class MashDataModules{
             }
         }
 
-        if(viewOptions.devModTestsVisible){
+        if(viewOptions.devUnitTestsVisible){
 
             // Get the Module test results for current user
             log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Mod Test Results for User {}", userContext.userId);
 
             // Remove current module test mash
-            UserModTestMashData.remove({userId: userContext.userId});
+            UserUnitTestMashData.remove({userId: userContext.userId});
 
-            const modResultsData = UserModTestResults.find({userId: userContext.userId}).fetch();
+            const modResultsData = UserUnitTestResults.find({userId: userContext.userId}).fetch();
 
             const mashScenarios = UserWorkPackageMashData.find({
                 userId: userContext.userId,
@@ -864,21 +864,21 @@ class MashDataModules{
 
                             log((msg) => console.log(msg), LogLevel.TRACE, "  Matched Scenario: {}", designScenario.designComponentName);
 
-                            testIdentity = this.getModTestIdentity(testResult.testFullName, designScenario.designComponentName, testResult.testName);
+                            testIdentity = this.getUnitTestIdentity(testResult.testFullName, designScenario.designComponentName, testResult.testName);
 
                             // Update the Mash
                             UserWorkPackageMashData.update(
                                 {_id: designScenario._id},
                                 {
                                     $set: {
-                                        modMashStatus: MashStatus.MASH_LINKED,
-                                        modMashTestStatus: MashTestStatus.MASH_PENDING // Depends on the sum of all Module tests
+                                        unitMashStatus: MashStatus.MASH_LINKED,
+                                        unitMashTestStatus: MashTestStatus.MASH_PENDING // Depends on the sum of all Module tests
                                     }
                                 }
                             );
 
                             // Insert a child Module Test record
-                            UserModTestMashData.insert(
+                            UserUnitTestMashData.insert(
                                 {
                                     // Identity
                                     userId:                      userContext.userId,
@@ -901,7 +901,7 @@ class MashDataModules{
 
                     // If no scenarios matched, insert as non-linked test
                     if(!linked){
-                        UserModTestMashData.insert(
+                        UserUnitTestMashData.insert(
                             {
                                 // Identity
                                 userId:                      userContext.userId,
@@ -926,14 +926,14 @@ class MashDataModules{
                 // Neither = PENDING
                 mashScenarios.forEach((designScenario) => {
 
-                    const modPassCount = UserModTestMashData.find({
+                    const modPassCount = UserUnitTestMashData.find({
                         userId:                     userContext.userId,
                         designScenarioReferenceId:  designScenario.designScenarioReferenceId,
                         mashStatus:                 MashStatus.MASH_LINKED,
                         testOutcome:                MashTestStatus.MASH_PASS
                     }).count();
 
-                    const modFailCount = UserModTestMashData.find({
+                    const modFailCount = UserUnitTestMashData.find({
                         userId:                     userContext.userId,
                         designScenarioReferenceId:  designScenario.designScenarioReferenceId,
                         mashStatus:                 MashStatus.MASH_LINKED,
@@ -955,7 +955,7 @@ class MashDataModules{
                             {_id: designScenario._id},
                             {
                                 $set: {
-                                    modMashTestStatus: scenarioTestStatus
+                                    unitMashTestStatus: scenarioTestStatus
                                 }
                             }
                         );
@@ -1002,7 +1002,7 @@ class MashDataModules{
         }
     };
 
-    getModTestIdentity(fullTitle,  scenarioName, testName){
+    getUnitTestIdentity(fullTitle, scenarioName, testName){
 
         // A mod test full Title could be:
         // SUITE...SCENARIO...SUBSUITE...TEST
@@ -1025,31 +1025,6 @@ class MashDataModules{
             subSuite: subSuite
         })
     }
-
-    getTestIdentity(title, fullTitle){
-        let titleStart = fullTitle.indexOf(title);
-
-        return({
-            testName: title,
-            testContext: fullTitle.substring(0, titleStart)
-        });
-    };
-
-    getContextDetails(testContext, scenarioName){
-        // Given that the Scenario Name is part of the test context, anything else must be a test group
-        if(testContext.trim() === scenarioName.trim()) {
-            // No other context
-            return '';
-        } else {
-            // Return what is after the Scenario Name
-            return testContext.substring(scenarioName.length);
-        }
-
-    }
-
-
-
-
 
 }
 
