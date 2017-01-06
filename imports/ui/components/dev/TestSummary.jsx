@@ -74,11 +74,11 @@ class TestSummary extends Component {
                             <span className={intResultClass}>{TextLookups.mashTestStatus(testSummaryData.intTestStatus)}</span>
                         </Col>
                         <Col md={3} className="close-col">
-                            <span className="test-summary-text">Mod Pass:</span>
+                            <span className="test-summary-text">Unit Pass:</span>
                             <span className="test-summary-text">{testSummaryData.unitTestPassCount}</span>
                         </Col>
                         <Col md={3} className="close-col">
-                            <span className="test-summary-text">Mod Fail:</span>
+                            <span className="test-summary-text">Unit Fail:</span>
                             <span className="test-summary-text">{testSummaryData.unitTestFailCount}</span>
                         </Col>
                     </Row>

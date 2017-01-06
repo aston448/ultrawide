@@ -158,6 +158,9 @@ class AppHeader extends Component {
         let logoutButton =
             <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
 
+        // let toggleHeaderButton =
+        //     <Button bsSize="xs" bsStyle="info" onClick={ () => this.onToggleHeader()}>...</Button>;
+
         let designsButton =
             <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
 
@@ -184,13 +187,13 @@ class AppHeader extends Component {
         let testSummaryButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
         let accTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acceptance Tests</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acc Tests</Button>;
         let intTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, intTestOption, userViewOptions, currentViewDataValue)}>Integration Tests</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, intTestOption, userViewOptions, currentViewDataValue)}>Int Tests</Button>;
         let unitTestsButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
         let accFilesButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Feature Files</Button>;
+            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Acc Files</Button>;
         let domainDictionaryButton =
             <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
 

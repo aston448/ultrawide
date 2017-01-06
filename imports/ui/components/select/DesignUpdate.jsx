@@ -38,11 +38,12 @@ class DesignUpdate extends Component {
     //     this.setState({adopted: this.getUpdateAdoptionStatus(this.props.currentUserDevContext, this.props.designUpdate)});
     // }
 
-    onEditDesignUpdate(userRole, userContext, du){
+    onEditDesignUpdate(userRole, userContext, viewOptions, du){
 
         ClientDesignUpdateServices.editDesignUpdate(
             userRole,
             userContext,
+            viewOptions,
             du._id
         );
     };
@@ -74,11 +75,12 @@ class DesignUpdate extends Component {
         );
     };
 
-    onViewDesignUpdate(userRole, userContext, du){
+    onViewDesignUpdate(userRole, userContext, viewOptions, du){
 
         ClientDesignUpdateServices.viewDesignUpdate(
             userRole,
             userContext,
+            viewOptions,
             du._id
         );
     }
@@ -134,7 +136,7 @@ class DesignUpdate extends Component {
     // }
 
     render() {
-        const {designUpdate, userRole, userContext, currentUserDevContext} = this.props;
+        const {designUpdate, userRole, userContext, viewOptions} = this.props;
 
         // Display as selected if this is the current DU in the user context
         let itemStyle = (designUpdate._id === userContext.designUpdateId ? 'design-item di-active' : 'design-item');
@@ -151,7 +153,7 @@ class DesignUpdate extends Component {
                     // Designers can edit, delete or publish a new update
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>
                             <Button bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>
                         </ButtonGroup>;
@@ -163,7 +165,7 @@ class DesignUpdate extends Component {
                     buttons =
                         <div>
                             <ButtonGroup className="button-group-left">
-                                <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
                             </ButtonGroup>
                             <ButtonGroup>
                                 <Button bsSize="xs" onClick={ () => this.onDevelopDesignUpdate(userContext, designUpdate)}>Develop this Update</Button>
@@ -181,7 +183,7 @@ class DesignUpdate extends Component {
                     // Designers can view, edit or withdraw the update or specify how it is to be merged into the next Design Version
                     buttons =
                         <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, designUpdate)}>Edit</Button>
+                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
                             <Button bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>
                         </ButtonGroup>
@@ -203,7 +205,7 @@ class DesignUpdate extends Component {
                 // View only for everyone
                 buttons =
                     <ButtonGroup>
-                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
+                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
                     </ButtonGroup>;
                 break;
         }
@@ -234,7 +236,7 @@ function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
         userContext: state.currentUserItemContext,
-        currentUserDevContext: state.currentUserDevContext
+        viewOptions: state.currentUserViewOptions
     }
 }
 

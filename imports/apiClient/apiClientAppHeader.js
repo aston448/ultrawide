@@ -49,15 +49,14 @@ class ClientAppHeaderServices{
             case ViewOptionType.DESIGN_TEST_SUMMARY:
             case ViewOptionType.UPDATE_TEST_SUMMARY:
             case ViewOptionType.DEV_TEST_SUMMARY:
+            case ViewOptionType.DEV_ACC_TESTS:
+            case ViewOptionType.DEV_INT_TESTS:
+            case ViewOptionType.DEV_UNIT_TESTS:
                 if(newOptions[optionType]){
-                    // Summary is being switched on so load up the data
-                    ClientMashDataServices.updateTestSummaryData(userContext);
+                    // Item is being switched on so load up the data
+                    ClientMashDataServices.updateTestData(userContext, newOptions);
                 }
                 break;
-            case ViewOptionType.DEV_INT_TESTS:
-                if(newOptions[optionType]){
-                    ClientMashDataServices.updateIntegrationTestData(userContext);
-                }
             default:
               // No action
         }

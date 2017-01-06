@@ -10,6 +10,7 @@ import { DesignUpdateMessages } from '../constants/message_texts.js';
 
 import DesignUpdateValidationApi    from '../apiValidation/apiDesignUpdateValidation.js';
 import ServerDesignUpdateApi        from '../apiServer/apiDesignUpdate.js';
+import ClientMashDataServices       from '../apiClient/apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -279,15 +280,15 @@ class ClientDesignUpdateServices {
 
             store.dispatch(setCurrentUserItemContext(context, true));
 
-            return true;
+            return context;
         }
 
         // Not an error - just indicates no update needed
-        return false;
+        return userContext;
     };
 
     // User chose to edit a design update ------------------------------------------------------------------------------
-    editDesignUpdate(userRole, userContext, designUpdateToEditId){
+    editDesignUpdate(userRole, userContext, viewOptions, designUpdateToEditId){
 
         // Client validation
         let result = DesignUpdateValidationApi.validateEditDesignUpdate(userRole, designUpdateToEditId);
@@ -320,7 +321,10 @@ class ClientDesignUpdateServices {
         ));
 
         // Ensure that the current update is the update we chose to edit
-        this.setDesignUpdate(userContext, designUpdateToEditId);
+        const newContext = this.setDesignUpdate(userContext, designUpdateToEditId);
+
+        // Get the latest test results
+        ClientMashDataServices.updateTestData(viewOptions, newContext);
 
         // Edit mode
         store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
@@ -333,7 +337,7 @@ class ClientDesignUpdateServices {
     };
 
     // User chose to view a Design Update ------------------------------------------------------------------------------
-    viewDesignUpdate(userRole, userContext, designUpdateToViewId){
+    viewDesignUpdate(userRole, userContext, viewOptions, designUpdateToViewId){
 
         // Client validation
         let result = DesignUpdateValidationApi.validateViewDesignUpdate(userRole, designUpdateToViewId);
@@ -345,7 +349,10 @@ class ClientDesignUpdateServices {
         }
 
         // Ensure that the current update is the update we chose to view
-        this.setDesignUpdate(userContext, designUpdateToViewId);
+        const newContext = this.setDesignUpdate(userContext, designUpdateToViewId);
+
+        // Get the latest test results
+        ClientMashDataServices.updateTestData(viewOptions, newContext);
 
         // View mode
         store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));

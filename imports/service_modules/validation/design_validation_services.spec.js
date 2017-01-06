@@ -34,7 +34,7 @@ afterEach(function(){
 
 describe('A new Design can only be added by a Designer', function () {
 
-    describe('DesignValidationServices', function () {
+    describe('Design Validation Services', function () {
 
         it('returns VALID when a Designer adds a Design', function () {
 
@@ -62,7 +62,7 @@ describe('A new Design can only be added by a Designer', function () {
 
 describe('Only a Designer can update a Design name', function () {
 
-    describe('DesignValidationServices', function () {
+    describe('Design Validation Services', function () {
 
         it('returns VALID when a Designer updates a Design name', function () {
 
@@ -90,7 +90,7 @@ describe('Only a Designer can update a Design name', function () {
 
 describe('A Design cannot be given the same name as another existing Design', function () {
 
-    describe('DesignValidationServices', function () {
+    describe('Design Validation Services', function () {
 
         it('returns VALID when a Designer updates a Design name to a new name', function () {
 
@@ -111,7 +111,7 @@ describe('A Design cannot be given the same name as another existing Design', fu
 
 describe('A Designer can remove a Design that is removable', function () {
 
-    describe('DesignValidationServices', function () {
+    describe('Design Validation Services', function () {
 
         it('returns VALID for a Designer if the Design is removable', function () {
 
@@ -133,7 +133,7 @@ describe('A Designer can remove a Design that is removable', function () {
 
 describe('A Design can only be removed by a Designer', function () {
 
-    describe('DesignValidationServices', function () {
+    describe('Design Validation Services', function () {
 
         it('returns INVALID for a Manager if the Design is removable', function () {
 

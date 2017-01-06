@@ -56,36 +56,47 @@ export class Design extends Component {
     render() {
         const {design, userContext, userRole} = this.props;
 
-        //console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
+        if(userContext && userRole) {
+            //console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
 
-        // Active if this design is the current context design
-        let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
+            // Active if this design is the current context design
+            let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
 
-        let buttons = '';
-        if(design.isRemovable){
-            buttons = <ButtonGroup>
-                <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
-                <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
-            </ButtonGroup>
+            let buttons = '';
+            if (design.isRemovable) {
+                buttons = <ButtonGroup>
+                    <Button id="butWork" bsSize="xs"
+                            onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
+                        Design</Button>
+                    <Button id="butRemove" bsSize="xs"
+                            onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove
+                        Design</Button>
+                </ButtonGroup>
+            } else {
+                buttons = <ButtonGroup>
+                    <Button id="butWork" bsSize="xs"
+                            onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
+                        Design</Button>
+                    <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup
+                        Design</Button>
+                </ButtonGroup>
+            }
+
+            return (
+                <div className={itemStyle}>
+                    <DesignItemHeader
+                        currentItemType={ItemType.DESIGN}
+                        currentItemId={design._id}
+                        currentItemName={design.designName}
+                        currentItemStatus=''
+                        onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
+                    />
+                    {buttons}
+                </div>
+            )
         } else {
-            buttons = <ButtonGroup>
-                <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
-                <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>
-            </ButtonGroup>
+            return(<div></div>);
         }
-
-        return (
-            <div className={itemStyle}>
-                <DesignItemHeader
-                    currentItemType={ItemType.DESIGN}
-                    currentItemId={design._id}
-                    currentItemName={design.designName}
-                    currentItemStatus=''
-                    onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
-                />
-                {buttons}
-            </div>
-        )
     }
 }
 

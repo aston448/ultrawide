@@ -10,6 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
+
 import Design from '../../components/select/Design.jsx';
 import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 
@@ -33,7 +34,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class DesignsList extends Component {
+export class DesignsList extends Component {
     constructor(props) {
         super(props);
 
@@ -46,34 +47,36 @@ class DesignsList extends Component {
     renderDesignList(designs){
         return designs.map((design) => {
             return (
-                <Design
-                    key={design._id}
-                    design={design}
-                />
+                <div id="design._id">
+                    <Design
+                        key={design._id}
+                        design={design}
+                    />
+                </div>
             );
         });
     }
 
     render() {
 
-        const {designs, currentUserRole, currentUserItemContext} = this.props;
+        const {designs, userRole, userContext} = this.props;
 
         // Designs only addable by a Designer
         let addDesign = <div></div>;
 
-        if(currentUserRole === RoleType.DESIGNER){
+        if(userRole === RoleType.DESIGNER){
             addDesign =
                 <div className="design-item-add">
                     <DesignComponentAdd
                         addText="Add Design"
-                        onClick={ () => this.addNewDesign(currentUserRole)}
+                        onClick={ () => this.addNewDesign(userRole)}
                     />
                 </div>
         }
 
         // A list of available Designs and a container to hold Design Versions for the selected Design
 
-        if(designs.length > 0 && currentUserItemContext) {
+        if(designs && designs.length > 0) {
             return (
                 <Panel header="Designs">
                     {this.renderDesignList(designs)}
@@ -82,7 +85,9 @@ class DesignsList extends Component {
             );
         } else {
             return(
-                <div>No Data</div>
+                <Panel header="Designs">
+                    {addDesign}
+                </Panel>
             )
         }
     }
@@ -96,13 +101,13 @@ DesignsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext
+        userRole: state.currentUserRole,
+        userContext: state.currentUserItemContext
     }
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignsList = connect(mapStateToProps)(DesignsList);
+let DesignsListRedux = connect(mapStateToProps)(DesignsList);
 
 
 export default DesignsContainer = createContainer(({params}) => {
@@ -111,4 +116,4 @@ export default DesignsContainer = createContainer(({params}) => {
     return ClientContainerServices.getUltrawideDesigns();
 
 
-}, DesignsList);
+}, DesignsListRedux);
