@@ -1013,12 +1013,16 @@ class MashDataModules{
 
         let suite = fullTitle.substring(0, scenarioStart).trim();
         if(suite === ''){
-            suite = scenarioName;
+            suite = 'Test';
         }
+        let subSuite = fullTitle.substring(scenarioStart + scenarioName.length, testStart).trim();
 
+        if(subSuite === ''){
+            subSuite = suite;
+        }
         return({
             suite: suite,
-            subSuite: fullTitle.substring(scenarioStart + scenarioName.length, testStart).trim()
+            subSuite: subSuite
         })
     }
 

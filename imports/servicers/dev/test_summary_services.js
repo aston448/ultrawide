@@ -4,6 +4,7 @@ import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_tes
 import { DesignComponents }             from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
+import { UserModTestMashData }          from '../../collections/dev/user_mod_test_mash_data.js';
 
 // Ultrawide services
 import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, LogLevel }   from '../../constants/constants.js';
@@ -30,36 +31,6 @@ class TestSummaryServices {
             designVersionId:    userContext.designVersionId,
             designUpdateId:     userContext.designUpdateId
         });
-
-        // // Get the test results
-        // let acceptanceResultsData = null;
-        // let integrationResultsData = null;
-        // let moduleResultsData = null;
-        //
-        // switch (acceptanceTestType) {
-        //     case 'CHIMP_CUCUMBER':
-        //         break;
-        //     default:
-        //         break;
-        // }
-        //
-        // switch (integrationTestType) {
-        //     case 'CHIMP_MOCHA':
-        //         let testFile = userContext.integrationTestResultsLocation;
-        //
-        //         integrationResultsData = ChimpMochaTestServices.getJsonTestResults(testFile);
-        //         break;
-        //     default:
-        //         break;
-        //
-        // }
-        //
-        // switch (moduleTestType) {
-        //     case 'METEOR_MOCHA':
-        //         break;
-        //     default:
-        //         break;
-        // }
 
         // Get the Design Scenario Data
         let designScenarios = [];
@@ -96,6 +67,8 @@ class TestSummaryServices {
             let moduleTestFails = 0;
 
             // See if we have any test results
+
+            // Integration Tests
             if(userContext.designUpdateId === 'NONE'){
                 integrationTestResult = UserIntTestResults.findOne(
                     {
@@ -118,7 +91,18 @@ class TestSummaryServices {
                 integrationTestDisplay = integrationTestResult.testResult;
             }
 
-            // TODO Add in Acceptance and Module Test Data
+            // Unit Tests
+            moduleTestPasses = UserModTestMashData.find({
+                userId:     userContext.userId,
+                designScenarioReferenceId: designScenario.componentReferenceId,
+                testOutcome: MashTestStatus.MASH_PASS
+            }).count();
+
+            moduleTestFails= UserModTestMashData.find({
+                userId:     userContext.userId,
+                designScenarioReferenceId: designScenario.componentReferenceId,
+                testOutcome: MashTestStatus.MASH_FAIL
+            }).count();
 
             UserDevTestSummaryData.insert({
                 userId:                         userContext.userId,

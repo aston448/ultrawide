@@ -339,9 +339,9 @@ class DesignComponent extends Component{
         let workPackageItem = (displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.DEV_DESIGN);
 
         if(workPackageItem){
-            itemStyle = (!testSummary && designItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
+            itemStyle = (designItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         } else {
-            itemStyle = (!testSummary && currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
+            itemStyle = (currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         }
 
 

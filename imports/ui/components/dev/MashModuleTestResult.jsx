@@ -58,12 +58,12 @@ export class MashModuleTestResult extends Component {
             <Grid className="close-grid">
                 <Row>
                     <Col md={10} className="close-col">
-                             <span className={"unit-test-group"}>
-                                {testResult.testGroupName + ': '}
-                            </span>
+                         <span className="unit-test-group">
+                            {testResult.testGroupName + ': '}
+                        </span>
                         <span className={"unit-test " + testStyle}>
-                                {testResult.testName}
-                            </span>
+                            {testResult.testName}
+                        </span>
                     </Col>
                     <Col md={2} className="close-col">
                         <div className={"mash-item " + testStyle}>
