@@ -71,8 +71,8 @@ class MeteorMochaTestServices{
                                 testName:           test.title,
                                 testFullName:       test.fullTitle,
                                 testResult:         MashTestStatus.MASH_FAIL,
-                                testError:          test.err.error,
-                                testErrorReason:    test.err.reason,
+                                testError:          test.err.message,
+                                testErrorReason:    'Expected "' +  test.err.expected + '" but got "' + test.err.actual + '"',
                                 testDuration:       test.duration,
                                 stackTrace:         test.err.stack
                             }

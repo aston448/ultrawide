@@ -94,9 +94,9 @@ export const publishDesignVersion = new ValidatedMethod({
 
 });
 
-export const unpublishDesignVersion = new ValidatedMethod({
+export const withdrawDesignVersion = new ValidatedMethod({
 
-    name: 'designVersion.unpublishDesignVersion',
+    name: 'designVersion.withdrawDesignVersion',
 
     validate: new SimpleSchema({
         userRole:           {type: String},
@@ -105,17 +105,17 @@ export const unpublishDesignVersion = new ValidatedMethod({
 
     run({userRole, designVersionId}){
 
-        const result = DesignVersionValidationApi.validateUnpublishDesignVersion(userRole, designVersionId);
+        const result = DesignVersionValidationApi.validateWithdrawDesignVersion(userRole, designVersionId);
 
         if (result != Validation.VALID) {
-            throw new Meteor.Error('designVersion.unpublishDesignVersion.failValidation', result)
+            throw new Meteor.Error('designVersion.withdrawDesignVersion.failValidation', result)
         }
 
         try {
-            DesignVersionServices.unpublishDesignVersion(designVersionId);
+            DesignVersionServices.withdrawDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.unpublishDesignVersion.fail', e)
+            throw new Meteor.Error('designVersion.withdrawDesignVersion.fail', e)
         }
     }
 

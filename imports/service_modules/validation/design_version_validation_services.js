@@ -91,7 +91,7 @@ class DesignVersionValidationServices{
         return Validation.VALID;
     };
 
-    validateUnpublishDesignVersion(userRole, designVersion, dvUpdates){
+    validateWithdrawDesignVersion(userRole, designVersion, dvUpdates){
 
         // User must be Designer
         if(!(userRole === RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_PUBLISH }
@@ -99,7 +99,7 @@ class DesignVersionValidationServices{
 
         // Design Version must be Draft
         if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_DRAFT){
-            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UNPUBLISH;
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
         }
 
         // Design Version must have no updates

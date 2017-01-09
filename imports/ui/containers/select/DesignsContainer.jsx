@@ -47,12 +47,10 @@ export class DesignsList extends Component {
     renderDesignList(designs){
         return designs.map((design) => {
             return (
-                <div id="design._id">
-                    <Design
-                        key={design._id}
-                        design={design}
-                    />
-                </div>
+                <Design
+                    key={design._id}
+                    design={design}
+                />
             );
         });
     }

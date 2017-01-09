@@ -1,7 +1,7 @@
 import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 105 - Unpublish Design Version', function(){
+describe('UC 105 - Withdraw Design Version', function(){
 
     beforeEach(function(){
 
@@ -18,12 +18,8 @@ describe('UC 105 - Unpublish Design Version', function(){
     });
 
 
-    // Interface
-    it('A Design Version in a Draft state has an Unpublish option on it');
-
-
     // Actions
-    it('A Designer can revert a Design Version from Draft published to New unpublished', function() {
+    it('A Designer can revert a Design Version from Draft published to New', function() {
 
         // Setup
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
@@ -31,7 +27,7 @@ describe('UC 105 - Unpublish Design Version', function(){
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
 
         // Execute
-        server.call('testDesignVersions.unpublishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.withdrawDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
 
         // Validate
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'gloria', (function(error, result){expect(!error);}));
@@ -40,9 +36,9 @@ describe('UC 105 - Unpublish Design Version', function(){
 
 
     // Conditions
-    it('Only a Draft Design Version can be unpublished');
+    it('Only a Draft Design Version can be withdrawn');
 
-    it('Only a Designer can unpublish a Design Version', function(){
+    it('Only a Designer can withdraw a Design Version', function(){
 
         // Setup -------------------------------------------------------------------------------------------------------
         // Get Designer to publish it...
@@ -55,7 +51,7 @@ describe('UC 105 - Unpublish Design Version', function(){
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.unpublishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.DEVELOPER);
+        server.call('testDesignVersions.withdrawDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.DEVELOPER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'hugh', (function(error, result){expect(!error);}));
@@ -66,13 +62,13 @@ describe('UC 105 - Unpublish Design Version', function(){
         server.call('testDesigns.selectDesign', 'Design1', 'miles');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.unpublishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles', RoleType.MANAGER);
+        server.call('testDesignVersions.withdrawDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles', RoleType.MANAGER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'miles', (function(error, result){expect(!error);}));
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'miles', (function(error, result){expect(!error);}));
     });
 
-    it('A Design Version that has Design Updates cannot be unpublished');
+    it('A Design Version that has Design Updates cannot be withdrawn');
 
 });

@@ -828,12 +828,12 @@ class MashDataModules{
         if(viewOptions.devUnitTestsVisible){
 
             // Get the Module test results for current user
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Mod Test Results for User {}", userContext.userId);
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Test Results for User {}", userContext.userId);
 
             // Remove current module test mash
             UserUnitTestMashData.remove({userId: userContext.userId});
 
-            const modResultsData = UserUnitTestResults.find({userId: userContext.userId}).fetch();
+            const unitResultsData = UserUnitTestResults.find({userId: userContext.userId}).fetch();
 
             const mashScenarios = UserWorkPackageMashData.find({
                 userId: userContext.userId,
@@ -843,17 +843,24 @@ class MashDataModules{
                 mashComponentType: ComponentType.SCENARIO
             }).fetch();
 
-            if(modResultsData.length > 0) {
+            if(unitResultsData.length > 0) {
 
                 // Parse Test Results
-                modResultsData.forEach((testResult) => {
+                unitResultsData.forEach((testResult) => {
 
                     let testIdentity = {
                         suite: testResult.testName,
                         subSuite: testResult.testName
                     };
 
-                    log((msg) => console.log(msg), LogLevel.TRACE, "Mod Test Result: {}", testResult.testFullName);
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Unit Test Result: {}", testResult.testFullName);
+
+                    let testError = 'Pass in ' + testResult.testDuration + 'ms';
+                    let testStack = 'Pass in ' + testResult.testDuration + 'ms';
+                    if(testResult.testResult === MashTestStatus.MASH_FAIL){
+                        testError = testResult.testErrorReason;
+                        testStack = testResult.stackTrace;
+                    }
 
                     let linked = false;
 
@@ -891,7 +898,9 @@ class MashDataModules{
                                     testName:                    testResult.testName,
                                     // Status
                                     mashStatus:                  MashStatus.MASH_LINKED,
-                                    testOutcome:                 testResult.testResult
+                                    testOutcome:                 testResult.testResult,
+                                    testErrors:                  testError,
+                                    testStack:                   testStack
                                 }
                             );
 
@@ -914,7 +923,9 @@ class MashDataModules{
                                 testName:                    testResult.testName,
                                 // Status
                                 mashStatus:                  MashStatus.MASH_NOT_DESIGNED,
-                                testOutcome:                 testResult.testResult
+                                testOutcome:                 testResult.testResult,
+                                testErrors:                  testError,
+                                testStack:                   testStack
                             }
                         );
                     }

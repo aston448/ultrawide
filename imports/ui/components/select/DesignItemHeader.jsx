@@ -36,7 +36,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class DesignItemHeader extends Component{
+export class DesignItemHeader extends Component{
 
     constructor(...args){
         super(...args);
@@ -188,10 +188,10 @@ class DesignItemHeader extends Component{
                             />
                         </div>
                         <InputGroup.Addon onClick={ () => this.saveItemRef(userRole, currentItemType, currentItemId)}>
-                            <div className="green"><Glyphicon glyph="ok"/></div>
+                            <div id="editOk" className="green"><Glyphicon glyph="ok"/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon onClick={ () => this.undoItemRefChange()}>
-                            <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                            <div id="editCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
                         </InputGroup.Addon>
                     </InputGroup>
                 </div>;
@@ -200,10 +200,10 @@ class DesignItemHeader extends Component{
                 <div onClick={ () => this.setCurrentItem()}>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
-                            <ControlLabel>{currentItemRef}</ControlLabel>
+                            <label id="refLabel">{currentItemRef}</label>
                         </div>
                         <InputGroup.Addon onClick={ () => this.editItemVersion()}>
-                            <div className="blue"><Glyphicon glyph="edit"/></div>
+                            <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
                         </InputGroup.Addon>
                     </InputGroup>
                 </div>;
@@ -212,7 +212,7 @@ class DesignItemHeader extends Component{
                 <div onClick={ () => this.setCurrentItem()}>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
-                            <ControlLabel>{currentItemRef}</ControlLabel>
+                            <label id="refLabel">{currentItemRef}</label>
                         </div>
                     </InputGroup>
                 </div>;
@@ -231,10 +231,10 @@ class DesignItemHeader extends Component{
                         />
                     </div>
                     <InputGroup.Addon onClick={ () => this.saveItemName(userRole, currentItemType, currentItemId)}>
-                        <div className="green"><Glyphicon glyph="ok"/></div>
+                        <div id="editOk" className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.undoItemNameChange()}>
-                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
+                        <div id="editCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -243,10 +243,10 @@ class DesignItemHeader extends Component{
             <div onClick={ () => this.setCurrentItem()}>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
-                        <ControlLabel>{nameText}</ControlLabel>
+                        <ControlLabel id="nameLabel">{nameText}</ControlLabel>
                     </div>
                     <InputGroup.Addon onClick={ () => this.editItemName()}>
-                        <div className="blue"><Glyphicon glyph="edit"/></div>
+                        <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
                 </InputGroup>
             </div>;
@@ -256,7 +256,7 @@ class DesignItemHeader extends Component{
             <div onClick={ () => this.setCurrentItem()}>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
-                        <ControlLabel>{nameText}</ControlLabel>
+                        <ControlLabel id="nameLabel">{nameText}</ControlLabel>
                     </div>
                 </InputGroup>
             </div>;
@@ -331,9 +331,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignItemHeader = connect(mapStateToProps)(DesignItemHeader);
+export default connect(mapStateToProps)(DesignItemHeader);
 
-
-export default DesignItemHeader;
 
 

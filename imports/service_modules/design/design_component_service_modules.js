@@ -55,7 +55,7 @@ class DesignComponentModules{
 
         workPackages.forEach((wp) => {
 
-            WorkPackageComponents.insert(
+            const wpComponentId = WorkPackageComponents.insert(
                 {
                     designVersionId:                designVersionId,
                     workPackageId:                  wp._id,
@@ -71,8 +71,27 @@ class DesignComponentModules{
                     componentActive:                false       // Start by assuming nothing in scope
                 }
             );
-        });
 
+            // If the added item is a Scenario and its parent is already in scope for this WP then put it in scope for the WP
+            if(component.componentType === ComponentType.SCENARIO){
+
+                // Get the Desgn parent
+                const parent = DesignComponents.findOne({_id: component.componentParentId});
+
+                // Get the parent in the WP
+                const wpParent = WorkPackageComponents.findOne({workPackageId: wp._id, componentReferenceId: parent.componentReferenceId});
+
+                // Update if active in this WP
+                if(wpParent.componentActive || wpParent.componentParent){
+                    WorkPackageComponents.update(
+                        {_id: wpComponentId},
+                        {
+                            $set:{componentActive: true}
+                        }
+                    );
+                }
+            }
+        });
     };
 
     updateWorkPackageLocation(designComponentId, reorder){

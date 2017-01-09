@@ -51,12 +51,12 @@ class DesignVersionValidationApi{
         return DesignVersionValidationServices.validatePublishDesignVersion(userRole, thisVersion);
     };
 
-    validateUnpublishDesignVersion(userRole, designVersionId){
+    validateWithdrawDesignVersion(userRole, designVersionId){
 
         const thisVersion = DesignVersions.findOne({_id: designVersionId});
         const dvUpdates = DesignUpdates.find({designVersionId: designVersionId}).fetch();
 
-        return DesignVersionValidationServices.validateUnpublishDesignVersion(userRole, thisVersion, dvUpdates);
+        return DesignVersionValidationServices.validateWithdrawDesignVersion(userRole, thisVersion, dvUpdates);
     };
 
     validateCreateNextDesignVersion(userRole, designVersionId){

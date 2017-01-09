@@ -138,11 +138,11 @@ class ClientDesignVersionServices{
         return true;
     };
 
-    // User chose to un-publish a draft design version to make it editable again ---------------------------------------
-    unpublishDesignVersion(userRole, userContext, designVersionToUnPublishId){
+    // User chose to withdraw a draft design version to make it hidden again -------------------------------------------
+    withdrawDesignVersion(userRole, userContext, designVersionToUnPublishId){
 
         // Client validation
-        let result = DesignVersionValidationApi.validateUnpublishDesignVersion(userRole, designVersionToUnPublishId);
+        let result = DesignVersionValidationApi.validateWithdrawDesignVersion(userRole, designVersionToUnPublishId);
 
         if(result != Validation.VALID){
 
@@ -152,7 +152,7 @@ class ClientDesignVersionServices{
         }
 
         // Real action call - server actions
-        ServerDesignVersionApi.unpublishDesignVersion(userRole, designVersionToUnPublishId, (err, result) => {
+        ServerDesignVersionApi.withdrawDesignVersion(userRole, designVersionToUnPublishId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -256,7 +256,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
-    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, progressDataValue){
+    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId){
 
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
@@ -293,7 +293,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersion, progressDataValue){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersion){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersion._id);

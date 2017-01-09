@@ -19,6 +19,8 @@ let Schema = new SimpleSchema({
     // Status
     mashStatus:                 {type: String},                         // Whether linked or not
     testOutcome:                {type: String},                         // Pending / Pass  Fail
+    testErrors:                 {type: String, optional: true},         // Error if Failure
+    testStack:                  {type: String, optional: true}          // Stack if Failure
 });
 
 UserUnitTestMashData.attachSchema(Schema);

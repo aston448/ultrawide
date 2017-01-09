@@ -12,7 +12,7 @@ import {
     updateDesignVersionName,
     updateDesignVersionNumber,
     publishDesignVersion,
-    unpublishDesignVersion,
+    withdrawDesignVersion,
     createNextDesignVersion
 } from '../apiValidatedMethods/design_version_methods.js'
 
@@ -64,9 +64,9 @@ class ServerDesignVersionApi {
         );
     };
 
-    unpublishDesignVersion(userRole, designVersionId, callback){
+    withdrawDesignVersion(userRole, designVersionId, callback){
 
-        unpublishDesignVersion.call(
+        withdrawDesignVersion.call(
             {
                 userRole: userRole,
                 designVersionId: designVersionId

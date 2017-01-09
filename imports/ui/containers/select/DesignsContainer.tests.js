@@ -12,7 +12,7 @@ import { DesignStatus, RoleType } from '../../../constants/constants.js'
 import { Designs } from '../../../collections/design/designs.js'
 
 
-describe('Component: Designs List', () => {
+describe('JSX: DesignsList', () => {
 
     describe('The Designs list has an "Add Design" option at the end of the list', () => {
 
@@ -166,6 +166,52 @@ describe('Component: Designs List', () => {
             // Should be Two Designs
             // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
             chai.expect(item.find('Connect(Design)')).to.have.length(2);
+
+        });
+
+        it('is also visible to Manager', () => {
+
+            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
+            const design = Factory.create('design');
+            let designs = [];
+            designs.push(design);
+
+            const userRole = RoleType.MANAGER;
+            const userContext = {
+                designId: design._id
+            };
+
+
+            const item = shallow(
+                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
+            );
+
+            // Should be One Design
+            // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
+            chai.expect(item.find('Connect(Design)')).to.have.length(1);
+
+        });
+
+        it('is also visible to Developer', () => {
+
+            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
+            const design = Factory.create('design');
+            let designs = [];
+            designs.push(design);
+
+            const userRole = RoleType.DEVELOPER;
+            const userContext = {
+                designId: design._id
+            };
+
+
+            const item = shallow(
+                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
+            );
+
+            // Should be One Design
+            // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
+            chai.expect(item.find('Connect(Design)')).to.have.length(1);
 
         });
 

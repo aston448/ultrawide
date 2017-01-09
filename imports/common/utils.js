@@ -12,6 +12,20 @@ import store from '../redux/store'
 import {updateUserMessage} from '../redux/actions'
 
 
+export function getBootstrapText(html){
+
+    // Returns the actual text for a React Bootstrap control given the html
+    // <ControlLabel>My Label</ControlLabel>
+    // Calling item.find(...).text() returns "<ControlLabel/>"
+    // So call item.find(...).html and pass that to this function...
+
+    const textStart = html.indexOf('>');
+    const remaining = html.substring(textStart + 1);
+    const textEnd = remaining.indexOf('<');
+
+    return remaining.substring(0, textEnd);
+}
+
 export function getComponentClass(currentItem, view, context, isNarrative){
 
     let main = '';

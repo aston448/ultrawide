@@ -52,6 +52,14 @@ export class MashUnitTestResult extends Component {
 
         const testStyle = testResult.testOutcome;
 
+        //TODO - Change these to nice custom overlays
+        const errorDetails = (
+            <Tooltip id="errorDeets">{testResult.testErrors}</Tooltip>
+        );
+
+        const errorStack = (
+            <Tooltip id="errorStack">{testResult.testStack}</Tooltip>
+        );
 
         // All this is is the Scenario Name plus a list of its scenarios
         return(
@@ -63,14 +71,18 @@ export class MashUnitTestResult extends Component {
                         </div>
                     </Col>
                     <Col md={7} className="close-col">
-                        <div className={"unit-test " + testStyle}>
-                            {testResult.testName}
-                        </div>
+                        <OverlayTrigger placement="left" overlay={errorDetails}>
+                            <div className={"unit-test " + testStyle}>
+                                {testResult.testName}
+                            </div>
+                        </OverlayTrigger>
                     </Col>
                     <Col md={2} className="close-col">
-                        <div className={"unit-test " + testStyle}>
-                            {TextLookups.mashTestStatus(testResult.testOutcome)}
-                        </div>
+                        <OverlayTrigger placement="left" overlay={errorStack}>
+                            <div className={"unit-test " + testStyle}>
+                                {TextLookups.mashTestStatus(testResult.testOutcome)}
+                            </div>
+                        </OverlayTrigger>
                     </Col>
                 </Row>
             </Grid>

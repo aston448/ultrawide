@@ -23,12 +23,12 @@ Meteor.methods({
         ClientDesignVersionServices.publishDesignVersion(userRole, userContext, designVersion._id);
     },
 
-    'testDesignVersions.unpublishDesignVersion'(designVersionName, userName, userRole){
+    'testDesignVersions.withdrawDesignVersion'(designVersionName, userName, userRole){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        ClientDesignVersionServices.unpublishDesignVersion(userRole, userContext, designVersion._id);
+        ClientDesignVersionServices.withdrawDesignVersion(userRole, userContext, designVersion._id);
     },
 
     'testDesignVersions.editDesignVersion'(designVersionName, userName, userRole){

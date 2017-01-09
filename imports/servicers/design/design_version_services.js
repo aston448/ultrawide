@@ -94,7 +94,7 @@ class DesignVersionServices{
         }
     };
 
-    unpublishDesignVersion(designVersionId){
+    withdrawDesignVersion(designVersionId){
 
         if(Meteor.isServer) {
             DesignVersions.update(

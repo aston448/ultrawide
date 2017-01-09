@@ -68,9 +68,7 @@ export class Design extends Component {
                     <Button id="butWork" bsSize="xs"
                             onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
                         Design</Button>
-                    <Button id="butRemove" bsSize="xs"
-                            onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove
-                        Design</Button>
+                    <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
                 </ButtonGroup>
             } else {
                 buttons = <ButtonGroup>

@@ -35,7 +35,7 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-class DesignVersionsList extends Component {
+export class DesignVersionsList extends Component {
     constructor(props) {
         super(props);
 
@@ -59,9 +59,9 @@ class DesignVersionsList extends Component {
 
         // There is no Add Design Version.  One is created by default for a new Design and when Updates are merged into a new Design Version.
 
-        const {designVersions, userRole, currentUserItemContext} = this.props;
+        const {designVersions, userRole, userContext} = this.props;
 
-        // The Updates container contains either the Updates for an Updatatble Design Version or just the WPs for an initial version
+        // The Updates container contains either the Updates for an Updatable Design Version or just the WPs for an initial version
         return (
             <Grid>
                 <Row>
@@ -72,64 +72,12 @@ class DesignVersionsList extends Component {
                     </Col>
                     <Col md={9} className="col">
                         <DesignUpdatesContainer params={{
-                            currentDesignVersionId: currentUserItemContext.designVersionId
+                            currentDesignVersionId: userContext.designVersionId
                         }}/>
                     </Col>
                 </Row>
             </Grid>
         );
-
-        // switch(userRole){
-        //     case RoleType.DESIGNER:
-        //
-        //         // Designers see the Designs and the Updates and can change them
-        //         return (
-        //             <Grid>
-        //                 <Row>
-        //                     <Col md={3} className="col">
-        //                         <Panel header="Design Versions">
-        //                             {this.renderDesignVersionsList(designVersions)}
-        //                         </Panel>
-        //                     </Col>
-        //                     <Col md={9} className="col">
-        //                         <DesignUpdatesContainer params={{
-        //                             currentDesignVersionId: currentUserItemContext.designVersionId
-        //                         }}/>
-        //                     </Col>
-        //                 </Row>
-        //             </Grid>
-        //         );
-        //
-        //         break;
-        //     case RoleType.DEVELOPER:
-        //     case RoleType.MANAGER:
-        //         // Developers and Managers see Work Packages too
-        //         return (
-        //             <Grid>
-        //                 <Row>
-        //                     <Col md={2} className="col">
-        //                         <Panel header="Design Versions">
-        //                             {this.renderDesignVersionsList(designVersions)}
-        //                         </Panel>
-        //                     </Col>
-        //                     <Col md={3} className="col">
-        //                         <WorkPackagesContainer params={{
-        //                             wpType: WorkPackageType.WP_BASE,
-        //                             designVersionId: currentUserItemContext.designVersionId,
-        //                             designUpdateId: 'NONE'
-        //                         }}/>
-        //                     </Col>
-        //                     <Col md={7} className="col">
-        //                         <DesignUpdatesContainer params={{
-        //                             currentDesignVersionId: currentUserItemContext.designVersionId
-        //                         }}/>
-        //                     </Col>
-        //                 </Row>
-        //             </Grid>
-        //         );
-        //
-        // }
-
     }
 }
 
@@ -141,16 +89,16 @@ DesignVersionsList.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole: state.currentUserRole,
-        currentUserItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext
     }
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignVersionsList = connect(mapStateToProps)(DesignVersionsList);
+let DesignVersionsListRedux = connect(mapStateToProps)(DesignVersionsList);
 
 
 export default DesignVersionsContainer = createContainer(({params}) => {
 
     return ClientContainerServices.getDesignVersionsForCurrentDesign(params.currentDesignId);
 
-}, DesignVersionsList);
+}, DesignVersionsListRedux);

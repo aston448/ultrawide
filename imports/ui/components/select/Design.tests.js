@@ -1,24 +1,31 @@
 
 import React from 'react';
 
-
 import { shallow } from 'enzyme';
 import { chai } from 'meteor/practicalmeteor:chai';
 
 import { Design } from './Design.jsx';  // Non Redux wrapped
 
 import { DesignStatus, RoleType } from '../../../constants/constants.js'
+import { getBootstrapText } from '../../../common/utils.js';
 
 import { Designs } from '../../../collections/design/designs.js'
 
-describe('Component: Design', () => {
+describe('JSX: Design', () => {
+
+    Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
+    const design = Factory.create('design');
+
+    Factory.define('designNr', Designs, { designName: 'Design2', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
+    const designNonRemovable = Factory.create('designNr');
+
+    Factory.define('designArchived', Designs, { designName: 'Design3', isRemovable: true, designStatus: DesignStatus.DESIGN_ARCHIVED});
+    const designArchived = Factory.create('designArchived');
+
 
     describe('If a Design is removable, the Design has an option to remove the Design', () => {
 
         it('has a Remove button if the Design is removable', () => {
-
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
 
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.DESIGNER;
@@ -29,19 +36,17 @@ describe('Component: Design', () => {
 
             // Remove Design button should be there
             chai.expect(item.find('#butRemove')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#butRemove').html())).to.equal('Remove Design');
 
         });
 
         it('does not have a Remove button if the Design is not removable', () => {
 
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
-
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
+                <Design design={designNonRemovable} userContext={userContext} userRole={userRole}/>
             );
 
             // Remove Design button should NOT be there
@@ -54,9 +59,6 @@ describe('Component: Design', () => {
     describe('An option to remove a Design is only visible to a Designer', () => {
 
         it('does not have a remove button for a Developer', () => {
-
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
 
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.DEVELOPER;
@@ -71,9 +73,6 @@ describe('Component: Design', () => {
         });
 
         it('does not have a remove button for a Manager', () => {
-
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
 
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.MANAGER;
@@ -93,14 +92,11 @@ describe('Component: Design', () => {
 
         it('has a Backup button if the Design is not removable and not archived', () => {
 
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
-
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
+                <Design design={designNonRemovable} userContext={userContext} userRole={userRole}/>
             );
 
             // Remove Design button should be there
@@ -109,9 +105,6 @@ describe('Component: Design', () => {
         });
 
         it('does not have a Backup button if the Design is removable', () => {
-
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
 
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.DESIGNER;
@@ -127,8 +120,70 @@ describe('Component: Design', () => {
 
         it('does not have a Backup button if the Design is archived', () => {
 
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_ARCHIVED});
-            const design = Factory.create('design');
+            const userContext = {designId: 'AAA'};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <Design design={designArchived} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Remove Design button should be there
+            chai.expect(item.find('#butBackup')).to.have.length(0);
+
+        });
+
+    });
+
+    describe('The current working Design for the user is highlighted', () => {
+
+        it('is highlighted if is the User Context Design', () => {
+
+            const userContext = {designId: design._id};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Should find the active design class
+            chai.expect(item.find('.di-active')).to.have.length(1);
+
+        });
+
+        it('is not highlighted if is not the User Context Design', () => {
+
+            const userContext = {designId: 'AAA'};  // Bollox ID
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Should NOT find the active design class
+            chai.expect(item.find('.di-active')).to.have.length(0);
+
+        });
+
+    });
+
+    describe('Each Design has an option to select it as the current working Design', () => {
+
+        it('has a Work on this Design button if the Design is selected for Designer', () => {
+
+            const userContext = {designId: design._id};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Work Design button should be there for selected Design
+            chai.expect(item.find('.di-active')).to.have.length(1);
+            chai.expect(item.find('#butWork')).to.have.length(1);
+
+        });
+
+        it('has a Work on this Design button if the Design is not selected for Designer', () => {
 
             const userContext = {designId: 'AAA'};
             const userRole = RoleType.DESIGNER;
@@ -137,10 +192,70 @@ describe('Component: Design', () => {
                 <Design design={design} userContext={userContext} userRole={userRole}/>
             );
 
-            // Remove Design button should be there
-            chai.expect(item.find('#butBackup')).to.have.length(0);
+            // Work Design button should be there for non-selected Design
+            chai.expect(item.find('.di-active')).to.have.length(0);
+            chai.expect(item.find('#butWork')).to.have.length(1);
 
         });
 
+        it('has a Work on this Design button if the Design is selected for Manager', () => {
+
+            const userContext = {designId: design._id};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Work Design button should be there for selected Design
+            chai.expect(item.find('.di-active')).to.have.length(1);
+            chai.expect(item.find('#butWork')).to.have.length(1);
+
+        });
+
+        it('has a Work on this Design button if the Design is not selected for Manager', () => {
+
+            const userContext = {designId: 'AAA'};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Work Design button should be there for non-selected Design
+            chai.expect(item.find('.di-active')).to.have.length(0);
+            chai.expect(item.find('#butWork')).to.have.length(1);
+
+        });
+
+        it('has a Work on this Design button if the Design is selected for Developer', () => {
+
+            const userContext = {designId: design._id};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Work Design button should be there for selected Design
+            chai.expect(item.find('.di-active')).to.have.length(1);
+            chai.expect(item.find('#butWork')).to.have.length(1);
+
+        });
+
+        it('has a Work on this Design button if the Design is not selected for Developer', () => {
+
+            const userContext = {designId: 'AAA'};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            // Work Design button should be there for non-selected Design
+            chai.expect(item.find('.di-active')).to.have.length(0);
+            chai.expect(item.find('#butWork')).to.have.length(1);
+
+        });
     });
 });
