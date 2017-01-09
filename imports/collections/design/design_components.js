@@ -35,6 +35,8 @@ let Schema = new SimpleSchema({
     isRemovable:                {type: Boolean, defaultValue: true} ,               // Flag to indicate if current component can be deleted
     isRemoved:                  {type: Boolean, defaultValue: false} ,              // Flag to indicate the current component is deleted
     isNew:                      {type: Boolean, defaultValue: true},                // Flag to indicate a new item which should be editable by default
+    isDevUpdated:               {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been updated by a developer
+    isDevAdded:                 {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been added by a developer
     lockingUser:                {type: String, defaultValue: 'NONE'},               // Indicates if a component is locked for edit by a user
     designUpdateId:             {type: String, optional: true}                      // For scenarios only, set when component is in an update as can only be in one
 });

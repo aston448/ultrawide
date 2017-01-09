@@ -46,7 +46,7 @@ class DesignComponentValidationApi{
             componentType:      thisComponent.componentType
         }).fetch();
 
-        return DesignComponentValidationServices.validateUpdateComponentName(view, mode, thisComponent.componentType, newName, existingComponents);
+        return DesignComponentValidationServices.validateUpdateComponentName(view, mode, thisComponent.componentType, thisComponent.isDevAdded, newName, existingComponents);
     };
 
     validateUpdateFeatureNarrative(view, mode){

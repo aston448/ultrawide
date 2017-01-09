@@ -50,16 +50,32 @@ class DesignComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateComponentName(view, mode, componentType, newName, existingComponents){
+    validateUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingComponents){
 
-        // Updates only allowed in design edit when in edit mode
-        if(view != ViewType.DESIGN_NEW_EDIT){
+        // Updates only allowed in design edit when in edit mode or for Base WP editing
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DEVELOP_BASE_WP)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_EDIT;
         }
 
         // Updates not allowed in view only mode
         if(mode != ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_EDIT;
+        }
+
+        // For Base WPs, updates only allowed for Scenarios and Added Feature Aspects
+        if(view === ViewType.DEVELOP_BASE_WP){
+
+            // Fail bad Feature Aspects
+            if(componentType === ComponentType.FEATURE_ASPECT && !isDevAdded){
+                // FAIL - cant update non dev added Feature Aspects
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE;
+            }
+
+            // Anything else that's not a Scenario or Feature aspect is no good
+            if((componentType != ComponentType.SCENARIO) && (componentType != ComponentType.FEATURE_ASPECT)){
+                // FAIL can't update any other components
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE;
+            }
         }
 
         // Name must be unique for component type - for functional components only

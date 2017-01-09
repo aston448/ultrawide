@@ -144,6 +144,7 @@ class DesignComponentHeader extends Component{
             case ViewType.DEVELOP_UPDATE_WP:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
+                    nextProps.currentItem.componentName === this.props.currentItem.componentName &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen
                 );
@@ -455,6 +456,7 @@ class DesignComponentHeader extends Component{
         // What is saved depends on the context
         switch (view){
             case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DEVELOP_BASE_WP:
                 // Updates to the base design
                 success = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
@@ -462,6 +464,10 @@ class DesignComponentHeader extends Component{
                 // Updates to a design update
                 success = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
+
+            case ViewType.DEVELOP_UPDATE_WP:
+                break;
+
         }
 
         if(success){
@@ -546,6 +552,11 @@ class DesignComponentHeader extends Component{
 
         // Delete item greyed out if not removable but not if logically deleted in update  || (currentItem.isRemoved && view === ViewType.EDIT_UPDATE)
         let deleteStyle = currentItem.isRemovable ? 'red' : 'lgrey';
+
+        // For Work Packages only stuff added in WP is remmovable
+        if(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP){
+            deleteStyle = designItem.isRemovable && (designItem.isDevAdded || designItem.isDevUpdated) ? 'red' : 'lgrey';
+        }
 
         // All items are in scope...
         let inScope = true;
@@ -776,41 +787,41 @@ class DesignComponentHeader extends Component{
                 </div>
             );
 
-        let nonDraggableHeader =
-            <div>
-                <InputGroup>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    {/*<InputGroup.Addon>*/}
-                        {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                    {/*</InputGroup.Addon>*/}
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            spellCheck={false}
-                            ref="editorReadOnly"
-                            readOnly={true}
-                        />
-                    </div>
-                    <InputGroup.Addon onClick={ () => this.editComponentName()}>
-                        <OverlayTrigger overlay={tooltipEdit}>
-                            <a href="#">
-                                <div className="blue"><Glyphicon glyph="edit"/></div>
-                            </a>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                        <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible">
-                            <Glyphicon glyph="move"/>
-                        </div>
-                    </InputGroup.Addon>
-                </InputGroup>
-            </div>;
+        // let nonDraggableHeader =
+        //     <div>
+        //         <InputGroup>
+        //             <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+        //                 <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+        //             </InputGroup.Addon>
+        //             {/*<InputGroup.Addon>*/}
+        //                 {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
+        //             {/*</InputGroup.Addon>*/}
+        //             <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
+        //             <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
+        //                 <Editor
+        //                     editorState={this.state.editorState}
+        //                     spellCheck={false}
+        //                     ref="editorReadOnly"
+        //                     readOnly={true}
+        //                 />
+        //             </div>
+        //             <InputGroup.Addon onClick={ () => this.editComponentName()}>
+        //                 <OverlayTrigger overlay={tooltipEdit}>
+        //                     <a href="#">
+        //                         <div className="blue"><Glyphicon glyph="edit"/></div>
+        //                     </a>
+        //                 </OverlayTrigger>
+        //             </InputGroup.Addon>
+        //             <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+        //                 <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
+        //             </InputGroup.Addon>
+        //             <InputGroup.Addon>
+        //                 <div className="invisible">
+        //                     <Glyphicon glyph="move"/>
+        //                 </div>
+        //             </InputGroup.Addon>
+        //         </InputGroup>
+        //     </div>;
 
         // Compose Header Components -----------------------------------------------------------------------------------
 
@@ -843,7 +854,6 @@ class DesignComponentHeader extends Component{
             case DisplayContext.BASE_VIEW:
             case DisplayContext.UPDATE_VIEW:
             case DisplayContext.WP_VIEW:
-            case DisplayContext.DEV_DESIGN:
                 // View only
                 designComponentElement = viewOnlyHeader;
                 break;
@@ -861,6 +871,33 @@ class DesignComponentHeader extends Component{
                         if(inScope) {
                             // Editable component
                             if (this.state.editable  && inScope) {
+                                // Being edited now...
+                                designComponentElement = editingHeader;
+
+                            } else {
+                                // Not being edited now
+                                designComponentElement = draggableHeader;
+                            }
+                        } else {
+                            // Item is out of scope so cannot be edited or dragged
+                            designComponentElement = viewOnlyHeader;
+                        }
+                        break;
+                }
+                break;
+            case DisplayContext.DEV_DESIGN:
+                // Scenarios are editable
+                switch (mode){
+                    case  ViewMode.MODE_VIEW:
+                        // View only
+                        designComponentElement = viewOnlyHeader;
+                        break;
+
+                    case ViewMode.MODE_EDIT:
+                        // Scenarios and new Feature Aspects are editable.
+                        if(designItem.componentType === ComponentType.SCENARIO || (designItem.componentType === ComponentType.FEATURE_ASPECT && designItem.isDevAdded)) {
+                            // Editable component
+                            if (this.state.editable) {
                                 // Being edited now...
                                 designComponentElement = editingHeader;
 

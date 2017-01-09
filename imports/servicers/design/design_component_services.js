@@ -148,6 +148,8 @@ class DesignComponentServices{
                     isRemovable: component.isRemovable,
                     isRemoved: component.isRemoved,
                     isNew: component.isNew,
+                    isDevUpdated: component.isDevUpdated,
+                    isDevAdded: component.isDevAdded,
                     lockingUser: component.lockingUser,
                     designUpdateId: component.designUpdateId
                 }
