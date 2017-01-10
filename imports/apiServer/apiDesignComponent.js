@@ -20,7 +20,7 @@ import {
 // =====================================================================================================================
 class ServerDesignComponentApi {
 
-    addApplicationToDesignVersion(view, mode, designVersionId, callback){
+    addApplicationToDesignVersion(view, mode, designVersionId,  callback){
 
         addApplicationToDesignVersion.call(
             {

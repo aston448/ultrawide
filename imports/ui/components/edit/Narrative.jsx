@@ -294,7 +294,8 @@ export default class Narrative extends React.Component {
             displayContext === DisplayContext.UPDATE_SCOPE ||
             displayContext === DisplayContext.BASE_VIEW ||
             displayContext === DisplayContext.WP_SCOPE ||
-            displayContext === DisplayContext.WP_VIEW
+            displayContext === DisplayContext.WP_VIEW ||
+            displayContext === DisplayContext.DEV_DESIGN
         ){
             // VIEW MODE
             narrativeHtml =

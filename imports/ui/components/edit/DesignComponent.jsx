@@ -124,6 +124,8 @@ class DesignComponent extends Component{
                 return !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
+                    nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
+                    nextProps.mode === this.props.mode &&
                     nextProps.testSummary === this.props.testSummary
                  );
         }
@@ -297,6 +299,7 @@ class DesignComponent extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureItem);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -310,13 +313,11 @@ class DesignComponent extends Component{
 
         switch(this.props.view){
             case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.addScenario(view, mode, parentItem);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 ClientDesignUpdateComponentServices.addScenario(view, mode, parentItem);
-                break;
-            case ViewType.DEVELOP_BASE_WP:
-                // TODO
                 break;
             case ViewType.DEVELOP_UPDATE_WP:
                 // TODO
@@ -463,7 +464,9 @@ class DesignComponent extends Component{
                 displayContext === DisplayContext.UPDATE_SCOPE ||
                 displayContext === DisplayContext.BASE_VIEW ||
                 displayContext === DisplayContext.WP_SCOPE ||
-                displayContext === DisplayContext.WP_VIEW
+                displayContext === DisplayContext.WP_VIEW ||
+                (displayContext === DisplayContext.DEV_DESIGN && designItem.componentType === ComponentType.APPLICATION) ||
+                (displayContext === DisplayContext.DEV_DESIGN && designItem.componentType === ComponentType.DESIGN_SECTION)
             );
 
             switch (currentItem.componentType) {
@@ -489,7 +492,7 @@ class DesignComponent extends Component{
                                             <td className="control-table-data-section">
                                                 <DesignComponentAdd
                                                     addText="Add Design Section"
-                                                    onClick={ () => this.addDesignSectionToApplication(view, mode, currentItem)}
+                                                    onClick={ () => this.addDesignSectionToApplication(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -535,14 +538,14 @@ class DesignComponent extends Component{
                                             <td className="control-table-data-feature">
                                                 <DesignComponentAdd
                                                     addText="Add feature"
-                                                    onClick={ () => this.addFeatureToDesignSection(view, mode, currentItem)}
+                                                    onClick={ () => this.addFeatureToDesignSection(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
                                             <td>
                                                 <DesignComponentAdd
                                                     addText="Add sub section"
-                                                    onClick={ () => this.addSectionToDesignSection(view, mode, currentItem)}
+                                                    onClick={ () => this.addSectionToDesignSection(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -590,14 +593,14 @@ class DesignComponent extends Component{
                                             <td className="control-table-data-feature-aspect">
                                                 <DesignComponentAdd
                                                     addText="Add feature aspect"
-                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, currentItem)}
+                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
                                             <td className="control-table-data">
                                                 <DesignComponentAdd
                                                     addText="Add scenario"
-                                                    onClick={ () => this.addScenario(view, mode, currentItem)}
+                                                    onClick={ () => this.addScenario(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -637,7 +640,7 @@ class DesignComponent extends Component{
                                             <td className="control-table-data-scenario">
                                                 <DesignComponentAdd
                                                     addText="Add scenario"
-                                                    onClick={ () => this.addScenario(view, mode, currentItem)}
+                                                    onClick={ () => this.addScenario(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>

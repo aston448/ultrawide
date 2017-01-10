@@ -3,7 +3,7 @@
 import { DesignComponents } from '../collections/design/design_components.js';
 
 // Ultrawide Services
-import { DesignComponentValidationErrors } from '../constants/validation_errors.js';
+import { DesignComponentValidationErrors, Validation } from '../constants/validation_errors.js';
 
 import DesignComponentValidationServices    from '../service_modules/validation/design_component_validation_services.js';
 import DesignComponentModules               from '../service_modules/design/design_component_service_modules.js';
@@ -16,22 +16,26 @@ import DesignComponentModules               from '../service_modules/design/desi
 
 class DesignComponentValidationApi{
 
-    validateAddDesignComponent(view, mode){
+    validateAddDesignComponent(view, mode, componentType){
 
-        return DesignComponentValidationServices.validateAddDesignComponent(view, mode)
+        return DesignComponentValidationServices.validateAddDesignComponent(view, mode, componentType)
     };
 
     validateRemoveDesignComponent(view, mode, designComponentId){
 
         let designComponent = DesignComponents.findOne({_id: designComponentId});
 
-        if (designComponent.isRemovable){
+        const status = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, designComponent);
+
+        if (status === Validation.VALID){
             // Just double check....
             if(DesignComponentModules.hasNoChildren(designComponentId)){
-                return DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, designComponent);
+                return Validation.VALID;
             } else {
                 return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE;
             }
+        } else {
+            return status;
         }
     };
 

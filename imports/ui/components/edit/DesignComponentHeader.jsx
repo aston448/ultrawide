@@ -144,7 +144,10 @@ class DesignComponentHeader extends Component{
             case ViewType.DEVELOP_UPDATE_WP:
                 return !(
                     nextState.highlighted === this.state.highlighted &&
-                    nextProps.currentItem.componentName === this.props.currentItem.componentName &&
+                    nextState.editable === this.state.editable &&
+                    nextState.editorState === this.state.editorState &&
+                    nextProps.mode === this.props.mode &&
+                    nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen
                 );
@@ -171,12 +174,14 @@ class DesignComponentHeader extends Component{
         // New untouched items are editable...
         switch (this.props.view) {
             case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DEVELOP_BASE_WP:
                 // A new component is automatically editable
-                if (this.props.currentItem.isNew) {
+                if (this.props.designItem.isNew) {
                     this.editComponentName();
                 }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DEVELOP_UPDATE_WP:
                 // A new component not yet changed is automatically editable
                 if (this.props.currentItem.isNew && ! this.props.currentItem.isChanged) {
                     this.editComponentName();
@@ -258,7 +263,11 @@ class DesignComponentHeader extends Component{
         let item = props.currentItem;
 
         // For Work Package items the item needed for decoration is the Design Item
-        if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.WP_VIEW || props.displayContext === DisplayContext.DEV_DESIGN){
+        if(
+            props.displayContext === DisplayContext.WP_SCOPE ||
+            props.displayContext === DisplayContext.WP_VIEW ||
+            props.displayContext === DisplayContext.DEV_DESIGN
+        ){
             item = props.designItem;
         }
 
@@ -449,7 +458,7 @@ class DesignComponentHeader extends Component{
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
 
-        let item = this.props.currentItem;
+        let item = this.props.designItem;
 
         let success = false;
 
@@ -483,6 +492,7 @@ class DesignComponentHeader extends Component{
 
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DEVELOP_BASE_WP:
                 ClientDesignComponentServices.removeDesignComponent(view, mode, item, userContext);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -548,12 +558,11 @@ class DesignComponentHeader extends Component{
 
         // Determine the look of the item ------------------------------------------------------------------------------
 
-
-
         // Delete item greyed out if not removable but not if logically deleted in update  || (currentItem.isRemoved && view === ViewType.EDIT_UPDATE)
-        let deleteStyle = currentItem.isRemovable ? 'red' : 'lgrey';
+        let deleteStyle = designItem.isRemovable ? 'red' : 'lgrey';
 
-        // For Work Packages only stuff added in WP is remmovable
+
+        // For Work Packages only stuff added in WP is removable
         if(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP){
             deleteStyle = designItem.isRemovable && (designItem.isDevAdded || designItem.isDevUpdated) ? 'red' : 'lgrey';
         }
@@ -759,7 +768,7 @@ class DesignComponentHeader extends Component{
                                 </a>
                             </OverlayTrigger>
                         </InputGroup.Addon>
-                        <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+                        <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
                             <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>

@@ -6,7 +6,7 @@ import { WorkPackages }             from '../../collections/work/work_packages.j
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel } from '../../constants/constants.js';
+import { ComponentType, ViewType, LogLevel } from '../../constants/constants.js';
 import { DefaultComponentNames } from '../../constants/default_names.js';
 import { getIdFromMap, log } from '../../common/utils.js';
 
@@ -24,7 +24,7 @@ import DesignComponentModules   from '../../service_modules/design/design_compon
 class DesignComponentServices{
 
     // Add a new design component
-    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew){
+    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view){
 
         if(Meteor.isServer){
             // Get the parent reference id (if there is a parent)
@@ -39,8 +39,14 @@ class DesignComponentServices{
                 // Get the Feature Reference ID.  This will be NONE for anything that is not under a Feature
                 featureRefId = parent.componentFeatureReferenceId;
 
-
             }
+
+            console.log("Adding Scenario with view " + view);
+
+            // If adding from a Work Package set as dev added
+            let devAdded = (view === ViewType.DEVELOP_BASE_WP);
+
+            console.log("IsDevAdded = " + devAdded);
 
             // Get the design id - this is added to the components for easier access to data
             let designId = DesignVersions.findOne({_id: designVersionId}).designId;
@@ -58,7 +64,8 @@ class DesignComponentServices{
                     componentParentReferenceId:     parentRefId,
                     componentFeatureReferenceId:    featureRefId,
                     componentTextRaw:               defaultRawText,
-                    isNew:                          isNew
+                    isNew:                          isNew,
+                    isDevAdded:                     devAdded
                 },
 
             );

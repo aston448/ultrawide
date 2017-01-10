@@ -26,7 +26,7 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
     run({view, mode, designVersionId}){
 
         // Server validation
-        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.APPLICATION);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designComponent.addApplicationToDesignVersion.failValidation', result)
@@ -64,7 +64,7 @@ export const addDesignSectionToApplication = new ValidatedMethod({
     run({view, mode, designVersionId, parentId}){
 
         // Server validation
-        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designComponent.addDesignSectionToApplication.failValidation', result)
@@ -103,7 +103,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
     run({view, mode, designVersionId, parentId, parentLevel}){
 
         // Server validation
-        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designComponent.addDesignSectionToDesignSection.failValidation', result)
@@ -141,7 +141,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
     run({view, mode, designVersionId, parentId}){
 
         // Server validation
-        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designComponent.addFeatureToDesignSection.failValidation', result)
@@ -179,7 +179,7 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
     run({view, mode, designVersionId, parentId}){
 
         // Server validation
-        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE_ASPECT);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designComponent.addFeatureAspectToFeature.failValidation', result)
@@ -194,7 +194,9 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
                 0,
                 DefaultComponentNames.NEW_FEATURE_ASPECT_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_FEATURE_ASPECT_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_ASPECT_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_ASPECT_DETAILS),
+                true,
+                view
             );
         } catch (e) {
             console.log(e);
@@ -219,7 +221,7 @@ export const addScenario = new ValidatedMethod({
     run({view, mode, designVersionId, parentId}){
 
         // Server validation
-        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.SCENARIO);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designComponent.addScenario.failValidation', result)
@@ -234,7 +236,9 @@ export const addScenario = new ValidatedMethod({
                 0,
                 DefaultComponentNames.NEW_SCENARIO_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_SCENARIO_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_SCENARIO_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_SCENARIO_DETAILS),
+                true,
+                view
             );
         } catch (e) {
             console.log(e);

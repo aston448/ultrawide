@@ -106,7 +106,7 @@ class ClientDesignComponentServices{
     addApplicationToDesignVersion(view, mode, designVersionId) {
 
         // Client validation
-        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.APPLICATION);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -115,7 +115,7 @@ class ClientDesignComponentServices{
         }
 
         // Real action call
-        ServerDesignComponentApi.addApplicationToDesignVersion(view, mode, designVersionId, (err, result) => {
+        ServerDesignComponentApi.addApplicationToDesignVersion(view, mode, designVersionId, ComponentType.APPLICATION, (err, result) => {
 
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
@@ -140,7 +140,7 @@ class ClientDesignComponentServices{
     addDesignSectionToApplication(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -149,22 +149,28 @@ class ClientDesignComponentServices{
         }
 
         // Real action call
-        ServerDesignComponentApi.addDesignSectionToApplication(view, mode, parentComponent.designVersionId, parentComponent._id, (err, result) => {
+        ServerDesignComponentApi.addDesignSectionToApplication(
+            view,
+            mode,
+            parentComponent.designVersionId,
+            parentComponent._id,
+            (err, result) => {
 
-            if(err){
-                // Unexpected error as all expected errors already handled - show alert.
-                // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-            } else {
-                // Add Design Section Actions:
+                if(err){
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                } else {
+                    // Add Design Section Actions:
 
-                // Show action success on screen
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
-                    messageText: DesignComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
-                }));
+                    // Show action success on screen
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: DesignComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
+                    }));
+                }
             }
-        });
+        );
 
         // Indicate that business validation passed
         return true;
@@ -174,7 +180,7 @@ class ClientDesignComponentServices{
     addDesignSectionToDesignSection(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -215,7 +221,7 @@ class ClientDesignComponentServices{
     addFeatureToDesignSection(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -255,7 +261,7 @@ class ClientDesignComponentServices{
     addFeatureAspectToFeature(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE_ASPECT);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -296,7 +302,7 @@ class ClientDesignComponentServices{
     addScenario(view, mode, parentComponent){
 
         // Client validation
-        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode);
+        let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.SCENARIO);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -344,6 +350,27 @@ class ClientDesignComponentServices{
             return false;
         }
 
+        // There can now be no component selected...  Do this update first so errors not caused by server delay
+        const context = {
+            userId:                         userContext.userId,
+            designId:                       userContext.designId,
+            designVersionId:                userContext.designVersionId,
+            designUpdateId:                 userContext.designUpdateId,
+            workPackageId:                  userContext.workPackageId,
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE',
+            featureFilesLocation:           userContext.featureFilesLocation,
+            acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+            integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+            unitTestResultsLocation:      userContext.unitTestResultsLocation
+        };
+
+        store.dispatch(setCurrentUserItemContext(context, true));
+
         // Real action call
         ServerDesignComponentApi.removeDesignComponent(
             view,
@@ -359,26 +386,6 @@ class ClientDesignComponentServices{
                 } else {
                     // Remove Design Component Actions:
 
-                    // There can now be no component selected...
-                    const context = {
-                        userId:                         userContext.userId,
-                        designId:                       userContext.designId,
-                        designVersionId:                userContext.designVersionId,
-                        designUpdateId:                 userContext.designUpdateId,
-                        workPackageId:                  userContext.workPackageId,
-                        designComponentId:              'NONE',
-                        designComponentType:            'NONE',
-                        featureReferenceId:             'NONE',
-                        featureAspectReferenceId:       'NONE',
-                        scenarioReferenceId:            'NONE',
-                        scenarioStepId:                 'NONE',
-                        featureFilesLocation:           userContext.featureFilesLocation,
-                        acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                        integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                        unitTestResultsLocation:      userContext.unitTestResultsLocation
-                    };
-
-                    store.dispatch(setCurrentUserItemContext(context, true));
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

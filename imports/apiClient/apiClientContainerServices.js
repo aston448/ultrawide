@@ -833,7 +833,7 @@ class ClientContainerServices{
 
                     console.log("DCT Container: UC Design component is " + userContext.designComponentId);
                     currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
-                    console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
+
                     break;
 
                 case ViewType.DESIGN_UPDATE_EDIT:
@@ -1121,31 +1121,41 @@ class ClientContainerServices{
 
                 case ComponentType.FEATURE_ASPECT:
                     // Return any SCENARIO data related to this Feature Aspect
-                    return UserWorkPackageMashData.find(
-                        {
-                            userId: userContext.userId,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId,
-                            workPackageId: userContext.workPackageId,
-                            mashComponentType: ComponentType.SCENARIO,
-                            designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
-                        },
-                        {sort:{mashItemIndex: 1}}
-                    ).fetch();
+                    if(selectedDesignComponent) {
+                        return UserWorkPackageMashData.find(
+                            {
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId,
+                                workPackageId: userContext.workPackageId,
+                                mashComponentType: ComponentType.SCENARIO,
+                                designFeatureAspectReferenceId: selectedDesignComponent.componentReferenceId
+                            },
+                            {sort: {mashItemIndex: 1}}
+                        ).fetch();
+                    } else {
+                        // Its just possible the Developer deleted this component
+                        return[];
+                    }
 
                 case ComponentType.SCENARIO:
                     // Return any data related to this Scenario (at most one test)
-                    return UserWorkPackageMashData.find(
-                        {
-                            userId: userContext.userId,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId,
-                            workPackageId: userContext.workPackageId,
-                            mashComponentType: ComponentType.SCENARIO,
-                            designScenarioReferenceId: selectedDesignComponent.componentReferenceId
-                        },
-                        {sort:{mashItemIndex: 1}}
-                    ).fetch();
+                    if(selectedDesignComponent) {
+                        return UserWorkPackageMashData.find(
+                            {
+                                userId: userContext.userId,
+                                designVersionId: userContext.designVersionId,
+                                designUpdateId: userContext.designUpdateId,
+                                workPackageId: userContext.workPackageId,
+                                mashComponentType: ComponentType.SCENARIO,
+                                designScenarioReferenceId: selectedDesignComponent.componentReferenceId
+                            },
+                            {sort:{mashItemIndex: 1}}
+                        ).fetch();
+                    } else {
+                        // Its just possible the Developer deleted this component
+                        return[];
+                    }
 
                 default:
                     // No component or irrelevant component:

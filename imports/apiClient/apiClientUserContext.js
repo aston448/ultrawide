@@ -587,37 +587,52 @@ class ClientUserContextServices {
 
     getParent(parentType, context){
 
-        let currentItemType = context.designComponentType;
-        let currentItemId= context.designComponentId;
+        if(context.designComponentId != 'NONE') {
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for parent of type {} for component {} ", parentType, currentItemId);
+            let currentItemType = context.designComponentType;
+            let currentItemId = context.designComponentId;
 
-        if(context.designUpdateId === 'NONE'){
+            log((msg) => console.log(msg), LogLevel.TRACE, "Looking for parent of type {} for component {} ", parentType, currentItemId);
 
-            let currentItem = DesignComponents.findOne({_id: currentItemId});
-            let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+            if (context.designUpdateId === 'NONE') {
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
+                let currentItem = DesignComponents.findOne({_id: currentItemId});
+                let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
 
-            while((parentItem.componentType != parentType) && (currentItem.componentParentId != 'NONE')){
-                currentItem = parentItem;
-                parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
+
+                while (parentItem && (parentItem.componentType != parentType) && (currentItem.componentParentId != 'NONE')) {
+                    currentItem = parentItem;
+                    parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+
+                    if (parentItem) {
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
+                    } else {
+                        log((msg) => console.log(msg), LogLevel.TRACE, "No more parents");
+                    }
+                }
+
+                if(!parentItem){
+                    return 'NONE';
+                }
+
+                return parentItem.componentName;
+
+            } else {
+                let currentUpdateItem = DesignUpdateComponents.findOne({_id: currentItemId});
+                let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+
+                while ((parentUpdateItem.componentType != parentType) && (currentUpdateItem.componentParentIdNew != 'NONE')) {
+                    currentUpdateItem = parentUpdateItem;
+                    parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+                }
+
+                return parentUpdateItem.componentName;
             }
-
-            return parentItem.componentName;
-
         } else {
-            let currentUpdateItem = DesignUpdateComponents.findOne({_id: currentItemId});
-            let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
-
-            while((parentUpdateItem.componentType != parentType) && (currentUpdateItem.componentParentIdNew != 'NONE')){
-                currentUpdateItem = parentUpdateItem;
-                parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
-            }
-
-            return parentUpdateItem.componentName;
+            return 'NONE';
         }
     }
 

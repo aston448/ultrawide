@@ -15,10 +15,10 @@ import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js
 
 class DesignComponentValidationServices{
 
-    validateAddDesignComponent(view, mode){
+    validateAddDesignComponent(view, mode, componentType){
 
-        // Additions only allowed in design edit when in edit mode
-        if(view != ViewType.DESIGN_NEW_EDIT){
+        // Additions only allowed in design edit or base work package when in edit mode
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DEVELOP_BASE_WP)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_ADD;
         }
 
@@ -27,17 +27,25 @@ class DesignComponentValidationServices{
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
         }
 
+        // In work packages only Scenarios and Feature Aspects can be added
+        if(view === ViewType.DEVELOP_BASE_WP){
+
+            if(!(componentType === ComponentType.FEATURE_ASPECT || componentType === ComponentType.SCENARIO)){
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_TYPE_ADD;
+            }
+        }
+
         return Validation.VALID;
     };
 
     validateRemoveDesignComponent(view, mode, designComponent){
 
-        // Updates only allowed in design edit when in edit mode
-        if(view != ViewType.DESIGN_NEW_EDIT){
+        // Only can remove if editing design or WP
+        if(!(view === ViewType.DESIGN_NEW_EDIT || view === ViewType.DEVELOP_BASE_WP)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_REMOVE;
         }
 
-        // Updates not allowed in view only mode
+        // Remove not allowed in view only mode
         if(mode != ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
         }
@@ -45,6 +53,13 @@ class DesignComponentValidationServices{
         // Component must be removable
         if(!designComponent.isRemovable){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE;
+        }
+
+        // If WP, must be removable AND added by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
+        if(view === ViewType.DEVELOP_BASE_WP){
+            if(!designComponent.isDevAdded){
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV;
+            }
         }
 
         return Validation.VALID;

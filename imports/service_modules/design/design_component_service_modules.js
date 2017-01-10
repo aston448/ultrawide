@@ -72,17 +72,27 @@ class DesignComponentModules{
                 }
             );
 
-            // If the added item is a Scenario and its parent is already in scope for this WP then put it in scope for the WP
-            if(component.componentType === ComponentType.SCENARIO){
+            // If the added item is a Scenario or a Feature Aspect and its parent is already in scope for this WP then put it in scope for the WP
+            if(component.componentType === ComponentType.SCENARIO || component.componentType === ComponentType.FEATURE_ASPECT){
 
-                // Get the Desgn parent
+                // Get the Design parent
                 const parent = DesignComponents.findOne({_id: component.componentParentId});
 
                 // Get the parent in the WP
                 const wpParent = WorkPackageComponents.findOne({workPackageId: wp._id, componentReferenceId: parent.componentReferenceId});
 
-                // Update if active in this WP
-                if(wpParent.componentActive || wpParent.componentParent){
+                // Update if active in this WP - Scenarios if sibling Scenarios are active.
+                if(component.componentType === ComponentType.SCENARIO && (wpParent.componentActive || wpParent.componentParent)){
+                    WorkPackageComponents.update(
+                        {_id: wpComponentId},
+                        {
+                            $set:{componentActive: true}
+                        }
+                    );
+                }
+
+                // Feature Aspects if Feature is active
+                if(component.componentType === ComponentType.FEATURE_ASPECT && wpParent.componentActive){
                     WorkPackageComponents.update(
                         {_id: wpComponentId},
                         {

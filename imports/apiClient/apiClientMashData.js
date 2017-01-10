@@ -52,7 +52,11 @@ class ClientMashDataServices {
 
     updateTestData(userContext, viewOptions){
 
-        Meteor.call('mash.updateTestData', userContext, viewOptions);
+        Meteor.call('mash.populateWorkPackageMashData', userContext, done => {
+            Meteor.call('mash.updateTestData', userContext, viewOptions);
+        });
+
+
 
         // if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
         //     Meteor.call('mash.updateTestSummary', userContext, (err) => {
