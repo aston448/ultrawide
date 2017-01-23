@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignItemHeader from './DesignItemHeader.jsx';
 
 // Ultrawide Services
-import { ItemType } from '../../../constants/constants.js';
+import { ItemType, RoleType } from '../../../constants/constants.js';
 import ClientDesignServices from '../../../apiClient/apiClientDesign.js';
 import ClientBackupServices from '../../../apiClient/apiClientBackup.js';
 
@@ -63,21 +63,33 @@ export class Design extends Component {
             let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
 
             let buttons = '';
-            if (design.isRemovable) {
-                buttons = <ButtonGroup>
-                    <Button id="butWork" bsSize="xs"
-                            onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
-                        Design</Button>
-                    <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>
-                </ButtonGroup>
+            if(userRole === RoleType.DESIGNER) {
+                // Designer has various options
+                if (design.isRemovable) {
+                    buttons = <ButtonGroup>
+                        <Button id="butWork" bsSize="xs"
+                                onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
+                            Design</Button>
+                        <Button id="butRemove" bsSize="xs"
+                                onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove
+                            Design</Button>
+                    </ButtonGroup>
+                } else {
+                    buttons = <ButtonGroup>
+                        <Button id="butWork" bsSize="xs"
+                                onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
+                            Design</Button>
+                        <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup
+                            Design</Button>
+                    </ButtonGroup>
+                }
             } else {
-                buttons = <ButtonGroup>
-                    <Button id="butWork" bsSize="xs"
-                            onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
-                        Design</Button>
-                    <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup
-                        Design</Button>
-                </ButtonGroup>
+                // Other users can just work on a Design
+                buttons =
+                    <ButtonGroup>
+                        <Button id="butWork" bsSize="xs"
+                                onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+                    </ButtonGroup>
             }
 
             return (

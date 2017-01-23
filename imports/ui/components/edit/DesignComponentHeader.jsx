@@ -929,6 +929,8 @@ class DesignComponentHeader extends Component{
             switch(currentItem.componentType){
 
                 case ComponentType.FEATURE:
+                    // Feature level test summary
+
                     let featureRowClass = 'scenario-test-row-untested';
 
                     if(testSummaryData) {
@@ -960,6 +962,8 @@ class DesignComponentHeader extends Component{
                     break;
 
                 case ComponentType.SCENARIO:
+                    // Scenario level test summary
+
                     let rowClass = 'scenario-test-row-untested';
 
                     if(testSummaryData) {
