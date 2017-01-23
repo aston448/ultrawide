@@ -37,17 +37,19 @@ Meteor.methods({
     'testDesignUpdates.editDesignUpdate'(designUpdateName, userName, userRole){
 
         const userContext = TestDataHelpers.getUserContext(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, designUpdate._id);
+        ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
     },
 
     'testDesignUpdates.viewDesignUpdate'(designUpdateName, userName, userRole){
 
         const userContext = TestDataHelpers.getUserContext(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, designUpdate._id);
+        ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
     },
 
     'testDesignUpdates.updateDesignUpdateName'(newName, userRole, userName){
