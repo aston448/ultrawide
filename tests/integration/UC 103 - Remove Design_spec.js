@@ -77,7 +77,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
         // Complete the Design Version and create the next Updatable version
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
         // And edit the new Design Version
         server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion2', 'gloria', RoleType.DESIGNER);
