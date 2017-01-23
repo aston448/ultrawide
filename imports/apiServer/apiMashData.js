@@ -16,8 +16,8 @@ Meteor.methods({
     //     IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
     // },
 
-    'mash.loadUserFeatureFileData'(userContext, filePath){
-        MashDataServices.loadUserFeatureFileData(userContext, filePath);
+    'mash.loadUserFeatureFileData'(userContext){
+        MashDataServices.loadUserFeatureFileData(userContext);
     },
 
     'mash.createMashData'(userContext){

@@ -56,7 +56,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id)
+        ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false)
     },
 
 });

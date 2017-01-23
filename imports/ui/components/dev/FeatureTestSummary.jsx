@@ -62,18 +62,35 @@ class TestSummary extends Component {
             let resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
             let resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+            let resultFeatureSummary = '';
 
-            // If any fails don't highlight passes
-            if(testSummaryData.featureTestFailCount > 0){
-                resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
-                resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
+            // If no Scenarios at all indicate design deficit
+            if(testSummaryData.featureNoTestCount === 0 && testSummaryData.featureTestFailCount === 0 && testSummaryData.featureTestPassCount === 0){
+                resultFeatureSummary = 'feature-summary-no-scenarios';
             } else {
-                // Highlight passes if any and no fails
-                if(testSummaryData.featureTestPassCount > 0){
-                    resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
+                // If any fails it's a FAIL
+                if (testSummaryData.featureTestFailCount > 0) {
+                    resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_NO_HIGHLIGHT;
+                    resultClassFail = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_FAIL;
+                    resultFeatureSummary = 'feature-summary-bad';
                 } else {
-                    // No passes or failures so highlight number of tests
-                    resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
+                    // Highlight passes if any and no fails
+                    if (testSummaryData.featureTestPassCount > 0) {
+                        resultClassPass = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_PASS;
+                    } else {
+                        // No passes or failures so highlight number of tests
+                        resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
+                    }
+                    if (testSummaryData.featureNoTestCount > 0) {
+                        if (testSummaryData.featureTestPassCount > 0) {
+                            resultFeatureSummary = 'feature-summary-mmm';
+                        } else {
+                            resultFeatureSummary = 'feature-summary-meh';
+                        }
+                    } else {
+                        // All passes and no pending tests
+                        resultFeatureSummary = 'feature-summary-good';
+                    }
                 }
             }
 
@@ -88,9 +105,12 @@ class TestSummary extends Component {
                             <span className={resultClassFail}>Failing Tests:</span>
                             <span className={resultClassFail}>{testSummaryData.featureTestFailCount}</span>
                         </Col>
-                        <Col md={4} className="close-col">
+                        <Col md={3} className="close-col">
                             <span className={resultClassNotTested}>Not Tested:</span>
                             <span className={resultClassNotTested}>{testSummaryData.featureNoTestCount}</span>
+                        </Col>
+                        <Col md={1} className="close-col">
+                            <div className={resultFeatureSummary}><Glyphicon glyph="th"/></div>
                         </Col>
                     </Row>
                 </Grid>

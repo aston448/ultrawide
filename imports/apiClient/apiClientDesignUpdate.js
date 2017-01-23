@@ -324,7 +324,7 @@ class ClientDesignUpdateServices {
         const newContext = this.setDesignUpdate(userContext, designUpdateToEditId);
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(viewOptions, newContext);
+        //ClientMashDataServices.updateTestData(viewOptions, newContext);
 
         // Edit mode
         store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
@@ -352,7 +352,7 @@ class ClientDesignUpdateServices {
         const newContext = this.setDesignUpdate(userContext, designUpdateToViewId);
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(viewOptions, newContext);
+        // ClientMashDataServices.updateTestData(viewOptions, newContext);
 
         // View mode
         store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));

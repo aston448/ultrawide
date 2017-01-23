@@ -4,7 +4,7 @@ import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_tes
 import { DesignComponents }             from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
-import { UserUnitTestMashData }          from '../../collections/dev/user_unit_test_mash_data.js';
+import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
 
 // Ultrawide services
 import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, LogLevel }   from '../../constants/constants.js';
@@ -59,6 +59,7 @@ class TestSummaryServices {
         designScenarios.forEach((designScenario) =>{
 
             let integrationTestResult = null;
+            let scenarioName = '';
             let featureReferenceId = '';
 
             let acceptanceTestDisplay = MashTestStatus.MASH_NOT_LINKED;
@@ -68,41 +69,51 @@ class TestSummaryServices {
 
             // See if we have any test results
 
-            // Integration Tests
+            // Get Scenario Name
             if(userContext.designUpdateId === 'NONE'){
-                integrationTestResult = UserIntTestResults.findOne(
-                    {
-                        userId:     userContext.userId,
-                        testName:   designScenario.componentName
-                    }
-                );
+                scenarioName = designScenario.componentName;
                 featureReferenceId = designScenario.componentFeatureReferenceId;
             } else {
-                integrationTestResult = UserIntTestResults.findOne(
-                    {
-                        userId:     userContext.userId,
-                        testName:   designScenario.componentNameNew
-                    }
-                );
+                scenarioName = designScenario.componentNameNew;
                 featureReferenceId = designScenario.componentFeatureReferenceIdNew;
             }
+
+
+
+            // Integration Tests
+            integrationTestResult = UserIntTestResults.findOne(
+                {
+                    userId:     userContext.userId,
+                    testName:   scenarioName
+                }
+            );
 
             if(integrationTestResult){
                 integrationTestDisplay = integrationTestResult.testResult;
             }
 
-            // Unit Tests
-            unitTestPasses = UserUnitTestMashData.find({
-                userId:     userContext.userId,
-                designScenarioReferenceId: designScenario.componentReferenceId,
-                testOutcome: MashTestStatus.MASH_PASS
+            // Unit Tests - tests related to a Scenario
+            let searchRegex = new RegExp(scenarioName);
+
+            if(scenarioName === 'A list of all Designs is visible to all users') {
+                console.log("Looking for test results for " + searchRegex);
+            }
+
+            unitTestPasses = UserUnitTestResults.find({
+                userId:         userContext.userId,
+                testFullName:   {$regex: searchRegex},
+                testResult:     MashTestStatus.MASH_PASS
             }).count();
 
-            unitTestFails= UserUnitTestMashData.find({
-                userId:     userContext.userId,
-                designScenarioReferenceId: designScenario.componentReferenceId,
-                testOutcome: MashTestStatus.MASH_FAIL
+            unitTestFails= UserUnitTestResults.find({
+                userId:         userContext.userId,
+                testFullName:   {$regex: searchRegex},
+                testResult:     MashTestStatus.MASH_FAIL
             }).count();
+
+            if(scenarioName === 'A list of all Designs is visible to all users') {
+                console.log("    Found " + unitTestPasses + " passes");
+            }
 
             UserDevTestSummaryData.insert({
                 userId:                         userContext.userId,
@@ -112,8 +123,8 @@ class TestSummaryServices {
                 featureReferenceId:             featureReferenceId,
                 accTestStatus:                  acceptanceTestDisplay,
                 intTestStatus:                  integrationTestDisplay,
-                unitTestPassCount:               unitTestPasses,
-                unitTestFailCount:               unitTestFails,
+                unitTestPassCount:              unitTestPasses,
+                unitTestFailCount:              unitTestFails,
                 featureSummaryStatus:           FeatureTestSummaryStatus.FEATURE_NO_TESTS
             });
 

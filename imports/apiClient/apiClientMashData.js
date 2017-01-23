@@ -50,25 +50,31 @@ class ClientMashDataServices {
 
     }
 
-    updateTestData(userContext, viewOptions){
+    updateTestData(view, userContext, viewOptions, currentProgressDataValue){
 
-        Meteor.call('mash.populateWorkPackageMashData', userContext, done => {
-            Meteor.call('mash.updateTestData', userContext, viewOptions);
-        });
+        switch(view){
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                // Need the Mash data
+                Meteor.call('mash.populateWorkPackageMashData', userContext, done => {
+                    Meteor.call('mash.updateTestData', userContext, viewOptions);
+                });
+                break;
+            default:
+                // Just need the results
+                Meteor.call('mash.updateTestData', userContext, viewOptions, done => {
+
+                    // Make sure the design view updates when test summary data is showing
+                    if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
+
+                        store.dispatch(updateProgressData(!currentProgressDataValue));
+
+                    }
+                });
+        }
 
 
 
-        // if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
-        //     Meteor.call('mash.updateTestSummary', userContext, (err) => {
-        //         //store.dispatch(updateProgressData(!currentProgressDataValue));
-        //     });
-        // }
-        //
-        // if(viewOptions.devIntTestsVisible){
-        //     Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
-        //         //store.dispatch(updateProgressData(!currentProgressDataValue));
-        //     });
-        // }
 
 
     }

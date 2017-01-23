@@ -31,23 +31,25 @@ export class DesignVersion extends Component {
         super(props);
     }
 
-    onEditDesignVersion(userRole, viewOptions, userContext, dv){
+    onEditDesignVersion(userRole, viewOptions, userContext, dv, progressData){
 
         ClientDesignVersionServices.editDesignVersion(
             userRole,
             viewOptions,
             userContext,
-            dv._id
+            dv._id,
+            progressData
         );
     }
 
-    onViewDesignVersion(userRole, viewOptions, userContext, dv){
+    onViewDesignVersion(userRole, viewOptions, userContext, dv, progressData){
 
         ClientDesignVersionServices.viewDesignVersion(
             userRole,
             viewOptions,
             userContext,
-            dv
+            dv,
+            progressData
         );
     }
 
@@ -93,7 +95,7 @@ export class DesignVersion extends Component {
     }
 
     render() {
-        const {designVersion, userRole, viewOptions, userContext} = this.props;
+        const {designVersion, userRole, viewOptions, userContext, progressData} = this.props;
 
         let itemStyle = (designVersion._id === userContext.designVersionId ? 'design-item di-active' : 'design-item');
 
@@ -109,8 +111,8 @@ export class DesignVersion extends Component {
                     // Designers can Edit View or Publish
                     buttons =
                         <ButtonGroup>
-                            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion)}>Edit</Button>
-                            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
+                            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>Edit</Button>
+                            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
                             <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>
                         </ButtonGroup>;
 
@@ -126,8 +128,8 @@ export class DesignVersion extends Component {
                         // Designers can view it, withdraw it if not adopted or create the next version from updates...
                         buttons =
                             <ButtonGroup>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
-                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion)}>Edit</Button>
+                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
+                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>Edit</Button>
                                 <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignVersion(userRole, userContext, designVersion)}>Withdraw</Button>
                                 <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next Design Version</Button>
                             </ButtonGroup>;
@@ -138,7 +140,7 @@ export class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
+                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
                                 </ButtonGroup>
                             </div>;
                             break;
@@ -147,7 +149,7 @@ export class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
+                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
                                 </ButtonGroup>
                             </div>;
                         break;
@@ -162,8 +164,8 @@ export class DesignVersion extends Component {
                     case RoleType.DESIGNER:
                         buttons =
                             <ButtonGroup>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
-                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion)}>Edit</Button>
+                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
+                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>Edit</Button>
                                 <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next Design Version</Button>
                             </ButtonGroup>;
                         break;
@@ -216,7 +218,8 @@ function mapStateToProps(state) {
     return {
         userRole:                   state.currentUserRole,
         viewOptions:                state.currentUserViewOptions,
-        userContext:                state.currentUserItemContext
+        userContext:                state.currentUserItemContext,
+        progressData:               state.currentProgressDataValue
     }
 }
 

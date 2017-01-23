@@ -56,6 +56,8 @@ class MashDataServices{
 
             let testSummaryVisible = (viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible);
 
+            console.log("TEST SUMMARY VISIBLE: " + testSummaryVisible)
+
             if(viewOptions.devAccTestsVisible || testSummaryVisible){
                 // Get the latest feature files
                 MashFeatureFileModules.loadUserFeatureFileData(userContext);
@@ -86,6 +88,7 @@ class MashDataServices{
 
             if(testSummaryVisible){
                 // Recreate the summary mash
+                console.log("Refreshing SUMMARY")
                 TestSummaryServices.refreshTestSummaryData(userContext);
             }
 

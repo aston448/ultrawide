@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import ClientDesignVersionServices      from '../../imports/apiClient/apiClientDesignVersion.js';
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
-import {RoleType} from '../../imports/constants/constants.js';
+import { ViewType, RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 

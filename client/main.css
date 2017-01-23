@@ -1036,6 +1036,46 @@ input {
     color: darkblue;
 }
 
+.feature-summary-good{
+    margin: 2px 0 0 0;
+    padding: 0 0 0 5px;
+    color: lightgreen;
+    background-color: limegreen;
+    border: 1px solid black;
+}
+
+.feature-summary-mmm {
+    margin: 2px 0 0 0;
+    padding: 0 0 0 5px;
+    color: lightgrey;
+    background-color: darkseagreen;
+    border: 1px solid black;
+}
+
+.feature-summary-meh{
+    margin: 2px 0 0 0;
+    padding: 0 0 0 5px;
+    color: ghostwhite;
+    background-color: lightgrey;
+    border: 1px solid black;
+}
+
+.feature-summary-bad{
+    margin: 2px 0 0 0;
+    padding: 0 0 0 5px;
+    color: lightpink;
+    background-color: red;
+    border: 1px solid black;
+}
+
+.feature-summary-no-scenarios{
+    margin: 2px 0 0 0;
+    padding: 0 0 0 5px;
+    color: darkgrey;
+    background-color: ghostwhite;
+    border: 1px solid darkgrey;
+}
+
 .mash-linked {
     color: black;
 }
@@ -1050,10 +1090,6 @@ input {
 
 .mash-not-linked {
     color: lightgrey;
-}
-
-.mash-not-implemented {
-    color: darkgrey;
 }
 
 .mash-pending{

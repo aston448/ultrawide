@@ -17,7 +17,7 @@ import ServerDesignVersionApi       from '../apiServer/apiDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage, updateProgressData} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -256,7 +256,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
-    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId){
+    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, progressData){
 
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
@@ -278,8 +278,10 @@ class ClientDesignVersionServices{
             let loading = ClientContainerServices.getDevData();
         }
 
-        // Get the latest test results
-        ClientMashDataServices.updateTestData(viewOptions, updatedContext);
+        // Get the latest test results if summary showing
+        if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
+            ClientMashDataServices.updateTestData(ViewType.DESIGN_NEW_EDIT, updatedContext, viewOptions, progressData);
+        }
 
         // Switch to the design editor view
         store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
@@ -293,7 +295,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersion){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersion._id);
@@ -314,15 +316,10 @@ class ClientDesignVersionServices{
             let loading = ClientContainerServices.getDevData();
         }
 
-        // Get the latest DEV data for the Mash
-        ClientMashDataServices.createDevMashData(updatedContext);
-
-        // Get the latest test results
-        ClientMashDataServices.updateTestData(viewOptions, updatedContext);
-
 
         // Decide what the actual view should be.  A designer with a New or Draft DV
         // can have the option to switch into edit mode.  Anyone else is view only
+        let view = ViewType.SELECT;
 
         switch(userRole){
             case RoleType.DESIGNER:
@@ -330,19 +327,26 @@ class ClientDesignVersionServices{
                     case DesignVersionStatus.VERSION_NEW:
                     case DesignVersionStatus.VERSION_DRAFT:
                         // For new / draft design versions, viewing does not preclude switching to editing
-                        store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
+                        view = ViewType.DESIGN_NEW_EDIT;
                         break;
 
                     case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                         // For final design versions view is all you can do
-                        store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
+                        view = ViewType.DESIGN_PUBLISHED_VIEW;
                         break;
                 }
-                store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
                 break;
             default:
-                store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
-                store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                view = ViewType.DESIGN_PUBLISHED_VIEW;
+        }
+
+        // And change the view
+        store.dispatch(setCurrentView(view));
+        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+
+        // Get the latest test results if summary showing
+        if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
+            ClientMashDataServices.updateTestData(view, updatedContext, viewOptions, progressData);
         }
 
         return true;

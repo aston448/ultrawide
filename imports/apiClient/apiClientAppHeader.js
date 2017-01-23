@@ -35,7 +35,7 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    toggleViewOption(userContext, optionType, currentOptions, currentDataValue){
+    toggleViewOption(view, userContext, optionType, currentOptions, currentDataValue){
         // Toggles a particular view option
         let newOptions = currentOptions;
 
@@ -54,7 +54,7 @@ class ClientAppHeaderServices{
             case ViewOptionType.DEV_UNIT_TESTS:
                 if(newOptions[optionType]){
                     // Item is being switched on so load up the data
-                    ClientMashDataServices.updateTestData(userContext, newOptions);
+                    ClientMashDataServices.updateTestData(view, userContext, newOptions);
                 }
                 break;
             default:

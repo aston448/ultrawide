@@ -62,24 +62,40 @@ class TestSummary extends Component {
             let accResultClass = 'test-summary-result ' + testSummaryData.accTestStatus;
             let intResultClass = 'test-summary-result ' + testSummaryData.intTestStatus;
 
+            let unitResultClass = 'test-summary-result mash-not-implemented';
+            let unitTestResult = <span className={unitResultClass}>No Tests</span>;
+
+            if(testSummaryData.unitTestPassCount > 0 || testSummaryData.unitTestFailCount > 0){
+
+                if(testSummaryData.unitTestFailCount > 0){
+                    unitResultClass = 'test-summary-result mash-fail';
+                } else {
+                    unitResultClass = 'test-summary-result mash-pass';
+                }
+
+                unitTestResult =
+                    <span>
+                        <span className={unitResultClass}>{'Pass: ' + testSummaryData.unitTestPassCount}</span>
+                        <span className={unitResultClass}>{'Fail: ' + testSummaryData.unitTestFailCount}</span>
+                    </span>;
+            }
+
+
+
             return(
                 <Grid className="close-grid">
                     <Row>
-                        <Col md={3} className="close-col">
+                        <Col md={4} className="close-col">
                             <span className="test-summary-text">Accept:</span>
                             <span className={accResultClass}>{TextLookups.mashTestStatus(testSummaryData.accTestStatus)}</span>
                         </Col>
-                        <Col md={3} className="close-col">
+                        <Col md={4} className="close-col">
                             <span className="test-summary-text">Integ:</span>
                             <span className={intResultClass}>{TextLookups.mashTestStatus(testSummaryData.intTestStatus)}</span>
                         </Col>
-                        <Col md={3} className="close-col">
-                            <span className="test-summary-text">Unit Pass:</span>
-                            <span className="test-summary-text">{testSummaryData.unitTestPassCount}</span>
-                        </Col>
-                        <Col md={3} className="close-col">
-                            <span className="test-summary-text">Unit Fail:</span>
-                            <span className="test-summary-text">{testSummaryData.unitTestFailCount}</span>
+                        <Col md={4} className="close-col">
+                            <span className="test-summary-text">Unit:</span>
+                            {unitTestResult}
                         </Col>
                     </Row>
                 </Grid>

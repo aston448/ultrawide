@@ -374,15 +374,20 @@ class ClientWorkPackageServices {
         // Get the latest design data for the Mash
         ClientMashDataServices.populateWorkPackageMashData(updatedContext);
 
+        // Get new View...
+        let view = ViewType.SELECT;
+        if(userContext.designUpdateId === 'NONE') {
+            view = ViewType.DEVELOP_BASE_WP;
+        } else {
+            view = ViewType.DEVELOP_UPDATE_WP;
+        }
+
         // Get the latest test results
-        ClientMashDataServices.updateTestData(updatedContext, viewOptions);
+        ClientMashDataServices.updateTestData(view, updatedContext, viewOptions);
 
         // Switch to Dev View
-        if(userContext.designUpdateId === 'NONE') {
-            store.dispatch(setCurrentView(ViewType.DEVELOP_BASE_WP));
-        } else {
-            store.dispatch(setCurrentView(ViewType.DEVELOP_UPDATE_WP));
-        }
+        store.dispatch(setCurrentView(view));
+
     }
 }
 
