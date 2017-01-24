@@ -6,10 +6,17 @@ Meteor.methods({
 
     'verifyUserContext.designIs'(designName, userName){
 
-        const design = TestDataHelpers.getDesign(designName);
+        let design = null;
+        let designId = 'NONE';
+
+        if(designName != 'NONE'){
+            design = TestDataHelpers.getDesign(designName);
+            designId = design._id;
+        }
+
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        if(userContext.designId != design._id){
+        if(userContext.designId != designId){
             throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: " + design._id);
         }
     },
@@ -25,6 +32,15 @@ Meteor.methods({
     },
 
     // Methods to verify that context is cleared
+    'verifyUserContext.designIsNone'(userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        if(userContext.designId != 'NONE'){
+            throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: NONE");
+        }
+    },
+
     'verifyUserContext.designVersionIsNone'(userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

@@ -117,9 +117,9 @@ describe('UC 103 - Remove Design', function() {
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design1 removed from user contexts
-        server.call('verifyUserContext.designIs', 'NONE', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.designIs', 'NONE', 'hugh', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.designIs', 'NONE', 'miles', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIsNone', 'gloria', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIsNone', 'hugh', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIsNone', 'miles', (function(error, result){expect(!error);}));
     });
 
     it('When a Design is removed, all subcomponents of that Design are deleted', function() {
