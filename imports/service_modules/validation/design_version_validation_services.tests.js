@@ -1,4 +1,5 @@
 import {DesignVersions} from '../../collections/design/design_versions.js';
+import {DesignUpdates} from '../../collections/design_update/design_updates.js';
 
 import DesignVersionValidationServices from '../../service_modules/validation/design_version_validation_services.js';
 
@@ -12,44 +13,56 @@ import { chai } from 'meteor/practicalmeteor:chai';
 beforeEach(function(){
 
     StubCollections.add([DesignVersions]);
+    StubCollections.add([DesignUpdates]);
     StubCollections.stub();
 
-    DesignVersions.insert({
-        designId:               'ABC',
+    const dv001 = DesignVersions.insert({
+        designId:               '001',
         designVersionName:      'New',
         designVersionNumber:    '0.1',
         designVersionStatus:    DesignVersionStatus.VERSION_NEW
     });
 
-    DesignVersions.insert({
-        designId:               'ABC',
+    const dv002 = DesignVersions.insert({
+        designId:               '001',
         designVersionName:      'Draft',
         designVersionNumber:    '0.1',
         designVersionStatus:    DesignVersionStatus.VERSION_DRAFT
     });
 
-    DesignVersions.insert({
-        designId:               'ABC',
+    const dv003 = DesignVersions.insert({
+        designId:               '001',
         designVersionName:      'Complete',
         designVersionNumber:    '0.1',
         designVersionStatus:    DesignVersionStatus.VERSION_DRAFT_COMPLETE
     });
 
-    DesignVersions.insert({
-        designId:               'ABC',
+    const dv004 = DesignVersions.insert({
+        designId:               '001',
         designVersionName:      'Updatable',
         designVersionNumber:    '0.1',
         designVersionStatus:    DesignVersionStatus.VERSION_UPDATABLE
     });
 
-    DesignVersions.insert({
-        designId:               'ABC',
+    const dv005 = DesignVersions.insert({
+        designId:               '001',
         designVersionName:      'Updatable Complete',
         designVersionNumber:    '0.1',
         designVersionStatus:    DesignVersionStatus.VERSION_UPDATABLE_COMPLETE
     });
 
+    const dv006 = DesignVersions.insert({
+        designId:               '001',
+        designVersionName:      'Draft Updates',
+        designVersionNumber:    '0.1',
+        designVersionStatus:    DesignVersionStatus.VERSION_DRAFT
+    });
 
+    DesignUpdates.insert({
+        designVersionId:            dv006,
+        updateName:                 'Update1',
+        updateReference:            'CR001'
+    });
 
 });
 
@@ -141,5 +154,116 @@ describe('Only a New Design Version can be published', function () {
 
         });
 
+    });
+});
+
+describe('Only a Draft Design Version can be withdrawn', function () {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns VALID when a Designer withdraws a Draft Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.equal(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Designer returned INVALID!');
+
+        });
+
+        it('returns INVALID when a Designer withdraws a New Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a New Design Version by a Designer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Designer withdraws a Complete Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Complete Design Version by a Designer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Designer withdraws an Updatable Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Complete Design Version by a Designer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Designer withdraws an Updatable Complete Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Complete Design Version by a Designer returned VALID!');
+
+        });
+
+    });
+});
+
+describe('Only a Designer can withdraw a Design Version', function () {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns VALID when a Designer withdraws a Draft Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.equal(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Designer returned INVALID!');
+
+        });
+
+        it('returns INVALID when a Developer withdraws a Draft Design Version', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Developer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Manager withdraws a Draft Design Version', function () {
+
+            const role = RoleType.MANAGER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Manager returned VALID!');
+
+        });
+
+    });
+
+});
+
+describe('A Design Version that has Design Updates cannot be withdrawn', function () {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns INVALID when a Designer withdraws a Draft Design Version with Updates', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version with Updates by a Designer returned VALID!');
+
+        });
     });
 });
