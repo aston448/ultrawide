@@ -634,7 +634,59 @@ class ClientUserContextServices {
         } else {
             return 'NONE';
         }
-    }
+    };
+
+    resetContextsOnDesignRemoval(removedDesignId){
+
+        // This prevents errors after re-login if a Design is removed that other people have accessed
+
+        const affectedUsers = UserCurrentEditContext.find({designId: removedDesignId}).fetch();
+
+        affectedUsers.forEach((user) => {
+
+            UserCurrentEditContext.update(
+                {_id: user._id},
+                {
+                    $set:{
+                        designId:                       'NONE',
+                        designVersionId:                'NONE',
+                        designUpdateId:                 'NONE',
+                        workPackageId:                  'NONE',
+                        designComponentId:              'NONE',
+                        designComponentType:            'NONE',
+                        featureReferenceId:             'NONE',
+                        featureAspectReferenceId:       'NONE',
+                        scenarioReferenceId:            'NONE',
+                        scenarioStepId:                 'NONE',
+                    }
+                }
+            );
+        })
+    };
+
+    resetContextsOnDesignComponentRemoval(removedDesignComponentId){
+
+        // This prevents errors after re-login if a Design Component is removed that other people have accessed
+
+        const affectedUsers = UserCurrentEditContext.find({designComponentId: removedDesignComponentId}).fetch();
+
+        affectedUsers.forEach((user) => {
+
+            UserCurrentEditContext.update(
+                {_id: user._id},
+                {
+                    $set:{
+                        designComponentId:              'NONE',
+                        designComponentType:            'NONE',
+                        featureReferenceId:             'NONE',
+                        featureAspectReferenceId:       'NONE',
+                        scenarioReferenceId:            'NONE',
+                        scenarioStepId:                 'NONE',
+                    }
+                }
+            );
+        })
+    };
 
 }
 

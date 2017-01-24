@@ -9,6 +9,7 @@ import { DesignMessages } from '../constants/message_texts.js'
 
 import ServerDesignApi      from '../apiServer/apiDesign.js';
 import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
+import ClientUserContextServices from '../apiClient/apiClientUserContext.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -141,6 +142,9 @@ class ClientDesignServices{
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));
+
+                // Reset the user context of other users where this Design is selected (if any)
+                ClientUserContextServices.resetContextsOnDesignRemoval(designId)
 
             }
         });

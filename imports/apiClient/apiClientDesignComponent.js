@@ -14,6 +14,7 @@ import { Validation } from '../constants/validation_errors.js';
 
 import ServerDesignComponentApi      from '../apiServer/apiDesignComponent.js';
 import DesignComponentValidationApi  from '../apiValidation/apiDesignComponentValidation.js';
+import ClientUserContextServices     from '../apiClient/apiClientUserContext.js';
 
 import {log} from '../common/utils.js';
 
@@ -392,6 +393,9 @@ class ClientDesignComponentServices{
                         messageType: MessageType.INFO,
                         messageText: DesignComponentMessages.MSG_DESIGN_COMPONENT_REMOVED
                     }));
+
+                    // Reset the user context of other users where this Design Component is selected (if any)
+                    ClientUserContextServices.resetContextsOnDesignComponentRemoval(designComponent._id)
                 }
             }
         );
