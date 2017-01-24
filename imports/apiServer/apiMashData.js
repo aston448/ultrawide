@@ -2,19 +2,9 @@
 import { Meteor } from 'meteor/meteor';
 
 import  MashDataServices            from '../servicers/dev/mash_data_services.js';
-import  TestSummaryServices         from '../servicers/dev/test_summary_services.js';
-import  IntegrationTestServices     from '../servicers/dev/integration_test_services.js';
 
 // Meteor methods
 Meteor.methods({
-
-    // 'mash.updateTestSummary'(userContext){
-    //     TestSummaryServices.refreshTestSummaryData(userContext, 'CHIMP_CUCUMBER', 'CHIMP_MOCHA', 'METEOR_MOCHA');
-    // },
-    //
-    // 'mash.updateIntegrationTestData'(userContext){
-    //     IntegrationTestServices.getIntegrationTestResults('CHIMP_MOCHA', userContext);
-    // },
 
     'mash.loadUserFeatureFileData'(userContext){
         MashDataServices.loadUserFeatureFileData(userContext);

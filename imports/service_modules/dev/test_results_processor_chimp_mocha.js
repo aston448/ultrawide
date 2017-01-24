@@ -83,7 +83,7 @@ class ChimpMochaTestServices{
                                 testName:           test.title,
                                 testFullName:       test.fullTitle,
                                 testResult:         MashTestStatus.MASH_FAIL,
-                                testError:          test.err.error,
+                                testError:          test.err.message,       // This is the Reason plus the Error
                                 testErrorReason:    test.err.reason,
                                 testDuration:       test.duration,
                                 stackTrace:         test.err.stack

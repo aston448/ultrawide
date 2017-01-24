@@ -176,7 +176,7 @@ class WorkPackageFeatureMashList extends Component {
         }
 
 
-        let mainPanel = 'No data for this item - try refreshing test data';
+        let mainPanel = <div></div>;
 
         if(designMashItemData.length > 0) {
             switch(userContext.designComponentType){
@@ -258,6 +258,14 @@ class WorkPackageFeatureMashList extends Component {
 
 
             }
+        } else {
+
+            if(userContext.designComponentId === 'NONE'){
+                mainPanel = <div className="design-item-note">Select a Design item</div>;
+            } else {
+                mainPanel = <div className="design-item-note">No data for this item - try refreshing test data</div>;
+            }
+
         }
 
         return(

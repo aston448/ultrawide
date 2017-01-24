@@ -17,7 +17,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designId != designId){
-            throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: " + design._id);
+            throw new Meteor.Error("FAIL", "User context design id for user " + userName + " is: " + userContext.designId + " expected: " + design._id);
         }
     },
 
@@ -27,7 +27,7 @@ Meteor.methods({
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
         if(userContext.designVersionId != designVersion._id){
-            throw new Meteor.Error("FAIL", "User context design version id is: " + userContext.designVersionId + " expected: " + designVersion._id);
+            throw new Meteor.Error("FAIL", "User context design version id for user " + userName + " is: " + userContext.designVersionId + " expected: " + designVersion._id);
         }
     },
 
@@ -37,7 +37,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context design id is: " + userContext.designId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context design id for user " + userName + " is: " + userContext.designId + " expected: NONE");
         }
     },
 
@@ -46,7 +46,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designVersionId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context design version id is: " + userContext.designVersionId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context design version id for user " + userName + " is: " + userContext.designVersionId + " expected: NONE");
         }
     },
 
@@ -55,7 +55,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designUpdateId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context design update id is: " + userContext.designUpdateId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context design update id for user " + userName + " is: " + userContext.designUpdateId + " expected: NONE");
         }
     },
 
@@ -64,7 +64,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.workPackageId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context work package id is: " + userContext.workPackageId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context work package id for user " + userName + " is: " + userContext.workPackageId + " expected: NONE");
         }
     },
 
@@ -73,7 +73,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designComponentId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context design component id is: " + userContext.designComponentId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context design component id for user " + userName + " is: " + userContext.designComponentId + " expected: NONE");
         }
     },
 
@@ -82,7 +82,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.designComponentType != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context design component type is: " + userContext.designComponentType + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context design component type for user " + userName + " is: " + userContext.designComponentType + " expected: NONE");
         }
     },
 
@@ -91,7 +91,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.featureReferenceId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context feature reference is: " + userContext.featureReferenceId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context feature reference for user " + userName + " is: " + userContext.featureReferenceId + " expected: NONE");
         }
     },
 
@@ -100,7 +100,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.featureAspectReferenceId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context feature aspect reference is: " + userContext.featureAspectReferenceId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context feature aspect reference for user " + userName + " is: " + userContext.featureAspectReferenceId + " expected: NONE");
         }
     },
 
@@ -109,7 +109,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.scenarioReferenceId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context scenario reference is: " + userContext.scenarioReferenceId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context scenario reference for user " + userName + " is: " + userContext.scenarioReferenceId + " expected: NONE");
         }
     },
 
@@ -118,7 +118,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         if(userContext.scenarioStepId != 'NONE'){
-            throw new Meteor.Error("FAIL", "User context scenario step reference is: " + userContext.scenarioStepId + " expected: NONE");
+            throw new Meteor.Error("FAIL", "User context scenario step reference for user " + userName + " is: " + userContext.scenarioStepId + " expected: NONE");
         }
     },
 

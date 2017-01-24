@@ -812,7 +812,9 @@ class MashDataModules{
                             {
                                 $set: {
                                     intMashStatus: MashStatus.MASH_LINKED,
-                                    intMashTestStatus: testResult.testResult
+                                    intMashTestStatus: testResult.testResult,
+                                    intErrorMessage: testResult.testError,
+                                    intDuration: testResult.testDuration
                                 }
                             }
                         );
