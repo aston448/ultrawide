@@ -99,6 +99,28 @@ describe('UC 103 - Remove Design', function() {
         server.call('verifyDesigns.designExistsCalled', 'Design1', (function(error, result){expect(!error);}));
     });
 
+    it('When a Design is removed, any user with that Design as their default has the default cleared', function() {
+        // Setup -------------------------------------------------------------------------------------------------------
+        // Work on Design1
+        server.call('testDesigns.workDesign', 'Design1', 'gloria');
+        // Make sure all users have selected Design1
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
+        server.call('testDesigns.selectDesign', 'Design1', 'miles');
+        // Check
+        server.call('verifyUserContext.designIs', 'Design1', 'gloria', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIs', 'Design1', 'hugh', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIs', 'Design1', 'miles', (function(error, result){expect(!error);}));
+
+        // Execute -----------------------------------------------------------------------------------------------------
+        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+
+        // Verify ------------------------------------------------------------------------------------------------------
+        // Design1 removed from user contexts
+        server.call('verifyUserContext.designIs', 'NONE', 'gloria', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIs', 'NONE', 'hugh', (function(error, result){expect(!error);}));
+        server.call('verifyUserContext.designIs', 'NONE', 'miles', (function(error, result){expect(!error);}));
+    });
 
     it('When a Design is removed, all subcomponents of that Design are deleted', function() {
         // Setup -------------------------------------------------------------------------------------------------------
