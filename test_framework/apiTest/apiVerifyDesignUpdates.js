@@ -80,5 +80,17 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdates.designUpdateMergeActionIs'(designUpdateName, newMergeAction, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        if(designUpdate.updateMergeAction === newMergeAction){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected DU merge action " + newMergeAction + " but has action " + designUpdate.updateMergeAction);
+        }
+    },
+
 });
 

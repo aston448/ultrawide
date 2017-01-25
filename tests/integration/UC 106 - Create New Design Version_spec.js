@@ -173,6 +173,8 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Set it to IGNORE
         server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_IGNORE, RoleType.DESIGNER, 'gloria');
+        // Check
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE, 'gloria');
 
         // Execute
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
