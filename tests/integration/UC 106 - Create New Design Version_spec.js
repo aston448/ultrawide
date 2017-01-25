@@ -56,7 +56,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     });
 
-    it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with an Update', function(){
+    it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with a Design Update', function(){
 
         // Setup
         // Publish the New Design Version
