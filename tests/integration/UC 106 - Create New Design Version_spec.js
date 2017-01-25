@@ -56,7 +56,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     });
 
-    it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version', function(){
+    it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with an Update', function(){
 
         // Setup
         // Publish the New Design Version
@@ -66,8 +66,19 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Add a Design Update so it can be completed
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+        // Name it
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Publish it
+        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Set it to INCLUDE
+        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+        // Check
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
 
-        // Execute - create another new DV frm DesignVersion2
+        // Execute - create another new DV from DesignVersion2
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
 
         // Verify - new DV created with default name
