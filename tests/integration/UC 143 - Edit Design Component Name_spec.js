@@ -19,7 +19,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
     });
 
     afterEach(function(){

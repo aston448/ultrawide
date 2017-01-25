@@ -24,7 +24,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
     });
 
@@ -39,7 +39,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Setup
         // Publish the Design Version
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -61,7 +61,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Setup
         // Publish the New Design Version
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Create an Updatable DV from it
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
@@ -90,7 +90,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Setup
         // Publish the Design Version
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
         // Execute as Developer
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
@@ -138,7 +138,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Setup
         // Publish the New Design Version
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Create an Updatable DV from it
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
@@ -160,17 +160,19 @@ describe('UC 106 - Create New Design Version', function(){
         // Setup
         // Publish initial DV
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Create a new Updatable DV
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Name it
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
         // Add a Design Update
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         // Name it
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Publish it
+        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Set it to IGNORE
         server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_IGNORE, RoleType.DESIGNER, 'gloria');
         // Check
@@ -194,7 +196,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Setup
         // Publish the Design Version
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');

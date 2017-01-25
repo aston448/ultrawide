@@ -14,9 +14,9 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -44,11 +44,11 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
         // Setup - add a new update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Verify that Feature1 is not in the scope yet
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
 
         // Execute
@@ -73,11 +73,11 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
         // Setup - add a new update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Verify that Feature1 Actions is not in the scope yet
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
 
         // Execute
@@ -101,11 +101,11 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
         // Setup - add a new update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Verify that Feature1 Actions is not in the scope yet
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Execute
@@ -132,15 +132,15 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
         // Setup - add a new update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // And another one
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
         // Add Scenario1 to first update
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 

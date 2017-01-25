@@ -14,9 +14,9 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -44,7 +44,7 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
 
         // Setup - create a new Design Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
 
         // Execute
@@ -60,7 +60,7 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
 
         // Setup - create a new Design Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
 
         // Execute
@@ -77,9 +77,9 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
 
         // Setup - create a new Design Update and publish it
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, RoleType.DESIGNER, 'gloria');
 
         // Try as Developer
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
@@ -104,9 +104,9 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
 
         // Setup - create a new Design Update and publish it
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, RoleType.DESIGNER, 'gloria');
 
         // Try as Developer
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
@@ -131,13 +131,13 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
 
         // Setup - create a new Design Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate1', 'gloria');
         // And now a second Update....
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
 
         // Execute - try to give it same name as before
@@ -151,13 +151,13 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
     it('The same Design Update reference may be used on more than one Design Update for a Base Design Version', function(){
         // Setup - create a new Design Update
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate1', 'gloria');
         // And now a second Update....
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');

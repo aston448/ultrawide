@@ -14,9 +14,9 @@ describe('UC 501 - Add New Design Update', function(){
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -46,7 +46,7 @@ describe('UC 501 - Add New Design Update', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
 
         // Verify
         server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
@@ -61,7 +61,7 @@ describe('UC 501 - Add New Design Update', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'hugh');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', 'hugh', RoleType.DEVELOPER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DEVELOPER, 'hugh');
 
         // Verify
         server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'hugh');
@@ -71,7 +71,7 @@ describe('UC 501 - Add New Design Update', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'miles');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', 'miles', RoleType.MANAGER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.MANAGER, 'miles');
 
         // Verify
         server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'miles');
@@ -92,7 +92,7 @@ describe('UC 501 - Add New Design Update', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
 
         // Verify
         server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
@@ -103,13 +103,13 @@ describe('UC 501 - Add New Design Update', function(){
         // Setup - following on from previous test
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
         // Publish New DV to to Draft
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion21', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion21', RoleType.DESIGNER, 'gloria');
         // Check status is Draft
         server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion21', DesignVersionStatus.VERSION_DRAFT, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion21', 'gloria');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
 
         // Verify
         server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
@@ -124,7 +124,7 @@ describe('UC 501 - Add New Design Update', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
 
         // Verify
         server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');

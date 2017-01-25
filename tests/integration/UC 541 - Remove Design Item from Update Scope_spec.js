@@ -14,9 +14,9 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -44,10 +44,10 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
 
         //Setup - add a new Update and add Feature1 to scope
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
 
@@ -63,10 +63,10 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
 
         //Setup - add a new Update and add Feature1 Actions to scope
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
 
@@ -81,10 +81,10 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
 
         //Setup - add a new Update and add Scenario1 to scope
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 

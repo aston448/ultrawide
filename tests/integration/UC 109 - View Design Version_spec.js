@@ -51,7 +51,7 @@ describe('UC 109 - View Design Version', function(){
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
         // Publish it so its draft
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
 
         // Try for Designer
         // Execute

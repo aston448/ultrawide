@@ -7,7 +7,7 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testDesignUpdates.addDesignUpdate'(userName, userRole){
+    'testDesignUpdates.addDesignUpdate'(userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
@@ -22,7 +22,7 @@ Meteor.methods({
         ClientDesignUpdateServices.setDesignUpdate(userContext, designUpdate._id);
     },
 
-    'testDesignUpdates.publishDesignUpdate'(designUpdateName, userName, userRole){
+    'testDesignUpdates.publishDesignUpdate'(designUpdateName, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
@@ -30,11 +30,11 @@ Meteor.methods({
         ClientDesignUpdateServices.publishDesignUpdate(userRole, userContext, designUpdate._id);
     },
 
-    'testDesignUpdates.withdrawDesignUpdate'(designUpdateName, userName, userRole){
+    'testDesignUpdates.withdrawDesignUpdate'(designUpdateName, userRole, userName){
 
     },
 
-    'testDesignUpdates.editDesignUpdate'(designUpdateName, userName, userRole){
+    'testDesignUpdates.editDesignUpdate'(designUpdateName, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);

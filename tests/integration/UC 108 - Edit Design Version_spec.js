@@ -50,7 +50,7 @@ describe('UC 108 - Edit Design Version', function(){
         // Make sure the design is in the user context
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         // Publish it so its draft
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Go back and select the Design so that no Design Version in user context
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));

@@ -6,7 +6,7 @@ import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
-    'testWorkPackages.addNewWorkPackage'(userName, userRole, workPackageType){
+    'testWorkPackages.addNewWorkPackage'(workPackageType, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         let openWpItems = [];

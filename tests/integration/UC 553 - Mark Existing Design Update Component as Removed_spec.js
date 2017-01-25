@@ -14,9 +14,9 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -35,7 +35,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // And create a new update to work with
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
     });
@@ -49,7 +49,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('An existing Application and all Design Components below it can be removed in a Design Update', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
@@ -99,7 +99,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('An existing Design Section and all Design Components below it can be removed in a Design Update', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
@@ -152,7 +152,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('An existing Feature and all Design Components below it can be removed in a Design Update', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
@@ -206,7 +206,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('An existing Feature Aspect and all Design Components below it can be removed in a Design Update', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
@@ -262,7 +262,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('An existing Scenario can be removed in a Design Update', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
@@ -321,7 +321,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('A existing Design Update Component can only be removed in a Design Update in edit mode', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute - remove Scenario 1 in view mode
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_VIEW);
@@ -372,7 +372,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     it('An existing Design Update Component cannot be removed if any new Design Update Components have been added inside it in the current Design Update', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Add a new Scenario to Feature1 Actions
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
@@ -417,7 +417,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Setup Add a second Design Update...
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
 
@@ -428,7 +428,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
 
         // Execute - Try to remove the whole Application from DesignUpdate1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify - nothing existing is removed
@@ -482,7 +482,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Setup Add a second Design Update...
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
 
@@ -492,7 +492,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         server.call('verifyDesignUpdateComponents.componentIsInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
 
         // Execute - Try to remove the whole Application from DesignUpdate1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
 
         // Verify - nothing existing is removed or in scope
@@ -546,12 +546,12 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Setup Add a second Design Update...
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
 
         // Execute - remove Feature1 from DesignUpdate1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
 
         // Feature1 and all below it is in scope and removed

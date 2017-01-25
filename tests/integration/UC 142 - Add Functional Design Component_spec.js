@@ -42,7 +42,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
 
         // Execute
         // Add an Application
@@ -57,7 +57,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Add an Application
         server.call('testDesignComponents.addApplication', 'gloria');
         // Add a Design Section
@@ -76,7 +76,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Add an Application
         server.call('testDesignComponents.addApplication', 'gloria');
         // Add a Design Section
@@ -98,7 +98,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Add an Application
         server.call('testDesignComponents.addApplication', 'gloria');
         // Add a Design Section
@@ -123,7 +123,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
 
         // Execute
         // Add an Application - should fail in view mode

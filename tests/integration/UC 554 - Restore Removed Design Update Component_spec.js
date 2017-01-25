@@ -14,9 +14,9 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -35,7 +35,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // And create a new update to work with
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
     });
@@ -49,7 +49,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A removed existing Application and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
         // Verify - all stuff removed
         server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
@@ -88,7 +88,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A removed existing Design Section and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
         // Verify - all stuff removed
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
@@ -127,7 +127,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A removed existing Feature and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         // Verify - all stuff removed
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
@@ -166,7 +166,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A removed existing Feature Aspect and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         // Verify - all stuff removed
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
@@ -205,7 +205,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A removed existing Scenario can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
         // Verify - all stuff removed
         server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
@@ -246,7 +246,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A Design Update Component can only be restored in edit mode', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
 
         // Execute in View mode
@@ -259,7 +259,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A Design Update Component that is the child of a removed Design Update Component cannot be restored', function(){
 
         // Setup - remove everything
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
 
         // Try to restore Section1

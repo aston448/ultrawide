@@ -15,7 +15,7 @@ Meteor.methods({
         ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
     },
 
-    'testDesignVersions.publishDesignVersion'(designVersionName, userName, userRole){
+    'testDesignVersions.publishDesignVersion'(designVersionName, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);

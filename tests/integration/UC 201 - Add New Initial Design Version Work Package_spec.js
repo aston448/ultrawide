@@ -37,13 +37,13 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
 
         // Setup
         // Designer Publish DesignVersion1
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Manager select DesignVersion1
         server.call('testDesigns.selectDesign', 'Design1', 'miles');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
 
         // Execute - add WP as Manager
-        server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
 
         // Verify
         server.call('verifyWorkPackages.workPackageExistsCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
@@ -55,13 +55,13 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
 
         // Setup
         // Designer Publish DesignVersion1
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
 
         // Execute - Designer try to create WP
         // Designer select DesignVersion1
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('testWorkPackages.addNewWorkPackage', 'gloria', RoleType.DESIGNER, WorkPackageType.WP_BASE);
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.DESIGNER, 'gloria');
 
         // Verify
         server.call('verifyWorkPackages.workPackageDoesNotExistCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'gloria');
@@ -70,7 +70,7 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
         // Developer select DesignVersion1
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
-        server.call('testWorkPackages.addNewWorkPackage', 'hugh', RoleType.DEVELOPER, WorkPackageType.WP_BASE);
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.DEVELOPER, 'hugh');
 
         // Verify
         server.call('verifyWorkPackages.workPackageDoesNotExistCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'hugh');
@@ -85,7 +85,7 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
 
         // Execute - add WP as Manager
-        server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
 
         // Verify
         server.call('verifyWorkPackages.workPackageDoesNotExistCalled', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');

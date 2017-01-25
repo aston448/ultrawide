@@ -21,11 +21,11 @@ describe('UC 203 - Edit Work Package Name', function(){
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add a new Work Package
         server.call('testDesigns.selectDesign', 'Design1', 'miles');
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
     });
 
     afterEach(function(){
@@ -91,7 +91,7 @@ describe('UC 203 - Edit Work Package Name', function(){
         server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
         server.call('verifyWorkPackages.workPackageCalledCountIs', 'WorkPackage1', 1, 'miles');
         // Add another WP
-        server.call('testWorkPackages.addNewWorkPackage', 'miles', RoleType.MANAGER, WorkPackageType.WP_BASE);
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
 
         // Execute - select new WP and try to rename to WorkPackage1
         server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');

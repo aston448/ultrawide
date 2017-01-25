@@ -37,7 +37,7 @@ Meteor.methods({
         ClientDesignServices.workDesign(userContext, RoleType.DESIGNER, design._id)
     },
 
-    'testDesigns.removeDesign'(designName, userName, userRole){
+    'testDesigns.removeDesign'(designName, userRole, userName){
 
         const design = TestDataHelpers.getDesign(designName);
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -49,7 +49,7 @@ Meteor.methods({
 
     },
 
-    'testDesigns.editDesignVersion'(designName, designVersionName, userName, userRole){
+    'testDesigns.editDesignVersion'(designName, designVersionName, userRole, userName){
 
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);

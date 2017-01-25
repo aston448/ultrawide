@@ -14,9 +14,9 @@ describe('UC 555 - Move Design Update Component', function(){
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
         // Complete the Design Version and create the next
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
@@ -35,12 +35,12 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // And create a new update to work with
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Create some new data in the Design Update
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // App 2
         server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
@@ -56,7 +56,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('A new Design Section for a Design Update can be moved to a different Application', function(){
 
         // Setup - add new Design section to Application1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section3', 'gloria', ViewMode.MODE_EDIT);
 
@@ -75,7 +75,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('A new Design Section for a Design Update can be moved to a different Design Section', function(){
 
         // Setup - add new Design section to Section1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addSectionToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Section1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1', 'gloria', ViewMode.MODE_EDIT);
 
@@ -94,7 +94,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('A new Feature for a Design Update can be moved to a different Design Section', function(){
 
         // Setup - add new Feature to Section1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
 
@@ -113,7 +113,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('A new Scenario for a Design Update can be moved to a different in Scope Feature', function(){
 
         // Setup - add new Scenario to Feature1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
@@ -135,7 +135,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('A new Scenario for a Design Update can be moved to a different in Scope Feature Aspect', function(){
 
         // Setup - add new Scenario to Feature1 Actions
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
@@ -161,7 +161,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('An existing Design Section from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute - Try to move existing Section1 to Application2
         server.call(
@@ -178,7 +178,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('An existing Feature from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Execute - Try to move existing Feature1 to Section2
         server.call(
@@ -195,7 +195,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('An existing Feature Aspect from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Rename Feature2 Actions to rule out any duplicate name problems
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'Actions1', 'gloria', ViewMode.MODE_EDIT);
         // Make sure the target is in scope
@@ -216,7 +216,7 @@ describe('UC 555 - Move Design Update Component', function(){
     it('An existing Scenario from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Make sure the target is in scope
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
 

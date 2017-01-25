@@ -23,7 +23,7 @@ describe('UC 105 - Withdraw Design Version', function(){
 
         // Setup
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
 
         // Execute
@@ -43,7 +43,7 @@ describe('UC 105 - Withdraw Design Version', function(){
         // Setup -------------------------------------------------------------------------------------------------------
         // Get Designer to publish it...
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
 
         // See if Developer can unpublish

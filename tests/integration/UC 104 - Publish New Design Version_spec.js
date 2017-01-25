@@ -22,7 +22,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesigns.selectDesign', 'Design1', 'gloria');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}))
@@ -35,7 +35,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesigns.selectDesign', 'Design1', 'hugh');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.DEVELOPER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'hugh', (function(error, result){expect(!error);}));
@@ -45,7 +45,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesigns.selectDesign', 'Design1', 'miles');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.MANAGER);
+        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.MANAGER, 'hugh');
 
         // Verify ------------------------------------------------------------------------------------------------------
         server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'miles', (function(error, result){expect(!error);}))

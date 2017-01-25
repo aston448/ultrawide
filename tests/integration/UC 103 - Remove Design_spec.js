@@ -17,7 +17,7 @@ describe('UC 103 - Remove Design', function() {
 
     it('A Designer can remove a Design that is removable', function() {
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.DESIGNER, 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should not exist
@@ -29,7 +29,7 @@ describe('UC 103 - Remove Design', function() {
         // Work on Design1
         server.call('testDesigns.workDesign', 'Design1', 'gloria');
         // And edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Add an Application - Application1
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
@@ -41,7 +41,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.DESIGNER, 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist
@@ -52,14 +52,14 @@ describe('UC 103 - Remove Design', function() {
 
     it('A Design can only be removed by a Designer', function() {
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'hugh', RoleType.DEVELOPER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.DEVELOPER, 'hugh');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist
         server.call('verifyDesigns.designExistsCalled', 'Design1', (function(error, result){expect(!error);}));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'miles', RoleType.MANAGER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.MANAGER, 'miles');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist
@@ -74,13 +74,13 @@ describe('UC 103 - Remove Design', function() {
         // Name and Publish a Design Version
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         // Complete the Design Version and create the next Updatable version
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
         // And edit the new Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion2', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
         // Add an Application - Application1
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
@@ -92,7 +92,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.DESIGNER, 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist
@@ -113,7 +113,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('verifyUserContext.designIs', 'Design1', 'miles', (function(error, result){expect(!error);}));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.DESIGNER, 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design1 removed from user contexts
@@ -127,7 +127,7 @@ describe('UC 103 - Remove Design', function() {
         // Work on Design1
         server.call('testDesigns.workDesign', 'Design1', 'gloria');
         // And edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Add an Application - Application1
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
@@ -136,7 +136,7 @@ describe('UC 103 - Remove Design', function() {
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.removeDesign', 'Design1', 'gloria', RoleType.DESIGNER);
+        server.call('testDesigns.removeDesign', 'Design1', RoleType.DESIGNER, 'gloria');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should not exist
