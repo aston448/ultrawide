@@ -177,3 +177,31 @@ export const removeDesignUpdate = new ValidatedMethod({
     }
 
 });
+
+export const updateMergeAction = new ValidatedMethod({
+
+    name: 'designUpdate.updateMergeAction',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        designUpdateId:     {type: String},
+        newAction:          {type: String}
+    }).validator(),
+
+    run({userRole, designUpdateId, newAction}){
+
+        const result = DesignUpdateValidationApi.validateUpdateMergeAction(userRole, designUpdateId);
+
+        if (result != Validation.VALID) {
+            throw new Meteor.Error('designUpdate.updateMergeAction.failValidation', result)
+        }
+
+        try {
+            DesignUpdateServices.updateMergeAction(designUpdateId, newAction);
+        } catch (e) {
+            console.log(e);
+            throw new Meteor.Error('designUpdate.updateMergeAction.fail', e)
+        }
+    }
+
+});

@@ -1,4 +1,4 @@
-import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext} from '../constants/constants.js';
+import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -113,6 +113,18 @@ class TextLookups {
                 return 'Unit';
         }
     };
+
+    updateMergeActions(mergeAction){
+
+        switch(mergeAction){
+            case DesignUpdateMergeAction.MERGE_INCLUDE:
+                return 'Include in new version';
+            case DesignUpdateMergeAction.MERGE_ROLL:
+                return 'Roll forward';
+            case DesignUpdateMergeAction.MERGE_IGNORE:
+                return 'Ignore (Discard)';
+        }
+    }
 
 }
 

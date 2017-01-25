@@ -253,6 +253,41 @@ class ClientDesignUpdateServices {
         return true;
     };
 
+    // User changed the merge action on the Design Update
+    updateMergeAction(userRole, designUpdateId, newAction){
+
+        // Client validation
+        let result = DesignUpdateValidationApi.validateUpdateMergeAction(userRole, designUpdateId);
+
+        if(result != Validation.VALID){
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        // Real action call - server actions
+        ServerDesignUpdateApi.updateMergeAction(userRole, designUpdateId, newAction, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignUpdateMessages.MSG_DESIGN_UPDATE_MERGE_ACTION_SET
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return true;
+
+    }
+
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Sets the currently selected design update as part of the global state -------------------------------------------

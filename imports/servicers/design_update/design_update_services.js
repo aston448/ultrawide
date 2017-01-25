@@ -136,6 +136,21 @@ class DesignUpdateServices{
             }
         }
     };
+
+    updateMergeAction(designUpdateId, newAction){
+
+        if(Meteor.isServer){
+
+            DesignUpdates.update(
+                {_id: designUpdateId},
+                {
+                    $set:{
+                        updateMergeAction: newAction
+                    }
+                }
+            );
+        }
+    };
 }
 
 export default new DesignUpdateServices();

@@ -10,6 +10,7 @@ import DesignItemHeader from './DesignItemHeader.jsx';
 // Ultrawide Services
 import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';
 import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType} from '../../../constants/constants.js';
+import TextLookups from '../../../common/lookups.js';
 
 // Bootstrap
 import {Button, ButtonGroup, FormGroup, Radio, Checkbox} from 'react-bootstrap';
@@ -31,12 +32,10 @@ class DesignUpdate extends Component {
 
         this.state = {
             adopted: false,
+            mergeAction: props.designUpdate.updateMergeAction
         };
     }
 
-    // componentDidMount(){
-    //     this.setState({adopted: this.getUpdateAdoptionStatus(this.props.currentUserDevContext, this.props.designUpdate)});
-    // }
 
     onEditDesignUpdate(userRole, userContext, viewOptions, du){
 
@@ -94,6 +93,16 @@ class DesignUpdate extends Component {
     };
 
     onDevelopDesignUpdate(){
+
+    }
+
+    onMergeActionChange(userRole, du, newAction){
+
+        this.setState({mergeAction: newAction});
+
+        ClientDesignUpdateServices.updateMergeAction(userRole, du._id, newAction);
+
+        this.setNewDesignUpdateActive(this.props.userContext, du);
 
     }
 
@@ -186,17 +195,20 @@ class DesignUpdate extends Component {
                             <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
                             <Button bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>
-                        </ButtonGroup>
+                        </ButtonGroup>;
                     options =
                         <FormGroup>
-                            <Radio>
-                                {DesignUpdateMergeAction.MERGE_INCLUDE}
+                            <Radio checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
+                                   onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
+                                {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_INCLUDE)}
                             </Radio>
-                            <Radio>
-                                {DesignUpdateMergeAction.MERGE_IGNORE}
+                            <Radio checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
+                                   onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_ROLL)}>
+                                {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_ROLL)}
                             </Radio>
-                            <Radio>
-                                {DesignUpdateMergeAction.MERGE_ROLL}
+                            <Radio checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
+                                   onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_IGNORE)}>
+                                {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
                             </Radio>
                         </FormGroup>;
                 }

@@ -33,12 +33,6 @@ describe('UC 106 - Create New Design Version', function(){
     });
 
 
-    // Interface
-    it('A Design Version in a Draft or Updatable state has an option to create a new Design Version');
-
-    it('A confirmation screen shows the Design Updates to Merge and Carry Forward in the new Design Version');
-
-
     // Actions
     it('A Designer can create a new Updatable Design Version from an existing Draft Design Version', function(){
 

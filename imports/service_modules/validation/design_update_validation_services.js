@@ -138,6 +138,21 @@ class DesignUpdateValidationServices{
 
     };
 
+    validateMergeActions(userRole, designUpdate){
+
+        // User must be a Designer
+        if(userRole != RoleType.DESIGNER){
+            return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_MERGE_ACTION;
+        }
+
+        // Design Update must be Draft
+        if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT){
+            return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_MERGE_ACTION;
+        }
+
+        return Validation.VALID;
+    }
+
 }
 export default new DesignUpdateValidationServices();
 

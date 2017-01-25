@@ -50,7 +50,9 @@ export const DesignUpdateValidationErrors = {
     DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW:        'New Design Updates can only be viewed by a Designer',
     DESIGN_UPDATE_INVALID_NAME_DUPLICATE:       'Design Update name already exists for another update in this Design Version',
     DESIGN_UPDATE_INVALID_ROLE_REMOVE:          'Only a Designer can remove Design Updates',
-    DESIGN_UPDATE_NOT_REMOVABLE:                'Only new or unused Design Updates can be removed'
+    DESIGN_UPDATE_NOT_REMOVABLE:                'Only new or unused Design Updates can be removed',
+    DESIGN_UPDATE_INVALID_ROLE_MERGE_ACTION:    'Only a Designer can set merge actions for a Design Update',
+    DESIGN_UPDATE_INVALID_STATE_MERGE_ACTION:   'Only a Draft Design Update can have merge actions set'
 };
 
 export const WorkPackageValidationErrors = {

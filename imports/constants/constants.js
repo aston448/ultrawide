@@ -140,9 +140,9 @@ export const WorkPackageType = {
 };
 
 export const DesignUpdateMergeAction = {
-    MERGE_INCLUDE:          'Include change',
-    MERGE_ROLL:             'Roll change forward',
-    MERGE_IGNORE:           'Ignore change'
+    MERGE_INCLUDE:          'MERGE_INCLUDE',
+    MERGE_ROLL:             'MERGE_ROLL',
+    MERGE_IGNORE:           'MERGE_IGNORE'
 };
 
 export const DesignUpdateSummaryType = {

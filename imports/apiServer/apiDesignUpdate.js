@@ -5,7 +5,8 @@ import {
     updateDesignUpdateRef,
     publishDesignUpdate,
     withdrawDesignUpdate,
-    removeDesignUpdate
+    removeDesignUpdate,
+    updateMergeAction
 } from '../apiValidatedMethods/design_update_methods.js'
 
 // =====================================================================================================================
@@ -94,6 +95,21 @@ class ServerDesignUpdateApi {
             }
         );
     };
+
+    updateMergeAction(userRole, designUpdateId, newAction, callback){
+
+        updateMergeAction.call(
+            {
+                userRole:       userRole,
+                designUpdateId: designUpdateId,
+                newAction:      newAction
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
 
 }
 

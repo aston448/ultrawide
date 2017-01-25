@@ -83,5 +83,12 @@ class DesignUpdateValidationApi{
 
     };
 
+    validateUpdateMergeAction(userRole, designUpdateId){
+
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+
+        return DesignUpdateValidationServices.validateMergeActions(userRole, designUpdate);
+    }
+
 }
 export default new DesignUpdateValidationApi();
