@@ -4,6 +4,7 @@ import { DesignVersions }   from '../collections/design/design_versions.js';
 import { DesignUpdates }    from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
+import { DesignUpdateMergeAction } from '../constants/constants.js';
 import DesignVersionValidationServices from '../service_modules/validation/design_version_validation_services.js';
 
 //======================================================================================================================
@@ -62,8 +63,12 @@ class DesignVersionValidationApi{
     validateCreateNextDesignVersion(userRole, designVersionId){
 
         const thisVersion = DesignVersions.findOne({_id: designVersionId});
+        const mergeIncludeUpdatesCount = DesignUpdates.find({
+            designVersionId: designVersionId,
+            updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
+        }).count();
 
-        return DesignVersionValidationServices.validateCreateNextDesignVersion(userRole, thisVersion);
+        return DesignVersionValidationServices.validateCreateNextDesignVersion(userRole, thisVersion, mergeIncludeUpdatesCount);
     }
 }
 export default new DesignVersionValidationApi();

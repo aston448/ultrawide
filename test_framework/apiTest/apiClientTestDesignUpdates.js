@@ -68,4 +68,12 @@ Meteor.methods({
         ClientDesignUpdateServices.updateDesignUpdateReference(userRole, userContext.designUpdateId, newRef)
     },
 
+    'testDesignUpdates.updateMergeAction'(newAction, userRole, userName){
+
+        // Assumption that DU is always selected before it can be updated
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        ClientDesignUpdateServices.updateMergeAction(userRole, userContext.designUpdateId, newAction)
+    },
+
 });

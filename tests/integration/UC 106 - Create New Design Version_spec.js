@@ -1,5 +1,5 @@
 
-import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
+import {RoleType, DesignVersionStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 106 - Create New Design Version', function(){
@@ -155,7 +155,35 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     });
 
-    it('A new Design Version may not be created from an Updatable Design Version if no Design Updates are selected for inclusion');
+    it('A new Design Version may not be created from an Updatable Design Version if no Design Updates are selected for inclusion', function(){
+
+        // Setup
+        // Publish initial DV
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', 'gloria', RoleType.DESIGNER);
+        // Create a new Updatable DV
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        // Name it
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Add a Design Update
+        server.call('testDesignUpdates.addDesignUpdate', 'gloria', RoleType.DESIGNER);
+        // Name it
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Set it to IGNORE
+        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_IGNORE, RoleType.DESIGNER, 'gloria');
+
+        // Execute
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+
+        // Verify - new DV not created
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
+        server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        // And DV2 status should still be Updatable
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+    });
 
 
     // Consequences
