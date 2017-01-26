@@ -116,7 +116,7 @@ class ClientDesignComponentServices{
         }
 
         // Real action call
-        ServerDesignComponentApi.addApplicationToDesignVersion(view, mode, designVersionId, ComponentType.APPLICATION, (err, result) => {
+        ServerDesignComponentApi.addApplicationToDesignVersion(view, mode, designVersionId, (err, result) => {
 
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
