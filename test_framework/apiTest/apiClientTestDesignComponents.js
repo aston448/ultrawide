@@ -198,9 +198,8 @@ Meteor.methods({
         const displayContext = DisplayContext.BASE_EDIT;
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const component = TestDataHelpers.getDesignUpdateComponentWithParent(
+        const component = TestDataHelpers.getDesignComponentWithParent(
             userContext.designVersionId,
-            userContext.designUpdateId,
             componentType,
             parentName,
             componentName

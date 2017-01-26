@@ -34,9 +34,8 @@ Meteor.methods({
     'verifyUserContext.designComponentIs'(componentType, parentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const component = TestDataHelpers.getDesignUpdateComponentWithParent(
+        const component = TestDataHelpers.getDesignComponentWithParent(
             userContext.designVersionId,
-            userContext.designUpdateId,
             componentType,
             parentName,
             componentName

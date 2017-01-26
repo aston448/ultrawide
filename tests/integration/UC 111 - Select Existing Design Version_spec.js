@@ -18,6 +18,7 @@ describe('UC 111 - Select Existing Design Version', function(){
         // Add  Design - Design1: will create default Design Version
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        server.call('testDesigns.workDesign', 'Design1', 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
         // Name first Design Version
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
