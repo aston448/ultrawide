@@ -41,12 +41,12 @@ class DesignComponentServices{
 
             }
 
-            console.log("Adding Scenario with view " + view);
+            //console.log("Adding Scenario with view " + view);
 
             // If adding from a Work Package set as dev added
             let devAdded = (view === ViewType.DEVELOP_BASE_WP);
 
-            console.log("IsDevAdded = " + devAdded);
+            //console.log("IsDevAdded = " + devAdded);
 
             // Get the design id - this is added to the components for easier access to data
             let designId = DesignVersions.findOne({_id: designVersionId}).designId;
