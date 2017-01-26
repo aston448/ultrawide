@@ -2,6 +2,27 @@
 import {RoleType, DesignVersionStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
+let createNewDesignFromDraft = function(){
+    // Setup
+    // Publish the Design Version
+    server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+    server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+
+    // Execute
+    server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+
+    // Verify - new DV created with default name as well as DV1
+    server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
+    server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+    // Select the new DV
+    server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+    // And status should be updatable
+    server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+    // And previous DV should be complete
+    server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+    server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+};
+
 describe('UC 106 - Create New Design Version', function(){
 
     before(function(){
@@ -35,25 +56,7 @@ describe('UC 106 - Create New Design Version', function(){
 
     // Actions
     it('A Designer can create a new Updatable Design Version from an existing Draft Design Version', function(){
-
-        // Setup
-        // Publish the Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-
-        // Execute
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-
-        // Verify - new DV created with default name as well as DV1
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
-        // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        createNewDesignFromDraft();
     });
 
     it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with a Design Update', function(){
@@ -246,7 +249,9 @@ describe('UC 106 - Create New Design Version', function(){
 
     });
 
-    it('When a new Design Version is created, the previous Design Version becomes Complete');
+    it('When a new Design Version is created, the previous Design Version becomes Complete', function(){
+        createNewDesignFromDraft();
+    });
 
     it('When a new Design Version is created Design Updates selected for Merge are included in it');
 
