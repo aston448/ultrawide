@@ -40,6 +40,9 @@ describe('UC 111 - Select Existing Design Version', function(){
     // Actions
     it('An existing Design Version can be selected as the current working Design Version', function(){
 
+        // Work on Design1
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+
         // Select DV1
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
 
@@ -57,6 +60,9 @@ describe('UC 111 - Select Existing Design Version', function(){
 
     // Consequences
     it('When a new Design Version is chosen previous user context except for the Design is cleared', function(){
+
+        // Work on Design1
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
 
         // Select DV1
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
