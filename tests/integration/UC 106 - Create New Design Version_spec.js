@@ -387,10 +387,10 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Select the new DV
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        // Verify that DU2 exists for it and is still Draft and Roll Forward
+        // Verify that DU2 exists for it and is still Draft but now defaulted to INCLUDE
         server.call('verifyDesignUpdates.designUpdateExistsCalled', 'DesignUpdate2', 'gloria');
         server.call('verifyDesignUpdates.designUpdateStatusIs', 'DesignUpdate2', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate2', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
 
         // Select old DV
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');

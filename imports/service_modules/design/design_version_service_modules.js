@@ -313,13 +313,19 @@ class DesignVersionModules{
 
     mergeStepUpdateOldVersion(oldDesignVersionId){
 
-        //console.log("MERGE: Updating old DV...");
+        // Complete status depends on current status
+        const oldDv = DesignVersions.findOne({_id: oldDesignVersionId});
+        let newDvStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
+
+        if(oldDv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE){
+            newDvStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
+        }
 
         DesignVersions.update(
             {_id: oldDesignVersionId},
             {
                 $set:{
-                    designVersionStatus: DesignVersionStatus.VERSION_DRAFT_COMPLETE
+                    designVersionStatus: newDvStatus
                 }
             }
 
