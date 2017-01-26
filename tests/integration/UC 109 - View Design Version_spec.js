@@ -143,7 +143,7 @@ describe('UC 109 - View Design Version', function(){
         // Publish it so its draft
         server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Create next version
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.createNextDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
         // Verify - new DV created with default name as well as DV1
         server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME);
         server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
