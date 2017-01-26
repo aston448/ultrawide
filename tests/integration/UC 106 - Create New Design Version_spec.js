@@ -275,13 +275,6 @@ describe('UC 106 - Create New Design Version', function(){
         // Add a Design Update so it can be completed
         du.a_designer_adds_and_publishes_a_design_update_called('DesignUpdate1');
 
-        // server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        // // Name it
-        // server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        // server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // // Publish it
-        // server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-
         // Add new functionality to the update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // New section - Section99
@@ -341,12 +334,8 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
 
         // Add a Design Update so it can be completed
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        // Name it
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        du.a_designer_adds_and_publishes_a_design_update_called('DesignUpdate1');
+
         // Add new functionality to the first update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // New section - Section88
@@ -361,12 +350,8 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
 
         // Add another Design Update to roll forward
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        // Name it
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
-        // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
+        du.a_designer_adds_and_publishes_a_design_update_called('DesignUpdate2');
+
         // Add new functionality to the second update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
         // New section - Section99

@@ -5,16 +5,33 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignItemHeader } from './DesignItemHeader.jsx';  // Non Redux wrapped
 
-import { DesignStatus, RoleType } from '../../../constants/constants.js'
+import { DesignStatus, DesignVersionStatus, RoleType, ItemType } from '../../../constants/constants.js'
 import { getBootstrapText } from '../../../common/utils.js';
 
 import { Designs } from '../../../collections/design/designs.js'
+import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: DesignItemHeader', () => {
 
     // Global data for all tests
     Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
     const design = Factory.create('design');
+
+    Factory.define('designVersion1', DesignVersions, {
+        designId:               design._id,
+        designVersionName:      'DesignVersion1',
+        designVersionNumber:    '0.1',
+        designVersionStatus:    DesignVersionStatus.VERSION_DRAFT_COMPLETE
+    });
+    const designVersion1 = Factory.create('designVersion1');
+
+    Factory.define('designVersion2', DesignVersions, {
+        designId:               design._id,
+        designVersionName:      'DesignVersion2',
+        designVersionNumber:    '1.0',
+        designVersionStatus:    DesignVersionStatus.VERSION_UPDATABLE
+    });
+    const designVersion2 = Factory.create('designVersion2');
 
     const currentItemId = design._id;
     const currentItemName = design.designName;
@@ -23,6 +40,7 @@ describe('JSX: DesignItemHeader', () => {
     const onSelectItem = () => {return true};
 
 
+    // DESIGNS ---------------------------------------------------------------------------------------------------------
 
     describe('Each Design in the list is identified by its name', () => {
 
@@ -32,6 +50,7 @@ describe('JSX: DesignItemHeader', () => {
 
             const item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -43,7 +62,7 @@ describe('JSX: DesignItemHeader', () => {
 
             // Design Name should be visible and have the expected name and status
             chai.expect(item.find('#nameLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(currentItemName + ' (' + currentItemStatus + ')');
+            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(currentItemName);
 
         });
 
@@ -57,6 +76,7 @@ describe('JSX: DesignItemHeader', () => {
 
             const item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -67,8 +87,8 @@ describe('JSX: DesignItemHeader', () => {
             );
 
             // Design Name should be visible and have the expected name and status
-            chai.expect(item.find('#nameLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(currentItemName + ' (' + currentItemStatus + ')');
+            chai.expect(item.find('#statusLabel')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(currentItemStatus);
 
         });
 
@@ -88,6 +108,7 @@ describe('JSX: DesignItemHeader', () => {
 
             const item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -98,8 +119,8 @@ describe('JSX: DesignItemHeader', () => {
             );
 
             // Design Name should be visible and have the expected name and status
-            chai.expect(item.find('#nameLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(currentItemName + ' (' + currentItemStatus + ')');
+            chai.expect(item.find('#statusLabel')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(currentItemStatus);
 
         });
 
@@ -113,6 +134,7 @@ describe('JSX: DesignItemHeader', () => {
 
             const item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -136,6 +158,7 @@ describe('JSX: DesignItemHeader', () => {
 
             const item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -155,6 +178,7 @@ describe('JSX: DesignItemHeader', () => {
 
             const item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -178,6 +202,7 @@ describe('JSX: DesignItemHeader', () => {
 
             let item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -206,6 +231,7 @@ describe('JSX: DesignItemHeader', () => {
 
             let item = shallow(
                 <DesignItemHeader
+                    currentItemType={ItemType.DESIGN}
                     currentItemId={currentItemId}
                     currentItemName={currentItemName}
                     currentItemRef={currentItemRef}
@@ -223,6 +249,106 @@ describe('JSX: DesignItemHeader', () => {
                 chai.expect(item.find('#editCancel')).to.have.length(1);
             });
         });
+
+    });
+
+
+    // DESIGN VERSIONS -------------------------------------------------------------------------------------------------
+
+    describe('Each Design Version in the list is identified by its name and version number', () => {
+
+        it('name visible', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Design Version Name should be visible and have the expected name
+            chai.expect(item.find('#nameLabel')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(designVersion1.designVersionName);
+
+        });
+
+        it('version number visible', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Design Version Number should be visible and have the expected value
+            chai.expect(item.find('#refLabel')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#refLabel').html())).to.equal(designVersion1.designVersionNumber);
+
+        });
+
+    });
+
+    describe('The state of each Design Version is shown', () => {
+
+        it('status visible for Complete', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Design Version Name should be visible and have the expected name
+            chai.expect(item.find('#statusLabel')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(designVersion1.designVersionStatus);
+
+        });
+
+        it('status visible for Updatable', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion2._id}
+                    currentItemName={designVersion2.designVersionName}
+                    currentItemRef={designVersion2.designVersionNumber}
+                    currentItemStatus={designVersion2.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Design Version Name should be visible and have the expected name
+            chai.expect(item.find('#statusLabel')).to.have.length(1);
+            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(designVersion2.designVersionStatus);
+
+        });
+
 
     });
 

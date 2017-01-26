@@ -163,12 +163,6 @@ export class DesignItemHeader extends Component{
     render(){
         const {currentItemId, currentItemName, currentItemRef, currentItemStatus, currentItemType, userRole} = this.props;
 
-        // Show the status of items that have it when not editing
-        let nameText = currentItemName;
-        if(currentItemStatus != ''){
-            nameText = nameText + ' (' + currentItemStatus + ')';
-        }
-
         let refEditorEditing = <div></div>;
         let refEditorNotEditing = <div></div>;
         let refReadOnly = <div></div>;
@@ -200,7 +194,7 @@ export class DesignItemHeader extends Component{
                 <div onClick={ () => this.setCurrentItem()}>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
-                            <label id="refLabel">{currentItemRef}</label>
+                            <ControlLabel id="refLabel">{currentItemRef}</ControlLabel>
                         </div>
                         <InputGroup.Addon onClick={ () => this.editItemVersion()}>
                             <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
@@ -212,7 +206,7 @@ export class DesignItemHeader extends Component{
                 <div onClick={ () => this.setCurrentItem()}>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
-                            <label id="refLabel">{currentItemRef}</label>
+                            <ControlLabel id="refLabel">{currentItemRef}</ControlLabel>
                         </div>
                     </InputGroup>
                 </div>;
@@ -243,8 +237,11 @@ export class DesignItemHeader extends Component{
             <div onClick={ () => this.setCurrentItem()}>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
-                        <ControlLabel id="nameLabel">{nameText}</ControlLabel>
+                        <ControlLabel id="nameLabel">{currentItemName}</ControlLabel>
                     </div>
+                    <InputGroup.Addon>
+                        <ControlLabel id="statusLabel">{currentItemStatus}</ControlLabel>
+                    </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.editItemName()}>
                         <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
@@ -256,8 +253,11 @@ export class DesignItemHeader extends Component{
             <div onClick={ () => this.setCurrentItem()}>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
-                        <ControlLabel id="nameLabel">{nameText}</ControlLabel>
+                        <ControlLabel id="nameLabel">{currentItemName}</ControlLabel>
                     </div>
+                    <InputGroup.Addon>
+                        <ControlLabel id="statusLabel">{currentItemStatus}</ControlLabel>
+                    </InputGroup.Addon>
                 </InputGroup>
             </div>;
 
@@ -316,6 +316,7 @@ export class DesignItemHeader extends Component{
 
 
 DesignItemHeader.propTypes = {
+    currentItemType: PropTypes.string.isRequired,
     currentItemId: PropTypes.string.isRequired,
     currentItemName: PropTypes.string.isRequired,
     currentItemRef: PropTypes.string,
