@@ -1,6 +1,8 @@
 
-import {RoleType, DesignVersionStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+
+// Reused code
 
 let createNewDesignFromDraft = function(){
     // Setup
@@ -22,6 +24,45 @@ let createNewDesignFromDraft = function(){
     server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
     server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
 };
+
+let createNewDesignFromUpdatable = function(){
+    // Setup
+    // Publish the New Design Version
+    server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+    server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+    // Create an Updatable DV from it
+    server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+    server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+    server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+    // Add a Design Update so it can be completed
+    server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+    // Name it
+    server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+    server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+    // Publish it
+    server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+    // Set it to INCLUDE
+    server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+    // Check
+    server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+
+    // Execute - create another new DV from DesignVersion2
+    server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+
+    // Verify - new DV created with default name
+    server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
+    server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
+    server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+    // Select the new DV
+    server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+    // And status should be updatable
+    server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+    // And previous DV should be complete
+    server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+    server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+};
+
+
 
 describe('UC 106 - Create New Design Version', function(){
 
@@ -60,41 +101,7 @@ describe('UC 106 - Create New Design Version', function(){
     });
 
     it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with a Design Update', function(){
-
-        // Setup
-        // Publish the New Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Create an Updatable DV from it
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
-        // Add a Design Update so it can be completed
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        // Name it
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Set it to INCLUDE
-        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
-        // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
-
-        // Execute - create another new DV from DesignVersion2
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
-
-        // Verify - new DV created with default name
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
-        // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        createNewDesignFromUpdatable();
     });
 
 
@@ -251,10 +258,134 @@ describe('UC 106 - Create New Design Version', function(){
 
     it('When a new Design Version is created, the previous Design Version becomes Complete', function(){
         createNewDesignFromDraft();
+        createNewDesignFromUpdatable();
     });
 
-    it('When a new Design Version is created Design Updates selected for Merge are included in it');
+    it('When a new Design Version is created Design Updates selected for Merge are included in it', function(){
+        // Setup
+        // Publish the New Design Version
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        // Create an Updatable DV from it
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Add a Design Update so it can be completed
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+        // Name it
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Publish it
+        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
-    it('When a new Design Version is created Design Updates selected for Carry Forward are now updates for the new Design Version');
+        // Add new functionality to the update
+        // New section - Section99
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section99', 'gloria', ViewMode.MODE_EDIT);
+        // New Feature - Feature99
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section99', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section99', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
+
+        // Set update to INCLUDE
+        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+        // Check
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+
+        // Execute - create another new DV from DesignVersion2
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+
+        // Verify - new DV created with default name
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        // Select the new DV
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        // And status should be updatable
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        // And previous DV should be complete
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+
+        // And new DV should include Section99 and Feature99 as well as the original stuff
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.APPLICATION, 'Application1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section99');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.DESIGN_SECTION, 'Section1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature99');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE, 'Feature1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Actions');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE_ASPECT, 'Actions');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Conditions');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE_ASPECT, 'Conditions');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.SCENARIO, 'Scenario1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario2');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.SCENARIO, 'Scenario2');
+
+        // And check that they are in the right places
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1', 'NONE');
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section99', 'Application1');
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature99', 'Section99');
+
+    });
+
+    it('When a new Design Version is created Design Updates selected for Carry Forward are now updates for the new Design Version', function(){
+
+        // Setup
+        // Publish the New Design Version
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        // Create an Updatable DV from it
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Add a Design Update so it can be completed
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+        // Name it
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Publish it
+        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+
+        // Add new functionality to the update
+        // New section - Section99
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section99', 'gloria', ViewMode.MODE_EDIT);
+        // New Feature - Feature99
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section99', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section99', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
+
+        // Set update to ROLL FORWARD
+        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_ROLL, RoleType.DESIGNER, 'gloria');
+        // Check
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
+
+        // Execute - create another new DV from DesignVersion2
+        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+
+        // Verify - new DV created with default name
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
+        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+
+        // Select the new DV
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        // Verify that DU exists for it and is still Draft and Roll Forward
+        server.call('verifyDesignUpdates.designUpdateExistsCalled', 'DesignUpdate1', 'gloria');
+        server.call('verifyDesignUpdates.designUpdateStatusIs', 'DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, 'gloria');
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
+
+        // Select old DV
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        // DU no longer exists for that DV
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', 'DesignUpdate1', 'gloria');
+
+    });
 
 });
