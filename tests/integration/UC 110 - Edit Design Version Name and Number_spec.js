@@ -25,16 +25,6 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
     });
 
 
-    // Interface
-    it('Each Design Version has a edit option against its name');
-
-    it('Each Design Version has an edit option against its number');
-
-    it('When a Design Version name or number is being edited there is a save option');
-
-    it('When a Design Version name or number is being edited there is an undo option');
-
-
     // Actions
     it('A Designer may update the name of a Design Version', function(){
 
