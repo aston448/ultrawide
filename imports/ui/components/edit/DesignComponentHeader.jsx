@@ -137,6 +137,7 @@ class DesignComponentHeader extends Component{
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
                     nextProps.isDragging === this.props.isDragging
                 );
                 break;
@@ -149,6 +150,7 @@ class DesignComponentHeader extends Component{
                     nextProps.mode === this.props.mode &&
                     nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
                     nextProps.testSummary === this.props.testSummary &&
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
                     nextProps.isOpen === this.props.isOpen
                 );
         }

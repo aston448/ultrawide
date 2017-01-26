@@ -116,6 +116,7 @@ class DesignComponent extends Component{
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
                     nextProps.mode === this.props.mode
                 );
                 break;
@@ -126,6 +127,7 @@ class DesignComponent extends Component{
                     nextState.highlighted === this.state.highlighted &&
                     nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
                     nextProps.mode === this.props.mode &&
+                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
                     nextProps.testSummary === this.props.testSummary
                  );
         }

@@ -267,3 +267,41 @@ describe('A Design Version that has Design Updates cannot be withdrawn', functio
         });
     });
 });
+
+describe('Only a Designer can create a new Design Version', function () {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns VALID when a Designer creates a new Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.equal(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Designer returned INVALID!');
+
+        });
+
+        it('returns INVALID when a Developer creates a new Design Version', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Developer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Manager creates a new Design Version', function () {
+
+            const role = RoleType.MANAGER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Manager returned VALID!');
+
+        });
+
+    });
+
+});

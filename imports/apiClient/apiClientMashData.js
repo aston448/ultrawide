@@ -61,6 +61,7 @@ class ClientMashDataServices {
 
                         // Make sure the design view updates when test summary data is showing
                         if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
+                            console.log("UPDATING PROGRESS DATA - DEV")
                             store.dispatch(updateProgressData(!currentProgressDataValue));
                         }
                     });
@@ -72,6 +73,7 @@ class ClientMashDataServices {
 
                     // Make sure the design view updates when test summary data is showing
                     if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
+                        console.log("UPDATING PROGRESS DATA")
                         store.dispatch(updateProgressData(!currentProgressDataValue));
                     }
                 });
