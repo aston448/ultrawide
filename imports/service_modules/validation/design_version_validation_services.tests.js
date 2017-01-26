@@ -305,3 +305,114 @@ describe('Only a Designer can create a new Design Version', function () {
     });
 
 });
+
+describe('Only a Designer can edit a Design Version', function () {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns VALID when a Designer edits a draft Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+
+            chai.assert.equal(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Designer returned INVALID!');
+
+        });
+
+        it('returns INVALID when a Developer edits a draft Design Version', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Developer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Manager edits a draft Design Version', function () {
+
+            const role = RoleType.MANAGER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Manager returned VALID!');
+
+        });
+
+    });
+});
+
+describe('A Complete Design Version cannot be edited', function() {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns INVALID when a Designer edits a draft complete Design Version', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Complete Design Version by a Designer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Manager edits an updatable complete Design Version', function () {
+
+            const role = RoleType.MANAGER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit an Updatable Complete Design Version by a Designer returned VALID!');
+
+        });
+
+    });
+});
+
+describe('An Updatable Design Version cannot be edited', function() {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns INVALID when a Designer edits an updatable Design Version', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit an Updatable Design Version by a Designer returned VALID!');
+
+        });
+
+    });
+});
+
+describe('Only a Designer can view a New Design Version', function () {
+
+    describe('Design Version Validation Services', function () {
+
+        it('returns VALID when a Designer views a new Design Version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+
+            chai.assert.equal(DesignVersionValidationServices.validateViewDesignVersion(role, designVersion), Validation.VALID, 'Attempt to view a New Design Version by a Designer returned INVALID!');
+
+        });
+
+        it('returns INVALID when a Developer views a new Design Version', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateViewDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a New Design Version by a Developer returned VALID!');
+
+        });
+
+        it('returns INVALID when a Manager views a new Design Version', function () {
+
+            const role = RoleType.MANAGER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+
+            chai.assert.notEqual(DesignVersionValidationServices.validateViewDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a New Design Version by a Manager returned VALID!');
+
+        });
+
+    });
+});
+
+

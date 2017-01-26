@@ -860,7 +860,7 @@ class MashDataModules{
                     let testError = 'Pass in ' + testResult.testDuration + 'ms';
                     let testStack = 'Pass in ' + testResult.testDuration + 'ms';
                     if(testResult.testResult === MashTestStatus.MASH_FAIL){
-                        testError = testResult.testErrorReason;
+                        testError = testResult.testError;
                         testStack = testResult.stackTrace;
                     }
 

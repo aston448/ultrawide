@@ -480,7 +480,7 @@ describe('JSX: DesignVersion', () => {
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
@@ -554,6 +554,208 @@ describe('JSX: DesignVersion', () => {
             chai.expect(item.find('#butEdit')).to.have.length(0);
         });
 
-    })
+    });
 
+
+    describe('A Design Version contains a View option', () => {
+
+        it('visible for a New Design Version for Designer', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for a Draft Design Version for Designer', () => {
+
+            const userContext = {designVersionId: designVersionDraft._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for a Draft Design Version for Developer', () => {
+
+            const userContext = {designVersionId: designVersionDraft._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for a Draft Design Version for Manager', () => {
+
+            const userContext = {designVersionId: designVersionDraft._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for a Draft Complete Design Version for Designer', () => {
+
+            const userContext = {designVersionId: designVersionDraftComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for a Draft Complete Design Version for Developer', () => {
+
+            const userContext = {designVersionId: designVersionDraftComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for a Draft Complete Design Version for Manager', () => {
+
+            const userContext = {designVersionId: designVersionDraftComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for an Updatable Complete Design Version for Designer', () => {
+
+            const userContext = {designVersionId: designVersionUpdatableComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for an Updatable Complete Design Version for Developer', () => {
+
+            const userContext = {designVersionId: designVersionUpdatableComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for an Updatable Complete Design Version for Manager', () => {
+
+            const userContext = {designVersionId: designVersionUpdatableComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for an Updatable Design Version for Designer', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for an Updatable Design Version for Developer', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+
+        it('visible for an Updatable Design Version for Manager', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+        });
+    });
+
+    describe('The View option is only visible to Designers for New Design Versions', () => {
+
+        it('NOT visible for a New Design Version for Developer', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(0);
+        });
+
+        it('NOT visible for a New Design Version for Manager', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butView')).to.have.length(0);
+        });
+
+    });
 });
