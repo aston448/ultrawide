@@ -191,6 +191,22 @@ Meteor.methods({
 
         ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
 
+    },
+
+    'testDesignComponents.selectComponent'(componentType, parentName, componentName, userName){
+
+        const displayContext = DisplayContext.BASE_EDIT;
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const component = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            parentName,
+            componentName
+        );
+
+        ClientDesignComponentServices.setDesignComponent(component._id, userContext, displayContext);
     }
 
 });
