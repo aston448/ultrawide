@@ -445,4 +445,115 @@ describe('JSX: DesignVersion', () => {
 
     });
 
+    describe('An editable Design Version contains an Edit option', () => {
+
+        it('visible for a New Design Version', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(1);
+        });
+
+        it('visible for a Draft Design Version', () => {
+
+            const userContext = {designVersionId: designVersionDraft._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(1);
+        });
+
+        it('NOT visible for a Draft Complete Design Version', () => {
+
+            const userContext = {designVersionId: designVersionDraftComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+
+        it('NOT visible for an Updatable Complete Design Version', () => {
+
+            const userContext = {designVersionId: designVersionUpdatableComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+
+        it('NOT visible for an Updatable Design Version', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+    });
+
+    describe('The Edit option is only visible to Designers', () => {
+
+        it('visible for a Designer', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(1);
+        });
+
+        it('NOT visible for a Developer', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+
+        it('NOT visible for a Manager', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+
+    })
+
 });
