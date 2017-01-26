@@ -336,6 +336,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+
         // Add a Design Update so it can be completed
         server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         // Name it
@@ -343,21 +344,38 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         // Publish it
         server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-
-        // Add new functionality to the update
-        // New section - Section99
+        // Add new functionality to the first update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // New section - Section88
+        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section88', 'gloria', ViewMode.MODE_EDIT);
+        // New Feature - Feature88
+        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section88', 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section88', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature88', 'gloria', ViewMode.MODE_EDIT);
+        // Set update to INCLUDE
+        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+        // Check
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+
+        // Add another Design Update to roll forward
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+        // Name it
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
+        // Publish it
+        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
+        // Add new functionality to the second update
+        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
+        // New section - Section99
         server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section99', 'gloria', ViewMode.MODE_EDIT);
         // New Feature - Feature99
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section99', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section99', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
-
         // Set update to ROLL FORWARD
         server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_ROLL, RoleType.DESIGNER, 'gloria');
         // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
 
         // Execute - create another new DV from DesignVersion2
         server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
@@ -369,15 +387,15 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Select the new DV
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        // Verify that DU exists for it and is still Draft and Roll Forward
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', 'DesignUpdate1', 'gloria');
-        server.call('verifyDesignUpdates.designUpdateStatusIs', 'DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
+        // Verify that DU2 exists for it and is still Draft and Roll Forward
+        server.call('verifyDesignUpdates.designUpdateExistsCalled', 'DesignUpdate2', 'gloria');
+        server.call('verifyDesignUpdates.designUpdateStatusIs', 'DesignUpdate2', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, 'gloria');
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
 
         // Select old DV
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
         // DU no longer exists for that DV
-        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', 'DesignUpdate1', 'gloria');
+        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', 'DesignUpdate2', 'gloria');
 
     });
 
