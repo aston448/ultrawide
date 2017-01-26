@@ -31,6 +31,22 @@ Meteor.methods({
         }
     },
 
+    'verifyUserContext.designComponentIs'(componentType, parentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const component = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            parentName,
+            componentName
+        );
+
+        if(userContext.designComponentId != component._id){
+            throw new Meteor.Error("FAIL", "User context design component id for user " + userName + " is: " + userContext.designComponentId + " expected: " + component._id);
+        }
+    },
+
     // Methods to verify that context is cleared
     'verifyUserContext.designIsNone'(userName){
 
