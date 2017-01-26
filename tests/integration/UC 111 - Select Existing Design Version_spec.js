@@ -41,7 +41,7 @@ describe('UC 111 - Select Existing Design Version', function(){
     it('An existing Design Version can be selected as the current working Design Version', function(){
 
         // Work on Design1
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesigns.workDesign', 'Design1', 'gloria');
 
         // Select DV1
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
@@ -62,13 +62,13 @@ describe('UC 111 - Select Existing Design Version', function(){
     it('When a new Design Version is chosen previous user context except for the Design is cleared', function(){
 
         // Work on Design1
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesigns.workDesign', 'Design1', 'gloria');
 
         // Select DV1
         server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
 
         // Select a component of DV1
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.viewDesignVersion', 'DesignVersion1', RoleType.DESIGNER,  'gloria');
         server.call('testDesignComponents.selectComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
 
         server.call('verifyUserContext.designComponentIs', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');

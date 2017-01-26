@@ -38,7 +38,7 @@ describe('UC 108 - Edit Design Version', function(){
         server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
 
         // Execute
-        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
 
         // Verify
         // The Design version will be in the user context if now editing - other evidence is interface specific and can only be seen in acceptance tests
@@ -56,7 +56,7 @@ describe('UC 108 - Edit Design Version', function(){
         server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
 
         // Execute
-        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
 
         // Verify
         // The Design version will be in the user context if now editing - other evidence is interface specific and can only be seen in acceptance tests
@@ -74,7 +74,7 @@ describe('UC 108 - Edit Design Version', function(){
         server.call('verifyUserContext.designVersionIsNone', 'hugh', (function(error, result){expect(!error);}));
 
         // Execute
-        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.DEVELOPER);
+        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
 
         // Verify
         // The Design version should not be in the context
@@ -87,7 +87,7 @@ describe('UC 108 - Edit Design Version', function(){
         server.call('verifyUserContext.designVersionIsNone', 'miles', (function(error, result){expect(!error);}));
 
         // Execute
-        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles', RoleType.MANAGER);
+        server.call('testDesignVersions.editDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.MANAGER, 'miles');
 
         // Verify
         // The Design version should not be in the context

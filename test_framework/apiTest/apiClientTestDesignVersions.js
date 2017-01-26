@@ -31,7 +31,7 @@ Meteor.methods({
         ClientDesignVersionServices.withdrawDesignVersion(userRole, userContext, designVersion._id);
     },
 
-    'testDesignVersions.editDesignVersion'(designVersionName, userName, userRole){
+    'testDesignVersions.editDesignVersion'(designVersionName, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
@@ -40,7 +40,7 @@ Meteor.methods({
         ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
     },
 
-    'testDesignVersions.viewDesignVersion'(designVersionName, userName, userRole){
+    'testDesignVersions.viewDesignVersion'(designVersionName, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
