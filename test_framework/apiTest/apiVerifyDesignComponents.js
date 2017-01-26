@@ -140,10 +140,10 @@ Meteor.methods({
         const designComponentBelow = DesignComponents.findOne({componentType: componentType, componentName: componentBelowName});
 
         // Components highest in the list have the lowest indexes
-        console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
-        console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
+        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
+        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
         if(designComponentAbove.componentIndex >= designComponentBelow.componentIndex){
-            console.log("FAIL!");
+            //console.log("FAIL!");
             throw new Meteor.Error("FAIL", "Expected component " + componentAboveName + " to be above component " + componentBelowName + " in the list of " + componentType +"s");
         } else {
             return true;

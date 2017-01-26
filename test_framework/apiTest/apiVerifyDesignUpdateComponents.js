@@ -290,7 +290,7 @@ Meteor.methods({
         );
 
         if(aboveComponent.componentIndex >= belowComponent.componentIndex){
-            console.log("FAIL!");
+            //console.log("FAIL!");
             throw new Meteor.Error("FAIL", "Expected component " + componentAboveName + " to be above component " + componentBelowName + " in the list of " + componentType +"s");
         } else {
             return true;
@@ -310,8 +310,8 @@ Meteor.methods({
             featureName
         );
 
-        console.log("Feature narrative is: " + feature.componentNarrativeNew);
-        console.log("Expected narrative is: " + narrativeText);
+        //console.log("Feature narrative is: " + feature.componentNarrativeNew);
+        //console.log("Expected narrative is: " + narrativeText);
 
         if(feature.componentNarrativeNew.trim() !=  narrativeText.trim()){
             throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + feature.componentNarrativeNew);
