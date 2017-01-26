@@ -257,6 +257,7 @@ describe('UC 106 - Create New Design Version', function(){
     });
 
     it('When a new Design Version is created, the previous Design Version becomes Complete', function(){
+        // These previous tests are actually testing this
         createNewDesignFromDraft();
         createNewDesignFromUpdatable();
     });
@@ -279,12 +280,11 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
 
         // Add new functionality to the update
-        // New section - Section99
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // New section - Section99
         server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section99', 'gloria', ViewMode.MODE_EDIT);
         // New Feature - Feature99
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
         server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section99', 'gloria', ViewMode.MODE_EDIT);
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section99', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
 
@@ -300,36 +300,29 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
         server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
         server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        // Select the new DV
+        // Select the new DV and name it
         server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion3', RoleType.DESIGNER, 'gloria');
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
         // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE, 'gloria');
 
         // And new DV should include Section99 and Feature99 as well as the original stuff
         server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.APPLICATION, 'Application1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.APPLICATION, 'Application1');
         server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section99');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.DESIGN_SECTION, 'Section1');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.DESIGN_SECTION, 'Section99');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.DESIGN_SECTION, 'Section1');
         server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature99');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE, 'Feature1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Actions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE_ASPECT, 'Actions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Conditions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE_ASPECT, 'Conditions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.SCENARIO, 'Scenario1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario2');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.SCENARIO, 'Scenario2');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.FEATURE, 'Feature99');
+        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.FEATURE, 'Feature1');
 
         // And check that they are in the right places
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1', 'NONE');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section99', 'Application1');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature99', 'Section99');
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion3', ComponentType.APPLICATION, 'Application1', 'NONE');
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion3', ComponentType.DESIGN_SECTION, 'Section99', 'Application1');
+        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion3', ComponentType.FEATURE, 'Feature99', 'Section99');
 
     });
 
