@@ -182,10 +182,10 @@ export class DesignItemHeader extends Component{
                             />
                         </div>
                         <InputGroup.Addon onClick={ () => this.saveItemRef(userRole, currentItemType, currentItemId)}>
-                            <div id="editOk" className="green"><Glyphicon glyph="ok"/></div>
+                            <div id="editRefOk" className="green"><Glyphicon glyph="ok"/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon onClick={ () => this.undoItemRefChange()}>
-                            <div id="editCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
+                            <div id="editRefCancel" className="red"><Glyphicon glyph="arrow-left"/></div>
                         </InputGroup.Addon>
                     </InputGroup>
                 </div>;
@@ -197,7 +197,7 @@ export class DesignItemHeader extends Component{
                             <ControlLabel id="refLabel">{currentItemRef}</ControlLabel>
                         </div>
                         <InputGroup.Addon onClick={ () => this.editItemVersion()}>
-                            <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
+                            <div id="editRef" className="blue"><Glyphicon glyph="edit"/></div>
                         </InputGroup.Addon>
                     </InputGroup>
                 </div>;

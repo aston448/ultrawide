@@ -70,7 +70,6 @@ describe('JSX: AppHeader', () => {
                 />
             );
 
-            //
             chai.expect(item.find('#butEdit')).to.have.length(0);
 
         });
@@ -106,8 +105,6 @@ describe('JSX: AppHeader', () => {
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
-
-            console.log("Button HTML: " + item.find('#butView').html());
             chai.expect(hasBootstrapClass(item.find('#butView').html(), 'btn-success')).to.be.true;
 
         });
@@ -138,7 +135,6 @@ describe('JSX: AppHeader', () => {
                 />
             );
 
-            //
             chai.expect(item.find('#butEdit')).to.have.length(1);
             chai.expect(hasBootstrapClass(item.find('#butEdit').html(), 'btn-default')).to.be.true;
 

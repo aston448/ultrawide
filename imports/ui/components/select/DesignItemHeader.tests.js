@@ -352,5 +352,249 @@ describe('JSX: DesignItemHeader', () => {
 
     });
 
+    describe('Each Design Version has a edit option against its name', () => {
+
+        it('has an edit option for a Designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is visible
+            chai.expect(item.find('#edit')).to.have.length(1);
+        });
+
+    });
+
+    describe('Each Design Version has an edit option against its number', () => {
+
+        it('has an edit option for a Designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is visible
+            chai.expect(item.find('#editRef')).to.have.length(1);
+        });
+
+    });
+
+    describe('The edit option for a Design Version name is only visible to a Designer', () => {
+
+        it('has no edit option for a Developer', () => {
+
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is not visible
+            chai.expect(item.find('#edit')).to.have.length(0);
+        });
+
+        it('has no edit option for a Manager', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is not visible
+            chai.expect(item.find('#edit')).to.have.length(0);
+        });
+
+    });
+
+    describe('The edit option for a Design Version number is only visible to a Designer', () => {
+
+        it('has no edit option for a Developer', () => {
+
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is not visible
+            chai.expect(item.find('#editRef')).to.have.length(0);
+        });
+
+        it('has no edit option for a Manager', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is not visible
+            chai.expect(item.find('#editRef')).to.have.length(0);
+        });
+
+    });
+
+    describe('When a Design Version name or number is being edited there is a save option', () => {
+
+        it('save option visible for name', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            chai.expect(item.find('#editOk')).to.have.length(0);
+
+            // And now edit...
+            item.setState({nameEditable: true}, done => {
+                // Edit Save Item is visible
+                chai.expect(item.find('#editOk')).to.have.length(1);
+            });
+        });
+
+        it('save option visible for number', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            chai.expect(item.find('#editRefOk')).to.have.length(0);
+
+            // And now edit...
+            item.setState({refEditable: true}, done => {
+                // Edit Save Item is visible
+                chai.expect(item.find('#editRefOk')).to.have.length(1);
+            });
+        });
+
+    });
+
+    describe('When a Design Version name or number is being edited there is an undo option', () => {
+
+        it('undo option visible for name', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            chai.expect(item.find('#editCancel')).to.have.length(0);
+
+            // And now edit...
+            item.setState({nameEditable: true}, done => {
+                // Edit Save Item is visible
+                chai.expect(item.find('#editCancel')).to.have.length(1);
+            });
+        });
+
+        it('undo option visible for number', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            let item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.DESIGN_VERSION}
+                    currentItemId={designVersion1._id}
+                    currentItemName={designVersion1.designVersionName}
+                    currentItemRef={designVersion1.designVersionNumber}
+                    currentItemStatus={designVersion1.designVersionStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            chai.expect(item.find('#editRefCancel')).to.have.length(0);
+
+            // And now edit...
+            item.setState({refEditable: true}, done => {
+                // Edit Save Item is visible
+                chai.expect(item.find('#editRefCancel')).to.have.length(1);
+            });
+        });
+
+    });
+
 
 });
