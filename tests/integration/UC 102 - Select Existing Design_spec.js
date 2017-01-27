@@ -31,7 +31,7 @@ describe('UC 102 - Select Existing Design', function() {
         DesignActions.designerSelectsDesign('Design2');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        expect(UserContextVerifications.designerUserContextDesignIs('Design2'));
+        expect(UserContextVerifications.userContextForRole_DesignIs(RoleType.DESIGNER, 'Design2'));
     });
 
     it('When a new Design is selected previous user context is cleared', function() {
