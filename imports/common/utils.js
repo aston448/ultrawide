@@ -26,6 +26,22 @@ export function getBootstrapText(html){
     return remaining.substring(0, textEnd);
 }
 
+
+export function hasBootstrapClass(html, className){
+
+    const classIndex = html.indexOf('class="');
+    const classStart = classIndex + 7;
+    const classEnd = html.indexOf('\"', classStart);
+    const classString = html.substring(classStart, classEnd);
+
+    //console.log("Searching " + classString + " for " + className);
+
+    const propIndex = classString.indexOf(className);
+
+    return (propIndex != -1);
+
+}
+
 export function getComponentClass(currentItem, view, context, isNarrative){
 
     let main = '';

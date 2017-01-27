@@ -381,13 +381,13 @@ class DevApplicationsList extends Component {
                     col7width = 0;
                     break;
                 case 2:
-                    col1width = 8;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    col7width = 4;
+                    col1width = 7;
+                    col2width = 5;
+                    col3width = 5;
+                    col4width = 5;
+                    col5width = 5;
+                    col6width = 5;
+                    col7width = 5;
                     break;
                 case 3:
                     col1width = 6;

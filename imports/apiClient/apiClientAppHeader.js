@@ -4,6 +4,7 @@
 
 // Ultrawide Collections
 import { DesignComponents } from '../collections/design/design_components.js';
+import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
 import { ViewType, ViewOptionType, ComponentType } from '../constants/constants.js';
@@ -12,7 +13,7 @@ import ClientMashDataServices from '../apiClient/apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
-import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems} from '../redux/actions'
+import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -69,6 +70,29 @@ class ClientAppHeaderServices{
         // Open everything down to the Feature level - i.e. all Applications and Design Sections and close everything else
         let componentArray = [];
 
+        if(userContext.workPackageId != 'NONE'){
+
+            const wpOpenComponents = WorkPackageComponents.find(
+                {
+                    workPackageId: userContext.workPackageId,
+                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+
+                },
+                {fields: {_id: 1}}
+            );
+
+            wpOpenComponents.forEach((component) => {
+                componentArray.push(component._id);
+            });
+
+            store.dispatch(setCurrentUserOpenWorkPackageItems(
+                Meteor.userId(),
+                componentArray,
+                null,
+                true
+            ));
+        }
+
         if(userContext.designUpdateId === 'NONE'){
 
             const designVersionOpenComponents = DesignComponents.find(
@@ -94,32 +118,84 @@ class ClientAppHeaderServices{
 
     setViewLevelSections(userContext){
 
-        // Open everything down to the Section level - i.e. all Applications open
+        // Open everything down to the Section level - i.e. all Applications open and any sections that contain only other sections
         let componentArray = [];
+
+        if(userContext.workPackageId != 'NONE'){
+
+            const wpOpenComponents = WorkPackageComponents.find(
+                {
+                    workPackageId: userContext.workPackageId,
+                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+
+                }
+            ).fetch();
+
+            wpOpenComponents.forEach((component) => {
+                if(this.hasNoFeaturesWp(component)) {
+                    componentArray.push(component._id);
+                }
+            });
+
+            console.log("WP Open list: " + componentArray.length);
+            store.dispatch(setCurrentUserOpenWorkPackageItems(
+                Meteor.userId(),
+                componentArray,
+                null,
+                true
+            ));
+
+            return;
+        }
 
         if(userContext.designUpdateId === 'NONE'){
 
             const designVersionOpenComponents = DesignComponents.find(
                 {
                     designVersionId: userContext.designVersionId,
-                    componentType: ComponentType.APPLICATION
+                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
 
-                },
-                {fields: {_id: 1}}
-            );
+                }
+            ).fetch();
 
             designVersionOpenComponents.forEach((component) => {
-                componentArray.push(component._id);
+                if(this.hasNoFeaturesDc(component)) {
+                    componentArray.push(component._id);
+                }
             });
 
+            console.log("DESIGN Open list: " + componentArray.length);
             store.dispatch(setCurrentUserOpenDesignItems(
                 Meteor.userId(),
                 componentArray,
                 null,
                 true
             ));
+
+            return;
         }
     }
+
+    hasNoFeaturesDc(component){
+
+        // Returns true if there are no features that are children of the component
+        return count =  DesignComponents.find({
+                componentParentReferenceId: component.componentReferenceId,
+                componentType: ComponentType.FEATURE
+            }).count() === 0;
+
+    }
+
+    hasNoFeaturesWp(component){
+
+        // Returns true if there are no features that are children of the component
+        return WorkPackageComponents.find({
+            componentParentReferenceId: component.componentReferenceId,
+            componentType: ComponentType.FEATURE
+        }).count() === 0;
+    }
+
+
 
     setViewDesigns() {
         // Returns to the Design selection screen

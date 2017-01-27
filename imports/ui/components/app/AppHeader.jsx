@@ -38,7 +38,7 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 // App Header component - represents the title bar
-class AppHeader extends Component {
+export class AppHeader extends Component {
     constructor(props) {
         super(props);
     }
@@ -156,59 +156,57 @@ class AppHeader extends Component {
         let bsStyleView = (mode === ViewMode.MODE_VIEW ? 'success': 'default');
 
         let logoutButton =
-            <Button bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
+            <Button id="butLogout" bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
 
         // let toggleHeaderButton =
         //     <Button bsSize="xs" bsStyle="info" onClick={ () => this.onToggleHeader()}>...</Button>;
 
         let designsButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
+            <Button id="butDesigns" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
 
         // View Mode and Zoom buttons
         let viewModeEditButton =
-            <Button bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
+            <Button id="butEdit" bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
         let viewModeViewButton =
-            <Button bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW)}>VIEW</Button>;
+            <Button id="butView" bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW)}>VIEW</Button>;
 
         let viewFeatureLevelButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToFeatures(userContext)}>Go to Features</Button>;
+            <Button id="butZoomFeatures" bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToFeatures(userContext)}>Go to Features</Button>;
         let viewSectionLevelButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToSections(userContext)}>Go to Sections</Button>;
+            <Button id="butZoomSections" bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToSections(userContext)}>Go to Sections</Button>;
 
         // View Options Buttons
         let scopeFixedButton =
-            <Button bsSize="xs" bsStyle={'info'}>Scope</Button>;
+            <Button id="butScope" bsSize="xs" bsStyle={'info'}>Scope</Button>;
         let designFixedButton =
-            <Button bsSize="xs" bsStyle={'info'}>Design</Button>;
+            <Button id="butDesign" bsSize="xs" bsStyle={'info'}>Design</Button>;
         let detailsFixedButton =
-            <Button bsSize="xs" bsStyle={'info'}>Details</Button>;
+            <Button id="butDetailsFixed" bsSize="xs" bsStyle={'info'}>Details</Button>;
         let detailsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
+            <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
         let testSummaryButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
+            <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
         let accTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acc Tests</Button>;
+            <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acc Tests</Button>;
         let intTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, intTestOption, userViewOptions, currentViewDataValue)}>Int Tests</Button>;
+            <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, intTestOption, userViewOptions, currentViewDataValue)}>Int Tests</Button>;
         let unitTestsButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
+            <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
         let accFilesButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Acc Files</Button>;
+            <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Acc Files</Button>;
         let domainDictionaryButton =
-            <Button bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
+            <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
 
 
         let configureScreenButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Role</Button>;
+            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Role</Button>;
 
         let selectionScreenButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
+            <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestDataButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userViewOptions)}>Refresh Test Data</Button>;
+            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userViewOptions)}>Refresh Test Data</Button>;
 
-        let exportToDevButton =
-            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportFeatureUpdates(userContext)}>Export Feature Updates</Button>;
 
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
@@ -529,8 +527,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-AppHeader = connect(mapStateToProps)(AppHeader);
+export default connect(mapStateToProps)(AppHeader);
 
-export default AppHeader;
 
 
