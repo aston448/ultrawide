@@ -169,7 +169,7 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
         // Verify
         // Check that still retains default Number
-        server.call('verifyDesignVersions.currentDesignVersionNumberIs', DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER, 'hugh');
+        server.call('verifyDesignVersions.currentDesignVersionNumberIs', DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER, 'gloria');
     });
 
 });
