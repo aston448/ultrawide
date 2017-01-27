@@ -28,7 +28,7 @@ class DesignVersionValidationApi{
         const thisVersion = DesignVersions.findOne({_id: designVersionId});
         const otherVersions = DesignVersions.find({_id: {$ne: thisVersion._id}, designId: thisVersion.designId}).fetch();
 
-        return DesignVersionValidationServices.validateUpdateDesignVersionName(userRole, newNumber, otherVersions);
+        return DesignVersionValidationServices.validateUpdateDesignVersionNumber(userRole, newNumber, otherVersions);
     };
 
     validateEditDesignVersion(userRole, designVersionId){
