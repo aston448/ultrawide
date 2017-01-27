@@ -137,8 +137,6 @@ describe('UC 103 - Remove Design', function() {
         DesignComponentActions.designerAddApplicationCalled('Application1');
         // Add a Design Section - Section1
         DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section1');
-        // Add a Feature - Feature1
-        DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
         DesignActions.designerRemovesDesign('Design1');
@@ -150,8 +148,6 @@ describe('UC 103 - Remove Design', function() {
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.APPLICATION, 'Application1'));
         // Design Section should not exist
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.DESIGN_SECTION, 'Section1'));
-        // Feature should not exist
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.FEATURE, 'Feature1'));
 
     });
 

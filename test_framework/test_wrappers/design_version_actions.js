@@ -12,7 +12,7 @@ class DesignVersionActions{
     }
 
     designerPublishesDesignVersion(versionName){
-        server.call('testDesignVersions.publishDesignVersion', newName, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DESIGNER, 'gloria');
     }
 
     designerCreatesNextDesignVersionFrom(oldDesignVersion){
