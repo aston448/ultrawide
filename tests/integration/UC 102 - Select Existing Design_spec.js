@@ -2,6 +2,8 @@
 import {RoleType} from '../../imports/constants/constants.js'
 import {DefaultItemNames} from '../../imports/constants/default_names.js';
 
+import DesignActions from '../../test_framework/test_wrappers/design_actions.js';
+import UserContextVerifications from '../../test_framework/test_wrappers/user_context_verifications.js';
 
 describe('UC 102 - Select Existing Design', function() {
 
@@ -15,16 +17,14 @@ describe('UC 102 - Select Existing Design', function() {
 
     it('An existing Design can be selected as the working Design', function() {
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design2');
+        DesignActions.designerAddsNewDesignCalled('Design1');
+        DesignActions.designerAddsNewDesignCalled('Design2');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        DesignActions.designerSelectsDesign('Design1');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyUserContext.designIs', 'Design1', 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.designerUserContextDesignIs('Design1'));
 
         // Execute -----------------------------------------------------------------------------------------------------
         server.call('testDesigns.selectDesign', 'Design2', 'gloria');
@@ -37,8 +37,8 @@ describe('UC 102 - Select Existing Design', function() {
     it('When a new Design is selected previous user context is cleared', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignActions.designerAddsNewDesignCalled('Design1');
+
         // This sets all edit context items to "DUMMY"
         server.call('testUserContext.setFullDummyEditContext', 'gloria');
 
