@@ -1,3 +1,15 @@
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
 import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
@@ -5,11 +17,10 @@ describe('UC 105 - Withdraw Design Version', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
         // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignActions.designerAddsNewDesignCalled('Design1');
 
     });
 
@@ -22,15 +33,15 @@ describe('UC 105 - Withdraw Design Version', function(){
     it('A Designer can revert a Design Version from Draft published to New', function() {
 
         // Setup
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
 
         // Execute
-        server.call('testDesignVersions.withdrawDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', RoleType.DESIGNER);
+        DesignVersionActions.designerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
-        // Validate
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'gloria', (function(error, result){expect(!error);}));
+        // Validate - NEW again
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
     });
 
@@ -42,31 +53,29 @@ describe('UC 105 - Withdraw Design Version', function(){
 
         // Setup -------------------------------------------------------------------------------------------------------
         // Get Designer to publish it...
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}));
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
 
         // See if Developer can unpublish
         // Make sure the design is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
+        DesignActions.developerSelectsDesign('Design1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.withdrawDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', RoleType.DEVELOPER);
+        DesignVersionActions.developerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'hugh', (function(error, result){expect(!error);}));
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'hugh', (function(error, result){expect(!error);}));
+        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
         // See if Manager can unpublish
         // Make sure the design is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
+        DesignActions.managerSelectsDesign('Design1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.withdrawDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles', RoleType.MANAGER);
+        DesignVersionActions.managerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW, 'miles', (function(error, result){expect(!error);}));
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'miles', (function(error, result){expect(!error);}));
+        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
     });
 
     it('A Design Version that has Design Updates cannot be withdrawn');

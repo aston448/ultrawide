@@ -1,14 +1,25 @@
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
 import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 103 - Remove Design', function() {
 
     beforeEach(function(){
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
         // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignActions.designerAddsNewDesignCalled('Design1');
     });
 
     afterEach(function(){
@@ -19,36 +30,41 @@ describe('UC 103 - Remove Design', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
         // Make sure the design is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        DesignActions.designerSelectsDesign('Design1');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'gloria', (function(error, result){expect(!error);}))
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
     });
 
     it('Only a Designer can publish a Design Version', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
         // Make sure the design is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
+        DesignActions.developerSelectsDesign('Design1');
+        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'hugh', (function(error, result){expect(!error);}));
+        // Still NEW
+        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
         // Setup -------------------------------------------------------------------------------------------------------
         // Make sure the design is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
+        DesignActions.managerSelectsDesign('Design1');
+        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.MANAGER, 'hugh');
+        DesignVersionActions.managerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyDesignVersions.designVersionStatusIsNot', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT, 'miles', (function(error, result){expect(!error);}))
+        // Still NEW
+        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
     });
 

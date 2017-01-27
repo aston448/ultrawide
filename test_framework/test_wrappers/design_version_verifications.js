@@ -37,6 +37,30 @@ class DesignVersionVerifications{
         );
     }
 
+    designVersion_StatusForDesignerIs(version, status){
+        server.call('verifyDesignVersions.designVersionStatusIs', version, status, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    designVersion_StatusForDeveloperIs(version, status){
+        server.call('verifyDesignVersions.designVersionStatusIs', version, status, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    designVersion_StatusForManagerIs(version, status){
+        server.call('verifyDesignVersions.designVersionStatusIs', version, status, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
 
 }
 

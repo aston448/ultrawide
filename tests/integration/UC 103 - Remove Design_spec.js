@@ -1,12 +1,12 @@
-import TestFixtures from '../../test_framework/test_wrappers/test_fixtures.js';
-import DesignActions from '../../test_framework/test_wrappers/design_actions.js';
-import DesignVersionActions from '../../test_framework/test_wrappers/design_version_actions.js';
-import DesignUpdateActions from '../../test_framework/test_wrappers/design_update_actions.js';
-import DesignComponentActions from '../../test_framework/test_wrappers/design_component_actions.js';
-import UpdateComponentActions from '../../test_framework/test_wrappers/design_update_component_actions.js';
-import DesignVerifications from '../../test_framework/test_wrappers/design_verifications.js';
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
-import UserContextVerifications from '../../test_framework/test_wrappers/user_context_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
 
 import {RoleType, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
