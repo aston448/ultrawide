@@ -1,9 +1,15 @@
 
+import TestFixtures from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVerifications from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignVersionVerifications from '../../test_framework/test_wrappers/design_version_verifications.js';
+
 import {RoleType} from '../../imports/constants/constants.js'
+import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 101 - Add New Design', function() {
     beforeEach(function(){
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
     });
 
     afterEach(function(){
@@ -15,18 +21,18 @@ describe('UC 101 - Add New Design', function() {
 
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DEVELOPER);
+        DesignActions.addNewDesignAsRole(RoleType.DEVELOPER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No new design created
-        server.call('verifyDesigns.noNewDesign', (function(error, result){expect(!error);}));
+        expect(DesignVerifications.defaultNewDesignDoesNotExist());
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.MANAGER);
+        DesignActions.addNewDesignAsRole(RoleType.MANAGER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No new design created
-        server.call('verifyDesigns.noNewDesign', (function(error, result){expect(!error);}));
+        expect(DesignVerifications.defaultNewDesignDoesNotExist());
 
     });
 
@@ -35,11 +41,11 @@ describe('UC 101 - Add New Design', function() {
         // Setup -------------------------------------------------------------------------------------------------------
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
 
         // Verify ------------------------------------------------------------------------------------------------------
-        // Created a new removable Design
-        server.call('verifyDesigns.newDesign', (function(error, result){expect(!error);}));
+        // Created a new Design
+        expect(DesignVerifications.defaultNewDesignExists());
 
     });
 
@@ -48,12 +54,12 @@ describe('UC 101 - Add New Design', function() {
         // Setup -------------------------------------------------------------------------------------------------------
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Created a new Design and a new Design Version linked to it
-        server.call('verifyDesigns.newDesign', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.newDesignVersion', (function(error, result){expect(!error);}));
+        expect(DesignVerifications.defaultNewDesignExists());
+        expect(DesignVersionVerifications.defaultNewDesignVersionExistsForDesign(DefaultItemNames.NEW_DESIGN_NAME));
 
     })
 });

@@ -273,7 +273,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
 
         // Add a Design Update so it can be completed
-        du.a_designer_adds_and_publishes_a_design_update_called('DesignUpdate1');
+        du.designerAddsAnUpdateCalled('DesignUpdate1');
 
         // Add new functionality to the update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
@@ -334,7 +334,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
 
         // Add a Design Update so it can be completed
-        du.a_designer_adds_and_publishes_a_design_update_called('DesignUpdate1');
+        du.designerAddsAnUpdateCalled('DesignUpdate1');
 
         // Add new functionality to the first update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
@@ -350,7 +350,7 @@ describe('UC 106 - Create New Design Version', function(){
         server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
 
         // Add another Design Update to roll forward
-        du.a_designer_adds_and_publishes_a_design_update_called('DesignUpdate2');
+        du.designerAddsAnUpdateCalled('DesignUpdate2');
 
         // Add new functionality to the second update
         server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');

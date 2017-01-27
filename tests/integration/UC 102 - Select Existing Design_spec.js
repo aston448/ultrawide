@@ -1,14 +1,14 @@
 
-import {RoleType} from '../../imports/constants/constants.js'
-import {DefaultItemNames} from '../../imports/constants/default_names.js';
-
+import TestFixtures from '../../test_framework/test_wrappers/test_fixtures.js';
 import DesignActions from '../../test_framework/test_wrappers/design_actions.js';
 import UserContextVerifications from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType} from '../../imports/constants/constants.js'
 
 describe('UC 102 - Select Existing Design', function() {
 
     beforeEach(function(){
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
     });
 
     afterEach(function(){
@@ -16,6 +16,7 @@ describe('UC 102 - Select Existing Design', function() {
     });
 
     it('An existing Design can be selected as the working Design', function() {
+
         // Setup -------------------------------------------------------------------------------------------------------
         DesignActions.designerAddsNewDesignCalled('Design1');
         DesignActions.designerAddsNewDesignCalled('Design2');
@@ -24,14 +25,13 @@ describe('UC 102 - Select Existing Design', function() {
         DesignActions.designerSelectsDesign('Design1');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        expect(UserContextVerifications.designerUserContextDesignIs('Design1'));
+        expect(UserContextVerifications.userContextForRole_DesignIs(RoleType.DESIGNER, 'Design1'));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.selectDesign', 'Design2', 'gloria');
+        DesignActions.designerSelectsDesign('Design2');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyUserContext.designIs', 'Design2', 'gloria', (function(error, result){expect(!error);}));
-
+        expect(UserContextVerifications.designerUserContextDesignIs('Design2'));
     });
 
     it('When a new Design is selected previous user context is cleared', function() {
@@ -39,24 +39,28 @@ describe('UC 102 - Select Existing Design', function() {
         // Setup -------------------------------------------------------------------------------------------------------
         DesignActions.designerAddsNewDesignCalled('Design1');
 
-        // This sets all edit context items to "DUMMY"
-        server.call('testUserContext.setFullDummyEditContext', 'gloria');
+        // This sets all user context items to "DUMMY"
+        TestFixtures.setDummyUserContextForDesigner();
+
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        DesignActions.designerSelectsDesign('Design1');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        server.call('verifyUserContext.designIs', 'Design1', 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignIs(RoleType.DESIGNER, 'Design1'));
+
         // And rest should be "NONE"
-        server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.designUpdateIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.workPackageIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.designComponentIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.designComponentTypeIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.featureReferenceIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.featureAspectReferenceIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.scenarioReferenceIsNone', 'gloria', (function(error, result){expect(!error);}));
-        server.call('verifyUserContext.scenarioStepIsNone', 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextDesignUpdateNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextWorkPackageNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextDesignComponentNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextDesignComponentTypeNotSetForRole(RoleType.DESIGNER));
+
+        expect(UserContextVerifications.userContextFeatureReferenceNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextFeatureAspectReferenceNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextScenarioReferenceNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextScenarioStepNotSetForRole(RoleType.DESIGNER));
+
     });
 
 });

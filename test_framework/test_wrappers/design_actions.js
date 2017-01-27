@@ -5,14 +5,43 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignActions{
 
+    addNewDesignAsRole(userRole){
+        server.call('testDesigns.addNewDesign', userRole);
+    }
+
     designerAddsNewDesignCalled(designName){
         server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
         server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, designName);
     };
 
     designerSelectsDesign(designName){
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
+        server.call('testDesigns.selectDesign', designName, 'gloria');
     }
+
+    developerSelectsDesign(designName){
+        server.call('testDesigns.selectDesign', designName, 'hugh');
+    }
+
+    managerSelectsDesign(designName){
+        server.call('testDesigns.selectDesign', designName, 'miles');
+    }
+
+    designerRemovesDesign(designName){
+        server.call('testDesigns.removeDesign', designName, RoleType.DESIGNER, 'gloria');
+    }
+
+    developerRemovesDesign(designName){
+        server.call('testDesigns.removeDesign', designName, RoleType.DEVELOPER, 'hugh');
+    }
+
+    managerRemovesDesign(designName){
+        server.call('testDesigns.removeDesign', designName, RoleType.MANAGER, 'miles');
+    }
+
+    designerWorksOnDesign(designName){
+        server.call('testDesigns.workDesign', designName, 'gloria');
+    }
+
 
 
 }

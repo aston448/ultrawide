@@ -3,20 +3,27 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 
-class du{
+class DesignUpdateActions{
 
-    a_designer_adds_and_publishes_a_design_update_called(updateName){
+    designerAddsAnUpdateCalled(updateName){
 
         server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
         // Name it
         server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
         server.call('testDesignUpdates.updateDesignUpdateName', updateName, RoleType.DESIGNER, 'gloria');
-        // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria');
 
     };
+
+    designerEditsUpdate(updateName){
+        server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.DESIGNER, 'gloria');
+    }
+
+    designerPublishesUpdate(updateName){
+        // Publish it
+        server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria');
+    }
 
 
 }
 
-export default new du();
+export default new DesignUpdateActions();
