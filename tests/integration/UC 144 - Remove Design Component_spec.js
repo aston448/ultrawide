@@ -1,4 +1,17 @@
-import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 144 - Remove Design Component', function(){
@@ -13,13 +26,10 @@ describe('UC 144 - Remove Design Component', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     afterEach(function(){
@@ -27,243 +37,165 @@ describe('UC 144 - Remove Design Component', function(){
     });
 
 
-    // Interface
-    it('Each Design Component has a remove option');
-
-
     // Actions
     it('A Scenario with no Scenario Steps may be removed from a Design Version', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.SCENARIO, 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
         // Verify
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 0);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 0));
     });
 
     it('A Feature Aspect with no Scenarios may be removed from a Design Version', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Remove Scenario so Aspect can be removed
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        // There are originally 3 Actions in default data
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
 
-        // Verify
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 0);
+        // Verify - now only 2
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 2));
     });
 
     it('A Feature with no Feature Aspects or Scenarios may be removed from a Design Version', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
-        // Need to remove the default Feature Aspects
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Interface', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Actions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Conditions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Consequences', 'gloria', ViewMode.MODE_EDIT);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Remove Scenarios and Feature Aspects from Feature2
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario3');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario4');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Interface');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Consequences');
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE, 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
 
         // Verify
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 0);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 0));
 
     });
 
     it('A Design Section with no Features or sub sections may be removed from a Design Version', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
 
-        // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.DESIGN_SECTION, 'Section1', 'gloria', ViewMode.MODE_EDIT);
+        // Execute - Use Section99
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
 
         // Verify
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 0);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 0));
     });
 
     it('An Application with no Design sections may be removed from a Design Version', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
+        // Remove Section99 from Application99
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.APPLICATION, 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
 
         // Verify
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 0);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 0));
     });
 
 
     // Conditions
-    it('Design Components can only be removed when in edit mode', function(){
-
-        // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
-
-        // Execute - but in View mode
-        server.call('testDesignComponents.removeComponent', ComponentType.APPLICATION, 'Application1', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
-    });
+    it('Design Components can only be removed when in edit mode');
 
     it('An Application may only be removed if it has no Design Sections', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.APPLICATION, 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', 1);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
 
     });
 
     it('A Design Section may only be removed if it has no sub sections', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'SubSection1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Add a sub-section to Section99
+        DesignComponentActions.designerAddDesignSectionToDesignSection_('Section99');
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.DESIGN_SECTION, 'Section1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
 
     });
 
     it ('A Design Section may only be removed if it has no Features', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.DESIGN_SECTION, 'Section1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.DESIGN_SECTION, 'Section1', 1);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Feature may only be removed if it has no Feature Aspects', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE, 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
     });
 
-    it('A Feature may only be removed if it has no Scenarios', function(){
-
-        // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 1);
-
-        // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE, 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-
-        // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE, 'Feature1', 1);
-    });
+    it('A Feature may only be removed if it has no Scenarios');
 
     it('A Feature Aspect may only be removed if it has no Scenarios', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 1);
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.SCENARIO, 'Scenario1', 1);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // There are originally 3 Actions in default data
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 
         // Execute
-        server.call('testDesignComponents.removeComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
 
         // Verify - not removed
-        server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 1);
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
     });
 
     it('A Scenario may only be removed if it has no Scenario Steps');
