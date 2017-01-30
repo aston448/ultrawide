@@ -38,7 +38,7 @@ describe('UC 103 - Remove Design', function() {
         // Work on Design1
         DesignActions.designerWorksOnDesign('Design1');
         // And edit the default Design Version
-        DesignVersionActions.designerEditDesign_DesignVersion('Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerEditDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
         // Add an Application - Application1
         DesignComponentActions.designerAddApplicationCalled('Application1');
         // Add a Design Section - Section1
@@ -132,7 +132,7 @@ describe('UC 103 - Remove Design', function() {
         // Work on Design1
         DesignActions.designerWorksOnDesign('Design1');
         // And edit the default Design Version
-        DesignVersionActions.designerEditDesign_DesignVersion('Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerEditDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
         // Add an Application - Application1
         DesignComponentActions.designerAddApplicationCalled('Application1');
         // Add a Design Section - Section1

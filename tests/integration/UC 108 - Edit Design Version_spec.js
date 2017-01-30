@@ -31,6 +31,7 @@ describe('UC 108 - Edit Design Version', function(){
 
         // Add  Design - Design1: will create default Design Version
         DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+        DesignActions.designerSelectsDesign('Design1');
         DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'DesignVersion1')
     });
