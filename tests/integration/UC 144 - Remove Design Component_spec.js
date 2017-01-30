@@ -57,8 +57,9 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        // Remove Scenario so Aspect can be removed
+        // Remove Scenarios so Aspect can be removed
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444');
         // There are originally 3 Actions in default data
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 
@@ -76,7 +77,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Remove Scenarios and Feature Aspects from Feature2
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario3');
-        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario4');
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario4');
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Interface');
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions');
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions');
