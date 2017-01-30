@@ -29,6 +29,14 @@ class DesignComponentVerifications{
       );
   }
 
+  componentOfType_Called_InDesign_Version_CountIs(type, name, designName, designVersionName, count){
+      server.call('verifyDesignComponents.componentCountCalledIs', ComponentType.APPLICATION, 'Application1', designName, designVersionName, 1,
+          (function(error, result){
+              return(error === null);
+          })
+      );
+  }
+
 
 
 

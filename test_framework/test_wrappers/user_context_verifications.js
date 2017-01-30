@@ -27,6 +27,16 @@ class UserContextVerifications{
 
     };
 
+    userContextForRole_DesignComponentIs(userRole, componentType,  parentName, designComponentName){
+
+        server.call('verifyUserContext.designComponentIs', componentType, parentName, designComponentName, TestFixtures.getUserForRole(userRole),
+            (function(error, result){
+                return(error === null);
+            })
+        );
+
+    };
+
     // Negative Checks -------------------------------------------------------------------------------------------------
 
     userContextDesignNotSetForRole(userRole){

@@ -131,6 +131,23 @@ Meteor.methods({
 
     },
 
+    'testDesignComponents.updateSelectedComponentName'(newName, userName){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const rawName = DesignComponentModules.getRawTextFor(newName);
+
+        if(userContext.designComponentId === 'NONE'){
+            throw new Meteor.Error("FAIL", "No Design Component is currently selected for user " + userName);
+        }
+
+        ClientDesignComponentServices.updateComponentName(view, mode, userContext.designComponentId, newName, rawName)
+
+    },
+
     'testDesignComponents.updateFeatureNarrative'(featureName, newText, mode){
 
         // Assume view is correct

@@ -1,4 +1,16 @@
-import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 142 - Add Functional Design Component', function(){
@@ -13,11 +25,10 @@ describe('UC 142 - Add Functional Design Component', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     afterEach(function(){
@@ -25,113 +36,72 @@ describe('UC 142 - Add Functional Design Component', function(){
     });
 
 
-    // Interface
-    it('A Design Version has an option to add a new Application to it');
-
-    it('A Design Section has an option to add a new Feature to it');
-
-    it('A Feature has an option to add a new Scenario to it');
-
-    it('A Feature Aspect has an option to add a new Scenario to it');
-
-    it('When about to add a new functional component the parent component is highlighted');
-
-
     // Actions
     it('An Application may be added to a Design Version', function() {
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
         // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
+        DesignComponentActions.designerAddApplication();
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'NONE');
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 'NONE'));
     });
 
     it('A Feature may be added to a Design Section', function(){
 
         // Setup
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
-        // Add a Design Section
-        server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Feature
-        server.call('testDesignComponents.addFeatureToDesignSection', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        DesignComponentActions.designerAddFeatureToSection_('Section1');
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1', 'Section1'));
     });
 
     it('A Scenario may be added to a Feature', function(){
 
         // Setup
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
-        // Add a Design Section
-        server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
-        // Add a Feature
-        server.call('testDesignComponents.addFeatureToDesignSection', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Scenario
-        server.call('testDesignComponents.addScenarioToFeature', DefaultComponentNames.NEW_FEATURE_NAME);
+        DesignComponentActions.designerAddScenarioToFeature('Feature1');
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, DefaultComponentNames.NEW_FEATURE_NAME);
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1', 'Feature1'));
     });
 
 
     it('A Scenario may be added to a Feature Aspect', function(){
 
         // Setup
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
-        // Add a Design Section
-        server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
-        // Add a Feature
-        server.call('testDesignComponents.addFeatureToDesignSection', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        // Add a Feature Aspect
-        server.call('testDesignComponents.addFeatureAspectToFeature', DefaultComponentNames.NEW_FEATURE_NAME);
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Scenario
-        server.call('testDesignComponents.addScenarioToFeatureAspect', DefaultComponentNames.NEW_FEATURE_NAME, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
 
         // Verify
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1', 'Actions'));
     });
 
 
     // Conditions
-    it('Design Components may only be added when in edit mode', function(){
-
-        // Setup
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-
-        // Execute
-        // Add an Application - should fail in view mode
-        server.call('testDesignComponents.addApplicationInMode', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify no App created
-        server.call('verifyDesignComponents.componentDoesNotExistCalled', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME);
-    });
+    it('Design Components may only be added when in edit mode');
 
 
     // Consequences

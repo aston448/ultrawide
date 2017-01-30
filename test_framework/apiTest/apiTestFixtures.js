@@ -203,7 +203,8 @@ Meteor.methods({
         //              Conditions
         //                  Scenario4
         //              Consequences
-        //  Application999
+        //  Application99
+        //      Section99
 
         // Add Application1
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
@@ -228,6 +229,12 @@ Meteor.methods({
         const section2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Section2');
         ClientDesignComponentServices.updateComponentName(view, mode, section2Component._id, 'Section2', rawName);
+
+        // Add Section99
+        ClientDesignComponentServices.addDesignSectionToApplication(view, mode, application99Component);
+        const section99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        rawName = DesignComponentModules.getRawTextFor('Section99');
+        ClientDesignComponentServices.updateComponentName(view, mode, section99Component._id, 'Section99', rawName);
 
         // Add Feature1 to Section 1
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section1Component);

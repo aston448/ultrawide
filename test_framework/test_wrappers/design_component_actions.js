@@ -5,9 +5,17 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignComponentActions{
 
+    designerAddApplication(){
+        server.call('testDesignComponents.addApplication', 'gloria');
+    }
+
     designerAddApplicationCalled(appName){
         server.call('testDesignComponents.addApplication', 'gloria');
         server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, appName);
+    }
+
+    designerAddDesignSectionToApplication_(appName){
+        server.call('testDesignComponents.addDesignSectionToApplication', appName);
     }
 
     designerAddDesignSectionToApplication_Called(appName, sectionName){
@@ -15,9 +23,37 @@ class DesignComponentActions{
         server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, sectionName);
     }
 
+    designerAddDesignSectionToDesignSection_(sectionName){
+        server.call('testDesignComponents.addDesignSectionToDesignSection', sectionName);
+    }
+
+    designerAddFeatureToSection_(sectionName){
+        server.call('testDesignComponents.addFeatureToDesignSection', sectionName);
+    }
+
     designerAddFeatureToSection_Called(sectionName, featureName){
         server.call('testDesignComponents.addFeatureToDesignSection', sectionName);
         server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, featureName);
+    }
+
+    designerAddFeatureAspectToFeature_(featureName){
+        server.call('testDesignComponents.addFeatureAspectToFeature', featureName);
+    }
+
+    designerAddScenarioToFeature(featureName){
+        server.call('testDesignComponents.addScenarioToFeature', featureName);
+    }
+
+    designerAddScenarioToFeatureAspect(featureName, featureAspectName){
+        server.call('testDesignComponents.addScenarioToFeatureAspect', featureName, featureAspectName);
+    }
+
+    designerSelectComponentType_WithParent_Called_(componentType, componentParent, componentName) {
+        server.call('testDesignComponents.selectComponent', componentType, componentParent, componentName, 'gloria');
+    }
+
+    designerEditSelectedComponentNameTo_(newName){
+        server.call('testDesignComponents.updateSelectedComponentName', newName, 'gloria');
     }
 }
 

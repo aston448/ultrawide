@@ -1,4 +1,16 @@
-import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 141 - Add Organisational Design Component', function(){
@@ -13,11 +25,10 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     afterEach(function(){
@@ -25,74 +36,51 @@ describe('UC 141 - Add Organisational Design Component', function(){
     });
 
 
-    // Interface
-    it('An Application has an option to add a new Design Section to it');
-
-    it('A Design Section has an option to add a new Design Section to it as a sub section');
-
-    it('A Feature has an option to add a new Feature Aspect to it');
-
-    it('When about to add a new organisational component the parent component is highlighted');
-
-
     // Actions
     it('A Design Section may be added to an Application', function(){
 
         // Setup
         // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Design Section
-        server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
+        DesignComponentActions.designerAddDesignSectionToApplication_('Application1');
 
-        // Verify
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, DefaultComponentNames.NEW_APPLICATION_NAME);
+
+        // Verify - New Design Section in Application1
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1', 'Application1'));
     });
 
 
     it('A Design Section may be added to another Design Section as a subsection', function(){
 
         // Setup
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
-        // Add a Design Section - update name to remove ambiguity
-        server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - add new section to 'Section1'
-        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
+        DesignComponentActions.designerAddDesignSectionToDesignSection_('Section1');
 
-        // Verify - new component added
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
+        // Verify - new component added with parent Section1
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1', 'Section1'));
     });
 
     it('A Feature Aspect may be added to a Feature', function(){
 
         // Setup
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
-        // Add an Application
-        server.call('testDesignComponents.addApplication', 'gloria');
-        // Add a Design Section - update name to remove ambiguity
-        server.call('testDesignComponents.addDesignSectionToApplication', DefaultComponentNames.NEW_APPLICATION_NAME);
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        // Add a Feature
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - add new section to 'Section1'
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
+        DesignComponentActions.designerAddFeatureAspectToFeature_('Feature1');
 
         // Verify - new component added
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Feature1');
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1', 'Feature1'));
     });
 
 

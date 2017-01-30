@@ -47,9 +47,16 @@ Meteor.methods({
         }
     },
 
-    'verifyDesignComponents.componentCountCalledIs'(componentType, componentName, componentCount){
+    'verifyDesignComponents.componentCountCalledIs'(componentType, componentName, designName, designVersionName, componentCount){
 
-        const designComponentsCount = DesignComponents.find({componentType: componentType, componentName: componentName}).count();
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
+        const designComponentsCount = DesignComponents.find({
+            designVersionId: designVersion._id,
+            componentType: componentType,
+            componentName: componentName}
+            ).count();
 
         if(designComponentsCount === componentCount){
             return true;

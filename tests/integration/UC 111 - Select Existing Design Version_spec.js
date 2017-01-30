@@ -1,5 +1,18 @@
-import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+
 
 describe('UC 111 - Select Existing Design Version', function(){
 
@@ -13,23 +26,15 @@ describe('UC 111 - Select Existing Design Version', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.workDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        // Name first Design Version
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Create Design1, DesignVersion1
+        TestFixtures.addDesignWithDefaultData();
+
         // Create a second Design Version
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
 
     });
 
@@ -42,19 +47,19 @@ describe('UC 111 - Select Existing Design Version', function(){
     it('An existing Design Version can be selected as the current working Design Version', function(){
 
         // Work on Design1
-        server.call('testDesigns.workDesign', 'Design1', 'gloria');
+        DesignActions.designerWorksOnDesign('Design1');
 
         // Select DV1
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
 
         // Verify Context has DV1
-        server.call('verifyDesignVersions.currentDesignVersionNameIs', 'DesignVersion1', 'gloria');
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion1'));
 
         // Select DV2
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
 
         // Verify Context has DV2
-        server.call('verifyDesignVersions.currentDesignVersionNameIs', 'DesignVersion2', 'gloria');
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
 
     });
 
@@ -63,22 +68,22 @@ describe('UC 111 - Select Existing Design Version', function(){
     it('When a new Design Version is chosen previous user context except for the Design is cleared', function(){
 
         // Work on Design1
-        server.call('testDesigns.workDesign', 'Design1', 'gloria');
+        DesignActions.designerWorksOnDesign('Design1');
 
         // Select DV1
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
 
         // Select a component of DV1
-        server.call('testDesignVersions.viewDesignVersion', 'DesignVersion1', RoleType.DESIGNER,  'gloria');
-        server.call('testDesignComponents.selectComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
+        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
+        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
-        server.call('verifyUserContext.designComponentIs', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
+        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
 
         // Change to DV2
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
 
         // Verify that old design component cleared
-        server.call('verifyUserContext.designComponentIsNone', 'gloria');
+        expect(UserContextVerifications.userContextDesignComponentNotSetForRole(RoleType.DESIGNER));
     });
 
 });
