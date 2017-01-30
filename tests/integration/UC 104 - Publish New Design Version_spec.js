@@ -13,7 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
-describe('UC 103 - Remove Design', function() {
+describe('UC 104 - Publish New Design Version', function() {
 
     beforeEach(function(){
         TestFixtures.clearAllData();

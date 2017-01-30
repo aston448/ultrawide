@@ -149,7 +149,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Publish it
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Set it to IGNORE
-        DesignUpdateActions.designerEditsUpdate(DesignUpdateMergeAction.MERGE_IGNORE);
+        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1',DesignUpdateMergeAction.MERGE_IGNORE));
 

@@ -20,7 +20,6 @@ class DesignVersionActions{
     designerUpdatesDesignVersionNameFrom_To_(oldName, newName){
         server.call('testDesignVersions.selectDesignVersion', oldName, 'gloria');
         server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria');
-
     }
 
     designerPublishesDesignVersion(versionName){
@@ -28,11 +27,11 @@ class DesignVersionActions{
     }
 
     developerPublishesDesignVersion(versionName){
-        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DEVELOPER, 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DEVELOPER, 'hugh');
     }
 
     managerPublishesDesignVersion(versionName){
-        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.MANAGER, 'gloria');
+        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.MANAGER, 'miles');
     }
 
     designerWithdrawsDesignVersion(versionName){
