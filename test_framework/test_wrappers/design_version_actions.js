@@ -48,14 +48,17 @@ class DesignVersionActions{
     }
 
     designerCreatesNextDesignVersionFrom(oldDesignVersion){
+        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'gloria');
         server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DESIGNER, 'gloria');
     }
 
     developerCreatesNextDesignVersionFrom(oldDesignVersion){
+        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'hugh');
         server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DEVELOPER, 'hugh');
     }
 
     managerCreatesNextDesignVersionFrom(oldDesignVersion){
+        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'miles');
         server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.MANAGER, 'miles');
     }
 
@@ -67,7 +70,7 @@ class DesignVersionActions{
 
 
     // Complex Actions -------------------------------------------------------------------------------------------------
-    designerCreateNewDesignVersionFromDraft(params){
+    designerCreateNextDesignVersionFromNew(params){
         // Setup
         // Publish the Design Version
         server.call('testDesigns.selectDesign', params.designName, 'gloria');
@@ -88,7 +91,7 @@ class DesignVersionActions{
         server.call('verifyDesignVersions.designVersionStatusIs', params.designVersionName, DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
     }
 
-    designerCreateNewDesignVersionFromUpdatable(params){
+    designerCreateNextDesignVersionFromUpdatable(params){
         // Setup
         // Publish the New Design Version
         server.call('testDesigns.selectDesign', params.designName, 'gloria');

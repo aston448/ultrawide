@@ -23,6 +23,10 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria');
     }
 
+    designerSetsUpdateActionTo(action){
+        server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria');
+    }
+
 
 }
 

@@ -6,6 +6,7 @@ import DesignUpdateActions          from '../../test_framework/test_wrappers/des
 import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
 import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
 import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
 import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
@@ -44,7 +45,7 @@ describe('UC 106 - Create New Design Version', function(){
             designVersionName: 'DesignVersion1'
         };
 
-        DesignVersionActions.designerCreateNewDesignVersionFromDraft(params);
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
     });
 
     it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with a Design Update', function(){
@@ -56,7 +57,7 @@ describe('UC 106 - Create New Design Version', function(){
             designUpdate: 'DesignUpdate1'
         };
 
-        DesignVersionActions.designerCreateNewDesignVersionFromUpdatable(params);
+        DesignVersionActions.designerCreateNextDesignVersionFromUpdatable(params);
 
     });
 
@@ -71,145 +72,136 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Execute as Developer
         DesignActions.developerSelectsDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         DesignVersionActions.developerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Verify - new DV not created
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
         // And DV1 status should still be Draft
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT, 'hugh');
+        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT));
 
         // Execute as Manager
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.MANAGER, 'miles');
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Verify - new DV not created
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
         // And DV1 status should still be Draft
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT, 'miles');
+        expect(DesignVersionVerifications.designVersion_StatusForManagerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT));
 
     });
 
     it('A new Design Version may not be created from a New Design Version', function(){
 
         // Setup - keep the DV as New
+        DesignActions.designerSelectsDesign('Design1');
 
         // Execute
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Verify - new DV not created
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
         // And DV1 status should still be New
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_NEW, 'gloria');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_NEW));
     });
 
     it('A new Design Version may not be created from a Complete Design Version', function(){
 
-        // Setup
-        // Publish the New Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Create an Updatable DV from it
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Setup - create new DV from original
+        const params = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
 
-        // Execute - try to create another new DV frm DesignVersion1
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+
+        // Name the new version so we don't confuse it with the next attempt
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
+        // Execute - try to create another new DV from old DesignVersion1
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Verify - new DV not created
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
         // And DV1 status should still be Complete
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE));
     });
 
     it('A new Design Version may not be created from an Updatable Design Version if no Design Updates are selected for inclusion', function(){
 
-        // Setup
-        // Publish initial DV
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Create a new Updatable DV
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Name it
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
-        // Add a Design Update
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        // Name it
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Set it to IGNORE
-        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_IGNORE, RoleType.DESIGNER, 'gloria');
-        // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE, 'gloria');
+        // Setup - create new DV from original
+        const params = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
 
-        // Execute
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+
+        // Name it
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+        // Add a Design Update
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        // Publish it
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        // Set it to IGNORE
+        DesignUpdateActions.designerEditsUpdate(DesignUpdateMergeAction.MERGE_IGNORE);
+        // Check
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1',DesignUpdateMergeAction.MERGE_IGNORE));
+
+        // Execute - try to create new DV from DV2 which has only one update set to IGNORE
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
 
         // Verify - new DV not created
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
-        server.call('verifyDesignVersions.designVersionDoesNotExistCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
         // And DV2 status should still be Updatable
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE));
     });
 
 
     // Consequences
     it('When a new Design Version is created all Design Components in the previous version are copied to it', function(){
 
-        // Setup
-        // Publish the Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        // Setup - create new DV from original
+        const params = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
 
-        // Execute
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
 
-        // Verify - new DV created with default name as well as DV1
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        // Select the new DV and give it a name
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Name it
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         // Check that all Design Components now exist for both new DV and old DV
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.APPLICATION, 'Application1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.DESIGN_SECTION, 'Section1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE, 'Feature1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Actions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE_ASPECT, 'Actions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Conditions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.FEATURE_ASPECT, 'Conditions');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.SCENARIO, 'Scenario1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario2');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion1', ComponentType.SCENARIO, 'Scenario2');
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, 'Actions','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, 'Actions','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, 'Conditions','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, 'Conditions','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario1','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario2','Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario2','Design1', 'DesignVersion2'));
 
         // And check that they are in the right places
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1', 'NONE');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section1', 'Application1');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature1', 'Section1');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Actions', 'Feature1');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.FEATURE_ASPECT, 'Conditions', 'Feature1');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario1', 'Actions');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion2', ComponentType.SCENARIO, 'Scenario2', 'Conditions');
-
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion1', 'NONE'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion1', 'Application1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion1', 'Section1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions','Design1', 'DesignVersion1', 'Feature1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Conditions','Design1', 'DesignVersion1', 'Feature1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1','Design1', 'DesignVersion1', 'Actions'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario2','Design1', 'DesignVersion1', 'Conditions'));
     });
 
     it('When a new Design Version is created, the previous Design Version becomes Complete', function(){
@@ -219,7 +211,7 @@ describe('UC 106 - Create New Design Version', function(){
             designVersionName: 'DesignVersion1'
         };
 
-        DesignVersionActions.designerCreateNewDesignVersionFromDraft(params1);
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params1);
 
         const params2 = {
             designName: 'Design1',
@@ -228,131 +220,144 @@ describe('UC 106 - Create New Design Version', function(){
             designUpdate: 'DesignUpdate1'
         };
 
-        DesignVersionActions.designerCreateNewDesignVersionFromUpdatable(params2);
+        DesignVersionActions.designerCreateNextDesignVersionFromUpdatable(params2);
     });
 
     it('When a new Design Version is created Design Updates selected for Merge are included in it', function(){
-        // Setup
-        // Publish the New Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Create an Updatable DV from it
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Setup - create updatable DV
+        const params1 = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
+
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params1);
+
+        const params2 = {
+            designName: 'Design1',
+            firstDesignVersion: 'DesignVersion1',
+            secondDesignVersion: 'DesignVersion2',
+            designUpdate: 'DesignUpdate1'
+        };
+
+        // Name it
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         // Add a Design Update so it can be completed
-        du.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
 
         // Add new functionality to the update
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
         // New section - Section99
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section99', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section99');
         // New Feature - Feature99
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section99', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section99', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
 
         // Set update to INCLUDE
-        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+
         // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
         // Execute - create another new DV from DesignVersion2
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
 
         // Verify - new DV created with default name
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
+
         // Select the new DV and name it
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion3', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion3');
+
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE));
+
         // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE));
 
         // And new DV should include Section99 and Feature99 as well as the original stuff
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.APPLICATION, 'Application1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.APPLICATION, 'Application1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.DESIGN_SECTION, 'Section1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.DESIGN_SECTION, 'Section99');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.DESIGN_SECTION, 'Section1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion2', ComponentType.FEATURE, 'Feature1');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.FEATURE, 'Feature99');
-        server.call('verifyDesignComponents.componentExistsInDesignVersionCalled', 'Design1', 'DesignVersion3', ComponentType.FEATURE, 'Feature1');
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3'));
+
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99','Design1', 'DesignVersion3'));
+
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99','Design1', 'DesignVersion3'));
 
         // And check that they are in the right places
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion3', ComponentType.APPLICATION, 'Application1', 'NONE');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion3', ComponentType.DESIGN_SECTION, 'Section99', 'Application1');
-        server.call('verifyDesignComponents.componentInDesignVersionParentIs', 'Design1', 'DesignVersion3', ComponentType.FEATURE, 'Feature99', 'Section99');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3', 'NONE'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section99','Design1', 'DesignVersion3', 'Application1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature99','Design1', 'DesignVersion3', 'Section99'));
+
 
     });
 
     it('When a new Design Version is created Design Updates selected for Carry Forward are now updates for the new Design Version', function(){
 
-        // Setup
-        // Publish the New Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Create an Updatable DV from it
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        // Setup - create updatable DV
+        const params1 = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
+
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params1);
+
+        // Name it
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         // Add a Design Update so it can be completed
-        du.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
 
         // Add new functionality to the first update
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // New section - Section88
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section88', 'gloria', ViewMode.MODE_EDIT);
-        // New Feature - Feature88
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section88', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section88', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature88', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // New section - Section99
+        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section88');
+        // New Feature - Feature99
+        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section88', 'Feature88');
         // Set update to INCLUDE
-        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
         // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
         // Add another Design Update to roll forward
-        du.designerAddsAnUpdateCalled('DesignUpdate2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
 
         // Add new functionality to the second update
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         // New section - Section99
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section99', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section99');
         // New Feature - Feature99
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section99', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section99', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
         // Set update to ROLL FORWARD
-        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_ROLL, RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_ROLL);
         // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL, 'gloria');
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL));
 
         // Execute - create another new DV from DesignVersion2
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
 
         // Verify - new DV created with default name
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion2');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
 
         // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+
         // Verify that DU2 exists for it and is still Draft but now defaulted to INCLUDE
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', 'DesignUpdate2', 'gloria');
-        server.call('verifyDesignUpdates.designUpdateStatusIs', 'DesignUpdate2', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', 'DesignUpdate2', DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+        expect(DesignUpdateVerifications.updateExistsForDesignerCalled('DesignUpdate2'));
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_INCLUDE));
 
         // Select old DV
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         // DU no longer exists for that DV
-        server.call('verifyDesignUpdates.designUpdateDoesNotExistCalled', 'DesignUpdate2', 'gloria');
+        expect(DesignUpdateVerifications.updateDoesNotExistForDesignerCalled('DesignUpdate2'));
 
     });
 
