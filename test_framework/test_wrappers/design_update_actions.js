@@ -27,6 +27,10 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria');
     }
 
+    designerSelectsUpdate(updateName){
+        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria');
+    }
+
 
 }
 

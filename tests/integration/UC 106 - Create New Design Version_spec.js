@@ -254,6 +254,7 @@ describe('UC 106 - Create New Design Version', function(){
         UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
 
         // Set update to INCLUDE
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         // Check
@@ -320,6 +321,7 @@ describe('UC 106 - Create New Design Version', function(){
         // New Feature - Feature99
         UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section88', 'Feature88');
         // Set update to INCLUDE
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
@@ -334,6 +336,7 @@ describe('UC 106 - Create New Design Version', function(){
         // New Feature - Feature99
         UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
         // Set update to ROLL FORWARD
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
         DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_ROLL);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL));

@@ -64,8 +64,8 @@ describe('UC 105 - Withdraw Design Version', function(){
         // Execute -----------------------------------------------------------------------------------------------------
         DesignVersionActions.developerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
-        // Verify ------------------------------------------------------------------------------------------------------
-        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
+        // Verify Still Draft-------------------------------------------------------------------------------------------
+        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
 
         // See if Manager can unpublish
         // Make sure the design is in the user context
@@ -74,8 +74,8 @@ describe('UC 105 - Withdraw Design Version', function(){
         // Execute -----------------------------------------------------------------------------------------------------
         DesignVersionActions.managerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
 
-        // Verify ------------------------------------------------------------------------------------------------------
-        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
+        // Verify Still Draft-------------------------------------------------------------------------------------------
+        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
     });
 
     it('A Design Version that has Design Updates cannot be withdrawn');
