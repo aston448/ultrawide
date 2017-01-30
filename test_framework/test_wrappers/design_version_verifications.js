@@ -61,6 +61,29 @@ class DesignVersionVerifications{
         );
     }
 
+    currentDesignVersionNameForDesignerIs(name){
+        server.call('verifyDesignVersions.currentDesignVersionNameIs', name, 'gloria');
+    }
+
+    currentDesignVersionNameForDeveloperIs(name){
+        server.call('verifyDesignVersions.currentDesignVersionNameIs', name, 'hugh');
+    }
+
+    currentDesignVersionNameForManagerIs(name){
+        server.call('verifyDesignVersions.currentDesignVersionNameIs', name, 'miles');
+    }
+
+    currentDesignVersionNumberForDesignerIs(number){
+        server.call('verifyDesignVersions.currentDesignVersionNumberIs', number, 'gloria');
+    }
+
+    currentDesignVersionNumberForDeveloperIs(number){
+        server.call('verifyDesignVersions.currentDesignVersionNumberIs', number, 'hugh');
+    }
+
+    currentDesignVersionNumberForManagerIs(number){
+        server.call('verifyDesignVersions.currentDesignVersionNumberIs', number, 'miles');
+    }
 
 }
 

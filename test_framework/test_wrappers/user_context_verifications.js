@@ -17,6 +17,16 @@ class UserContextVerifications{
 
     };
 
+    userContextForRole_DesignVersionIs(userRole, designVersionName){
+
+        server.call('verifyUserContext.designVersionIs', designVersionName, TestFixtures.getUserForRole(userRole),
+            (function(error, result){
+                return(error === null);
+            })
+        );
+
+    };
+
     // Negative Checks -------------------------------------------------------------------------------------------------
 
     userContextDesignNotSetForRole(userRole){

@@ -1,10 +1,23 @@
-import {RoleType} from '../../imports/constants/constants.js';
-import {DefaultItemNames} from '../../imports/constants/default_names.js';
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 107 - Update Design Name', function() {
 
     beforeEach(function(){
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
     });
 
     afterEach(function(){
@@ -13,65 +26,69 @@ describe('UC 107 - Update Design Name', function() {
 
     it('Only a Designer can update a Design name', function() {
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        expect(DesignVerifications.designExistsCalled('Design1'));
 
         // Execute -----------------------------------------------------------------------------------------------------
         // Give Developer a go...
-        server.call('testDesigns.updateDesignName', RoleType.DEVELOPER, DefaultItemNames.NEW_DESIGN_NAME, 'Updated Name');
+        DesignActions.developerEditsDesignNameFrom_To_('Design1', 'New Name');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No update to name
-        server.call('verifyDesigns.designDoesNotExistCalled', 'Updated Name', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.designExistsCalled', DefaultItemNames.NEW_DESIGN_NAME, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designDoesNotExistCalled('New Name'));
+        expect(DesignVerifications.designExistsCalled('Design1'));
+
         // And there is only one design
-        server.call('verifyDesigns.designCountIs', 1, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designCountIs(1));
 
         // Execute -----------------------------------------------------------------------------------------------------
         // Give Manager a go...
-        server.call('testDesigns.updateDesignName', RoleType.MANAGER, DefaultItemNames.NEW_DESIGN_NAME, 'Updated Name');
+        DesignActions.managerEditsDesignNameFrom_To_('Design1', 'New Name');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No update to name
-        server.call('verifyDesigns.designDoesNotExistCalled', 'Updated Name', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.designExistsCalled', DefaultItemNames.NEW_DESIGN_NAME, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designDoesNotExistCalled('New Name'));
+        expect(DesignVerifications.designExistsCalled('Design1'));
         // And there is only one design
-        server.call('verifyDesigns.designCountIs', 1, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designCountIs(1));
     });
 
     it('A Designer can edit a Design name to a new value', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'My Name');
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design name has changed
-        server.call('verifyDesigns.designExistsCalled', 'My Name', (function(error, result){expect(!error);}));
-        server.call('verifyDesigns.designDoesNotExistCalled', DefaultItemNames.NEW_DESIGN_NAME, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designExistsCalled('Design1'));
+        expect(DesignVerifications.designDoesNotExistCalled(DefaultItemNames.NEW_DESIGN_NAME));
         // And there is only one design
-        server.call('verifyDesigns.designCountIs', 1, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designCountIs(1));
 
     });
 
     it('A Design cannot be given the same name as another existing Design', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Unique Name');
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+        expect(DesignVerifications.designExistsCalled('Design1'));
+        expect(DesignVerifications.designExistsCalled(DefaultItemNames.NEW_DESIGN_NAME));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Unique Name');
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
 
         // Verify ------------------------------------------------------------------------------------------------------
-        // A Design still exists called new name
-        server.call('verifyDesigns.designExistsCalled', DefaultItemNames.NEW_DESIGN_NAME, (function(error, result){expect(!error);}));
-        // As well as the one we called Unique name
-        server.call('verifyDesigns.designExistsCalled', 'Unique Name', (function(error, result){expect(!error);}));
+        // No change to design names
+        expect(DesignVerifications.designExistsCalled('Design1'));
+        expect(DesignVerifications.designExistsCalled(DefaultItemNames.NEW_DESIGN_NAME));
         // And there are only 2 designs
-        server.call('verifyDesigns.designCountIs', 2, (function(error, result){expect(!error);}));
+        expect(DesignVerifications.designCountIs(2));
     });
 
 });

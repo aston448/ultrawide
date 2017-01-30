@@ -38,6 +38,18 @@ class DesignActions{
         server.call('testDesigns.removeDesign', designName, RoleType.MANAGER, 'miles');
     }
 
+    designerEditsDesignNameFrom_To_(oldName, newName){
+        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, oldName, newName);
+    }
+
+    developerEditsDesignNameFrom_To_(oldName, newName){
+        server.call('testDesigns.updateDesignName', RoleType.DEVELOPER, oldName, newName);
+    }
+
+    managerEditsDesignNameFrom_To_(oldName, newName){
+        server.call('testDesigns.updateDesignName', RoleType.MANAGER, oldName, newName);
+    }
+
     designerWorksOnDesign(designName){
         server.call('testDesigns.workDesign', designName, 'gloria');
     }

@@ -37,6 +37,14 @@ class DesignVerifications{
         );
     }
 
+    designCountIs(count){
+        server.call('verifyDesigns.designCountIs', count,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
 
 }
 

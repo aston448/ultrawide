@@ -22,6 +22,30 @@ class DesignVersionActions{
         server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria');
     }
 
+    designerUpdatesDesignVersionNameTo(newName){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria');
+    }
+
+    developerUpdatesDesignVersionNameTo(newName){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DEVELOPER, 'hugh');
+    }
+
+    managerUpdatesDesignVersionNameTo(newName){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.MANAGER, 'miles');
+    }
+
+    designerUpdatesDesignVersionNumberTo(newNumber){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DESIGNER, 'gloria');
+    }
+
+    developerUpdatesDesignVersionNumberTo(newNumber){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DEVELOPER, 'hugh');
+    }
+
+    managerUpdatesDesignVersionNumberTo(newNumber){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.MANAGER, 'miles');
+    }
+
     designerPublishesDesignVersion(versionName){
         server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DESIGNER, 'gloria');
     }
@@ -61,8 +85,28 @@ class DesignVersionActions{
         server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.MANAGER, 'miles');
     }
 
-    designerEditDesign_DesignVersion(designName, designVersionName){
-        server.call('testDesigns.editDesignVersion', designName, designVersionName, RoleType.DESIGNER, 'gloria');
+    designerEditDesignVersion(designVersionName){
+        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria');
+    }
+
+    developerEditDesignVersion(designVersionName){
+        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh');
+    }
+
+    managerEditDesignVersion(designVersionName){
+        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.MANAGER, 'miles');
+    }
+
+    designerViewDesignVersion(designVersionName){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria');
+    }
+
+    developerViewDesignVersion(designVersionName){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh');
+    }
+
+    managerViewDesignVersion(designVersionName){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.MANAGER, 'miles');
     }
 
 

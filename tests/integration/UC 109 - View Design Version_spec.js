@@ -1,4 +1,17 @@
-import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 109 - View Design Version', function(){
@@ -13,11 +26,12 @@ describe('UC 109 - View Design Version', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
         // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'DesignVersion1')
     });
 
     afterEach(function(){
@@ -30,54 +44,54 @@ describe('UC 109 - View Design Version', function(){
 
         // Setup
         // Make sure the design is in the user context and the design version isn't
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
+        DesignActions.designerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion1'));
     });
 
     it('All roles can view a Draft Design Version', function(){
         // Setup
         // Make sure the design is in the user context and the design version isn't
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
+        DesignActions.designerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
         // Publish it so its draft
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
 
         // Try for Designer
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion1'));
 
         // Try for Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('verifyUserContext.designVersionIsNone', 'hugh', (function(error, result){expect(!error);}));
+        DesignActions.developerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DEVELOPER, 'DesignVersion1'));
 
         // Try for Manager
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('verifyUserContext.designVersionIsNone', 'miles', (function(error, result){expect(!error);}));
+        DesignActions.managerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.MANAGER, 'miles');
+        DesignVersionActions.managerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.MANAGER, 'DesignVersion1'));
     });
 
 
@@ -85,52 +99,56 @@ describe('UC 109 - View Design Version', function(){
 
         // Setup
         // Make sure the design is in the user context and the design version isn't
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
+        DesignActions.designerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
         // Publish it so its draft
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         // Create next version
-        server.call('testDesignVersions.createNextDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
         // Verify - new DV created with default name as well as DV1
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
         // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE,));
         // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE,));
 
         // Try for Designer
+        DesignActions.designerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
+
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion1'));
 
         // Try for Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('verifyUserContext.designVersionIsNone', 'hugh', (function(error, result){expect(!error);}));
+        DesignActions.developerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DEVELOPER, 'DesignVersion1'));
 
         // Try for Manager
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('verifyUserContext.designVersionIsNone', 'miles', (function(error, result){expect(!error);}));
+        DesignActions.managerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.MANAGER, 'miles');
+        DesignVersionActions.managerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.MANAGER, 'DesignVersion1'));
 
     });
 
@@ -138,80 +156,88 @@ describe('UC 109 - View Design Version', function(){
 
         // Setup
         // Make sure the design is in the user context and the design version isn't
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('verifyUserContext.designVersionIsNone', 'gloria', (function(error, result){expect(!error);}));
+        DesignActions.designerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
         // Publish it so its draft
-        server.call('testDesignVersions.publishDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         // Create next version
-        server.call('testDesignVersions.createNextDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
         // Verify - new DV created with default name as well as DV1
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+        // Select the new DV
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE,));
+        // And previous DV should be complete
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE,));
 
         // Try for Designer
+        DesignActions.designerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
+
         // Execute
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerViewDesignVersion('DesignVersion2');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
 
         // Try for Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('verifyUserContext.designVersionIsNone', 'hugh', (function(error, result){expect(!error);}));
+        DesignActions.developerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerViewDesignVersion('DesignVersion2');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'hugh', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DEVELOPER, 'DesignVersion2'));
 
         // Try for Manager
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('verifyUserContext.designVersionIsNone', 'miles', (function(error, result){expect(!error);}));
+        DesignActions.managerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, RoleType.MANAGER, 'miles');
+        DesignVersionActions.managerViewDesignVersion('DesignVersion2');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
-        server.call('verifyUserContext.designVersionIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'miles', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.MANAGER, 'DesignVersion2'));
 
     });
 
 
     // Conditions
     it('Only a Designer can view an New Design Version', function(){
+        // Leave DV1 Unpublished
         // Try for Developer
         // Setup
         // Make sure the design is in the user context and the design version isn't
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('verifyUserContext.designVersionIsNone', 'hugh', (function(error, result){expect(!error);}));
+        DesignActions.developerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version should not be set
-        server.call('verifyUserContext.designVersionIsNone', 'hugh', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Try for Manager
         // Setup
         // Make sure the design is in the user context and the design version isn't
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('verifyUserContext.designVersionIsNone', 'miles', (function(error, result){expect(!error);}));
+        DesignActions.managerSelectsDesign('Design1');
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        server.call('testDesignVersions.viewDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.MANAGER, 'miles');
+        DesignVersionActions.managerViewDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version should not be set
-        server.call('verifyUserContext.designVersionIsNone', 'miles', (function(error, result){expect(!error);}));
+        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
     });
 
 

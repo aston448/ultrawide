@@ -1,28 +1,20 @@
-import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 110 - Edit Design Version Name and Number', function(){
-
-    let createNewDesignVersionFromDraft = function(){
-        // Setup
-        // Publish the Design Version
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-
-        // Execute
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-
-        // Verify - new DV created with default name as well as DV1
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', 'DesignVersion1');
-        server.call('verifyDesignVersions.designVersionExistsCalled', 'Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
-        // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', 'DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
-    };
 
     before(function(){
 
@@ -34,11 +26,12 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
         // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'DesignVersion1')
     });
 
     afterEach(function(){
@@ -51,28 +44,28 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('New Name');
 
         // Verify
-        server.call('verifyDesignVersions.currentDesignVersionNameIs', 'DesignVersion1', 'gloria');
+        expect(DesignVersionVerifications.currentDesignVersionNameForDesignerIs('New Name'));
     });
 
     it('A Designer may update the number of a Design Version', function(){
 
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignVersions.updateDesignVersionNumber', '1', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerUpdatesDesignVersionNumberTo('1.1');
 
         // Verify
-        server.call('verifyDesignVersions.currentDesignVersionNumberIs', '1', 'gloria');
+        expect(DesignVersionVerifications.currentDesignVersionNumberForDesignerIs('1.1'));
     });
 
 
@@ -82,26 +75,26 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
         // Try Developer
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh');
+        DesignActions.developerSelectsDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerUpdatesDesignVersionNameTo('New Name');
 
         // Verify that name has not in fact changed
-        server.call('verifyDesignVersions.currentDesignVersionNameIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh');
+        expect(DesignVersionVerifications.currentDesignVersionNameForDeveloperIs('DesignVersion1'));
 
         // Try Manager
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles');
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.MANAGER, 'miles');
+        DesignVersionActions.managerUpdatesDesignVersionNameTo('New Name');
 
         // Verify that name has not in fact changed
-        server.call('verifyDesignVersions.currentDesignVersionNameIs', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles');
+        expect(DesignVersionVerifications.currentDesignVersionNameForManagerIs('DesignVersion1'));
 
     });
 
@@ -110,66 +103,77 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
         // Try Developer
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'hugh');
+        DesignActions.developerSelectsDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignVersions.updateDesignVersionNumber', '1', RoleType.DEVELOPER, 'hugh');
+        DesignVersionActions.developerUpdatesDesignVersionNumberTo('1.1');
 
         // Verify that number has not in fact changed
-        server.call('verifyDesignVersions.currentDesignVersionNumberIs', DefaultItemNames.NEW_DESIGN_VERSION_NUMBER, 'hugh');
+        expect(DesignVersionVerifications.currentDesignVersionNumberForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
 
         // Try Manager
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'miles');
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        server.call('testDesignVersions.updateDesignVersionNumber', '1', RoleType.MANAGER, 'miles');
+        DesignVersionActions.managerUpdatesDesignVersionNumberTo('1.1');
 
         // Verify that number has not in fact changed
-        server.call('verifyDesignVersions.currentDesignVersionNumberIs', DefaultItemNames.NEW_DESIGN_VERSION_NUMBER, 'miles');
+        expect(DesignVersionVerifications.currentDesignVersionNumberForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
     });
 
     it('A Design Version may not be renamed to the same name as another version in the Design', function(){
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        // Call it DesignVersion1
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+
+
         // Create new Design Version
-        createNewDesignVersionFromDraft();
+        // Setup - create new DV from original
+        const params = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
+
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
 
         // Execute - try to rename new version to DesignVersion1
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion1');
 
         // Verify
         // Check that still retains default Name
-        server.call('verifyDesignVersions.currentDesignVersionNameIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        expect(DesignVersionVerifications.currentDesignVersionNameForDesignerIs(DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
 
     });
 
     it('A Design Version may not be renumbered to the same number as another version in the Design', function(){
         // Setup
         // Make sure the design and design version is in the user context
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        // Call it DesignVersion1 with number 1.0
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionNumber', '1.0', RoleType.DESIGNER, 'gloria');
-        // Create new Design Version
-        createNewDesignVersionFromDraft();
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNumberTo('1.0');
 
-        // Execute - try to rename new version to DesignVersion1
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionNumber', '1.0', RoleType.DESIGNER, 'gloria');
+        // Create new Design Version
+        // Setup - create new DV from original
+        const params = {
+            designName: 'Design1',
+            designVersionName: 'DesignVersion1'
+        };
+
+        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+
+        // Execute - try to rename new version number to 1.0
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNumberTo('1.0');
 
         // Verify
         // Check that still retains default Number
-        server.call('verifyDesignVersions.currentDesignVersionNumberIs', DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER, 'gloria');
+        expect(DesignVersionVerifications.currentDesignVersionNumberForDesignerIs(DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER));
     });
 
 });
