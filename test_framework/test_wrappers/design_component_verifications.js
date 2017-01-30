@@ -30,7 +30,7 @@ class DesignComponentVerifications{
   }
 
   componentOfType_Called_InDesign_Version_CountIs(type, name, designName, designVersionName, count){
-      server.call('verifyDesignComponents.componentCountCalledIs', type, name, designName, designVersionName, 1,
+      server.call('verifyDesignComponents.componentCountCalledIs', type, name, designName, designVersionName, count,
           (function(error, result){
               return(error === null);
           })
