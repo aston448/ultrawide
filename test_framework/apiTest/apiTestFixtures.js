@@ -190,11 +190,13 @@ Meteor.methods({
         //              Conditions
         //                  Scenario2
         //              Consequences
+        //              ExtraAspect
         //          Feature444
         //              Interface
         //              Actions
         //              Conditions
         //              Consequences
+        //          SubSection1
         //      Section2
         //          Feature2
         //              Interface
@@ -203,6 +205,7 @@ Meteor.methods({
         //              Conditions
         //                  Scenario4
         //              Consequences
+        //          SubSection2
         //  Application99
         //      Section99
 
@@ -242,6 +245,12 @@ Meteor.methods({
         rawName = DesignComponentModules.getRawTextFor('Feature1');
         ClientDesignComponentServices.updateComponentName(view, mode, feature1Component._id, 'Feature1', rawName);
 
+        // Add ExtraAspect to Feature1
+        ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, feature1Component);
+        const extraAspectComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentName: DefaultComponentNames.NEW_FEATURE_ASPECT_NAME});
+        rawName = DesignComponentModules.getRawTextFor('ExtraAspect');
+        ClientDesignComponentServices.updateComponentName(view, mode, extraAspectComponent._id, 'ExtraAspect', rawName);
+
         // Add Feature444 to Section 1
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section1Component);
         const feature444Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
@@ -253,6 +262,18 @@ Meteor.methods({
         const feature2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature2');
         ClientDesignComponentServices.updateComponentName(view, mode, feature2Component._id, 'Feature2', rawName);
+
+        // Add SubSection1 to Section1
+        ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, section1Component);
+        const subSection1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        rawName = DesignComponentModules.getRawTextFor('SubSection1');
+        ClientDesignComponentServices.updateComponentName(view, mode, subSection1Component._id, 'SubSection1', rawName);
+
+        // Add SubSection2 to Section2
+        ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, section2Component);
+        const subSection2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        rawName = DesignComponentModules.getRawTextFor('SubSection2');
+        ClientDesignComponentServices.updateComponentName(view, mode, subSection2Component._id, 'SubSection2', rawName);
 
         // Add Scenario1 to Feature1 Actions
         const featureAspect1Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Actions', componentParentId: feature1Component._id});

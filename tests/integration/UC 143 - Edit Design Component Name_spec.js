@@ -67,16 +67,16 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Add another App
         DesignComponentActions.designerAddApplication();
         // Should be one with the default name too now
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 1));
 
         // Execute
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME);
         DesignComponentActions.designerEditSelectedComponentNameTo_('Application1');
 
         // Verify - not changed to Application1 - should still be the default
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Feature name may not be changed to the same name as another Feature in the Design', function(){
@@ -85,16 +85,16 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Check both features are there (from default setup)
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
 
         // Execute - try to update Feature2 to Feature1
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
         DesignComponentActions.designerEditSelectedComponentNameTo_('Feature1');
 
         // Verify - not changed to Feature1 - should still be Feature2
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Scenario name may not be changed to the same name as another Scenario in the Design', function(){
@@ -103,16 +103,16 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Check both scenarios are there
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
 
         // Execute - try to update Scenario2 to Scenario1
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
         DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario1');
 
         // Verify - not changed to Scenario1 - should still be Scenario2
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Design Section name may not be changed to the same name as another Design Section under the same parent section', function(){
@@ -121,16 +121,16 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Check both Sections are there
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section2', 'Design1', 'DesignVersion1', 1));
 
         // Execute - try to update Section2 to Section1
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
         DesignComponentActions.designerEditSelectedComponentNameTo_('Section1');
 
         // Verify - not changed to Section1 - should still be Section2
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section2', 'Design1', 'DesignVersion1', 1));
 
 
     });
@@ -141,16 +141,16 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Check both feature aspects are there
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 1));
 
         // Execute - try to update Actions to Conditions
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         DesignComponentActions.designerEditSelectedComponentNameTo_('Conditions');
 
         // Verify - not changed
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Design Section name may be changed to the same name as a Design Section in a different parent', function(){
@@ -158,16 +158,16 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Check both Sections are there
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
 
         // Execute - update Section1 to Section99
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         DesignComponentActions.designerEditSelectedComponentNameTo_('Section99');
 
         // Verify - now 2 Section99s
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 0));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 2));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 2));
     });
 
     it('A Feature Aspect name may be changed to the same name as a Feature Aspect in another Feature', function(){
@@ -189,7 +189,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignComponentActions.designerEditSelectedComponentNameTo_('Aspect1');
 
         // Verify - now 2 Aspect1s
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Aspect1', 'Design1', 'DesignVersion1', 2));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Aspect1', 'Design1', 'DesignVersion1', 2));
     });
 
 

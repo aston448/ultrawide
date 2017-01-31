@@ -43,13 +43,13 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
 
         // Execute
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 0));
     });
 
     it('A Feature Aspect with no Scenarios may be removed from a Design Version', function(){
@@ -61,13 +61,13 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444');
         // There are originally 3 Actions in default data
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 
         // Execute
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
 
         // Verify - now only 2
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 2));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 2));
     });
 
     it('A Feature with no Feature Aspects or Scenarios may be removed from a Design Version', function(){
@@ -87,7 +87,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 0));
 
     });
 
@@ -96,13 +96,13 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
 
         // Execute - Use Section99
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 0));
     });
 
     it('An Application with no Design sections may be removed from a Design Version', function(){
@@ -110,7 +110,7 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
         // Remove Section99 from Application99
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
 
@@ -118,7 +118,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 0));
     });
 
 
@@ -130,13 +130,13 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
 
         // Execute
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
 
         // Verify - not removed
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
 
     });
 
@@ -152,7 +152,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
 
         // Verify - not removed
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
 
     });
 
@@ -166,7 +166,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
         // Verify - not removed
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Feature may only be removed if it has no Feature Aspects', function(){
@@ -179,7 +179,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
 
         // Verify - not removed
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
     });
 
     it('A Feature may only be removed if it has no Scenarios');
@@ -190,13 +190,13 @@ describe('UC 144 - Remove Design Component', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // There are originally 3 Actions in default data
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 
         // Execute
         DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
 
         // Verify - not removed
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
     });
 
     it('A Scenario may only be removed if it has no Scenario Steps');

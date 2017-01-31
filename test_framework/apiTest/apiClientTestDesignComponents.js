@@ -183,6 +183,7 @@ Meteor.methods({
 
     },
 
+    // Use Select and then MoveSelected for unambiguous results
     'testDesignComponents.moveComponent'(componentType, componentName, newParentType, newParentName, mode){
 
         // Assume view and context is correct
@@ -222,6 +223,21 @@ Meteor.methods({
         );
 
         ClientDesignComponentServices.setDesignComponent(component._id, userContext, displayContext);
-    }
+    },
+
+    'testDesignComponents.moveSelectedComponent'(targetType, targetParentName, targetName,  userName, mode){
+
+        // Assume view and context is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const displayContext = DisplayContext.BASE_EDIT;
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const movingComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        const newParentComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
+
+        ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
+
+    },
 
 });
