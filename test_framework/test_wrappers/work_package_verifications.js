@@ -28,16 +28,36 @@ class WorkPackageVerifications{
         );
     }
 
+    workPackage_StatusForManagerIs(wpName, wpStatus){
+        server.call('verifyWorkPackages.workPackageStatusIs', wpName, wpStatus, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     currentManagerWorkPackageIs(workPackageName){
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'miles');
+        server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
     }
 
     currentDeveloperWorkPackageIs(workPackageName){
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'hugh');
+        server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
     }
 
     currentDesignerWorkPackageIs(workPackageName){
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'gloria');
+        server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
     }
 
 }

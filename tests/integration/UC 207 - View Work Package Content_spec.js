@@ -1,5 +1,21 @@
-import {RoleType, ViewMode, ComponentType, WorkPackageType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+
 
 describe('UC 207 - View Work Package Content - Initial Design Version', function(){
 
@@ -13,25 +29,29 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Two Work Packages
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage2', RoleType.MANAGER, 'miles');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Manager selects DesignVersion1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+
+        // Add new Base WP
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+
+        // Add new Base WP - unpublished
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
     });
 
     afterEach(function(){
@@ -45,84 +65,59 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
     // Actions
     it('A Manager may view a New Initial Design Version Work Package', function(){
 
-        // Setup - make sure WP2 is selected before trying to view WP1
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'miles');
+        // Setup - make sure WP1 is selected before trying to view WP2
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
 
-        // Execute - should automatically switch selection to WP1 if successful
-        server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
+        // Execute - should automatically switch selection to WP2 if successful
+        WorkPackageActions.managerViewsBaseWorkPackage('WorkPackage2');
 
-        // Verify - current WP is WP1
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage1', 'miles');
+        // Verify - current WP is WP2
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage2'));
     });
 
     it('Any user role may view a Draft Initial Design Version Work Package', function(){
 
-        // Setup - publish WP1 and make sure WP2 is selected before trying to view WP1
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage1', 'miles');
-        server.call('testWorkPackages.publishWorkPackage', 'WorkPackage1', 'miles', RoleType.MANAGER);
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'miles');
+        // Setup - make sure WP2 is selected before trying to view WP1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
 
         // Execute for Manager - should automatically switch selection to WP1 if successful
-        server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
+        WorkPackageActions.managerViewsBaseWorkPackage('WorkPackage1');
 
         // Verify - current WP is WP1
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage1', 'miles');
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage2'));
 
         // Setup - Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'hugh');
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage2');
 
         // Execute for Developer - should automatically switch selection to WP1 if successful
-        server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'hugh', RoleType.DEVELOPER);
+        WorkPackageActions.developerViewsBaseWorkPackage('WorkPackage1');
 
         // Verify - current WP is WP1
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage1', 'hugh');
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('WorkPackage2'));
 
         // Setup - Designer
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'gloria');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.designerSelectsWorkPackage('WorkPackage2');
 
-        // Execute for Manager - should automatically switch selection to WP1 if successful
-        server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'gloria', RoleType.DESIGNER);
+        // Execute for Designer - should automatically switch selection to WP1 if successful
+        WorkPackageActions.designerViewsBaseWorkPackage('WorkPackage1');
 
         // Verify - current WP is WP1
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage1', 'gloria');
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('WorkPackage2'));
     });
 
     it('Any user role may view a Complete Initial Design Version Work Package');
 
 
     // Conditions
-    it('Only a Manager may view a New Initial Design Version Work Package', function(){
-
-        // Setup - publish WP2 so other users can select it
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'miles');
-        server.call('testWorkPackages.publishWorkPackage', 'WorkPackage2', 'miles', RoleType.MANAGER);
-
-        // Setup - Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'hugh');
-
-        // Execute for Developer - would automatically switch selection to WP1 if successful
-        server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'hugh', RoleType.DEVELOPER);
-
-        // Verify - current WP is still WP2
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage2', 'hugh');
-
-        // Setup - Designer
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('testWorkPackages.selectWorkPackage', 'WorkPackage2', 'gloria');
-
-        // Execute for Manager - would automatically switch selection to WP1 if successful
-        server.call('testWorkPackages.viewWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'gloria', RoleType.DESIGNER);
-
-        // Verify - current WP is WP1
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage2', 'gloria');
-    });
+    it('Only a Manager may view a New Initial Design Version Work Package');
 
 
     // Consequences

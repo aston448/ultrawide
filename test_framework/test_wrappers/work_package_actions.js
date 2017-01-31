@@ -32,6 +32,10 @@ class WorkPackageActions{
         server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER);
     }
 
+    managerWithdrawsSelectedWorkPackage(){
+        server.call('testWorkPackages.withdrawSelectedWorkPackage', 'miles', RoleType.MANAGER);
+    }
+
     managerRemovesSelectedWorkPackage(){
         server.call('testWorkPackages.removeSelectedWorkPackage', 'miles', RoleType.MANAGER);
     }
@@ -43,6 +47,20 @@ class WorkPackageActions{
     managerEditsSelectedBaseWorkPackage(){
         server.call('testWorkPackages.editSelectedWorkPackage', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
     }
+
+    managerViewsBaseWorkPackage(wpName){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
+    }
+
+    developerViewsBaseWorkPackage(wpName){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'hugh', RoleType.DEVELOPER);
+    }
+
+    designerViewsBaseWorkPackage(wpName){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'gloria', RoleType.DESIGNER);
+    }
+
+
 }
 
 export default new WorkPackageActions();
