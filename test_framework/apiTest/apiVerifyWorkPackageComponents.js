@@ -17,6 +17,17 @@ Meteor.methods({
         return true;
     },
 
+    'verifyWorkPackageComponents.componentExistsInCurrentWpCalled'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        // This call will actually verify the component exists and return error if not
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+
+        return true;
+    },
+
     'verifyWorkPackageComponents.componentParentIs'(workPackageName, componentType, componentName, parentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -43,6 +54,19 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackageComponents.currentWpComponentIsInScope'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+
+        if(workPackageComponent.componentActive){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not Active in Scope");
+        }
+    },
+
     'verifyWorkPackageComponents.componentIsInParentScope'(workPackageName, componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -56,10 +80,36 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackageComponents.currentWpComponentIsInParentScope'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+
+        if(workPackageComponent.componentParent){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not in Parent Scope");
+        }
+    },
+
     'verifyWorkPackageComponents.componentIsNotInScope'(workPackageName, componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+
+        if(workPackageComponent.componentParent || workPackageComponent.componentActive){
+            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is in Scope!");
+        } else {
+            return true;
+        }
+    },
+
+    'verifyWorkPackageComponents.currentWpComponentIsNotInScope'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         if(workPackageComponent.componentParent || workPackageComponent.componentActive){

@@ -1,4 +1,21 @@
-import {RoleType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 232 - Remove Design Component from Scope - Initial Design Version', function(){
@@ -13,28 +30,27 @@ describe('UC 232 - Remove Design Component from Scope - Initial Design Version',
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
-        // Add A Work Package
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
-        // Scope everything
-        server.call('testWorkPackages.editWorkPackage', 'WorkPackage1', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Manager selects DesignVersion1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+
+        // Add new Base WP - published
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        
+        // Add Application1 in scope
+        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentBaseWp('Application1');
     });
 
     afterEach(function(){
@@ -47,310 +63,310 @@ describe('UC 232 - Remove Design Component from Scope - Initial Design Version',
 
         // Setup - verify all in scope
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3',));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        WpComponentActions.managerRemovesApplicationFromScopeForCurrentBaseWp('Application1');
 
         // Verify - everything not in scope
         // Application1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A Manager can remove all in-scope Scenarios for a Design Section in an Initial Design Version from a Work Package Scope', function(){
 
         // Setup - verify all in scope
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        WpComponentActions.managerRemovesDesignSectionFromScopeForCurrentBaseWp('Application1', 'Section1');
 
         // Verify - everything in Section1 is out of scope - rest still in
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A Manager can remove all in-scope Scenarios for a Feature in an Initial Design Version from a Work Package Scope', function(){
 
         // Setup - verify all in scope
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        WpComponentActions.managerRemovesFeatureFromScopeForCurrentBaseWp('Section1', 'Feature1');
 
         // Verify - everything in Feature1 is out of scope - rest still in
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A Manager can remove all in-scope Scenarios for a Feature Aspect in an Initial Design Version from a Work Package Scope', function(){
 
         // Setup - verify all in scope
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        WpComponentActions.managerRemovesFeatureAspectFromScopeForCurrentBaseWp('Feature1', 'Actions');
 
         // Verify - everything in Feature1 Actions is out of scope - rest still in
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A Manager can remove an in-scope Scenario in an Initial Design Version from a Work Package Scope', function(){
 
         // Setup - verify all in scope
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario1');
 
         // Verify - Scenario1 is out of scope - rest still in
         // Application1 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.APPLICATION, 'NONE', 'Application1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         // Section1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         // Feature1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section1', 'Feature1', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsNotInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'miles');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         // Feature1 Conditions is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2 is out of scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         // Section2 is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.FEATURE, 'Section2', 'Feature2', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // Scenario3 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // Feature2 Conditions is in parent scope
-        server.call('verifyWorkPackageComponents.componentIsInParentScope', 'WorkPackage1', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'miles');
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         // Scenario4 is in scope
-        server.call('verifyWorkPackageComponents.componentIsInScope', 'WorkPackage1', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'miles');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
 

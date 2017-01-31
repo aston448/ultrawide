@@ -8,13 +8,13 @@ import TestDataHelpers                      from '../test_modules/test_data_help
 
 Meteor.methods({
 
-    'testWorkPackageComponents.toggleInitialWpComponentInScope'(workPackageName, componentType, componentParentName, componentName, userName){
+    'testWorkPackageComponents.toggleInitialWpComponentInScope'(componentType, componentParentName, componentName, userName){
 
         const view = ViewType.WORK_PACKAGE_BASE_EDIT;
         const displayContext = DisplayContext.WP_SCOPE;
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, true);
@@ -22,13 +22,13 @@ Meteor.methods({
         return true;
     },
 
-    'testWorkPackageComponents.toggleInitialWpComponentOutScope'(workPackageName, componentType, componentParentName, componentName, userName){
+    'testWorkPackageComponents.toggleInitialWpComponentOutScope'(componentType, componentParentName, componentName, userName){
 
         const view = ViewType.WORK_PACKAGE_BASE_EDIT;
         const displayContext = DisplayContext.WP_SCOPE;
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, false);
@@ -36,13 +36,13 @@ Meteor.methods({
         return true;
     },
 
-    'testWorkPackageComponents.toggleUpdateWpComponentInScope'(workPackageName, componentType, componentParentName, componentName, userName){
+    'testWorkPackageComponents.toggleUpdateWpComponentInScope'(componentType, componentParentName, componentName, userName){
 
         const view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
         const displayContext = DisplayContext.WP_SCOPE;
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, true);
@@ -50,13 +50,13 @@ Meteor.methods({
         return true;
     },
 
-    'testWorkPackageComponents.toggleUpdateWpComponentOutScope'(workPackageName, componentType, componentParentName, componentName, userName){
+    'testWorkPackageComponents.toggleUpdateWpComponentOutScope'(componentType, componentParentName, componentName, userName){
 
         const view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
         const displayContext = DisplayContext.WP_SCOPE;
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, false);

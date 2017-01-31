@@ -90,7 +90,7 @@ describe('UC 209 - Withdraw Work Package - Initial Design Version', function(){
         WorkPackageActions.managerWithdrawsSelectedWorkPackage();
 
         // Verify - still New
-        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('WorkPackage1', WorkPackageStatus.WP_NEW));
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('WorkPackage2', WorkPackageStatus.WP_NEW));
 
     });
 
