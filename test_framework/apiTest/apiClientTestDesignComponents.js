@@ -159,6 +159,23 @@ Meteor.methods({
         ClientDesignComponentServices.updateFeatureNarrative(view, mode, featureComponent._id, newText, newRawText);
     },
 
+    'testDesignComponents.updateSelectedFeatureNarrative'(newText, userName){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        if(userContext.designComponentId === 'NONE'){
+            throw new Meteor.Error("FAIL", "No Feature is currently selected for user " + userName);
+        }
+
+        const newRawText = DesignComponentModules.getRawTextFor(newText);
+
+        ClientDesignComponentServices.updateFeatureNarrative(view, mode, userContext.designComponentId, newText, newRawText);
+    },
+
     'testDesignComponents.updateComponentNameInMode'(componentType, oldName, newName, mode){
 
         // Assume view is correct

@@ -61,6 +61,14 @@ class DesignComponentVerifications{
         );
     }
 
+    feature_NarrativeIs(featureName, narrativeText){
+        server.call('verifyDesignComponents.featureNarrativeIs', featureName, narrativeText,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
 }
 
 export default new DesignComponentVerifications();

@@ -1,4 +1,17 @@
-import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 147 - Edit Feature Narrative', function(){
@@ -13,13 +26,10 @@ describe('UC 147 - Edit Feature Narrative', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     afterEach(function(){
@@ -31,16 +41,12 @@ describe('UC 147 - Edit Feature Narrative', function(){
     it('Each Feature has a default Narrative template', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Verify default Narrative template is there
-        let defaultNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
-        server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', defaultNarrative);
+        expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', DefaultComponentNames.NEW_NARRATIVE_TEXT));
+
     });
 
     it('Each Narrative has an option to edit it');
@@ -54,50 +60,27 @@ describe('UC 147 - Edit Feature Narrative', function(){
     it('A Designer can edit and save a Feature Narrative', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         let oldNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
         let newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
         // Check
-        server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', oldNarrative);
+        expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', oldNarrative));
 
         // Execute
-        server.call('testDesignComponents.updateFeatureNarrative', 'Feature1', newNarrative, ViewMode.MODE_EDIT);
+        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
+        DesignComponentActions.designerEditSelectedFeatureNarrativeTo(newNarrative);
 
         // Verify
-        server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', newNarrative);
+        expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', newNarrative));
     });
 
     it('A designer can edit but then discard changes to a Feature Narrative');
 
 
     // Conditions
-    it('A Feature Narrative can only be edited when in edit mode', function(){
-
-        // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-
-        let oldNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
-        let newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
-        // Check
-        server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', oldNarrative);
-
-        // Execute
-        server.call('testDesignComponents.updateFeatureNarrative', 'Feature1', newNarrative, ViewMode.MODE_VIEW);
-
-        // Verify - not changed
-        server.call('verifyDesignComponents.featureNarrativeIs', 'Feature1', oldNarrative);
-    });
+    it('A Feature Narrative can only be edited when in edit mode');
 
 
     // Consequences

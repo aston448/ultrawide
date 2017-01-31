@@ -97,6 +97,10 @@ class DesignComponentActions{
     designerReorderSelectedComponentToAbove_WithParent_Called_(targetType, targetParentName, targetComponentName){
         server.call('testDesignComponents.reorderSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT);
     }
+
+    designerEditSelectedFeatureNarrativeTo(newText){
+        server.call('testDesignComponents.updateSelectedFeatureNarrative', newText, 'gloria');
+    }
 }
 
 export default new DesignComponentActions();
