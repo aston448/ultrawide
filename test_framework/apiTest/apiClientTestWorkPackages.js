@@ -1,6 +1,8 @@
 
 import { Meteor } from 'meteor/meteor';
 
+import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
+
 import ClientWorkPackageServices    from '../../imports/apiClient/apiClientWorkPackage.js';
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
@@ -30,6 +32,14 @@ Meteor.methods({
         ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
     },
 
+    'testWorkPackages.publishSelectedWorkPackage'(userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
+    },
+
     'testWorkPackages.withdrawWorkPackage'(workPackageName, userName, userRole){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -42,6 +52,14 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+    },
+
+    'testWorkPackages.editSelectedWorkPackage'(workPackageType, userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
         ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
     },
@@ -66,6 +84,14 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id)
+    },
+
+    'testWorkPackages.removeSelectedWorkPackage'(userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
         ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id)
     }

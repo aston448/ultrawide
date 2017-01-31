@@ -1,4 +1,19 @@
-import {RoleType, ViewMode, ComponentType, WorkPackageType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 203 - Edit Work Package Name', function(){
@@ -13,19 +28,21 @@ describe('UC 203 - Edit Work Package Name', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version - then set DV as DesignVersion1 and publish it
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add a new Work Package
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'miles');
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Manager selects DesignVersion1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+
+        // Add new Base WP
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
     });
 
     afterEach(function(){
@@ -33,73 +50,42 @@ describe('UC 203 - Edit Work Package Name', function(){
     });
 
 
-    // Interface
-    it('A Work Package has an option to edit its name');
-
-    it('When a Work Package name is being edited there is an option to save changes');
-
-    it('When a Work Package name is being edited there is an option to undo changes');
-
-
     // Actions
     it('A Manager may edit the name of a Work Package', function(){
 
-        // Setup - select and verify the WP
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
+        // Setup - select the WP
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
 
         // Execute
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
 
         // Verify
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', 'WorkPackage1', 'miles');
+        expect(WorkPackageVerifications.workPackageExistsForManagerCalled('WorkPackage1'));
     });
 
     it('A Work Package name being edited may be discarded without losing the old name');
 
 
     // Conditions
-    it('Only a Manager may edit a Work Package name', function(){
-
-        // Setup - select and verify the WP
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-
-        // Execute as Designer
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'gloria');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'gloria');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.DESIGNER, 'gloria');
-
-        // Verify
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'gloria');
-
-        // Execute as Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion1', 'hugh');
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'hugh');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.DEVELOPER, 'hugh');
-
-        // Verify
-        server.call('verifyWorkPackages.currentWorkPackageNameIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'hugh');
-    });
+    it('Only a Manager may edit a Work Package name');
 
     it('A Work Package may not be given the same name as another Work Package for the Design Version', function(){
 
         // Setup - select WP and rename
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
-        server.call('verifyWorkPackages.workPackageCalledCountIs', 'WorkPackage1', 1, 'miles');
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        expect(WorkPackageVerifications.workPackageCalled_CountForManagerIs('WorkPackage1', 1));
+
         // Add another WP
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
 
         // Execute - select new WP and try to rename to WorkPackage1
-        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 'miles');
-        server.call('testWorkPackages.updateWorkPackageName', 'WorkPackage1', RoleType.MANAGER, 'miles');
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
 
         // Verify - should be only 1 with new name and 1 with default
-        server.call('verifyWorkPackages.workPackageCalledCountIs', DefaultItemNames.NEW_WORK_PACKAGE_NAME, 1, 'miles');
-        server.call('verifyWorkPackages.workPackageCalledCountIs', 'WorkPackage1', 1, 'miles');
+        expect(WorkPackageVerifications.workPackageCalled_CountForManagerIs('WorkPackage1', 1));
+        expect(WorkPackageVerifications.workPackageCalled_CountForManagerIs(DefaultItemNames.NEW_WORK_PACKAGE_NAME, 1));
     });
 
 });
