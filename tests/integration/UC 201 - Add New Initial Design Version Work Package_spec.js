@@ -60,14 +60,4 @@ describe('UC 201 - Add New Initial Design Version Work Package', function(){
 
     });
 
-
-    // Conditions
-    it('Only a Manager can add new Initial Design Version Work Packages');
-
-    it('A Work Package cannot be added to a New Design Version');
-
-    it('A Work Package cannot be added to a Complete Design Version');
-
-    it('A Work Package cannot be added to an Updatable Design Version');
-
 });

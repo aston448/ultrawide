@@ -111,20 +111,6 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
 
     // Conditions
-    it('A new Design Update Component cannot be removed in View Only mode', function(){
-
-        // Setup - add new Application
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
-
-        // Remove Application
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify not removed
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria');
-    });
-
     it('A new Application cannot be removed from a Design Update if it has children', function(){
 
         // Setup - add new Application

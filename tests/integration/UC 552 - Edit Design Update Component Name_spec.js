@@ -61,25 +61,6 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
 
     // Conditions
-    it('Design Update Component names can only be edited when in edit mode', function(){
-
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Add new Feature to original Section 1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'gloria');
-
-        // Execute
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify - name not changed
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.FEATURE, 'Feature99', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'gloria');
-    });
 
     it('An Application name may not be changed to the same name as another Application in the Design Update or Base Design Version', function(){
 

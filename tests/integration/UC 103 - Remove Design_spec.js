@@ -24,6 +24,7 @@ describe('UC 103 - Remove Design', function() {
 
     });
 
+    // Actions
     it('A Designer can remove a Design that is removable', function() {
         // Execute -----------------------------------------------------------------------------------------------------
         DesignActions.designerRemovesDesign('Design1');
@@ -33,6 +34,7 @@ describe('UC 103 - Remove Design', function() {
         expect(DesignVerifications.designDoesNotExistCalled('Design1'));
     });
 
+    // Conditions
     it('A Design can only be removed if it has no Features', function() {
         // Setup -------------------------------------------------------------------------------------------------------
         // Work on Design1
@@ -52,23 +54,6 @@ describe('UC 103 - Remove Design', function() {
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist
         expect(DesignVerifications.designExistsCalled('Design1'));
-    });
-
-    it('A Design can only be removed by a Designer', function() {
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.developerRemovesDesign('Design1');
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // Design should still exist
-        expect(DesignVerifications.designExistsCalled('Design1'));
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.managerRemovesDesign('Design1');
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // Design should still exist
-        expect(DesignVerifications.designExistsCalled('Design1'));
-
     });
 
     it('A Design without Features cannot be removed if it contains a Design Update with Features', function() {
@@ -103,6 +88,7 @@ describe('UC 103 - Remove Design', function() {
         expect(DesignVerifications.designExistsCalled('Design1'));
     });
 
+    // Consequences
     it('When a Design is removed, any user with that Design as their default has the default cleared', function() {
         // Setup -------------------------------------------------------------------------------------------------------
         // Work on Design1

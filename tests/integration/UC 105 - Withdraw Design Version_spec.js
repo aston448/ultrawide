@@ -47,36 +47,6 @@ describe('UC 105 - Withdraw Design Version', function(){
 
 
     // Conditions
-    it('Only a Draft Design Version can be withdrawn');
-
-    it('Only a Designer can withdraw a Design Version', function(){
-
-        // Setup -------------------------------------------------------------------------------------------------------
-        // Get Designer to publish it...
-        DesignActions.designerSelectsDesign('Design1');
-        DesignVersionActions.designerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
-
-        // See if Developer can unpublish
-        // Make sure the design is in the user context
-        DesignActions.developerSelectsDesign('Design1');
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignVersionActions.developerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-
-        // Verify Still Draft-------------------------------------------------------------------------------------------
-        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
-
-        // See if Manager can unpublish
-        // Make sure the design is in the user context
-        DesignActions.managerSelectsDesign('Design1');
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignVersionActions.managerWithdrawsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-
-        // Verify Still Draft-------------------------------------------------------------------------------------------
-        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
-    });
 
     it('A Design Version that has Design Updates cannot be withdrawn');
 

@@ -16,26 +16,8 @@ describe('UC 101 - Add New Design', function() {
 
     });
 
-    it('A new Design can only be added by a Designer', function() {
-        // Setup -------------------------------------------------------------------------------------------------------
 
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.addNewDesignAsRole(RoleType.DEVELOPER);
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // No new design created
-        expect(DesignVerifications.defaultNewDesignDoesNotExist());
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.addNewDesignAsRole(RoleType.MANAGER);
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // No new design created
-        expect(DesignVerifications.defaultNewDesignDoesNotExist());
-
-    });
-
+    // Actions
     it('A Designer can add a new Design to Ultrawide', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
@@ -49,6 +31,7 @@ describe('UC 101 - Add New Design', function() {
 
     });
 
+    // Consequences
     it('When a new Design is added an initial Design Version is created for it', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------

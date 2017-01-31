@@ -83,10 +83,6 @@ describe('UC 205 - Remove Work Package - Initial Design Version', function(){
 
     });
 
-    it('An Adopted Initial Design Version Work Package may not be removed');
-
-    it('A Complete Initial Design Version Work Package may not be removed');
-
 });
 
 describe('UC 205 - Remove Work Package - Design Update', function(){

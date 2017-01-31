@@ -72,61 +72,8 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
     });
 
 
+
     // Conditions
-    it('Only a Designer may edit a Design Update name', function(){
-
-        // Setup - create a new Design Update and publish it
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, RoleType.DESIGNER, 'gloria');
-
-        // Try as Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'hugh');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'hugh');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DEVELOPER, 'hugh');
-
-        // Verify no change
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'hugh');
-
-        // Try as Manager
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'miles');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'miles');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.MANAGER, 'miles');
-
-        // Verify no change
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'miles');
-    });
-
-    it('Only a Designer may edit a Design Update reference', function(){
-
-        // Setup - create a new Design Update and publish it
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.publishDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, RoleType.DESIGNER, 'gloria');
-
-        // Try as Developer
-        server.call('testDesigns.selectDesign', 'Design1', 'hugh');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'hugh');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'hugh');
-        server.call('testDesignUpdates.updateDesignUpdateRef', 'CR999', RoleType.DEVELOPER, 'hugh');
-
-        // Verify no change
-        server.call('verifyDesignUpdates.currentDesignUpdateRefIs', DefaultItemNames.NEW_DESIGN_UPDATE_REF, 'hugh');
-
-        // Try as Manager
-        server.call('testDesigns.selectDesign', 'Design1', 'miles');
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'miles');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'miles');
-        server.call('testDesignUpdates.updateDesignUpdateRef', 'CR999', RoleType.MANAGER, 'miles');
-
-        // Verify no change
-        server.call('verifyDesignUpdates.currentDesignUpdateRefIs', DefaultItemNames.NEW_DESIGN_UPDATE_REF, 'miles');
-    });
-
     it('A Design Update name must be unique for the Base Design Version', function(){
 
         // Setup - create a new Design Update

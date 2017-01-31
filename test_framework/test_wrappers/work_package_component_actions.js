@@ -47,19 +47,19 @@ class WpComponentActions{
     }
 
     managerRemovesDesignSectionFromScopeForCurrentBaseWp(parentName, sectionName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.DESIGN_SECTION, 'NONE', parentName, sectionName, 'miles');
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.DESIGN_SECTION, parentName, sectionName, 'miles');
     }
 
     managerRemovesFeatureFromScopeForCurrentBaseWp(parentName, featureName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE, 'NONE', parentName, featureName, 'miles');
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE, parentName, featureName, 'miles');
     }
 
     managerRemovesFeatureAspectFromScopeForCurrentBaseWp(parentName, aspectName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE_ASPECT, 'NONE', parentName, aspectName, 'miles');
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles');
     }
 
     managerRemovesScenarioFromScopeForCurrentBaseWp(parentName, scenarioName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.SCENARIO, 'NONE', parentName, scenarioName, 'miles');
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.SCENARIO, parentName, scenarioName, 'miles');
     }
 
 }

@@ -123,7 +123,6 @@ describe('UC 144 - Remove Design Component', function(){
 
 
     // Conditions
-    it('Design Components can only be removed when in edit mode');
 
     it('An Application may only be removed if it has no Design Sections', function(){
 

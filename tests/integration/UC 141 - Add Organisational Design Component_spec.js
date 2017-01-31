@@ -84,12 +84,6 @@ describe('UC 141 - Add Organisational Design Component', function(){
     });
 
 
-    // Conditions
-    it('Only a Designer may add organisational components');
-
-    it('Organisational components may only be added when in edit mode');
-
-
     // Consequences
     it('Adding an organisational component to a base Design Version makes it available in any Design Updates based on that version');
 

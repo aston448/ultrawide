@@ -100,10 +100,6 @@ describe('UC 142 - Add Functional Design Component', function(){
     });
 
 
-    // Conditions
-    it('Design Components may only be added when in edit mode');
-
-
     // Consequences
     it('Adding a functional component to a base Design Version makes it available in any Design Updates based on that version');
 

@@ -73,40 +73,6 @@ describe('UC 108 - Edit Design Version', function(){
     });
 
 
-    // Conditions
-    it('Only a Designer can edit a Design Version', function(){
-
-        // Try for Developer
-        // Setup
-        // Make sure the design is in the user context and the design version isn't
-        DesignActions.developerSelectsDesign('Design1');
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
-
-        // Execute
-        DesignVersionActions.developerEditDesignVersion('DesignVersion1');
-
-        // Verify
-        // The Design version should not be in the context
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
-
-        // Try for Manager
-        // Setup
-        // Make sure the design is in the user context and the design version isn't
-        DesignActions.managerSelectsDesign('Design1');
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
-
-        // Execute
-        DesignVersionActions.managerEditDesignVersion('DesignVersion1');
-
-        // Verify
-        // The Design version should not be in the context
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
-    });
-
-
-    it('A Final Design Version cannot be edited');
-
-
     // Consequences
     it('When a Design Version is edited it is opened in edit mode with an option to view only');
 

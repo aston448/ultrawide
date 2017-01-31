@@ -137,7 +137,6 @@ describe('UC 145 - Move Design Component', function(){
 
 
     // Conditions
-    it('Design Components can only be moved when in edit mode');
 
     it('Applications cannot be moved to other Applications or Design Sections or Features or Feature Aspects', function(){
 

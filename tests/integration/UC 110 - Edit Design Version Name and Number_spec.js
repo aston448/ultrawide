@@ -68,60 +68,6 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
 
     // Conditions
-    it('Only a Designer may update a Design Version Name', function(){
-
-        // Try Developer
-        // Setup
-        // Make sure the design and design version is in the user context
-        DesignActions.developerSelectsDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-
-        // Execute
-        DesignVersionActions.developerUpdatesDesignVersionNameTo('New Name');
-
-        // Verify that name has not in fact changed
-        expect(DesignVersionVerifications.currentDesignVersionNameForDeveloperIs('DesignVersion1'));
-
-        // Try Manager
-        // Setup
-        // Make sure the design and design version is in the user context
-        DesignActions.managerSelectsDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-
-        // Execute
-        DesignVersionActions.managerUpdatesDesignVersionNameTo('New Name');
-
-        // Verify that name has not in fact changed
-        expect(DesignVersionVerifications.currentDesignVersionNameForManagerIs('DesignVersion1'));
-
-    });
-
-    it('Only a Designer may update a Design Version number', function(){
-
-        // Try Developer
-        // Setup
-        // Make sure the design and design version is in the user context
-        DesignActions.developerSelectsDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-
-        // Execute
-        DesignVersionActions.developerUpdatesDesignVersionNumberTo('1.1');
-
-        // Verify that number has not in fact changed
-        expect(DesignVersionVerifications.currentDesignVersionNumberForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
-
-        // Try Manager
-        // Setup
-        // Make sure the design and design version is in the user context
-        DesignActions.managerSelectsDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-
-        // Execute
-        DesignVersionActions.managerUpdatesDesignVersionNumberTo('1.1');
-
-        // Verify that number has not in fact changed
-        expect(DesignVersionVerifications.currentDesignVersionNumberForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
-    });
 
     it('A Design Version may not be renamed to the same name as another version in the Design', function(){
         // Setup

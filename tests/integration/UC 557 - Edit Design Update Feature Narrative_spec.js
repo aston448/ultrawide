@@ -81,22 +81,6 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
 
 
     // Conditions
-    it('A Design Update Feature Narrative cannot be edited in View Only mode', function(){
-
-        let newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
-
-        // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.featureNarrativeIs', 'Section1', 'Feature1', DefaultComponentNames.NEW_NARRATIVE_TEXT, 'gloria');
-
-        // Execute
-        server.call('testDesignUpdateComponents.updateFeatureNarrative', 'Section1', 'Feature1', newNarrative, 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify unchanged
-        server.call('verifyDesignUpdateComponents.featureNarrativeIs', 'Section1', 'Feature1', DefaultComponentNames.NEW_NARRATIVE_TEXT, 'gloria');
-    });
-
     it('An existing Design Update Feature Narrative cannot be edited if the Feature is not in Scope', function(){
 
         let newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';

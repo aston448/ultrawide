@@ -94,22 +94,6 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
 
     // Conditions
-    it('A functional Design Update Component can only be added in edit mode', function(){
-
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-
-        // Add Scenario
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-
-        // Verify
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'gloria');
-    });
-
     it('A Scenario cannot be added to a Feature that is not in Scope for the Design Update', function(){
 
         //Setup - add a new Update

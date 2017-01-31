@@ -67,8 +67,6 @@ describe('UC 203 - Edit Work Package Name', function(){
 
 
     // Conditions
-    it('Only a Manager may edit a Work Package name');
-
     it('A Work Package may not be given the same name as another Work Package for the Design Version', function(){
 
         // Setup - select WP and rename

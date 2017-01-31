@@ -63,34 +63,6 @@ describe('UC 106 - Create New Design Version', function(){
 
 
     // Conditions
-    it('Only a Designer can create a new Design Version', function(){
-
-        // Setup
-        // Publish the Design Version
-        DesignActions.designerSelectsDesign('Design1');
-        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-
-        // Execute as Developer
-        DesignActions.developerSelectsDesign('Design1');
-        DesignVersionActions.developerCreatesNextDesignVersionFrom('DesignVersion1');
-
-        // Verify - new DV not created
-        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
-        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
-        // And DV1 status should still be Draft
-        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT));
-
-        // Execute as Manager
-        DesignActions.managerSelectsDesign('Design1');
-        DesignVersionActions.managerCreatesNextDesignVersionFrom('DesignVersion1');
-
-        // Verify - new DV not created
-        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
-        expect(DesignVersionVerifications.designVersionDoesNotExistForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
-        // And DV1 status should still be Draft
-        expect(DesignVersionVerifications.designVersion_StatusForManagerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT));
-
-    });
 
     it('A new Design Version may not be created from a New Design Version', function(){
 

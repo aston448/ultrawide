@@ -76,28 +76,8 @@ describe('UC 209 - Withdraw Work Package - Initial Design Version', function(){
     });
 
 
-    // Conditions
-    it('Only a Manager can withdraw an Initial Design Version Work Package');
-
-    it('A New Initial Design Version Work Package cannot be withdrawn', function(){
-
-        // Setup
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
-
-        // Execute
-        WorkPackageActions.managerWithdrawsSelectedWorkPackage();
-
-        // Verify - still New
-        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('WorkPackage2', WorkPackageStatus.WP_NEW));
-
-    });
-
-    it('An Adopted Initial Design Version Work Package cannot be withdrawn');
 
 
-    it('A Complete Initial Design Version Work Package cannot be withdrawn');
 
 });
 
@@ -124,13 +104,5 @@ describe('UC 209 - Withdraw Work Package - Design Update', function(){
     it('A Manager can withdraw an Available Design Update Work Package');
 
 
-    // Conditions
-    it('Only a Manager can withdraw a Design Update Work Package');
-
-    it('An Adopted Design Update Work Package cannot be withdrawn');
-
-    it('A New Design Update Work Package cannot be withdrawn');
-
-    it('A Complete Design Update Work Package cannot be withdrawn');
 
 });

@@ -318,56 +318,6 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
 
     // Conditions
-    it('A existing Design Update Component can only be removed in a Design Update in edit mode', function(){
-
-        // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-
-        // Execute - remove Scenario 1 in view mode
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify - nothing is removed or in scope
-
-        // Application1
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        // Section1
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        // Feature1
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        // Feature1 Actions
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        // Scenario1
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        // Feature1 Conditions
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        // Scenario2
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        // Section2
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        // Feature2
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        // Feature2 Actions
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        // Scenario3
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        // Feature2 Conditions
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        // Scenario4
-        server.call('verifyDesignUpdateComponents.componentIsNotInScope', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
-    });
 
     it('An existing Design Update Component cannot be removed if any new Design Update Components have been added inside it in the current Design Update', function(){
 

@@ -243,18 +243,6 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
 
     // Conditions
-    it('A Design Update Component can only be restored in edit mode', function(){
-
-        // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
-
-        // Execute in View mode
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify - still removed
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-    });
 
     it('A Design Update Component that is the child of a removed Design Update Component cannot be restored', function(){
 

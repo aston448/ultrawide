@@ -109,21 +109,6 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
 
     // Conditions
-    it('An organisational Design Update Component can only be added in edit mode', function(){
-
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-
-        // Add Application
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_VIEW);
-
-        // Verify
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'gloria');
-    });
 
     it('A Feature Aspect cannot be added to a Feature that is not in Scope for the Design Update', function(){
 

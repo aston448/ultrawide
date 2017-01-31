@@ -208,37 +208,6 @@ describe('UC 109 - View Design Version', function(){
     });
 
 
-    // Conditions
-    it('Only a Designer can view an New Design Version', function(){
-        // Leave DV1 Unpublished
-        // Try for Developer
-        // Setup
-        // Make sure the design is in the user context and the design version isn't
-        DesignActions.developerSelectsDesign('Design1');
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
-
-        // Execute
-        DesignVersionActions.developerViewDesignVersion('DesignVersion1');
-
-        // Verify
-        // The Design version should not be set
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
-
-        // Try for Manager
-        // Setup
-        // Make sure the design is in the user context and the design version isn't
-        DesignActions.managerSelectsDesign('Design1');
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
-
-        // Execute
-        DesignVersionActions.managerViewDesignVersion('DesignVersion1');
-
-        // Verify
-        // The Design version should not be set
-        expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
-    });
-
-
     // Consequences
     it('When a non-editable Design Version is viewed it is opened View Only with no option to edit');
 

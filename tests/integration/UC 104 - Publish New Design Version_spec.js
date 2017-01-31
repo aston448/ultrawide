@@ -26,6 +26,7 @@ describe('UC 104 - Publish New Design Version', function() {
 
     });
 
+    // Actions
     it('A Designer can update a Design Version from New to Published', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
@@ -39,35 +40,5 @@ describe('UC 104 - Publish New Design Version', function() {
         // Verify ------------------------------------------------------------------------------------------------------
         expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_DRAFT));
     });
-
-    it('Only a Designer can publish a Design Version', function() {
-
-        // Setup -------------------------------------------------------------------------------------------------------
-        // Make sure the design is in the user context
-        DesignActions.developerSelectsDesign('Design1');
-        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignVersionActions.developerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // Still NEW
-        expect(DesignVersionVerifications.designVersion_StatusForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
-
-        // Setup -------------------------------------------------------------------------------------------------------
-        // Make sure the design is in the user context
-        DesignActions.managerSelectsDesign('Design1');
-        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        DesignVersionActions.managerPublishesDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // Still NEW
-        expect(DesignVersionVerifications.designVersion_StatusForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
-
-    });
-
-    it('Only a New Design Version can be published');
 
 });

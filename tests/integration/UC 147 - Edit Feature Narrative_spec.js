@@ -79,10 +79,6 @@ describe('UC 147 - Edit Feature Narrative', function(){
     it('A designer can edit but then discard changes to a Feature Narrative');
 
 
-    // Conditions
-    it('A Feature Narrative can only be edited when in edit mode');
-
-
     // Consequences
     it('When a Narrative is updated in a base Design Version, any related Design Updates are updated');
 

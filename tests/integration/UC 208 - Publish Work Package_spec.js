@@ -71,9 +71,6 @@ describe('UC 208 - Publish Work Package - Initial Design Version', function(){
     });
 
 
-    // Conditions
-    it('Only a Manager can publish a New Initial Design Version Work Package');
-
 });
 
 describe('UC 208 - Publish Work Package - Design Update', function(){
@@ -99,7 +96,5 @@ describe('UC 208 - Publish Work Package - Design Update', function(){
     it('A Manager can publish a New Design Update Work Package');
 
 
-    // Conditions
-    it('Only a Manager can publish a New Design Update Work Package');
 
 });

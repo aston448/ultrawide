@@ -24,36 +24,7 @@ describe('UC 107 - Update Design Name', function() {
 
     });
 
-    it('Only a Designer can update a Design name', function() {
-        // Setup -------------------------------------------------------------------------------------------------------
-        DesignActions.addNewDesignAsRole(RoleType.DESIGNER);
-        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        expect(DesignVerifications.designExistsCalled('Design1'));
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        // Give Developer a go...
-        DesignActions.developerEditsDesignNameFrom_To_('Design1', 'New Name');
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // No update to name
-        expect(DesignVerifications.designDoesNotExistCalled('New Name'));
-        expect(DesignVerifications.designExistsCalled('Design1'));
-
-        // And there is only one design
-        expect(DesignVerifications.designCountIs(1));
-
-        // Execute -----------------------------------------------------------------------------------------------------
-        // Give Manager a go...
-        DesignActions.managerEditsDesignNameFrom_To_('Design1', 'New Name');
-
-        // Verify ------------------------------------------------------------------------------------------------------
-        // No update to name
-        expect(DesignVerifications.designDoesNotExistCalled('New Name'));
-        expect(DesignVerifications.designExistsCalled('Design1'));
-        // And there is only one design
-        expect(DesignVerifications.designCountIs(1));
-    });
-
+    // Actions
     it('A Designer can edit a Design name to a new value', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
@@ -71,6 +42,7 @@ describe('UC 107 - Update Design Name', function() {
 
     });
 
+    // Conditions
     it('A Design cannot be given the same name as another existing Design', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------

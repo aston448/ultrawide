@@ -15,6 +15,7 @@ describe('UC 102 - Select Existing Design', function() {
 
     });
 
+    // Actions
     it('An existing Design can be selected as the working Design', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------
@@ -34,6 +35,7 @@ describe('UC 102 - Select Existing Design', function() {
         expect(UserContextVerifications.userContextForRole_DesignIs(RoleType.DESIGNER, 'Design2'));
     });
 
+    // Consequences
     it('When a new Design is selected previous user context is cleared', function() {
 
         // Setup -------------------------------------------------------------------------------------------------------

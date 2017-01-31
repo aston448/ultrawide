@@ -195,10 +195,6 @@ describe('UC 146 - ReOrder Design Component List', function(){
     it('A Scenario may be moved to be above another Scenario in a Feature');
 
 
-    // Conditions
-    it('Design Components may only be reordered when in edit mode');
-
-
     // Consequences
     it('When a Design Component is reordered in a base Design Version, any related Design Updates are updated');
 

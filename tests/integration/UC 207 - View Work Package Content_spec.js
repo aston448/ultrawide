@@ -116,12 +116,6 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
     it('Any user role may view a Complete Initial Design Version Work Package');
 
 
-    // Conditions
-    it('Only a Manager may view a New Initial Design Version Work Package');
-
-
-    // Consequences
-
 });
 
 

@@ -57,8 +57,6 @@ describe('UC 143 - Edit Design Component Name', function(){
 
 
     // Conditions
-    it('Design Component names can only be edited when in edit mode');
-
     it('An Application name may not be changed to the same name as another Application in the Design', function(){
 
         // Setup
