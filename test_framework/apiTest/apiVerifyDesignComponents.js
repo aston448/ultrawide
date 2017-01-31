@@ -158,6 +158,26 @@ Meteor.methods({
 
     },
 
+    'verifyDesignComponents.selectedComponentIsAboveComponent'(targetType, targetParentName, targetName, userName){
+
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const selectedComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        const targetComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
+
+        // Components highest in the list have the lowest indexes
+        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
+        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
+        if(selectedComponent.componentIndex >= targetComponent.componentIndex){
+            //console.log("FAIL!");
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent + " to be above component " + targetComponent + " in the list of " + targetType +"s");
+        } else {
+            return true;
+        }
+
+    },
+
     'verifyDesignComponents.featureNarrativeIs'(featureName, narrativeText){
 
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});

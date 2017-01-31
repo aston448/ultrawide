@@ -210,6 +210,7 @@ Meteor.methods({
 
     },
 
+
     'testDesignComponents.selectComponent'(componentType, parentName, componentName, userName){
 
         const displayContext = DisplayContext.BASE_EDIT;
@@ -237,6 +238,22 @@ Meteor.methods({
         const newParentComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
 
         ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
+
+    },
+
+    'testDesignComponents.reorderSelectedComponent'(targetType, targetParentName, targetName, userName, mode){
+
+        // Assume view and context is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const displayContext = DisplayContext.BASE_EDIT;
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+
+        const movingComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        const targetComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
+
+        ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
 
     },
 

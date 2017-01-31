@@ -1,4 +1,17 @@
-import {RoleType, ViewMode, ComponentType} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 146 - ReOrder Design Component List', function(){
@@ -13,13 +26,10 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
     beforeEach(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        // Edit the default Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', DefaultItemNames.NEW_DESIGN_VERSION_NAME, RoleType.DESIGNER, 'gloria');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
     });
 
     afterEach(function(){
@@ -37,202 +47,162 @@ describe('UC 146 - ReOrder Design Component List', function(){
     it('An Application may be moved to above another Application in a Design Version', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2');
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application1', 'Application2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application2', 'Application3');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Add another application
+        DesignComponentActions.designerAddApplicationCalled('Application2');
 
-        // Execute - move Application3 to above Application1
-        server.call('testDesignComponents.reorderComponent', ComponentType.APPLICATION, 'Application3', 'Application1', ViewMode.MODE_EDIT);
+        // Check ordering is as created: Application1, Application99, Application2
+        DesignComponentActions.designerSelectApplication('Application1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
+        DesignComponentActions.designerSelectApplication('Application99');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application2');
 
-        // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application3', 'Application1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application1', 'Application2');
+        // Execute - move Application2 to above Application1
+        DesignComponentActions.designerSelectApplication('Application2');
+        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+
+        // Verify - order should now be 2, 1, 99
+        DesignComponentActions.designerSelectApplication('Application2');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectApplication('Application1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
     });
 
     it('A Design Section may be moved to above another Design Section in an Application', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section2');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'Section1', 'Section2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'Section2', 'Section3');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Add another section
+        DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section3');
+
+        // Check ordering is as created - should be Section1, Section2, Section3
+        DesignComponentActions.designerSelectDesignSection('Application1', 'Section1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
+        DesignComponentActions.designerSelectDesignSection('Application1', 'Section2');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section3');
 
         // Execute - move Section3 to above Section1
-        server.call('testDesignComponents.reorderComponent', ComponentType.DESIGN_SECTION, 'Section3', 'Section1', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerSelectDesignSection('Application1', 'Section3');
+        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
         // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'Section3', 'Section1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'Section1', 'Section2');
+        DesignComponentActions.designerSelectDesignSection('Application1', 'Section3');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerSelectDesignSection('Application1', 'Section1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
     });
 
     it('A Design Section may be moved to be above another Design Section in its parent Design Section', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1');
-        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection2');
-        server.call('testDesignComponents.addDesignSectionToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'SubSection1', 'SubSection2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'SubSection2', 'SubSection3');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Add more sub sections to Section1
+        DesignComponentActions.designerAddDesignSectionToDesignSection_Called('Section1', 'SubSection2');
+        DesignComponentActions.designerAddDesignSectionToDesignSection_Called('Section1', 'SubSection3');
+        // Check ordering is as created: 1, 2, 3
+        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2');
+        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection2');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection3');
 
         // Execute - move SubSection3 to above SubSection1
-        server.call('testDesignComponents.reorderComponent', ComponentType.DESIGN_SECTION, 'SubSection3', 'SubSection1', ViewMode.MODE_EDIT);
+        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection3');
+        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
 
         // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'SubSection3', 'SubSection1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.DESIGN_SECTION, 'SubSection1', 'SubSection2');
+        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection3');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2');
     });
 
     it('A Feature may be moved to be above another Feature in a Design Section', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature2');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Feature1', 'Feature2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Feature2', 'Feature3');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Add another Feature to Section1
+        DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature555');
 
-        // Execute - move Feature3 to above Feature1
-        server.call('testDesignComponents.reorderComponent', ComponentType.FEATURE, 'Feature3', 'Feature1', ViewMode.MODE_EDIT);
+        // Check ordering is as created: Feature1, Feature444, Feature555
+        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature444');
+        DesignComponentActions.designerSelectFeature('Section1', 'Feature444');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature555');
 
-        // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Feature3', 'Feature1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE, 'Feature1', 'Feature2');
+        // Execute - move Feature555 to above Feature1
+        DesignComponentActions.designerSelectFeature('Section1', 'Feature555');
+        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+
+        // Verify - order should now be 555, 1, 444
+        DesignComponentActions.designerSelectFeature('Section1', 'Feature555');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature444');
     });
 
     it('A Feature aspect may be moved to be above another Feature Aspect in a Feature', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect2');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Aspect2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE_ASPECT, 'Aspect2', 'Aspect3');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Check ordering is as created for Feature1: Interface, Actions, Conditions, Consequences, ExtraAspect
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Interface');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Actions');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Conditions');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences');
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Consequences');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect');
 
-        // Execute - move Aspect3 to above Aspect1
-        server.call('testDesignComponents.reorderComponent', ComponentType.FEATURE_ASPECT, 'Aspect3', 'Aspect1', ViewMode.MODE_EDIT);
+        // Execute - move Consequences to above Conditions
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Consequences');
+        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
 
-        // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE_ASPECT, 'Aspect3', 'Aspect1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.FEATURE_ASPECT, 'Aspect1', 'Aspect2');
-    });
-
-    it('A Scenario may be moved to be above another Scenario in a Feature', function(){
-
-        // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario2');
-        server.call('testDesignComponents.addScenarioToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario1', 'Scenario2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario2', 'Scenario3');
-
-        // Execute - move Scenario3 to above Scenario1
-        server.call('testDesignComponents.reorderComponent', ComponentType.SCENARIO, 'Scenario3', 'Scenario1', ViewMode.MODE_EDIT);
-
-        // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario3', 'Scenario1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario1', 'Scenario2');
+        // Verify - order should now be Interface, Actions, Consequences, Conditions, ExtraAspect
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Interface');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Actions');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences');
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Consequences');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
+        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Conditions');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect');
     });
 
     it('A Scenario may be moved to be above another Scenario in a Feature Aspect', function(){
 
         // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addDesignSectionToApplication', 'Application1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1');
-        server.call('testDesignComponents.addFeatureToDesignSection', 'Section1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1');
-        server.call('testDesignComponents.addFeatureAspectToFeature', 'Feature1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario2');
-        server.call('testDesignComponents.addScenarioToFeatureAspect', 'Feature1', 'Aspect1');
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario1', 'Scenario2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario2', 'Scenario3');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Add another Scenario to Feature1 Actions
+        DesignComponentActions.designerAddScenarioToFeatureAspect_Called('Feature1', 'Actions', 'Scenario555');
+        // Check ordering is as created: Scenario1, Scenario444, Scenario555
+        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444');
+        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario444');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario555');
 
-        // Execute - move Scenario3 to above Scenario1
-        server.call('testDesignComponents.reorderComponent', ComponentType.SCENARIO, 'Scenario3', 'Scenario1', ViewMode.MODE_EDIT);
+        // Execute - move Scenario555 to above Scenario1
+        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario555');
+        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
-        // Verify - order should now be 3, 1, 2
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario3', 'Scenario1');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.SCENARIO, 'Scenario1', 'Scenario2');
+        // Verify - order should now be 555, 1, 444
+        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario555');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario1');
+        DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444');
     });
+
+    it('A Scenario may be moved to be above another Scenario in a Feature');
 
 
     // Conditions
-    it('Design Components may only be reordered when in edit mode', function(){
-
-        // Setup
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1');
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2');
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Application3');
-        // Check ordering is as created
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application1', 'Application2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application2', 'Application3');
-
-        // Execute - move Application3 to above Application1 - but in View Only mode
-        server.call('testDesignComponents.reorderComponent', ComponentType.APPLICATION, 'Application3', 'Application1', ViewMode.MODE_VIEW);
-
-        // Verify - order should not be changed
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application1', 'Application2');
-        server.call('verifyDesignComponents.componentIsAboveComponent', ComponentType.APPLICATION, 'Application2', 'Application3');
-    });
+    it('Design Components may only be reordered when in edit mode');
 
 
     // Consequences
