@@ -1,27 +1,36 @@
-import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 502 - Edit Design Update Name and Reference', function(){
 
     before(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
         // Complete the Design Version and create the next
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
     });
 
     after(function(){
@@ -31,7 +40,7 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        server.call('textFixtures.clearDesignUpdates');
+        TestFixtures.clearDesgnUpdates();
     });
 
     afterEach(function(){
@@ -43,32 +52,32 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
     it('A Designer may update a Design Update name', function(){
 
         // Setup - create a new Design Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        expect(DesignUpdateVerifications.updateExistsForDesignerCalled(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
 
         // Execute
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
 
         // Verify
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate1', 'gloria');
+        expect(DesignUpdateVerifications.updateExistsForDesignerCalled('DesignUpdate1'));
 
     });
 
     it('A Designer may update a Design Update reference', function(){
 
         // Setup - create a new Design Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        expect(DesignUpdateVerifications.updateExistsForDesignerCalled(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
 
         // Execute
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateRef', 'CR999', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateRefTo('CR999');
 
         // Verify
-        server.call('verifyDesignUpdates.currentDesignUpdateRefIs', 'CR999', 'gloria');
+        expect(DesignUpdateVerifications.selectedUpdateRefForDesignerIs('CR999'));
     });
 
 
@@ -77,53 +86,46 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
     it('A Design Update name must be unique for the Base Design Version', function(){
 
         // Setup - create a new Design Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate1', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
         // And now a second Update....
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
 
         // Execute - try to give it same name as before
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
 
         // Verify - name has not changed
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        expect(DesignUpdateVerifications.selectedUpdateNameForDesignerIs(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
     });
 
     it('The same Design Update reference may be used on more than one Design Update for a Base Design Version', function(){
         // Setup - create a new Design Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate1', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
         // And now a second Update....
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate2');
 
         // Execute - set same ref on both
-        server.call('testDesignUpdates.selectDesignUpdate', 'DesignUpdate1', 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateRef', 'CR999', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', 'DesignUpdate2', 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateRef', 'CR999', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerEditsSelectedUpdateRefTo('CR999');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
+        DesignUpdateActions.designerEditsSelectedUpdateRefTo('CR999');
 
         // Verify both changed
-        server.call('testDesignUpdates.selectDesignUpdate', 'DesignUpdate1', 'gloria');
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate1', 'gloria');
-        server.call('verifyDesignUpdates.currentDesignUpdateRefIs', 'CR999', 'gloria');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        expect(DesignUpdateVerifications.selectedUpdateRefForDesignerIs('CR999'));
 
-        server.call('testDesignUpdates.selectDesignUpdate', 'DesignUpdate2', 'gloria');
-        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', 'DesignUpdate2', 'gloria');
-        server.call('verifyDesignUpdates.currentDesignUpdateRefIs', 'CR999', 'gloria');
-
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
+        expect(DesignUpdateVerifications.selectedUpdateRefForDesignerIs('CR999'));
     });
 
 });

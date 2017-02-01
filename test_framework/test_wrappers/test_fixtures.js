@@ -26,6 +26,10 @@ class TestFixtures{
         server.call('testFixtures.clearAllData');
     };
 
+    clearDesgnUpdates(){
+        server.call('textFixtures.clearDesignUpdates');
+    }
+
     setDummyUserContextForDesigner(){
         server.call('testUserContext.setFullDummyEditContext', 'gloria');
     }

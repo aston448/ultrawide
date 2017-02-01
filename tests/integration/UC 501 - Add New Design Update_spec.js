@@ -1,27 +1,37 @@
-import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 501 - Add New Design Update', function(){
 
     before(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
         // Complete the Design Version and create the next
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
+
     });
 
     after(function(){
@@ -31,7 +41,7 @@ describe('UC 501 - Add New Design Update', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        server.call('textFixtures.clearDesignUpdates');
+        TestFixtures.clearDesgnUpdates();
     });
 
     afterEach(function(){
@@ -43,15 +53,14 @@ describe('UC 501 - Add New Design Update', function(){
     it('A Designer may add a Design Update to an Updatable Design Version', function(){
 
         // Setup
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
 
         // Execute
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerAddsAnUpdate();
 
         // Verify
-        server.call('verifyDesignUpdates.designUpdateExistsCalled', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
+        expect(DesignUpdateVerifications.updateExistsForDesignerCalled(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
     });
-
 
 
 });
