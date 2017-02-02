@@ -28,12 +28,12 @@ class TestDataHelpers {
         } else {
             // Check we did get an error
             if(outcome.success){
-                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: ' + expectation.message + ' but got SUCCESS');
+                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: \"' + expectation.message + '\" but got SUCCESS');
             }
 
             // Were expecting a validation failure - check its the right one
             if(outcome.message != expectation.message){
-                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: ' + expectation.message + ' but got: ' + outcome.message);
+                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: \"' + expectation.message + '\" but got: \"' + outcome.message + '\"');
             }
         }
     };

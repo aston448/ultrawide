@@ -6,173 +6,173 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 class UpdateComponentActions{
 
     // Component additions
-    designerAddsApplicationToCurrentUpdate(){
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
+    designerAddsApplicationToCurrentUpdate(expectation){
+        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsApplicationCalled(appName){
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, appName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsApplicationCalled(appName, expectation){
+        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT, expectation);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, appName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsDesignSectionToCurrentUpdateApplication(appName){
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', appName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsDesignSectionToCurrentUpdateApplication(appName, expectation){
+        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsDesignSectionToCurrentUpdateSection(sectionParent, sectionName){
-        server.call('testDesignUpdateComponents.addSectionToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsDesignSectionToCurrentUpdateSection(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.addSectionToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsDesignSectionToApplication_Called(appName, sectionName){
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', appName, 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, appName, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, sectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsDesignSectionToApplication_Called(appName, sectionName, expectation){
+        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, appName, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsFeatureToCurrentUpdateSection(sectionParent, sectionName){
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsFeatureToCurrentUpdateSection(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.addFeatureToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsDesignSectionTo_Section_Called(sectionParent, sectionName, subSectionName){
-        server.call('testDesignUpdateComponents.addSectionToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, sectionName, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, subSectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsDesignSectionTo_Section_Called(sectionParent, sectionName, subSectionName, expectation){
+        server.call('testDesignUpdateComponents.addSectionToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, sectionName, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, subSectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsFeatureTo_Section_Called(sectionParent, sectionName, featureName){
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, sectionName, DefaultComponentNames.NEW_FEATURE_NAME, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsFeatureTo_Section_Called(sectionParent, sectionName, featureName, expectation){
+        server.call('testDesignUpdateComponents.addFeatureToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, sectionName, DefaultComponentNames.NEW_FEATURE_NAME, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     designerAddsFeatureAspectToCurrentUpdateFeature(featureParent, featureName, expectation){
         server.call('testDesignUpdateComponents.addFeatureAspectToFeature', featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsFeatureAspectTo_Feature_Called(sectionParent, featureName, aspectName){
-        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', sectionParent, featureName, 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, featureName, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsFeatureAspectTo_Feature_Called(sectionParent, featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', sectionParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, featureName, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsScenarioToCurrentUpdateFeatureAspect(featureName, aspectName){
-        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsScenarioToCurrentUpdateFeatureAspect(featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsScenarioTo_FeatureAspect_Called(featureName, aspectName, scenarioName){
-        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, aspectName, DefaultComponentNames.NEW_SCENARIO_NAME, scenarioName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsScenarioTo_FeatureAspect_Called(featureName, aspectName, scenarioName, expectation){
+        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, aspectName, DefaultComponentNames.NEW_SCENARIO_NAME, scenarioName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Scope addition
-    designerAddsFeatureToCurrentUpdateScope(featureParent, featureName){
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsFeatureToCurrentUpdateScope(featureParent, featureName, expectation){
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsFeatureAspectToCurrentUpdateScope(featureName, aspectName){
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsFeatureAspectToCurrentUpdateScope(featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerAddsScenarioToCurrentUpdateScope(aspectName, scenarioName){
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsScenarioToCurrentUpdateScope(aspectName, scenarioName, expectation){
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Scope removal
-    designerRemovesFeatureFromCurrentUpdateScope(featureParent, featureName){
-        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesFeatureFromCurrentUpdateScope(featureParent, featureName, expectation){
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRemovesFeatureAspectFromCurrentUpdateScope(featureName, aspectName){
-        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesFeatureAspectFromCurrentUpdateScope(featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRemovesScenarioFromCurrentUpdateScope(aspectName, scenarioName){
-        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesScenarioFromCurrentUpdateScope(aspectName, scenarioName, expectation){
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Select
-    designerSelectsUpdateComponent(componentType, componentParent, componentName){
-        server.call('testDesignUpdateComponents.selectComponent', componentType, componentParent, componentName, 'gloria');
+    designerSelectsUpdateComponent(componentType, componentParent, componentName, expectation){
+        server.call('testDesignUpdateComponents.selectComponent', componentType, componentParent, componentName, 'gloria', expectation);
     }
 
     // Rename selected
-    designerUpdatesSelectedUpdateComponentNameTo(newName){
-        server.call('testDesignUpdateComponents.updateCurrentComponentName', newName, 'gloria', ViewMode.MODE_EDIT);
+    designerUpdatesSelectedUpdateComponentNameTo(newName, expectation){
+        server.call('testDesignUpdateComponents.updateCurrentComponentName', newName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Move Selected
-    designerMovesSelectedUpdateComponentTo(targetType, targetParent, targetName){
-        server.call('testDesignUpdateComponents.moveSelectedDesignComponent', targetType, targetParent, targetName, 'gloria', ViewMode.MODE_EDIT);
+    designerMovesSelectedUpdateComponentTo(targetType, targetParent, targetName, expectation){
+        server.call('testDesignUpdateComponents.moveSelectedDesignComponent', targetType, targetParent, targetName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Reorder Selected
-    designerReordersSelectedUpdateComponentToAbove(targetType, targetParent, targetName){
-        server.call('testDesignUpdateComponents.reorderSelectedDesignComponent', targetType, targetParent, targetName, 'gloria', ViewMode.MODE_EDIT)
+    designerReordersSelectedUpdateComponentToAbove(targetType, targetParent, targetName, expectation){
+        server.call('testDesignUpdateComponents.reorderSelectedDesignComponent', targetType, targetParent, targetName, 'gloria', ViewMode.MODE_EDIT, expectation)
     }
 
     // Update Narrative for selected Feature
-    designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative){
-        server.call('testDesignUpdateComponents.updateSelectedFeatureNarrative', newNarrative, 'gloria', ViewMode.MODE_EDIT);
+    designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative, expectation){
+        server.call('testDesignUpdateComponents.updateSelectedFeatureNarrative', newNarrative, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
 
     // Logical Deletes
-    designerLogicallyDeletesUpdateApplication(appName){
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT);
+    designerLogicallyDeletesUpdateApplication(appName, expectation){
+        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerLogicallyDeletesUpdateSection(sectionParent, sectionName){
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerLogicallyDeletesUpdateSection(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerLogicallyDeletesUpdateFeature(featureParent, featureName){
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerLogicallyDeletesUpdateFeature(featureParent, featureName, expectation){
+        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerLogicallyDeletesUpdateFeatureAspect(featureName, aspectName){
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerLogicallyDeletesUpdateFeatureAspect(featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerLogicallyDeletesUpdateScenario(aspectName, scenarioName){
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT);
+    designerLogicallyDeletesUpdateScenario(aspectName, scenarioName, expectation){
+        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Logical Restores
-    designerRestoresDeletedUpdateApplication(appName){
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT);
+    designerRestoresDeletedUpdateApplication(appName, expectation){
+        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRestoresDeletedUpdateSection(sectionParent, sectionName){
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerRestoresDeletedUpdateSection(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRestoresDeletedUpdateFeature(featureParent, featureName){
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerRestoresDeletedUpdateFeature(featureParent, featureName, expectation){
+        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRestoresDeletedUpdateFeatureAspect(featureName, aspectName){
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerRestoresDeletedUpdateFeatureAspect(featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRestoresDeletedUpdateScenario(aspectName, scenarioName){
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT);
+    designerRestoresDeletedUpdateScenario(aspectName, scenarioName, expectation){
+        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     // Actual Deletes of new components
-    designerRemovesUpdateApplication(appName){
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesUpdateApplication(appName, expectation){
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRemovesUpdateSection(sectionParent, sectionName){
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesUpdateSection(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRemovesUpdateFeature(featureParent, featureName){
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesUpdateFeature(featureParent, featureName, expectation){
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRemovesUpdateFeatureAspect(featureName, aspectName){
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesUpdateFeatureAspect(featureName, aspectName, expectation){
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, featureName, aspectName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerRemovesUpdateScenario(aspectName, scenarioName){
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemovesUpdateScenario(aspectName, scenarioName, expectation){
+        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
 }

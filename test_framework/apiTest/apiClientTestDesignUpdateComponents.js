@@ -12,7 +12,8 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
-    'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode){
+
+    'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -23,12 +24,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode){
+    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -39,13 +38,11 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 
-    'testDesignUpdateComponents.addApplication'(userName, mode){
+    'testDesignUpdateComponents.addApplication'(userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -55,12 +52,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -77,12 +72,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, parentComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -99,12 +92,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, parentComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -121,12 +112,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addFeatureToDesignSection(view, mode, parentComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode, expectation){
+    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -144,10 +133,9 @@ Meteor.methods({
         const outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
-
     },
 
-    'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -164,12 +152,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -186,12 +172,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode){
+    'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -210,12 +194,10 @@ Meteor.methods({
         
         const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode){
+    'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode, expectation = {success: true, message: ''}){
         // Only use this after selecting the component
 
         // Assume view is correct
@@ -229,12 +211,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode){
+    'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
         // Called in the context of an EXISTING component
 
         // Assume view is correct
@@ -252,12 +232,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode){
+    'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
         // Called in the context of an NEW component
 
         // Assume view is correct
@@ -275,12 +253,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode){
+    'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -297,12 +273,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.restoreComponent(view, mode, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.moveDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.moveDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -327,12 +301,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -351,12 +323,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -381,12 +351,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetType, targetComponentParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetType, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -405,12 +373,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode){
+    'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -428,12 +394,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode){
+    'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode, expectation = {success: true, message: ''}){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -445,12 +409,10 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName){
+    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName, expectation = {success: true, message: ''}){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
@@ -463,7 +425,9 @@ Meteor.methods({
         const displayContext = DisplayContext.UPDATE_EDIT;
 
         // Note this is same function for both base design and updates
-        ClientDesignComponentServices.setDesignComponent(targetComponent._id, userContext, displayContext);
+        const outcome = ClientDesignComponentServices.setDesignComponent(targetComponent._id, userContext, displayContext);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     }
 
 

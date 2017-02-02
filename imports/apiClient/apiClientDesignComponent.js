@@ -493,7 +493,8 @@ class ClientDesignComponentServices{
 
     // User selected a design component --------------------------------------------------------------------------------
     setDesignComponent(newDesignComponentId, userContext, displayContext){
-        console.log("Selected component with id " + newDesignComponentId);
+        //console.log("Selected component with id " + newDesignComponentId);
+
         if(newDesignComponentId != userContext.designComponentId) {
 
             // See if any of the feature specific fields need setting
@@ -549,16 +550,16 @@ class ClientDesignComponentServices{
                 featureFilesLocation:           userContext.featureFilesLocation,
                 acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
                 integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                unitTestResultsLocation:      userContext.unitTestResultsLocation
+                unitTestResultsLocation:        userContext.unitTestResultsLocation
             };
 
             store.dispatch(setCurrentUserItemContext(context, true));
 
-            return true;
+            return {success: true, message: ''};
         }
 
         // Not an error - just indicates no change
-        return false;
+        return {success: true, message: 'No change'};
     };
 
     // User opened or closed a design component ------------------------------------------------------------------------

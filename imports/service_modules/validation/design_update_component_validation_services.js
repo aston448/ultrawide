@@ -35,7 +35,7 @@ class DesignUpdateComponentValidationServices{
                 case ComponentType.SCENARIO:
                     // Must be in scope to add stuff to them
                     if(!parentComponent.isInScope){
-                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE;  // CHANGE THIS BACK TO ADD!
+                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
                     }
                     break;
                 default:
