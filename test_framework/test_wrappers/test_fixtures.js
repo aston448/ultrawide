@@ -53,7 +53,7 @@ class TestFixtures{
         server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria', expectation);
 
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria', expectation);
+        server.call('testDesignVersions.editDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria', expectation);
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1', expectation);
     }
 

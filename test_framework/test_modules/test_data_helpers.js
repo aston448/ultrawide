@@ -21,23 +21,27 @@ class TestDataHelpers {
         return (expectation != null) ? expectation : {success: true, message: ''};
     }
 
-    processClientCallOutcome(outcome, expectation){
+    processClientCallOutcome(outcome, expectation, location){
+
+        if(!location){
+            location = 'Unknown Proc';
+        }
 
         if(expectation.success){
             // Were expecting this call to be valid
             if(!(outcome.success)){
                 // Something wrong in test or code
-                throw new Meteor.Error('INVALID', 'Unexpected validation failure: ' + outcome.message);
+                throw new Meteor.Error('INVALID', location + ': Unexpected validation failure: ' + outcome.message);
             }
         } else {
             // Check we did get an error
             if(outcome.success){
-                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: \"' + expectation.message + '\" but got SUCCESS');
+                throw new Meteor.Error('UNEXPECTED', location + ': Expecting failure: \"' + expectation.message + '\" but got SUCCESS');
             }
 
             // Were expecting a validation failure - check its the right one
             if(outcome.message != expectation.message){
-                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: \"' + expectation.message + '\" but got: \"' + outcome.message + '\"');
+                throw new Meteor.Error('UNEXPECTED', location + ': Expecting failure: \"' + expectation.message + '\" but got: \"' + outcome.message + '\"');
             }
         }
     };

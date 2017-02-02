@@ -14,7 +14,7 @@ Meteor.methods({
 
         const outcome = ClientDesignServices.addNewDesign(role);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Design');
     },
 
     'testDesigns.updateDesignName'(role, existingName, newName, expectation){
@@ -25,7 +25,7 @@ Meteor.methods({
 
         const outcome = ClientDesignServices.updateDesignName(role, design._id, newName);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Design Name');
     },
 
     'testDesigns.selectDesign'(designName, userName, expectation){
@@ -37,7 +37,7 @@ Meteor.methods({
 
         const outcome = ClientDesignServices.setDesign(userContext, design._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Select Design');
     },
 
     'testDesigns.workDesign'(designName, userName, expectation){
@@ -49,7 +49,7 @@ Meteor.methods({
 
         const outcome = ClientDesignServices.workDesign(userContext, RoleType.DESIGNER, design._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Work Design');
     },
 
     'testDesigns.removeDesign'(designName, userRole, userName, expectation){
@@ -61,25 +61,21 @@ Meteor.methods({
 
         const outcome = ClientDesignServices.removeDesign(userContext, userRole, design._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Design');
     },
 
-    'testDesigns.selectDesignVersion'(){
-
-    },
-
-    'testDesigns.editDesignVersion'(designName, designVersionName, userRole, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const design = TestDataHelpers.getDesign(designName);
-        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
-
-        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
+    // 'testDesigns.editDesignVersion'(designName, designVersionName, userRole, userName, expectation){
+    //
+    //     expectation = TestDataHelpers.getExpectation(expectation);
+    //
+    //     const design = TestDataHelpers.getDesign(designName);
+    //     const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+    //     const userContext = TestDataHelpers.getUserContext(userName);
+    //     const viewOptions = TestDataHelpers.getViewOptions(userName);
+    //
+    //     const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+    //
+    //     TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Design Version');
+    // },
 
 });
