@@ -220,7 +220,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Allow tests to access results
-        return {success: false, message: ''};
+        return {success: true, message: ''};
     };
 
     // User clicked Add Feature inside a Design Section ----------------------------------------------------------------
