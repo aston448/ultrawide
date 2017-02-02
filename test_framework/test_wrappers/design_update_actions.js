@@ -21,6 +21,10 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria');
     }
 
+    managerSelectsUpdate(updateName){
+        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'miles');
+    }
+
     designerEditsSelectedUpdateNameTo(newName){
         server.call('testDesignUpdates.updateDesignUpdateName', newName, RoleType.DESIGNER, 'gloria');
     }

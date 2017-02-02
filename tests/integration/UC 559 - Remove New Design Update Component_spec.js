@@ -1,27 +1,37 @@
-import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 559 - Remove New Design Update Component', function(){
 
     before(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
         // Complete the Design Version and create the next
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
     });
 
     after(function(){
@@ -31,13 +41,13 @@ describe('UC 559 - Remove New Design Update Component', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        server.call('textFixtures.clearDesignUpdates');
+        TestFixtures.clearDesgnUpdates();
 
-        // And create a new update to work with
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
     });
 
     afterEach(function(){
@@ -49,62 +59,58 @@ describe('UC 559 - Remove New Design Update Component', function(){
     it('A new Application with no children in a Design Update can be removed', function(){
 
         // Setup - add new Application
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
 
         // Remove Application
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateApplication('Application2');
 
         // Verify completely gone
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.APPLICATION, 'Application2', 'gloria');
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.APPLICATION, 'Application2'));
     });
 
     it('A new Design Section with no children in a Design Update can be removed', function(){
 
         // Setup - add new Section
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section3', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Remove Section
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section3', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateSection('Application1', 'Section3');
 
         // Verify completely gone
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.DESIGN_SECTION, 'Section3', 'gloria');
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section3'));
     });
 
     it('A new Feature with no children in a Design Update can be removed', function(){
 
         // Setup - add new Feature - need to remove default Feature Aspects
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Interface', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Consequences', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Interface');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Conditions');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Consequences');
 
         // Remove Feature
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3');
 
         // Verify completely gone
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.FEATURE, 'Feature3', 'gloria');
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE, 'Feature3'));
     });
 
     it('A new Feature Aspect with no children in a Design Update can be removed', function(){
 
         // Setup - add new Feature Aspect
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
 
         // Remove Feature Aspect
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature1', 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature1', 'Aspect1');
 
         // Verify completely gone
-        server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', ComponentType.FEATURE_ASPECT, 'Aspect1', 'gloria');
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Aspect1'));
     });
 
     it('A new Scenario with no Scenario Steps in a Design Update can be removed');
@@ -114,66 +120,59 @@ describe('UC 559 - Remove New Design Update Component', function(){
     it('A new Application cannot be removed from a Design Update if it has children', function(){
 
         // Setup - add new Application
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
         // And add a Section to it
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application2', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application2', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section3', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section3');
 
         // Remove Application
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateApplication('Application2');
 
         // Verify not removed
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.APPLICATION, 'NONE', 'Application2', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application2'));
     });
 
     it('A new Design Section cannot be removed from a Design Update if it has children', function(){
 
         // Setup - add new Section
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section3', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         // Add Feature to it
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section3', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section3', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
 
         // Remove Section
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section3', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateSection('Application1', 'Section3');
 
         // Verify not removed
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.DESIGN_SECTION, 'Application1', 'Section3', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
     });
 
     it('A new Feature cannot be removed from a Design Update if it has children', function(){
 
         // Setup - add new Feature - automatically adds aspects as children
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Remove Feature
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3');
 
         // Verify not removed
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', 'Feature3', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
     });
 
     it('A new Feature Aspect cannot be removed from a Design Update if it has children', function(){
 
         // Setup - add new Feature - automatically adds aspects as children
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         // Add Scenario to Actions aspect
-        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature3', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario99');
 
         // Remove Feature Aspect
-        server.call('testDesignUpdateComponents.removeDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
 
         // Verify not removed
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions'));
 
     });
 

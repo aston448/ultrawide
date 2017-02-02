@@ -1,27 +1,37 @@
-import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 555 - Move Design Update Component', function(){
 
     before(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
         // Complete the Design Version and create the next
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
     });
 
     after(function(){
@@ -31,20 +41,19 @@ describe('UC 555 - Move Design Update Component', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        server.call('textFixtures.clearDesignUpdates');
+        TestFixtures.clearDesgnUpdates();
 
-        // And create a new update to work with
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
 
         // Create some new data in the Design Update
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // App 2
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
-
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+ 
     });
 
     afterEach(function(){
@@ -56,102 +65,64 @@ describe('UC 555 - Move Design Update Component', function(){
     it('A new Design Section for a Design Update can be moved to a different Application', function(){
 
         // Setup - add new Design section to Application1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section3', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Execute - move it to Application2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.DESIGN_SECTION, 'Application1', 'Section3',
-            ComponentType.APPLICATION, 'NONE', 'Application2',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section3');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.APPLICATION, 'NONE', 'Application2');
 
         // Verify parent now Application2
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.DESIGN_SECTION, 'Application2', 'Section3', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application2', 'Section3'));
     });
 
     it('A new Design Section for a Design Update can be moved to a different Design Section', function(){
 
         // Setup - add new Design section to Section1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addSectionToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Section1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'SubSection1', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section1', 'SubSection1');
 
         // Execute - move it to Section2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1',
-            ComponentType.DESIGN_SECTION, 'Application1', 'Section2',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify parent now Section2
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.DESIGN_SECTION, 'Section2', 'SubSection1', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section2', 'SubSection1'));
     });
 
     it('A new Feature for a Design Update can be moved to a different Design Section', function(){
 
         // Setup - add new Feature to Section1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature3', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Execute - move it to Section2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.FEATURE, 'Section1', 'Feature3',
-            ComponentType.DESIGN_SECTION, 'Application1', 'Section2',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify parent now Section2
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section2', 'Feature3', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature3'));
     });
 
-    it('A new Scenario for a Design Update can be moved to a different in Scope Feature', function(){
-
-        // Setup - add new Scenario to Feature1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
-        // Make sure the target is in scope
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria', ViewMode.MODE_EDIT);
-
-        // Execute - move it to Feature2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.SCENARIO, 'Feature1', 'Scenario99',
-            ComponentType.FEATURE, 'Section2', 'Feature2',
-            'gloria', ViewMode.MODE_EDIT
-        );
-
-        // Verify parent now Feature2
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Feature2', 'Scenario99', 'gloria');
-    });
+    it('A new Scenario for a Design Update can be moved to a different in Scope Feature');
 
     it('A new Scenario for a Design Update can be moved to a different in Scope Feature Aspect', function(){
 
         // Setup - add new Scenario to Feature1 Actions
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.addScenarioToFeatureAspect', 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario99', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario99');
+
         // Make sure the target is in scope
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Conditions');
 
         // Execute - move it to Feature2 Conditions
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.SCENARIO, 'Actions', 'Scenario99',
-            ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario99');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions');
 
         // Verify parent now Feature2 Conditions
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Conditions', 'Scenario99', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario99'));
+
     });
 
     it('A new Feature Aspect for a Design Update can be moved to a different in Scope Feature');
@@ -161,75 +132,58 @@ describe('UC 555 - Move Design Update Component', function(){
     it('An existing Design Section from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Execute - Try to move existing Section1 to Application2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.DESIGN_SECTION, 'Application1', 'Section1',
-            ComponentType.APPLICATION, 'NONE', 'Application2',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.APPLICATION, 'NONE', 'Application2');
 
         // Verify parent still Application1
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
     });
 
     it('An existing Feature from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Execute - Try to move existing Feature1 to Section2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.FEATURE, 'Section1', 'Feature1',
-            ComponentType.DESIGN_SECTION, 'Application1', 'Section2',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify parent still Section1
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
     });
 
     it('An existing Feature Aspect from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Rename Feature2 Actions to rule out any duplicate name problems
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'Actions1', 'gloria', ViewMode.MODE_EDIT);
-        // Make sure the target is in scope
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
-        // Execute - Try to move existing Feature1 Actions to Feature2
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions',
-            ComponentType.FEATURE, 'Section2', 'Feature2',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        // Make sure the target is in scope
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
+
+        // Execute - Try to move existing Feature1 ExtraAspect to Feature2
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE, 'Section2', 'Feature2');
 
         // Verify parent still Feature1
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
     });
 
     it('An existing Scenario from the Base Design Version cannot be moved', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Make sure the target is in scope
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Conditions');
 
         // Execute - Try to move existing Scenario1 to Feature1 Conditions
-        server.call(
-            'testDesignUpdateComponents.moveDesignComponent',
-            ComponentType.SCENARIO, 'Actions', 'Scenario1',
-            ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions',
-            'gloria', ViewMode.MODE_EDIT
-        );
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
 
-        // Verify parent still Application1
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
+        // Verify parent still Actions
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
 });

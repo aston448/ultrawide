@@ -1,27 +1,37 @@
-import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 554 - Restore Removed Design Update Component', function(){
 
     before(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
         // Complete the Design Version and create the next
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
     });
 
     after(function(){
@@ -31,13 +41,13 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        server.call('textFixtures.clearDesignUpdates');
+        TestFixtures.clearDesgnUpdates();
 
-        // And create a new update to work with
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
     });
 
     afterEach(function(){
@@ -49,196 +59,201 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A removed existing Application and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+        
         // Verify - all stuff removed
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRestoresDeletedUpdateApplication('Application1');
 
         // Verify
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A removed existing Design Section and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        // Verify - all stuff removed
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
+
+        // Verify - all stuff removed for Section
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRestoresDeletedUpdateSection('Application1', 'Section1');
 
         // Verify
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A removed existing Feature and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        // Verify - all stuff removed
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature1');
+
+        // Verify - all stuff removed for Feature
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRestoresDeletedUpdateFeature('Section1', 'Feature1');
 
         // Verify
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A removed existing Feature Aspect and all its child Design Components can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-        // Verify - all stuff removed
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateFeatureAspect('Feature1', 'Actions');
+        
+        // Verify - all stuff removed for Aspect
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-
+        UpdateComponentActions.designerRestoresDeletedUpdateFeatureAspect('Feature1', 'Actions');
+ 
         // Verify
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
     it('A removed existing Scenario can be restored', function(){
 
         // Setup
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
-        // Verify - all stuff removed
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
+        
+        // Verify - all stuff removed for Scenario
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRestoresDeletedUpdateScenario('Actions', 'Scenario1');
 
         // Verify
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsNotRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
 
@@ -247,80 +262,80 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
     it('A Design Update Component that is the child of a removed Design Update Component cannot be restored', function(){
 
         // Setup - remove everything
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.logicallyDeleteDesignComponent', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria', ViewMode.MODE_EDIT);
-
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+ 
         // Try to restore Section1
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-
+        UpdateComponentActions.designerRestoresDeletedUpdateSection('Application1', 'Section1');
+        
         // Everything still removed
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Try to restore Feature 1
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerRestoresDeletedUpdateFeature('Section1', 'Feature1');
 
         // Everything still removed
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Try to restore Feature1 Actions
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria', ViewMode.MODE_EDIT);
-
+        UpdateComponentActions.designerRestoresDeletedUpdateFeatureAspect('Feature1', 'Actions');
+        
         // Everything still removed
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Try to restore Scenario1
-        server.call('testDesignUpdateComponents.restoreDesignComponent', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
-
+        UpdateComponentActions.designerRestoresDeletedUpdateScenario('Actions', 'Scenario1');
+        
         // Everything still removed
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.APPLICATION, 'NONE', 'Application1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario1', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.DESIGN_SECTION, 'Application1', 'Section2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE, 'Section2', 'Feature2', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Actions', 'Scenario3', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions', 'gloria');
-        server.call('verifyDesignUpdateComponents.componentIsRemoved', ComponentType.SCENARIO, 'Conditions', 'Scenario4', 'gloria');
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
     });
 

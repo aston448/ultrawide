@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
+import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
+
 import ClientDesignUpdateComponentServices      from '../../imports/apiClient/apiClientDesignUpdateComponent.js';
+import ClientDesignComponentServices            from '../../imports/apiClient/apiClientDesignComponent.js';
 import DesignComponentModules                   from '../../imports/service_modules/design/design_component_service_modules.js';
 import TestDataHelpers                          from '../test_modules/test_data_helpers.js'
 
@@ -173,6 +176,21 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw)
     },
 
+    'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode){
+        // Only use this after selecting the component
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+        const newNameRaw = DesignComponentModules.getRawTextFor(newName);
+
+        ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw)
+    },
+
     'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode){
         // Called in the context of an EXISTING component
 
@@ -255,6 +273,26 @@ Meteor.methods({
         ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
     },
 
+    'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+        const displayContext = DisplayContext.UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const movingComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            targetComponentType,
+            targetComponentParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
+    },
+
     'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode){
 
         // Assume view is correct
@@ -270,6 +308,26 @@ Meteor.methods({
             movingComponentParentName,
             movingComponentName
         );
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            movingComponentType,
+            targetComponentParentName,
+            targetComponentName
+        );
+
+        ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
+    },
+
+    'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetComponentParentName, targetComponentName, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+        const displayContext = DisplayContext.UPDATE_EDIT;
+
+        // Get user's Design Version Id as the one being worked on
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const movingComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
         const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
             userContext.designVersionId,
             userContext.designUpdateId,
@@ -299,6 +357,35 @@ Meteor.methods({
 
         ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText)
     },
+
+    'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode){
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_UPDATE_EDIT;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+        const newRawText = DesignComponentModules.getRawTextFor(newPlainText);
+
+        ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText)
+    },
+
+    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+        const displayContext = DisplayContext.UPDATE_EDIT;
+
+        // Note this is same function for both base design and updates
+        ClientDesignComponentServices.setDesignComponent(targetComponent._id, userContext, displayContext);
+    }
 
 
 

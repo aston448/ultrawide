@@ -298,6 +298,26 @@ Meteor.methods({
 
     },
 
+    'verifyDesignUpdateComponents.selectedComponentIsAboveComponent'(targetType, targetParentName, targetName, userName){
+
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const selectedComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, targetType, targetParentName, targetName);
+
+        // Components highest in the list have the lowest indexes
+        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
+        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
+        if(selectedComponent.componentIndex >= targetComponent.componentIndex){
+            //console.log("FAIL!");
+            throw new Meteor.Error("FAIL", "Expected update component " + selectedComponent + " to be above component " + targetComponent + " in the list of " + targetType +"s");
+        } else {
+            return true;
+        }
+
+    },
+
     'verifyDesignUpdateComponents.featureNarrativeIs'(parentName, featureName, narrativeText, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -309,6 +329,24 @@ Meteor.methods({
             parentName,
             featureName
         );
+
+        //console.log("Feature narrative is: " + feature.componentNarrativeNew);
+        //console.log("Expected narrative is: " + narrativeText);
+
+        if(feature.componentNarrativeNew.trim() !=  narrativeText.trim()){
+            throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + feature.componentNarrativeNew);
+        } else {
+            return true;
+        }
+    },
+
+    'verifyDesignUpdateComponents.selectedFeatureNarrativeIs'(narrativeText, userName){
+
+        // Must select Feature first before calling this
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
 
         //console.log("Feature narrative is: " + feature.componentNarrativeNew);
         //console.log("Expected narrative is: " + narrativeText);

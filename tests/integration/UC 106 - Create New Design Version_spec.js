@@ -221,9 +221,9 @@ describe('UC 106 - Create New Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // New section - Section99
-        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section99');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section99');
         // New Feature - Feature99
-        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
 
         // Set update to INCLUDE
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
@@ -289,9 +289,9 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // New section - Section99
-        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section88');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section88');
         // New Feature - Feature99
-        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section88', 'Feature88');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section88', 'Feature88');
         // Set update to INCLUDE
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
@@ -304,9 +304,9 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the second update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         // New section - Section99
-        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section99');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section99');
         // New Feature - Feature99
-        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
         // Set update to ROLL FORWARD
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
         DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_ROLL);

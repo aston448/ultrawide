@@ -74,11 +74,11 @@ describe('UC 103 - Remove Design', function() {
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Add an Application - Application1
-        UpdateComponentActions.designerAddApplicationCalled('Application1');
+        UpdateComponentActions.designerAddsApplicationCalled('Application1');
         // Add a Design Section - Section1
-        UpdateComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section1');
         // Add a Feature - Feature1
-        UpdateComponentActions.designerAddFeatureTo_Section_Called('Application1', 'Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
         DesignActions.designerRemovesDesign('Design1');

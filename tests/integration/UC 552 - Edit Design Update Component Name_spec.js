@@ -1,27 +1,37 @@
-import {RoleType, ViewMode, ComponentType, DesignVersionStatus, WorkPackageType, WorkPackageStatus} from '../../imports/constants/constants.js'
+
+import TestFixtures                 from '../../test_framework/test_wrappers/test_fixtures.js';
+import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
+import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
+import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
+import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
+import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
+import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 552 - Edit Design Update Component Name', function(){
 
     before(function(){
 
-        server.call('testFixtures.clearAllData');
+        TestFixtures.clearAllData();
 
-        // Create a Design
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        // Name and Publish a Design Version
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
         // Complete the Design Version and create the next
-        server.call('testDesignVersions.createNextDesignVersion', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion2', RoleType.DESIGNER, 'gloria');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
     });
 
     after(function(){
@@ -31,7 +41,13 @@ describe('UC 552 - Edit Design Update Component Name', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        server.call('textFixtures.clearDesignUpdates')
+        TestFixtures.clearDesgnUpdates();
+
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
     });
 
     afterEach(function(){
@@ -42,21 +58,18 @@ describe('UC 552 - Edit Design Update Component Name', function(){
     // Actions
     it('A Design Update Component name can be edited and saved', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add new Feature to original Section 1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'gloria');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
 
         // Execute
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature99', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature99');
 
         // Verify
-        server.call('verifyDesignUpdateComponents.componentExistsInDesignUpdateWithParentCalled', ComponentType.FEATURE, 'Section1', 'Feature99', 'gloria');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature99'));
     });
 
 
@@ -64,156 +77,125 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
     it('An Application name may not be changed to the same name as another Application in the Design Update or Base Design Version', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Application
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.APPLICATION, 'Application1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 1, 'gloria');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdate();
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, 'Application1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 1));
 
         // Try to call it Application1
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Application1');
 
         // Verify - still 1 of each
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.APPLICATION, 'Application1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 1, 'gloria');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, 'Application1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 1));
     });
 
     it('A Feature name may not be changed to the same name as another Feature in the Design Update or Base Design Version', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Feature
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addFeatureToDesignSection', 'Application1', 'Section1','gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE, 'Feature1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 1, 'gloria');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'Feature1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 1));
 
         // Try to call it Feature1
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME, 'Feature1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature1');
 
         // Verify - still 1 of each
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE, 'Feature1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 1, 'gloria');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'Feature1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 1));
     });
 
     it('A Scenario name may not be changed to the same name as another Scenario in the Design Update or Base Design Version', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Scenario
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.addScenarioToFeature', 'Section1', 'Feature1','gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.SCENARIO, 'Scenario1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1, 'gloria');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Section1', 'Feature1');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
 
         // Try to call it Scenario1
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME, 'Scenario1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario1');
 
         // Verify - still 1 of each
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.SCENARIO, 'Scenario1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1, 'gloria');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
     });
 
     it('A Design Section name may not be changed to the same name as another Design Section under the same parent section in the Design Update', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Design Section
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application1','gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.DESIGN_SECTION, 'Section1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 1, 'gloria');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateApplication('Application1');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'Section1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 1));
 
         // Try to call it Section1
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Section1');
 
         // Verify - still 1 of each
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.DESIGN_SECTION, 'Section1', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 1, 'gloria');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'Section1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 1));
     });
 
     it('A Feature Aspect name may not be changed to the same name as another Feature Aspect in the same Feature in the Design Update', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Feature Aspect
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1','gloria', ViewMode.MODE_EDIT);
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, 'Actions', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1, 'gloria');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateFeature('Section1', 'Feature1');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'Actions', 3));  // There are several in default data
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1));
 
         // Try to call it Actions
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Actions', 'gloria', ViewMode.MODE_EDIT);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Actions');
 
-        // Verify - still 1 of each
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, 'Actions', 1, 'gloria');
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1, 'gloria');
+        // Verify - still same numbers as before
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'Actions', 3));  // There are several in default data
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1));
     });
 
     it('A Design Section name may be changed to the same name as a Design Section in a different parent in the Design Update', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Add Application
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addApplication', 'gloria', ViewMode.MODE_EDIT);
-        // Call it Application2
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME, 'Application2', 'gloria', ViewMode.MODE_EDIT);
-        // Currently 1 Section1
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.DESIGN_SECTION, 'Section1', 1, 'gloria');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
-        // Execute - add a new Section1 under Application2
-        server.call('testDesignUpdateComponents.addDesignSectionToApplication', 'NONE', 'Application2','gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, 'Application2', DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Section1', 'gloria', ViewMode.MODE_EDIT);
+        // Execute - add a new Section1 under Application99
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateApplication('Application99');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application99', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Section1');
 
         // Verify - 2 Section1s
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.DESIGN_SECTION, 'Section1', 2, 'gloria');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'Section1', 2));
     });
 
     it('A Feature Aspect name may be changed to the same name as a Feature Aspect in another Feature in the Design Update', function(){
 
-        //Setup - add a new Update
-        server.call('testDesignVersions.selectDesignVersion', 'DesignVersion2', 'gloria');
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        // Add New Feature Aspect to Feature1
-        server.call('testDesignUpdates.editDesignUpdate', 'DesignUpdate1', RoleType.DESIGNER, 'gloria');
-        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section1', 'Feature1', 'gloria', ViewMode.MODE_EDIT);
-        // Call it Aspect1
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
-        // Currently 1 Aspect1
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 1, 'gloria');
+        // Setup - Feature1 has Aspect ExtraAspect already
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
-        // Execute - add a new Feature Aspect to Feature 2
-        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', 'Section2', 'Feature2', 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE_ASPECT, 'Feature2', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Aspect1', 'gloria', ViewMode.MODE_EDIT);
+        // Add New Feature Aspect to Feature2
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateFeature('Section2', 'Feature2');
+
+        // Execute - call new Aspect ExtraAspect
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature2', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ExtraAspect');
 
         // Verify - 2 Aspect1s
-        server.call('verifyDesignUpdateComponents.componentCountWithNameIs', ComponentType.FEATURE_ASPECT, 'Aspect1', 2, 'gloria');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'ExtraAspect', 2));
     });
 
 
