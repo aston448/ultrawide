@@ -193,6 +193,11 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_MOVE;
         }
 
+        // Only new update items can be moved
+        if(!(movingComponent.isNew)){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER;
+        }
+
         // Moves must be to a valid destination
         if(!reorderDropAllowed(movingComponent, targetComponent)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER;
