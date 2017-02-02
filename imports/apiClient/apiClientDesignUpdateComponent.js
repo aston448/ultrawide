@@ -10,7 +10,6 @@ import { Validation }                       from '../constants/validation_errors
 
 import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateComponent.js';
 import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
-import ClientAuditServices                  from '../apiClient/apiClientAudit.js';
 
 // REDUX services
 import store from '../redux/store'
