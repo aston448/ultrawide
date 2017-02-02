@@ -79,6 +79,9 @@ class DesignComponentServices{
                     { $set: {componentReferenceId: designComponentId}}
                 );
 
+                // Set the default index for a new component
+                DesignComponentModules.setIndex(designComponentId, componentType, parentId);
+
                 // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
                 if(componentType === ComponentType.FEATURE){
                     DesignComponents.update(
@@ -95,9 +98,15 @@ class DesignComponentServices{
                     // Make sure Design is no longer removable now that a feature added
                     DesignServices.setRemovable(designId);
 
+                    // Update the WP before adding the Feature Aspects
+                    DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
+
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
                     DesignComponentModules.addDefaultFeatureAspects(designVersionId, designComponentId, defaultRawText);
+                } else {
+                    // Check for any WPs in this design version and add the components to them too
+                    DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
                 }
 
                 // When inserting a new design component its parent becomes non-removable
@@ -107,13 +116,6 @@ class DesignComponentServices{
                         {$set: {isRemovable: false}}
                     );
                 }
-
-                // Set the default index for a new component
-                DesignComponentModules.setIndex(designComponentId, componentType, parentId);
-
-
-                // Check for any WPs in this design version and add the components to them too
-                DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
             }
 
             return designComponentId;
