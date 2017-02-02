@@ -15,6 +15,7 @@ import WorkPackageVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkPackageValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 205 - Remove Work Package - Initial Design Version', function(){
 
@@ -76,7 +77,8 @@ describe('UC 205 - Remove Work Package - Initial Design Version', function(){
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Execute
-        WorkPackageActions.managerRemovesSelectedWorkPackage();
+        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_NOT_REMOVABLE};
+        WorkPackageActions.managerRemovesSelectedWorkPackage(expectation);
 
         // Verify - still Exists
         expect(WorkPackageVerifications.workPackageExistsForManagerCalled('WorkPackage1'))

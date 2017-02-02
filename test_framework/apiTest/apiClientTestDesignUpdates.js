@@ -7,73 +7,107 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testDesignUpdates.addDesignUpdate'(userRole, userName){
+    'testDesignUpdates.addDesignUpdate'(userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignUpdateServices.addNewDesignUpdate(userRole, userContext.designVersionId)
+        const outcome = ClientDesignUpdateServices.addNewDesignUpdate(userRole, userContext.designVersionId);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdates.selectDesignUpdate'(designUpdateName, userName){
+    'testDesignUpdates.selectDesignUpdate'(designUpdateName, userName, expectation){
 
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
-
-        ClientDesignUpdateServices.setDesignUpdate(userContext, designUpdate._id);
-    },
-
-    'testDesignUpdates.publishDesignUpdate'(designUpdateName, userRole, userName){
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        ClientDesignUpdateServices.publishDesignUpdate(userRole, userContext, designUpdate._id);
+        const outcome = ClientDesignUpdateServices.setDesignUpdate(userContext, designUpdate._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdates.withdrawDesignUpdate'(designUpdateName, userRole, userName){
+    'testDesignUpdates.publishDesignUpdate'(designUpdateName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        const outcome = ClientDesignUpdateServices.publishDesignUpdate(userRole, userContext, designUpdate._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+    },
+
+    'testDesignUpdates.withdrawDesignUpdate'(designUpdateName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
     },
 
-    'testDesignUpdates.editDesignUpdate'(designUpdateName, userRole, userName){
+    'testDesignUpdates.editDesignUpdate'(designUpdateName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
+        const outcome = ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdates.viewDesignUpdate'(designUpdateName, userName, userRole){
+    'testDesignUpdates.viewDesignUpdate'(designUpdateName, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
+        const outcome = ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdates.updateDesignUpdateName'(newName, userRole, userName){
+    'testDesignUpdates.updateDesignUpdateName'(newName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assumption that DU is selected before name updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignUpdateServices.updateDesignUpdateName(userRole, userContext.designUpdateId, newName)
+        const outcome = ClientDesignUpdateServices.updateDesignUpdateName(userRole, userContext.designUpdateId, newName);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdates.updateDesignUpdateRef'(newRef, userRole, userName){
+    'testDesignUpdates.updateDesignUpdateRef'(newRef, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assumption that DU is always selected before it can be updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignUpdateServices.updateDesignUpdateReference(userRole, userContext.designUpdateId, newRef)
+        const outcome = ClientDesignUpdateServices.updateDesignUpdateReference(userRole, userContext.designUpdateId, newRef);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdates.updateMergeAction'(newAction, userRole, userName){
+    'testDesignUpdates.updateMergeAction'(newAction, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assumption that DU is always selected before it can be updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignUpdateServices.updateMergeAction(userRole, userContext.designUpdateId, newAction)
+        const outcome = ClientDesignUpdateServices.updateMergeAction(userRole, userContext.designUpdateId, newAction);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 });

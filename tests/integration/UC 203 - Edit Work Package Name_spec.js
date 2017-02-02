@@ -15,6 +15,7 @@ import WorkPackageVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkPackageValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 203 - Edit Work Package Name', function(){
 
@@ -79,7 +80,8 @@ describe('UC 203 - Edit Work Package Name', function(){
 
         // Execute - select new WP and try to rename to WorkPackage1
         WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_NAME_DUPLICATE};
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1', expectation);
 
         // Verify - should be only 1 with new name and 1 with default
         expect(WorkPackageVerifications.workPackageCalled_CountForManagerIs('WorkPackage1', 1));

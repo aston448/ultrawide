@@ -38,7 +38,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -61,7 +61,7 @@ class ClientDesignVersionServices{
 
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User saves an update to a Design Version version number ---------------------------------------------------------
@@ -74,7 +74,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -97,7 +97,7 @@ class ClientDesignVersionServices{
 
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chose to publish a new design version as a draft adoptable version -----------------------------------------
@@ -110,7 +110,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -135,7 +135,7 @@ class ClientDesignVersionServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chose to withdraw a draft design version to make it hidden again -------------------------------------------
@@ -148,7 +148,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -173,7 +173,7 @@ class ClientDesignVersionServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chose to create a new updatable Design Version from the current version and any updates selected
@@ -186,7 +186,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -211,7 +211,7 @@ class ClientDesignVersionServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     }
 
     // TODO
@@ -265,7 +265,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Now valid to edit so make updates:
@@ -289,7 +289,7 @@ class ClientDesignVersionServices{
         // Put the view in edit mode
         store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
 
-        return true;
+        return {success: true, message: ''};
 
     };
 
@@ -305,7 +305,7 @@ class ClientDesignVersionServices{
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Ensure that the current version is the version we chose to view
@@ -349,7 +349,7 @@ class ClientDesignVersionServices{
             ClientMashDataServices.updateTestData(view, updatedContext, viewOptions, progressData);
         }
 
-        return true;
+        return {success: true, message: ''};
     };
 
 }

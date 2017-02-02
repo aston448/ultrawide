@@ -13,6 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 107 - Update Design Name', function() {
 
@@ -53,7 +54,8 @@ describe('UC 107 - Update Design Name', function() {
         expect(DesignVerifications.designExistsCalled(DefaultItemNames.NEW_DESIGN_NAME));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
+        const expectation = {success: false, messsage: DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE};
+        DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1', expectation);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // No change to design names

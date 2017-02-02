@@ -37,7 +37,7 @@ class ClientWorkPackageComponentServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -66,7 +66,7 @@ class ClientWorkPackageComponentServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
 

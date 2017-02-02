@@ -7,70 +7,102 @@ import { ViewType, RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testDesignVersions.selectDesignVersion'(designVersionName, userName){
+    'testDesignVersions.selectDesignVersion'(designVersionName, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
+        const outcome = ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.publishDesignVersion'(designVersionName, userRole, userName){
+    'testDesignVersions.publishDesignVersion'(designVersionName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        ClientDesignVersionServices.publishDesignVersion(userRole, userContext, designVersion._id);
+        const outcome = ClientDesignVersionServices.publishDesignVersion(userRole, userContext, designVersion._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.withdrawDesignVersion'(designVersionName, userName, userRole){
+    'testDesignVersions.withdrawDesignVersion'(designVersionName, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        ClientDesignVersionServices.withdrawDesignVersion(userRole, userContext, designVersion._id);
+        const outcome = ClientDesignVersionServices.withdrawDesignVersion(userRole, userContext, designVersion._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.editDesignVersion'(designVersionName, userRole, userName){
+    'testDesignVersions.editDesignVersion'(designVersionName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.viewDesignVersion'(designVersionName, userRole, userName){
+    'testDesignVersions.viewDesignVersion'(designVersionName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion, false);
+        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion, false);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.updateDesignVersionName'(newName, userRole, userName){
+    'testDesignVersions.updateDesignVersionName'(newName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assumption that DV is always selected before it can be updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignVersionServices.updateDesignVersionName(userRole, userContext.designVersionId, newName)
+        const outcome = ClientDesignVersionServices.updateDesignVersionName(userRole, userContext.designVersionId, newName);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.updateDesignVersionNumber'(newNumber, userRole, userName){
+    'testDesignVersions.updateDesignVersionNumber'(newNumber, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assumption that DV is always selected before it can be updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignVersionServices.updateDesignVersionNumber(userRole, userContext.designVersionId, newNumber)
+        const outcome = ClientDesignVersionServices.updateDesignVersionNumber(userRole, userContext.designVersionId, newNumber);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignVersions.createNextDesignVersion'(currentDesignVersionName, userRole, userName){
+    'testDesignVersions.createNextDesignVersion'(currentDesignVersionName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, currentDesignVersionName);
 
-        ClientDesignVersionServices.createNextDesignVersion(userRole, userContext, designVersion._id)
+        const outcome = ClientDesignVersionServices.createNextDesignVersion(userRole, userContext, designVersion._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     }
 
 });

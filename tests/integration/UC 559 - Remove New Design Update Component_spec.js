@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 559 - Remove New Design Update Component', function(){
 
@@ -126,7 +127,8 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section3');
 
         // Remove Application
-        UpdateComponentActions.designerRemovesUpdateApplication('Application2');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        UpdateComponentActions.designerRemovesUpdateApplication('Application2', expectation);
 
         // Verify not removed
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application2'));
@@ -141,7 +143,8 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
 
         // Remove Section
-        UpdateComponentActions.designerRemovesUpdateSection('Application1', 'Section3');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        UpdateComponentActions.designerRemovesUpdateSection('Application1', 'Section3', expectation);
 
         // Verify not removed
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
@@ -154,7 +157,8 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Remove Feature
-        UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3', expectation);
 
         // Verify not removed
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
@@ -169,7 +173,8 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario99');
 
         // Remove Feature Aspect
-        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions', expectation);
 
         // Verify not removed
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions'));

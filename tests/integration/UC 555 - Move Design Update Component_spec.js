@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 555 - Move Design Update Component', function(){
 
@@ -136,7 +137,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Execute - Try to move existing Section1 to Application2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
-        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.APPLICATION, 'NONE', 'Application2');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE};
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.APPLICATION, 'NONE', 'Application2', expectation);
 
         // Verify parent still Application1
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
@@ -149,7 +151,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Execute - Try to move existing Feature1 to Section2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
-        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE};
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2', expectation);
 
         // Verify parent still Section1
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
@@ -165,7 +168,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Execute - Try to move existing Feature1 ExtraAspect to Feature2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect');
-        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE, 'Section2', 'Feature2');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE};
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
 
         // Verify parent still Feature1
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
@@ -180,7 +184,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Execute - Try to move existing Scenario1 to Feature1 Conditions
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE};
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', expectation);
 
         // Verify parent still Actions
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));

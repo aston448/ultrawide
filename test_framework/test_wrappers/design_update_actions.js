@@ -5,45 +5,45 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignUpdateActions{
 
-    designerAddsAnUpdate(){
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+    designerAddsAnUpdate(expectation){
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    designerAddsAnUpdateCalled(updateName){
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+    designerAddsAnUpdateCalled(updateName, expectation){
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria', expectation);
         // Name it
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', updateName, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria', expectation);
+        server.call('testDesignUpdates.updateDesignUpdateName', updateName, RoleType.DESIGNER, 'gloria', expectation);
 
     };
 
-    designerSelectsUpdate(updateName){
-        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria');
+    designerSelectsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria', expectation);
     }
 
-    managerSelectsUpdate(updateName){
-        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'miles');
+    managerSelectsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'miles', expectation);
     }
 
-    designerEditsSelectedUpdateNameTo(newName){
-        server.call('testDesignUpdates.updateDesignUpdateName', newName, RoleType.DESIGNER, 'gloria');
+    designerEditsSelectedUpdateNameTo(newName, expectation){
+        server.call('testDesignUpdates.updateDesignUpdateName', newName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    designerEditsSelectedUpdateRefTo(newRef){
-        server.call('testDesignUpdates.updateDesignUpdateRef', newRef, RoleType.DESIGNER, 'gloria');
+    designerEditsSelectedUpdateRefTo(newRef, expectation){
+        server.call('testDesignUpdates.updateDesignUpdateRef', newRef, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    designerEditsUpdate(updateName){
-        server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.DESIGNER, 'gloria');
+    designerEditsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    designerPublishesUpdate(updateName){
+    designerPublishesUpdate(updateName, expectation){
         // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    designerSetsUpdateActionTo(action){
-        server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria');
+    designerSetsUpdateActionTo(action, expectation){
+        server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria', expectation);
     }
 
 

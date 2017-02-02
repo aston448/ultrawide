@@ -34,7 +34,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -56,7 +56,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User saves an update to a Design Update name --------------------------------------------------------------------
@@ -68,7 +68,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -90,7 +90,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User saves an update to a Design Update version -----------------------------------------------------------------
@@ -102,7 +102,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -124,7 +124,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chose to publish a design update to make it available in draft form ----------------------------------------
@@ -136,7 +136,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -160,7 +160,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chose to withdraw a published design update  ---------------------------------------------------------------
@@ -172,7 +172,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -196,7 +196,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chose to delete a design update ----------------------------------------------------------------------------
@@ -208,7 +208,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -250,7 +250,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User changed the merge action on the Design Update
@@ -262,7 +262,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -284,7 +284,7 @@ class ClientDesignUpdateServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
 
     }
 
@@ -331,7 +331,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Open the update scope down to the Feature level
@@ -367,7 +367,7 @@ class ClientDesignUpdateServices {
         // Switch to update edit view
         store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
 
-        return true;
+        return {success: true, message: ''};
 
     };
 
@@ -380,7 +380,7 @@ class ClientDesignUpdateServices {
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Ensure that the current update is the update we chose to view

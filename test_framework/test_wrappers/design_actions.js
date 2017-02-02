@@ -5,61 +5,61 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignActions{
 
-    addNewDesignAsRole(userRole){
-        server.call('testDesigns.addNewDesign', userRole);
+    addNewDesignAsRole(userRole, expectation){
+        server.call('testDesigns.addNewDesign', userRole, expectation);
     }
 
-    designerAddsNewDesignCalled(designName){
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, designName);
+    designerAddsNewDesignCalled(designName, expectation){
+        server.call('testDesigns.addNewDesign', RoleType.DESIGNER, expectation);
+        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, designName, expectation);
     };
 
-    designerSelectsDesign(designName){
-        server.call('testDesigns.selectDesign', designName, 'gloria');
+    designerSelectsDesign(designName, expectation){
+        server.call('testDesigns.selectDesign', designName, 'gloria', expectation);
     }
 
-    developerSelectsDesign(designName){
-        server.call('testDesigns.selectDesign', designName, 'hugh');
+    developerSelectsDesign(designName, expectation){
+        server.call('testDesigns.selectDesign', designName, 'hugh', expectation);
     }
 
-    managerSelectsDesign(designName){
-        server.call('testDesigns.selectDesign', designName, 'miles');
+    managerSelectsDesign(designName, expectation){
+        server.call('testDesigns.selectDesign', designName, 'miles', expectation);
     }
 
-    designerRemovesDesign(designName){
-        server.call('testDesigns.removeDesign', designName, RoleType.DESIGNER, 'gloria');
+    designerRemovesDesign(designName, expectation){
+        server.call('testDesigns.removeDesign', designName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerRemovesDesign(designName){
-        server.call('testDesigns.removeDesign', designName, RoleType.DEVELOPER, 'hugh');
+    developerRemovesDesign(designName, expectation){
+        server.call('testDesigns.removeDesign', designName, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerRemovesDesign(designName){
-        server.call('testDesigns.removeDesign', designName, RoleType.MANAGER, 'miles');
+    managerRemovesDesign(designName, expectation){
+        server.call('testDesigns.removeDesign', designName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerEditsDesignNameFrom_To_(oldName, newName){
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, oldName, newName);
+    designerEditsDesignNameFrom_To_(oldName, newName, expectation){
+        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, oldName, newName, expectation);
     }
 
-    developerEditsDesignNameFrom_To_(oldName, newName){
-        server.call('testDesigns.updateDesignName', RoleType.DEVELOPER, oldName, newName);
+    developerEditsDesignNameFrom_To_(oldName, newName, expectation){
+        server.call('testDesigns.updateDesignName', RoleType.DEVELOPER, oldName, newName, expectation);
     }
 
-    managerEditsDesignNameFrom_To_(oldName, newName){
-        server.call('testDesigns.updateDesignName', RoleType.MANAGER, oldName, newName);
+    managerEditsDesignNameFrom_To_(oldName, newName, expectation){
+        server.call('testDesigns.updateDesignName', RoleType.MANAGER, oldName, newName, expectation);
     }
 
-    designerWorksOnDesign(designName){
-        server.call('testDesigns.workDesign', designName, 'gloria');
+    designerWorksOnDesign(designName, expectation){
+        server.call('testDesigns.workDesign', designName, 'gloria', expectation);
     }
 
-    developerWorksOnDesign(designName){
-        server.call('testDesigns.workDesign', designName, 'hugh');
+    developerWorksOnDesign(designName, expectation){
+        server.call('testDesigns.workDesign', designName, 'hugh', expectation);
     }
 
-    managerWorksOnDesign(designName){
-        server.call('testDesigns.workDesign', designName, 'miles');
+    managerWorksOnDesign(designName, expectation){
+        server.call('testDesigns.workDesign', designName, 'miles', expectation);
     }
 
 

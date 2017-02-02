@@ -10,6 +10,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 
 import {RoleType, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 103 - Remove Design', function() {
 
@@ -49,7 +50,8 @@ describe('UC 103 - Remove Design', function() {
         DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.designerRemovesDesign('Design1');
+        const expectation = {success: false, message: DesignValidationErrors.DESIGN_NOT_REMOVABLE};
+        DesignActions.designerRemovesDesign('Design1', expectation);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist
@@ -81,7 +83,8 @@ describe('UC 103 - Remove Design', function() {
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
-        DesignActions.designerRemovesDesign('Design1');
+        const expectation = {success: false, message: DesignValidationErrors.DESIGN_NOT_REMOVABLE};
+        DesignActions.designerRemovesDesign('Design1', expectation);
 
         // Verify ------------------------------------------------------------------------------------------------------
         // Design should still exist

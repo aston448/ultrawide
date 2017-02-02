@@ -115,6 +115,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_MOVE:    'Only new additions to the Design can be moved in a Design Update',
     DESIGN_UPDATE_COMPONENT_INVALID_MOVE:              'This Design Update Component cannot be moved to the location where it was dropped',
     DESIGN_UPDATE_COMPONENT_INVALID_REORDER:           'This Design Update Component cannot be moved to the location where it was dropped',
+    DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING:  'Existing Design Components cannot be reordered in a Design Update',
     DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Update Component cannot have the same name as another component of the same type in this Design Version',
     DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE:             'A Design Update Component containing other components is not removable.  Delete from bottom up to remove',
     DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW:         'A Design Update Component containing NEW components added in this or another update is not removable',

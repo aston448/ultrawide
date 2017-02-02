@@ -6,17 +6,22 @@ import { UserCurrentEditContext }   from '../../imports/collections/context/user
 import { UserCurrentViewOptions }   from '../../imports/collections/context/user_current_view_options.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
-import ClientBackupServices             from '../../imports/apiClient/apiClientBackup.js'
+import ClientBackupServices         from '../../imports/apiClient/apiClientBackup.js'
+import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testBackup.backupDesign'(designName, role){
+    'testBackup.backupDesign'(designName, role, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const design = Designs.findOne({designName: designName});
 
-        ClientBackupServices.backupDesign(design._id, role);
+        const outcome = ClientBackupServices.backupDesign(design._id, role);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 });

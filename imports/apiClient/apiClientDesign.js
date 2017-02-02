@@ -33,7 +33,7 @@ class ClientDesignServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -55,7 +55,7 @@ class ClientDesignServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User saves an update to a Design name ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ class ClientDesignServices{
             console.log("Save Design Name validation failed: " + result);
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -91,7 +91,7 @@ class ClientDesignServices{
 
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User chooses to remove a Design ---------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ class ClientDesignServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -151,41 +151,35 @@ class ClientDesignServices{
 
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     }
 
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     setDesign(userContext, newDesignId){
-        // Set a new design as the current design if a new one chosen
+        // Set a new design as the current design
 
-        // if(newDesignId != userContext.designId) {
+        const context = {
+            userId:                         userContext.userId,
+            designId:                       newDesignId,
+            designVersionId:                'NONE',
+            designUpdateId:                 'NONE',
+            workPackageId:                  'NONE',
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE',
+            featureFilesLocation:           userContext.featureFilesLocation,
+            acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+            integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+            unitTestResultsLocation:      userContext.unitTestResultsLocation
+        };
 
-            const context = {
-                userId:                         userContext.userId,
-                designId:                       newDesignId,
-                designVersionId:                'NONE',
-                designUpdateId:                 'NONE',
-                workPackageId:                  'NONE',
-                designComponentId:              'NONE',
-                designComponentType:            'NONE',
-                featureReferenceId:             'NONE',
-                featureAspectReferenceId:       'NONE',
-                scenarioReferenceId:            'NONE',
-                scenarioStepId:                 'NONE',
-                featureFilesLocation:           userContext.featureFilesLocation,
-                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                unitTestResultsLocation:      userContext.unitTestResultsLocation
-            };
+        store.dispatch(setCurrentUserItemContext(context, true));
 
-            store.dispatch(setCurrentUserItemContext(context, true));
-
-            return true;
-        // }
-        //
-        // // Not an error - just indicates no change
-        // return false;
+        return {success: true, message: ''};
     }
 
     workDesign(userContext, userRole, newDesignId){
@@ -195,6 +189,8 @@ class ClientDesignServices{
 
         // Design set - go to selection screen
         store.dispatch(setCurrentView(ViewType.SELECT));
+
+        return {success: true, message: ''};
     }
 
 }

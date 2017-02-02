@@ -17,6 +17,7 @@ import WpComponentVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 502 - Edit Design Update Name and Reference', function(){
 
@@ -80,28 +81,6 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
         expect(DesignUpdateVerifications.selectedUpdateRefForDesignerIs('CR999'));
     });
 
-
-
-    // Conditions
-    it('A Design Update name must be unique for the Base Design Version', function(){
-
-        // Setup - create a new Design Update
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdate();
-        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
-        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
-        // And now a second Update....
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdate();
-
-        // Execute - try to give it same name as before
-        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
-        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
-
-        // Verify - name has not changed
-        expect(DesignUpdateVerifications.selectedUpdateNameForDesignerIs(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
-    });
-
     it('The same Design Update reference may be used on more than one Design Update for a Base Design Version', function(){
         // Setup - create a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -127,5 +106,29 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
         expect(DesignUpdateVerifications.selectedUpdateRefForDesignerIs('CR999'));
     });
+
+
+    // Conditions
+    it('A Design Update name must be unique for the Base Design Version', function(){
+
+        // Setup - create a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
+        // And now a second Update....
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdate();
+
+        // Execute - try to give it same name as before
+        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
+        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_NAME_DUPLICATE};
+        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1', expectation);
+
+        // Verify - name has not changed
+        expect(DesignUpdateVerifications.selectedUpdateNameForDesignerIs(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
+    });
+
+
 
 });

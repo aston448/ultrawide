@@ -38,7 +38,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -80,7 +80,7 @@ class ClientWorkPackageServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // Manager sets or updates Work Package name -----------------------------------------------------------------------
@@ -93,7 +93,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -115,7 +115,7 @@ class ClientWorkPackageServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     }
 
     // Manager chose to publish a WP to make it available in draft form ------------------------------------------------
@@ -128,7 +128,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -153,7 +153,7 @@ class ClientWorkPackageServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // Manager chose to unpublish a WP to withdraw it ------------------------------------------------------------------
@@ -166,7 +166,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -191,7 +191,7 @@ class ClientWorkPackageServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // Manager chose to delete a WP ------------------------------------------------------------------------------------
@@ -204,7 +204,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -247,7 +247,7 @@ class ClientWorkPackageServices {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // LOCAL CLIENT ACTIONS ============================================================================================
@@ -296,7 +296,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Ensure that the current WP is the WP we chose to edit
@@ -315,7 +315,7 @@ class ClientWorkPackageServices {
                 break;
         }
 
-        return true;
+        return {success: true, message: ''};
 
     };
 
@@ -329,7 +329,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Ensure that the current update is the update we chose to view
@@ -348,7 +348,7 @@ class ClientWorkPackageServices {
                 break;
         }
 
-        return true;
+        return {success: true, message: ''};
 
     };
 
@@ -362,7 +362,7 @@ class ClientWorkPackageServices {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Set the current context
@@ -387,6 +387,8 @@ class ClientWorkPackageServices {
 
         // Switch to Dev View
         store.dispatch(setCurrentView(view));
+
+        return {success: true, message: ''};
 
     }
 }

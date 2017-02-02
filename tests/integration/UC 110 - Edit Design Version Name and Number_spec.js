@@ -13,6 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignVersionValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 110 - Edit Design Version Name and Number', function(){
 
@@ -87,7 +88,8 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
         // Execute - try to rename new version to DesignVersion1
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion1');
+        const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_NAME_DUPLICATE};
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion1', expectation);
 
         // Verify
         // Check that still retains default Name
@@ -113,7 +115,8 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
         // Execute - try to rename new version number to 1.0
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        DesignVersionActions.designerUpdatesDesignVersionNumberTo('1.0');
+        const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_NUMBER_DUPLICATE};
+        DesignVersionActions.designerUpdatesDesignVersionNumberTo('1.0', expectation);
 
         // Verify
         // Check that still retains default Number

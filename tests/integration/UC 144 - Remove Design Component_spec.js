@@ -13,6 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 144 - Remove Design Component', function(){
 
@@ -132,7 +133,8 @@ describe('UC 144 - Remove Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
 
         // Execute
-        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE};
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99', expectation);
 
         // Verify - not removed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
@@ -148,7 +150,8 @@ describe('UC 144 - Remove Design Component', function(){
         DesignComponentActions.designerAddDesignSectionToDesignSection_('Section99');
 
         // Execute
-        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE};
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99', expectation);
 
         // Verify - not removed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
@@ -162,7 +165,8 @@ describe('UC 144 - Remove Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
-        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE};
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
 
         // Verify - not removed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
@@ -175,7 +179,8 @@ describe('UC 144 - Remove Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute
-        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE};
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
 
         // Verify - not removed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
@@ -192,7 +197,8 @@ describe('UC 144 - Remove Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 
         // Execute
-        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE};
+        DesignComponentActions.designerRemoveDesignComponentOfType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', expectation);
 
         // Verify - not removed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));

@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 557 - Edit Design Update Feature Narrative', function(){
 
@@ -102,7 +103,8 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
         expect(UpdateComponentVerifications.designerSelectedFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));
 
         // Execute
-        UpdateComponentActions.designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative);
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT};
+        UpdateComponentActions.designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative, expectation);
 
         // Verify unchanged
         expect(UpdateComponentVerifications.designerSelectedFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));

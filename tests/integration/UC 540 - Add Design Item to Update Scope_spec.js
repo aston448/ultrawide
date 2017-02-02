@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 540 - Add Design Item to Update Scope', function(){
 
@@ -151,6 +152,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Execute - try to add Scenario1 to second update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        //TODO - add expectation - this should fail???
+        //const expectation = {success: false, message: DesignUpdateComponentValidationErrors.}
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Verify - Scenario and parent not in scope

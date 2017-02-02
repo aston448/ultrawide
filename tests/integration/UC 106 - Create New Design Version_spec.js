@@ -13,7 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
-
+import {DesignVersionValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 106 - Create New Design Version', function(){
 
@@ -70,7 +70,8 @@ describe('UC 106 - Create New Design Version', function(){
         DesignActions.designerSelectsDesign('Design1');
 
         // Execute
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT};
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1', expectation);
 
         // Verify - new DV not created
         expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
@@ -93,7 +94,8 @@ describe('UC 106 - Create New Design Version', function(){
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         // Execute - try to create another new DV from old DesignVersion1
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT};
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1', expectation);
 
         // Verify - new DV not created
         expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
@@ -126,6 +128,7 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1',DesignUpdateMergeAction.MERGE_IGNORE));
 
         // Execute - try to create new DV from DV2 which has only one update set to IGNORE
+        const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_NEXT};
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
 
         // Verify - new DV not created

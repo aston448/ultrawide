@@ -5,101 +5,101 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignComponentActions{
 
-    designerAddApplication(){
-        server.call('testDesignComponents.addApplication', 'gloria');
+    designerAddApplication(expectation){
+        server.call('testDesignComponents.addApplication', 'gloria', expectation);
     }
 
-    designerAddApplicationCalled(appName){
-        server.call('testDesignComponents.addApplication', 'gloria');
-        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, appName);
+    designerAddApplicationCalled(appName, expectation){
+        server.call('testDesignComponents.addApplication', 'gloria', expectation);
+        server.call('testDesignComponents.updateComponentName', ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, appName, expectation);
     }
 
-    designerAddDesignSectionToApplication_(appName){
-        server.call('testDesignComponents.addDesignSectionToApplication', appName);
+    designerAddDesignSectionToApplication_(appName, expectation){
+        server.call('testDesignComponents.addDesignSectionToApplication', appName, expectation);
     }
 
-    designerAddDesignSectionToApplication_Called(appName, sectionName){
-        server.call('testDesignComponents.addDesignSectionToApplication', appName);
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, sectionName);
+    designerAddDesignSectionToApplication_Called(appName, sectionName, expectation){
+        server.call('testDesignComponents.addDesignSectionToApplication', appName, expectation);
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, sectionName, expectation);
     }
 
-    designerAddDesignSectionToDesignSection_(sectionName){
-        server.call('testDesignComponents.addDesignSectionToDesignSection', sectionName);
+    designerAddDesignSectionToDesignSection_(sectionName, expectation){
+        server.call('testDesignComponents.addDesignSectionToDesignSection', sectionName, expectation);
     }
 
-    designerAddDesignSectionToDesignSection_Called(sectionName, newSectionName){
-        server.call('testDesignComponents.addDesignSectionToDesignSection', sectionName);
-        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, newSectionName);
+    designerAddDesignSectionToDesignSection_Called(sectionName, newSectionName, expectation){
+        server.call('testDesignComponents.addDesignSectionToDesignSection', sectionName, expectation);
+        server.call('testDesignComponents.updateComponentName', ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, newSectionName, expectation);
     }
 
-    designerAddFeatureToSection_(sectionName){
-        server.call('testDesignComponents.addFeatureToDesignSection', sectionName);
+    designerAddFeatureToSection_(sectionName, expectation){
+        server.call('testDesignComponents.addFeatureToDesignSection', sectionName, expectation);
     }
 
-    designerAddFeatureToSection_Called(sectionName, featureName){
-        server.call('testDesignComponents.addFeatureToDesignSection', sectionName);
-        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, featureName);
+    designerAddFeatureToSection_Called(sectionName, featureName, expectation){
+        server.call('testDesignComponents.addFeatureToDesignSection', sectionName, expectation);
+        server.call('testDesignComponents.updateComponentName', ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, featureName, expectation);
     }
 
-    designerAddFeatureAspectToFeature_(featureName){
-        server.call('testDesignComponents.addFeatureAspectToFeature', featureName);
+    designerAddFeatureAspectToFeature_(featureName, expectation){
+        server.call('testDesignComponents.addFeatureAspectToFeature', featureName, expectation);
     }
 
-    designerAddScenarioToFeature(featureName){
-        server.call('testDesignComponents.addScenarioToFeature', featureName);
+    designerAddScenarioToFeature(featureName, expectation){
+        server.call('testDesignComponents.addScenarioToFeature', featureName, expectation);
     }
 
-    designerAddScenarioToFeatureAspect(featureName, featureAspectName){
-        server.call('testDesignComponents.addScenarioToFeatureAspect', featureName, featureAspectName);
+    designerAddScenarioToFeatureAspect(featureName, featureAspectName, expectation){
+        server.call('testDesignComponents.addScenarioToFeatureAspect', featureName, featureAspectName, expectation);
     }
 
-    designerAddScenarioToFeatureAspect_Called(featureName, featureAspectName, scenarioName){
-        server.call('testDesignComponents.addScenarioToFeatureAspect', featureName, featureAspectName);
-        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, scenarioName);
+    designerAddScenarioToFeatureAspect_Called(featureName, featureAspectName, scenarioName, expectation){
+        server.call('testDesignComponents.addScenarioToFeatureAspect', featureName, featureAspectName, expectation);
+        server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, scenarioName, expectation);
     }
 
-    designerSelectComponentType_WithParent_Called_(componentType, componentParent, componentName) {
-        server.call('testDesignComponents.selectComponent', componentType, componentParent, componentName, 'gloria');
+    designerSelectComponentType_WithParent_Called_(componentType, componentParent, componentName, expectation){
+        server.call('testDesignComponents.selectComponent', componentType, componentParent, componentName, 'gloria', expectation);
     }
 
-    designerSelectApplication(appName){
-        server.call('testDesignComponents.selectComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria');
+    designerSelectApplication(appName, expectation){
+        server.call('testDesignComponents.selectComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', expectation);
     }
 
-    designerSelectDesignSection(parentName, sectionName){
-        server.call('testDesignComponents.selectComponent', ComponentType.DESIGN_SECTION, parentName, sectionName, 'gloria');
+    designerSelectDesignSection(parentName, sectionName, expectation){
+        server.call('testDesignComponents.selectComponent', ComponentType.DESIGN_SECTION, parentName, sectionName, 'gloria', expectation);
     }
 
-    designerSelectFeature(parentName, featureName){
-        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE, parentName, featureName, 'gloria');
+    designerSelectFeature(parentName, featureName, expectation){
+        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE, parentName, featureName, 'gloria', expectation);
     }
 
-    designerSelectFeatureAspect(parentName, aspectName){
-        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'gloria');
+    designerSelectFeatureAspect(parentName, aspectName, expectation){
+        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'gloria', expectation);
     }
 
-    designerSelectScenario(featureName, aspectName, scenarioName){
-        server.call('testDesignComponents.selectComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria');
+    designerSelectScenario(featureName, aspectName, scenarioName, expectation){
+        server.call('testDesignComponents.selectComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', expectation);
     }
 
-    designerEditSelectedComponentNameTo_(newName){
-        server.call('testDesignComponents.updateSelectedComponentName', newName, 'gloria');
+    designerEditSelectedComponentNameTo_(newName, expectation){
+        server.call('testDesignComponents.updateSelectedComponentName', newName, 'gloria', expectation);
     }
 
-    designerRemoveDesignComponentOfType_WithParent_Called_(type, parentName, componentName){
-        server.call('testDesignComponents.removeComponent', type, parentName, componentName, 'gloria', ViewMode.MODE_EDIT);
+    designerRemoveDesignComponentOfType_WithParent_Called_(type, parentName, componentName, expectation){
+        server.call('testDesignComponents.removeComponent', type, parentName, componentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerMoveSelectedComponentToTarget_WithParent_Called_(targetType, targetParentName, targetComponentName){
-        server.call('testDesignComponents.moveSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT);
+    designerMoveSelectedComponentToTarget_WithParent_Called_(targetType, targetParentName, targetComponentName, expectation){
+        server.call('testDesignComponents.moveSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerReorderSelectedComponentToAbove_WithParent_Called_(targetType, targetParentName, targetComponentName){
-        server.call('testDesignComponents.reorderSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT);
+    designerReorderSelectedComponentToAbove_WithParent_Called_(targetType, targetParentName, targetComponentName, expectation){
+        server.call('testDesignComponents.reorderSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerEditSelectedFeatureNarrativeTo(newText){
-        server.call('testDesignComponents.updateSelectedFeatureNarrative', newText, 'gloria');
+    designerEditSelectedFeatureNarrativeTo(newText, expectation){
+        server.call('testDesignComponents.updateSelectedFeatureNarrative', newText, 'gloria', expectation);
     }
 }
 

@@ -15,7 +15,7 @@ Meteor.methods({
 
     'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation){
 
-        expectation = expectation = TestDataHelpers.getExpectation(expectation);
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -31,7 +31,7 @@ Meteor.methods({
 
     'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation){
 
-        expectation = expectation = TestDataHelpers.getExpectation(expectation);
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;

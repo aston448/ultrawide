@@ -4,60 +4,60 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class WorkPackageActions{
 
-    managerAddsBaseDesignWorkPackage(){
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles');
+    managerAddsBaseDesignWorkPackage(expectation){
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles', expectation);
     }
 
-    managerAddsUpdateWorkPackage(){
-        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_UPDATE, RoleType.MANAGER, 'miles');
+    managerAddsUpdateWorkPackage(expectation){
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_UPDATE, RoleType.MANAGER, 'miles', expectation);
     }
 
-    managerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, 'miles');
+    managerSelectsWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.selectWorkPackage', wpName, 'miles', expectation);
     }
 
-    developerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, 'hugh');
+    developerSelectsWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.selectWorkPackage', wpName, 'hugh', expectation);
     }
 
-    designerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, 'gloria');
+    designerSelectsWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.selectWorkPackage', wpName, 'gloria', expectation);
     }
 
-    managerUpdatesSelectedWpNameTo(newName){
-        server.call('testWorkPackages.updateWorkPackageName', newName, RoleType.MANAGER, 'miles');
+    managerUpdatesSelectedWpNameTo(newName, expectation){
+        server.call('testWorkPackages.updateWorkPackageName', newName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    managerPublishesSelectedWorkPackage(){
-        server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER);
+    managerPublishesSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
     }
 
-    managerWithdrawsSelectedWorkPackage(){
-        server.call('testWorkPackages.withdrawSelectedWorkPackage', 'miles', RoleType.MANAGER);
+    managerWithdrawsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.withdrawSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
     }
 
-    managerRemovesSelectedWorkPackage(){
-        server.call('testWorkPackages.removeSelectedWorkPackage', 'miles', RoleType.MANAGER);
+    managerRemovesSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.removeSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
     }
 
-    managerEditsBaseWorkPackage(wpName){
-        server.call('testWorkPackages.editWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
+    managerEditsBaseWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.editWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
 
-    managerEditsSelectedBaseWorkPackage(){
-        server.call('testWorkPackages.editSelectedWorkPackage', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
+    managerEditsSelectedBaseWorkPackage(expectation){
+        server.call('testWorkPackages.editSelectedWorkPackage', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
 
-    managerViewsBaseWorkPackage(wpName){
-        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER);
+    managerViewsBaseWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
 
-    developerViewsBaseWorkPackage(wpName){
-        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'hugh', RoleType.DEVELOPER);
+    developerViewsBaseWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'hugh', RoleType.DEVELOPER, expectation);
     }
 
-    designerViewsBaseWorkPackage(wpName){
-        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'gloria', RoleType.DESIGNER);
+    designerViewsBaseWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'gloria', RoleType.DESIGNER, expectation);
     }
 
 

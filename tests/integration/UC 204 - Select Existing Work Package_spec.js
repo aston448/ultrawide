@@ -15,6 +15,7 @@ import WorkPackageVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkPackageValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 204 - Select Existing Work Package - Base Design', function(){
 
@@ -137,10 +138,11 @@ describe('UC 204 - Select Existing Work Package - Base Design', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
 
         // Execute
+
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage3');
 
         // Verify
-        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage2'));
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage3'));
 
 
         // Setup - Developer
@@ -148,7 +150,8 @@ describe('UC 204 - Select Existing Work Package - Base Design', function(){
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage3');
+        let expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_VIEW_NEW};
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage3', expectation);
 
         // Verify
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('NONE'));
@@ -159,7 +162,8 @@ describe('UC 204 - Select Existing Work Package - Base Design', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
 
         // Execute
-        WorkPackageActions.designerSelectsWorkPackage('WorkPackage3');
+        // Same failure expectation as before
+        WorkPackageActions.designerSelectsWorkPackage('WorkPackage3', expectation);
 
         // Verify
         expect(WorkPackageVerifications.currentDesignerWorkPackageIs('NONE'));

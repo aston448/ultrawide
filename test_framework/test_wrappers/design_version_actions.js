@@ -5,170 +5,170 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignVersionActions{
 
-    designerSelectsDesignVersion(versionName){
-        server.call('testDesignVersions.selectDesignVersion', versionName, 'gloria');
+    designerSelectsDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'gloria', expectation);
     }
 
-    developerSelectsDesignVersion(versionName){
-        server.call('testDesignVersions.selectDesignVersion', versionName, 'hugh');
+    developerSelectsDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'hugh', expectation);
     }
 
-    managerSelectsDesignVersion(versionName){
-        server.call('testDesignVersions.selectDesignVersion', versionName, 'miles');
+    managerSelectsDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'miles', expectation);
     }
 
-    designerUpdatesDesignVersionNameFrom_To_(oldName, newName){
-        server.call('testDesignVersions.selectDesignVersion', oldName, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria');
+    designerUpdatesDesignVersionNameFrom_To_(oldName, newName, expectation){
+        server.call('testDesignVersions.selectDesignVersion', oldName, 'gloria', expectation);
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    designerUpdatesDesignVersionNameTo(newName){
-        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria');
+    designerUpdatesDesignVersionNameTo(newName, expectation){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerUpdatesDesignVersionNameTo(newName){
-        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DEVELOPER, 'hugh');
+    developerUpdatesDesignVersionNameTo(newName, expectation){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerUpdatesDesignVersionNameTo(newName){
-        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.MANAGER, 'miles');
+    managerUpdatesDesignVersionNameTo(newName, expectation){
+        server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerUpdatesDesignVersionNumberTo(newNumber){
-        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DESIGNER, 'gloria');
+    designerUpdatesDesignVersionNumberTo(newNumber, expectation){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerUpdatesDesignVersionNumberTo(newNumber){
-        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DEVELOPER, 'hugh');
+    developerUpdatesDesignVersionNumberTo(newNumber, expectation){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerUpdatesDesignVersionNumberTo(newNumber){
-        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.MANAGER, 'miles');
+    managerUpdatesDesignVersionNumberTo(newNumber, expectation){
+        server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerPublishesDesignVersion(versionName){
-        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DESIGNER, 'gloria');
+    designerPublishesDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerPublishesDesignVersion(versionName){
-        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DEVELOPER, 'hugh');
+    developerPublishesDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerPublishesDesignVersion(versionName){
-        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.MANAGER, 'miles');
+    managerPublishesDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerWithdrawsDesignVersion(versionName){
-        server.call('testDesignVersions.withdrawDesignVersion', versionName, 'gloria', RoleType.DESIGNER);
+    designerWithdrawsDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.withdrawDesignVersion', versionName, 'gloria', RoleType.DESIGNER, expectation);
     }
 
-    developerWithdrawsDesignVersion(versionName){
-        server.call('testDesignVersions.withdrawDesignVersion', versionName, 'hugh', RoleType.DEVELOPER);
+    developerWithdrawsDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.withdrawDesignVersion', versionName, 'hugh', RoleType.DEVELOPER, expectation);
     }
 
-    managerWithdrawsDesignVersion(versionName){
-        server.call('testDesignVersions.withdrawDesignVersion', versionName, 'miles', RoleType.MANAGER);
+    managerWithdrawsDesignVersion(versionName, expectation){
+        server.call('testDesignVersions.withdrawDesignVersion', versionName, 'miles', RoleType.MANAGER, expectation);
     }
 
-    designerCreatesNextDesignVersionFrom(oldDesignVersion){
-        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'gloria');
-        server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DESIGNER, 'gloria');
+    designerCreatesNextDesignVersionFrom(oldDesignVersion, expectation){
+        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'gloria', expectation);
+        server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerCreatesNextDesignVersionFrom(oldDesignVersion){
-        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'hugh');
-        server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DEVELOPER, 'hugh');
+    developerCreatesNextDesignVersionFrom(oldDesignVersion, expectation){
+        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'hugh', expectation);
+        server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerCreatesNextDesignVersionFrom(oldDesignVersion){
-        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'miles');
-        server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.MANAGER, 'miles');
+    managerCreatesNextDesignVersionFrom(oldDesignVersion, expectation){
+        server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'miles', expectation);
+        server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerEditDesignVersion(designVersionName){
-        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria');
+    designerEditDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerEditDesignVersion(designVersionName){
-        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh');
+    developerEditDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerEditDesignVersion(designVersionName){
-        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.MANAGER, 'miles');
+    managerEditDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerViewDesignVersion(designVersionName){
-        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria');
+    designerViewDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
-    developerViewDesignVersion(designVersionName){
-        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh');
+    developerViewDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh', expectation);
     }
 
-    managerViewDesignVersion(designVersionName){
-        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.MANAGER, 'miles');
+    managerViewDesignVersion(designVersionName, expectation){
+        server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
     }
 
 
 
 
     // Complex Actions -------------------------------------------------------------------------------------------------
-    designerCreateNextDesignVersionFromNew(params){
+    designerCreateNextDesignVersionFromNew(params, expectation){
         // Setup
         // Publish the Design Version
-        server.call('testDesigns.selectDesign', params.designName, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', params.designVersionName, RoleType.DESIGNER, 'gloria');
+        server.call('testDesigns.selectDesign', params.designName, 'gloria', expectation);
+        server.call('testDesignVersions.publishDesignVersion', params.designVersionName, RoleType.DESIGNER, 'gloria', expectation);
 
         // Execute
-        server.call('testDesignVersions.createNextDesignVersion', params.designVersionName, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.createNextDesignVersion', params.designVersionName, RoleType.DESIGNER, 'gloria', expectation);
 
         // Verify - new DV created with default name as well as DV1
-        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, params.designVersionName);
-        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, params.designVersionName, expectation);
+        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, DefaultItemNames.NEXT_DESIGN_VERSION_NAME, expectation);
         // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria', expectation);
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria', expectation);
         // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', params.designVersionName, 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', params.designVersionName, DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', params.designVersionName, 'gloria', expectation);
+        server.call('verifyDesignVersions.designVersionStatusIs', params.designVersionName, DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria', expectation);
     }
 
-    designerCreateNextDesignVersionFromUpdatable(params){
+    designerCreateNextDesignVersionFromUpdatable(params, expectation){
         // Setup
         // Publish the New Design Version
-        server.call('testDesigns.selectDesign', params.designName, 'gloria');
-        server.call('testDesignVersions.publishDesignVersion', params.firstDesignVersion, RoleType.DESIGNER, 'gloria');
+        server.call('testDesigns.selectDesign', params.designName, 'gloria', expectation);
+        server.call('testDesignVersions.publishDesignVersion', params.firstDesignVersion, RoleType.DESIGNER, 'gloria', expectation);
         // Create an Updatable DV from it
-        server.call('testDesignVersions.createNextDesignVersion', params.firstDesignVersion, RoleType.DESIGNER, 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', params.secondDesignVersion, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.createNextDesignVersion', params.firstDesignVersion, RoleType.DESIGNER, 'gloria', expectation);
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria', expectation);
+        server.call('testDesignVersions.updateDesignVersionName', params.secondDesignVersion, RoleType.DESIGNER, 'gloria', expectation);
         // Add a Design Update so it can be completed
-        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria', expectation);
         // Name it
-        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria');
-        server.call('testDesignUpdates.updateDesignUpdateName', params.designUpdate, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.selectDesignUpdate', DefaultItemNames.NEW_DESIGN_UPDATE_NAME, 'gloria', expectation);
+        server.call('testDesignUpdates.updateDesignUpdateName', params.designUpdate, RoleType.DESIGNER, 'gloria', expectation);
         // Publish it
-        server.call('testDesignUpdates.publishDesignUpdate', params.designUpdate, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.publishDesignUpdate', params.designUpdate, RoleType.DESIGNER, 'gloria', expectation);
         // Set it to INCLUDE
-        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignUpdates.updateMergeAction', DesignUpdateMergeAction.MERGE_INCLUDE, RoleType.DESIGNER, 'gloria', expectation);
         // Check
-        server.call('verifyDesignUpdates.designUpdateMergeActionIs', params.designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria');
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', params.designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE, 'gloria', expectation);
 
         // Execute - create another new DV from DesignVersion2
-        server.call('testDesignVersions.createNextDesignVersion', params.secondDesignVersion, RoleType.DESIGNER, 'gloria');
+        server.call('testDesignVersions.createNextDesignVersion', params.secondDesignVersion, RoleType.DESIGNER, 'gloria', expectation);
 
         // Verify - new DV created with default name
-        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, params.firstDesignVersion);
-        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, params.secondDesignVersion);
-        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, params.firstDesignVersion, expectation);
+        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, params.secondDesignVersion, expectation);
+        server.call('verifyDesignVersions.designVersionExistsCalled', params.designName, DefaultItemNames.NEXT_DESIGN_VERSION_NAME, expectation);
         // Select the new DV
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'gloria', expectation);
         // And status should be updatable
-        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria');
+        server.call('verifyDesignVersions.designVersionStatusIs', DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE, 'gloria', expectation);
         // And previous DV should be complete
-        server.call('testDesignVersions.selectDesignVersion', params.firstDesignVersion, 'gloria');
-        server.call('verifyDesignVersions.designVersionStatusIs', params.firstDesignVersion, DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria');
+        server.call('testDesignVersions.selectDesignVersion', params.firstDesignVersion, 'gloria', expectation);
+        server.call('verifyDesignVersions.designVersionStatusIs', params.firstDesignVersion, DesignVersionStatus.VERSION_DRAFT_COMPLETE, 'gloria', expectation);
     }
 
 

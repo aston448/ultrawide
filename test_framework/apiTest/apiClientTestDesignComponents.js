@@ -13,7 +13,9 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
-    'testDesignComponents.addApplication'(userName){
+    'testDesignComponents.addApplication'(userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -22,11 +24,14 @@ Meteor.methods({
         // Get user's Design Version Id as the one being worked on
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
+        const outcome = ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addApplicationInMode'(userName, mode){
+    'testDesignComponents.addApplicationInMode'(userName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -34,11 +39,14 @@ Meteor.methods({
         // Get user's Design Version Id as the one being worked on
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
+        const outcome = ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addDesignSectionToApplication'(applicationName){
+    'testDesignComponents.addDesignSectionToApplication'(applicationName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -47,11 +55,14 @@ Meteor.methods({
         // And the parent component
         const applicationComponent = DesignComponents.findOne({componentType: ComponentType.APPLICATION, componentName: applicationName});
 
-        ClientDesignComponentServices.addDesignSectionToApplication(view, mode, applicationComponent);
+        const outcome = ClientDesignComponentServices.addDesignSectionToApplication(view, mode, applicationComponent);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addDesignSectionToDesignSection'(sectionName){
+    'testDesignComponents.addDesignSectionToDesignSection'(sectionName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -60,11 +71,14 @@ Meteor.methods({
         // And the parent component
         const sectionComponent = DesignComponents.findOne({componentType: ComponentType.DESIGN_SECTION, componentName: sectionName});
 
-        ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, sectionComponent);
+        const outcome = ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, sectionComponent);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addFeatureToDesignSection'(sectionName){
+    'testDesignComponents.addFeatureToDesignSection'(sectionName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -73,11 +87,14 @@ Meteor.methods({
         // And the parent component
         const sectionComponent = DesignComponents.findOne({componentType: ComponentType.DESIGN_SECTION, componentName: sectionName});
 
-        ClientDesignComponentServices.addFeatureToDesignSection(view, mode, sectionComponent);
+        const outcome = ClientDesignComponentServices.addFeatureToDesignSection(view, mode, sectionComponent);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addFeatureAspectToFeature'(featureName){
+    'testDesignComponents.addFeatureAspectToFeature'(featureName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -86,11 +103,14 @@ Meteor.methods({
         // And the parent component
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
 
-        ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureComponent);
+        const outcome = ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, featureComponent);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addScenarioToFeature'(featureName){
+    'testDesignComponents.addScenarioToFeature'(featureName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -99,11 +119,14 @@ Meteor.methods({
         // And the parent component
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
 
-        ClientDesignComponentServices.addScenario(view, mode, featureComponent);
+        const outcome = ClientDesignComponentServices.addScenario(view, mode, featureComponent);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.addScenarioToFeatureAspect'(featureName, featureAspectName){
+    'testDesignComponents.addScenarioToFeatureAspect'(featureName, featureAspectName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -113,12 +136,15 @@ Meteor.methods({
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
         const featureAspectComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: featureAspectName, componentParentId: featureComponent._id});
 
-        ClientDesignComponentServices.addScenario(view, mode, featureAspectComponent);
+        const outcome = ClientDesignComponentServices.addScenario(view, mode, featureAspectComponent);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 
-    'testDesignComponents.updateComponentName'(componentType, oldName, newName){
+    'testDesignComponents.updateComponentName'(componentType, oldName, newName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -127,11 +153,14 @@ Meteor.methods({
         const component = DesignComponents.findOne({componentType: componentType, componentName: oldName});
         const rawName = DesignComponentModules.getRawTextFor(newName);
 
-        ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName)
+        const outcome = ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName)
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.updateSelectedComponentName'(newName, userName){
+    'testDesignComponents.updateSelectedComponentName'(newName, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -144,11 +173,14 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "No Design Component is currently selected for user " + userName);
         }
 
-        ClientDesignComponentServices.updateComponentName(view, mode, userContext.designComponentId, newName, rawName)
+        const outcome = ClientDesignComponentServices.updateComponentName(view, mode, userContext.designComponentId, newName, rawName)
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.updateFeatureNarrative'(featureName, newText, mode){
+    'testDesignComponents.updateFeatureNarrative'(featureName, newText, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -156,10 +188,14 @@ Meteor.methods({
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
         const newRawText = DesignComponentModules.getRawTextFor(newText);
 
-        ClientDesignComponentServices.updateFeatureNarrative(view, mode, featureComponent._id, newText, newRawText);
+        const outcome = ClientDesignComponentServices.updateFeatureNarrative(view, mode, featureComponent._id, newText, newRawText);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.updateSelectedFeatureNarrative'(newText, userName){
+    'testDesignComponents.updateSelectedFeatureNarrative'(newText, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -173,10 +209,14 @@ Meteor.methods({
 
         const newRawText = DesignComponentModules.getRawTextFor(newText);
 
-        ClientDesignComponentServices.updateFeatureNarrative(view, mode, userContext.designComponentId, newText, newRawText);
+        const outcome = ClientDesignComponentServices.updateFeatureNarrative(view, mode, userContext.designComponentId, newText, newRawText);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.updateComponentNameInMode'(componentType, oldName, newName, mode){
+    'testDesignComponents.updateComponentNameInMode'(componentType, oldName, newName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -184,11 +224,14 @@ Meteor.methods({
         const component = DesignComponents.findOne({componentType: componentType, componentName: oldName});
         const rawName = DesignComponentModules.getRawTextFor(newName);
 
-        ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName)
+        const outcome = ClientDesignComponentServices.updateComponentName(view, mode, component._id, newName, rawName)
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.removeComponent'(componentType, parentName, componentName, userName, mode){
+    'testDesignComponents.removeComponent'(componentType, parentName, componentName, userName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -196,12 +239,15 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, parentName, componentName);
 
-        ClientDesignComponentServices.removeDesignComponent(view, mode, designComponent, userContext);
+        const outcome = ClientDesignComponentServices.removeDesignComponent(view, mode, designComponent, userContext);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
     // Use Select and then MoveSelected for unambiguous results
-    'testDesignComponents.moveComponent'(componentType, componentName, newParentType, newParentName, mode){
+    'testDesignComponents.moveComponent'(componentType, componentName, newParentType, newParentName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view and context is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -210,11 +256,14 @@ Meteor.methods({
         const movingComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
         const newParentComponent = DesignComponents.findOne({componentType: newParentType, componentName: newParentName});
 
-        ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
+        const outcome = ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.reorderComponent'(componentType, movingComponentName, targetComponentName, mode){
+    'testDesignComponents.reorderComponent'(componentType, movingComponentName, targetComponentName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view and context is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -223,12 +272,15 @@ Meteor.methods({
         const movingComponent = DesignComponents.findOne({componentType: componentType, componentName: movingComponentName});
         const targetComponent = DesignComponents.findOne({componentType: componentType, componentName: targetComponentName});
 
-        ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
+        const outcome = ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 
-    'testDesignComponents.selectComponent'(componentType, parentName, componentName, userName){
+    'testDesignComponents.selectComponent'(componentType, parentName, componentName, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const displayContext = DisplayContext.BASE_EDIT;
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -240,10 +292,14 @@ Meteor.methods({
             componentName
         );
 
-        ClientDesignComponentServices.setDesignComponent(component._id, userContext, displayContext);
+        const outcome = ClientDesignComponentServices.setDesignComponent(component._id, userContext, displayContext);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.moveSelectedComponent'(targetType, targetParentName, targetName,  userName, mode){
+    'testDesignComponents.moveSelectedComponent'(targetType, targetParentName, targetName,  userName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view and context is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -254,11 +310,14 @@ Meteor.methods({
         const movingComponent = DesignComponents.findOne({_id: userContext.designComponentId});
         const newParentComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
 
-        ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
+        const outcome = ClientDesignComponentServices.moveDesignComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignComponents.reorderSelectedComponent'(targetType, targetParentName, targetName, userName, mode){
+    'testDesignComponents.reorderSelectedComponent'(targetType, targetParentName, targetName, userName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assume view and context is correct
         const view = ViewType.DESIGN_NEW_EDIT;
@@ -270,8 +329,9 @@ Meteor.methods({
         const movingComponent = DesignComponents.findOne({_id: userContext.designComponentId});
         const targetComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
 
-        ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
+        const outcome = ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 });

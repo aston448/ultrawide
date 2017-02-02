@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 552 - Edit Design Update Component Name', function(){
 
@@ -86,7 +87,8 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Application1
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME);
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Application1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Application1', expectation);
 
         // Verify - still 1 of each
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, 'Application1', 1));
@@ -104,7 +106,8 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Feature1
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME);
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature1', expectation);
 
         // Verify - still 1 of each
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'Feature1', 1));
@@ -123,7 +126,8 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Scenario1
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME);
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario1', expectation);
 
         // Verify - still 1 of each
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
@@ -141,7 +145,8 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Section1
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Section1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Section1', expectation);
 
         // Verify - still 1 of each
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'Section1', 1));
@@ -160,7 +165,8 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Actions
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Actions');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Actions', expectation);
 
         // Verify - still same numbers as before
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'Actions', 3));  // There are several in default data

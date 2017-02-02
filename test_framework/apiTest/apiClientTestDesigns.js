@@ -8,55 +8,78 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testDesigns.addNewDesign'(role){
+    'testDesigns.addNewDesign'(role, expectation){
 
-        ClientDesignServices.addNewDesign(role);
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const outcome = ClientDesignServices.addNewDesign(role);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesigns.updateDesignName'(role, existingName, newName){
+    'testDesigns.updateDesignName'(role, existingName, newName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const design = TestDataHelpers.getDesign(existingName);
 
-        ClientDesignServices.updateDesignName(role, design._id, newName);
+        const outcome = ClientDesignServices.updateDesignName(role, design._id, newName);
 
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesigns.selectDesign'(designName, userName){
+    'testDesigns.selectDesign'(designName, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const design = TestDataHelpers.getDesign(designName);
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignServices.setDesign(userContext, design._id);
+        const outcome = ClientDesignServices.setDesign(userContext, design._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesigns.workDesign'(designName, userName){
+    'testDesigns.workDesign'(designName, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const design = TestDataHelpers.getDesign(designName);
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignServices.workDesign(userContext, RoleType.DESIGNER, design._id)
+        const outcome = ClientDesignServices.workDesign(userContext, RoleType.DESIGNER, design._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesigns.removeDesign'(designName, userRole, userName){
+    'testDesigns.removeDesign'(designName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const design = TestDataHelpers.getDesign(designName);
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignServices.removeDesign(userContext, userRole, design._id)
+        const outcome = ClientDesignServices.removeDesign(userContext, userRole, design._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
     'testDesigns.selectDesignVersion'(){
 
     },
 
-    'testDesigns.editDesignVersion'(designName, designVersionName, userRole, userName){
+    'testDesigns.editDesignVersion'(designName, designVersionName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false)
+        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
 });

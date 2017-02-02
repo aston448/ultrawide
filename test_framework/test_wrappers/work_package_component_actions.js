@@ -4,62 +4,62 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class WpComponentActions{
 
-    managerAddComponentToScopeForCurrentBaseWp(type, parentName, name){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', type, parentName, name, 'miles');
+    managerAddComponentToScopeForCurrentBaseWp(type, parentName, name, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', type, parentName, name, 'miles', expectation);
     }
 
-    managerAddComponentInScopeForCurrentUpdateWp(type, parentName, name){
-        server.call('testWorkPackageComponents.toggleUpdateWpComponentInScope', type, parentName, name, 'miles');
+    managerAddComponentInScopeForCurrentUpdateWp(type, parentName, name, expectation){
+        server.call('testWorkPackageComponents.toggleUpdateWpComponentInScope', type, parentName, name, 'miles', expectation);
     }
 
-    managerRemoveComponentFromScopeForCurrentBaseWp(type, parentName, name){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', type, parentName, name, 'miles');
+    managerRemoveComponentFromScopeForCurrentBaseWp(type, parentName, name, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', type, parentName, name, 'miles', expectation);
     }
 
-    managerRemoveComponentFromScopeForCurrentUpdateWp(type, parentName, name){
-        server.call('testWorkPackageComponents.toggleUpdateWpComponentOutScope', type, parentName, name, 'miles');
+    managerRemoveComponentFromScopeForCurrentUpdateWp(type, parentName, name, expectation){
+        server.call('testWorkPackageComponents.toggleUpdateWpComponentOutScope', type, parentName, name, 'miles', expectation);
     }
 
 
 
-    managerAddsApplicationToScopeForCurrentBaseWp(appName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.APPLICATION, 'NONE', appName, 'miles');
+    managerAddsApplicationToScopeForCurrentBaseWp(appName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.APPLICATION, 'NONE', appName, 'miles', expectation);
     }
 
-    managerAddsDesignSectionToScopeForCurrentBaseWp(parentName, sectionName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.DESIGN_SECTION, parentName, sectionName, 'miles');
+    managerAddsDesignSectionToScopeForCurrentBaseWp(parentName, sectionName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.DESIGN_SECTION, parentName, sectionName, 'miles', expectation);
     }
 
-    managerAddsFeatureToScopeForCurrentBaseWp(parentName, featureName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.FEATURE, parentName, featureName, 'miles');
+    managerAddsFeatureToScopeForCurrentBaseWp(parentName, featureName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.FEATURE, parentName, featureName, 'miles', expectation);
     }
 
-    managerAddsFeatureAspectToScopeForCurrentBaseWp(parentName, aspectName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles');
+    managerAddsFeatureAspectToScopeForCurrentBaseWp(parentName, aspectName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles', expectation);
     }
 
-    managerAddsScenarioToScopeForCurrentBaseWp(parentName, scenarioName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.SCENARIO, parentName, scenarioName, 'miles');
+    managerAddsScenarioToScopeForCurrentBaseWp(parentName, scenarioName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.SCENARIO, parentName, scenarioName, 'miles', expectation);
     }
 
-    managerRemovesApplicationFromScopeForCurrentBaseWp(appName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.APPLICATION, 'NONE', appName, 'miles');
+    managerRemovesApplicationFromScopeForCurrentBaseWp(appName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.APPLICATION, 'NONE', appName, 'miles', expectation);
     }
 
-    managerRemovesDesignSectionFromScopeForCurrentBaseWp(parentName, sectionName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.DESIGN_SECTION, parentName, sectionName, 'miles');
+    managerRemovesDesignSectionFromScopeForCurrentBaseWp(parentName, sectionName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.DESIGN_SECTION, parentName, sectionName, 'miles', expectation);
     }
 
-    managerRemovesFeatureFromScopeForCurrentBaseWp(parentName, featureName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE, parentName, featureName, 'miles');
+    managerRemovesFeatureFromScopeForCurrentBaseWp(parentName, featureName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE, parentName, featureName, 'miles', expectation);
     }
 
-    managerRemovesFeatureAspectFromScopeForCurrentBaseWp(parentName, aspectName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles');
+    managerRemovesFeatureAspectFromScopeForCurrentBaseWp(parentName, aspectName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles', expectation);
     }
 
-    managerRemovesScenarioFromScopeForCurrentBaseWp(parentName, scenarioName){
-        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.SCENARIO, parentName, scenarioName, 'miles');
+    managerRemovesScenarioFromScopeForCurrentBaseWp(parentName, scenarioName, expectation){
+        server.call('testWorkPackageComponents.toggleInitialWpComponentOutScope', ComponentType.SCENARIO, parentName, scenarioName, 'miles', expectation);
     }
 
 }

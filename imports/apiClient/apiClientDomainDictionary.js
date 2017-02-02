@@ -36,7 +36,7 @@ class ClientDomainDictionaryApi {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -58,7 +58,7 @@ class ClientDomainDictionaryApi {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // Designer sets or changes a term name ----------------------------------------------------------------------------
@@ -71,7 +71,7 @@ class ClientDomainDictionaryApi {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -93,7 +93,7 @@ class ClientDomainDictionaryApi {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // Designer sets or updates a term definition ----------------------------------------------------------------------
@@ -106,7 +106,7 @@ class ClientDomainDictionaryApi {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -128,7 +128,7 @@ class ClientDomainDictionaryApi {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // Designer removes a term from the Dictionary ---------------------------------------------------------------------
@@ -141,7 +141,7 @@ class ClientDomainDictionaryApi {
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call - server actions
@@ -163,7 +163,7 @@ class ClientDomainDictionaryApi {
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // LOCAL CLIENT ACTIONS ============================================================================================

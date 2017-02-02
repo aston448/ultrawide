@@ -8,100 +8,148 @@ import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
-    'testWorkPackages.addNewWorkPackage'(workPackageType, userRole, userName){
+    'testWorkPackages.addNewWorkPackage'(workPackageType, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         let openWpItems = [];
 
-        ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, workPackageType, openWpItems)
+        const outcome = ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, workPackageType, openWpItems);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.selectWorkPackage'(workPackageName, userName){
+    'testWorkPackages.selectWorkPackage'(workPackageName, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
-        ClientWorkPackageServices.setWorkPackage(userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.setWorkPackage(userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.publishWorkPackage'(workPackageName, userName, userRole){
+    'testWorkPackages.publishWorkPackage'(workPackageName, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
-        ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.publishSelectedWorkPackage'(userName, userRole){
+    'testWorkPackages.publishSelectedWorkPackage'(userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
-        ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.withdrawWorkPackage'(workPackageName, userName, userRole){
+    'testWorkPackages.withdrawWorkPackage'(workPackageName, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
-        ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.withdrawSelectedWorkPackage'(userName, userRole){
+    'testWorkPackages.withdrawSelectedWorkPackage'(userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
-        ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.editWorkPackage'(workPackageName, workPackageType, userName, userRole){
+    'testWorkPackages.editWorkPackage'(workPackageName, workPackageType, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
-        ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+        const outcome = ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.editSelectedWorkPackage'(workPackageType, userName, userRole){
+    'testWorkPackages.editSelectedWorkPackage'(workPackageType, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
-        ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+        const outcome = ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.viewWorkPackage'(workPackageName, workPackageType, userName, userRole){
+    'testWorkPackages.viewWorkPackage'(workPackageName, workPackageType, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
-        ClientWorkPackageServices.viewWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+        const outcome = ClientWorkPackageServices.viewWorkPackage(userRole, userContext, workPackage._id, workPackageType);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.updateWorkPackageName'(newName, userRole, userName){
+    'testWorkPackages.updateWorkPackageName'(newName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         // Assumption that WP is always selected before it can be updated
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientWorkPackageServices.updateWorkPackageName(userRole, userContext.workPackageId, newName)
+        const outcome = ClientWorkPackageServices.updateWorkPackageName(userRole, userContext.workPackageId, newName);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.removeWorkPackage'(workPackageName, userName, userRole){
+    'testWorkPackages.removeWorkPackage'(workPackageName, userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
-        ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id)
+        const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testWorkPackages.removeSelectedWorkPackage'(userName, userRole){
+    'testWorkPackages.removeSelectedWorkPackage'(userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
-        ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id)
+        const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
     }
 
 });

@@ -199,7 +199,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application99');
         // Expect this to fail...
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING};
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
 
         // Verify no change
@@ -217,7 +217,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
         // Expect this to fail...
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING};
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
 
         // Verify no change
@@ -235,7 +235,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature444');
         // Expect this to fail...
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING};
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE, 'Section1', 'Feature1', expectation);
 
         // Verify no change
@@ -261,7 +261,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
         // Expect this to fail...
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING};
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', expectation);
 
         // Verify no change
@@ -286,7 +286,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario444');
         // Expect this to fail...
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING};
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
 
         // Verify no change

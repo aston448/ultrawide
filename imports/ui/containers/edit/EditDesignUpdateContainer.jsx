@@ -61,6 +61,7 @@ class UpdateApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
+                    testSummary={false}
                 />
             );
 
@@ -78,6 +79,7 @@ class UpdateApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
+                    testSummary={false}
                 />
             );
         });

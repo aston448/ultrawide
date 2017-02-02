@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 553 - Mark Existing Design Update Component as Removed', function(){
 
@@ -343,7 +344,8 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // Execute - Try to remove the whole Application
-        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1', expectation);
 
         // Verify - nothing existing is removed - stuff could be in scope
 
@@ -395,7 +397,8 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Execute - Try to remove the whole Application from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1', expectation);
 
         // Verify - nothing existing is removed
 
@@ -461,7 +464,8 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Execute - Try to remove the whole Application from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1', expectation);
         
         // Verify - nothing existing is removed or in scope
 

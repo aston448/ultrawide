@@ -26,35 +26,35 @@ class TestFixtures{
         server.call('testFixtures.clearAllData');
     };
 
-    clearDesgnUpdates(){
+    clearDesgnUpdates(expectation){
         server.call('textFixtures.clearDesignUpdates');
     }
 
-    setDummyUserContextForDesigner(){
-        server.call('testUserContext.setFullDummyEditContext', 'gloria');
+    setDummyUserContextForDesigner(expectation){
+        server.call('testUserContext.setFullDummyEditContext', 'gloria', expectation);
     }
 
-    setDummyUserContextForDeveloper(){
-        server.call('testUserContext.setFullDummyEditContext', 'hugh');
+    setDummyUserContextForDeveloper(expectation){
+        server.call('testUserContext.setFullDummyEditContext', 'hugh', expectation);
     }
 
-    setDummyUserContextForManager(){
-        server.call('testUserContext.setFullDummyEditContext', 'miles');
+    setDummyUserContextForManager(expectation){
+        server.call('testUserContext.setFullDummyEditContext', 'miles', expectation);
     }
 
-    addDesignWithDefaultData(){
+    addDesignWithDefaultData(expectation){
         // This creates a Design and populates the initial Design Version with a set of data - see AddBasicDesignData
 
         // Add  Design - Design1: will create default Design Version
-        server.call('testDesigns.addNewDesign', RoleType.DESIGNER);
-        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1');
-        server.call('testDesigns.selectDesign', 'Design1', 'gloria');
-        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria');
-        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
+        server.call('testDesigns.addNewDesign', RoleType.DESIGNER, expectation);
+        server.call('testDesigns.updateDesignName', RoleType.DESIGNER, DefaultItemNames.NEW_DESIGN_NAME, 'Design1', expectation);
+        server.call('testDesigns.selectDesign', 'Design1', 'gloria', expectation);
+        server.call('testDesignVersions.selectDesignVersion', DefaultItemNames.NEW_DESIGN_VERSION_NAME, 'gloria', expectation);
+        server.call('testDesignVersions.updateDesignVersionName', 'DesignVersion1', RoleType.DESIGNER, 'gloria', expectation);
 
         // Add Basic Data to the Design Version
-        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria');
-        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1');
+        server.call('testDesigns.editDesignVersion', 'Design1', 'DesignVersion1', RoleType.DESIGNER, 'gloria', expectation);
+        server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1', expectation);
     }
 
 }

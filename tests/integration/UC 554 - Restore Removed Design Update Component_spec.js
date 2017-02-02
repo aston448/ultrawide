@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 554 - Restore Removed Design Update Component', function(){
 
@@ -266,7 +267,8 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
  
         // Try to restore Section1
-        UpdateComponentActions.designerRestoresDeletedUpdateSection('Application1', 'Section1');
+        let expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE};
+        UpdateComponentActions.designerRestoresDeletedUpdateSection('Application1', 'Section1', expectation);
         
         // Everything still removed
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
@@ -284,7 +286,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Try to restore Feature 1
-        UpdateComponentActions.designerRestoresDeletedUpdateFeature('Section1', 'Feature1');
+        UpdateComponentActions.designerRestoresDeletedUpdateFeature('Section1', 'Feature1', expectation);
 
         // Everything still removed
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
@@ -302,7 +304,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Try to restore Feature1 Actions
-        UpdateComponentActions.designerRestoresDeletedUpdateFeatureAspect('Feature1', 'Actions');
+        UpdateComponentActions.designerRestoresDeletedUpdateFeatureAspect('Feature1', 'Actions', expectation);
         
         // Everything still removed
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
@@ -320,7 +322,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Try to restore Scenario1
-        UpdateComponentActions.designerRestoresDeletedUpdateScenario('Actions', 'Scenario1');
+        UpdateComponentActions.designerRestoresDeletedUpdateScenario('Actions', 'Scenario1', expectation);
         
         // Everything still removed
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
