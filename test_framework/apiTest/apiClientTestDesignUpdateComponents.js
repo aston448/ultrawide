@@ -21,7 +21,11 @@ Meteor.methods({
 
         const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
-        ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true)
+        const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode){
@@ -33,7 +37,11 @@ Meteor.methods({
 
         const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
-        ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false)
+        const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
 
@@ -45,7 +53,11 @@ Meteor.methods({
         // Get user's Design Version Id as the one being worked on
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId);
+        const outcome = ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode){
@@ -63,7 +75,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, parentComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode){
@@ -103,7 +119,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.addFeatureToDesignSection(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addFeatureToDesignSection(view, mode, parentComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode){
@@ -121,7 +141,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode){
@@ -139,7 +163,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode){
@@ -157,7 +185,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode){
@@ -177,7 +209,11 @@ Meteor.methods({
         
         const newNameRaw = DesignComponentModules.getRawTextFor(newName);
         
-        ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw)
+        const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode){
@@ -192,7 +228,11 @@ Meteor.methods({
 
         const newNameRaw = DesignComponentModules.getRawTextFor(newName);
 
-        ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw)
+        const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode){
@@ -211,7 +251,11 @@ Meteor.methods({
             componentName
         );
 
-        ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode){
@@ -230,7 +274,11 @@ Meteor.methods({
             componentName
         );
 
-        ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode){
@@ -248,7 +296,11 @@ Meteor.methods({
             componentName
         );
 
-        ClientDesignUpdateComponentServices.restoreComponent(view, mode, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.restoreComponent(view, mode, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.moveDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
@@ -274,7 +326,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode){
@@ -294,7 +350,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode){
@@ -320,7 +380,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetType, targetComponentParentName, targetComponentName, userName, mode){
@@ -340,7 +404,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
+        const outcome = ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode){
@@ -359,7 +427,11 @@ Meteor.methods({
 
         const newRawText = DesignComponentModules.getRawTextFor(newPlainText);
 
-        ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText)
+        const outcome = ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode){
@@ -372,7 +444,11 @@ Meteor.methods({
 
         const newRawText = DesignComponentModules.getRawTextFor(newPlainText);
 
-        ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText)
+        const outcome = ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName){

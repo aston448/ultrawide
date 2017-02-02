@@ -34,7 +34,7 @@ class UpdateComponentActions{
 
     designerAddsDesignSectionTo_Section_Called(sectionParent, sectionName, subSectionName){
         server.call('testDesignUpdateComponents.addSectionToDesignSection', sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT);
-        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, sectionParent, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, subSectionName, 'gloria', ViewMode.MODE_EDIT);
+        server.call('testDesignUpdateComponents.updateComponentName', ComponentType.DESIGN_SECTION, sectionName, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, subSectionName, 'gloria', ViewMode.MODE_EDIT);
     }
 
     designerAddsFeatureTo_Section_Called(sectionParent, sectionName, featureName){

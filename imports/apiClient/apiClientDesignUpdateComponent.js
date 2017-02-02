@@ -33,7 +33,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -59,7 +59,7 @@ class ClientDesignUpdateComponentServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User saved changes to Narrative in a Feature --------------------------------------------------------------------
@@ -71,7 +71,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -93,7 +93,7 @@ class ClientDesignUpdateComponentServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Add Application in the main Design Update Applications container -----------------------------------
@@ -109,7 +109,7 @@ class ClientDesignUpdateComponentServices{
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             //ClientAuditServices.updateUserAction(auditKey, 'FAIL', result);
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -132,7 +132,7 @@ class ClientDesignUpdateComponentServices{
         });
 
         // Allow tests to access results
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Add Design Section inside an Application component -------------------------------------------------
@@ -144,7 +144,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -173,7 +173,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Add Sub Section inside a Design Section ------------------------------------------------------------
@@ -219,7 +219,7 @@ class ClientDesignUpdateComponentServices{
             }
         );
 
-        // Allow tests to access results
+        // Indicate that business validation passed
         return {success: true, message: ''};
     };
 
@@ -232,7 +232,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -261,7 +261,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Add Feature Aspect inside a Feature ----------------------------------------------------------------
@@ -273,7 +273,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -302,7 +302,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Add Scenario in either a Feature or Feature Aspect -------------------------------------------------
@@ -314,7 +314,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -343,7 +343,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Delete for a design component when editing a Design Update -----------------------------------------
@@ -355,7 +355,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -386,7 +386,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User clicked Restore for a logically deleted design component when editing a Design Update ----------------------
@@ -398,7 +398,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -429,7 +429,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
 
     };
 
@@ -442,7 +442,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -471,7 +471,7 @@ class ClientDesignUpdateComponentServices{
         });
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User dragged a component to a new location in the design update -------------------------------------------------
@@ -485,7 +485,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -515,7 +515,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // User dragged a component to a new position in its current list --------------------------------------------------
@@ -527,7 +527,7 @@ class ClientDesignUpdateComponentServices{
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -557,7 +557,7 @@ class ClientDesignUpdateComponentServices{
         );
 
         // Indicate that business validation passed
-        return true;
+        return {success: true, message: ''};
     };
 
     // LOCAL CLIENT ACTIONS ============================================================================================
