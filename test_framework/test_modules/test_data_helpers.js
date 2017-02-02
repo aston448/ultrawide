@@ -25,7 +25,7 @@ class TestDataHelpers {
 
         if(expectation.success){
             // Were expecting this call to be valid
-            if(!outcome.success){
+            if(!(outcome.success)){
                 // Something wrong in test or code
                 throw new Meteor.Error('INVALID', 'Unexpected validation failure: ' + outcome.message);
             }
