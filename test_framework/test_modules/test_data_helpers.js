@@ -23,15 +23,20 @@ class TestDataHelpers {
             // Were expecting this call to be valid
             if(!outcome.success){
                 // Something wrong in test or code
-                throw new Meteor.Error('INVALID', outcome.message);
+                throw new Meteor.Error('INVALID', 'Unexpected validation failure: ' + outcome.message);
             }
         } else {
+            // Check we did get an error
+            if(outcome.success){
+                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: ' + expectation.message + ' but got SUCCESS');
+            }
+
             // Were expecting a validation failure - check its the right one
             if(outcome.message != expectation.message){
                 throw new Meteor.Error('UNEXPECTED', 'Expecting failure: ' + expectation.message + ' but got: ' + outcome.message);
             }
         }
-    }
+    };
 
     getUserContext(userName){
 
