@@ -16,7 +16,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Select Design Version');
     },
 
     'testDesignVersions.publishDesignVersion'(designVersionName, userRole, userName, expectation){
@@ -28,7 +28,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.publishDesignVersion(userRole, userContext, designVersion._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Publish Design Version');
     },
 
     'testDesignVersions.withdrawDesignVersion'(designVersionName, userName, userRole, expectation){
@@ -40,7 +40,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.withdrawDesignVersion(userRole, userContext, designVersion._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Withdraw Design Version');
     },
 
     'testDesignVersions.editDesignVersion'(designVersionName, userRole, userName, expectation){
@@ -53,7 +53,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Design Version');
     },
 
     'testDesignVersions.viewDesignVersion'(designVersionName, userRole, userName, expectation){
@@ -66,7 +66,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion, false);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View Design Version');
     },
 
     'testDesignVersions.updateDesignVersionName'(newName, userRole, userName, expectation){
@@ -78,7 +78,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.updateDesignVersionName(userRole, userContext.designVersionId, newName);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Design Version Name');
     },
 
     'testDesignVersions.updateDesignVersionNumber'(newNumber, userRole, userName, expectation){
@@ -90,7 +90,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.updateDesignVersionNumber(userRole, userContext.designVersionId, newNumber);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Design Version Number');
     },
 
     'testDesignVersions.createNextDesignVersion'(currentDesignVersionName, userRole, userName, expectation){
@@ -102,7 +102,7 @@ Meteor.methods({
 
         const outcome = ClientDesignVersionServices.createNextDesignVersion(userRole, userContext, designVersion._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Create Next Design Version');
     }
 
 });

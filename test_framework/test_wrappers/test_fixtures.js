@@ -26,20 +26,20 @@ class TestFixtures{
         server.call('testFixtures.clearAllData');
     };
 
-    clearDesgnUpdates(expectation){
+    clearDesgnUpdates(){
         server.call('textFixtures.clearDesignUpdates');
     }
 
-    setDummyUserContextForDesigner(expectation){
-        server.call('testUserContext.setFullDummyEditContext', 'gloria', expectation);
+    setDummyUserContextForDesigner(){
+        server.call('testUserContext.setFullDummyEditContext', 'gloria');
     }
 
-    setDummyUserContextForDeveloper(expectation){
-        server.call('testUserContext.setFullDummyEditContext', 'hugh', expectation);
+    setDummyUserContextForDeveloper(){
+        server.call('testUserContext.setFullDummyEditContext', 'hugh');
     }
 
-    setDummyUserContextForManager(expectation){
-        server.call('testUserContext.setFullDummyEditContext', 'miles', expectation);
+    setDummyUserContextForManager(){
+        server.call('testUserContext.setFullDummyEditContext', 'miles');
     }
 
     addDesignWithDefaultData(expectation){

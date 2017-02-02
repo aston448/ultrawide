@@ -54,7 +54,7 @@ describe('UC 107 - Update Design Name', function() {
         expect(DesignVerifications.designExistsCalled(DefaultItemNames.NEW_DESIGN_NAME));
 
         // Execute -----------------------------------------------------------------------------------------------------
-        const expectation = {success: false, messsage: DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE};
+        const expectation = {success: false, message: DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE};
         DesignActions.designerEditsDesignNameFrom_To_(DefaultItemNames.NEW_DESIGN_NAME, 'Design1', expectation);
 
         // Verify ------------------------------------------------------------------------------------------------------
