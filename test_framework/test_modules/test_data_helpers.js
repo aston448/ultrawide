@@ -17,6 +17,10 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 class TestDataHelpers {
 
+    getExpectation(expectation){
+        return (expectation != null) ? expectation : {success: true, message: ''};
+    }
+
     processClientCallOutcome(outcome, expectation){
 
         if(expectation.success){

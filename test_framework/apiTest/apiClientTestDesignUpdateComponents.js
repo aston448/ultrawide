@@ -13,7 +13,9 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 Meteor.methods({
 
 
-    'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -27,7 +29,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         const view = ViewType.DESIGN_UPDATE_EDIT;
         const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -42,7 +46,9 @@ Meteor.methods({
     },
 
 
-    'testDesignUpdateComponents.addApplication'(userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addApplication'(userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -55,7 +61,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -75,7 +83,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -95,7 +105,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -115,7 +127,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -135,7 +149,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -155,7 +171,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -175,7 +193,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -197,8 +217,10 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode, expectation){
         // Only use this after selecting the component
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -214,9 +236,11 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation){
         // Called in the context of an EXISTING component
 
+        TestDataHelpers.getExpectation(expectation);
+
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
 
@@ -235,9 +259,11 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation){
         // Called in the context of an NEW component
 
+        TestDataHelpers.getExpectation(expectation);
+
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
 
@@ -256,7 +282,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -276,7 +304,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.moveDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.moveDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -304,7 +334,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -326,7 +358,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -354,7 +388,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetType, targetComponentParentName, targetComponentName, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetType, targetComponentParentName, targetComponentName, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -376,7 +412,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -397,7 +435,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -412,7 +452,9 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName, expectation = {success: true, message: ''}){
+    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName, expectation){
+
+        TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
