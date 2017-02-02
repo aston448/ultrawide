@@ -43,7 +43,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Component to Update Scope');
     },
 
     'testDesignUpdateComponents.removeComponentFromUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation){
@@ -59,7 +59,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Component from Update Scope');
     },
 
 
@@ -75,7 +75,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add App');
     },
 
     'testDesignUpdateComponents.addDesignSectionToApplication'(targetParentName, targetComponentName, userName, mode, expectation){
@@ -97,7 +97,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, parentComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Section to App');
     },
 
     'testDesignUpdateComponents.addSectionToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation){
@@ -119,7 +119,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, parentComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Section to Section');
     },
 
     'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode, expectation){
@@ -141,7 +141,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addFeatureToDesignSection(view, mode, parentComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Feature');
     },
 
     'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode, expectation){
@@ -163,7 +163,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Aspect');
     },
 
     'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode, expectation){
@@ -185,7 +185,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Scenario to Feature');
     },
 
     'testDesignUpdateComponents.addScenarioToFeatureAspect'(targetParentName, targetComponentName, userName, mode, expectation){
@@ -207,7 +207,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addScenario(view, mode, parentComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Add Scenario to Aspect');
     },
 
     'testDesignUpdateComponents.updateComponentName'(componentType, targetParentName, targetComponentName, newName, userName, mode, expectation){
@@ -231,7 +231,7 @@ Meteor.methods({
         
         const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Update Component Name');
     },
 
     'testDesignUpdateComponents.updateCurrentComponentName'(newName, userName, mode, expectation){
@@ -250,7 +250,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Update Selected Component Name');
     },
 
     'testDesignUpdateComponents.logicallyDeleteDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation){
@@ -273,7 +273,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Logical Del Cmponent');
     },
 
     'testDesignUpdateComponents.removeDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation){
@@ -296,7 +296,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.removeComponent(view, mode, targetComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Remove Component');
     },
 
     'testDesignUpdateComponents.restoreDesignComponent'(componentType, componentParentName, componentName, userName, mode, expectation){
@@ -318,37 +318,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.restoreComponent(view, mode, targetComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testDesignUpdateComponents.moveDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        // Assume view is correct
-        const view = ViewType.DESIGN_UPDATE_EDIT;
-        const displayContext = DisplayContext.UPDATE_EDIT;
-
-        // Get user's Design Version Id as the one being worked on
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const movingComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
-            userContext.designVersionId,
-            userContext.designUpdateId,
-            movingComponentType,
-            movingComponentParentName,
-            movingComponentName
-        );
-        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
-            userContext.designVersionId,
-            userContext.designUpdateId,
-            targetComponentType,
-            targetComponentParentName,
-            targetComponentName
-        );
-
-        const outcome = ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Restore Component');
     },
 
     'testDesignUpdateComponents.moveSelectedDesignComponent'(targetComponentType, targetComponentParentName, targetComponentName, userName, mode, expectation){
@@ -372,37 +342,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.moveComponent(view, mode, displayContext, movingComponent, targetComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testDesignUpdateComponents.reorderDesignComponent'(movingComponentType, movingComponentParentName, movingComponentName, targetComponentParentName, targetComponentName, userName, mode, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        // Assume view is correct
-        const view = ViewType.DESIGN_UPDATE_EDIT;
-        const displayContext = DisplayContext.UPDATE_EDIT;
-
-        // Get user's Design Version Id as the one being worked on
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const movingComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
-            userContext.designVersionId,
-            userContext.designUpdateId,
-            movingComponentType,
-            movingComponentParentName,
-            movingComponentName
-        );
-        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
-            userContext.designVersionId,
-            userContext.designUpdateId,
-            movingComponentType,
-            targetComponentParentName,
-            targetComponentName
-        );
-
-        const outcome = ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Move Component');
     },
 
     'testDesignUpdateComponents.reorderSelectedDesignComponent'(targetType, targetComponentParentName, targetComponentName, userName, mode, expectation){
@@ -426,31 +366,9 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.reorderComponent(view, mode, displayContext, movingComponent, targetComponent);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Reorder Component');
     },
 
-    'testDesignUpdateComponents.updateFeatureNarrative'(parentName, featureName, newPlainText, userName, mode, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        // Assume view is correct
-        const view = ViewType.DESIGN_UPDATE_EDIT;
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const feature = TestDataHelpers.getDesignUpdateComponentWithParent(
-            userContext.designVersionId,
-            userContext.designUpdateId,
-            ComponentType.FEATURE,
-            parentName,
-            featureName
-        );
-
-        const newRawText = DesignComponentModules.getRawTextFor(newPlainText);
-
-        const outcome = ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
 
     'testDesignUpdateComponents.updateSelectedFeatureNarrative'(newPlainText, userName, mode, expectation){
 
@@ -466,7 +384,7 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, feature._id, newPlainText, newRawText);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Update Narrative');
     },
 
 

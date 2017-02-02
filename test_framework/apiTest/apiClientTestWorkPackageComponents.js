@@ -21,7 +21,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, true);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component In Scope');
     },
 
     'testWorkPackageComponents.toggleInitialWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){
@@ -37,7 +37,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, false);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component Out Scope');
     },
 
     'testWorkPackageComponents.toggleUpdateWpComponentInScope'(componentType, componentParentName, componentName, userName, expectation){
@@ -53,7 +53,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, true);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd WP Component In Scope');
     },
 
     'testWorkPackageComponents.toggleUpdateWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){
@@ -69,7 +69,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, workPackageComponent._id, false);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd WP Component Out Scope');
     },
 
 });

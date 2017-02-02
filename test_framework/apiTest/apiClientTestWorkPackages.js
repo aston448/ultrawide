@@ -26,19 +26,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, workPackageType, openWpItems);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testWorkPackages.publishWorkPackage'(workPackageName, userName, userRole, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
-
-        const outcome = ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add WP');
     },
 
     'testWorkPackages.publishSelectedWorkPackage'(userName, userRole, expectation){
@@ -50,19 +38,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testWorkPackages.withdrawWorkPackage'(workPackageName, userName, userRole, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
-
-        const outcome = ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Publish WP');
     },
 
     'testWorkPackages.withdrawSelectedWorkPackage'(userName, userRole, expectation){
@@ -74,7 +50,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Withdraw WP');
     },
 
     'testWorkPackages.editWorkPackage'(workPackageName, workPackageType, userName, userRole, expectation){
@@ -86,7 +62,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit WP');
     },
 
     'testWorkPackages.editSelectedWorkPackage'(workPackageType, userName, userRole, expectation){
@@ -98,7 +74,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Selected WP');
     },
 
     'testWorkPackages.viewWorkPackage'(workPackageName, workPackageType, userName, userRole, expectation){
@@ -110,7 +86,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.viewWorkPackage(userRole, userContext, workPackage._id, workPackageType);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View WP');
     },
 
     'testWorkPackages.updateWorkPackageName'(newName, userRole, userName, expectation){
@@ -122,19 +98,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.updateWorkPackageName(userRole, userContext.workPackageId, newName);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testWorkPackages.removeWorkPackage'(workPackageName, userName, userRole, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
-
-        const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update WP Name');
     },
 
     'testWorkPackages.removeSelectedWorkPackage'(userName, userRole, expectation){
@@ -146,7 +110,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove WP');
     }
 
 });
