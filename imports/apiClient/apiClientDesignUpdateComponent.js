@@ -1,15 +1,16 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide collections
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
+import {DesignUpdateComponents}             from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ComponentType, MessageType} from '../constants/constants.js';
-import { DesignUpdateComponentMessages } from '../constants/message_texts.js';
-import { Validation } from '../constants/validation_errors.js';
+import { ComponentType, MessageType}        from '../constants/constants.js';
+import { DesignUpdateComponentMessages }    from '../constants/message_texts.js';
+import { Validation }                       from '../constants/validation_errors.js';
 
-import ServerDesignUpdateComponentApi      from '../apiServer/apiDesignUpdateComponent.js';
-import DesignUpdateComponentValidationApi  from '../apiValidation/apiDesignUpdateComponentValidation.js';
+import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateComponent.js';
+import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
+import ClientAuditServices                  from '../apiClient/apiClientAudit.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -99,12 +100,16 @@ class ClientDesignUpdateComponentServices{
     // User clicked Add Application in the main Design Update Applications container -----------------------------------
     addApplicationToDesignVersion(view, mode, designVersionId, designUpdateId) {
 
+        // Audit
+        //const auditKey = ClientAuditServices.logUserAction('DU_ADD_APPLICATION');
+
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, null);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            //ClientAuditServices.updateUserAction(auditKey, 'FAIL', result);
             return false;
         }
 
@@ -123,10 +128,11 @@ class ClientDesignUpdateComponentServices{
                     messageType: MessageType.INFO,
                     messageText: DesignUpdateComponentMessages.MSG_NEW_APPLICATION_ADDED
                 }));
+                //ClientAuditServices.updateUserAction(auditKey, 'SUCCESS', DesignUpdateComponentMessages.MSG_NEW_APPLICATION_ADDED);
             }
         });
 
-        // Indicate that business validation passed
+        // Allow tests to access results
         return true;
     };
 
@@ -174,13 +180,17 @@ class ClientDesignUpdateComponentServices{
     // User clicked Add Sub Section inside a Design Section ------------------------------------------------------------
     addSectionToDesignSection(view, mode, parentComponent){
 
+        // Audit
+        // const auditKey = ClientAuditServices.logUserAction('DU_ADD_SECTION_TO_SECTION');
+
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return false;
+            //ClientAuditServices.updateUserAction(auditKey, 'FAIL', result);
+            return {success: false, message: result};
         }
 
         // Real action call
@@ -205,12 +215,13 @@ class ClientDesignUpdateComponentServices{
                         messageType: MessageType.INFO,
                         messageText: DesignUpdateComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
                     }));
+                    //ClientAuditServices.updateUserAction(auditKey, 'SUCCESS', DesignUpdateComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED);
                 }
             }
         );
 
-        // Indicate that business validation passed
-        return true;
+        // Allow tests to access results
+        return {success: false, message: ''};
     };
 
     // User clicked Add Feature inside a Design Section ----------------------------------------------------------------
