@@ -126,7 +126,7 @@ Meteor.methods({
         }
     },
 
-    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode){
+    'testDesignUpdateComponents.addFeatureAspectToFeature'(targetParentName, targetComponentName, userName, mode, expectation){
 
         // Assume view is correct
         const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -143,9 +143,8 @@ Meteor.methods({
 
         const outcome = ClientDesignUpdateComponentServices.addFeatureAspectToFeature(view, mode, parentComponent);
 
-        if(!outcome.success){
-            throw new Meteor.Error('INVALID', outcome.message);
-        }
+        TestDataHelpers.processClientCallOutcome(outcome, expectation);
+
     },
 
     'testDesignUpdateComponents.addScenarioToFeature'(targetParentName, targetComponentName, userName, mode){

@@ -42,8 +42,8 @@ class UpdateComponentActions{
         server.call('testDesignUpdateComponents.updateComponentName', ComponentType.FEATURE, sectionName, DefaultComponentNames.NEW_FEATURE_NAME, featureName, 'gloria', ViewMode.MODE_EDIT);
     }
 
-    designerAddsFeatureAspectToCurrentUpdateFeature(featureParent, featureName){
-        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', featureParent, featureName, 'gloria', ViewMode.MODE_EDIT);
+    designerAddsFeatureAspectToCurrentUpdateFeature(featureParent, featureName, expectation){
+        server.call('testDesignUpdateComponents.addFeatureAspectToFeature', featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
     designerAddsFeatureAspectTo_Feature_Called(sectionParent, featureName, aspectName){

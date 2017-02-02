@@ -17,6 +17,22 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 class TestDataHelpers {
 
+    processClientCallOutcome(outcome, expectation){
+
+        if(expectation.success){
+            // Were expecting this call to be valid
+            if(!outcome.success){
+                // Something wrong in test or code
+                throw new Meteor.Error('INVALID', outcome.message);
+            }
+        } else {
+            // Were expecting a validation failure - check its the right one
+            if(outcome.message != expectation.message){
+                throw new Meteor.Error('UNEXPECTED', 'Expecting failure: ' + expectation.message + ' but got: ' + outcome.message);
+            }
+        }
+    }
+
     getUserContext(userName){
 
         const user = UserRoles.findOne({userName: userName});
