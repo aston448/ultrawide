@@ -9,14 +9,12 @@ Meteor.methods({
 
     'testDesignVersions.selectDesignVersion'(designVersionName, userName, expectation){
 
-        expectation = TestDataHelpers.getExpectation(expectation);
-
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        const outcome = ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
+        // This is not a validated method - don't process outcome
+        ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Select Design Version');
     },
 
     'testDesignVersions.publishDesignVersion'(designVersionName, userRole, userName, expectation){

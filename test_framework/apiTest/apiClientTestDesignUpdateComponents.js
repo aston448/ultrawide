@@ -12,6 +12,23 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
+    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+        const displayContext = DisplayContext.UPDATE_EDIT;
+
+        // Note this is same function for both base design and updates
+        // And it is not a validated action
+        ClientDesignComponentServices.setDesignComponent(targetComponent._id, userContext, displayContext);
+
+    },
 
     'testDesignUpdateComponents.addComponentToUpdateScope'(componentType, componentParentName, componentName, userName, mode, expectation){
 
@@ -452,25 +469,7 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },
 
-    'testDesignUpdateComponents.selectComponent'(componentType, componentParentName, componentName, userName, expectation){
 
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
-            userContext.designVersionId,
-            userContext.designUpdateId,
-            componentType,
-            componentParentName,
-            componentName
-        );
-        const displayContext = DisplayContext.UPDATE_EDIT;
-
-        // Note this is same function for both base design and updates
-        const outcome = ClientDesignComponentServices.setDesignComponent(targetComponent._id, userContext, displayContext);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    }
 
 
 

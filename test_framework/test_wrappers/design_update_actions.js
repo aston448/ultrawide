@@ -17,12 +17,12 @@ class DesignUpdateActions{
 
     };
 
-    designerSelectsUpdate(updateName, expectation){
-        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria', expectation);
+    designerSelectsUpdate(updateName){
+        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria');
     }
 
-    managerSelectsUpdate(updateName, expectation){
-        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'miles', expectation);
+    managerSelectsUpdate(updateName){
+        server.call('testDesignUpdates.selectDesignUpdate', updateName, 'miles');
     }
 
     designerEditsSelectedUpdateNameTo(newName, expectation){

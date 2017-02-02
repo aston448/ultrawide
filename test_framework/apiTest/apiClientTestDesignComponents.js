@@ -13,6 +13,23 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
+    'testDesignComponents.selectComponent'(componentType, parentName, componentName, userName){
+
+        const displayContext = DisplayContext.BASE_EDIT;
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const component = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            parentName,
+            componentName
+        );
+
+        // This is not a validated action
+        ClientDesignComponentServices.setDesignComponent(component._id, userContext, displayContext);
+
+    },
+
     'testDesignComponents.addApplication'(userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -273,26 +290,6 @@ Meteor.methods({
         const targetComponent = DesignComponents.findOne({componentType: componentType, componentName: targetComponentName});
 
         const outcome = ClientDesignComponentServices.reorderDesignComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-
-    'testDesignComponents.selectComponent'(componentType, parentName, componentName, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const displayContext = DisplayContext.BASE_EDIT;
-        const userContext = TestDataHelpers.getUserContext(userName);
-
-        const component = TestDataHelpers.getDesignComponentWithParent(
-            userContext.designVersionId,
-            componentType,
-            parentName,
-            componentName
-        );
-
-        const outcome = ClientDesignComponentServices.setDesignComponent(component._id, userContext, displayContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },

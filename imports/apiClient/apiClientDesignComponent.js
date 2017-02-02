@@ -555,11 +555,11 @@ class ClientDesignComponentServices{
 
             store.dispatch(setCurrentUserItemContext(context, true));
 
-            return {success: true, message: ''};
+            return context;
         }
 
         // Not an error - just indicates no change
-        return {success: true, message: 'No change'};
+        return userContext;
     };
 
     // User opened or closed a design component ------------------------------------------------------------------------

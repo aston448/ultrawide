@@ -12,15 +12,15 @@ class WorkPackageActions{
         server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_UPDATE, RoleType.MANAGER, 'miles', expectation);
     }
 
-    managerSelectsWorkPackage(wpName, expectation){
-        server.call('testWorkPackages.selectWorkPackage', wpName, 'miles', expectation);
+    managerSelectsWorkPackage(wpName){
+        server.call('testWorkPackages.selectWorkPackage', wpName, 'miles');
     }
 
-    developerSelectsWorkPackage(wpName, expectation){
-        server.call('testWorkPackages.selectWorkPackage', wpName, 'hugh', expectation);
+    developerSelectsWorkPackage(wpName){
+        server.call('testWorkPackages.selectWorkPackage', wpName, 'hugh');
     }
 
-    designerSelectsWorkPackage(wpName, expectation){
+    designerSelectsWorkPackage(wpName){
         server.call('testWorkPackages.selectWorkPackage', wpName, 'gloria', expectation);
     }
 

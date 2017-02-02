@@ -8,6 +8,15 @@ import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
+    'testWorkPackages.selectWorkPackage'(workPackageName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        // This is not a validated action
+        ClientWorkPackageServices.setWorkPackage(userContext, workPackage._id);
+    },
+
     'testWorkPackages.addNewWorkPackage'(workPackageType, userRole, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -16,18 +25,6 @@ Meteor.methods({
         let openWpItems = [];
 
         const outcome = ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, workPackageType, openWpItems);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testWorkPackages.selectWorkPackage'(workPackageName, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
-
-        const outcome = ClientWorkPackageServices.setWorkPackage(userContext, workPackage._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },

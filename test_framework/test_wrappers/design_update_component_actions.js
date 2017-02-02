@@ -87,8 +87,8 @@ class UpdateComponentActions{
     }
 
     // Select
-    designerSelectsUpdateComponent(componentType, componentParent, componentName, expectation){
-        server.call('testDesignUpdateComponents.selectComponent', componentType, componentParent, componentName, 'gloria', expectation);
+    designerSelectsUpdateComponent(componentType, componentParent, componentName){
+        server.call('testDesignUpdateComponents.selectComponent', componentType, componentParent, componentName, 'gloria');
     }
 
     // Rename selected

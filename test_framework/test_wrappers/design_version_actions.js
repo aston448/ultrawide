@@ -5,8 +5,8 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignVersionActions{
 
-    designerSelectsDesignVersion(versionName, expectation){
-        server.call('testDesignVersions.selectDesignVersion', versionName, 'gloria', expectation);
+    designerSelectsDesignVersion(versionName){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'gloria');
     }
 
     developerSelectsDesignVersion(versionName, expectation){

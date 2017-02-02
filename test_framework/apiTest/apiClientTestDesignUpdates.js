@@ -7,6 +7,16 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
+    'testDesignUpdates.selectDesignUpdate'(designUpdateName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        // This is not a validated action
+        ClientDesignUpdateServices.setDesignUpdate(userContext, designUpdate._id);
+
+    },
+
     'testDesignUpdates.addDesignUpdate'(userRole, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -14,18 +24,6 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         const outcome = ClientDesignUpdateServices.addNewDesignUpdate(userRole, userContext.designVersionId);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation);
-    },
-
-    'testDesignUpdates.selectDesignUpdate'(designUpdateName, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
-
-        const outcome = ClientDesignUpdateServices.setDesignUpdate(userContext, designUpdate._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation);
     },

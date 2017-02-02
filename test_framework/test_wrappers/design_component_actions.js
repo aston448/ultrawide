@@ -58,28 +58,28 @@ class DesignComponentActions{
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, scenarioName, expectation);
     }
 
-    designerSelectComponentType_WithParent_Called_(componentType, componentParent, componentName, expectation){
-        server.call('testDesignComponents.selectComponent', componentType, componentParent, componentName, 'gloria', expectation);
+    designerSelectComponentType_WithParent_Called_(componentType, componentParent, componentName){
+        server.call('testDesignComponents.selectComponent', componentType, componentParent, componentName, 'gloria');
     }
 
-    designerSelectApplication(appName, expectation){
-        server.call('testDesignComponents.selectComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria', expectation);
+    designerSelectApplication(appName){
+        server.call('testDesignComponents.selectComponent', ComponentType.APPLICATION, 'NONE', appName, 'gloria');
     }
 
-    designerSelectDesignSection(parentName, sectionName, expectation){
-        server.call('testDesignComponents.selectComponent', ComponentType.DESIGN_SECTION, parentName, sectionName, 'gloria', expectation);
+    designerSelectDesignSection(parentName, sectionName){
+        server.call('testDesignComponents.selectComponent', ComponentType.DESIGN_SECTION, parentName, sectionName, 'gloria');
     }
 
-    designerSelectFeature(parentName, featureName, expectation){
-        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE, parentName, featureName, 'gloria', expectation);
+    designerSelectFeature(parentName, featureName){
+        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE, parentName, featureName, 'gloria');
     }
 
-    designerSelectFeatureAspect(parentName, aspectName, expectation){
-        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'gloria', expectation);
+    designerSelectFeatureAspect(parentName, aspectName){
+        server.call('testDesignComponents.selectComponent', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'gloria');
     }
 
-    designerSelectScenario(featureName, aspectName, scenarioName, expectation){
-        server.call('testDesignComponents.selectComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria', expectation);
+    designerSelectScenario(featureName, aspectName, scenarioName){
+        server.call('testDesignComponents.selectComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria');
     }
 
     designerEditSelectedComponentNameTo_(newName, expectation){
