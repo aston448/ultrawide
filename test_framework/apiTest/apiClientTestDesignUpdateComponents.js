@@ -81,7 +81,11 @@ Meteor.methods({
             targetComponentName
         );
 
-        ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, parentComponent);
+        const outcome = ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, parentComponent);
+
+        if(!outcome.success){
+            throw new Meteor.Error('INVALID', outcome.message);
+        }
     },
 
     'testDesignUpdateComponents.addFeatureToDesignSection'(targetParentName, targetComponentName, userName, mode){
