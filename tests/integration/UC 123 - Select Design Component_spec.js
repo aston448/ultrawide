@@ -77,7 +77,7 @@ describe('UC 123 - Select Design Component', function(){
 
     it('A Scenario may be selected', function(){
 
-        DesignComponentActions.designerSelectScenario('Actions', 'Scenario1');
+        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario1');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
