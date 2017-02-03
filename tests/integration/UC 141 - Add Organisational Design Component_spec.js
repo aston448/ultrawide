@@ -9,6 +9,10 @@ import DesignUpdateVerifications    from '../../test_framework/test_wrappers/des
 import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -85,8 +89,38 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
 
     // Consequences
-    it('Adding an organisational component to a base Design Version makes it available in any Design Updates based on that version');
+    it('Adding an organisational component to a base Design Version makes it available in any Work Packages based on that version', function(){
 
-    it('Adding an organisational component to a base Design Version makes it available in any Work Packages based on that version');
+        // Setup
+        // Publish DV1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Manager add a WP
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        // And add Section1 to it
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
+        // Check on Scenarios in WP Scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+
+        // Execute - designer adds Scenario3 to Feature1 Actions
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
+        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario3');
+
+        // Verify - Scenario3 now in WP1 not in scope
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+    });
 
 });
