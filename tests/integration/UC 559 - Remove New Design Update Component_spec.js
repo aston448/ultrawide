@@ -127,7 +127,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section3');
 
         // Remove Application
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
         UpdateComponentActions.designerRemovesUpdateApplication('Application2', expectation);
 
         // Verify not removed
@@ -143,7 +143,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
 
         // Remove Section
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
         UpdateComponentActions.designerRemovesUpdateSection('Application1', 'Section3', expectation);
 
         // Verify not removed
@@ -157,7 +157,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Remove Feature
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
         UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3', expectation);
 
         // Verify not removed
@@ -173,7 +173,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario99');
 
         // Remove Feature Aspect
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
         UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions', expectation);
 
         // Verify not removed
