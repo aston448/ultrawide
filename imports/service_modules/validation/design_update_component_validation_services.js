@@ -94,7 +94,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateDesignUpdateComponentName(view, mode, componentType, newName, existingUpdateComponents){
+    validateUpdateDesignUpdateComponentName(view, mode, componentType, newName, existingUpdateComponents, componentParentId){
 
         // Updates only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
