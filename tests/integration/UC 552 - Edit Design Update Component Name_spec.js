@@ -119,13 +119,13 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Scenario
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Interface');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Interface');
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
 
         // Try to call it Scenario1
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Feature1', DefaultComponentNames.NEW_SCENARIO_NAME);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Interface', DefaultComponentNames.NEW_SCENARIO_NAME);
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario1', expectation);
 

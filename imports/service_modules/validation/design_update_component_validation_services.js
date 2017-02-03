@@ -119,7 +119,7 @@ class DesignUpdateComponentValidationServices{
             });
 
             if(duplicate){
-                return DesignUpdateComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT;
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT;
             } else {
                 return Validation.VALID;
             }
