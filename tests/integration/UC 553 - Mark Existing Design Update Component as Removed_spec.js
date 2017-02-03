@@ -344,7 +344,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // Execute - Try to remove the whole Application
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1', expectation);
 
         // Verify - nothing existing is removed - stuff could be in scope
@@ -397,7 +397,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Execute - Try to remove the whole Application from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW};
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1', expectation);
 
         // Verify - nothing existing is removed
@@ -464,7 +464,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Execute - Try to remove the whole Application from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_SCOPE};
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1', expectation);
         
         // Verify - nothing existing is removed or in scope
