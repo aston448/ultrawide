@@ -97,15 +97,15 @@ describe('UC 141 - Add Organisational Design Component', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         // Manager add a WP
         DesignActions.managerWorksOnDesign('Design1');
-        DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerAddsBaseDesignWorkPackage();
         WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
         WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
         // And add Section1 to it
         WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
-        // Check on Scenarios in WP Scope
-        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Check Aspect in WP Scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
 
         // Execute - designer adds NewAspect to Feature1
         DesignActions.designerWorksOnDesign('Design1');

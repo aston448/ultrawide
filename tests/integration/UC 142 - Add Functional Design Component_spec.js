@@ -128,15 +128,15 @@ describe('UC 142 - Add Functional Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
-        DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario3');
+        DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario5');
 
         // Verify - Scenario3 now in WP1 not in scope
         DesignActions.managerWorksOnDesign('Design1');
         DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
     });
 
 });
