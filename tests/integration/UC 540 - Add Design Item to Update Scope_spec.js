@@ -146,12 +146,14 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate2');
         // Add Scenario1 to first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
         // Execute - try to add Scenario1 to second update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE};
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1', expectation);

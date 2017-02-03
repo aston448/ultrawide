@@ -229,7 +229,7 @@ class DesignUpdateComponentValidationServices{
             let alreadyInScope = false;
 
             componentInOtherUpdates.forEach((instance) => {
-                if(instance.usInScope){
+                if(instance.isInScope){
                     alreadyInScope = true;
                 }
             });
