@@ -17,6 +17,7 @@ import WpComponentVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkPackageComponentValidationErrors} from '../../imports/constants/validation_errors.js'
 
 describe('UC 232 - Remove Design Component from Scope - Initial Design Version', function(){
 

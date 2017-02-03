@@ -17,6 +17,7 @@ import WpComponentVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {WorkPackageComponentValidationErrors} from '../../imports/constants/validation_errors.js'
 
 describe('UC 231 - Add Design Component to Scope - Initial Design Version', function(){
 
@@ -322,6 +323,7 @@ describe('UC 231 - Add Design Component to Scope - Initial Design Version', func
         // Execute - add Scenario3 in scope for WorkPackage2
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage2');
+        const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE};
         WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
 
         // Verify - Scenario3 should be in scope for WP1 but not WP2
