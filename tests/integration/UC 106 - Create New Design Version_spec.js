@@ -40,24 +40,44 @@ describe('UC 106 - Create New Design Version', function(){
     // Actions
     it('A Designer can create a new Updatable Design Version from an existing Draft Design Version', function(){
 
-        const params = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
+        // Setup
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
 
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+        // Execute
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+
+        // Verify
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE));
+
     });
 
     it('A Designer can create a new Updatable Design Version from an existing Updatable Design Version with a Design Update', function(){
 
-        const params = {
-            designName: 'Design1',
-            firstDesignVersion: 'DesignVersion1',
-            secondDesignVersion: 'DesignVersion2',
-            designUpdate: 'DesignUpdate1'
-        };
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+        // Check
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE));
+        // Add a Design Update so that new version can be created - defaults to INCLUDE
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
-        DesignVersionActions.designerCreateNextDesignVersionFromUpdatable(params);
+        // Execute
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+
+        // Verify
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_UPDATABLE));
 
     });
 
@@ -82,13 +102,11 @@ describe('UC 106 - Create New Design Version', function(){
 
     it('A new Design Version may not be created from a Complete Design Version', function(){
 
-        // Setup - create new DV from original
-        const params = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
-
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+        // Setup
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Name the new version so we don't confuse it with the next attempt
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
@@ -108,11 +126,11 @@ describe('UC 106 - Create New Design Version', function(){
 
     it('A new Design Version may not be created from an Updatable Design Version if no Design Updates are selected for inclusion', function(){
 
-        // Setup - create new DV from original
-        const params = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
+        // Setup
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
 
@@ -129,7 +147,7 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Execute - try to create new DV from DV2 which has only one update set to IGNORE
         const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_NEXT};
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2', expectation);
 
         // Verify - new DV not created
         expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
@@ -142,13 +160,11 @@ describe('UC 106 - Create New Design Version', function(){
     // Consequences
     it('When a new Design Version is created all Design Components in the previous version are copied to it', function(){
 
-        // Setup - create new DV from original
-        const params = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
-
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+        // Setup
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Name it
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
@@ -180,42 +196,35 @@ describe('UC 106 - Create New Design Version', function(){
     });
 
     it('When a new Design Version is created, the previous Design Version becomes Complete', function(){
-        // These previous tests are actually testing this
-        const params1 = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
 
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params1);
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion3');
 
-        const params2 = {
-            designName: 'Design1',
-            firstDesignVersion: 'DesignVersion1',
-            secondDesignVersion: 'DesignVersion2',
-            designUpdate: 'DesignUpdate1'
-        };
-
-        DesignVersionActions.designerCreateNextDesignVersionFromUpdatable(params2);
+        // Verify
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion1', DesignVersionStatus.VERSION_DRAFT_COMPLETE));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE));
+        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE));
     });
 
     it('When a new Design Version is created Design Updates selected for Merge are included in it', function(){
-        // Setup - create updatable DV
-        const params1 = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
 
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params1);
-
-        const params2 = {
-            designName: 'Design1',
-            firstDesignVersion: 'DesignVersion1',
-            secondDesignVersion: 'DesignVersion2',
-            designUpdate: 'DesignUpdate1'
-        };
-
-        // Name it
-        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
 
         // Add a Design Update so it can be completed
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
@@ -223,10 +232,10 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
-        // New section - Section99
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section99');
-        // New Feature - Feature99
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
+        // New section - Section3
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+        // New Feature - Feature3
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
 
         // Set update to INCLUDE
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
@@ -259,32 +268,29 @@ describe('UC 106 - Create New Design Version', function(){
 
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion3'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99','Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion3'));
 
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion3'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99','Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion3'));
 
         // And check that they are in the right places
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3', 'NONE'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section99','Design1', 'DesignVersion3', 'Application1'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature99','Design1', 'DesignVersion3', 'Section99'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion3', 'Application1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion3', 'Section3'));
 
 
     });
 
     it('When a new Design Version is created Design Updates selected for Carry Forward are now updates for the new Design Version', function(){
 
-        // Setup - create updatable DV
-        const params1 = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
-
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params1);
-
-        // Name it
-        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
 
         // Add a Design Update so it can be completed
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
