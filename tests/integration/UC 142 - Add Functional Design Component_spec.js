@@ -132,7 +132,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Verify - Scenario3 now in WP1 not in scope
         DesignActions.managerWorksOnDesign('Design1');
-        DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
