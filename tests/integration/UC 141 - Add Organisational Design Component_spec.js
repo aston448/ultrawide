@@ -107,20 +107,20 @@ describe('UC 141 - Add Organisational Design Component', function(){
         // Check on Scenarios in WP Scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
-        // Execute - designer adds Scenario3 to Feature1 Actions
+        // Execute - designer adds NewAspect to Feature1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
-        DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario3');
+        DesignComponentActions.designerAddFeatureAspectToFeature_('Feature1');
+        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        DesignComponentActions.designerEditSelectedComponentNameTo_('NewAspect');
 
-        // Verify - Scenario3 now in WP1 not in scope
+        // Verify - NewAspect now in WP1 not in scope
         DesignActions.managerWorksOnDesign('Design1');
         DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'NewAspect'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'NewAspect'));
     });
 
 });
