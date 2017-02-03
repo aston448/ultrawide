@@ -232,6 +232,21 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Component');
     },
 
+    'testDesignComponents.removeSelectedComponent'(userName, mode, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designComponent =  DesignComponents.findOne({_id: userContext.designComponentId});
+
+        const outcome = ClientDesignComponentServices.removeDesignComponent(view, mode, designComponent, userContext);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Selected Component');
+    },
+
 
     'testDesignComponents.moveSelectedComponent'(targetType, targetParentName, targetName,  userName, mode, expectation){
 

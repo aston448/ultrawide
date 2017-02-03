@@ -90,6 +90,10 @@ class DesignComponentActions{
         server.call('testDesignComponents.removeComponent', type, parentName, componentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
+    designerRemovesSelectedDesignComponent(expectation){
+        server.call('testDesignComponents.removeSelectedComponent', 'gloria', ViewMode.MODE_EDIT, expectation);
+    }
+
     designerMoveSelectedComponentToTarget_WithParent_Called_(targetType, targetParentName, targetComponentName, expectation){
         server.call('testDesignComponents.moveSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }

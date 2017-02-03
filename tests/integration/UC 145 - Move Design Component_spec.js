@@ -99,22 +99,6 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section2'));
     });
 
-    it('A Feature Aspect may be moved from one Feature to another Feature', function(){
-
-        // Setup
-        DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'ExtraAspect', 'Design1', 'DesignVersion1', 'Feature1'));
-
-        // Execute - move ExtraAspect from Feature1 to Feature2
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
-
-        // Verify new parent
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'ExtraAspect', 'Design1', 'DesignVersion1', 'Feature2'));
-
-    });
-
     it('A Scenario may be moved from a Feature to a Feature Aspect');
 
     it('A Scenario may be moved from a Feature Aspect to a Feature');
