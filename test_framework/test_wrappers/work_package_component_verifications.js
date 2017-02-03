@@ -13,6 +13,14 @@ class WpComponentVerifications{
         )
     };
 
+    componentDoesNotExistForManagerCurrentWp(type, parentName, name){
+        server.call('verifyWorkPackageComponents.componentDoesNotExistInCurrentWpCalled', type, parentName, name, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    };
+
     componentIsInScopeForManagerCurrentWp(type, parentName, name){
         server.call('verifyWorkPackageComponents.currentWpComponentIsInScope', type, parentName, name, 'miles',
             (function(error, result){

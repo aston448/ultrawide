@@ -28,6 +28,19 @@ Meteor.methods({
         return true;
     },
 
+    'verifyWorkPackageComponents.componentDoesNotExistInCurrentWpCalled'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        // This call will actually verify the component exists but we are telling it to expect a failure so it returns true if failing
+        const result = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName, true);
+
+        if(!result){
+            throw new Meteor.Error("FAIL", "Expecting WP Component " + componentParentName + " - " + componentName + " not to exist but it does");
+        }
+    },
+
     'verifyWorkPackageComponents.componentParentIs'(workPackageName, componentType, componentName, parentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

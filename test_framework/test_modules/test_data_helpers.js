@@ -244,7 +244,7 @@ class TestDataHelpers {
     };
 
 
-    getWorkPackageComponentWithParent(designVersionId, designUpdateId, workPackageId, componentType, componentParentName, componentName){
+    getWorkPackageComponentWithParent(designVersionId, designUpdateId, workPackageId, componentType, componentParentName, componentName, expectationFailure = false){
         // Allows us to get a component by combination of name and parent name - so we can get Feature Aspects successfully
         let designComponents = [];
         let designComponent = null;
@@ -311,7 +311,12 @@ class TestDataHelpers {
         if(designComponent){
             designComponentRef = designComponent.componentReferenceId;
         } else {
-            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            if(expectationFailure){
+                // There should not be a Design Component if there is no WP component as the name comes from the base Design, not the WP
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+            }
         }
 
         const workPackageComponent = WorkPackageComponents.findOne({
@@ -321,7 +326,11 @@ class TestDataHelpers {
         });
 
         if(!workPackageComponent){
-            throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName + " and Work Package " + workPackage.workPackageName);
+            if(expectationFailure){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName + " and Work Package " + workPackage.workPackageName);
+            }
         }
 
         return workPackageComponent;
