@@ -91,6 +91,7 @@ export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_INVALID_MOVE:              'This Design Component cannot be moved to the location where it was dropped',
     DESIGN_COMPONENT_INVALID_REORDER:           'This Design Component cannot be moved to the location where it was dropped',
     DESIGN_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Component cannot have the same name as another component of the same type in this Design Version',
+    DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT: 'This Design Component cannot have the same name as another component of the same type under the same parent',
     DESIGN_COMPONENT_NOT_REMOVABLE:             'A Design Component containing other components is not removable.  Delete from bottom up to remove.',
     DESIGN_COMPONENT_NOT_REMOVABLE_DEV:         'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
     DESIGN_COMPONENT_NOT_WP_UPDATABLE:          'A Design Component is only updatable from a WP if is a Scenario or is a Feature Aspect added by the Developer'
