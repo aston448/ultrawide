@@ -120,7 +120,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Add Scenario
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
 

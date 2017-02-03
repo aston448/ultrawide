@@ -108,8 +108,21 @@ class DesignUpdateComponentValidationServices{
 
         // Name must be unique for component type - for functional components only
         if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT){
-            // No need to validate
-            return Validation.VALID;
+            // For non-functional components must be unique under the same parent only
+            let duplicate = false;
+
+            existingUpdateComponents.forEach((component) => {
+
+                if(component.componentNameNew === newName  && component.componentParentIdNew === componentParentId){
+                    duplicate = true;
+                }
+            });
+
+            if(duplicate){
+                return DesignUpdateComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT;
+            } else {
+                return Validation.VALID;
+            }
         } else {
 
             let duplicate = false;
