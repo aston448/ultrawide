@@ -145,7 +145,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         // Edit WP1 and put Feature1 in Scope
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
 
         // Execute - designer adds NewAspect to Feature1
         DesignActions.designerWorksOnDesign('Design1');
