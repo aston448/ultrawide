@@ -257,7 +257,7 @@ describe('UC 145 - Move Design Component', function(){
         // Execute - try to move Aspect Actions to Feature2
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section2', 'Feature2', expectation);
+        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
 
         // Verify - Aspect is still under Feature1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
