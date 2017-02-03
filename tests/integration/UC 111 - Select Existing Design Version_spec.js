@@ -32,6 +32,7 @@ describe('UC 111 - Select Existing Design Version', function(){
         TestFixtures.addDesignWithDefaultData();
 
         // Create a second Design Version
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
         DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');

@@ -69,6 +69,58 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
 
 
     // Conditions
+    it('Only a Designer may update a Design Version name', function(){
+
+        // Setup
+        DesignActions.developerSelectsDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+
+        // Execute
+        let expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE};
+        DesignVersionActions.developerUpdatesDesignVersionNameTo('New Name', expectation);
+
+        // Verify - not changed
+        expect(DesignVersionVerifications.currentDesignVersionNameForDeveloperIs('DesignVersion1'));
+
+        // Setup
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+
+        // Execute
+        expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE};
+        DesignVersionActions.managerUpdatesDesignVersionNameTo('New Name', expectation);
+
+        // Verify - not changed
+        expect(DesignVersionVerifications.currentDesignVersionNameForManagerIs('DesignVersion1'));
+
+    });
+
+    it('Only a Designer may update a Design Version number', function(){
+
+        // Setup
+        DesignActions.developerSelectsDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        expect(DesignVersionVerifications.currentDesignVersionNumberForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
+
+        // Execute
+        let expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE};
+        DesignVersionActions.developerUpdatesDesignVersionNumberTo('1.1', expectation);
+
+        // Verify - not changed
+        expect(DesignVersionVerifications.currentDesignVersionNumberForDeveloperIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
+
+        // Setup
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        expect(DesignVersionVerifications.currentDesignVersionNumberForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
+
+        // Execute
+        expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE};
+        DesignVersionActions.managerUpdatesDesignVersionNumberTo('New Name', expectation);
+
+        // Verify - not changed
+        expect(DesignVersionVerifications.currentDesignVersionNumberForManagerIs(DefaultItemNames.NEW_DESIGN_VERSION_NUMBER));
+    });
 
     it('A Design Version may not be renamed to the same name as another version in the Design', function(){
         // Setup
