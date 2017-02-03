@@ -21,7 +21,7 @@ class WorkPackageActions{
     }
 
     designerSelectsWorkPackage(wpName){
-        server.call('testWorkPackages.selectWorkPackage', wpName, 'gloria', expectation);
+        server.call('testWorkPackages.selectWorkPackage', wpName, 'gloria');
     }
 
     managerUpdatesSelectedWpNameTo(newName, expectation){

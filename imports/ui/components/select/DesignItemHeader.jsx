@@ -293,22 +293,31 @@ export class DesignItemHeader extends Component{
                 }
 
             case RoleType.DESIGNER:
-                // Rest are Designer Views depending on the current state.  Designers do not see Work Packages
-                if (this.state.nameEditable && this.state.refEditable) {
-                    return (<div className="design-item-header">{nameEditorEditing}{refEditorEditing}</div>);
+                if(currentItemType === ItemType.WORK_PACKAGE){
+                    // Designers can see WPs read only and new stuff is greyed out
+                    if(currentItemStatus === DesignVersionStatus.VERSION_NEW || currentItemStatus === DesignUpdateStatus.UPDATE_NEW){
+
+                        titleClass = 'design-item-header greyed-out'
+                    }
+                    return (<div className={titleClass}>{nameReadOnly}{refReadOnly}</div>);
+                } else {
+                    if (this.state.nameEditable && this.state.refEditable) {
+                        return (<div className="design-item-header">{nameEditorEditing}{refEditorEditing}</div>);
+                    }
+
+                    if (this.state.nameEditable && !this.state.refEditable) {
+                        return (<div className="design-item-header">{nameEditorEditing}{refEditorNotEditing}</div>);
+                    }
+
+                    if (!this.state.nameEditable && this.state.refEditable) {
+                        return (<div className="design-item-header">{nameEditorNotEditing}{refEditorEditing}</div>);
+                    }
+
+                    if (!this.state.nameEditable && !this.state.refEditable) {
+                        return (<div className="design-item-header">{nameEditorNotEditing}{refEditorNotEditing}</div>);
+                    }
                 }
 
-                if (this.state.nameEditable && !this.state.refEditable) {
-                    return (<div className="design-item-header">{nameEditorEditing}{refEditorNotEditing}</div>);
-                }
-
-                if (!this.state.nameEditable && this.state.refEditable) {
-                    return (<div className="design-item-header">{nameEditorNotEditing}{refEditorEditing}</div>);
-                }
-
-                if (!this.state.nameEditable && !this.state.refEditable) {
-                    return (<div className="design-item-header">{nameEditorNotEditing}{refEditorNotEditing}</div>);
-                }
         }
 
     }

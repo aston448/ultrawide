@@ -5,7 +5,7 @@ import { WorkPackages } from '../collections/work/work_packages.js';
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import {ViewType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus, MessageType} from '../constants/constants.js';
+import { RoleType, ViewType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus, MessageType} from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { WorkPackageMessages } from '../constants/message_texts.js';
 
@@ -251,6 +251,20 @@ class ClientWorkPackageServices {
     };
 
     // LOCAL CLIENT ACTIONS ============================================================================================
+
+    // User clicks on a WP to select it
+    selectWorkPackage(userRole, userContext, workPackage){
+
+        let newContext = userContext;
+
+        if((workPackage.workPackageStatus === WorkPackageStatus.WP_NEW) && (userRole != RoleType.MANAGER)){
+            // Not selectable
+        } else {
+            newContext = this.setWorkPackage(userContext, workPackage._id);
+        }
+
+        return newContext;
+    }
 
     // Sets the currently selected work package as part of the global state
     setWorkPackage(userContext, newWorkPackageId){
