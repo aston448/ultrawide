@@ -88,7 +88,7 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
         WorkPackageActions.managerViewsBaseWorkPackage('WorkPackage1');
 
         // Verify - current WP is WP1
-        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage2'));
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage1'));
 
         // Setup - Developer
         DesignActions.developerWorksOnDesign('Design1');
@@ -99,7 +99,7 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
         WorkPackageActions.developerViewsBaseWorkPackage('WorkPackage1');
 
         // Verify - current WP is WP1
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('WorkPackage2'));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('WorkPackage1'));
 
         // Setup - Designer
         DesignActions.designerWorksOnDesign('Design1');
@@ -110,7 +110,7 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
         WorkPackageActions.designerViewsBaseWorkPackage('WorkPackage1');
 
         // Verify - current WP is WP1
-        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('WorkPackage2'));
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('WorkPackage1'));
     });
 
     it('Any user role may view a Complete Initial Design Version Work Package');
