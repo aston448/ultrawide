@@ -52,13 +52,16 @@ class DesignUpdateValidationServices{
 
     };
 
-    validateUpdateDesignUpdateReference(userRole, newRef, otherDesignUpdates){
+    validateUpdateDesignUpdateReference(userRole){
 
         // To update a Design Update Name, user must be a Designer
         if(userRole != RoleType.DESIGNER){
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_UPDATE;
         }
 
+
+
+        return Validation.VALID;
     };
 
     validateEditDesignUpdate(userRole, designUpdateStatus){

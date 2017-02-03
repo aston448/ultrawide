@@ -35,11 +35,9 @@ class DesignUpdateValidationApi{
 
     validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef){
 
-        // Get all other designs apart from this one
-        const thisDesignUpdate = DesignUpdates.findOne({_id: designUpdateId});
-        const otherDesignUpdates = DesignUpdates.find({_id: {$ne: designUpdateId}, designVersionId: thisDesignUpdate.designVersionId}).fetch();
+        // Currently there is no restriction on duplicate references so other params not needed
 
-        return DesignUpdateValidationServices.validateUpdateDesignUpdateReference(userRole, newRef, otherDesignUpdates);
+        return DesignUpdateValidationServices.validateUpdateDesignUpdateReference(userRole);
 
     };
 
