@@ -142,7 +142,7 @@ class DesignUpdateComponentValidationServices{
         }
     };
 
-    validateUpdateDesignUpdateFeatureNarrative(view, mode){
+    validateUpdateDesignUpdateFeatureNarrative(view, mode, updateComponent){
 
         // Updates only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
@@ -152,6 +152,11 @@ class DesignUpdateComponentValidationServices{
         // Updates not allowed in view only mode
         if(mode != ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT;
+        }
+
+        // The component must be in scope for the update
+        if(!(updateComponent.isInScope)){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_SCOPE_EDIT;
         }
 
         return Validation.VALID;

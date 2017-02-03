@@ -82,13 +82,14 @@ describe('UC 555 - Move Design Update Component', function(){
         // Setup - add new Design section to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section1', 'SubSection2');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2'));
 
         // Execute - move it to Section2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2');
         UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify parent now Section2
-        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section2', 'SubSection1'));
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section2', 'SubSection2'));
     });
 
     it('A new Feature for a Design Update can be moved to a different Design Section', function(){

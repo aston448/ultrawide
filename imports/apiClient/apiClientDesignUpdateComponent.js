@@ -66,7 +66,7 @@ class ClientDesignUpdateComponentServices{
     updateFeatureNarrative(view, mode, designUpdateComponentId, newPlainText, newRawText){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateFeatureNarrative(view, mode);
+        let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen

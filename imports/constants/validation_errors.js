@@ -103,6 +103,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD:     'A Design Update Component cannot be added to a Feature or Feature Aspect if it is not in scope',
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_EDIT:         'A Design Update Component can only be edited in the Design Update Design Editor',
     DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT:         'A Design Update Component cannot be edited in View Only mode',
+    DESIGN_UPDATE_COMPONENT_INVALID_SCOPE_EDIT:        'This Design Update Component must be in the Update scope to be edited',
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_REMOVE:       'A Design Update Component can only be removed in the Design Update Design Editor',
     DESIGN_UPDATE_COMPONENT_INVALID_MODE_REMOVE:       'A Design Update Component cannot be removed in View Only mode',
     DESIGN_UPDATE_COMPONENT_INVALID_VIEW_RESTORE:      'A Design Update Component can only be restored in the Design Update Design Editor',

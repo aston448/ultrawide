@@ -309,7 +309,7 @@ export const updateFeatureNarrative = new ValidatedMethod({
     run({view, mode, designUpdateComponentId, newPlainText, newRawText}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateFeatureNarrative(view, mode);
+        const result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.updateFeatureNarrative.failValidation', result)

@@ -103,7 +103,7 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
         expect(UpdateComponentVerifications.designerSelectedFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_SCOPE_EDIT};
         UpdateComponentActions.designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative, expectation);
 
         // Verify unchanged

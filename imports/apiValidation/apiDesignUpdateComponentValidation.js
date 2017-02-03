@@ -95,9 +95,11 @@ class DesignUpdateComponentValidationApi{
         return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent.componentType, newName, existingUpdateComponents, thisUpdateComponent.componentParentIdNew);
     };
 
-    validateUpdateDesignUpdateFeatureNarrative(view, mode){
+    validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId){
 
-        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateFeatureNarrative(view, mode)
+        const thisUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
+        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateFeatureNarrative(view, mode, thisUpdateComponent);
     };
 
     validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponentId, targetComponentId){
