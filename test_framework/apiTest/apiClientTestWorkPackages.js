@@ -8,13 +8,13 @@ import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
 
-    'testWorkPackages.selectWorkPackage'(workPackageName, userName){
+    'testWorkPackages.selectWorkPackage'(workPackageName, userRole, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
 
         // This is not a validated action
-        ClientWorkPackageServices.setWorkPackage(userContext, workPackage._id);
+        ClientWorkPackageServices.selectWorkPackage(userRole, userContext, workPackage);
     },
 
     'testWorkPackages.addNewWorkPackage'(workPackageType, userRole, userName, expectation){
