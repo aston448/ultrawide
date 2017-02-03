@@ -132,8 +132,6 @@ describe('UC 106 - Create New Design Version', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
-
         // Name it
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
         // Add a Design Update

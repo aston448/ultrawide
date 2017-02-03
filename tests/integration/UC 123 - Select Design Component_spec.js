@@ -51,35 +51,35 @@ describe('UC 123 - Select Design Component', function(){
 
         DesignComponentActions.designerSelectApplication('Application1');
 
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, 'NONE', 'Application1'));
+        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.APPLICATION, 'NONE', 'Application1'));
     });
 
     it('A Design Section may be selected', function(){
 
         DesignComponentActions.designerSelectDesignSection('Application1', 'Section1');
 
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, 'Application1', 'Section1'));
+        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
     });
 
     it('A Feature may be selected', function() {
 
         DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
 
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, 'Section1', 'Feature1'));
+        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.FEATURE, 'Section1', 'Feature1'));
     });
 
     it('A Feature Aspect may be selected', function(){
 
         DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Actions');
 
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, 'Feature1', 'Actions'));
+        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
     });
 
     it('A Scenario may be selected', function(){
 
         DesignComponentActions.designerSelectScenario('Actions', 'Scenario1');
 
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, 'Actions', 'Scenario1'));
+        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
 
