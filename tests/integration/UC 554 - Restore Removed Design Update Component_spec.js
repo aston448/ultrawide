@@ -267,7 +267,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
  
         // Try to restore Section1
-        let expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE};
+        let expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE_PARENT};
         UpdateComponentActions.designerRestoresDeletedUpdateSection('Application1', 'Section1', expectation);
         
         // Everything still removed
