@@ -145,7 +145,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Section1
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', DefaultComponentNames.NEW_DESIGN_SECTION_NAME);
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT};
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Section1', expectation);
 
         // Verify - still 1 of each
@@ -165,7 +165,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Try to call it Actions
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT};
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Actions', expectation);
 
         // Verify - still same numbers as before
