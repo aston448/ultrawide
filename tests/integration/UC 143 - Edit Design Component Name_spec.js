@@ -143,9 +143,9 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        // Check both feature aspects are there
+        // Check both feature aspects are there - note there are 3 of each in the default test data
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
 
         // Execute - try to update Actions to Conditions
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
@@ -154,7 +154,7 @@ describe('UC 143 - Edit Design Component Name', function(){
 
         // Verify - not changed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
     });
 
     it('A Design Section name may be changed to the same name as a Design Section in a different parent', function(){

@@ -232,7 +232,7 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
     });
 
-    it('Feature Aspects cannot be moved to Applications or Design Sections or other Feature Aspects', function(){
+    it('Feature Aspects cannot be moved to Applications or Design Sections or other Features or Feature Aspects', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
@@ -250,6 +250,14 @@ describe('UC 145 - Move Design Component', function(){
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
         DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
+
+        // Verify - Aspect is still under Feature1
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
+
+        // Execute - try to move Aspect Actions to Feature2
+        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
+        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section2', 'Feature2', expectation);
 
         // Verify - Aspect is still under Feature1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
