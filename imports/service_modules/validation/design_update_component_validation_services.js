@@ -206,7 +206,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateToggleDesignUpdateComponentScope(view, mode, displayContext){
+    validateToggleDesignUpdateComponentScope(view, mode, displayContext, component, componentInOtherUpdates, newScope){
 
         // Updates only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
@@ -221,6 +221,23 @@ class DesignUpdateComponentValidationServices{
         // Context must be scoping
         if(displayContext != DisplayContext.UPDATE_SCOPE){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_SCOPE;
+        }
+
+        // A Scenario cannot be put in scope if it is in scope for another update
+        if(newScope && component.componentType === ComponentType.SCENARIO){
+
+            let alreadyInScope = false;
+
+            componentInOtherUpdates.forEach((instance) => {
+                if(instance.usInScope){
+                    alreadyInScope = true;
+                }
+            });
+
+            if(alreadyInScope){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
+            }
+
         }
 
         return Validation.VALID;

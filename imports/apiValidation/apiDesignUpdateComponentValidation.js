@@ -116,11 +116,18 @@ class DesignUpdateComponentValidationApi{
         return DesignUpdateComponentValidationServices.validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponent, targetComponent)
     };
 
-    validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponentId){
+    validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponentId, newScope){
 
-        let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        const designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-        return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent);
+        // A list of this component in other updates for the same design version.  Used to stop a Scenario being changed in two parallel updates at once
+        const componentInOtherDesignUpdates = DesignUpdateComponents.find({
+            componentReferenceId:   designUpdateComponent.componentReferenceId,
+            designVersionId:        designUpdateComponent.designVersionId,
+            designUpdateId:         {$ne: designUpdateComponent.designUpdateId},
+        }).fetch();
+
+        return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent, componentInOtherDesignUpdates, newScope);
     }
 
 }

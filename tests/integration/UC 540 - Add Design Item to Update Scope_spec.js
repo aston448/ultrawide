@@ -152,9 +152,9 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Execute - try to add Scenario1 to second update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        //TODO - add expectation - this should fail???
-        //const expectation = {success: false, message: DesignUpdateComponentValidationErrors.}
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE};
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1', expectation);
 
         // Verify - Scenario and parent not in scope
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));

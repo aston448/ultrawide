@@ -437,7 +437,7 @@ class ClientDesignUpdateComponentServices{
     toggleInScope(view, mode, displayContext, designUpdateComponent, newScope){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent._id);
+        let result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent._id, newScope);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen

@@ -469,7 +469,7 @@ export const toggleScope = new ValidatedMethod({
     run({view, mode, displayContext, designUpdateComponentId, newScope}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext);
+        const result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponentId, newScope);
 
         if (result != Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.toggleScope.failValidation', result)
