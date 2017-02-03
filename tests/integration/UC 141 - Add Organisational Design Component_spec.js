@@ -95,15 +95,57 @@ describe('UC 141 - Add Organisational Design Component', function(){
         // Publish DV1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-        // Manager add a WP
+        // Add 2 work packages
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerAddsBaseDesignWorkPackage();
         WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
         WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+
+        // Execute - designer adds Section3 to Application1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section3');
+
+        // Verify - Section3 now in WP1 and in WP2 not in scope
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        // And add Section1 to it
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+
+    });
+
+    it('A Feature Aspect added to a Feature in scope in a Work Package becomes in scope in that Work Package', function(){
+
+        // Setup
+        // Publish DV1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Add 2 work packages
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+
+        // Edit WP1 and put Feature1 in Scope
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Section1', 'Feature1');
 
         // Execute - designer adds NewAspect to Feature1
         DesignActions.designerWorksOnDesign('Design1');
@@ -112,13 +154,19 @@ describe('UC 141 - Add Organisational Design Component', function(){
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
         DesignComponentActions.designerEditSelectedComponentNameTo_('NewAspect');
 
-        // Verify - NewAspect now in WP1 not in scope
+        // Verify - NewAspect now in WP1 in scope and in WP2 not in scope
         DesignActions.managerWorksOnDesign('Design1');
-        DesignVerifications.managerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'NewAspect'));
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'NewAspect'));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'NewAspect'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'NewAspect'));
-    });
+    })
 
 });

@@ -111,32 +111,77 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Publish DV1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-        // Manager add a WP
+        // Add 2 work packages
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerAddsBaseDesignWorkPackage();
         WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
         WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
-        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        // And add Section1 to it
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
-        // Check on Scenarios in WP Scope
-        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
 
-        // Execute - designer adds Scenario3 to Feature1 Actions
+        // Execute - designer adds Feature3 to Section1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature3');
+
+        // Verify - Feature3 now in WP1 and WP2 and not in scope
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
+    });
+
+    it('A Scenario added to a Feature Aspect in scope in a Work Package becomes in scope in that Work Package', function(){
+
+        // Setup
+        // Publish DV1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Add 2 work packages
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+
+        // Put Feature1 Actions in Scope for WP1
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentBaseWp('Feature1', 'Actions');
+
+        // Execute - designer adds Scenario5 to Feature1 Actions
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
         DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
         DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario5');
 
-        // Verify - Scenario3 now in WP1 not in scope
+        // Verify - Scenario5 now in WP1 and WP2 and in scope for WP1 only
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));
-    });
+    })
 
 });
