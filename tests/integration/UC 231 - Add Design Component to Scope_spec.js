@@ -324,7 +324,7 @@ describe('UC 231 - Add Design Component to Scope - Initial Design Version', func
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage2');
         const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE};
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3', expectation);
 
         // Verify - Scenario3 should be in scope for WP1 but not WP2
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
