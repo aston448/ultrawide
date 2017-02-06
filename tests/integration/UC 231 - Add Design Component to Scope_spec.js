@@ -439,7 +439,7 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
     // Actions
     it('A Manager can add all non-scoped Scenarios for an Application in a Design Update to a Work Package Scope', function(){
 
-        // In these tests when stuff is added to the WP scope it is in scope for the WP if it was in scope in the DU and parent scope only if a parent of
+        // In these tests when stuff is added to the WP scope it is in scope for the WP if it was a Feature or Scenario in scope in the DU and parent scope only if a parent of
         // an item that is in scope.  Adding a higher level item includes all DU in scope items below it as in scope
 
         // Setup - edit WP
@@ -467,16 +467,11 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        // Feature2 Actions is in scope
-        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        // Scenario3 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // Feature2 Actions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // NewScenario is in scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
-        // Feature2 Conditions is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        // Scenario4 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
 
     });
 
@@ -507,16 +502,11 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        // Feature2 Actions is in scope
-        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        // Scenario3 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // Feature2 Actions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // NewScenario is in scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
-        // Feature2 Conditions is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        // Scenario4 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
 
     });
 
@@ -549,14 +539,9 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is NOT in scope
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        // Scenario3 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3',));
         // NewScenario is NOT in scope
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
-        // Feature2 Conditions is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        // Scenario4 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
 
     });
 
@@ -587,16 +572,11 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         // Feature2 is in parent scope
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        // Feature2 Actions is in scope
-        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        // Scenario3 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // Feature2 Actions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         // NewScenario is in scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
-        // Feature2 Conditions is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        // Scenario4 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
     });
 
     it('A Manager can add a non-scoped Scenario in a Design Update to a Work Package Scope', function(){
@@ -628,14 +608,8 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         // Feature2 Actions is in parent scope
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        // Scenario3 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
         // NewScenario is in scope
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
-        // Feature2 Conditions is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        // Scenario4 is NOT in scope
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
     });
 
 
