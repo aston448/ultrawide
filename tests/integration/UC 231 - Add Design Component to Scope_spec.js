@@ -419,7 +419,7 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        xpect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
 
         // But does not contain other items
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1'));
