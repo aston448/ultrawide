@@ -377,6 +377,7 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+
         // The update is to Feature1 Scenarios 1 and 2 and to Feature2 - a new Scenario in Actions
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
@@ -405,7 +406,6 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
     it('A Design Update Work Package Scope pane shows all in scope Features and Scenarios for the Design Update and their parent components', function(){
 
         // Setup - open the WP for view
-
         WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Verify - WP potential scope contains Scenario1 and 2 plus their parents and the new Feature 2 scenario and its parents
@@ -437,19 +437,209 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
 
 
     // Actions
-    it('A Manager can add all non-scoped Scenarios for an Application in a Design Update to a Work Package Scope');
+    it('A Manager can add all non-scoped Scenarios for an Application in a Design Update to a Work Package Scope', function(){
 
-    it('A Manager can add all non-scoped Scenarios for a Design Section in a Design Update to a Work Package Scope');
+        // In these tests when stuff is added to the WP scope it is in scope for the WP if it was in scope in the DU and parent scope only if a parent of
+        // an item that is in scope.  Adding a higher level item includes all DU in scope items below it as in scope
 
-    it('A Manager can add all non-scoped Scenarios for a Feature in a Design Update to a Work Package Scope');
+        // Setup - edit WP
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
-    it('A Manager can add all non-scoped Scenarios for a Feature Aspect in a Design Update to a Work Package Scope');
+        // Execute - Add Application1 to scope
+        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application1');
 
-    it('A Manager can add a non-scoped Scenario in a Design Update to a Work Package Scope');
+        // Verify
+        // Application1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        // Section1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Feature1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        // Feature1 Actions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Scenario1 is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Feature1 Conditions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        // Scenario2 is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        // Section2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        // Feature2 is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        // Feature2 Actions is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        // Scenario3 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // NewScenario is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
+        // Feature2 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        // Scenario4 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
+    });
+
+    it('A Manager can add all non-scoped Scenarios for a Design Section in a Design Update to a Work Package Scope', function(){
+
+        // Setup - edit WP
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Execute - Add Application1 to scope
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section2');
+
+        // Verify - Just Feature2 + New Scenario and its parents in scope
+        // Application1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        // Section1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Feature1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        // Feature1 Actions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Scenario1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Feature1 Conditions NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        // Scenario2 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        // Section2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        // Feature2 is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        // Feature2 Actions is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        // Scenario3 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // NewScenario is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
+        // Feature2 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        // Scenario4 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
+    });
+
+    it('A Manager can add all non-scoped Scenarios for a Feature in a Design Update to a Work Package Scope', function(){
+
+        // Setup - edit WP
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Execute - Add Feature1 to scope
+        WpComponentActions.managerAddsFeatureToScopeForCurrentUpdateWp('Section1', 'Feature1');
+
+        // Verify
+        // Application1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        // Section1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Feature1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        // Feature1 Actions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Scenario1 is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Feature1 Conditions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        // Scenario2 is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        // Section2 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        // Feature2 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        // Feature2 Actions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        // Scenario3 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3',));
+        // NewScenario is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
+        // Feature2 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        // Scenario4 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
+    });
+
+    it('A Manager can add all non-scoped Scenarios for a Feature Aspect in a Design Update to a Work Package Scope', function(){
+
+        // Setup - edit WP
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Execute - Add Feature2 Actions to scope
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentUpdateWp('Feature2', 'Actions');
+
+        // Verify
+        // Application1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        // Section1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Feature1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        // Feature1 Actions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Scenario1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Feature1 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        // Scenario2 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        // Section2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        // Feature2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        // Feature2 Actions is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        // Scenario3 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // NewScenario is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
+        // Feature2 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        // Scenario4 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+    });
+
+    it('A Manager can add a non-scoped Scenario in a Design Update to a Work Package Scope', function(){
+
+        // Setup - edit WP
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Execute - Add Feature2 Actions to scope
+        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'NewScenario');
+
+        // Verify
+        // Application1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        // Section1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Feature1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        // Feature1 Actions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Scenario1 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Feature1 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        // Scenario2 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        // Section2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        // Feature2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        // Feature2 Actions is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        // Scenario3 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        // NewScenario is in scope
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
+        // Feature2 Conditions is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        // Scenario4 is NOT in scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+    });
 
 
     // Conditions
-    it('Design Components cannot be added to Design Update Work Package Scope in View Only mode');
 
     it('Any Scenario child of the Scope selection already in Scope for another Work Package for the same Base Design Version is not added to a Design Update Work Package Scope');
 
