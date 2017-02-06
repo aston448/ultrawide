@@ -75,7 +75,7 @@ describe('UC 111 - Select Existing Design Version', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
 
         // Select a component of DV1
-        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));

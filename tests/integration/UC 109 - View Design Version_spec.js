@@ -46,7 +46,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
 
         // Execute
-        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -63,7 +63,7 @@ describe('UC 109 - View Design Version', function(){
 
         // Try for Designer
         // Execute
-        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -74,7 +74,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        DesignVersionActions.developerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -85,7 +85,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        DesignVersionActions.managerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.managerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -120,7 +120,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
 
         // Execute
-        DesignVersionActions.designerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -131,7 +131,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        DesignVersionActions.developerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -142,7 +142,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        DesignVersionActions.managerViewDesignVersion('DesignVersion1');
+        DesignVersionActions.managerViewsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -177,7 +177,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
 
         // Execute
-        DesignVersionActions.designerViewDesignVersion('DesignVersion2');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion2');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -188,7 +188,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DEVELOPER));
 
         // Execute
-        DesignVersionActions.developerViewDesignVersion('DesignVersion2');
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion2');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests
@@ -199,7 +199,7 @@ describe('UC 109 - View Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.MANAGER));
 
         // Execute
-        DesignVersionActions.managerViewDesignVersion('DesignVersion2');
+        DesignVersionActions.managerViewsDesignVersion('DesignVersion2');
 
         // Verify
         // The Design version will be in the user context if now viewing - other evidence is interface specific and can only be seen in acceptance tests

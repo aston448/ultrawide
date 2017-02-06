@@ -46,7 +46,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         // Setup
         // Edit the default Design Version
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Design Section
@@ -63,7 +63,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - add new section to 'Section1'
         DesignComponentActions.designerAddsDesignSectionToDesignSection_('Section1');
@@ -77,7 +77,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - add new section to 'Section1'
         DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
@@ -107,7 +107,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
         // Execute - designer adds Section3 to Application1
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Verify - Section3 now in WP1 and in WP2 not in scope
@@ -149,7 +149,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
         // Execute - designer adds NewAspect to Feature1
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
         DesignComponentActions.designerEditsSelectedComponentNameTo_('NewAspect');

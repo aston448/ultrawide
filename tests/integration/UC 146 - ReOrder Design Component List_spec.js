@@ -46,7 +46,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Add another application
         DesignComponentActions.designerAddsApplicationCalled('Application2');
 
@@ -71,7 +71,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Add another section
         DesignComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
@@ -96,7 +96,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Add more sub sections to Section1
         DesignComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection2');
         DesignComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection3');
@@ -121,7 +121,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Add another Feature to Section1
         DesignComponentActions.designerAddsFeatureToSection_Called('Section1', 'Feature555');
 
@@ -146,7 +146,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Check ordering is as created for Feature1: Interface, Actions, Conditions, Consequences, ExtraAspect
         DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Interface');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
@@ -176,7 +176,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Add another Scenario to Feature1 Actions
         DesignComponentActions.designerAddsScenarioToFeatureAspect_Called('Feature1', 'Actions', 'Scenario555');
         // Check ordering is as created: Scenario1, Scenario444, Scenario555
@@ -216,7 +216,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
 
         // Execute - Reorder Section1 Features
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Move Feature444 to above Feature1
         DesignComponentActions.designerSelectsFeature('Section1', 'Feature444');
         DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');

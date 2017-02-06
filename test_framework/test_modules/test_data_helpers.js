@@ -6,6 +6,7 @@ import { Designs }                  from '../../imports/collections/design/desig
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
+import { DomainDictionary }         from '../../imports/collections/design/domain_dictionary.js';
 import { DesignComponents }         from '../../imports/collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
@@ -16,6 +17,21 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 
 class TestDataHelpers {
+
+    getRawTextFor(plainText){
+        return {
+            "entityMap" : {  },
+            "blocks" : [
+                { "key" : "5efv7", "text" : plainText,
+                    "type" : "unstyled",
+                    "depth" : 0,
+                    "inlineStyleRanges" : [ ],
+                    "entityRanges" : [ ],
+                    "data" : {  }
+                }
+            ]
+        };
+    }
 
     getExpectation(expectation){
         return (expectation != null) ? expectation : {success: true, message: ''};
@@ -130,6 +146,17 @@ class TestDataHelpers {
 
         return workPackage;
     };
+
+    getDomainDictionaryTerm(designId, designVersionId, termName){
+
+        const dictionaryTerm = DomainDictionary.findOne({designId: designId, designVersionId: designVersionId, domainTermNew: termName});
+
+        if(dictionaryTerm){
+            return dictionaryTerm;
+        } else {
+            throw new Meteor.Error("FAIL", "Dictionary entry " + termName + " not found.");
+        }
+    }
 
     getDesignComponent(designVersionId, designUpdateId, componentName){
 

@@ -8,7 +8,7 @@ import { MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DomainDictionaryMessages } from '../constants/message_texts.js';
 
-import ClientDomainDictionaryServices   from '../service_modules/client/client_domain_dictionary.js';
+import ClientDomainDictionaryServices   from '../service_modules/design/client_domain_dictionary.js';
 import DomainDictionaryValidationApi    from '../apiValidation/apiDomainDictionaryValidation.js';
 import ServerDomainDictionaryApi        from '../apiServer/apiDomainDictionary.js';
 

@@ -47,7 +47,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 'Application1'));
 
         // Execute - move Section1 from Application1 to Application99
@@ -62,7 +62,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - move SubSection1 from Section1 to Section2
@@ -77,7 +77,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - move SubSection1 from Section1 to Application1
@@ -92,7 +92,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - move Feature1 from Section1 to Section2
@@ -107,7 +107,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Actions'));
 
         // Execute - move Scenario1 from Feature1 Actions to Feature2 Interface
@@ -126,7 +126,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - try to move Application1 to Application99
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
@@ -165,7 +165,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - try to move Section1 to Feature1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
@@ -188,7 +188,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - try to move Feature1 to Application1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
@@ -219,7 +219,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - try to move Aspect Actions to Application1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
@@ -258,7 +258,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute - try to move Scenario1 to Application1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
@@ -280,7 +280,7 @@ describe('UC 145 - Move Design Component', function(){
     it('No Design Component can be moved to a Scenario', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Try to move Application1 to Scenario1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
@@ -329,7 +329,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('Section1', 1));
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('SubSection1', 2));
 
@@ -354,7 +354,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         expect(DesignComponentVerifications.scenarioCalled_FeatureReferenceIs_('Scenario1', 'Feature1'));
 
         // Execute - move Feature1 Actions Scenario1 to Feature2 Actions
@@ -388,7 +388,7 @@ describe('UC 145 - Move Design Component', function(){
 
         // Execute - move SubSection1 from Section1 to Application1
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
         DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
 

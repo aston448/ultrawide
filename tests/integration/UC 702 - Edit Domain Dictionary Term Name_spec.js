@@ -15,18 +15,17 @@ import WorkPackageVerifications     from '../../test_framework/test_wrappers/wor
 import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+import DomainDictionaryActions      from '../../test_framework/test_wrappers/domain_dictionary_actions.js';
+import DomainDictionaryVerifications from '../../test_framework/test_wrappers/domain_dictionary_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DomainDictionaryValidationErrors} from '../../imports/constants/validation_errors.js';
 
-describe('UC 123 - Select Design Component', function(){
+describe('UC 702 - Edit Domain Dictionary Term Name', function(){
 
     before(function(){
 
-        TestFixtures.clearAllData();
-
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
     });
 
     after(function(){
@@ -35,61 +34,50 @@ describe('UC 123 - Select Design Component', function(){
 
     beforeEach(function(){
 
-        DesignActions.designerSelectsDesign('Design1');
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        TestFixtures.clearAllData();
+        TestFixtures.addDesignWithDefaultData();
+        DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
-
     });
 
     afterEach(function(){
 
     });
 
-
     // Actions
-    it('An Application may be selected', function(){
+    it('A Designer may edit the name of a Domain Dictionary term', function(){
 
-        DesignComponentActions.designerSelectsApplication('Application1');
+        // Setup
+        DomainDictionaryActions.designerAddsNewTerm();
 
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.APPLICATION, 'NONE', 'Application1'));
-    });
+        // Execute
+        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1');
 
-    it('A Design Section may be selected', function(){
+        // Verify
+        DomainDictionaryVerifications.termExistsForDesignerCalled('Term1');
+        DomainDictionaryVerifications.termDoesNotExistForDesignerCalled(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME);
 
-        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
-
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-    });
-
-    it('A Feature may be selected', function() {
-
-        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
-
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.FEATURE, 'Section1', 'Feature1'));
-    });
-
-    it('A Feature Aspect may be selected', function(){
-
-        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
-
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-    });
-
-    it('A Scenario may be selected', function(){
-
-        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
-
-        expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
 
-    // Consequences
-    it('When a Design Component that is not a Feature Aspect is selected its detail text is shown');
+    // Conditions
+    it('A term name cannot be edited to the same value as another term in the Design', function(){
 
-    it('When a Feature is selected its Feature Background Steps are shown');
+        // Setup
+        DomainDictionaryActions.designerAddsNewTerm();
+        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1');
+        DomainDictionaryActions.designerAddsNewTerm();
+        DomainDictionaryVerifications.termExistsForDesignerCalled('Term1');
+        DomainDictionaryVerifications.termExistsForDesignerCalled(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME);
 
-    it('When a Scenario is selected its Scenario Steps are shown');
+        // Execute - expect rejection
+        const expectation = {success: false, message: DomainDictionaryValidationErrors.DICTIONARY_INVALID_TERM_DUPLICATE};
+        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1', expectation);
 
-    it('When a Design Component is selected it becomes the current component in the user context');
+        // Verify - no change
+        DomainDictionaryVerifications.termExistsForDesignerCalled('Term1');
+        DomainDictionaryVerifications.termExistsForDesignerCalled(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME);
+    });
+
 
 });

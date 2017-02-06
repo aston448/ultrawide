@@ -46,7 +46,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Setup
         // Edit the default Design Version
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute
         // Add an Application
@@ -61,7 +61,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Feature
@@ -76,7 +76,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Scenario
@@ -92,7 +92,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Execute
         // Add a Scenario
@@ -123,7 +123,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Execute - designer adds Feature3 to Section1
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddsFeatureToSection_Called('Section1', 'Feature3');
 
         // Verify - Feature3 now in WP1 and WP2 and not in scope
@@ -164,7 +164,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Execute - designer adds Scenario5 to Feature1 Actions
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddsScenarioToFeatureAspect('Feature1', 'Actions');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
         DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenario5');

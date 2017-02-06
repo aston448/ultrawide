@@ -46,7 +46,7 @@ describe('UC 147 - Edit Feature Narrative', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Verify default Narrative template is there
         expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', DefaultComponentNames.NEW_NARRATIVE_TEXT));
@@ -59,7 +59,7 @@ describe('UC 147 - Edit Feature Narrative', function(){
 
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         let oldNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
         let newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
@@ -95,7 +95,7 @@ describe('UC 147 - Edit Feature Narrative', function(){
         // Execute - Designer edits Feature1 Narrative
         let newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
         DesignComponentActions.designerEditsSelectedFeatureNarrativeTo(newNarrative);
 

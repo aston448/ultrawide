@@ -47,7 +47,7 @@ describe('UC 108 - Edit Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
 
         // Execute
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now editing - other evidence is interface specific and can only be seen in acceptance tests
@@ -65,7 +65,7 @@ describe('UC 108 - Edit Design Version', function(){
         expect(UserContextVerifications.userContextDesignVersionNotSetForRole(RoleType.DESIGNER));
 
         // Execute
-        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
 
         // Verify
         // The Design version will be in the user context if now editing - other evidence is interface specific and can only be seen in acceptance tests
