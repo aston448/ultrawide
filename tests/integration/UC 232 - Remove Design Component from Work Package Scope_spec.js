@@ -19,7 +19,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {WorkPackageComponentValidationErrors} from '../../imports/constants/validation_errors.js'
 
-describe('UC 232 - Remove Design Component from Scope - Initial Design Version', function(){
+describe('UC 232 - Remove Design Component from Work Package Scope - Initial Design Version', function(){
 
     before(function(){
 
@@ -380,7 +380,7 @@ describe('UC 232 - Remove Design Component from Scope - Initial Design Version',
 
 });
 
-describe('UC 232 - Remove Design Component from Scope - Design Update', function(){
+describe('UC 232 - Remove Design Component from Work Package Scope - Design Update', function(){
 
     before(function(){
 
