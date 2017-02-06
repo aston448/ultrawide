@@ -21,6 +21,10 @@ class WpComponentActions{
     }
 
 
+    managerSelectsWorkPackageComponent(type, parentName, name){
+        server.call('testWorkPackageComponents.selectWorkPackageComponent', type, parentName, name, 'miles');
+    }
+
 
     managerAddsApplicationToScopeForCurrentBaseWp(appName, expectation){
         server.call('testWorkPackageComponents.toggleInitialWpComponentInScope', ComponentType.APPLICATION, 'NONE', appName, 'miles', expectation);

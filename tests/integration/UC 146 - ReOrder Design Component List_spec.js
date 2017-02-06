@@ -10,6 +10,10 @@ import DesignUpdateVerifications    from '../../test_framework/test_wrappers/des
 import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -192,12 +196,44 @@ describe('UC 146 - ReOrder Design Component List', function(){
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
     });
 
-    it('A Scenario may be moved to be above another Scenario in a Feature');
-
 
     // Consequences
-    it('When a Design Component is reordered in a base Design Version, any related Design Updates are updated');
+    it('When a Design Component is reordered in a base Design Version, any related Work Packages are updated', function(){
 
-    it('When a Design Component is reordered in a base Design Version, any related Work Packages are updated');
+        // Setup
+        // Publish DV1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Add 2 work packages
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+
+        // Execute - Reorder Section1 Features
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        // Move Feature444 to above Feature1
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature444');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+
+        // Verify
+        // Ordering is 444, 1 in both WPs
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature444');
+        expect(WpComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature444');
+        expect(WpComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
+    });
 
 });

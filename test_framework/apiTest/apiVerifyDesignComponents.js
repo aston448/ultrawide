@@ -171,7 +171,7 @@ Meteor.methods({
         //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
         if(selectedComponent.componentIndex >= targetComponent.componentIndex){
             //console.log("FAIL!");
-            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent + " to be above component " + targetComponent + " in the list of " + targetType +"s");
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentName + " to be above component " + targetComponent.componentName + " in the list of " + targetType +"s");
         } else {
             return true;
         }

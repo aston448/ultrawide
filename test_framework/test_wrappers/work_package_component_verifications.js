@@ -44,6 +44,14 @@ class WpComponentVerifications{
             })
         )
     }
+
+    designerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
+        server.call('verifyDesignComponents.selectedComponentIsAboveComponent', targetType, targetParentName, targetName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
 }
 
 export default new WpComponentVerifications();

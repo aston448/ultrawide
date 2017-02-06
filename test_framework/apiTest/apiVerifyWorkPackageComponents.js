@@ -1,6 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
+import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
+import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
@@ -131,4 +134,31 @@ Meteor.methods({
             return true;
         }
     },
+
+    'verifyWorkPackageComponents.currentWpComponentIsAboveComponent'(targetType, targetParentName, targetName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const targetWorkPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, targetType, targetParentName, targetName);
+        let movingWorkPackageDesignComponent = null;
+        if(userContext.designUpdateId === 'NONE'){
+            // Get Design Component
+            movingWorkPackageDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        } else {
+            // Get Design Update Component
+            movingWorkPackageDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+        }
+        const movingWorkPackageComponent = WorkPackageComponents.findOne({
+            designVersionId: userContext.designVersionId,
+            workPackageId: userContext.workPackageId,
+            componentReferenceId: movingWorkPackageDesignComponent.componentReferenceId
+        });
+
+        if(movingWorkPackageComponent.componentIndex >= targetWorkPackageComponent.componentIndex){
+            throw new Meteor.Error("FAIL", "Expected component " + movingWorkPackageDesignComponent._id + " to be above component " + targetWorkPackageComponent._id + " in the list of " + targetType +"s");
+        } else {
+            return true;
+        }
+    }
+
 });
