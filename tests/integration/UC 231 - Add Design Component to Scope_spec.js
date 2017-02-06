@@ -383,7 +383,7 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
 
         // And add a new Update WP
         DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         WorkPackageActions.managerAddsUpdateWorkPackage();
         WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
