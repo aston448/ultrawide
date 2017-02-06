@@ -228,12 +228,12 @@ describe('UC 146 - ReOrder Design Component List', function(){
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
         WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature444');
-        expect(WpComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.managerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
 
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
         WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature444');
-        expect(WpComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.managerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
     });
 
 });

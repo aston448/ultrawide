@@ -159,6 +159,38 @@ Meteor.methods({
         } else {
             return true;
         }
+    },
+
+
+    'verifyWorkPackageComponents.currentWpFeatureNarrativeIs'(narrativeText, userName){
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        let currentDesignComponent = null;
+        let featureNarrative = '';
+        if(userContext.designUpdateId === 'NONE'){
+            // Get Design Component
+            currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+            if(currentDesignComponent){
+                featureNarrative = currentDesignComponent.componentNarrative;
+            } else {
+                throw new Meteor.Error("FAIL", 'No component is currently selected');
+            }
+        } else {
+            // Get Design Update Component
+            currentDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+            if(currentDesignComponent){
+                featureNarrative = currentDesignComponent.componentNarrativeNew;
+            } else {
+                throw new Meteor.Error("FAIL", 'No component is currently selected');
+            }
+        }
+
+        if(featureNarrative.trim() != narrativeText.trim()){
+            throw new Meteor.Error("FAIL", 'Expected narrative to be ' + narrativeText + ' but got ' + featureNarrative);
+        } else {
+            return true;
+        }
+
     }
 
 });

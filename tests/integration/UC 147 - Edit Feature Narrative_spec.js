@@ -10,6 +10,10 @@ import DesignUpdateVerifications    from '../../test_framework/test_wrappers/des
 import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -49,12 +53,6 @@ describe('UC 147 - Edit Feature Narrative', function(){
 
     });
 
-    it('Each Narrative has an option to edit it');
-
-    it('A Narrative being edited has an option to save changes');
-
-    it('A Narrative being edited has an option to discard any changes');
-
 
     // Actions
     it('A Designer can edit and save a Feature Narrative', function(){
@@ -76,12 +74,43 @@ describe('UC 147 - Edit Feature Narrative', function(){
         expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', newNarrative));
     });
 
-    it('A designer can edit but then discard changes to a Feature Narrative');
-
 
     // Consequences
-    it('When a Narrative is updated in a base Design Version, any related Design Updates are updated');
+    it('When a Narrative is updated in a base Design Version, any related Work Packages are updated', function(){
 
-    it('When a Narrative is updated in a base Design Version, any related Work Packages are updated');
+        // Setup
+        // Publish DV1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Add 2 work packages
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+
+        // Execute - Designer edits Feature1 Narrative
+        let newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        DesignComponentActions.designerEditsSelectedFeatureNarrativeTo(newNarrative);
+
+        // Verify - New Narrative in both WPs
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        expect(WpComponentVerifications.managerSelectedFeatureNarrativeIs(newNarrative));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        expect(WpComponentVerifications.managerSelectedFeatureNarrativeIs(newNarrative));
+    });
 
 });

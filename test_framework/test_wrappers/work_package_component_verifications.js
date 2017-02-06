@@ -45,8 +45,16 @@ class WpComponentVerifications{
         )
     }
 
-    designerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
-        server.call('verifyDesignComponents.selectedComponentIsAboveComponent', targetType, targetParentName, targetName, 'gloria',
+    managerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
+        server.call('verifyDesignComponents.selectedComponentIsAboveComponent', targetType, targetParentName, targetName, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    managerSelectedFeatureNarrativeIs(narrativeText){
+        server.call('verifyWorkPackageComponents.currentWpFeatureNarrativeIs', narrativeText, 'miles',
             (function(error, result){
                 return(error === null);
             })
