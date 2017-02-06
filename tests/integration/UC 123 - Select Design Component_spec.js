@@ -49,35 +49,35 @@ describe('UC 123 - Select Design Component', function(){
     // Actions
     it('An Application may be selected', function(){
 
-        DesignComponentActions.designerSelectApplication('Application1');
+        DesignComponentActions.designerSelectsApplication('Application1');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.APPLICATION, 'NONE', 'Application1'));
     });
 
     it('A Design Section may be selected', function(){
 
-        DesignComponentActions.designerSelectDesignSection('Application1', 'Section1');
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
     });
 
     it('A Feature may be selected', function() {
 
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.FEATURE, 'Section1', 'Feature1'));
     });
 
     it('A Feature Aspect may be selected', function(){
 
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Actions');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
     });
 
     it('A Scenario may be selected', function(){
 
-        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
 
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.DESIGNER, ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });

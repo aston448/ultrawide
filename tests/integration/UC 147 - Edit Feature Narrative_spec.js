@@ -69,8 +69,8 @@ describe('UC 147 - Edit Feature Narrative', function(){
         expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', oldNarrative));
 
         // Execute
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
-        DesignComponentActions.designerEditSelectedFeatureNarrativeTo(newNarrative);
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        DesignComponentActions.designerEditsSelectedFeatureNarrativeTo(newNarrative);
 
         // Verify
         expect(DesignComponentVerifications.feature_NarrativeIs('Feature1', newNarrative));

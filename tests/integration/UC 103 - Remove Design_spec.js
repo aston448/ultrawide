@@ -43,11 +43,11 @@ describe('UC 103 - Remove Design', function() {
         // And edit the default Design Version
         DesignVersionActions.designerEditDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
         // Add an Application - Application1
-        DesignComponentActions.designerAddApplicationCalled('Application1');
+        DesignComponentActions.designerAddsApplicationCalled('Application1');
         // Add a Design Section - Section1
-        DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section1');
+        DesignComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section1');
         // Add a Feature - Feature1
-        DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature1');
+        DesignComponentActions.designerAddsFeatureToSection_Called('Section1', 'Feature1');
 
         // Execute -----------------------------------------------------------------------------------------------------
         const expectation = {success: false, message: DesignValidationErrors.DESIGN_NOT_REMOVABLE};
@@ -123,9 +123,9 @@ describe('UC 103 - Remove Design', function() {
         // And edit the default Design Version
         DesignVersionActions.designerEditDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
         // Add an Application - Application1
-        DesignComponentActions.designerAddApplicationCalled('Application1');
+        DesignComponentActions.designerAddsApplicationCalled('Application1');
         // Add a Design Section - Section1
-        DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section1');
+        DesignComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section1');
 
         // Execute -----------------------------------------------------------------------------------------------------
         DesignActions.designerRemovesDesign('Design1');

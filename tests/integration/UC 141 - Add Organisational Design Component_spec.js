@@ -50,7 +50,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
         // Execute
         // Add a Design Section
-        DesignComponentActions.designerAddDesignSectionToApplication_('Application1');
+        DesignComponentActions.designerAddsDesignSectionToApplication_('Application1');
 
 
         // Verify - New Design Section in Application1
@@ -66,7 +66,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - add new section to 'Section1'
-        DesignComponentActions.designerAddDesignSectionToDesignSection_('Section1');
+        DesignComponentActions.designerAddsDesignSectionToDesignSection_('Section1');
 
         // Verify - new component added with parent Section1
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 'Design1', 'DesignVersion1'));
@@ -80,7 +80,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - add new section to 'Section1'
-        DesignComponentActions.designerAddFeatureAspectToFeature_('Feature1');
+        DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
 
         // Verify - new component added
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1'));
@@ -108,7 +108,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         // Execute - designer adds Section3 to Application1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section3');
+        DesignComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Verify - Section3 now in WP1 and in WP2 not in scope
         DesignActions.managerWorksOnDesign('Design1');
@@ -150,9 +150,9 @@ describe('UC 141 - Add Organisational Design Component', function(){
         // Execute - designer adds NewAspect to Feature1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        DesignComponentActions.designerAddFeatureAspectToFeature_('Feature1');
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        DesignComponentActions.designerEditSelectedComponentNameTo_('NewAspect');
+        DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        DesignComponentActions.designerEditsSelectedComponentNameTo_('NewAspect');
 
         // Verify - NewAspect now in WP1 in scope and in WP2 not in scope
         DesignActions.managerWorksOnDesign('Design1');

@@ -51,8 +51,8 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 'Application1'));
 
         // Execute - move Section1 from Application1 to Application99
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
 
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 'Application99'));
@@ -66,8 +66,8 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - move SubSection1 from Section1 to Section2
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 'Section2'));
@@ -81,8 +81,8 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - move SubSection1 from Section1 to Application1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
 
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 'Application1'));
@@ -96,8 +96,8 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - move Feature1 from Section1 to Section2
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section2'));
@@ -111,8 +111,8 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Actions'));
 
         // Execute - move Scenario1 from Feature1 Actions to Feature2 Interface
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Interface');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Interface');
 
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Interface'));
@@ -129,33 +129,33 @@ describe('UC 145 - Move Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - try to move Application1 to Application99
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
         let expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99', expectation);
 
         // Verify - App still has no parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 'NONE'));
 
         // Execute - try to move Application1 to Section1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
 
         // Verify - App still has no parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 'NONE'));
 
         // Execute - try to move Application1 to Feature1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1', expectation);
 
         // Verify - App still has no parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 'NONE'));
 
         // Execute - try to move Application1 to Aspect Actions
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', expectation);
 
         // Verify - App still has no parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 'NONE'));
@@ -168,17 +168,17 @@ describe('UC 145 - Move Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - try to move Section1 to Feature1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         let expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1', expectation);
 
         // Verify - Section is still under App
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 'Application1'));
 
         // Execute - try to move Section1 to Aspect Actions
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', expectation);
 
         // Verify - Section is still under App
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 'Application1'));
@@ -191,25 +191,25 @@ describe('UC 145 - Move Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - try to move Feature1 to Application1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
         let expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
 
         // Verify - Feature is still under Section1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - try to move Feature1 to Feature2
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
 
         // Verify - Feature is still under Section1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Execute - try to move Feature1 to Aspect Actions of Feature2
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions', expectation);
 
         // Verify - Feature is still under Section1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
@@ -222,33 +222,33 @@ describe('UC 145 - Move Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - try to move Aspect Actions to Application1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         let expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
 
         // Verify - Aspect is still under Feature1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
 
         // Execute - try to move Aspect Actions to Section1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
 
         // Verify - Aspect is still under Feature1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
 
         // Execute - try to move Aspect Actions to Feature2
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
 
         // Verify - Aspect is still under Feature1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
 
         // Execute - try to move Aspect Actions to Aspect Conditions
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions', expectation);
 
         // Verify - Aspect is still under Feature1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
@@ -261,17 +261,17 @@ describe('UC 145 - Move Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Execute - try to move Scenario1 to Application1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         let expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1', expectation);
 
         // Verify - Scenario1 is still under Actions
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Actions'));
 
         // Execute - try to move Aspect1 to Section1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1', expectation);
 
         // Verify - Scenario1 is still under Aspect1
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Actions'));
@@ -283,41 +283,41 @@ describe('UC 145 - Move Design Component', function(){
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
 
         // Try to move Application1 to Scenario1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
         let expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
 
         // Verify - not moved
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 'NONE'));
 
         // Try to move Section1 to Scenario1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
 
         // Verify - not moved
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 'Application1'));
 
         // Try to move Feature1 to Scenario1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
 
         // Verify - not moved
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section1'));
 
         // Try to move Aspect Actions to Scenario1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
 
         // Verify - not moved
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
 
         // Try to move Scenario2 to Scenario1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
         expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE};
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1', expectation);
 
         // Verify - not moved
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 'Conditions'));
@@ -334,16 +334,16 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('SubSection1', 2));
 
         // Execute - move SubSection1 from Section1 to Application1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
 
         // Verify
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('Section1', 1));
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('SubSection1', 1));
 
         // Execute - move sub section back into Section1 (its now in Application1)
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'SubSection1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'SubSection1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
         // Verify
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('Section1', 1));
@@ -358,8 +358,8 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.scenarioCalled_FeatureReferenceIs_('Scenario1', 'Feature1'));
 
         // Execute - move Feature1 Actions Scenario1 to Feature2 Actions
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions');
 
         // Validate - feature should now be Feature2
         expect(DesignComponentVerifications.scenarioCalled_FeatureReferenceIs_('Scenario1', 'Feature2'));
@@ -387,8 +387,10 @@ describe('UC 145 - Move Design Component', function(){
         WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Application1', 'Section1');
 
         // Execute - move SubSection1 from Section1 to Application1
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
-        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditDesignVersion('DesignVersion1');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerMovesSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
 
         // Validate - SubSection1 is under Application1 in both WPs
         DesignActions.managerWorksOnDesign('Design1');

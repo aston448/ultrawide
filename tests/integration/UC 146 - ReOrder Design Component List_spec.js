@@ -44,22 +44,22 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Add another application
-        DesignComponentActions.designerAddApplicationCalled('Application2');
+        DesignComponentActions.designerAddsApplicationCalled('Application2');
 
         // Check ordering is as created: Application1, Application99, Application2
-        DesignComponentActions.designerSelectApplication('Application1');
+        DesignComponentActions.designerSelectsApplication('Application1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99'));
-        DesignComponentActions.designerSelectApplication('Application99');
+        DesignComponentActions.designerSelectsApplication('Application99');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application2'));
 
         // Execute - move Application2 to above Application1
-        DesignComponentActions.designerSelectApplication('Application2');
-        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+        DesignComponentActions.designerSelectsApplication('Application2');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
 
         // Verify - order should now be 2, 1, 99
-        DesignComponentActions.designerSelectApplication('Application2');
+        DesignComponentActions.designerSelectsApplication('Application2');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        DesignComponentActions.designerSelectApplication('Application1');
+        DesignComponentActions.designerSelectsApplication('Application1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99'));
     });
 
@@ -69,22 +69,22 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Add another section
-        DesignComponentActions.designerAddDesignSectionToApplication_Called('Application1', 'Section3');
+        DesignComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Check ordering is as created - should be Section1, Section2, Section3
-        DesignComponentActions.designerSelectDesignSection('Application1', 'Section1');
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
-        DesignComponentActions.designerSelectDesignSection('Application1', 'Section2');
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section2');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
 
         // Execute - move Section3 to above Section1
-        DesignComponentActions.designerSelectDesignSection('Application1', 'Section3');
-        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section3');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
 
         // Verify - order should now be 3, 1, 2
-        DesignComponentActions.designerSelectDesignSection('Application1', 'Section3');
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section3');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        DesignComponentActions.designerSelectDesignSection('Application1', 'Section1');
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
     });
 
@@ -94,22 +94,22 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Add more sub sections to Section1
-        DesignComponentActions.designerAddDesignSectionToDesignSection_Called('Section1', 'SubSection2');
-        DesignComponentActions.designerAddDesignSectionToDesignSection_Called('Section1', 'SubSection3');
+        DesignComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection2');
+        DesignComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection3');
         // Check ordering is as created: 1, 2, 3
-        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection1');
+        DesignComponentActions.designerSelectsDesignSection('Section1', 'SubSection1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2'));
-        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection2');
+        DesignComponentActions.designerSelectsDesignSection('Section1', 'SubSection2');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection3'));
 
         // Execute - move SubSection3 to above SubSection1
-        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection3');
-        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerSelectsDesignSection('Section1', 'SubSection3');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
 
         // Verify - order should now be 3, 1, 2
-        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection3');
+        DesignComponentActions.designerSelectsDesignSection('Section1', 'SubSection3');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1'));
-        DesignComponentActions.designerSelectDesignSection('Section1', 'SubSection1');
+        DesignComponentActions.designerSelectsDesignSection('Section1', 'SubSection1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2'));
     });
 
@@ -119,22 +119,22 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Add another Feature to Section1
-        DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature555');
+        DesignComponentActions.designerAddsFeatureToSection_Called('Section1', 'Feature555');
 
         // Check ordering is as created: Feature1, Feature444, Feature555
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature444'));
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature444');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature444');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature555'));
 
         // Execute - move Feature555 to above Feature1
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature555');
-        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature555');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1');
 
         // Verify - order should now be 555, 1, 444
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature555');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature555');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        DesignComponentActions.designerSelectFeature('Section1', 'Feature1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section1', 'Feature444'));
     });
 
@@ -144,27 +144,27 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Check ordering is as created for Feature1: Interface, Actions, Conditions, Consequences, ExtraAspect
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Interface');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Interface');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Actions');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Conditions');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Conditions');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Consequences');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Consequences');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
 
         // Execute - move Consequences to above Conditions
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Consequences');
-        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Consequences');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions');
 
         // Verify - order should now be Interface, Actions, Consequences, Conditions, ExtraAspect
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Interface');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Interface');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Actions');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Consequences');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Consequences');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
-        DesignComponentActions.designerSelectFeatureAspect('Feature1', 'Conditions');
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Conditions');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
     });
 
@@ -174,21 +174,21 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
         // Add another Scenario to Feature1 Actions
-        DesignComponentActions.designerAddScenarioToFeatureAspect_Called('Feature1', 'Actions', 'Scenario555');
+        DesignComponentActions.designerAddsScenarioToFeatureAspect_Called('Feature1', 'Actions', 'Scenario555');
         // Check ordering is as created: Scenario1, Scenario444, Scenario555
-        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
-        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario444');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario444');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario555'));
 
         // Execute - move Scenario555 to above Scenario1
-        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario555');
-        DesignComponentActions.designerReorderSelectedComponentToAbove_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario555');
+        DesignComponentActions.designerReordersSelectedComponentToAbove_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
         // Verify - order should now be 555, 1, 444
-        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario555');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario555');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        DesignComponentActions.designerSelectScenario('Feature1', 'Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
     });
 

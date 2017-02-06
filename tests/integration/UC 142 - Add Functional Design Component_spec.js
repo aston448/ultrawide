@@ -50,7 +50,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Execute
         // Add an Application
-        DesignComponentActions.designerAddApplication();
+        DesignComponentActions.designerAddsApplication();
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1'));
@@ -65,7 +65,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Execute
         // Add a Feature
-        DesignComponentActions.designerAddFeatureToSection_('Section1');
+        DesignComponentActions.designerAddsFeatureToSection_('Section1');
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1'));
@@ -80,7 +80,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Execute
         // Add a Scenario
-        DesignComponentActions.designerAddScenarioToFeature('Feature1');
+        DesignComponentActions.designerAddsScenarioToFeature('Feature1');
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1'));
@@ -96,7 +96,7 @@ describe('UC 142 - Add Functional Design Component', function(){
 
         // Execute
         // Add a Scenario
-        DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
+        DesignComponentActions.designerAddsScenarioToFeatureAspect('Feature1', 'Actions');
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1'));
@@ -124,7 +124,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Execute - designer adds Feature3 to Section1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        DesignComponentActions.designerAddFeatureToSection_Called('Section1', 'Feature3');
+        DesignComponentActions.designerAddsFeatureToSection_Called('Section1', 'Feature3');
 
         // Verify - Feature3 now in WP1 and WP2 and not in scope
         DesignActions.managerWorksOnDesign('Design1');
@@ -165,9 +165,9 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Execute - designer adds Scenario5 to Feature1 Actions
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditDesignVersion('DesignVersion1');
-        DesignComponentActions.designerAddScenarioToFeatureAspect('Feature1', 'Actions');
-        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
-        DesignComponentActions.designerEditSelectedComponentNameTo_('Scenario5');
+        DesignComponentActions.designerAddsScenarioToFeatureAspect('Feature1', 'Actions');
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenario5');
 
         // Verify - Scenario5 now in WP1 and WP2 and in scope for WP1 only
         DesignActions.managerWorksOnDesign('Design1');
