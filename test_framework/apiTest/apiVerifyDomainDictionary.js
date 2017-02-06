@@ -15,7 +15,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const dictionaryTerm = DomainDictionary.findOne({designId: designId, designVersionId: designVersionId, domainTermNew: termName});
+        const dictionaryTerm = DomainDictionary.findOne({designId: userContext.designId, designVersionId: userContext.designVersionId, domainTermNew: termName});
 
         if(!dictionaryTerm){
             throw new Meteor.Error("FAIL", "Dictionary entry " + termName + " not found.");
