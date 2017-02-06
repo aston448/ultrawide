@@ -41,7 +41,7 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        TestFixtures.clearDesgnUpdates();
+        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');

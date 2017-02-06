@@ -127,16 +127,8 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
         // Make sure the design and design version is in the user context
         DesignActions.designerSelectsDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-
-
-        // Create new Design Version
-        // Setup - create new DV from original
-        const params = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
-
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Execute - try to rename new version to DesignVersion1
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
@@ -155,15 +147,8 @@ describe('UC 110 - Edit Design Version Name and Number', function(){
         DesignActions.designerSelectsDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNumberTo('1.0');
-
-        // Create new Design Version
-        // Setup - create new DV from original
-        const params = {
-            designName: 'Design1',
-            designVersionName: 'DesignVersion1'
-        };
-
-        DesignVersionActions.designerCreateNextDesignVersionFromNew(params);
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
 
         // Execute - try to rename new version number to 1.0
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);

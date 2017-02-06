@@ -42,7 +42,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        TestFixtures.clearDesgnUpdates();
+        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');

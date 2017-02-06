@@ -351,6 +351,17 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
 
     before(function(){
 
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1 and create a new updatable DV DesignVersion2
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
     });
 
     after(function(){
@@ -358,6 +369,25 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
     });
 
     beforeEach(function(){
+
+        TestFixtures.clearWorkPackages();
+        TestFixtures.clearDesignUpdates();
+
+        // Add update to the updatable DV
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        // The update is to Feature1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+
+        // And add a new Update WP
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('UpdateWorkPackage1');
 
     });
 
@@ -367,7 +397,37 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
 
 
     // Interface
-    it('A Design Update Work Package Scope pane shows all Design Update Components for the Design Update');
+    it('A Design Update Work Package Scope pane shows all Design Update Components for the Design Update', function(){
+
+        // Setup - open the WP for view
+
+        WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Verify - WP contains everything in Feature 1 plus its parents
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+
+        // But does not contain Section2 etc
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section2', 'SubSection2'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Interface'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Consequences'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+    });
 
 
     // Actions

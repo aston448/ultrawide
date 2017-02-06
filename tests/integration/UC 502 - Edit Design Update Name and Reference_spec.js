@@ -41,7 +41,7 @@ describe('UC 502 - Edit Design Update Name and Reference', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        TestFixtures.clearDesgnUpdates();
+        TestFixtures.clearDesignUpdates();
     });
 
     afterEach(function(){

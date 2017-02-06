@@ -42,7 +42,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        TestFixtures.clearDesgnUpdates();
+        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');

@@ -44,6 +44,10 @@ class WorkPackageActions{
         server.call('testWorkPackages.editWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
 
+    managerEditsUpdateWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.editWorkPackage', wpName, WorkPackageType.WP_UPDATE, 'miles', RoleType.MANAGER, expectation);
+    }
+
     managerEditsSelectedBaseWorkPackage(expectation){
         server.call('testWorkPackages.editSelectedWorkPackage', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
@@ -52,12 +56,24 @@ class WorkPackageActions{
         server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
 
+    managerViewsUpdateWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_UPDATE, 'miles', RoleType.MANAGER, expectation);
+    }
+
     developerViewsBaseWorkPackage(wpName, expectation){
         server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'hugh', RoleType.DEVELOPER, expectation);
     }
 
+    developerViewsUpdateWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_UPDATE, 'hugh', RoleType.DEVELOPER, expectation);
+    }
+
     designerViewsBaseWorkPackage(wpName, expectation){
         server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'gloria', RoleType.DESIGNER, expectation);
+    }
+
+    designerViewsUpdateWorkPackage(wpName, expectation){
+        server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_UPDATE, 'gloria', RoleType.DESIGNER, expectation);
     }
 
 

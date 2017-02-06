@@ -26,8 +26,12 @@ class TestFixtures{
         server.call('testFixtures.clearAllData');
     };
 
-    clearDesgnUpdates(){
+    clearDesignUpdates(){
         server.call('textFixtures.clearDesignUpdates');
+    }
+
+    clearWorkPackages(){
+        server.call('textFixtures.clearWorkPackages');
     }
 
     setDummyUserContextForDesigner(){

@@ -41,7 +41,7 @@ describe('UC 501 - Add New Design Update', function(){
     beforeEach(function(){
 
         // Remove any Design Updates before each test
-        TestFixtures.clearDesgnUpdates();
+        TestFixtures.clearDesignUpdates();
     });
 
     afterEach(function(){
