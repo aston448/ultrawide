@@ -380,6 +380,7 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         // The update is to Feature1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // And add a new Update WP
         DesignActions.managerWorksOnDesign('Design1');

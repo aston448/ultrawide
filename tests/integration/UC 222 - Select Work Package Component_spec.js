@@ -88,7 +88,7 @@ describe('UC 222 - Select Work Package Component', function(){
     it('A Work Package Feature Aspect may be selected', function(){
 
         // Execute
-        WpComponentActions.managerSelectsWorkPackageComponent(RoleType.MANAGER, ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
 
         // Verify
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.MANAGER, ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
@@ -97,7 +97,7 @@ describe('UC 222 - Select Work Package Component', function(){
     it('A Work Package Scenario may be selected', function(){
 
         // Execute
-        WpComponentActions.managerSelectsWorkPackageComponent(RoleType.MANAGER, ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
         // Verify
         expect(UserContextVerifications.userContextForRole_DesignComponentIs(RoleType.MANAGER, ComponentType.SCENARIO, 'Actions', 'Scenario1'));
