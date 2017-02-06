@@ -680,7 +680,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
         // Execute - add Scenario1 to the scope for the original WP
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
-        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'NewScenario');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'Scenario1');
 
         // Verify - Scenario1 and parents not in scope for original WP but is for new one
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
