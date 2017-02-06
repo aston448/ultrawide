@@ -377,9 +377,13 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
-        // The update is to Feature1
+        // The update is to Feature1 Scenarios 1 and 2 and to Feature2 - a new Scenario in Actions
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario2');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature2', 'Actions', 'NewScenario');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // And add a new Update WP
@@ -398,32 +402,33 @@ describe('UC 231 - Add Design Component to Scope - Design Update', function(){
 
 
     // Interface
-    it('A Design Update Work Package Scope pane shows all Design Update Components for the Design Update', function(){
+    it('A Design Update Work Package Scope pane shows all in scope Features and Scenarios for the Design Update and their parent components', function(){
 
         // Setup - open the WP for view
 
         WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage1');
 
-        // Verify - WP contains everything in Feature 1 plus its parents
+        // Verify - WP potential scope contains Scenario1 and 2 plus their parents and the new Feature 2 scenario and its parents
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
-        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
-        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
         expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        xpect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
 
-        // But does not contain Section2 etc
+        // But does not contain other items
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1'));
-        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
+        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section2', 'SubSection2'));
-        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Interface'));
-        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Consequences'));
         expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
