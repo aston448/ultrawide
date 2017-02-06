@@ -10,6 +10,10 @@ import DesignUpdateVerifications    from '../../test_framework/test_wrappers/des
 import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
+import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
+import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
+import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -99,10 +103,6 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section2'));
     });
 
-    it('A Scenario may be moved from a Feature to a Feature Aspect');
-
-    it('A Scenario may be moved from a Feature Aspect to a Feature');
-
     it('A Scenario may be moved from one Feature Aspect to another Feature Aspect', function(){
 
         // Setup
@@ -118,7 +118,6 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Interface'));
     });
 
-    it('A Scenario may be moved from one Feature to another Feature');
 
 
     // Conditions
@@ -351,8 +350,6 @@ describe('UC 145 - Move Design Component', function(){
         expect(DesignComponentVerifications.sectionComponentCalled_LevelIs_('SubSection1', 2));
     });
 
-    it('When a Feature Aspect is moved to a new Feature the feature reference for all its children is updated');
-
     it('When a Scenario is moved to a new Feature its feature reference is updated', function(){
 
         // Setup
@@ -366,12 +363,44 @@ describe('UC 145 - Move Design Component', function(){
 
         // Validate - feature should now be Feature2
         expect(DesignComponentVerifications.scenarioCalled_FeatureReferenceIs_('Scenario1', 'Feature2'));
-
-
     });
 
-    it('When a Design Component is moved in a base Design Version, any related Design Updates are updated');
+    it('When a Design Component is moved in a base Design Version, any related Work Packages are updated', function(){
 
-    it('When a Design Component is moved in a base Design Version, any related Work Packages are updated');
+        // Setup
+        // Publish DV1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Add 2 work packages
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackage();
+        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
+        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+
+        // Put Section1 in scope in WP1
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Application1', 'Section1');
+
+        // Execute - move SubSection1 from Section1 to Application1
+        DesignComponentActions.designerSelectComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+        DesignComponentActions.designerMoveSelectedComponentToTarget_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
+
+        // Validate - SubSection1 is under Application1 in both WPs
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'SubSection1'));
+
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WorkPackageActions.managerEditsSelectedBaseWorkPackage();
+        expect(WpComponentVerifications.componentExistsForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'SubSection1'));
+    });
 
 });
