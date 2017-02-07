@@ -231,6 +231,8 @@ class ClientDesignVersionServices{
     // Sets the currently selected design version as part of the global state
     setDesignVersion(userContext, newDesignVersionId){
 
+        // Also clears current DU / WP if any
+
         const context = {
             userId:                         userContext.userId,
             designId:                       userContext.designId,       // Must be the same design

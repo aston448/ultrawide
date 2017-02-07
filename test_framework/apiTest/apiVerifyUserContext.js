@@ -31,6 +31,26 @@ Meteor.methods({
         }
     },
 
+    'verifyUserContext.designUpdateIs'(designUpdateName, userName){
+        // Assume that Design / Design Version is set in user context before checking Design Update
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        if(userContext.designUpdateId != designUpdate._id){
+            throw new Meteor.Error("FAIL", "User context design update id for user " + userName + " is: " + userContext.designUpdateId + " expected: " + designUpdate._id);
+        }
+    },
+
+    'verifyUserContext.workPackageIs'(workPackageName, userName){
+        // Assume that Design / Design Version / Design Update is set in user context before checking Work Package
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        if(userContext.workPackageId != workPackage._id){
+            throw new Meteor.Error("FAIL", "User context work package id for user " + userName + " is: " + userContext.workPackageId + " expected: " + workPackage._id);
+        }
+    },
+
     'verifyUserContext.designComponentIs'(componentType, parentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

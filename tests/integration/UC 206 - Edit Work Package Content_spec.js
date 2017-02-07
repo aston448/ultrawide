@@ -42,15 +42,12 @@ describe('UC 206 - Edit Work Package Content - Initial Design', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
 
         // Add new Base WP
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Add new Base WP - unpublished
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage2');
+
     });
 
     afterEach(function(){
@@ -92,13 +89,9 @@ describe('UC 206 - Edit Work Package Content - Initial Design', function(){
 
 
     // Conditions
-    it('Only a Manager may edit a Published Initial Design Version Work Package');
-
     it('A Complete Initial Design Version Work Package may not be edited');
 
 
-    // Consequences
-    it('When a Work Package is edited it is opened in edit mode with an option to view only');
 
 });
 
@@ -106,6 +99,23 @@ describe('UC 206 - Edit Work Package Content - Design Update', function(){
 
     before(function(){
 
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Create next Design Version
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
+        // Add a Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
     });
 
     after(function(){
@@ -114,6 +124,14 @@ describe('UC 206 - Edit Work Package Content - Design Update', function(){
 
     beforeEach(function(){
 
+        TestFixtures.clearWorkPackages();
+
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1'); // Published (draft)
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2'); // Unpublished (new)
     });
 
     afterEach(function(){
@@ -121,27 +139,39 @@ describe('UC 206 - Edit Work Package Content - Design Update', function(){
     });
 
 
-    // Interface
-    it('A Work Package has an option to edit it');
-
-
     // Actions
 
-    it('A Manager may edit a New Design Update Work Package');
+    it('A Manager may edit a New Design Update Work Package', function(){
 
-    it('A Manager may edit a Draft Design Update Work Package');
+        // Setup - select DU first to clear WPs...
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+
+        // Execute
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
+
+        // Verify - should now be in the user context
+        expect(UserContextVerifications.userContextForRole_WorkPackageIs(RoleType.MANAGER, 'UpdateWorkPackage2'))
+
+
+    });
+
+    it('A Manager may edit a Draft Design Update Work Package', function(){
+
+        // Setup - select DU first to clear WPs...
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+
+        // Execute
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Verify - should now be in the user context
+        expect(UserContextVerifications.userContextForRole_WorkPackageIs(RoleType.MANAGER, 'UpdateWorkPackage1'))
+    });
 
     it('A Manager may edit an Adopted Design Update Work Package');
 
 
     // Conditions
-
-    it('Only a Manager may edit a Design Update Work Package');
-
     it('A Complete Design Update Work Package may not be edited');
 
-
-    // Consequences
-    it('When a Work Package is edited it is opened in edit mode with an option to view only');
 
 });

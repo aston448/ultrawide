@@ -123,6 +123,23 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
 
     before(function(){
 
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Create next Design Version
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
+        // Add a Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
     });
 
     after(function(){
@@ -131,6 +148,14 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
 
     beforeEach(function(){
 
+        TestFixtures.clearWorkPackages();
+
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1'); // Published (draft)
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2'); // Unpublished (new)
     });
 
     afterEach(function(){
@@ -143,17 +168,61 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
 
     // Actions
 
-    it('A Manager may view a New Design Update Work Package');
+    it('A Manager may view a New Design Update Work Package', function(){
 
-    it('Any user role may view a Draft Design Update Work Package');
+        // Setup - select DU first to clear WPs...
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('NONE'));
+
+        // Execute
+        WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage2');
+
+        // Verify - should now be in the user context
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage2'));
+    });
+
+    it('Any user role may view a Draft Design Update Work Package', function(){
+
+        // MANAGER
+        // Setup - select DU first to clear WPs...
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('NONE'));
+
+        // Execute
+        WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Verify - should now be in the user context
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage1'));
+
+        // DESIGNER
+        // Setup - select DU first to clear WPs...
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('NONE'));
+
+        // Execute
+        WorkPackageActions.designerViewsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Verify - should now be in the user context
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('UpdateWorkPackage1'));
+
+        // DEVELOPER
+        // Setup - select DU first to clear WPs...
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('NONE'));
+
+        // Execute
+        WorkPackageActions.developerViewsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Verify - should now be in the user context
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('UpdateWorkPackage1'));
+
+    });
 
     it('Any user role may view a Complete Design Update Work Package');
 
-
-    // Conditions
-    it('Only a Manager may view a New Design Update Work Package');
-
-
-    // Consequences
 
 });

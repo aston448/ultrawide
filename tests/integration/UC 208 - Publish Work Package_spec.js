@@ -61,6 +61,7 @@ describe('UC 208 - Publish Work Package - Initial Design Version', function(){
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_NEW));
 
         // Execute
         WorkPackageActions.managerPublishesSelectedWorkPackage();
@@ -85,6 +86,24 @@ describe('UC 208 - Publish Work Package - Design Update', function(){
 
     beforeEach(function(){
 
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Create next Design Version
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
+        // Add a Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
     });
 
     afterEach(function(){
@@ -93,7 +112,21 @@ describe('UC 208 - Publish Work Package - Design Update', function(){
 
 
     // Actions
-    it('A Manager can publish a New Design Update Work Package');
+    it('A Manager can publish a New Design Update Work Package', function(){
+
+        // Setup
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_NEW));
+
+        // Execute
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+
+        // Verify
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+    });
 
 
 

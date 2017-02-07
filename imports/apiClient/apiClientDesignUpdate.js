@@ -293,33 +293,30 @@ class ClientDesignUpdateServices {
     // Sets the currently selected design update as part of the global state -------------------------------------------
     setDesignUpdate(userContext, newDesignUpdateId){
 
-        if(newDesignUpdateId != userContext.designUpdateId) {
+        // Also clears current WP selection...
 
-            const context = {
-                userId:                         userContext.userId,
-                designId:                       userContext.designId,           // Must be the same design
-                designVersionId:                userContext.designVersionId,    // Must be same design version
-                designUpdateId:                 newDesignUpdateId,              // Update selected
-                workPackageId:                  'NONE',
-                designComponentId:              'NONE',
-                designComponentType:            'NONE',
-                featureReferenceId:             'NONE',
-                featureAspectReferenceId:       'NONE',
-                scenarioReferenceId:            'NONE',
-                scenarioStepId:                 'NONE',
-                featureFilesLocation:           userContext.featureFilesLocation,
-                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                unitTestResultsLocation:      userContext.unitTestResultsLocation
-            };
+        const context = {
+            userId:                         userContext.userId,
+            designId:                       userContext.designId,           // Must be the same design
+            designVersionId:                userContext.designVersionId,    // Must be same design version
+            designUpdateId:                 newDesignUpdateId,              // Update selected
+            workPackageId:                  'NONE',
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE',
+            featureFilesLocation:           userContext.featureFilesLocation,
+            acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
+            integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+            unitTestResultsLocation:      userContext.unitTestResultsLocation
+        };
 
-            store.dispatch(setCurrentUserItemContext(context, true));
+        store.dispatch(setCurrentUserItemContext(context, true));
 
-            return context;
-        }
+        return context;
 
-        // Not an error - just indicates no update needed
-        return userContext;
     };
 
     // User chose to edit a design update ------------------------------------------------------------------------------

@@ -13,7 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
 import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {WorkPackageValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -91,6 +91,23 @@ describe('UC 205 - Remove Work Package - Design Update', function(){
 
     before(function(){
 
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Create next Design Version
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
+        // Add a Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
     });
 
     after(function(){
@@ -98,6 +115,8 @@ describe('UC 205 - Remove Work Package - Design Update', function(){
     });
 
     beforeEach(function(){
+
+        TestFixtures.clearWorkPackages();
 
     });
 
@@ -107,13 +126,45 @@ describe('UC 205 - Remove Work Package - Design Update', function(){
 
 
     // Actions
-    it('A Manager may remove a New Design Update Work Package');
+    it('A Manager may remove a New Design Update Work Package', function(){
+
+        // Setup
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        expect(WorkPackageVerifications.workPackageExistsForManagerCalled('UpdateWorkPackage1'));
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_NEW));
+
+        // Execute
+        WorkPackageActions.managerRemovesSelectedWorkPackage();
+
+        // Verify
+        expect(WorkPackageVerifications.workPackageDoesNotExistForManagerCalled('UpdateWorkPackage1'));
+
+    });
 
 
     // Conditions
-    it('Only a Manager may remove a Design Update Work Package');
+    it('An Available Design Update Work Package may not be removed', function(){
 
-    it('An Available Design Update Work Package may not be removed');
+        // Setup
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        expect(WorkPackageVerifications.workPackageExistsForManagerCalled('UpdateWorkPackage1'));
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+
+        // Execute
+        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_NOT_REMOVABLE};
+        WorkPackageActions.managerRemovesSelectedWorkPackage(expectation);
+
+        // Verify - still there
+        expect(WorkPackageVerifications.workPackageExistsForManagerCalled('UpdateWorkPackage1'));
+
+    });
 
     it('An Adopted Design Update Work Package may not be removed');
 

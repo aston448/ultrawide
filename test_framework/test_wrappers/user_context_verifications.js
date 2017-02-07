@@ -27,6 +27,26 @@ class UserContextVerifications{
 
     };
 
+    userContextForRole_DesignUpdateIs(userRole, designUpdateName){
+
+        server.call('verifyUserContext.designUpdateIs', designUpdateName, TestFixtures.getUserForRole(userRole),
+            (function(error, result){
+                return(error === null);
+            })
+        );
+
+    };
+
+    userContextForRole_WorkPackageIs(userRole, workPackageName){
+
+        server.call('verifyUserContext.workPackageIs', workPackageName, TestFixtures.getUserForRole(userRole),
+            (function(error, result){
+                return(error === null);
+            })
+        );
+
+    };
+
     userContextForRole_DesignComponentIs(userRole, componentType,  parentName, designComponentName){
 
         server.call('verifyUserContext.designComponentIs', componentType, parentName, designComponentName, TestFixtures.getUserForRole(userRole),

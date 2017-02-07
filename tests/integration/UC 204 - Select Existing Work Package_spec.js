@@ -242,7 +242,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
 
         // Execute
         WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
@@ -262,7 +262,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
 
         // Execute
         WorkPackageActions.designerSelectsWorkPackage('UpdateWorkPackage1');
