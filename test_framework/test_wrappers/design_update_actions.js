@@ -73,6 +73,18 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    designerWithdrawsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.withdrawDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    developerWithdrawsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.withdrawDesignUpdate', updateName, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerWithdrawsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.withdrawDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
+    }
+
     designerSetsUpdateActionTo(action, expectation){
         server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria', expectation);
     }

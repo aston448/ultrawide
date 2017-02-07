@@ -20,7 +20,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateValidationErrors} from '../../imports/constants/validation_errors.js';
 
-describe('UC 505 - Publish New Design Update', function(){
+describe('UC 509 - Withdraw Draft Design Update', function(){
 
     before(function(){
 
@@ -53,83 +53,85 @@ describe('UC 505 - Publish New Design Update', function(){
 
     });
 
+
     // Actions
-    it('A Designer can publish a New Design Update', function(){
-
-        // Setup
-        DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-
-        // Execute
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
-
-        // Verify
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
-    });
-
-
-    // Conditions
-    it('A Developer cannot publish a Design Update', function(){
-
-        // Setup
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.developerSelectsUpdate('DesignUpdate2');
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDeveloperIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-
-        // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_PUBLISH};
-        DesignUpdateActions.developerPublishesUpdate('DesignUpdate2', expectation);
-
-        // Verify
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDeveloperIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-    });
-
-    it('A Manager cannot publish a Design Update', function(){
-
-        // Setup
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.managerSelectsUpdate('DesignUpdate2');
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForManagerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-
-        // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_PUBLISH};
-        DesignUpdateActions.managerPublishesUpdate('DesignUpdate2', expectation);
-
-        // Verify
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForManagerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-    });
-
-    it('A Designer cannot publish a Draft Design Update', function(){
+    it('A Designer can withdraw a Draft Design Update with no Work Packages', function(){
 
         // Setup
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_PUBLISH};
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1', expectation);
+        DesignUpdateActions.designerWithdrawsUpdate('DesignUpdate1');
 
         // Verify
-        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_NEW));
     });
 
-    it('A Designer cannot publish a Complete Design Update');
 
-
-    // Consequences
-    it('When a Design Update is published its default merge action is Merge', function(){
+    // Conditions
+    it('A New Design Update cannot be withdrawn', function(){
 
         // Setup
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
 
         // Execute
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
+        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_WITHDRAW};
+        DesignUpdateActions.designerWithdrawsUpdate('DesignUpdate2', expectation);
 
         // Verify
-        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_INCLUDE));
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
+    });
+
+    it('A Complete Design Update cannot be withdrawn');
+
+    it('A Draft Design Update cannot be withdrawn if it has Design Update Work Packages based on it', function(){
+
+        // Setup
+        // Manager creates a WP based on DU1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+
+        // Setup
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
+
+        // Execute
+        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_WPS_WITHDRAW};
+        DesignUpdateActions.designerWithdrawsUpdate('DesignUpdate1', expectation);
+
+        // Verify
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
+    });
+
+    it('Only a Designer can withdraw a Draft Design Update', function(){
+        // Setup
+        // Manager
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+
+        // Execute
+        let expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_WITHDRAW};
+        DesignUpdateActions.managerWithdrawsUpdate('DesignUpdate1', expectation);
+
+        // Verify
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForManagerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
+
+        // Developer
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+
+        // Execute
+        expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_WITHDRAW};
+        DesignUpdateActions.developerWithdrawsUpdate('DesignUpdate1', expectation);
+
+        // Verify
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDeveloperIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
     });
 
 });
