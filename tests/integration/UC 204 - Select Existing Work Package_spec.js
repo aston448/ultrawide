@@ -222,6 +222,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
 
         // Execute
         WorkPackageActions.managerSelectsWorkPackage('UpdateWorkPackage1');
@@ -241,6 +242,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
 
         // Execute
         WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
@@ -260,6 +262,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
 
         // Execute
         WorkPackageActions.designerSelectsWorkPackage('UpdateWorkPackage1');
@@ -281,6 +284,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup - Manager
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
 
         // Execute
 
@@ -293,6 +297,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup - Developer
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
 
         // Execute
         let expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_VIEW_NEW};
@@ -305,6 +310,7 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
         // Setup - Designer
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
 
         // Execute
         // Same failure expectation as before
