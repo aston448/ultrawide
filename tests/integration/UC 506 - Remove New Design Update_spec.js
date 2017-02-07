@@ -79,7 +79,7 @@ describe('UC 506 - Remove New Design Update', function(){
 
         // Execute
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_REMOVE};
-        DesignUpdateActions.designerRemovesUpdate('DesignUpdate2', expectation);
+        DesignUpdateActions.designerRemovesUpdate('DesignUpdate1', expectation);
 
         // Verify
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
