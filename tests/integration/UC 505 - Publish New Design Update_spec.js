@@ -124,6 +124,7 @@ describe('UC 505 - Publish New Design Update', function(){
         // Setup
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_IGNORE));
 
         // Execute
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');

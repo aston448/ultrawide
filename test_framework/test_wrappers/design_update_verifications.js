@@ -69,6 +69,22 @@ class DesignUpdateVerifications{
         );
     }
 
+    updateMergeActionForUpdate_ForDeveloperIs(updateName, action){
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', updateName, action, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateMergeActionForUpdate_ForManagerIs(updateName, action){
+        server.call('verifyDesignUpdates.designUpdateMergeActionIs', updateName, action, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     currentUpdateForDesignerIs(updateName){
         server.call('verifyDesignUpdates.currentDesignUpdateNameIs', updateName, 'gloria',
             (function(error, result){

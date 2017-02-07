@@ -96,6 +96,14 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria', expectation);
     }
 
+    developerSetsUpdateMergeActionTo(action, expectation){
+        server.call('testDesignUpdates.updateMergeAction', action, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerSetsUpdateMergeActionTo(action, expectation){
+        server.call('testDesignUpdates.updateMergeAction', action, RoleType.MANAGER, 'miles', expectation);
+    }
+
     // Remove
     designerRemovesUpdate(updateName, expectation){
         server.call('testDesignUpdates.removeDesignUpdate',  updateName, RoleType.DESIGNER, 'gloria', expectation);

@@ -41,6 +41,7 @@ describe('UC 509 - Withdraw Draft Design Update', function(){
 
     beforeEach(function(){
 
+        TestFixtures.clearWorkPackages();
         TestFixtures.clearDesignUpdates();
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
