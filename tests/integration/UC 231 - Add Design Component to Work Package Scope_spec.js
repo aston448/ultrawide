@@ -703,7 +703,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         // Check - Scenario1 is in scope for new WP
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
         // Scenario1 is in scope
-        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario1'));
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
     });
 
