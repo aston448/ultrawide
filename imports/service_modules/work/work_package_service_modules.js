@@ -137,12 +137,16 @@ class WorkPackageModules {
 
                         // For Feature Aspects we don't want to scope if no in-scope Scenarios will end up in the aspect
 
+                        //console.log("Scoping Feature Aspect");
+
                         // Get the Scenarios in the WP
                         let aspectWpScenarios = WorkPackageComponents.find({
-                            parentReferenceId:  child.componentReferenceId,
-                            componentType:      ComponentType.SCENARIO,
-                            workPackageId:      child.workPackageId
+                            componentParentReferenceId: child.componentReferenceId,
+                            componentType:              ComponentType.SCENARIO,
+                            workPackageId:              child.workPackageId
                         }).fetch();
+
+                        //console.log("Found " + aspectWpScenarios.length + " child Scenarios");
 
                         let includedScenarioCount = 0;
 
@@ -155,6 +159,8 @@ class WorkPackageModules {
                                     componentReferenceId:   scenario.componentReferenceId,  // Same component
                                     componentActive:        true                            // Already in scope
                                 }).count() === 0;
+
+                            //console.log("Scenario " + scenario._id + " not already scoped = " + notAlreadyScopedScenario);
 
                             if(notAlreadyScopedScenario){
                                 includedScenarioCount++;
@@ -172,6 +178,8 @@ class WorkPackageModules {
                                 }
                             );
                         }
+
+                        break;
 
                     default:
                         // Other stuff is just in scope as a parent only
