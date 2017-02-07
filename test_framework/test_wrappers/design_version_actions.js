@@ -9,12 +9,12 @@ class DesignVersionActions{
         server.call('testDesignVersions.selectDesignVersion', versionName, 'gloria');
     }
 
-    developerSelectsDesignVersion(versionName, expectation){
-        server.call('testDesignVersions.selectDesignVersion', versionName, 'hugh', expectation);
+    developerSelectsDesignVersion(versionName){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'hugh');
     }
 
-    managerSelectsDesignVersion(versionName, expectation){
-        server.call('testDesignVersions.selectDesignVersion', versionName, 'miles', expectation);
+    managerSelectsDesignVersion(versionName){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'miles');
     }
 
     designerUpdatesDesignVersionNameFrom_To_(oldName, newName, expectation){

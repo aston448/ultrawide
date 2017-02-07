@@ -392,7 +392,7 @@ class ClientDesignUpdateServices {
         // Switch to update view-only
         store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
 
-        return true;
+        return {success: true, message: ''};
 
     };
 
