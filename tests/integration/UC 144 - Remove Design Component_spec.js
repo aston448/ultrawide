@@ -246,12 +246,12 @@ describe('UC 144 - Remove Design Component', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        expect(WpComponentVerifications.componentDoesNotExistForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
 });

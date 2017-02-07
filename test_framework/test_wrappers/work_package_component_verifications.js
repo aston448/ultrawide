@@ -5,7 +5,8 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class WpComponentVerifications{
 
-    componentExistsForManagerCurrentWp(type, parentName, name){
+    // This means a component is available to add to the WP scope (unless it has already been added to another WP)
+    componentIsAvailableForManagerCurrentWp(type, parentName, name){
         server.call('verifyWorkPackageComponents.componentExistsInCurrentWpCalled', type, parentName, name, 'miles',
             (function(error, result){
                 return(error === null);
@@ -13,7 +14,8 @@ class WpComponentVerifications{
         )
     };
 
-    componentDoesNotExistForManagerCurrentWp(type, parentName, name){
+    // This means the component is not available to add to the WP scope - probably because it is not in an Update scope
+    componentIsNotAvailableForManagerCurrentWp(type, parentName, name){
         server.call('verifyWorkPackageComponents.componentDoesNotExistInCurrentWpCalled', type, parentName, name, 'miles',
             (function(error, result){
                 return(error === null);
@@ -21,6 +23,7 @@ class WpComponentVerifications{
         )
     };
 
+    // This means component is a Feature or Scenario in the WP scope
     componentIsInScopeForManagerCurrentWp(type, parentName, name){
         server.call('verifyWorkPackageComponents.currentWpComponentIsInScope', type, parentName, name, 'miles',
             (function(error, result){
@@ -29,6 +32,7 @@ class WpComponentVerifications{
         )
     }
 
+    // This means component is a parent of a Feature or Scenario component that is in the WP scope
     componentIsInParentScopeForManagerCurrentWp(type, parentName, name){
         server.call('verifyWorkPackageComponents.currentWpComponentIsInParentScope', type, parentName, name, 'miles',
             (function(error, result){
@@ -37,6 +41,7 @@ class WpComponentVerifications{
         )
     }
 
+    // This means it could be added to the WP but hasn't been
     componentIsNotInScopeForManagerCurrentWp(type, parentName, name){
         server.call('verifyWorkPackageComponents.currentWpComponentIsNotInScope', type, parentName, name, 'miles',
             (function(error, result){
@@ -44,6 +49,7 @@ class WpComponentVerifications{
             })
         )
     }
+
 
     managerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
         server.call('verifyDesignComponents.selectedComponentIsAboveComponent', targetType, targetParentName, targetName, 'miles',
