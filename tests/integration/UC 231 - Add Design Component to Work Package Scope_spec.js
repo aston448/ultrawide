@@ -677,17 +677,18 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
 
         // Available but not scoped
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
 
         // Not Available
+        expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1'));
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface'));
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
@@ -738,7 +739,6 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
@@ -747,6 +747,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'NewScenario'));
 
         // Not Available
+        expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1'));
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface'));
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
