@@ -13,7 +13,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
 import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 202 - Add New Design Update Work Package', function(){
@@ -57,9 +57,13 @@ describe('UC 202 - Add New Design Update Work Package', function(){
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
-        //TODO add action.
 
+        // Execute
+        WorkPackageActions.managerAddsUpdateWorkPackage();
 
+        // Verify
+        expect(WorkPackageVerifications.workPackageExistsForManagerCalled(DefaultItemNames.NEW_WORK_PACKAGE_NAME));
+        expect(WorkPackageVerifications.workPackage_TypeForManagerIs(DefaultItemNames.NEW_WORK_PACKAGE_NAME, WorkPackageType.WP_UPDATE));
     });
 
 

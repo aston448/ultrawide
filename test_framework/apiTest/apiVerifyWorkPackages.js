@@ -68,6 +68,19 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackages.workPackageTypeIs'(workPackageName, wpType, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
+
+        if(workPackage.workPackageType === wpType){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Work Package " + workPackageName + " is of type " + workPackage.workPackageType + " but expected " + wpType);
+
+        }
+    },
+
     'verifyWorkPackages.workPackageDoesNotExistCalled'(workPackageName, userName){
 
         // For testing that WP creation failed.  Make sure WP is unique

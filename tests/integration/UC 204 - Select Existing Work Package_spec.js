@@ -38,21 +38,15 @@ describe('UC 204 - Select Existing Work Package - Base Design', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
 
         // Add new Base WP
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Add new Base WP
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage2');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Add new Base WP - unpublished
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage3');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage3');
 
 
     });
@@ -176,6 +170,36 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
     // Tests for Design Update Work Packages
 
     before(function(){
+        // This test data is reused for all tests
+
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Designer Publish DesignVersion1
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+
+        // Create next Design Version
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
+
+        // Add a Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Manager now adds 3 work packages
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage3');  // Not published
+
 
     });
 
@@ -193,15 +217,102 @@ describe('UC 204 - Select Existing Work Package - Updates', function(){
 
 
     // Actions
-    it('A Manager may select a Published Work Package from the Design Update Work Package list');
+    it('A Manager may select a Published Work Package from the Design Update Work Package list', function(){
 
-    it('A Developer may select a Published Work Package from the Design Update Work Package list');
+        // Setup
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
 
-    it('A Designer may select a Published Work Package from the Design Update Work Package list');
+        // Execute
+        WorkPackageActions.managerSelectsWorkPackage('UpdateWorkPackage1');
+
+        // Verify
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage1'));
+
+        // Execute
+        WorkPackageActions.managerSelectsWorkPackage('UpdateWorkPackage2');
+
+        // Verify
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage2'));
+    });
+
+    it('A Developer may select a Published Work Package from the Design Update Work Package list', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+
+        // Execute
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+
+        // Verify
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('UpdateWorkPackage1'));
+
+        // Execute
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage2');
+
+        // Verify
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('UpdateWorkPackage2'));
+    });
+
+    it('A Designer may select a Published Work Package from the Design Update Work Package list', function(){
+
+        // Setup
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        // Execute
+        WorkPackageActions.designerSelectsWorkPackage('UpdateWorkPackage1');
+
+        // Verify
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('UpdateWorkPackage1'));
+
+        // Execute
+        WorkPackageActions.designerSelectsWorkPackage('UpdateWorkPackage2');
+
+        // Verify
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('UpdateWorkPackage2'));
+    });
 
 
     // Conditions
-    it('Only a Manager may select a New Work Package from the Design Update Work Package list');
+    it('Only a Manager may select a New Work Package from the Design Update Work Package list', function(){
+
+        // Setup - Manager
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+
+        // Execute
+
+        WorkPackageActions.managerSelectsWorkPackage('UpdateWorkPackage3');
+
+        // Verify
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage3'));
+
+
+        // Setup - Developer
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+
+        // Execute
+        let expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_VIEW_NEW};
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage3', expectation);
+
+        // Verify
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('NONE'));
+
+
+        // Setup - Designer
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        // Execute
+        // Same failure expectation as before
+        WorkPackageActions.designerSelectsWorkPackage('UpdateWorkPackage3', expectation);
+
+        // Verify
+        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('NONE'));
+    });
 
 });
 

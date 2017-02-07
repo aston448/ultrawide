@@ -8,8 +8,20 @@ class WorkPackageActions{
         server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles', expectation);
     }
 
+    managerAddsBaseDesignWorkPackageCalled(wpName, expectation){
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles', expectation);
+        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.updateWorkPackageName', wpName, RoleType.MANAGER, 'miles', expectation);
+    }
+
     managerAddsUpdateWorkPackage(expectation){
         server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_UPDATE, RoleType.MANAGER, 'miles', expectation);
+    }
+
+    managerAddsUpdateWorkPackageCalled(wpName, expectation){
+        server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_UPDATE, RoleType.MANAGER, 'miles', expectation);
+        server.call('testWorkPackages.selectWorkPackage', DefaultItemNames.NEW_WORK_PACKAGE_NAME, RoleType.MANAGER, 'miles');
+        server.call('testWorkPackages.updateWorkPackageName', wpName, RoleType.MANAGER, 'miles', expectation);
     }
 
     managerSelectsWorkPackage(wpName){

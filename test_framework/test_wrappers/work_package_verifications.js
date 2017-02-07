@@ -20,6 +20,14 @@ class WorkPackageVerifications{
         );
     }
 
+    workPackage_TypeForManagerIs(wpName, wpType){
+        server.call('verifyWorkPackages.workPackageTypeIs', wpName, wpType, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     workPackageCalled_CountForManagerIs(wpName, count){
         server.call('verifyWorkPackages.workPackageCalledCountIs', wpName, count, 'miles',
             (function(error, result){

@@ -371,12 +371,10 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
     });
 
 
-    // Conditions
-    it('Design Components cannot be removed from Initial Design Version Work Package Scope in View Only mode');
-
-
     // Consequences
-    it('When a Design Component is removed from Initial Design Version Work Package Scope any parent Design Components that no longer have any child Scenarios are also removed from Scope');
+    it('When a Design Component is removed from Initial Design Version Work Package Scope any parent Design Components that no longer have any child Scenarios are also removed from Scope', function(){
+        // This is actually tessted by above tests
+    });
 
 });
 
@@ -787,8 +785,9 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
     });
 
 
-
     // Consequences
-    it('When a Design Component is removed from Design Update Work Package Scope any parent Design Components that no longer have any child Scenarios are also removed from Scope');
+    it('When a Design Component is removed from Design Update Work Package Scope any parent Design Components that no longer have any child Scenarios are also removed from Scope', function(){
+        // This is actually tested by above tests
+    });
 
 });
