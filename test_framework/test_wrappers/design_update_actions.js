@@ -62,8 +62,15 @@ class DesignUpdateActions{
     }
 
     designerPublishesUpdate(updateName, expectation){
-        // Publish it
         server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    developerPublishesUpdate(updateName, expectation){
+        server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerPublishesUpdate(updateName, expectation){
+        server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
     designerSetsUpdateActionTo(action, expectation){
