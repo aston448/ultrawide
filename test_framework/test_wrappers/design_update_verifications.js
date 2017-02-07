@@ -53,6 +53,30 @@ class DesignUpdateVerifications{
         );
     }
 
+    currentUpdateForDesignerIs(updateName){
+        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', updateName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    currentUpdateForDeveloperIs(updateName){
+        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', updateName, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    currentUpdateForManagerIs(updateName){
+        server.call('verifyDesignUpdates.currentDesignUpdateNameIs', updateName, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
 
 }
 

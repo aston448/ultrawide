@@ -36,11 +36,21 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
-        if(designUpdate.updateName === designUpdateName){
-            return true;
+        if(designUpdate){
+            if(designUpdate.updateName === designUpdateName){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expected DU name to be " + designUpdateName + " but got " + designUpdate.updateName);
+            }
         } else {
-            throw new Meteor.Error("FAIL", "Expected DU name to be " + designUpdateName + " but got " + designUpdate.updateName);
+            // OK if NONE expected
+            if (designUpdateName === 'NONE') {
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Not expecting no Design Update found");
+            }
         }
+
     },
 
     'verifyDesignUpdates.currentDesignUpdateRefIs'(designUpdateRef, userName){

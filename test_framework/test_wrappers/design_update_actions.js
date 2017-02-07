@@ -41,6 +41,18 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
+    designerViewsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.viewDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    developerViewsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.viewDesignUpdate', updateName, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerViewsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.viewDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
+    }
+
     designerPublishesUpdate(updateName, expectation){
         // Publish it
         server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
