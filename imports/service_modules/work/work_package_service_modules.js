@@ -133,6 +133,46 @@ class WorkPackageModules {
                         }
                         break;
 
+                    case ComponentType.FEATURE_ASPECT:
+
+                        // For Feature Aspects we don't want to scope if no in-scope Scenarios will end up in the aspect
+
+                        // Get the Scenarios in the WP
+                        let aspectWpScenarios = WorkPackageComponents.find({
+                            parentReferenceId:  child.componentReferenceId,
+                            componentType:      ComponentType.SCENARIO,
+                            workPackageId:      child.workPackageId
+                        }).fetch();
+
+                        let includedScenarioCount = 0;
+
+                        // Need to find one or more of these scenarios that is not scoped in a parallel WP
+                        aspectWpScenarios.forEach((scenario) => {
+
+                            let notAlreadyScopedScenario = WorkPackageComponents.find({
+                                    _id:                    {$ne: scenario._id},            // Not same WP item
+                                    designVersionId:        scenario.designVersionId,       // Same Base Design Version
+                                    componentReferenceId:   scenario.componentReferenceId,  // Same component
+                                    componentActive:        true                            // Already in scope
+                                }).count() === 0;
+
+                            if(notAlreadyScopedScenario){
+                                includedScenarioCount++;
+                            }
+                        });
+
+                        // Set as a parent item if any included scenarios exist
+                        if(includedScenarioCount > 0){
+                            WorkPackageComponents.update(
+                                {_id: child._id},
+                                {
+                                    $set:{
+                                        componentParent: true
+                                    }
+                                }
+                            );
+                        }
+
                     default:
                         // Other stuff is just in scope as a parent only
                         WorkPackageComponents.update(

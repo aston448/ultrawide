@@ -677,7 +677,6 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
-
         expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
 
         // Available but not scoped
@@ -762,7 +761,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
         // Check - Scenario1 in scope for other WP
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
-        //expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario1'));
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
     });
 
