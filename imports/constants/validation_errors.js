@@ -52,7 +52,7 @@ export const DesignUpdateValidationErrors = {
     DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW:        'New Design Updates can only be viewed by a Designer',
     DESIGN_UPDATE_INVALID_NAME_DUPLICATE:       'Design Update name already exists for another update in this Design Version',
     DESIGN_UPDATE_INVALID_ROLE_REMOVE:          'Only a Designer can remove Design Updates',
-    DESIGN_UPDATE_NOT_REMOVABLE:                'Only new or unused Design Updates can be removed',
+    DESIGN_UPDATE_INVALID_STATE_REMOVE:         'Only new Design Updates can be removed',
     DESIGN_UPDATE_INVALID_ROLE_MERGE_ACTION:    'Only a Designer can set merge actions for a Design Update',
     DESIGN_UPDATE_INVALID_STATE_MERGE_ACTION:   'Only a Draft Design Update can have merge actions set'
 };
@@ -71,7 +71,7 @@ export const WorkPackageValidationErrors = {
     WORK_PACKAGE_INVALID_ROLE_VIEW_NEW:         'New Work Packages can only be viewed by a Manager',
     WORK_PACKAGE_INVALID_NAME_DUPLICATE:        'Work Package name already exists for another Work Package in this Design Version',
     WORK_PACKAGE_INVALID_ROLE_REMOVE:           'Only a Manager can remove Work Packages',
-    WORK_PACKAGE_NOT_REMOVABLE:                 'Only new or unadopted Work Packages can be removed',
+    WORK_PACKAGE_INVALID_STATE_REMOVE:          'Only new Work Packages can be removed',
     WORK_PACKAGE_INVALID_ROLE_DEVELOP:          'Only a Developer can develop Work Packages',
     WORK_PACKAGE_INVALID_STATE_DEVELOP:         'Only Adopted Work Packages can be developed',
     WORK_PACKAGE_INVALID_TYPE:                  'Unknown type for Work Package'

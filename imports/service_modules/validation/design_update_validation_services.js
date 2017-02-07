@@ -135,7 +135,7 @@ class DesignUpdateValidationServices{
 
         if(userRole != RoleType.DESIGNER){ return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_REMOVE }
 
-        if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_NEW){ return DesignUpdateValidationErrors.DESIGN_UPDATE_NOT_REMOVABLE }
+        if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_NEW){ return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_REMOVE }
 
         return Validation.VALID;
 

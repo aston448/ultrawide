@@ -106,7 +106,7 @@ class WorkPackageValidationServices{
 
         // Work Package must be New
         if(wpStatus != WorkPackageStatus.WP_NEW){
-            return WorkPackageValidationErrors.WORK_PACKAGE_NOT_REMOVABLE;
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_REMOVE;
         }
 
         return Validation.VALID;

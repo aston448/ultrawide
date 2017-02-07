@@ -115,4 +115,16 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Set Update Merge Action');
     },
 
+    'testDesignUpdates.removeDesignUpdate'(designUpdateName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        const outcome = ClientDesignUpdateServices.deleteDesignUpdate(userRole, userContext, designUpdate._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Update');
+    }
+
 });

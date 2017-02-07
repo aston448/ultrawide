@@ -5,6 +5,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignUpdateActions{
 
+    // Add
     designerAddsAnUpdate(expectation){
         server.call('testDesignUpdates.addDesignUpdate', RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -17,6 +18,7 @@ class DesignUpdateActions{
 
     };
 
+    // Select
     designerSelectsUpdate(updateName){
         server.call('testDesignUpdates.selectDesignUpdate', updateName, 'gloria');
     }
@@ -29,6 +31,7 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.selectDesignUpdate', updateName, 'hugh');
     }
 
+    // Edit
     designerEditsSelectedUpdateNameTo(newName, expectation){
         server.call('testDesignUpdates.updateDesignUpdateName', newName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -49,6 +52,7 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // View
     designerViewsUpdate(updateName, expectation){
         server.call('testDesignUpdates.viewDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -61,6 +65,7 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.viewDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Publish
     designerPublishesUpdate(updateName, expectation){
         server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -73,6 +78,7 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.publishDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Withdraw
     designerWithdrawsUpdate(updateName, expectation){
         server.call('testDesignUpdates.withdrawDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -85,8 +91,22 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.withdrawDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    designerSetsUpdateActionTo(action, expectation){
+    // Set Merge Action
+    designerSetsUpdateMergeActionTo(action, expectation){
         server.call('testDesignUpdates.updateMergeAction', action, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    // Remove
+    designerRemovesUpdate(updateName, expectation){
+        server.call('testDesignUpdates.removeDesignUpdate',  updateName, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    developerRemovesUpdate(updateName, expectation){
+        server.call('testDesignUpdates.removeDesignUpdate',  updateName, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerRemovesUpdate(updateName, expectation){
+        server.call('testDesignUpdates.removeDesignUpdate',  updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
 

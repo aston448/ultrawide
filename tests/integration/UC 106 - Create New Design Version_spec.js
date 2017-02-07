@@ -139,7 +139,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Publish it
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Set it to IGNORE
-        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1',DesignUpdateMergeAction.MERGE_IGNORE));
 
@@ -237,7 +237,7 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Set update to INCLUDE
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
@@ -301,7 +301,7 @@ describe('UC 106 - Create New Design Version', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section88', 'Feature88');
         // Set update to INCLUDE
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
@@ -316,7 +316,7 @@ describe('UC 106 - Create New Design Version', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
         // Set update to ROLL FORWARD
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
-        DesignUpdateActions.designerSetsUpdateActionTo(DesignUpdateMergeAction.MERGE_ROLL);
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_ROLL);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_ROLL));
 

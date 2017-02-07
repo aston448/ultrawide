@@ -77,7 +77,7 @@ describe('UC 205 - Remove Work Package - Initial Design Version', function(){
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Execute
-        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_NOT_REMOVABLE};
+        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_REMOVE};
         WorkPackageActions.managerRemovesSelectedWorkPackage(expectation);
 
         // Verify - still Exists
@@ -158,7 +158,7 @@ describe('UC 205 - Remove Work Package - Design Update', function(){
         expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_AVAILABLE));
 
         // Execute
-        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_NOT_REMOVABLE};
+        const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_REMOVE};
         WorkPackageActions.managerRemovesSelectedWorkPackage(expectation);
 
         // Verify - still there
