@@ -244,6 +244,58 @@ class WorkPackageModules {
         }
     };
 
+    checkDescopeParents(workPackageId, componentRef){
+
+        // Get the current component
+        const component = WorkPackageComponents.findOne({
+            workPackageId: workPackageId,
+            componentReferenceId: componentRef
+        });
+
+        // If it has a parent...
+        if(component.componentParentReferenceId != 'NONE'){
+
+            // Get parent
+            const parentComponent = WorkPackageComponents.findOne({
+                workPackageId: workPackageId,
+                componentReferenceId: component.componentParentReferenceId
+            });
+
+            // Get all children of the parent (i.e. siblings of component)
+            const parentChildren = WorkPackageComponents.find({
+                componentParentReferenceId: parentComponent.componentReferenceId,
+                workPackageId:              workPackageId
+            }).fetch();
+
+            let hasInScopeChildren = false;
+
+            // See if any of them are scoped
+            parentChildren.forEach((child) => {
+                if(child.componentActive || child.componentParent){
+                    hasInScopeChildren = true;
+                }
+            });
+
+            // If not make sure parent is descoped
+            if(!hasInScopeChildren){
+                WorkPackageComponents.update(
+                    {_id: parentComponent._id},
+                    {
+                        $set:{
+                            componentActive: false,
+                            componentParent: false
+                        }
+                    }
+                );
+
+                // And then move on up
+                this.checkDescopeParents(workPackageId, parentComponent.componentReferenceId);
+            }
+
+        }
+
+    }
+
 
 }
 

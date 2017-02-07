@@ -28,7 +28,7 @@ class WorkPackageComponentServices{
                 let startingComponentRef = wpComponent.componentReferenceId;
                 let parentRefId = wpComponent.componentParentReferenceId;
                 let currentWpComponent = wpComponent;
-                const currentWorkPackage = wpComponent.workPackageId;
+                const currentWorkPackageId = wpComponent.workPackageId;
 
                 if (newScope) {
                     // When a component is put in scope, all its parents come into scope as parents.
@@ -69,7 +69,7 @@ class WorkPackageComponentServices{
                         // Get the parent WP component
                         currentWpComponent = WorkPackageComponents.findOne(
                             {
-                                workPackageId: currentWorkPackage,
+                                workPackageId: currentWorkPackageId,
                                 componentReferenceId: parentRefId
                             }
                         );
@@ -90,7 +90,7 @@ class WorkPackageComponentServices{
                     }
 
                     // Mark up all children below the selected item...
-                    WorkPackageModules.scopeChildren(currentWorkPackage, startingComponentRef);
+                    WorkPackageModules.scopeChildren(currentWorkPackageId, startingComponentRef);
 
                 } else {
                     // When a component is put out of scope...
@@ -109,7 +109,10 @@ class WorkPackageComponentServices{
                     );
 
                     // And then all of its children
-                    WorkPackageModules.deScopeChildren(currentWorkPackage, startingComponentRef);
+                    WorkPackageModules.deScopeChildren(currentWorkPackageId, startingComponentRef);
+
+                    // If the component's parent no longer has in scope children, descope it recursively upwards
+                    WorkPackageModules.checkDescopeParents(currentWorkPackageId, startingComponentRef);
 
                 }
             }
