@@ -61,7 +61,7 @@ describe('UC 208 - Publish Work Package - Initial Design Version', function(){
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('UpdateWorkPackage1', WorkPackageStatus.WP_NEW));
+        expect(WorkPackageVerifications.workPackage_StatusForManagerIs('WorkPackage1', WorkPackageStatus.WP_NEW));
 
         // Execute
         WorkPackageActions.managerPublishesSelectedWorkPackage();

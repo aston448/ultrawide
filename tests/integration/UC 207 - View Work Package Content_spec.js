@@ -197,7 +197,7 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
         // DESIGNER
         // Setup - select DU first to clear WPs...
         DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
         expect(WorkPackageVerifications.currentDesignerWorkPackageIs('NONE'));
 
@@ -210,7 +210,7 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
         // DEVELOPER
         // Setup - select DU first to clear WPs...
         DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('NONE'));
 
