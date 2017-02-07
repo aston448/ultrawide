@@ -44,6 +44,13 @@ Meteor.methods({
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        const outcome = ClientDesignUpdateServices.withdrawDesignUpdate(userRole, userContext, designUpdate._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Withdraw Update');
+
     },
 
     'testDesignUpdates.editDesignUpdate'(designUpdateName, userRole, userName, expectation){
@@ -59,7 +66,7 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Update');
     },
 
-    'testDesignUpdates.viewDesignUpdate'(designUpdateName, userName, userRole, expectation){
+    'testDesignUpdates.viewDesignUpdate'(designUpdateName, userRole, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
