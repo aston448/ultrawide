@@ -20,7 +20,7 @@ import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentTy
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateValidationErrors} from '../../imports/constants/validation_errors.js';
 
-describe('UC 503 - View Design Update Content', function(){
+describe('UC 504 - Edit Design Update Content', function(){
 
     before(function(){
 
@@ -38,6 +38,7 @@ describe('UC 503 - View Design Update Content', function(){
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1'); // Published
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2'); // Still New
+
     });
 
     after(function(){
@@ -54,62 +55,37 @@ describe('UC 503 - View Design Update Content', function(){
 
 
     // Actions
-    it('A Designer can view a New or Published Design Update', function(){
+    it('A Designer may edit a New Design Update', function(){
 
         // Setup
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
 
         // Execute
-        DesignUpdateActions.designerViewsUpdate('DesignUpdate1');
-
-        // Verify
-        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('DesignUpdate1'));
-
-        // Setup
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
-
-        // Execute
-        DesignUpdateActions.designerViewsUpdate('DesignUpdate2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
 
         // Verify
         expect(DesignUpdateVerifications.currentUpdateForDesignerIs('DesignUpdate2'));
-
-
     });
 
-    it('A Developer can view a Published Design Update', function(){
+    it('A Designer may edit a Draft Design Update', function(){
 
         // Setup
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
 
         // Execute
-        DesignUpdateActions.developerViewsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Verify
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('DesignUpdate1'));
-    });
-
-    it('A Manager can view a Published Design Update', function(){
-
-        // Setup
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
-
-        // Execute
-        DesignUpdateActions.managerViewsUpdate('DesignUpdate1');
-
-        // Verify
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('DesignUpdate1'));
+        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('DesignUpdate1'));
     });
 
 
     // Conditions
-    it('A Developer cannot view a New Design Update', function(){
+    it('A Designer cannot edit a Complete Design Update');
+
+    it('A Developer cannot edit a Design Update', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -117,14 +93,14 @@ describe('UC 503 - View Design Update Content', function(){
         expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW};
-        DesignUpdateActions.developerViewsUpdate('DesignUpdate2', expectation);
+        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT};
+        DesignUpdateActions.developerEditsUpdate('DesignUpdate1', expectation);
 
         // Verify
         expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
     });
 
-    it('A Manager cannot view a New Design Update', function(){
+    it('A Manager cannot edit a Design Update', function(){
 
         // Setup
         DesignActions.managerWorksOnDesign('Design1');
@@ -132,17 +108,11 @@ describe('UC 503 - View Design Update Content', function(){
         expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW};
-        DesignUpdateActions.managerViewsUpdate('DesignUpdate2', expectation);
+        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT};
+        DesignUpdateActions.managerEditsUpdate('DesignUpdate1', expectation);
 
         // Verify
         expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
     });
-
-
-    // Consequences
-    it('When a non-editable Design Update is viewed it is opened View Only with no option to edit');
-
-    it('When an editable Design Update is opened by a Designer it is opened View Only with an option to edit');
 
 });

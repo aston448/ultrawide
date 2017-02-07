@@ -41,6 +41,14 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
 
+    developerEditsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerEditsUpdate(updateName, expectation){
+        server.call('testDesignUpdates.editDesignUpdate', updateName, RoleType.MANAGER, 'miles', expectation);
+    }
+
     designerViewsUpdate(updateName, expectation){
         server.call('testDesignUpdates.viewDesignUpdate', updateName, RoleType.DESIGNER, 'gloria', expectation);
     }
