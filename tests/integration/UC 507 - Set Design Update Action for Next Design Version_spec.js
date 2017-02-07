@@ -108,7 +108,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE, expectation);
 
         // Verify
-        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE));
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_IGNORE));
     });
 
     it('A Designer cannot set Design Update actions for a Complete Design Update');
