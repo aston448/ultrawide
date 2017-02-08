@@ -736,7 +736,7 @@ class ClientContainerServices{
                     {sort:{stepIndex: 1}}
                 );
 
-                //console.log("Scenario Steps found: " + scenarioSteps.count());
+                console.log("Scenario Steps found: " + scenarioSteps.count());
 
                 return {
                     steps: scenarioSteps.fetch(),
@@ -766,7 +766,7 @@ class ClientContainerServices{
                             {sort:{stepIndex: 1}}
                         );
 
-                        //console.log("Update Scenario Steps found: " + scenarioSteps.count());
+                        console.log("Update Scenario Steps found: " + scenarioSteps.count());
 
                         // For updates, check if scenario is REALLY in scope
                         const scenario = DesignUpdateComponents.findOne(
@@ -798,9 +798,12 @@ class ClientContainerServices{
                             {sort:{stepIndex: 1}}
                         );
 
-                        //console.log("Update Base Scenario Steps found: " + scenarioSteps.count());
+                        console.log("Update Base Scenario Steps found: " + scenarioSteps.count());
 
                         break;
+
+                    default:
+                        log((msg) => console.log(msg), LogLevel.ERROR, "INVALID DISPLAY CONTEXT TYPE!: {}", displayContext);
                 }
 
                 return {
@@ -841,18 +844,20 @@ class ClientContainerServices{
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_UPDATE_WP:
-                    currentUpdateComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
 
+                    currentUpdateComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
 
                     // For an update the current item is the update item but we can also get its equivalent in the original design
                     if(currentUpdateComponent) {
-                        //console.log("DCT Container: Update component is " + currentUpdateComponent.componentNameNew);
+                        console.log("DCT Container: Update component is " + currentUpdateComponent.componentNameNew);
 
-                        let updateItemReferenceId = currentUpdateComponent.componentReferenceId;
-                        currentDesignComponent = DesignComponents.findOne({componentReferenceId: updateItemReferenceId});
+                        currentDesignComponent = DesignComponents.findOne({
+                            designVersionId:        currentUpdateComponent.designVersionId,
+                            componentReferenceId:   currentUpdateComponent.componentReferenceId
+                        });
 
                         if(currentDesignComponent) {
-                            //console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
+                            console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
                         }
                     }
                     break;

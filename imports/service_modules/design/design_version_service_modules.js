@@ -41,6 +41,7 @@ class DesignVersionModules{
                     componentLevel:             oldComponent.componentLevel,
                     componentParentId:          oldComponent.componentParentId,                     // This will be wrong but updated afterwards
                     componentParentReferenceId: oldComponent.componentParentReferenceId,
+                    componentFeatureReferenceId:oldComponent.componentFeatureReferenceId,
                     componentIndex:             oldComponent.componentIndex,
 
                     // Data
@@ -54,7 +55,10 @@ class DesignVersionModules{
                     isRemovable:                oldComponent.isRemovable,
                     isRemoved:                  oldComponent.isRemoved,
                     isNew:                      oldComponent.isNew,
-                    isOpen:                     oldComponent.isOpen
+                    isDevUpdated:               oldComponent.isDevUpdated,
+                    isDevAdded:                 oldComponent.isDevAdded,
+                    lockingUser:                oldComponent.lockingUser,
+                    designUpdateId:             oldComponent.designUpdateId
                 }
             );
 

@@ -12,9 +12,11 @@ import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 import ScenarioStep from '../../components/edit/ScenarioStep.jsx';
 
 // Ultrawide Services
-import { DisplayContext, ViewType, ViewMode, StepContext } from '../../../constants/constants.js';
+import { DisplayContext, ViewType, ViewMode, StepContext, LogLevel } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientScenarioStepServices from '../../../apiClient/apiClientScenarioStep.js';
+
+import { log } from '../../../common/utils.js';
 
 // Bootstrap
 
@@ -103,18 +105,30 @@ class ScenarioStepsList extends Component {
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                if(stepContext != StepContext.STEP_FEATURE_SCENARIO) {
-                    addOn = addScenarioStep;
+                if(displayContext != DisplayContext.BASE_VIEW) {
+                    if (stepContext != StepContext.STEP_FEATURE_SCENARIO) {
+                        addOn = addScenarioStep;
+                    }
                 }
                 break;
         }
 
-        return (
-            <div>
-                {this.renderSteps(steps, parentInScope, view, mode, displayContext, stepContext, userContext)}
-                {addOn}
-            </div>
-        );
+        if(steps.length > 0){
+            return (
+                <div>
+                    {this.renderSteps(steps, parentInScope, view, mode, displayContext, stepContext, userContext)}
+                    {addOn}
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    {addOn}
+                </div>
+            )
+        }
+
+
     }
 }
 
@@ -140,6 +154,8 @@ ScenarioStepsList = connect(mapStateToProps)(ScenarioStepsList);
 
 export default ScenarioStepsContainer = createContainer(({params}) => {
 
+    console.log("Getting Steps Container data...")
+
     switch(params.stepContext){
         case StepContext.STEP_FEATURE:
         case StepContext.STEP_FEATURE_SCENARIO:
@@ -164,7 +180,10 @@ export default ScenarioStepsContainer = createContainer(({params}) => {
                 params.updateId,
                 params.parentReferenceId
             );
-        break
+            break;
+
+        default:
+            log((msg) => console.log(msg), LogLevel.ERROR, "INVALID STEP CONTEXT!: {}", params.stepContext);
     }
 
 

@@ -51,6 +51,9 @@ class DesignComponentText extends Component {
 
         // Set the source data item
         let mainComponent = null;
+        let baseComponent = null;
+        let mainComponentFeatureReference = 'NONE';
+        let baseComponentFeatureReference = 'NONE';
         let textTitle = '';
         let titleName = '';
         let titleNameOld = '';
@@ -63,10 +66,16 @@ class DesignComponentText extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_UPDATE_WP:
                 mainComponent = currentUpdateComponent;
+                baseComponent = currentDesignComponent;
                 if(mainComponent) {
+                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceIdNew;
+                    console.log("Feature ref is: " + mainComponent.componentFeatureReferenceIdNew);
                     titleName = mainComponent.componentNameNew;
                     titleNameOld = mainComponent.componentNameOld;
                     textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
+                }
+                if(baseComponent){
+                    baseComponentFeatureReference = baseComponent.componentFeatureReferenceId;
                 }
                 break;
 
@@ -77,6 +86,7 @@ class DesignComponentText extends Component {
             case ViewType.DEVELOP_BASE_WP:
                 mainComponent = currentDesignComponent;
                 if(mainComponent) {
+                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceId;
                     titleName = mainComponent.componentName;
                     textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
@@ -129,15 +139,15 @@ class DesignComponentText extends Component {
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
                                 updateId: mainComponent.designUpdateId,
-                                parentReferenceId: mainComponent.componentReferenceId
+                                parentReferenceId: mainComponentFeatureReference
                             }}/>
                         </Panel>
                     </div>;
             }
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
-            //console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
-            if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && mainComponent.componentFeatureReferenceId) {
+            console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component feature ref: " + mainComponentFeatureReference + " Display Context: " + context);
+            if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && (mainComponentFeatureReference != 'NONE')) {
                 panel2 =
                     <div>
                         <Panel className="panel-steps panel-steps-body" header={'Scenario Steps: ' + titleName}>
@@ -148,7 +158,7 @@ class DesignComponentText extends Component {
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
                                 updateId: mainComponent.designUpdateId,
-                                parentReferenceId: mainComponent.componentFeatureReferenceId
+                                parentReferenceId: mainComponentFeatureReference
                             }}/>
                             <ScenarioStepsContainer params={{
                                 view: view,
@@ -167,14 +177,14 @@ class DesignComponentText extends Component {
             }
 
             // Define panel 3 for updates - base item text - only shown if a current component exists
-            if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && currentDesignComponent){
-                let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(currentDesignComponent.componentType) + ' - ' + titleNameOld;
+            if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && baseComponent){
+                let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(baseComponent.componentType) + ' - ' + titleNameOld;
                 panel3 =
                     <div>
                         <Panel className="panel-text panel-text-body" header={baseTextTitle}>
                             <div>
                                 <TextEditor
-                                    designComponent={currentDesignComponent}
+                                    designComponent={baseComponent}
                                     mode={mode}
                                     view={view}
                                     context={DisplayContext.BASE_VIEW}
@@ -185,19 +195,29 @@ class DesignComponentText extends Component {
                     </div>;
 
                 // And define panel 4 for Base version scenario steps if a Scenario in an update
-                if(currentDesignComponent && mainComponent.componentType === ComponentType.SCENARIO) {
+                if(baseComponent && baseComponent.componentType === ComponentType.SCENARIO) {
                     panel4 =
                         <div>
-                            <Panel className="panel-steps panel-steps-body" header={'Scenario Steps: ' + titleName}>
-                                    <ScenarioStepsContainer params={{
-                                        view: view,
-                                        displayContext: DisplayContext.BASE_VIEW,
-                                        designId: currentDesignComponent.designId,
-                                        designVersionId: currentDesignComponent.designVersionId,
-                                        updateId: 'NONE',
-                                        scenarioReferenceId: currentDesignComponent.componentReferenceId,
-                                        parentReferenceId: currentDesignComponent.componentReferenceId
-                                    }}/>
+                            <Panel className="panel-steps panel-steps-body" header={'OLD Scenario Steps: ' + titleName}>
+                                <ScenarioStepsContainer params={{
+                                    view: view,
+                                    displayContext: DisplayContext.BASE_VIEW,
+                                    stepContext: StepContext.STEP_FEATURE_SCENARIO,
+                                    designId: baseComponent.designId,
+                                    designVersionId: baseComponent.designVersionId,
+                                    updateId: baseComponent.designUpdateId,
+                                    parentReferenceId: baseComponentFeatureReference
+                                }}/>
+                                <ScenarioStepsContainer params={{
+                                    view: view,
+                                    displayContext: DisplayContext.BASE_VIEW,
+                                    stepContext: StepContext.STEP_SCENARIO,
+                                    designId: baseComponent.designId,
+                                    designVersionId: baseComponent.designVersionId,
+                                    updateId: 'NONE',
+                                    scenarioReferenceId: baseComponent.componentReferenceId,
+                                    parentReferenceId: baseComponentFeatureReference
+                                }}/>
 
                             </Panel>
                         </div>;
