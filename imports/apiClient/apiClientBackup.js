@@ -8,6 +8,8 @@
 import ServerBackupApi      from '../apiServer/apiBackup.js';
 import BackupValidationApi  from '../apiValidation/apiBackupValidation.js';
 
+import ImpexServices        from '../servicers/backup/import_export.js';
+
 import { ViewType, MessageType } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { BackupMessages } from '../constants/message_texts.js'
@@ -66,6 +68,11 @@ class ClientBackupServices{
         // Indicate that business validation passed
         return true;
     };
+
+
+    forceRemoveDesign(designId){
+        Meteor.call('fixtures.forceRemoveDesign', designId);
+    }
 
 
 }

@@ -38,6 +38,10 @@ Meteor.methods({
 
         }
 
+    },
+
+    'fixtures.forceRemoveDesign'(designId){
+        ImpExServices.forceRemoveDesign(designId);
     }
 
 });

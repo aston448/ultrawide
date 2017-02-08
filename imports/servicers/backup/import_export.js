@@ -40,6 +40,48 @@ import ScenarioServices                 from '../design/scenario_services.js';
 
 class ImpExServices{
 
+    forceRemoveDesign(designId){
+
+        const designVersionData = DesignVersions.find({designId: designId}).fetch();
+
+        designVersionData.forEach((designVersion) => {
+
+            // All updates in this Version
+            DesignUpdates.remove({designVersionId: designVersion._id});
+
+            // All Work packages in this version
+            let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
+            workPackageData.forEach((workPackage) => {
+
+                // All work package components in this Work Package
+                WorkPackageComponents.remove({workPackageId: workPackage._id});
+
+            });
+
+            WorkPackages.remove({designVersionId: designVersion._id});
+
+            // All design components in this version
+            DesignComponents.remove({designVersionId: designVersion._id});
+
+            // All Design Update components in this version
+            DesignUpdateComponents.remove({designVersionId: designVersion._id});
+
+            // All Feature background steps in this Version
+            FeatureBackgroundSteps.remove({designVersionId: designVersion._id});
+
+            // All Scenario Steps in this version
+            ScenarioSteps.remove({designVersionId: designVersion._id});
+
+            // All Domain Dictionary entries for this version
+            DomainDictionary.remove({designVersionId: designVersion._id});
+
+        });
+
+        DesignVersions.remove({designId: designId});
+        Designs.remove({_id: designId});
+
+    }
+
     backupDesign(designId){
         if(Meteor.isServer){
             let designBackup = {};

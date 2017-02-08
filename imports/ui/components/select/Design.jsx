@@ -53,6 +53,10 @@ export class Design extends Component {
         ClientBackupServices.backupDesign(designId, userRole);
     }
 
+    onForceRemoveDesign(userRole, designId){
+        ClientBackupServices.forceRemoveDesign(designId);
+    }
+
     render() {
         const {design, userContext, userRole} = this.props;
 
@@ -75,13 +79,25 @@ export class Design extends Component {
                             Design</Button>
                     </ButtonGroup>
                 } else {
-                    buttons = <ButtonGroup>
-                        <Button id="butWork" bsSize="xs"
-                                onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
-                            Design</Button>
-                        <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup
-                            Design</Button>
-                    </ButtonGroup>
+                    if(design.designName != 'Ultrawide Project'){
+                        buttons = <ButtonGroup>
+                            <Button id="butWork" bsSize="xs"
+                                    onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
+                                Design</Button>
+                            <Button id="butBackup" bsSize="xs"
+                                    onClick={ () => this.onForceRemoveDesign(userRole, design._id)}>Force Remove
+                                Design</Button>
+                        </ButtonGroup>
+                    } else {
+                        buttons = <ButtonGroup>
+                            <Button id="butWork" bsSize="xs"
+                                    onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
+                                Design</Button>
+                            <Button id="butBackup" bsSize="xs"
+                                    onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup
+                                Design</Button>
+                        </ButtonGroup>
+                    }
                 }
             } else {
                 // Other users can just work on a Design
