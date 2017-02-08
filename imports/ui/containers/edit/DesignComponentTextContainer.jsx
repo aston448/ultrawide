@@ -198,7 +198,7 @@ class DesignComponentText extends Component {
                 if(baseComponent && baseComponent.componentType === ComponentType.SCENARIO) {
                     panel4 =
                         <div>
-                            <Panel className="panel-steps panel-steps-body" header={'OLD Scenario Steps: ' + titleName}>
+                            <Panel className="panel-steps panel-steps-body" header={'OLD Scenario Steps: ' + titleNameOld}>
                                 <ScenarioStepsContainer params={{
                                     view: view,
                                     displayContext: DisplayContext.BASE_VIEW,
@@ -236,6 +236,9 @@ class DesignComponentText extends Component {
                         <Col md={12} className="close-col">
                             {panel2}
                         </Col>
+                    </Row>
+                    <Row>
+                        <div className="new-old-divider"></div>
                     </Row>
                     <Row>
                         <Col md={12} className="close-col">

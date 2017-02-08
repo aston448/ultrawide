@@ -99,7 +99,7 @@ class ScenarioStepsList extends Component {
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_UPDATE_EDIT:
-                if(mode === ViewMode.MODE_EDIT && parentInScope && stepContext != StepContext.STEP_FEATURE_SCENARIO){
+                if(mode === ViewMode.MODE_EDIT && parentInScope && stepContext != StepContext.STEP_FEATURE_SCENARIO && displayContext != DisplayContext.BASE_VIEW){
                     addOn = addScenarioStep;
                 }
                 break;

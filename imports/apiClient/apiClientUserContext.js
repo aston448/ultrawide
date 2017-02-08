@@ -149,28 +149,62 @@ class ClientUserContextServices {
                             _id: userContext.designComponentId
                         });
 
-                        if (duComponent.componentParentIdNew === 'NONE') {
-                            // No Parent, just make sure component is open
-                            if (!duArr.includes(duComponent._id)) {
-                                duArr.push(duComponent._id);
-                            }
-                        } else {
-                            // Get the parent
-                            let duParent = DesignUpdateComponents.findOne({
-                                _id: duComponent.componentParentIdNew
-                            });
-
-                            // Keep going up until the parent is already open or top of tree
-                            while (!duArr.includes(duParent._id) && duParent.componentParentIdNew != 'NONE') {
-                                duComponent = duParent;
-
+                        if(duComponent) {
+                            if (duComponent.componentParentIdNew === 'NONE') {
+                                // No Parent, just make sure component is open
                                 if (!duArr.includes(duComponent._id)) {
                                     duArr.push(duComponent._id);
                                 }
-
-                                duParent = DesignUpdateComponents.findOne({
+                            } else {
+                                // Get the parent
+                                let duParent = DesignUpdateComponents.findOne({
                                     _id: duComponent.componentParentIdNew
                                 });
+
+                                // Keep going up until the parent is already open or top of tree
+                                while (!duArr.includes(duParent._id) && duParent.componentParentIdNew != 'NONE') {
+                                    duComponent = duParent;
+
+                                    if (!duArr.includes(duComponent._id)) {
+                                        duArr.push(duComponent._id);
+                                    }
+
+                                    duParent = DesignUpdateComponents.findOne({
+                                        _id: duComponent.componentParentIdNew
+                                    });
+                                }
+                            }
+                        } else {
+                            // Must be a base design component
+                            let baseComponent = DesignComponents.findOne({
+                                _id: userContext.designComponentId
+                            });
+
+                            if(baseComponent){
+                                if (baseComponent.componentParentId === 'NONE') {
+                                    // No Parent, just make sure component is open
+                                    if (!dvArr.includes(baseComponent._id)) {
+                                        dvArr.push(baseComponent._id);
+                                    }
+                                } else {
+                                    // Get the parent
+                                    let dvParent = DesignComponents.findOne({
+                                        _id: baseComponent.componentParentId
+                                    });
+
+                                    // Keep going up until the parent is already open or top of tree
+                                    while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
+                                        baseComponent = dvParent;
+
+                                        if (!dvArr.includes(baseComponent._id)) {
+                                            dvArr.push(baseComponent._id);
+                                        }
+
+                                        dvParent = DesignComponents.findOne({
+                                            _id: baseComponent.componentParentId
+                                        });
+                                    }
+                                }
                             }
                         }
 

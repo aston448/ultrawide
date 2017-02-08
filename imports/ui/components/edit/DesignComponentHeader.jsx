@@ -433,6 +433,7 @@ class DesignComponentHeader extends Component{
 
     // Start editing the component name
     editComponentName(){
+        this.setCurrentComponent();
 
         log((msg) => console.log(msg), LogLevel.TRACE, "EDIT COMPONENT NAME");
         this.setState({editable: true});

@@ -173,13 +173,17 @@ export default class Narrative extends React.Component {
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
-                if(props.mode == DisplayContext.BASE_VIEW){
+                if(props.displayContext == DisplayContext.BASE_VIEW){
+                    //console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
                     rawNarrative = props.designComponent.componentNarrativeRaw;
+
                 } else {
                     //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
                     rawNarrative = props.designComponent.componentNarrativeRawNew;
                 }
                 break;
+            default:
+                console.log("Invalid view: " + props.view)
         }
 
         if (rawNarrative) {
@@ -283,7 +287,7 @@ export default class Narrative extends React.Component {
     render() {
         const {designComponent, wpComponent, mode, displayContext, view, testSummary} = this.props;
 
-        //console.log("Rendering Narrative...");
+        //console.log("Rendering Narrative with context " + displayContext);
 
         let itemStyle = getComponentClass(wpComponent, view, displayContext, true);
 

@@ -338,6 +338,12 @@ input {
     float: right;
 }
 
+.new-old-divider{
+    margin: 10px 0 10px 0;
+    height: 4px;
+    background-color: lightgrey;
+}
+
 .design-item-header{
     margin: 0 0 10px 0;
     padding: 0px;
