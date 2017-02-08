@@ -183,31 +183,114 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED};
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1', expectation);
 
-        // Verify
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        // Verify - not in scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
 
     });
 
-    it('A Feature Aspect cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
+    it('A Feature Aspect cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version', function(){
 
-    it('A Scenario cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version');
+        // Setup
+        // And another update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
 
-    it('All Applications are in scope by default so that new Design Sections can be added');
+        // Put Feature Aspect in scope for DU1 and then delete it
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerLogicallyDeletesUpdateFeatureAspect('Feature1', 'Actions');
 
-    it('All Design Sections are in scope by default so that new Design Sections and Features can be added');
+        // Now edit DU2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
 
+        // Execute - Try to add Actions to scope
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED};
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions', expectation);
 
+        // Verify - not in scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+    });
+
+    it('A Scenario cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version', function(){
+
+        // Setup
+        // And another update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Put Scenario in scope for DU1 and then delete it
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
+
+        // Now edit DU2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+
+        // Execute - Try to add Scenario1 to scope
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED};
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1', expectation);
+
+        // Verify - not in scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+    });
+
+    it('All Applications are in scope by default so that new Design Sections can be added', function(){
+
+        // Setup - edit DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Add a new Section to Application1 without scoping it first
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+
+        // Verify - organisational items will have parent scope
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate('NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate('Application1', 'Section3'));
+
+    });
+
+    it('All Design Sections are in scope by default so that new Design Sections and Features can be added', function(){
+
+        // Setup - edit DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Add a new Feature to Section1 without scoping it first
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+
+        // Verify - organisational items will have parent scope and new functional in scope
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate('Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Section1', 'Feature3'));
+    });
 
 
     // Consequences
-    it('When a Feature is added to Design Update Scope it becomes editable in the Design Update editor');
+    it('When a Feature is added to Design Update Scope it is possible to add new Feature Aspects or Scenarios to it', function(){
 
-    it('When a Feature is added to Design Update Scope it is possible to add new Feature Aspects or Scenarios to it');
+        // Setup - edit DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
 
-    it('When a Feature Aspect is added to Design Update Scope it becomes editable in the Design Update editor');
+        // Execute
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
 
-    it('When a Feature Aspect is added to Design Update Scope it is possible to add new Scenarios to it');
+        // Verify
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Feature1', 'Aspect1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Section1', 'Feature1'));
+    });
 
-    it('When a Scenario is added to Design Update Scope it becomes editable in the Design Update editor');
+    it('When a Feature Aspect is added to Design Update Scope it is possible to add new Scenarios to it', function(){
+
+        // Setup - edit DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+
+        // Execute
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+
+        // Verify
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Actions', 'Scenario8'));
+    });
 
 });
