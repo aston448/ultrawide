@@ -77,6 +77,14 @@ class UpdateComponentVerifications{
         );
     }
 
+    designerSelectedComponentIs(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.selectedComponentIs', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
     designerSelectedFeatureNarrativeIs(narrativeText){
         server.call('verifyDesignUpdateComponents.selectedFeatureNarrativeIs', narrativeText, 'gloria');
     }

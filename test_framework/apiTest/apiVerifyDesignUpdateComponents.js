@@ -87,6 +87,32 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateComponents.selectedComponentIs'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+        if(designUpdateComponent){
+            let parentComponent = null;
+            let parentName = 'NONE';
+            if(componentType != ComponentType.APPLICATION) {
+                parentComponent = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentId});
+                if(parentComponent){
+                    parentName = parentComponent.componentNameNew;
+                }
+            }
+            if(designUpdateComponent.componentNameNew === componentName && designUpdateComponent.componentType === componentType && parentName === componentParentName){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expecting selected component to be " + componentName + " with parent " + componentParentName + " but got " + designUpdateComponent.componentNameNew + " with parent " + parentName);
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "No Design Update Component is selected.  Expecting " + componentName);
+        }
+
+    },
+
     'verifyDesignUpdateComponents.componentIsInScope'(componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
