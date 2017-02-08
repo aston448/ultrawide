@@ -122,6 +122,8 @@ class DesignUpdateComponentValidationApi{
 
         const designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
+        const hasNoNewChildren = DesignUpdateComponentModules.hasNoNewChildren(designUpdateComponentId, false);
+
         // A list of this component in other updates for the same design version.  Used to stop a Scenario being changed in two parallel updates at once
         const componentInOtherDesignUpdates = DesignUpdateComponents.find({
             componentReferenceId:   designUpdateComponent.componentReferenceId,
@@ -129,7 +131,7 @@ class DesignUpdateComponentValidationApi{
             designUpdateId:         {$ne: designUpdateComponent.designUpdateId},
         }).fetch();
 
-        return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent, componentInOtherDesignUpdates, newScope);
+        return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent, componentInOtherDesignUpdates, hasNoNewChildren, newScope);
     }
 
 }

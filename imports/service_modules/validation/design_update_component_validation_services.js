@@ -224,7 +224,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateToggleDesignUpdateComponentScope(view, mode, displayContext, component, componentInOtherUpdates, newScope){
+    validateToggleDesignUpdateComponentScope(view, mode, displayContext, component, componentInOtherUpdates, hasNoNewChildren, newScope){
 
         // Updates only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
@@ -239,6 +239,18 @@ class DesignUpdateComponentValidationServices{
         // Context must be scoping
         if(displayContext != DisplayContext.UPDATE_SCOPE){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_SCOPE;
+        }
+
+        // A new item added to the Design Update cannot be de-scoped from it
+        if(!newScope){
+            if(component.isNew){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW;
+            }
+        }
+
+        // An item that has new children in the update cannot be de-scoped from it
+        if(!newScope && !hasNoNewChildren){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN;
         }
 
         // No component can be put in scope if it's already removed in another update

@@ -18,6 +18,7 @@ import UpdateComponentVerifications from '../../test_framework/test_wrappers/des
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 541 - Remove Design Item from Update Scope', function(){
 
@@ -101,20 +102,79 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
 
 
     // Conditions
-    it('A new Feature in the Design Update cannot be removed from the Design Update Scope');
+    it('A new Feature in the Design Update cannot be removed from the Design Update Scope', function(){
 
-    it('A new Feature Aspect in the Design Update cannot be removed from the Design Update Scope');
+        // Setup - Add a new Feature to DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
-    it('A new Scenario in the Design Update cannot be removed from the Design Update Scope');
+        // Execute - try to descope Feature 3
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW};
+        UpdateComponentActions.designerRemovesFeatureFromCurrentUpdateScope('Section1', 'Feature3', expectation);
 
-    it('An existing Feature cannot be removed from Design Update Scope if new Scenarios have been added to it');
+        // Verify still in scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
+    });
 
-    it('An existing Feature Aspect cannot be removed from Design Update Scope if new Scenarios have been added to it');
+    it('A new Feature Aspect in the Design Update cannot be removed from the Design Update Scope', function(){
 
+        // Setup - Add a new Feature Aspect to DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
 
-    // Consequences
-    it('When a Design Component is removed from Design Update Scope it disappears from the Design Update editor');
+        // Execute - try to descope Aspect1
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW};
+        UpdateComponentActions.designerRemovesFeatureAspectFromCurrentUpdateScope('Feature1', 'Aspect1', expectation);
 
-    it('When a Design Component that is the parent of an in scope Design Component in the Design Update is removed from scope it becomes non-editable in the Design Update editor');
+        // Verify still in scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Aspect1'));
+    });
+
+    it('A new Scenario in the Design Update cannot be removed from the Design Update Scope', function(){
+
+        // Setup - Add a new Scenario to DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+
+        // Execute - try to descope Scenario8
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW};
+        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario8', expectation);
+
+        // Verify still in scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario8'));
+    });
+
+    it('An existing Feature cannot be removed from Design Update Scope if new Scenarios have been added to it', function(){
+
+        // Setup - Add a new Feature Aspect to existing Feature1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
+
+        // Execute - try to descope Feature1
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN};
+        UpdateComponentActions.designerRemovesFeatureFromCurrentUpdateScope('Section1', 'Feature1', expectation);
+
+        // Verify still in scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+
+    });
+
+    it('An existing Feature Aspect cannot be removed from Design Update Scope if new Scenarios have been added to it', function(){
+
+        // Setup - Add a new Scenario to existing Feature Aspect
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+
+        // Execute - try to descope Actions
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN};
+        UpdateComponentActions.designerRemovesFeatureAspectFromCurrentUpdateScope('Feature1', 'Actions', expectation);
+
+        // Verify still in scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+    });
 
 });
