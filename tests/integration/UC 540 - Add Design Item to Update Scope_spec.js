@@ -246,7 +246,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
         // Verify - organisational items will have parent scope
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+        // Design Sections are not Scopable so won't be specifically in scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
 
     });
 
@@ -260,6 +261,7 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
         // Verify - organisational items will have parent scope and new functional in scope
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Feature is a scopable item so goes in scope
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
     });
 
