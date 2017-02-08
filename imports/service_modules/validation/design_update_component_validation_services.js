@@ -245,12 +245,21 @@ class DesignUpdateComponentValidationServices{
         if(newScope && component.componentType === ComponentType.SCENARIO){
 
             let alreadyInScope = false;
+            let isRemoved = false;
 
             componentInOtherUpdates.forEach((instance) => {
                 if(instance.isInScope){
                     alreadyInScope = true;
                 }
+
+                if(instance.isRemoved){
+                    isRemoved = true;
+                }
             });
+
+            if(isRemoved){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED;
+            }
 
             if(alreadyInScope){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;

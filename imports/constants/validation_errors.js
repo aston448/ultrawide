@@ -125,7 +125,8 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_SCOPE:       'A Design Update Component containing IN SCOPE components in another update is not removable',
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE:            'A Design Update Component that is not removed is not restorable',
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE_PARENT:     'A Design Update Component whose parent is removed is not restorable',
-    DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE:     'This Scenario is already in scope for another Design Update so cannot be added here'
+    DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE:     'This Scenario is already in scope for another Design Update so cannot be added here',
+    DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED:      'This component cannot be scoped as it has been removed by another update'
 };
 
 export const WorkPackageComponentValidationErrors = {
