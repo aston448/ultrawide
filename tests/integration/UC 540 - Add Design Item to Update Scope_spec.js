@@ -245,8 +245,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Verify - organisational items will have parent scope
-        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate('NONE', 'Application1'));
-        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate('Application1', 'Section3'));
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
 
     });
 
@@ -259,8 +259,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Verify - organisational items will have parent scope and new functional in scope
-        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate('Application1', 'Section1'));
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Section1', 'Feature3'));
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
     });
 
 
@@ -275,8 +275,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
 
         // Verify
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Feature1', 'Aspect1'));
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Aspect1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
     });
 
     it('When a Feature Aspect is added to Design Update Scope it is possible to add new Scenarios to it', function(){
@@ -289,8 +289,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
 
         // Verify
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Feature1', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate('Actions', 'Scenario8'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario8'));
     });
 
 });

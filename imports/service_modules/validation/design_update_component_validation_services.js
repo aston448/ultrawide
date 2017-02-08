@@ -241,6 +241,23 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_SCOPE;
         }
 
+        // No component can be put in scope if it's already removed in another update
+        if(newScope){
+
+            let isRemoved = false;
+
+            componentInOtherUpdates.forEach((instance) => {
+
+                if(instance.isRemoved){
+                    isRemoved = true;
+                }
+            });
+
+            if(isRemoved){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED;
+            }
+        }
+
         // A Scenario cannot be put in scope if it is in scope for another update
         if(newScope && component.componentType === ComponentType.SCENARIO){
 
@@ -258,22 +275,7 @@ class DesignUpdateComponentValidationServices{
 
         }
 
-        // No component can be put in scope if it's already removed in another update
-        if(newScope){
 
-            let isRemoved = false;
-
-            componentInOtherUpdates.forEach((instance) => {
-
-                if(instance.isRemoved){
-                    isRemoved = true;
-                }
-            });
-
-            if(isRemoved){
-                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED;
-            }
-        }
 
         return Validation.VALID;
     }
