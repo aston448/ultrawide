@@ -201,6 +201,7 @@ describe('UC 555 - Move Design Update Component', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature8');
+        // Need to add a scopable item as well so that the new section can be included in the WP
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature9');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Add a WP and add Sections to WP scope
