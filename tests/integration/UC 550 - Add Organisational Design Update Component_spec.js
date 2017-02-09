@@ -140,7 +140,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
-        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section2', 'SubSection3');
+        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section2', 'SubSection3', expectation);
 
         // Verify - no new section
         expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'SubSection3'));
@@ -149,22 +149,10 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
 
     // Consequences
-    it('When an organisational Design Component is added to a Design Update it is also added to the Design Update Scope', function(){
-
-        // Setup
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-
-        // Add new Section to original Application 1
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
-
-        // Verify - added as Parent Scope
-        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
-        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
-    });
-
     it('When an organisational Design Component is added to a Draft Design Update is is also added to any Work Package including the update', function(){
 
         // Setup
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Create a WP based on DU1
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
