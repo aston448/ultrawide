@@ -64,7 +64,7 @@ export const DesignUpdateComponentMessages = {
     MSG_NEW_SCENARIO_ADDED:         'New Scenario added to Update',
     MSG_COMPONENT_NAME_UPDATED:     'Component name updated',
     MSG_FEATURE_NARRATIVE_UPDATED:  'Feature narrative updated',
-    MSG_DESIGN_COMPONENT_REMOVED:   'Design Update Component logically deleted',
+    MSG_DESIGN_COMPONENT_REMOVED:   'Design Update Component removed',
     MSG_DESIGN_COMPONENT_RESTORED:  'Design Update Component restored',
     MSG_DESIGN_COMPONENT_MOVED:     'Design Update Component moved',
     MSG_DESIGN_COMPONENT_REORDERED: 'Design Update Component re-ordered',

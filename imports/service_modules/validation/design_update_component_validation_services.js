@@ -63,7 +63,7 @@ class DesignUpdateComponentValidationServices{
             });
 
             if (isRemoved) {
-                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER;
             }
         }
 

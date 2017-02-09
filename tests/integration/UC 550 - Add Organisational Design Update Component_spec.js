@@ -156,7 +156,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         // as otherwise it would not be possible to scope the parent and would fail because parent not scoped
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER};
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateSection('Application1', 'Section2', expectation);
 
         // Verify - no new section
