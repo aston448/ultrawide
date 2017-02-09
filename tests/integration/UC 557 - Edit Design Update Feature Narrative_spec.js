@@ -120,6 +120,7 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
         const newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
 
         // Execute
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         UpdateComponentActions.designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative);
 

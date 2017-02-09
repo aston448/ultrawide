@@ -52,7 +52,7 @@ class WpComponentVerifications{
 
 
     managerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
-        server.call('verifyDesignComponents.selectedComponentIsAboveComponent', targetType, targetParentName, targetName, 'miles',
+        server.call('verifyWorkPackageComponents.currentWpComponentIsAboveComponent', targetType, targetParentName, targetName, 'miles',
             (function(error, result){
                 return(error === null);
             })
