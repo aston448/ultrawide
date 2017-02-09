@@ -294,4 +294,34 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         expect(UpdateComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
     });
 
+    // Consequences
+    it('When a new Design Update component is reordered it is also reordered in any Work Package based on the Design Update', function(){
+
+        // Setup - Add some new Features to DU1...
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'Feature9');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'Feature8');
+        // Add a WP and add Section2 to WP scope
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section2');
+        // Order should be Feature9 above Feature8
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section2', 'Feature9');
+        expect(WpComponentVerifications.managerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature8'));
+
+        // Execute - reorder Features
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section2', 'Feature8');
+        UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE, 'Section2', 'Feature9');
+
+        // Verify
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+        // Order should be Feature8 above Feature9
+        WpComponentActions.managerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section2', 'Feature8');
+        expect(WpComponentVerifications.managerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature9'));
+    });
+
 });
