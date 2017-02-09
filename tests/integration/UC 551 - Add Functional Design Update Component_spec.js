@@ -131,7 +131,7 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         // Execute - try to add new feature to Section1 in DU1.
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1', expectation);
 
         // Verify - no new Feature

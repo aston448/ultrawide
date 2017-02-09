@@ -50,22 +50,23 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
-        // Check that the target parent has not been removed in another update
-        if(parentInOtherUpdates) {
-
-            let isRemoved = false;
-
-            parentInOtherUpdates.forEach((instance) => {
-
-                if (instance.isRemoved) {
-                    isRemoved = true;
-                }
-            });
-
-            if (isRemoved) {
-                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER;
-            }
-        }
+        // TODO Remove if not needed - think that will always be removed in current update if removed in other update
+        // // Check that the target parent has not been removed in another update
+        // if(parentInOtherUpdates) {
+        //
+        //     let isRemoved = false;
+        //
+        //     parentInOtherUpdates.forEach((instance) => {
+        //
+        //         if (instance.isRemoved) {
+        //             isRemoved = true;
+        //         }
+        //     });
+        //
+        //     if (isRemoved) {
+        //         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER;
+        //     }
+        // }
 
         return Validation.VALID;
     };

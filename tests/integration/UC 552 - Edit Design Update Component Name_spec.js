@@ -208,13 +208,16 @@ describe('UC 552 - Edit Design Update Component Name', function(){
     // Consequences
     it('Updating the name of a Design Update Component updates it in any Work Package that includes the Design Update Component', function(){
 
-        // Setup
+        // Setup - put Feature1 in scope of DU1
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         // Create a WP based on DU1
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
 
         // Execute - Designer now updates Feature1 name in DU1
