@@ -209,7 +209,7 @@ describe('UC 555 - Move Design Update Component', function(){
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section3');
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section4');
+        //WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section4');
         // Feature8 is in Section3
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section3', 'Feature8'));
 
