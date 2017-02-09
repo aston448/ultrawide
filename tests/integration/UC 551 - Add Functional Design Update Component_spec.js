@@ -103,13 +103,76 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME));
     });
 
-    it('A functional Design Update Component cannot be added to a component removed in this or another Design Update');
+    it('A functional Design Update Component cannot be added to a component removed in this Design Update', function(){
+
+        // Setup - Remove Section1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
+
+        // Execute - try to add new Feature to Section1
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1', expectation);
+
+        // Verify - no new Feature
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME));
+
+    });
+
+    it('A functional Design Update Component cannot be added to a component removed in another Design Update', function(){
+
+        // Setup
+        // And another update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Delete Section1 in that update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
+
+        // Execute - try to add new feature to Section1 in DU1.
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1', expectation);
+
+        // Verify - no new Feature
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME));
+    });
 
 
     // Consequences
-    it('When a functional Design Component is added to a Design Update it is also added to the Design Update Scope');
+    it('When a functional Design Component is added to a Design Update it is also added to the Design Update Scope', function(){
 
-    it('When a functional Design Component is added to a Draft Design Update it is also added to generic Design Update Work Package scope');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Add new Feature to original Section 1
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
+
+        // Verify - new Feature in scope
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
+    });
+
+    it('When a functional Design Component is added to a Draft Design Update it is also added to any Work Package based on the update', function(){
+
+        // Setup
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        // Create a WP based on DU1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+
+        // Execute - Designer Adds Feature3 to DU1
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+
+        // Verify - Feature3 is in the WP now too
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
+    });
 
     it('A functional Design Component added to a Design Update appears as a functional addition in the Design Update summary');
 

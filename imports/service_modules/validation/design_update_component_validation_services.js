@@ -37,9 +37,16 @@ class DesignUpdateComponentValidationServices{
                     if(!parentComponent.isInScope){
                         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
                     }
+                    // And not removed
+                    if(parentComponent.isRemoved){
+                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+                    }
                     break;
                 default:
-                    // Others don't matter
+                    // Others must not be removed
+                    if(parentComponent.isRemoved){
+                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+                    }
             }
         }
 
