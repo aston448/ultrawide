@@ -201,6 +201,7 @@ describe('UC 555 - Move Design Update Component', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature8');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature9');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Add a WP and add Sections to WP scope
         DesignActions.managerWorksOnDesign('Design1');
@@ -209,19 +210,19 @@ describe('UC 555 - Move Design Update Component', function(){
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section3');
-        //WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section4');
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section4');
         // Feature8 is in Section3
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section3', 'Feature8'));
 
         // Execute - move Feature8 to Section4
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section3', 'Feature8');
-        //UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section4');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section4');
 
         // Verify
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         // Feature8 is in Section4
-        //expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section4', 'Feature8'));
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section4', 'Feature8'));
     });
 
 });
