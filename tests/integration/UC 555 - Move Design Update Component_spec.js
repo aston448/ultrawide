@@ -200,6 +200,7 @@ describe('UC 555 - Move Design Update Component', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature8');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Add a WP and add Sections to WP scope
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');

@@ -301,6 +301,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'Feature9');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'Feature8');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Add a WP and add Section2 to WP scope
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');

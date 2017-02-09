@@ -448,6 +448,24 @@ Meteor.methods({
         } else {
             return true;
         }
+    },
+
+    'verifyDesignUpdateComponents.selectedOldFeatureNarrativeIs'(narrativeText, userName){
+
+        // Must select Feature first before calling this
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+        //console.log("Feature narrative is: " + feature.componentNarrativeNew);
+        //console.log("Expected narrative is: " + narrativeText);
+
+        if(feature.componentNarrativeOld.trim() !=  narrativeText.trim()){
+            throw new Meteor.Error("FAIL", "Expected old feature narrative to be " + narrativeText + " but found " + feature.componentNarrativeOld);
+        } else {
+            return true;
+        }
     }
 
 });
