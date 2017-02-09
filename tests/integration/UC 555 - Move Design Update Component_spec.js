@@ -43,6 +43,7 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Remove any Design Updates before each test
         TestFixtures.clearDesignUpdates();
+        TestFixtures.clearWorkPackages();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -215,12 +216,12 @@ describe('UC 555 - Move Design Update Component', function(){
         // Execute - move Feature8 to Section4
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section3', 'Feature8');
-        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section4');
+        //UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section4');
 
         // Verify
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         // Feature8 is in Section4
-        //expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section4', 'Feature8'));
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section4', 'Feature8'));
     });
 
 });
