@@ -206,6 +206,46 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
 
     // Consequences
-    it('Updating the name of a Design Update Component updates it in any Work Package that includes the Design Update Component');
+    it('Updating the name of a Design Update Component updates it in any Work Package that includes the Design Update Component', function(){
+
+        // Setup
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        // Create a WP based on DU1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+
+        // Execute - Designer now updates Feature1 name in DU1
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature100');
+
+        // Verify - WP has Feature100 but not Feature1 any more
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature100'));
+        expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+    });
+
+    it('When a Base Design Version component name is edited in a Design update both the original and new names are stored for the Design Update', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Execute
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature100');
+
+        // Verify
+        expect(UpdateComponentVerifications.designerSelectedComponentOldNameIs('Feature1'));
+        expect(UpdateComponentVerifications.designerSelectedComponentNewNameIs('Feature100'));
+        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature100'));
+
+    });
+
+    it('A change to a Feature or Scenario name appears as a functional modification in the Design Update summary')
 
 });

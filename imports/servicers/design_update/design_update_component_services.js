@@ -24,7 +24,7 @@ import DesignUpdateComponentModules from '../../service_modules/design_update/de
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew){
+    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, isChanged = false){
 
         if(Meteor.isServer) {
             // Get the parent reference id (if there is a parent)
@@ -68,8 +68,8 @@ class DesignUpdateComponentServices{
 
                     // State is a new item
                     isNew: isNew,                   // New item added to design
-                    isChanged: false,                  // For now - will go to true when name is edited
-                    isTextChanged: false,                  // For now - will go to true when text is edited
+                    isChanged: isChanged,           // Usually false - will go to true when name is edited
+                    isTextChanged: false,           // For now - will go to true when text is edited
                     isMoved: false,
                     isRemoved: false,
 
@@ -387,6 +387,7 @@ class DesignUpdateComponentServices{
     toggleScope(designUpdateComponentId, newScope){
 
         if(Meteor.isServer) {
+
             let updatedComponents = DesignUpdateComponents.update(
                 {_id: designUpdateComponentId},
                 {
@@ -395,6 +396,18 @@ class DesignUpdateComponentServices{
                     }
                 }
             );
+
+            if(!newScope){
+                // If taking out of scope remove any parent scope
+                updatedComponents = updatedComponents + DesignUpdateComponents.update(
+                        {_id: designUpdateComponentId},
+                        {
+                            $set: {
+                                isParentScope: false
+                            }
+                        }
+                    );
+            }
 
             if(updatedComponents > 0){
                 // If setting in scope. make sure all parents have parent scope

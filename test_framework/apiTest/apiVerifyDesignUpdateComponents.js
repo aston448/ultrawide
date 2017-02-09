@@ -208,6 +208,72 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateComponents.componentIsNew'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isNew){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be New");
+        }
+    },
+
+    'verifyDesignUpdateComponents.componentIsChanged'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isChanged){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be Changed");
+        }
+    },
+
+    'verifyDesignUpdateComponents.selectedComponentOldNameIs'(oldName, userName){
+
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const selectedComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+        if(selectedComponent.componentNameOld === oldName){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component old name to be " + oldName + " but found " + selectedComponent.componentNameOld);
+        }
+    },
+
+    'verifyDesignUpdateComponents.selectedComponentNewNameIs'(newName, userName){
+
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const selectedComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+        if(selectedComponent.componentNameNew === newName){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component new name to be " + newName + " but found " + selectedComponent.componentNameNew);
+        }
+    },
+
     'verifyDesignUpdateComponents.componentCountCalledIs'(componentType, componentName, componentCount){
 
         // const designComponentsCount = DesignComponents.find({componentType: componentType, componentName: componentName}).count();

@@ -73,6 +73,9 @@ class DesignComponentText extends Component {
                     titleName = mainComponent.componentNameNew;
                     titleNameOld = mainComponent.componentNameOld;
                     textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
+                    if(mainComponent.isRemoved){
+                        textTitle = textTitle + ' (REMOVED)';
+                    }
                 }
                 if(baseComponent){
                     baseComponentFeatureReference = baseComponent.componentFeatureReferenceId;

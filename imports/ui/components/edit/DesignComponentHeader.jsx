@@ -173,7 +173,7 @@ class DesignComponentHeader extends Component{
                 break;
         }
 
-        // New untouched items are editable...
+        // New untouched items are editable unless they are new default feature aspects in a Design Update...
         switch (this.props.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DEVELOP_BASE_WP:

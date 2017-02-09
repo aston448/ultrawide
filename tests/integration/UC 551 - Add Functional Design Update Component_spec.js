@@ -174,6 +174,37 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
     });
 
+    it('When a Feature is added to a Design Update default Feature Aspects are also added as new Design Update Components', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Add new Feature to original Section 1
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
+
+        // Verify - new Feature in scope
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
+
+        // And new Aspects are there with status New and Changed - i.e. new but already have names set
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
+        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
+        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
+
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
+        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
+
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
+
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
+        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
+        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
+
+    });
+
     it('A functional Design Component added to a Design Update appears as a functional addition in the Design Update summary');
 
 });

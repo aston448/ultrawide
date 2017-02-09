@@ -86,7 +86,43 @@ class UpdateComponentVerifications{
     }
 
     designerSelectedFeatureNarrativeIs(narrativeText){
-        server.call('verifyDesignUpdateComponents.selectedFeatureNarrativeIs', narrativeText, 'gloria');
+        server.call('verifyDesignUpdateComponents.selectedFeatureNarrativeIs', narrativeText, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    componentIsNewForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.componentIsNew', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    componentIsChangedForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.componentIsChanged', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    designerSelectedComponentOldNameIs(oldName){
+        server.call('verifyDesignUpdateComponents.selectedComponentOldNameIs', oldName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    designerSelectedComponentNewNameIs(newName){
+        server.call('verifyDesignUpdateComponents.selectedComponentNewNameIs', newName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
     }
 }
 
