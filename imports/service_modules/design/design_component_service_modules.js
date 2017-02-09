@@ -135,17 +135,7 @@ class DesignComponentModules{
                             componentIndex:                 component.componentIndex,
                         }
                     },
-                    {multi: true},
-                    (error, result) => {
-                        if(error) {
-                            // Error handler
-                            //console.log("Update WP Location Error: " + error);
-                            return false;
-                        } else {
-                            //console.log("Update WP Location Success: " + result);
-                            return true;
-                        }
-                    }
+                    {multi: true}
                 );
             } else {
                 // Moved to a new section so will have to descope from WP
@@ -165,17 +155,7 @@ class DesignComponentModules{
                             componentActive:                false
                         }
                     },
-                    {multi: true},
-                    (error, result) => {
-                        if(error) {
-                            // Error handler
-                            //console.log("Update WP Move Location Error: " + error);
-                            return false;
-                        } else {
-                            //console.log("Update WP Move Location Success: " + result);
-                            return true;
-                        }
-                    }
+                    {multi: true}
                 );
             }
 

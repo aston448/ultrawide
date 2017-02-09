@@ -89,6 +89,12 @@ class DesignUpdateComponentServices{
                     {$set: {componentReferenceId: newUpdateComponentId}}
                 );
 
+                // Set the starting index for a new component (at end of list)
+                DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
+
+                // Ensure that all parents of the component are now in ParentScope
+                DesignUpdateComponentModules.updateParentScope(newUpdateComponentId, true);
+
                 // If a Feature also update the Feature Ref Id to the new ID + add the default narrative
                 if (componentType === ComponentType.FEATURE) {
                     DesignUpdateComponents.update(
@@ -108,9 +114,15 @@ class DesignUpdateComponentServices{
                     // Make sure Design is no longer removable now that a feature added
                     DesignServices.setRemovable(designId);
 
+                    // Update any WPs before adding the feature aspects
+                    DesignUpdateComponentModules.updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId);
+
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
                     DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '');
+                } else {
+                    // Just update any WPs
+                    DesignUpdateComponentModules.updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId);
                 }
 
                 // When inserting a new design component its parent becomes non-removable
@@ -122,12 +134,6 @@ class DesignUpdateComponentServices{
                         }
                     );
                 }
-
-                // Set the starting index for a new component (at end of list)
-                DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
-
-                // Ensure that all parents of the component are now in ParentScope
-                DesignUpdateComponentModules.updateParentScope(newUpdateComponentId, true);
             }
         }
     };
@@ -275,6 +281,9 @@ class DesignUpdateComponentServices{
                         {$set: {isRemovable: true}}
                     );
                 }
+
+                // Make sure this component is also moved in any work packages
+                DesignUpdateComponentModules.updateWorkPackageLocation(componentId, false);
             }
         }
     };
@@ -336,6 +345,8 @@ class DesignUpdateComponentServices{
                 }
             );
 
+            // Update any WPs with new ordering
+            DesignUpdateComponentModules.updateWorkPackageLocation(componentId, true);
 
             // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.
             if (indexDiff < 0.001) {
@@ -471,12 +482,14 @@ class DesignUpdateComponentServices{
                         )
                     }
 
+                    // Remove component from any related work packages
+                    DesignUpdateComponentModules.removeWorkPackageItems(designUpdateComponent._id, designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId);
+
                     // If this happened to be the last Feature, Design is now removable
                     if (designUpdateComponent.componentType === ComponentType.FEATURE) {
                         DesignServices.setRemovable(designUpdateComponent.designId);
                     }
                 }
-
 
             } else {
 

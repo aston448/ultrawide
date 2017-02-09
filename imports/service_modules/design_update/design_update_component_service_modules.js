@@ -1,9 +1,11 @@
 
 // Ultrawide Collections
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
+import { WorkPackages }             from '../../collections/work/work_packages.js';
+import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel }      from '../../constants/constants.js';
+import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType }      from '../../constants/constants.js';
 import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
 import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
 import { log }                          from '../../common/utils.js'
@@ -18,11 +20,153 @@ import { log }                          from '../../common/utils.js'
 class DesignUpdateComponentModules{
 
     addDefaultFeatureAspects(designVersionId, designUpdateId, featureId, defaultRawText){
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, true);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, true);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, true);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, true);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, false);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, false);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, false);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, false);
     }
+
+    updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId){
+
+        // See if any update WPs affected by this update
+        const workPackages = WorkPackages.find({
+            designVersionId:    designVersionId,
+            designUpdateId:     designUpdateId,
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_UPDATE
+        }).fetch();
+
+        const component = DesignUpdateComponents.findOne({_id: newUpdateComponentId});
+
+        workPackages.forEach((wp) => {
+
+            const wpComponentId = WorkPackageComponents.insert(
+                {
+                    designVersionId:                designVersionId,
+                    workPackageId:                  wp._id,
+                    workPackageType:                wp.workPackageType,
+                    componentId:                    component._id,
+                    componentReferenceId:           component.componentReferenceId,
+                    componentType:                  component.componentType,
+                    componentParentReferenceId:     component.componentParentReferenceIdNew,
+                    componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                    componentLevel:                 component.componentLevel,
+                    componentIndex:                 component.componentIndexNew,
+                    componentParent:                false,
+                    componentActive:                false       // Start by assuming nothing in scope
+                }
+            );
+
+            // If the added item is a Scenario or a Feature Aspect and its parent is already in scope for this WP then put it in scope for the WP
+            if(component.componentType === ComponentType.SCENARIO || component.componentType === ComponentType.FEATURE_ASPECT){
+
+                // Get the Design parent
+                const parent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
+
+                // Get the parent in the WP
+                const wpParent = WorkPackageComponents.findOne({workPackageId: wp._id, componentReferenceId: parent.componentReferenceId});
+
+                // Update if active in this WP - Scenarios if sibling Scenarios are active.
+                if(component.componentType === ComponentType.SCENARIO && (wpParent.componentActive || wpParent.componentParent)){
+                    WorkPackageComponents.update(
+                        {_id: wpComponentId},
+                        {
+                            $set:{componentActive: true}
+                        }
+                    );
+                }
+
+                // Feature Aspects if Feature is active
+                if(component.componentType === ComponentType.FEATURE_ASPECT && wpParent.componentActive){
+                    WorkPackageComponents.update(
+                        {_id: wpComponentId},
+                        {
+                            $set:{componentActive: true}
+                        }
+                    );
+                }
+            }
+        });
+    };
+
+    updateWorkPackageLocation(designUpdateComponentId, reorder){
+
+        const component = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
+        // See if any update WPs affected by this update
+        const workPackages = WorkPackages.find({
+            designVersionId:    component.designVersionId,
+            designUpdateId:     component.designUpdateId,
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_UPDATE
+        }).fetch();
+
+        //console.log("Update WP Location WPs to update: " + workPackages.length);
+
+        workPackages.forEach((wp) => {
+            if(reorder){
+                // Just a reordering job so can keep the WP scope as it is
+                WorkPackageComponents.update(
+                    {
+                        workPackageId:                  wp._id,
+                        workPackageType:                wp.workPackageType,
+                        componentId:                    designUpdateComponentId
+                    },
+                    {
+                        $set:{
+                            componentParentReferenceId:     component.componentParentReferenceIdNew,
+                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                            componentLevel:                 component.componentLevel,
+                            componentIndex:                 component.componentIndexNew,
+                        }
+                    },
+                    {multi: true}
+                );
+            } else {
+                // Moved to a new section so will have to descope from WP
+                WorkPackageComponents.update(
+                    {
+                        workPackageId:                  wp._id,
+                        workPackageType:                wp.workPackageType,
+                        componentId:                    designUpdateComponentId
+                    },
+                    {
+                        $set:{
+                            componentParentReferenceId:     component.componentParentReferenceIdNew,
+                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                            componentLevel:                 component.componentLevel,
+                            componentIndex:                 component.componentIndexNew,
+                            componentParent:                false,      // Reset WP status
+                            componentActive:                false
+                        }
+                    },
+                    {multi: true}
+                );
+            }
+        });
+    };
+
+    removeWorkPackageItems(designUpdateComponentId, designVersionId, designUpdateId){
+
+        // See if any update WPs affected by this update
+        const workPackages = WorkPackages.find({
+            designVersionId:    designVersionId,
+            designUpdateId:     designUpdateId,
+            workPackageStatus:  {$ne: WorkPackageStatus.WP_COMPLETE},
+            workPackageType:    WorkPackageType.WP_UPDATE
+        }).fetch();
+
+        workPackages.forEach((wp) => {
+            WorkPackageComponents.remove(
+                {
+                    workPackageId:                  wp._id,
+                    workPackageType:                wp.workPackageType,
+                    componentId:                    designUpdateComponentId
+                }
+            );
+        });
+
+    };
 
     setIndex(componentId, componentType, parentId){
 

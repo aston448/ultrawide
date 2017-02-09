@@ -140,10 +140,10 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
-        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section2', 'SubSection3', expectation);
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateSection('Application1', 'Section2', expectation);
 
         // Verify - no new section
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'SubSection3'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME));
 
     });
 
