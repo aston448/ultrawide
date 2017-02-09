@@ -129,6 +129,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED:      'This component cannot be scoped as it has been removed by another update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW:        'This component cannot be removed from scope as it is new in this update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN:    'This component cannot be removed from scope as it has new children in this update',
+    DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED: 'A component cannot be added to this item because it has been removed in another update'
 };
 
 export const WorkPackageComponentValidationErrors = {

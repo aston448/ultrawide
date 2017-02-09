@@ -19,11 +19,16 @@ class DesignUpdateComponentValidationApi{
     validateAddDesignUpdateComponent(view, mode, parentComponentId){
 
         if(parentComponentId) {
-            const parentComponent = DesignUpdateComponents.findOne({_id: parentComponentId})
-            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, parentComponent);
+            const parentComponent = DesignUpdateComponents.findOne({_id: parentComponentId});
+            const parentInOtherUpdates = DesignUpdateComponents.find({
+                componentReferenceId:   parentComponent.componentReferenceId,
+                designVersionId:        parentComponent.designVersionId,
+                designUpdateId:         {$ne: parentComponent.designUpdateId},
+            }).fetch();
+            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, parentComponent, parentInOtherUpdates);
         } else{
             // Means this is an application being added so no need to check target
-            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, null);
+            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, null, null);
         }
 
 

@@ -125,13 +125,63 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
     });
 
-    it('An organisational Design Update Component cannot be added to a component removed in this or another Design Update');
+    it('An organisational Design Update Component cannot be added to a component removed in this or another Design Update', function(){
+
+        // Setup
+        // And another update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Delete Section2 in that update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
+
+        // Execute - try to add SubSection3 to Section2 in DU1.  Note: need to add to a non-scopable component for this failure to be possible
+        // as otherwise it would not be possible to scope the parent and would fail because parent not scoped
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
+        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section2', 'SubSection3');
+
+        // Verify - no new section
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'SubSection3'));
+
+    });
 
 
     // Consequences
-    it('When an organisational Design Component is added to a Design Update it is also added to the Design Update Scope');
+    it('When an organisational Design Component is added to a Design Update it is also added to the Design Update Scope', function(){
 
-    it('When an organisational Design Component is added to a Draft Design Update is is also added to any Work Package including the update');
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Add new Section to original Application 1
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+
+        // Verify - added as Parent Scope
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+    });
+
+    it('When an organisational Design Component is added to a Draft Design Update is is also added to any Work Package including the update', function(){
+
+        // Setup
+        // Create a WP based on DU1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+
+        // Execute - Designer Adds Section3 to DU1
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+
+        // Verify - Section3 is in the WP now too
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
+
+    });
 
     it('An organisational Design Component added to a Design Update appears as an organisational addition in the Design Update summary');
 

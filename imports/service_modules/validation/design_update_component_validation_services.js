@@ -15,7 +15,7 @@ import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js
 
 class DesignUpdateComponentValidationServices{
 
-    validateAddDesignUpdateComponent(view, mode, parentComponent){
+    validateAddDesignUpdateComponent(view, mode, parentComponent, parentInOtherUpdates){
 
         // Additions only allowed in update edit when in edit mode
         if(view != ViewType.DESIGN_UPDATE_EDIT){
@@ -27,7 +27,7 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD;
         }
 
-        // Check that target is valid for adding to if there is one
+        // Check that scopable target is in scope for adding to if there is one
         if(parentComponent){
             switch(parentComponent.componentType){
                 case ComponentType.FEATURE:
@@ -40,6 +40,23 @@ class DesignUpdateComponentValidationServices{
                     break;
                 default:
                     // Others don't matter
+            }
+        }
+
+        // Check that the target parent has not been removed in another update
+        if(parentInOtherUpdates) {
+
+            let isRemoved = false;
+
+            parentInOtherUpdates.forEach((instance) => {
+
+                if (instance.isRemoved) {
+                    isRemoved = true;
+                }
+            });
+
+            if (isRemoved) {
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
             }
         }
 
