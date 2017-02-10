@@ -253,6 +253,12 @@ class ClientDesignVersionServices{
 
         store.dispatch(setCurrentUserItemContext(context, true));
 
+        // Subscribe to the appropriate data for the new DV
+        if(Meteor.isClient) {
+            console.log("Reset Design Version");
+            ClientContainerServices.getDesignVersionData(newDesignVersionId);
+        }
+
         return context;
 
     };

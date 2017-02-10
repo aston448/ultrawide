@@ -40,7 +40,7 @@ class UserConfiguration extends Component {
     }
 
     render() {
-        const {user, userRole, userContext} = this.props;
+        const {user} = this.props;
 
         const designerActive = user.isDesigner;
         const developerActive = user.isDeveloper;
@@ -102,8 +102,6 @@ UserConfiguration.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:       state.currentUserRole,
-        userContext:    state.currentUserItemContext,
     }
 }
 

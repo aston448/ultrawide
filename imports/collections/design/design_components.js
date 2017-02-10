@@ -45,7 +45,7 @@ DesignComponents.attachSchema(Schema);
 
 // Publish Design Components
 if(Meteor.isServer){
-    Meteor.publish('designComponents', function designComponentsPublication(){
-        return DesignComponents.find({});
+    Meteor.publish('designComponents', function designComponentsPublication(designVersionId){
+        return DesignComponents.find({designVersionId: designVersionId});
     })
 }

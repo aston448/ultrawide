@@ -33,6 +33,10 @@ import ClientDesignServices from './apiClientDesign.js';
 
 import { log } from '../common/utils.js';
 
+// REDUX services
+import store from '../redux/store'
+import { setCurrentUserItemContext } from '../redux/actions'
+
 
 // =====================================================================================================================
 
@@ -53,33 +57,63 @@ class ClientContainerServices{
         const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
         const dHandle = Meteor.subscribe('designs');
         const dvHandle = Meteor.subscribe('designVersions');
-        const duHandle = Meteor.subscribe('designUpdates');
-        const dcHandle = Meteor.subscribe('designComponents');
-        const ducHandle = Meteor.subscribe('designUpdateComponents');
-        const fbHandle = Meteor.subscribe('featureBackgroundSteps');
-        const ssHandle = Meteor.subscribe('scenarioSteps');
-        const ddHandle = Meteor.subscribe('domainDictionary');
-        const wpHandle = Meteor.subscribe('workPackages');
-        const wcHandle = Meteor.subscribe('workPackageComponents');
 
         const loading = (
             !urHandle.ready()   ||
             !ucHandle.ready()   ||
             !uvHandle.ready()   ||
             !uuHandle.ready()   ||
-            !dHandle.ready()    ||
-            !dvHandle.ready()   ||
-            !duHandle.ready()   ||
-            !dcHandle.ready()   ||
-            !ducHandle.ready()  ||
-            !fbHandle.ready()   ||
-            !ssHandle.ready()   ||
-            !ddHandle.ready()   ||
-            !wpHandle.ready()   ||
-            !wcHandle.ready()
+            !dHandle.ready()   ||
+            !dvHandle.ready()
         );
 
         return {isLoading: loading};
+
+    }
+
+    getUserData(userContext){
+
+        if(Meteor.isClient) {
+
+            const currentUser = UserRoles.findOne({userId: userContext.userId});
+
+            return {
+                user: currentUser,
+            }
+        }
+
+    };
+
+    getDesignVersionData(designVersionId, callback){
+
+        console.log("Getting Design Version Data for DV " + designVersionId);
+
+        let duHandle = Meteor.subscribe('designUpdates', designVersionId);
+        let dcHandle = Meteor.subscribe('designComponents', designVersionId);
+        let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
+        let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
+        let ssHandle = Meteor.subscribe('scenarioSteps', designVersionId);
+        let ddHandle = Meteor.subscribe('domainDictionary', designVersionId);
+        let wpHandle = Meteor.subscribe('workPackages', designVersionId);
+        let wcHandle = Meteor.subscribe('workPackageComponents', designVersionId);
+
+
+        Tracker.autorun((loader) => {
+
+            let loading = (
+                !duHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
+            );
+
+            console.log("loading = " + loading);
+
+            if(!loading && callback){
+                callback();
+
+                // Stop this checking once we are done or there wil be random chaos
+                loader.stop();
+            }
+
+        });
 
     }
 
@@ -120,7 +154,7 @@ class ClientContainerServices{
 
     getApplicationHeaderData(userContext, view){
 
-        //console.log("Getting header data for view: " + view + " and context design " + userContext.designId);
+        console.log("Getting header data for view: " + view + " and context design " + userContext.designId + " and design version " + userContext.designVersionId);
 
         // The data required depends on the view
         if(userContext && view) {
@@ -161,10 +195,12 @@ class ClientContainerServices{
                     currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
                     currentDesignUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
                     currentWorkPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+                    break;
                 default:
                     // No data required
             }
 
+            console.log("Returning design" + currentDesign);
             return {
                 view: view,
                 currentDesign: currentDesign,

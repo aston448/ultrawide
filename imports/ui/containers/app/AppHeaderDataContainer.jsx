@@ -43,7 +43,7 @@ class AppHeaderData extends Component {
         const {view, currentDesign, currentDesignVersion, currentDesignUpdate, currentWorkPackage} = this.props;
 
         // What is shown here depends on the current view
-        //console.log("RENDERING HEADER " + view + ' ' + currentDesign + ' ' + currentDesignVersion);
+        console.log("RENDERING HEADER " + view + ' ' + currentDesign + ' ' + currentDesignVersion);
         let headerData = '';
 
         // Ignore renderings of this before we know where we are
@@ -51,7 +51,7 @@ class AppHeaderData extends Component {
             switch (view) {
                 case ViewType.AUTHORISE:
                     // Not logged in so no info known
-                    headerData = 'Please log in...';
+                    headerData = '';
                     break;
                 case ViewType.CONFIGURE:
                     break;

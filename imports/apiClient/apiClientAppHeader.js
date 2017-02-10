@@ -7,13 +7,13 @@ import { DesignComponents } from '../collections/design/design_components.js';
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewOptionType, ComponentType } from '../constants/constants.js';
+import { ViewType, ViewOptionType, ComponentType, RoleType, MessageType } from '../constants/constants.js';
 import ClientMashDataServices from '../apiClient/apiClientMashData.js';
 
 
 // REDUX services
 import store from '../redux/store'
-import {changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -215,15 +215,47 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    setViewLogin(){
+    setViewLogin(userId){
         Meteor.call('impex.exportData');
+
+        // Clear User Context
+        const emptyContext = {
+            userId:                         userId,
+            designId:                       'NONE',
+            designVersionId:                'NONE',
+            designUpdateId:                 'NONE',
+            workPackageId:                  'NONE',
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE',
+            featureFilesLocation:           'NONE',
+            acceptanceTestResultsLocation:  'NONE',
+            integrationTestResultsLocation: 'NONE',
+            unitTestResultsLocation:        'NONE',
+        };
+
+        // Update REDUX but DON'T save to DB!
+        store.dispatch(setCurrentUserItemContext(emptyContext, false));
+
+        console.log("User Context cleared");
+
+        // Clear role and username
+        store.dispatch(setCurrentRole(RoleType.NONE));
+        store.dispatch(setCurrentUserName(''));
 
         // Returns to the login screen
         Meteor.logout();
 
+        console.log("logged out");
+
         store.dispatch(setCurrentView(ViewType.AUTHORISE));
         return true
-    }
+    };
+
+
 
 }
 

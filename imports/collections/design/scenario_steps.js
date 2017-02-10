@@ -40,7 +40,7 @@ ScenarioSteps.attachSchema(Schema);
 // Publish Design Components
 if(Meteor.isServer){
 
-    Meteor.publish('scenarioSteps', function scenarioStepsPublication(){
-        return ScenarioSteps.find({});
+    Meteor.publish('scenarioSteps', function scenarioStepsPublication(designVersionId){
+        return ScenarioSteps.find({designVersionId: designVersionId});
     })
 }

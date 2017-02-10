@@ -20,7 +20,7 @@ const initialState = {
     currentUserOpenWorkPackageItems: [],
     currentDesignComponentName: 'No Component',
     currentDesignComponentRawName: null,
-    currentUserMessage: {messageType: MessageType.INFO, messageText: 'No message' },
+    currentUserMessage: {messageType: MessageType.INFO, messageText: 'Please log in...' },
     currentProgressDataValue: false,
     currentViewOptionsDataValue: false
 

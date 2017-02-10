@@ -31,7 +31,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class UserLogin extends Component {
+export class UserLogin extends Component {
 
     constructor(props) {
         super(props);
@@ -77,13 +77,13 @@ class UserLogin extends Component {
                         Submit
                     </Button>
                     <Button onClick={() => this.onLoginUser('gloria', 'gloria')}>
-                        Login Designer
+                        Login Gloria
                     </Button>
                     <Button onClick={() => this.onLoginUser('hugh', 'hugh')}>
-                        Login Developer
+                        Login Hugh
                     </Button>
                     <Button onClick={() => this.onLoginUser('miles', 'miles')}>
-                        Login Manager
+                        Login Miles
                     </Button>
                 </form>
             </Well>
@@ -103,6 +103,4 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-UserLogin = connect(mapStateToProps)(UserLogin);
-
-export default UserLogin;
+export default connect(mapStateToProps)(UserLogin);

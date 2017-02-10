@@ -39,14 +39,15 @@ class RoleSelect extends Component {
         super(props);
     }
 
-    onRoleSelect(roleType, userContext, active){
+    onRoleSelect(roleType, active, userContext, view){
         if(active) {
-            ClientUserContextServices.setViewFromUserContext(roleType, userContext)
+            ClientUserContextServices.loadMainData(userContext, roleType, view);
+
         }
     }
 
     render() {
-        const {type, active, userRole, userContext} = this.props;
+        const {type, active, userContext, view} = this.props;
 
         let wellStyle = '';
         let roleButtonStyle = active ? 'role-button-active' : 'role-button-disabled';
@@ -73,7 +74,7 @@ class RoleSelect extends Component {
 
         return(
             <Well className={wellStyle}>
-                <Button className={roleButtonStyle} bsSize="large" block onClick={() => this.onRoleSelect(type, userContext, active)}>{roleButtonText}</Button>
+                <Button className={roleButtonStyle} bsSize="large" block onClick={() => this.onRoleSelect(type, active, userContext, view)}>{roleButtonText}</Button>
                 {roleText}
             </Well>
         )
@@ -89,8 +90,8 @@ RoleSelect.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:       state.currentUserRole,
-        userContext:    state.currentUserItemContext,
+        userContext: state.currentUserItemContext,
+        view: state.currentAppView
     }
 }
 

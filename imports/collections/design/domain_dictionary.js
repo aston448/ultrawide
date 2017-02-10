@@ -18,8 +18,8 @@ DomainDictionary.attachSchema(Schema);
 
 // Publish Domain Dictionary Items
 if(Meteor.isServer){
-    Meteor.publish('domainDictionary', function domainDictionaryPublication(){
-        return DomainDictionary.find({});
+    Meteor.publish('domainDictionary', function domainDictionaryPublication(designVersionId){
+        return DomainDictionary.find({designVersionId: designVersionId});
     })
 }
 

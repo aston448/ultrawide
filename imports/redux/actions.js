@@ -1,6 +1,7 @@
 /**
  * Created by aston on 14/08/2016.
  */
+import { ViewType, MessageType } from '../constants/constants.js';
 
 // Determines what the logged in user can see / do
 export const SET_CURRENT_USER_ROLE = 'SET_CURRENT_USER_ROLE';
@@ -61,6 +62,63 @@ export function setCurrentView(view) {
     return function (dispatch) {
         //console.log("ACTIONS: View to " + view);
         dispatch({type: SET_CURRENT_VIEW, newView: view});
+
+        // When the view changes set a default info message
+        let message = '';
+        switch(view){
+            case ViewType.AUTHORISE:
+                message = 'Please log in...';
+                break;
+            case ViewType.CONFIGURE:
+                message = 'Please select a role...';
+                break;
+            case ViewType.DESIGNS:
+                message = 'Available Designs';
+                break;
+            case ViewType.ADMIN:
+                message = 'Ultrawide Admin';
+                break;
+            case ViewType.SELECT:
+                message = 'Select the item you want to work on...';
+                break;
+            case ViewType.DESIGN_NEW_EDIT:
+                message = 'Editing Initial Design Version';
+                break;
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+                message = 'View Design Version';
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+                message = 'Editing Design Update';
+                break;
+            case ViewType.DESIGN_UPDATE_VIEW:
+                message = 'View Design Update';
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+                message = 'Develop Base Design Work Package';
+                break;
+            case ViewType.DEVELOP_UPDATE_WP:
+                message = 'Develop Design Update Work Package';
+                break;
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+                message = 'Edit Initial Design Work Package';
+                break;
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                message = 'Edit Design Update Work Package';
+                break;
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+                message = 'View Initial Design Work Package';
+                break;
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                message = 'View Design Update Work Package';
+                break;
+            case ViewType.WAIT:
+                message = 'Data loading.  Please wait...';
+                break;
+            default:
+                message = 'Unsupported View';
+        }
+
+        dispatch({type: UPDATE_USER_MESSAGE, newUserMessage: {messageType: MessageType.INFO, messageText: message}})
     };
 }
 

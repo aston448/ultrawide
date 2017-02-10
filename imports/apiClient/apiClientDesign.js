@@ -10,6 +10,7 @@ import { DesignMessages } from '../constants/message_texts.js'
 import ServerDesignApi      from '../apiServer/apiDesign.js';
 import DesignValidationApi  from '../apiValidation/apiDesignValidation.js';
 import ClientUserContextServices from '../apiClient/apiClientUserContext.js';
+import ClientContainerServices from '../apiClient/apiClientContainerServices.js';
 
 // REDUX services
 import store from '../redux/store'

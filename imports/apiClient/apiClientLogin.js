@@ -47,8 +47,9 @@ class ClientLoginServices{
 
                     const user = UserRoles.findOne({userId: userId});
                     if (user) {
-                        // Properly logged in so retrieve user settings
-                        ClientUserContextServices.getInitialSelectionSettings(userId);
+                        // Properly logged in so retrieve user settings - stored to REDUX
+                        ClientUserContextServices.getUserContext(userId);
+                        ClientUserContextServices.getUserViewOptions(userId);
 
                         // And go to the home / role selection screen
                         store.dispatch(setCurrentUserName(user.displayName));

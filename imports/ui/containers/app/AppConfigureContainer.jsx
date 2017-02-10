@@ -15,7 +15,7 @@ import UserConfiguration        from '../../components/configure/UserConfigurati
 
 // Ultrawide Services
 import {ViewType}               from '../../../constants/constants.js'
-
+import ClientContainerServices  from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
 
@@ -42,20 +42,19 @@ class ConfigureScreen extends Component {
 
         const {user} = this.props;
 
-        //console.log("rendering configure screen with user " + user);
-
         // Show Configuration Screen
-        return(
+        return (
             <UserConfiguration
                 user={user}
             />
-        );
+        )
+
 
     }
 }
 
 ConfigureScreen.propTypes = {
-    user:    PropTypes.object.isRequired
+    user:       PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -72,15 +71,6 @@ ConfigureScreen = connect(mapStateToProps)(ConfigureScreen);
 
 export default AppConfigureContainer = createContainer(({params}) => {
 
-    //console.log("AppConfigureContainer.  Params UserContext = " + params.userContext);
-
-    // TODO move to clientContainerServices
-
-    const currentUser = UserRoles.findOne({userId: params.userContext.userId});
-    //console.log("AppConfigureContainer.  User = " + currentUser);
-    return{
-        user: currentUser
-    }
-
+    return ClientContainerServices.getUserData(params.userContext);
 
 }, ConfigureScreen);

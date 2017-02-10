@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, ViewOptionType, RoleType} from '../../../constants/constants.js'
+import {ViewType, ViewMode, ViewOptionType, RoleType, MessageType} from '../../../constants/constants.js'
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
@@ -76,9 +76,9 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewSelection();
     }
 
-    onLogOut(){
+    onLogOut(userContext){
         // Back to authorisation view (i.e. log the user out)
-        ClientAppHeaderServices.setViewLogin();
+        ClientAppHeaderServices.setViewLogin(userContext.userId);
     }
 
     onRefreshTestData(view, userContext, userViewOptions){
@@ -87,6 +87,10 @@ export class AppHeader extends Component {
 
     onExportFeatureUpdates(userContext){
         ClientMashDataServices.exportFeatureUpdates(userContext);
+    }
+
+    setUserMessage(message){
+        //ClientAppHeaderServices.setUserMessage(message);
     }
 
     getOptionButtonStyle(viewOption, currentOptions){
@@ -107,7 +111,10 @@ export class AppHeader extends Component {
 
         let appName = ClientIdentityServices.getApplicationName();
 
+        console.log("App Header with role " + userRole + " and view " + view);
+
         // The header display depends on the current application View
+        let headerTitleActions = '';
         let headerTopActions = '';
         let headerBottomActionsOne = '';
         let headerBottomActionsTwo = '';
@@ -156,7 +163,9 @@ export class AppHeader extends Component {
         let bsStyleView = (mode === ViewMode.MODE_VIEW ? 'success': 'default');
 
         let logoutButton =
-            <Button id="butLogout" bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut()}>Log Out</Button>;
+            <ButtonToolbar className="top-header-buttons">
+                <Button id="butLogout" bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut(userContext)}>Log Out</Button>
+            </ButtonToolbar>;
 
         // let toggleHeaderButton =
         //     <Button bsSize="xs" bsStyle="info" onClick={ () => this.onToggleHeader()}>...</Button>;
@@ -213,11 +222,14 @@ export class AppHeader extends Component {
 
         let domStyle = (domainDictionaryVisible ? 'success' : 'default');
 
-        let userData =
-            <div>
-                <span className="header-data">{userName}</span>
-                <span className="header-title">({userRole})</span>
-            </div>;
+        let userData = <div></div>;
+        if(view != ViewType.AUTHORISE){
+            userData =
+                <div>
+                    <span className="header-data">{userName}</span>
+                    <span className="header-title">({userRole})</span>
+                </div>;
+        }
 
         let headerMessage =
             <Alert bsStyle={headerInfoStyle}>
@@ -250,17 +262,21 @@ export class AppHeader extends Component {
                 break;
             case ViewType.CONFIGURE:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions = <ButtonToolbar>{configureScreenButton}</ButtonToolbar>;
                 break;
             case ViewType.SELECT:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions = <ButtonToolbar>{configureScreenButton}{designsButton}</ButtonToolbar>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -293,6 +309,7 @@ export class AppHeader extends Component {
                 break;
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -321,6 +338,7 @@ export class AppHeader extends Component {
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -350,6 +368,7 @@ export class AppHeader extends Component {
                 break;
             case ViewType.DESIGN_UPDATE_VIEW:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -373,6 +392,7 @@ export class AppHeader extends Component {
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -392,6 +412,7 @@ export class AppHeader extends Component {
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -410,6 +431,7 @@ export class AppHeader extends Component {
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
@@ -445,7 +467,7 @@ export class AppHeader extends Component {
                     </ButtonToolbar>;
                 break;
             default:
-                console.log("Invalid view type");
+                console.log("Invalid view type: " + view);
         }
 
         if (view) {
@@ -467,9 +489,7 @@ export class AppHeader extends Component {
                             <div className="ultrawide-logo">{appName}</div>
                         </Col>
                         <Col md={1}>
-                            <ButtonToolbar className="top-header-buttons">
-                                 {logoutButton}
-                            </ButtonToolbar>
+                            {headerTitleActions}
                         </Col>
                     </Row>
                     <Row className="header-row-top">

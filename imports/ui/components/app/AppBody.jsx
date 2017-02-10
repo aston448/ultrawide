@@ -59,7 +59,6 @@ class AppBody extends Component {
                 // This is the default when the app starts...
                 bodyHtml =
                     <AppLoginContainer params={{
-                        userContext: userContext
                     }}/>;
                 break;
             case ViewType.CONFIGURE:
@@ -124,6 +123,9 @@ class AppBody extends Component {
                         view: view,
                     }}/>;
                 break;
+            case ViewType.WAIT:
+                // While data is loading
+                bodyHtml = <div></div>
         }
 
         return (

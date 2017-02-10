@@ -40,7 +40,7 @@ FeatureBackgroundSteps.attachSchema(Schema);
 // Publish Design Components
 if(Meteor.isServer){
 
-    Meteor.publish('featureBackgroundSteps', function featureBackgroundStepsPublication(){
-        return FeatureBackgroundSteps.find({});
+    Meteor.publish('featureBackgroundSteps', function featureBackgroundStepsPublication(designVersionId){
+        return FeatureBackgroundSteps.find({designVersionId: designVersionId});
     })
 }

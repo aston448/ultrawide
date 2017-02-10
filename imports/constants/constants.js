@@ -25,7 +25,8 @@ export const ViewType = {
     WORK_PACKAGE_BASE_VIEW:     'WORK_PACKAGE_BASE_VIEW',   // View a Work Package content for a Design Version
     WORK_PACKAGE_UPDATE_VIEW:   'WORK_PACKAGE_UPDATE_VIEW', // View a Work Package content for a Design Update
     DEVELOP_BASE_WP:            'DEVELOP_BASE_WP',          // Work with adopted base work package as a developer
-    DEVELOP_UPDATE_WP:          'DEVELOP_UPDATE_WP'         // Work with adopted update work package as a developer
+    DEVELOP_UPDATE_WP:          'DEVELOP_UPDATE_WP',        // Work with adopted update work package as a developer
+    WAIT:                       'WAIT'                      // While Data loading
 
 };
 
