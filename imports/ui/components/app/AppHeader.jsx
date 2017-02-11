@@ -131,6 +131,7 @@ export class AppHeader extends Component {
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
                 dictOption = ViewOptionType.DESIGN_DICT;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
@@ -308,6 +309,7 @@ export class AppHeader extends Component {
                     </ButtonToolbar>;
                 break;
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
                 headerTopActions =

@@ -12,8 +12,9 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 
 // Ultrawide Services
 import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
 // Bootstrap
 
@@ -37,7 +38,7 @@ import {connect} from 'react-redux';
 class FeaturesList extends Component {
     constructor(props) {
         super(props);
-    }
+    };
 
     getDesignItem(feature, displayContext){
         // Design Item needed only in WP context (otherwise we already have it as the current item)
@@ -46,7 +47,15 @@ class FeaturesList extends Component {
         } else {
             return feature;
         }
-    }
+    };
+
+    getDesignUpdateItem(feature, displayContext){
+        if(displayContext === DisplayContext.UPDATABLE_VIEW){
+            return ClientDesignVersionServices.getDesignUpdateItem(feature);
+        } else {
+            return null;
+        }
+    };
 
     // A list of Features in a Design Section
     renderFeatures() {
@@ -60,6 +69,7 @@ class FeaturesList extends Component {
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
                     testSummary = viewOptions.designTestSummaryVisible;
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
@@ -85,6 +95,7 @@ class FeaturesList extends Component {
                         key={feature._id}
                         currentItem={feature}
                         designItem={this.getDesignItem(feature, displayContext)}
+                        updateItem={this.getDesignUpdateItem(feature, displayContext)}
                         displayContext={displayContext}
                         view={view}
                         mode={mode}

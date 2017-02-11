@@ -43,7 +43,7 @@ class DesignComponentTarget extends Component{
 
     render(){
 
-        const {currentItem, designItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
+        const {currentItem, designItem, updateItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
 
         //console.log("Rendering design component target: " + currentItem.componentName);
 
@@ -54,6 +54,7 @@ class DesignComponentTarget extends Component{
                     <DesignComponent
                         currentItem={currentItem}
                         designItem={designItem}
+                        updateItem={updateItem}
                         isDragDropHovering={isOverCurrent && canDrop}
                         displayContext={displayContext}
                         testSummary={testSummary}
@@ -67,6 +68,7 @@ class DesignComponentTarget extends Component{
                     <DesignComponent
                         currentItem={currentItem}
                         designItem={designItem}
+                        updateItem={updateItem}
                         isDragDropHovering={false}
                         displayContext={displayContext}
                         testSummary={testSummary}
@@ -81,6 +83,7 @@ class DesignComponentTarget extends Component{
 DesignComponentTarget.propTypes = {
     currentItem: PropTypes.object.isRequired,
     designItem: PropTypes.object.isRequired,
+    updateItem: PropTypes.object,
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
     mode: PropTypes.string.isRequired,

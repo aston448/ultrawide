@@ -160,7 +160,8 @@ class DesignComponentServices{
                     isDevUpdated: component.isDevUpdated,
                     isDevAdded: component.isDevAdded,
                     lockingUser: component.lockingUser,
-                    designUpdateId: component.designUpdateId
+                    designUpdateId: component.designUpdateId,
+                    updateMergeStatus: component.updateMergeStatus
                 }
             );
 

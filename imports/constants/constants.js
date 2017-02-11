@@ -17,7 +17,8 @@ export const ViewType = {
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
     SELECT:                     'SELECT',                   // Main Selection Screen once in a Design
     DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',          // Edit an unpublished design version
-    DESIGN_PUBLISHED_VIEW:      'DESIGN_PUBLISHED_VIEW',    // View a published Design Version
+    DESIGN_PUBLISHED_VIEW:      'DESIGN_PUBLISHED_VIEW',    // View a published Initial Design Version
+    DESIGN_UPDATABLE_VIEW:      'DESIGN_UPDATABLE_VIEW',    // View progress on an Updatable Design Version
     DESIGN_UPDATE_EDIT:         'DESIGN_UPDATE_EDIT',       // Edit a Design Update
     DESIGN_UPDATE_VIEW:         'DESIGN_UPDATE_VIEW',       // View a Design Update
     WORK_PACKAGE_BASE_EDIT:     'WORK_PACKAGE_BASE_EDIT',   // Edit a Work Package content for a Design Version
@@ -58,6 +59,7 @@ export const ViewOptionType = {
 export const DisplayContext = {
     BASE_EDIT:              'BASE_EDIT',            // Editable new design
     BASE_VIEW:              'BASE_VIEW',            // Base design version window for design update
+    UPDATABLE_VIEW:         'UPDATABLE_VIEW',       // Updatable Design Version progress view
     UPDATE_SCOPE:           'UPDATE_SCOPE',         // Update Scope window
     UPDATE_EDIT:            'UPDATE_EDIT',          // Update Edit window
     UPDATE_VIEW:            'UPDATE_VIEW',          // Update when viewing it
@@ -120,6 +122,15 @@ export const DesignVersionStatus = {
     VERSION_DRAFT_COMPLETE:         'COMPLETE',         // Draft Design Version now Completed
     VERSION_UPDATABLE:              'UPDATABLE',        // Available to users. Changes only via design updates.
     VERSION_UPDATABLE_COMPLETE:     'UPDATES_COMPLETE'  // Updatable Design Version now complete
+};
+
+export const UpdateMergeStatus = {
+    COMPONENT_BASE:                 'component-base',             // Component is unchanged from base design
+    COMPONENT_ADDED:                'component_added',            // Component added in an Update
+    COMPONENT_MODIFIED:             'component-modified',         // Component name was changed by an Update
+    COMPONENT_DETAILS_MODIFIED:     'component-details-modified', // Component details text only changed by an update
+    COMPONENT_REMOVED:              'component-removed',          // Component removed by an Update
+    COMPONENT_MOVED:                'component-moved'             // Component moved in an update
 };
 
 export const DesignUpdateStatus = {

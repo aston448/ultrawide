@@ -13,6 +13,7 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 // Ultrawide Services
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js'
 import { ViewType, ComponentType, DisplayContext } from '../../../constants/constants.js';
 
 // Bootstrap
@@ -47,6 +48,14 @@ class DesignSectionsList extends Component {
         }
     }
 
+    getDesignUpdateItem(designSection, displayContext){
+        if(displayContext === DisplayContext.UPDATABLE_VIEW){
+            return ClientDesignVersionServices.getDesignUpdateItem(designSection);
+        } else {
+            return null;
+        }
+    }
+
     // A list of top level headings in the design
     renderDesignSections() {
         const {components, displayContext, view, mode, viewOptions} = this.props;
@@ -57,6 +66,7 @@ class DesignSectionsList extends Component {
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 testSummary = viewOptions.designTestSummaryVisible;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -76,6 +86,7 @@ class DesignSectionsList extends Component {
                     key={designSection._id}
                     currentItem={designSection}
                     designItem={this.getDesignItem(designSection, displayContext)}
+                    updateItem={this.getDesignUpdateItem(designSection, displayContext)}
                     displayContext={displayContext}
                     view={view}
                     mode={mode}

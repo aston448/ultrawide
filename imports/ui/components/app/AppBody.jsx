@@ -79,6 +79,7 @@ class AppBody extends Component {
                 break;
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 bodyHtml =
                     <EditDesignContainer params={{
                         designVersionId: userContext.designVersionId,

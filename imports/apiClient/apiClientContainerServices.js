@@ -170,6 +170,7 @@ class ClientContainerServices{
                 case ViewType.SELECT:
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
                     // Get the current design version which should be set for these views
                     currentDesign = Designs.findOne({_id: userContext.designId});
                     currentDesignVersion = DesignVersions.findOne({_id: userContext.designVersionId});
@@ -427,6 +428,7 @@ class ClientContainerServices{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 // Just need base design version applications
                 return{
                     baseApplications:       baseApplicationsArr
@@ -467,6 +469,7 @@ class ClientContainerServices{
         {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 // DESIGN:  Just provide data for Design Version
 
                 currentComponents = DesignComponents.find(
@@ -653,6 +656,7 @@ class ClientContainerServices{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
@@ -757,6 +761,7 @@ class ClientContainerServices{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
@@ -866,6 +871,7 @@ class ClientContainerServices{
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:

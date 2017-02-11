@@ -13,6 +13,7 @@ import {
     updateDesignVersionNumber,
     publishDesignVersion,
     withdrawDesignVersion,
+    updateWorkingDesignVersion,
     createNextDesignVersion
 } from '../apiValidatedMethods/design_version_methods.js'
 
@@ -76,6 +77,19 @@ class ServerDesignVersionApi {
             }
         );
     };
+
+    updateWorkingDesignVersion(userRole, designVersionId, callback){
+
+        updateWorkingDesignVersion.call(
+            {
+                userRole: userRole,
+                designVersionId: designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    }
 
     createNextDesignVersion(userRole, designVersionId, callback){
 

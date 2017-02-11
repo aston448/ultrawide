@@ -12,8 +12,9 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 
 // Ultrawide Services
 import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
 // Bootstrap
 
@@ -37,7 +38,7 @@ class FeatureAspectsList extends Component {
     constructor(props) {
         super(props);
 
-    }
+    };
 
     getDesignItem(featureAspect, displayContext){
         // Design Item needed only in WP context (otherwise we already have it as the current item)
@@ -46,7 +47,15 @@ class FeatureAspectsList extends Component {
         } else {
             return featureAspect;
         }
-    }
+    };
+
+    getDesignUpdateItem(featureAspect, displayContext){
+        if(displayContext === DisplayContext.UPDATABLE_VIEW){
+            return ClientDesignVersionServices.getDesignUpdateItem(featureAspect);
+        } else {
+            return null;
+        }
+    };
 
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
@@ -60,6 +69,7 @@ class FeatureAspectsList extends Component {
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
                     testSummary = viewOptions.designTestSummaryVisible;
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
@@ -79,6 +89,7 @@ class FeatureAspectsList extends Component {
                         key={featureAspect._id}
                         currentItem={featureAspect}
                         designItem={this.getDesignItem(featureAspect, displayContext)}
+                        updateItem={this.getDesignUpdateItem(featureAspect, displayContext)}
                         displayContext={displayContext}
                         view={view}
                         mode={mode}

@@ -13,7 +13,8 @@ let Schema = new SimpleSchema({
     designVersionName:      {type: String},                                 // The design version name - e.g. Dev Release
     designVersionNumber:    {type: String},                                 // The number - e.g 1.0
     designVersionRawText:   {type: Object, blackbox: true, optional: true}, // Text descriptive of this version
-    designVersionStatus:    {type: String, defaultValue: 'NEW'}             // Stage of development of this DV
+    designVersionStatus:    {type: String, defaultValue: 'NEW'},            // Stage of development of this DV
+    baseDesignVersionId:    {type: String, defaultValue: 'NONE'}            // The design version from which this version was created
 });
 
 DesignVersions.attachSchema(Schema);

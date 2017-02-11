@@ -12,8 +12,9 @@ import DesignComponentTarget from '../../components/edit/DesignComponentTarget.j
 
 // Ultrawide Services
 import { ViewType, DisplayContext, ComponentType } from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
 // Bootstrap
 
@@ -36,7 +37,7 @@ class ScenariosList extends Component {
     constructor(props) {
         super(props);
 
-    }
+    };
 
     getDesignItem(scenario, displayContext){
         // Design Item needed only in WP context (otherwise we already have it as the current item)
@@ -45,7 +46,15 @@ class ScenariosList extends Component {
         } else {
             return scenario;
         }
-    }
+    };
+
+    getDesignUpdateItem(scenario, displayContext){
+        if(displayContext === DisplayContext.UPDATABLE_VIEW){
+            return ClientDesignVersionServices.getDesignUpdateItem(scenario);
+        } else {
+            return null;
+        }
+    };
 
     // A list of Scenarios in a Feature or Feature Aspect
     renderScenarios() {
@@ -59,6 +68,7 @@ class ScenariosList extends Component {
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
                     testSummary = viewOptions.designTestSummaryVisible;
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
@@ -84,6 +94,7 @@ class ScenariosList extends Component {
                         key={scenario._id}
                         currentItem={scenario}
                         designItem={this.getDesignItem(scenario, displayContext)}
+                        updateItem={this.getDesignUpdateItem(scenario, displayContext)}
                         displayContext={displayContext}
                         view={view}
                         mode={mode}

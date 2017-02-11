@@ -87,6 +87,9 @@ export function setCurrentView(view) {
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 message = 'View Design Version';
                 break;
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                message = 'View Design Version Progress';
+                break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 message = 'Editing Design Update';
                 break;

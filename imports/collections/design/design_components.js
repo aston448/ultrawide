@@ -9,6 +9,7 @@
  */
 
 import { Mongo } from 'meteor/mongo';
+import { UpdateMergeStatus} from '../../constants/constants.js';
 
 export const DesignComponents = new Mongo.Collection('designComponents');
 
@@ -38,7 +39,8 @@ let Schema = new SimpleSchema({
     isDevUpdated:               {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been updated by a developer
     isDevAdded:                 {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been added by a developer
     lockingUser:                {type: String, defaultValue: 'NONE'},               // Indicates if a component is locked for edit by a user
-    designUpdateId:             {type: String, optional: true}                      // For scenarios only, set when component is in an update as can only be in one
+    designUpdateId:             {type: String, optional: true},                     // For scenarios only, set when component is in an update as can only be in one
+    updateMergeStatus:          {type: String, defaultValue: UpdateMergeStatus.COMPONENT_BASE}, // Indicates, for an updatable Design Version, how the component was changed from the previous version
 });
 
 DesignComponents.attachSchema(Schema);

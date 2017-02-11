@@ -121,6 +121,26 @@ class DesignVersionValidationServices{
         return Validation.VALID;
     };
 
+    validateUpdateWorkingDesignVersion(userRole, designVersion, mergeIncludeCount){
+
+        // User must be Designer or Developer
+        if(!(userRole === RoleType.DESIGNER || userRole === RoleType.DEVELOPER)){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE_WORKING;
+        }
+
+        // The Design Version must be Updatable (i.e. not an initial version or completed)
+        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_UPDATABLE){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING;
+        }
+
+        // There must be at least one Design Update to Merge to create the updated version
+        if(mergeIncludeCount === 0){
+            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_WORKING;
+        }
+
+        return Validation.VALID;
+    };
+
     validateCreateNextDesignVersion(userRole, designVersion, mergeIncludeCount){
 
         // User must be Designer

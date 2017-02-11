@@ -78,6 +78,7 @@ class DesignComponent extends Component{
         switch (nextProps.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
                 return !(
@@ -160,6 +161,7 @@ class DesignComponent extends Component{
         switch(newProps.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 if(
                     (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.props.openDesignItems.includes(this.props.currentItem._id)) ||
                     (!newProps.openDesignItems.includes(this.props.currentItem._id) && this.props.openDesignItems.includes(this.props.currentItem._id))
@@ -196,6 +198,7 @@ class DesignComponent extends Component{
         switch(props.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -224,6 +227,7 @@ class DesignComponent extends Component{
         switch(this.props.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
                 break;
 
@@ -330,7 +334,7 @@ class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-        const {currentItem, designItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, currentProgressDataValue, currentViewDataValue} = this.props;
+        const {currentItem, designItem, updateItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, currentProgressDataValue, currentViewDataValue} = this.props;
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -357,6 +361,7 @@ class DesignComponent extends Component{
                 <DesignComponentHeader
                     currentItem={currentItem}
                     designItem={designItem}
+                    updateItem={updateItem}
                     onToggleOpen={ () => this.toggleOpen()}
                     onSelectItem={ () => this.setNewDesignComponentActive(activeComponentId, userContext, displayContext)}
                     mode={mode}
@@ -681,6 +686,7 @@ class DesignComponent extends Component{
 DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
     designItem: PropTypes.object.isRequired,
+    updateItem: PropTypes.object,
     isDragDropHovering: PropTypes.bool.isRequired,
     displayContext: PropTypes.string.isRequired,
     testSummary: PropTypes.bool.isRequired,

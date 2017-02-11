@@ -3,6 +3,7 @@
 
 // Ultrawide Collections
 import {DesignVersions} from '../collections/design/design_versions.js';
+import {DesignUpdates} from '../collections/design_update/design_updates.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
@@ -176,6 +177,44 @@ class ClientDesignVersionServices{
         return {success: true, message: ''};
     };
 
+    // User chose to update the working Updatable Design Version with the latest updates set to Merge
+    updateWorkingDesignVersion(userRole, userContext, workingDesignVersionId){
+
+        // Client validation
+        let result = DesignVersionValidationApi.validateUpdateWorkingDesignVersion(userRole, workingDesignVersionId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerDesignVersionApi.updateWorkingDesignVersion(userRole, workingDesignVersionId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the current version is the version we chose to update
+                this.setDesignVersion(userContext, workingDesignVersionId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: DesignVersionMessages.MSG_DESIGN_VERSION_UPDATED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    }
+
     // User chose to create a new updatable Design Version from the current version and any updates selected
     createNextDesignVersion(userRole, userContext, baseDesignVersionId){
 
@@ -205,7 +244,7 @@ class ClientDesignVersionServices{
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
-                    messageText: DesignVersionMessages.MSG_DESIGN_VERSION_PUBLISHED
+                    messageText: DesignVersionMessages.MSG_DESIGN_VERSION_CREATED
                 }));
             }
         });
@@ -337,7 +376,9 @@ class ClientDesignVersionServices{
                         // For new / draft design versions, viewing does not preclude switching to editing
                         view = ViewType.DESIGN_NEW_EDIT;
                         break;
-
+                    case DesignVersionStatus.VERSION_UPDATABLE:
+                        view = ViewType.DESIGN_UPDATABLE_VIEW;
+                        break;
                     case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                         // For final design versions view is all you can do
                         view = ViewType.DESIGN_PUBLISHED_VIEW;
@@ -345,7 +386,17 @@ class ClientDesignVersionServices{
                 }
                 break;
             default:
-                view = ViewType.DESIGN_PUBLISHED_VIEW;
+                switch(designVersion.designVersionStatus){
+                    case DesignVersionStatus.VERSION_UPDATABLE:
+                        // Developers and Managers can see progress on an updatable Design Version
+                        view = ViewType.DESIGN_UPDATABLE_VIEW;
+                        break;
+                    default:
+                        // Anything else is View only
+                        view = ViewType.DESIGN_PUBLISHED_VIEW;
+                        break;
+                }
+                break;
         }
 
         // And change the view
@@ -359,6 +410,36 @@ class ClientDesignVersionServices{
 
         return {success: true, message: ''};
     };
+
+    // Get the Design Update item that relates to an Updatable Design Version
+    getDesignUpdateItem(designComponent){
+
+        // There may be several Design Updates for the Design Version.
+        // We will look for the one that has changed.  It should not be possible to change the same component in more than one update.
+        // However the details text might also be changed so there could be more than one...
+
+        // But in any case it does not matter as what we want is the OLD data that has been blatted over when we merged the updates.
+        // Therefore we can pick any of the DU components and it wil have the base version in it.
+
+        const updateComponents = DesignUpdates.find({
+            designVersionId: designComponent.designVersionId,
+            componentReferenceId: designComponent.componentReferenceId,
+            $or:[{isChanged: true}, {isTextChanged: true}],
+        }).fetch();
+
+        // This should only return one component unless there is the circumstance that the component was changed in one DU
+        // and its text in another...
+
+        if(updateComponents.length > 0){
+            // Just return the first item found
+            return updateComponents[0];
+
+        } else {
+            // No changes to this item
+            return null;
+        }
+
+    }
 
 }
 

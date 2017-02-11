@@ -81,6 +81,7 @@ class AppHeaderData extends Component {
                     break;
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
                     // Show the design and current design version which must be known if here
                     headerData =
                         <div>

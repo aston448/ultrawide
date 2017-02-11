@@ -737,6 +737,24 @@ class ClientDesignComponentServices{
                 });
         }
 
+    };
+
+    getNewAndOldRawText(newText, oldText){
+
+        let plainText = 'NEW: ' + newText + '\n' + 'OLD: ' + oldText;
+
+        return {
+            "entityMap" : {  },
+            "blocks" : [
+                { "key" : "5efv7", "text" : plainText,
+                    "type" : "unstyled",
+                    "depth" : 0,
+                    "inlineStyleRanges" : [ ],
+                    "entityRanges" : [ ],
+                    "data" : {  }
+                }
+            ]
+        };
     }
 
 }

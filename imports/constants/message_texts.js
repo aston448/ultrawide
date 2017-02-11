@@ -19,6 +19,8 @@ export const DesignVersionMessages = {
     MSG_DESIGN_VERSION_NAME_UPDATED:    'Design Version name updated',
     MSG_DESIGN_VERSION_NUMBER_UPDATED:  'Design Version number updated',
     MSG_DESIGN_VERSION_PUBLISHED:       'Design Version now Published Draft',
+    MSG_DESIGN_VERSION_CREATED:         'Next Design Version created',
+    MSG_DESIGN_VERSION_UPDATED:         'Working Design Version updated with latest Merge Updates'
 };
 
 export const DesignUpdateMessages = {

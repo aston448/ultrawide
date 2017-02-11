@@ -18,8 +18,9 @@ import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDe
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus} from '../../../constants/constants.js';
 import {getComponentClass, log} from '../../../common/utils.js';
+import TextLookups from '../../../common/lookups.js'
 
 // Bootstrap
 import {Checkbox}   from 'react-bootstrap';
@@ -96,6 +97,7 @@ class DesignComponentHeader extends Component{
         switch (this.props.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
                 return !(
@@ -198,6 +200,7 @@ class DesignComponentHeader extends Component{
         switch (newProps.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
                 if (newProps.currentItem.componentName != this.props.currentItem.componentName) {
                     this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
                 }
@@ -255,7 +258,9 @@ class DesignComponentHeader extends Component{
         }
     }
 
-
+    getNewAndOldRawText(newText, oldText){
+        return ClientDesignComponentServices.getNewAndOldRawText(newText, oldText);
+    }
 
     // Refresh the component name text
     updateTitleText(props, newRawText){
@@ -325,9 +330,21 @@ class DesignComponentHeader extends Component{
             switch (props.view) {
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
+
                     existingRawText = props.currentItem.componentNameRaw;
                     break;
-
+                case ViewType.DESIGN_UPDATABLE_VIEW:
+                    // If there is an item whose name has changed then create a new editor entry showing both
+                    if(props.updateItem){
+                        if(props.updateItem.componentNameOld != props.currentItem.componentName) {
+                            existingRawText = this.getNewAndOldRawText(props.currentItem.componentName, props.updateItem.componentNameOld);
+                        } else {
+                            existingRawText = props.currentItem.componentNameRaw;
+                        }
+                    } else {
+                        existingRawText = props.currentItem.componentNameRaw;
+                    }
+                    break;
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.DESIGN_UPDATE_VIEW:
 
@@ -535,21 +552,21 @@ class DesignComponentHeader extends Component{
 
     };
 
-    getProgressData(currentItem, userContext, view){
-        switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-                this.setState({progressData: ClientDesignComponentServices.getProgressData(currentItem, userContext)});
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-                // TODO
-        }
-    }
+    // getProgressData(currentItem, userContext, view){
+    //     switch(view){
+    //         case ViewType.DESIGN_NEW_EDIT:
+    //         case ViewType.DESIGN_PUBLISHED_VIEW:
+    //             this.setState({progressData: ClientDesignComponentServices.getProgressData(currentItem, userContext)});
+    //             break;
+    //         case ViewType.DESIGN_UPDATE_EDIT:
+    //         case ViewType.DESIGN_UPDATE_VIEW:
+    //             // TODO
+    //     }
+    // }
 
     // Render the header of the design component - has tools in it depending on context
     render(){
-        const {currentItem, designItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
+        const {currentItem, designItem, updateItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         // TODO - add all the tooltips required
         const tooltipEdit = (
@@ -620,14 +637,24 @@ class DesignComponentHeader extends Component{
                 break;
         }
 
+        // Get status for updatable views - display as a tooltip over the status icon
+        let updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
+        let updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
+
+        const tooltipUpdateStatus = (
+            <Tooltip id="modal-tooltip">
+                {updateStatusText}
+            </Tooltip>
+        );
+
         // Header options: ---------------------------------------------------------------------------------------------
 
-        //   DESIGN MODE: SCOPE
+        //  DESIGN MODE: SCOPE
         //      COMPONENT TYPE: FEATURE, SCENARIO
         //          Header with checkbox
         //      COMPONENT TYPE: OTHER
         //          View Only header
-        //   DESIGN MODE: EDIT
+        //  DESIGN MODE: EDIT
         //      VIEW MODE: VIEW
         //          View Only Header
         //      VIEW MODE: EDIT
@@ -638,6 +665,8 @@ class DesignComponentHeader extends Component{
         //                  Draggable Header
         //              NON-DRAGGABLE
         //                  Non-Draggable Header
+        //  DESIGN MODE: VIEW UPDATE PROGRESS
+        //      View Only Version Progress Header
 
         // Header components -------------------------------------------------------------------------------------------
 
@@ -766,9 +795,7 @@ class DesignComponentHeader extends Component{
                         </div>
                         <InputGroup.Addon onClick={ () => this.editComponentName()}>
                             <OverlayTrigger overlay={tooltipEdit}>
-                                <a href="#">
-                                    <div className="blue"><Glyphicon glyph="edit"/></div>
-                                </a>
+                                <div className="blue"><Glyphicon glyph="edit"/></div>
                             </OverlayTrigger>
                         </InputGroup.Addon>
                         <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
@@ -799,41 +826,28 @@ class DesignComponentHeader extends Component{
                 </div>
             );
 
-        // let nonDraggableHeader =
-        //     <div>
-        //         <InputGroup>
-        //             <InputGroup.Addon onClick={ () => this.toggleOpen()}>
-        //                 <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-        //             </InputGroup.Addon>
-        //             {/*<InputGroup.Addon>*/}
-        //                 {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-        //             {/*</InputGroup.Addon>*/}
-        //             <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-        //             <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-        //                 <Editor
-        //                     editorState={this.state.editorState}
-        //                     spellCheck={false}
-        //                     ref="editorReadOnly"
-        //                     readOnly={true}
-        //                 />
-        //             </div>
-        //             <InputGroup.Addon onClick={ () => this.editComponentName()}>
-        //                 <OverlayTrigger overlay={tooltipEdit}>
-        //                     <a href="#">
-        //                         <div className="blue"><Glyphicon glyph="edit"/></div>
-        //                     </a>
-        //                 </OverlayTrigger>
-        //             </InputGroup.Addon>
-        //             <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-        //                 <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
-        //             </InputGroup.Addon>
-        //             <InputGroup.Addon>
-        //                 <div className="invisible">
-        //                     <Glyphicon glyph="move"/>
-        //                 </div>
-        //             </InputGroup.Addon>
-        //         </InputGroup>
-        //     </div>;
+        let viewOnlyVersionProgressHeader =
+            <div>
+                <InputGroup onClick={ () => this.setCurrentComponent()}>
+                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
+                    <InputGroup.Addon>
+                        <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
+                            <div className={updateStatusClass}></div>
+                        </OverlayTrigger>
+                    </InputGroup.Addon>
+                    <div className={"readOnlyItem " + itemStyle} >
+                        <Editor
+                            editorState={this.state.editorState}
+                            spellCheck={false}
+                            ref="editorViewMode"
+                            readOnly={true}
+                        />
+                    </div>
+                </InputGroup>
+            </div>;
 
         // Compose Header Components -----------------------------------------------------------------------------------
 
@@ -868,6 +882,10 @@ class DesignComponentHeader extends Component{
             case DisplayContext.WP_VIEW:
                 // View only
                 designComponentElement = viewOnlyHeader;
+                break;
+            case DisplayContext.UPDATABLE_VIEW:
+                // Progress view
+                designComponentElement = viewOnlyVersionProgressHeader;
                 break;
             case DisplayContext.UPDATE_EDIT:
             case DisplayContext.BASE_EDIT:
@@ -1020,6 +1038,7 @@ class DesignComponentHeader extends Component{
 DesignComponentHeader.propTypes = {
     currentItem: PropTypes.object.isRequired,
     designItem: PropTypes.object.isRequired,
+    updateItem: PropTypes.object,
     isDragDropHovering: PropTypes.bool,
     onToggleOpen: PropTypes.func,
     onSelectItem: PropTypes.func,

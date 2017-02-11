@@ -1,4 +1,4 @@
-import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction} from '../constants/constants.js';
+import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -19,6 +19,8 @@ class TextLookups {
                 return 'DESIGN EDITOR';
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 return 'DESIGN VIEW';
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                return 'DESIGN VERSION PROGRESS';
             case ViewType.DESIGN_UPDATE_EDIT:
                 return 'DESIGN UPDATE EDITOR';
             case ViewType.DESIGN_UPDATE_VIEW:
@@ -123,6 +125,24 @@ class TextLookups {
                 return 'Roll forward';
             case DesignUpdateMergeAction.MERGE_IGNORE:
                 return 'Ignore (Discard)';
+        }
+    };
+
+    updateMergeStatus(mergeStatus){
+
+        switch(mergeStatus){
+            case UpdateMergeStatus.COMPONENT_BASE:
+                return 'Base Version - Unchanged';
+            case UpdateMergeStatus.COMPONENT_ADDED:
+                return 'Added in this Version';
+            case UpdateMergeStatus.COMPONENT_MODIFIED:
+                return 'Name Modified in this Version';
+            case UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED:
+                return 'Details Modified in this Version';
+            case UpdateMergeStatus.COMPONENT_MOVED:
+                return 'Moved in this Version';
+            case UpdateMergeStatus.COMPONENT_REMOVED:
+                return 'Removed in this version';
         }
     }
 

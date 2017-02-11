@@ -75,6 +75,15 @@ export class DesignVersion extends Component {
         );
     }
 
+    onUpdateWorkingDesignVersion(userRole, userContext, dv){
+
+        ClientDesignVersionServices.updateWorkingDesignVersion(
+            userRole,
+            userContext,
+            dv._id
+        );
+    }
+
     onCreateNextDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.createNextDesignVersion(
@@ -163,12 +172,30 @@ export class DesignVersion extends Component {
                 switch(userRole) {
                     case RoleType.DESIGNER:
                         buttons =
-                            <ButtonGroup>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
-                                 <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next Design Version</Button>
-                            </ButtonGroup>;
+                            <div>
+                                <ButtonGroup>
+                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
+                                </ButtonGroup>
+                                <ButtonGroup>
+                                    <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update this Design Version</Button>
+                                </ButtonGroup>
+                                <ButtonGroup>
+                                    <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next Design Version</Button>
+                                </ButtonGroup>
+                            </div>;
                         break;
-                    default:
+                    case RoleType.DEVELOPER:
+                        buttons =
+                            <div>
+                                <ButtonGroup>
+                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData)}>View</Button>
+                                </ButtonGroup>;
+                                <ButtonGroup>
+                                    <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update this Design Version</Button>
+                                </ButtonGroup>;
+                            </div>;
+                        break;
+                    case RoleType.MANAGER:
                         buttons =
                             <ButtonGroup>
                                 <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
@@ -178,7 +205,6 @@ export class DesignVersion extends Component {
                 break;
             case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
             case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
-
                 // View only
                 buttons =
                     <ButtonGroup>

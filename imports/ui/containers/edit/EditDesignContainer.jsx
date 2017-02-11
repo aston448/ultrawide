@@ -18,8 +18,10 @@ import IntegrationTestFeatureMashContainer  from '../dev/WorkPackageFeatureMashC
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
 
-import ClientDesignComponentServices    from '../../../apiClient/apiClientDesignComponent.js';
-import ClientContainerServices          from '../../../apiClient/apiClientContainerServices.js';
+import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
 
 // Bootstrap
 import {Grid, Row, Col, Panel} from 'react-bootstrap';
@@ -49,15 +51,33 @@ class DesignApplicationsList extends Component {
 
     }
 
+    getDesignItem(application, displayContext){
+        // Design Item needed only in WP context (otherwise we already have it as the current item)
+        if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
+            return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType);
+        } else {
+            return application;
+        }
+    }
+
+    getDesignUpdateItem(application, displayContext){
+        if(displayContext === DisplayContext.UPDATABLE_VIEW){
+            return ClientDesignVersionServices.getDesignUpdateItem(application);
+        } else {
+            return null;
+        }
+    }
+
     // A list of top level applications in the design / design update
-    renderApplications(applications, context, view, mode, testSummary) {
+    renderApplications(applications, displayContext, view, mode, testSummary) {
         return applications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={application}
-                    displayContext={context}
+                    designItem={this.getDesignItem(application, displayContext)}
+                    updateItem={this.getDesignUpdateItem(application, displayContext)}
+                    displayContext={displayContext}
                     view={view}
                     mode={mode}
                     testSummary={testSummary}
@@ -93,6 +113,9 @@ class DesignApplicationsList extends Component {
                 break;
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 displayContext = DisplayContext.BASE_VIEW;
+                break;
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                displayContext = DisplayContext.UPDATABLE_VIEW;
                 break;
         }
 
