@@ -152,4 +152,8 @@ export const DomainDictionaryValidationErrors = {
     DICTIONARY_INVALID_TERM_DUPLICATE:                  'A dictionary entry already exists with the same name'
 };
 
+export const TextEditorValidationErrors = {
+    TEXT_EDITOR_INVALID_ROLE_SAVE:                      'Only a Designer can update Details for a Design Component'
+};
+
 

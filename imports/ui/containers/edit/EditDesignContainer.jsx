@@ -149,8 +149,6 @@ class DesignApplicationsList extends Component {
             designDetails =
                 <DesignComponentTextContainer params={{
                     currentContext: userContext,
-                    currentItemName: currentItemName,
-                    mode: mode,
                     view: view,
                     displayContext: displayContext
                 }}/>;

@@ -861,7 +861,7 @@ class ClientContainerServices{
         }
     }
 
-    getTextDataForDesignComponent(userContext, mode, view, displayContext){
+    getTextDataForDesignComponent(userContext, view, displayContext){
 
         let currentDesignComponent = null;
         let currentUpdateComponent = null;
@@ -871,7 +871,6 @@ class ClientContainerServices{
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
@@ -903,6 +902,26 @@ class ClientContainerServices{
                         }
                     }
                     break;
+
+                case ViewType.DESIGN_UPDATABLE_VIEW:
+
+                    // Want the current version plus the related DU component to give old text if text has changed
+                    currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+                    const currentUpdateComponents = DesignUpdateComponents.find({
+                        designVersionId:        currentDesignComponent.designVersionId,
+                        componentReferenceId:   currentDesignComponent.componentReferenceId,
+                        isTextChanged:          true,
+                        isNew:                  false,
+                    }).fetch();
+
+                    // Could be more than one but all should have the same OLD values so just pick first
+                    if(currentUpdateComponents.length > 0){
+                        currentUpdateComponent = currentUpdateComponents[0];
+                    } else {
+                        currentUpdateComponent = null;
+                    }
+                    break;
+
                 default:
                     console.log("Unknown view type: " + view);
             }
@@ -910,19 +929,13 @@ class ClientContainerServices{
             return {
                 currentDesignComponent: currentDesignComponent,
                 currentUpdateComponent: currentUpdateComponent,
-                mode: mode,
-                view: view,
-                context: displayContext,
-                userContext: userContext
+                displayContext: displayContext
             }
         } else {
             return {
                 currentDesignComponent: null,
                 currentUpdateComponent: null,
-                mode: mode,
-                view: view,
-                context: displayContext,
-                userContext: userContext
+                displayContext: displayContext,
             }
         }
     };

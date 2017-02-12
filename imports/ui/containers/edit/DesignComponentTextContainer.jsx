@@ -20,7 +20,7 @@ import { Panel } from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
-
+import {connect} from 'react-redux';
 
 // React DnD
 
@@ -41,7 +41,7 @@ class DesignComponentText extends Component {
 
     render(){
 
-        const {currentDesignComponent, currentUpdateComponent, mode, view, context, userContext} = this.props;
+        const {currentDesignComponent, currentUpdateComponent, displayContext, view, mode, userContext, userRole} = this.props;
 
 
         let panel1 = <div></div>;
@@ -84,7 +84,6 @@ class DesignComponentText extends Component {
 
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
@@ -95,7 +94,25 @@ class DesignComponentText extends Component {
                     textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
                 break;
-
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                // Possible New and Old Details here where Design Update has been merged
+                mainComponent = currentDesignComponent;
+                if(mainComponent) {
+                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceId;
+                    titleName = mainComponent.componentName;
+                    textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
+                    if(mainComponent.isRemoved){
+                        textTitle = textTitle + ' (REMOVED)';
+                    }
+                }
+                baseComponent = currentUpdateComponent;
+                if(baseComponent){
+                    // If there is a change, then the new title should say NEW
+                    textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
+                    titleNameOld = baseComponent.componentNameOld;
+                    baseComponentFeatureReference = baseComponent.componentFeatureReferenceId;
+                }
+                break;
             default:
                 console.log("Unknown view type: " + view);
         }
@@ -121,10 +138,7 @@ class DesignComponentText extends Component {
                         <div>
                             <TextEditor
                                 designComponent={mainComponent}
-                                mode={mode}
-                                view={view}
-                                context={context}
-                                userContext={userContext}
+                                displayContext={displayContext}
                             />
                         </div>
                     </Panel>
@@ -138,7 +152,7 @@ class DesignComponentText extends Component {
                         <Panel className="panel-steps panel-steps-body" header="Feature Background Steps">
                             <ScenarioStepsContainer params={{
                                 view: view,
-                                displayContext: context,
+                                displayContext: displayContext,
                                 stepContext: StepContext.STEP_FEATURE,
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
@@ -150,14 +164,14 @@ class DesignComponentText extends Component {
             }
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
-            console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component feature ref: " + mainComponentFeatureReference + " Display Context: " + context);
+            console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component feature ref: " + mainComponentFeatureReference + " Display Context: " + displayContext);
             if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && (mainComponentFeatureReference != 'NONE')) {
                 panel2 =
                     <div>
                         <Panel className="panel-steps panel-steps-body" header={'Scenario Steps: ' + titleName}>
                             <ScenarioStepsContainer params={{
                                 view: view,
-                                displayContext: context,
+                                displayContext: displayContext,
                                 stepContext: StepContext.STEP_FEATURE_SCENARIO,
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
@@ -166,7 +180,7 @@ class DesignComponentText extends Component {
                             }}/>
                             <ScenarioStepsContainer params={{
                                 view: view,
-                                displayContext: context,
+                                displayContext: displayContext,
                                 stepContext: StepContext.STEP_SCENARIO,
                                 designId: mainComponent.designId,
                                 designVersionId: mainComponent.designVersionId,
@@ -181,7 +195,7 @@ class DesignComponentText extends Component {
             }
 
             // Define panel 3 for updates - base item text - only shown if a current component exists
-            if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && baseComponent){
+            if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW || view === ViewType.DESIGN_UPDATABLE_VIEW) && baseComponent){
                 let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(baseComponent.componentType) + ' - ' + titleNameOld;
                 panel3 =
                     <div>
@@ -189,10 +203,7 @@ class DesignComponentText extends Component {
                             <div>
                                 <TextEditor
                                     designComponent={baseComponent}
-                                    mode={mode}
-                                    view={view}
-                                    context={DisplayContext.BASE_VIEW}
-                                    userContext={userContext}
+                                    displayContext={DisplayContext.BASE_VIEW}
                                 />
                             </div>
                         </Panel>
@@ -270,17 +281,27 @@ class DesignComponentText extends Component {
 DesignComponentText.propTypes = {
     currentDesignComponent: PropTypes.object,
     currentUpdateComponent: PropTypes.object,
-    mode: PropTypes.string,
-    view: PropTypes.string,
-    context: PropTypes.string,
-    userContext: PropTypes.object
+    displayContext: PropTypes.string.isRequired,
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userContext:            state.currentUserItemContext,
+        userRole:               state.currentUserRole
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+DesignComponentText = connect(mapStateToProps)(DesignComponentText);
 
 
 export default DesignComponentTextContainer = createContainer(({params}) => {
 
     // Get the various bits of text we need for the design component context.  Will include Scenario Steps for Scenarios
-    return ClientContainerServices.getTextDataForDesignComponent(params.currentContext, params.mode, params.view, params.displayContext);
+    return ClientContainerServices.getTextDataForDesignComponent(params.currentContext, params.view, params.displayContext);
 
 
 }, DesignComponentText);

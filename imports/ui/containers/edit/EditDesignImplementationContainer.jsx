@@ -122,8 +122,6 @@ class DevApplicationsList extends Component {
             designDetails =
                 <DesignComponentTextContainer params={{
                     currentContext: userContext,
-                    currentItemName: currentItemName,
-                    mode: mode,
                     view: view,
                     displayContext: DisplayContext.EDIT_STEP_WP_DEV
                 }}/>;

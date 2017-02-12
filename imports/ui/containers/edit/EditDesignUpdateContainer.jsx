@@ -143,7 +143,6 @@ class UpdateApplicationsList extends Component {
                         <Panel header="New and Old Text" className="panel-update panel-update-body">
                             <DesignComponentTextContainer params={{
                                 currentContext: currentUserItemContext,
-                                mode: mode,
                                 view: view,
                                 displayContext: DisplayContext.UPDATE_EDIT
                             }}/>
@@ -195,7 +194,6 @@ class UpdateApplicationsList extends Component {
                         <Panel header="New and Old Text" className="panel-update panel-update-body">
                             <DesignComponentTextContainer params={{
                                 currentContext: currentUserItemContext,
-                                mode: mode,
                                 view: view,
                                 displayContext: DisplayContext.UPDATE_VIEW
                             }}/>

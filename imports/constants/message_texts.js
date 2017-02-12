@@ -86,3 +86,8 @@ export const DomainDictionaryMessages = {
     MSG_DICTIONARY_DEF_UPDATED:     'Domain Dictionary definition updated',
     MSG_DICTIONARY_TERM_REMOVED:    'Domain Dictionary term removed'
 };
+
+export const TextEditorMessages = {
+
+    MSG_TEXT_EDITOR_DETAILS_UPDATED:    'Design Component Details updated'
+};

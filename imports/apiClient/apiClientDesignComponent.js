@@ -741,20 +741,62 @@ class ClientDesignComponentServices{
 
     getNewAndOldRawText(newText, oldText){
 
-        let plainText = 'NEW: ' + newText + '\n' + 'OLD: ' + oldText;
+        // let plainText = 'NEW: ' + newText + '\n' + 'OLD: ' + oldText;
+        //
+        // return {
+        //     "entityMap" : {  },
+        //     "blocks" : [
+        //         { "key" : "5efv7", "text" : plainText,
+        //             "type" : "unstyled",
+        //             "depth" : 0,
+        //             "inlineStyleRanges" : [
+        //                 {
+        //                     "offset" : 0,
+        //                     "length" : 4,
+        //                     "style" : "ITALIC"
+        //                 }
+        //             ],
+        //             "entityRanges" : [ ],
+        //             "data" : {  }
+        //         }
+        //     ]
+        // };
+
+        let newDisplayText = 'NEW: ' + newText;
+        let oldDisplayText = 'OLD: ' + oldText;
 
         return {
             "entityMap" : {  },
             "blocks" : [
-                { "key" : "5efv7", "text" : plainText,
+                { "key" : "5efv7", "text" : newDisplayText,
                     "type" : "unstyled",
                     "depth" : 0,
-                    "inlineStyleRanges" : [ ],
+                    "inlineStyleRanges" : [
+                        {
+                            "offset" : 0,
+                            "length" : 4,
+                            "style" : "GREEN"
+                        }
+                    ],
+                    "entityRanges" : [ ],
+                    "data" : {  }
+                },
+                { "key" : "5efv8", "text" : oldDisplayText,
+                    "type" : "unstyled",
+                    "depth" : 0,
+                    "inlineStyleRanges" : [
+                        {
+                            "offset" : 0,
+                            "length" : 4,
+                            "style" : "RED"
+                        }
+                    ],
                     "entityRanges" : [ ],
                     "data" : {  }
                 }
             ]
         };
+
     }
 
 }

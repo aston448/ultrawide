@@ -17,6 +17,7 @@ import ClientDesignComponentServices        from '../../../apiClient/apiClientDe
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
 
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus} from '../../../constants/constants.js';
 import {getComponentClass, log} from '../../../common/utils.js';
@@ -612,7 +613,7 @@ class DesignComponentHeader extends Component{
             itemStyle = itemStyle + ' dragging-item';
         }
 
-        let openGlyph = isOpen ? 'collapse-up' :'collapse-down';
+        let openGlyph = isOpen ? 'minus' :'plus';
 
         let openStatus = isOpen ? 'open-status-open' : 'open-status-closed';
         if(currentItem.componentType === ComponentType.SCENARIO){
@@ -835,18 +836,19 @@ class DesignComponentHeader extends Component{
         let viewOnlyVersionProgressHeader =
             <div>
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
                             <div className={updateStatusClass}></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
+                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <div className={"readOnlyItem " + itemStyle + updateTextClass} >
                         <Editor
                             editorState={this.state.editorState}
+                            customStyleMap={ClientTextEditorServices.getColourMap()}
                             spellCheck={false}
                             ref="editorViewMode"
                             readOnly={true}

@@ -9,12 +9,16 @@ import React, { Component, PropTypes } from 'react';
 
 // Ultrawide Services
 import {ViewMode, ViewType, DisplayContext, ComponentType} from '../../../constants/constants.js';
-import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientTextEditorServices         from '../../../apiClient/apiClientTextEditor.js';
 
 // Bootstrap
 import {Glyphicon} from 'react-bootstrap';
 import {Button, ButtonGroup} from 'react-bootstrap';
 import {Grid, Col, Row} from 'react-bootstrap';
+
+// REDUX services
+import {connect} from 'react-redux';
 
 // Draft JS
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, CompositeDecorator} from 'draft-js';
@@ -47,7 +51,7 @@ const DomainSpan = (props) => {
 // -- DECORATOR CODE ---------------------------------------------------------------------------------------------------
 
 
-export default class TextEditor extends React.Component {
+export class TextEditor extends Component {
 
     constructor(props) {
         super(props);
@@ -168,17 +172,36 @@ export default class TextEditor extends React.Component {
         this.setState({editable: true});
     }
 
-    // Bold button handler
     onBoldClick(){
         this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
-        //this.focus();
+    }
+
+    onItalicClick(){
+        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'ITALIC'));
+    }
+
+    onUnderlineClick(){
+        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'UNDERLINE'));
+    }
+
+    onCodeClick(){
+        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'CODE'));
     }
 
     // Saves editor text to design component as RAW
-    onSave(andClose){
-        //console.log("SAVE");
+    onSave(view, role, designComponent, andClose){
+
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
-        Meteor.call('textEditor.saveText', this.props.designComponent._id, rawText);
+
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+                ClientTextEditorServices.saveDesignComponentText(role, designComponent._id, rawText);
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+                ClientTextEditorServices.saveDesignUpdateComponentText(role, designComponent._id, rawText);
+        }
+
+        // Close editor
         if (andClose) {
             this.setState({editable: false});
         }
@@ -192,7 +215,6 @@ export default class TextEditor extends React.Component {
     }
 
     toggleList(){
-
         this.onChange(
             RichUtils.toggleBlockType(
                 this.state.editorState,
@@ -201,10 +223,28 @@ export default class TextEditor extends React.Component {
         );
     }
 
+    toggleRed(){
+        this.onChange(
+            RichUtils.toggleInlineStyle(
+                this.state.editorState,
+                'RED'
+            )
+        );
+    }
+
+    toggleGreen(){
+        this.onChange(
+            RichUtils.toggleInlineStyle(
+                this.state.editorState,
+                'GREEN'
+            )
+        );
+    }
+
     render() {
         //console.log("Rendering...");
 
-        const { designComponent, mode, view, context} = this.props;
+        const { designComponent, displayContext, mode, view, userContext, userRole } = this.props;
 
         let editorHtml = '';
         let editorClass = 'editor-panel-large';
@@ -214,13 +254,14 @@ export default class TextEditor extends React.Component {
             editorClass = 'editor-panel-small';
         }
 
-        if (mode === ViewMode.MODE_VIEW || context === DisplayContext.BASE_VIEW){
+        if (mode === ViewMode.MODE_VIEW || displayContext === DisplayContext.BASE_VIEW){
             // VIEW MODE
 
             editorHtml =
                 <div className={editorClass}>
                     <Editor
                         editorState={this.state.editorState}
+                        customStyleMap={ClientTextEditorServices.getColourMap()}
                         spellCheck={false}
                         ref="editor-readonly"
                         readOnly={true}
@@ -239,6 +280,7 @@ export default class TextEditor extends React.Component {
                         <div className={editorClass}  >
                             <Editor
                                 editorState={this.state.editorState}
+                                customStyleMap={ClientTextEditorServices.getColourMap()}
                                 handleKeyCommand={this.handleKeyCommand}
                                 onChange={this.onChange}
                                 spellCheck={true}
@@ -255,23 +297,36 @@ export default class TextEditor extends React.Component {
                                             <Button bsSize="xs" onClick={ () => this.onBoldClick()}>
                                                 <div className="blue"><Glyphicon glyph="bold"/></div>
                                             </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onBoldClick()}>
+                                            <Button bsSize="xs" onClick={ () => this.onItalicClick()}>
                                                 <div className="blue"><Glyphicon glyph="italic"/></div>
                                             </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onBoldClick()}>
-                                                <div className="blue"><Glyphicon glyph="underscore"/></div>
+                                            <Button bsSize="xs" onClick={ () => this.onUnderlineClick()}>
+                                                <div className="blue">U</div>
+                                            </Button>
+                                            <Button bsSize="xs" onClick={ () => this.onCodeClick()}>
+                                                <div className="blue"><Glyphicon glyph="th"/></div>
                                             </Button>
                                             <Button bsSize="xs" onClick={ () => this.toggleList()}>
-                                                <div className="blue">UL</div>
+                                                <div className="blue"><Glyphicon glyph="list"/></div>
                                             </Button>
-                                            <Button bsSize="xs" onClick={ () => this.onSave(false)}>
+                                        </ButtonGroup>
+                                        <ButtonGroup>
+                                            <Button bsSize="xs" onClick={ () => this.toggleRed()}>
+                                                <div className="red"><Glyphicon glyph="tint"/></div>
+                                            </Button>
+                                            <Button bsSize="xs" onClick={ () => this.toggleGreen()}>
+                                                <div className="green"><Glyphicon glyph="tint"/></div>
+                                            </Button>
+                                        </ButtonGroup>
+                                        <ButtonGroup>
+                                            <Button bsSize="xs" onClick={ () => this.onSave(view, userRole, designComponent, false)}>
                                                 <div className="green">Save</div>
                                             </Button>
                                         </ButtonGroup>
                                     </Col>
                                     <Col md={2}>
                                         <ButtonGroup>
-                                            <Button bsSize="xs" onClick={ () => this.onSave(true)}>
+                                            <Button bsSize="xs" onClick={ () => this.onSave(view, userRole, designComponent, true)}>
                                                 <div className="green"><Glyphicon glyph="ok"/></div>
                                             </Button>
                                             <Button bsSize="xs" onClick={ () => this.onUndo()}>
@@ -291,6 +346,7 @@ export default class TextEditor extends React.Component {
                         <div className={editorClass}>
                             <Editor
                                 editorState={this.state.editorState}
+                                customStyleMap={ClientTextEditorServices.getColourMap()}
                                 spellCheck={true}
                                 ref="editor-readonly"
                                 readOnly={true}
@@ -314,11 +370,21 @@ export default class TextEditor extends React.Component {
 //  This is a redux updated property that changes when we change the focus on design components
 TextEditor.propTypes = {
     designComponent: PropTypes.object.isRequired,
-    mode: PropTypes.string.isRequired,
-    view: PropTypes.string.isRequired,
-    context: PropTypes.string.isRequired,
-    userContext: PropTypes.object.isRequired
+    displayContext: PropTypes.string.isRequired
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userContext:            state.currentUserItemContext,
+        userRole:               state.currentUserRole
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default TextEditor = connect(mapStateToProps)(TextEditor);
 
 
 function getBlockStyle(block) {
@@ -327,6 +393,7 @@ function getBlockStyle(block) {
         default: return null;
     }
 }
+
 
 
 const defaultRawContent = {

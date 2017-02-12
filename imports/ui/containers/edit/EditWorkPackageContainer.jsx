@@ -147,8 +147,6 @@ class WorkPackageApplicationsList extends Component {
                         <Panel header={wpTextHeader} className="panel-update panel-update-body">
                             <DesignComponentTextContainer params={{
                                 currentContext: userContext,
-                                currentItemName: currentItemName,
-                                mode: ViewMode.MODE_VIEW,
                                 view: view,
                                 displayContext: DisplayContext.WP_VIEW
                             }}/>
@@ -250,8 +248,6 @@ class WorkPackageApplicationsList extends Component {
                                 <Panel header={wpTextHeader} className="panel-update panel-update-body">
                                     <DesignComponentTextContainer params={{
                                         currentContext: userContext,
-                                        currentItemName: currentItemName,
-                                        mode: ViewMode.MODE_VIEW,
                                         view: view,
                                         displayContext: DisplayContext.WP_VIEW
                                     }}/>

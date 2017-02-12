@@ -1,26 +1,42 @@
-/**
- * Created by aston on 20/08/2016.
- */
-import { Meteor } from 'meteor/meteor';
-import { Mongo } from 'meteor/mongo';
-import { check } from 'meteor/check';
 
-import  TextEditorServices  from '../servicers/design/text_editor_services.js';
+import { saveDesignComponentText, saveDesignUpdateComponentText } from '../apiValidatedMethods/text_editor_methods.js'
+
+// =====================================================================================================================
+// Server API for teh Text Editor
+//
+// Calls Meteor Validated Methods and returns asynchronous results to callback
+// =====================================================================================================================
+class ServerTextEditorApi {
+
+    saveDesignComponentText(userRole, designComponentId, newRawText, callback){
+
+        saveDesignComponentText.call(
+            {
+                userRole: userRole,
+                designComponentId: designComponentId,
+                newRawText: newRawText
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    saveDesignUpdateComponentText(userRole, designUpdateComponentId, newRawText, callback){
+
+        saveDesignUpdateComponentText.call(
+            {
+                userRole: userRole,
+                designUpdateComponentId: designUpdateComponentId,
+                newRawText: newRawText
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
 
 
-// Meteor methods
-Meteor.methods({
+}
 
-    'textEditor.saveText'(designComponentId, rawText){
-
-        //console.log("Saving text..." + rawText);
-        TextEditorServices.saveText(designComponentId, rawText);
-    },
-
-    'textEditor.saveUpdateText'(designUpdateComponentId, rawText){
-
-        //console.log("Saving update text..." + rawText);
-        TextEditorServices.saveUpdateText(designUpdateComponentId, rawText);
-    }
-
-});
+export default new ServerTextEditorApi();
