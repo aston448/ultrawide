@@ -84,6 +84,7 @@ class DesignComponentText extends Component {
 
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.DEVELOP_BASE_WP:

@@ -3,7 +3,7 @@
 
 // Ultrawide Collections
 import {DesignVersions} from '../collections/design/design_versions.js';
-import {DesignUpdates} from '../collections/design_update/design_updates.js';
+import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
@@ -414,6 +414,8 @@ class ClientDesignVersionServices{
     // Get the Design Update item that relates to an Updatable Design Version
     getDesignUpdateItem(designComponent){
 
+        console.log("Getting Update Item for: " + designComponent.componentName);
+
         // There may be several Design Updates for the Design Version.
         // We will look for the one that has changed.  It should not be possible to change the same component in more than one update.
         // However the details text might also be changed so there could be more than one...
@@ -421,9 +423,10 @@ class ClientDesignVersionServices{
         // But in any case it does not matter as what we want is the OLD data that has been blatted over when we merged the updates.
         // Therefore we can pick any of the DU components and it wil have the base version in it.
 
-        const updateComponents = DesignUpdates.find({
-            designVersionId: designComponent.designVersionId,
-            componentReferenceId: designComponent.componentReferenceId,
+        const updateComponents = DesignUpdateComponents.find({
+            designVersionId:        designComponent.designVersionId,
+            componentReferenceId:   designComponent.componentReferenceId,
+            isNew:                  false,
             $or:[{isChanged: true}, {isTextChanged: true}],
         }).fetch();
 
@@ -432,10 +435,12 @@ class ClientDesignVersionServices{
 
         if(updateComponents.length > 0){
             // Just return the first item found
+            console.log("Returning Update Item: " + updateComponents[0].componentNameNew);
             return updateComponents[0];
 
         } else {
             // No changes to this item
+            console.log("Returning NULL");
             return null;
         }
 

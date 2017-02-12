@@ -120,7 +120,11 @@ class DesignVersionModules{
         updatesToMerge.forEach((update) => {
 
             // Update all design components that are changed but not new as well
-            changedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: false, $or:[{isChanged: true}, {isTextChanged: true}]});
+            changedComponents = DesignUpdateComponents.find({
+                designUpdateId: update._id,
+                isNew:          false,
+                $or:[{isChanged: true}, {isTextChanged: true}]
+            });
 
             changedComponents.forEach((changedComponent) => {
 
@@ -131,7 +135,10 @@ class DesignVersionModules{
                 }
 
                 DesignComponents.update(
-                    {componentReferenceId: changedComponent.componentReferenceId},
+                    {
+                        designVersionId:        newDesignVersionId,
+                        componentReferenceId:   changedComponent.componentReferenceId
+                    },
                     {
                         $set:{
                             componentName:              changedComponent.componentNameNew,
@@ -167,7 +174,10 @@ class DesignVersionModules{
                 }
 
                 DesignComponents.update(
-                    {componentReferenceId: movedComponent.componentReferenceId},
+                    {
+                        designVersionId:        newDesignVersionId,
+                        componentReferenceId:   movedComponent.componentReferenceId
+                    },
                     {
                         $set:{
                             componentParentId:          actualParentId,
@@ -190,7 +200,10 @@ class DesignVersionModules{
                 // This is a preview update - logically delete - just mark as removed
                 removedComponents.forEach((removedComponent) => {
                     DesignComponents.update(
-                        {componentReferenceId: removedComponent.componentReferenceId},
+                        {
+                            designVersionId:        newDesignVersionId,
+                            componentReferenceId:   removedComponent.componentReferenceId
+                        },
                         {
                             $set:{
                                 isRemoved:          true,
@@ -205,7 +218,10 @@ class DesignVersionModules{
                 removedComponents.forEach((removedComponent) => {
 
                     DesignComponents.remove(
-                        {componentReferenceId: removedComponent.componentReferenceId}
+                        {
+                            designVersionId:        newDesignVersionId,
+                            componentReferenceId:   removedComponent.componentReferenceId
+                        }
                     );
 
                 });

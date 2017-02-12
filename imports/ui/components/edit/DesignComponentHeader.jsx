@@ -335,9 +335,10 @@ class DesignComponentHeader extends Component{
                     break;
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     // If there is an item whose name has changed then create a new editor entry showing both
+                    console.log("Component name: " + item.componentName + " Update Item: " + props.updateItem);
                     if(props.updateItem){
-                        if(props.updateItem.componentNameOld != props.currentItem.componentName) {
-                            existingRawText = this.getNewAndOldRawText(props.currentItem.componentName, props.updateItem.componentNameOld);
+                        if(props.updateItem.componentNameOld != item.componentName) {
+                            existingRawText = this.getNewAndOldRawText(item.componentName, props.updateItem.componentNameOld);
                         } else {
                             existingRawText = props.currentItem.componentNameRaw;
                         }
@@ -641,6 +642,11 @@ class DesignComponentHeader extends Component{
         let updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
         let updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
 
+        let updateTextClass = '';
+        if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+            updateTextClass = ' removed-item';
+        }
+
         const tooltipUpdateStatus = (
             <Tooltip id="modal-tooltip">
                 {updateStatusText}
@@ -838,7 +844,7 @@ class DesignComponentHeader extends Component{
                             <div className={updateStatusClass}></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle} >
+                    <div className={"readOnlyItem " + itemStyle + updateTextClass} >
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={false}

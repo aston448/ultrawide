@@ -162,6 +162,7 @@ export default class Narrative extends React.Component {
         switch(props.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.DEVELOP_BASE_WP:
