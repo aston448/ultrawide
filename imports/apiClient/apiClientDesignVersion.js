@@ -114,6 +114,9 @@ class ClientDesignVersionServices{
             return {success: false, message: result};
         }
 
+        // Ensure that the current version is the version we chose to publish
+        this.setDesignVersion(userContext, designVersionToPublishId);
+
         // Real action call - server actions
         ServerDesignVersionApi.publishDesignVersion(userRole, designVersionToPublishId, (err, result) => {
 
@@ -123,9 +126,6 @@ class ClientDesignVersionServices{
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
-
-                // Ensure that the current version is the version we chose to publish
-                this.setDesignVersion(userContext, designVersionToPublishId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -152,6 +152,9 @@ class ClientDesignVersionServices{
             return {success: false, message: result};
         }
 
+        // Ensure that the current version is the version we chose to unpublish
+        this.setDesignVersion(userContext, designVersionToUnPublishId);
+
         // Real action call - server actions
         ServerDesignVersionApi.withdrawDesignVersion(userRole, designVersionToUnPublishId, (err, result) => {
 
@@ -161,9 +164,6 @@ class ClientDesignVersionServices{
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
-
-                // Ensure that the current version is the version we chose to unpublish
-                this.setDesignVersion(userContext, designVersionToUnPublishId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -190,6 +190,9 @@ class ClientDesignVersionServices{
             return {success: false, message: result};
         }
 
+        // Ensure that the current version is the version we chose to update and that user context is updated
+        this.setDesignVersion(userContext, workingDesignVersionId);
+
         // Real action call - server actions
         ServerDesignVersionApi.updateWorkingDesignVersion(userRole, workingDesignVersionId, (err, result) => {
 
@@ -199,9 +202,6 @@ class ClientDesignVersionServices{
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
-
-                // Ensure that the current version is the version we chose to update
-                this.setDesignVersion(userContext, workingDesignVersionId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
