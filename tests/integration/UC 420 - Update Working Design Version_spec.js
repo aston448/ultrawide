@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignVersionValidationErrors} from '../../imports/constants/validation_errors.js';
 
