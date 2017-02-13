@@ -281,6 +281,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Execute
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
         // Verify - only Scenario1 is in scope and removed

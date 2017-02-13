@@ -99,7 +99,7 @@ describe('UC 421 - View Changes to Updatable Design Version', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1')
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
         // Publish Update - sets to Merge
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
