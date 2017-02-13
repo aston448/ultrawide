@@ -69,6 +69,16 @@ class DesignComponentVerifications{
         );
     }
 
+    designerSelectedComponentMergeStatusIs_(mergeStatus){
+        server.call('verifyDesignComponents.selectedComponentMergeStatusIs', mergeStatus, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+
+
 }
 
 export default new DesignComponentVerifications();

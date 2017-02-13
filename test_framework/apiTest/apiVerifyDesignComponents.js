@@ -178,6 +178,19 @@ Meteor.methods({
 
     },
 
+    'verifyDesignComponents.selectedComponentMergeStatusIs'(mergeStatus, userName){
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const selectedComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+
+        if(selectedComponent.updateMergeStatus != mergeStatus){
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentName + " to have merge status " + mergeStatus + " but found " + selectedComponent.updateMergeStatus);
+        } else {
+            return true;
+        }
+    },
+
     'verifyDesignComponents.featureNarrativeIs'(featureName, narrativeText){
 
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
