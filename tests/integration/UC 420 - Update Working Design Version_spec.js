@@ -98,7 +98,7 @@ describe('UC 420 - Update Working Design Version', function(){
 
         // Execute
         const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE_WORKING};
-        DesignVersionActions.developerUpdatesDesignVersionWithUpdates('DesignVersion2', expectation);
+        DesignVersionActions.managerUpdatesDesignVersionWithUpdates('DesignVersion2', expectation);
 
         // Verify - no change to DVs
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion2', 0));
@@ -112,7 +112,7 @@ describe('UC 420 - Update Working Design Version', function(){
 
         // Execute
         const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING};
-        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion1', expectation);
 
         // Verify - no change to DVs
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion2', 0));
@@ -129,7 +129,7 @@ describe('UC 420 - Update Working Design Version', function(){
 
         // Execute
         const expectation = {success: false, message: DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_WORKING};
-        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2', expectation);
 
         // Verify - DV2 should now contain Feature3 but DV1 does not
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion2', 0));
