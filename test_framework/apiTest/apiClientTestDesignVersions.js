@@ -101,6 +101,18 @@ Meteor.methods({
         const outcome = ClientDesignVersionServices.createNextDesignVersion(userRole, userContext, designVersion._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Create Next Design Version');
+    },
+
+    'testDesignVersions.updateWorkingDesignVersion'(designVersionName, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
+
+        const outcome = ClientDesignVersionServices.updateWorkingDesignVersion(userRole, userContext, designVersion._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Working Design Version');
     }
 
 });

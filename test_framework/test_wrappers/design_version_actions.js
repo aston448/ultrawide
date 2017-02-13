@@ -5,6 +5,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignVersionActions{
 
+    // Select
     designerSelectsDesignVersion(versionName){
         server.call('testDesignVersions.selectDesignVersion', versionName, 'gloria');
     }
@@ -17,6 +18,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.selectDesignVersion', versionName, 'miles');
     }
 
+    // Set Name
     designerUpdatesDesignVersionNameFrom_To_(oldName, newName, expectation){
         server.call('testDesignVersions.selectDesignVersion', oldName, 'gloria', expectation);
         server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.DESIGNER, 'gloria', expectation);
@@ -34,6 +36,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.updateDesignVersionName', newName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Set Number
     designerUpdatesDesignVersionNumberTo(newNumber, expectation){
         server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -46,6 +49,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.updateDesignVersionNumber', newNumber, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Publish
     designerPublishesDesignVersion(versionName, expectation){
         server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -58,6 +62,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.publishDesignVersion', versionName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Withdraw
     designerWithdrawsDesignVersion(versionName, expectation){
         server.call('testDesignVersions.withdrawDesignVersion', versionName, 'gloria', RoleType.DESIGNER, expectation);
     }
@@ -70,6 +75,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.withdrawDesignVersion', versionName, 'miles', RoleType.MANAGER, expectation);
     }
 
+    // Create Next
     designerCreatesNextDesignVersionFrom(oldDesignVersion, expectation){
         server.call('testDesignVersions.selectDesignVersion', oldDesignVersion, 'gloria', expectation);
         server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.DESIGNER, 'gloria', expectation);
@@ -85,6 +91,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.createNextDesignVersion', oldDesignVersion, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Edit
     designerEditsDesignVersion(designVersionName, expectation){
         server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -97,6 +104,7 @@ class DesignVersionActions{
         server.call('testDesignVersions.editDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // View
     designerViewsDesignVersion(designVersionName, expectation){
         server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria', expectation);
     }
@@ -107,6 +115,19 @@ class DesignVersionActions{
 
     managerViewsDesignVersion(designVersionName, expectation){
         server.call('testDesignVersions.viewDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
+    }
+
+    // Update Updatable
+    designerUpdatesDesignVersionWithUpdates(designVersionName, expectation){
+        server.call('testDesignVersions.updateWorkingDesignVersion', designVersionName, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    developerUpdatesDesignVersionWithUpdates(designVersionName, expectation){
+        server.call('testDesignVersions.updateWorkingDesignVersion', designVersionName, RoleType.DEVELOPER, 'hugh', expectation);
+    }
+
+    managerUpdatesDesignVersionWithUpdates(designVersionName, expectation){
+        server.call('testDesignVersions.updateWorkingDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
     }
 
 }
