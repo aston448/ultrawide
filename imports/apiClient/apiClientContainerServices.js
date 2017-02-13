@@ -23,6 +23,8 @@ import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_p
 import { UserUnitTestMashData }              from '../collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
+import { TestOutputLocations }              from '../collections/dev/test_output_locations.js';
+import { TestOutputLocationFiles }          from '../collections/dev/test_output_location_files.js';
 
 // Ultrawide GUI Components
 
@@ -55,6 +57,8 @@ class ClientContainerServices{
         const ucHandle = Meteor.subscribe('userCurrentEditContext');
         const uvHandle = Meteor.subscribe('userCurrentViewOptions');
         const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
+        const tlHandle = Meteor.subscribe('testOutputLocations');
+        const tfHandle = Meteor.subscribe('testOutputLocationFiles');
         const dHandle = Meteor.subscribe('designs');
         const dvHandle = Meteor.subscribe('designVersions');
 
@@ -63,6 +67,8 @@ class ClientContainerServices{
             !ucHandle.ready()   ||
             !uvHandle.ready()   ||
             !uuHandle.ready()   ||
+            !tlHandle.ready()   ||
+            !tfHandle.ready()   ||
             !dHandle.ready()   ||
             !dvHandle.ready()
         );
@@ -78,7 +84,7 @@ class ClientContainerServices{
             const currentUser = UserRoles.findOne({userId: userContext.userId});
 
             return {
-                user: currentUser,
+                user: currentUser
             }
         }
 
@@ -109,7 +115,7 @@ class ClientContainerServices{
             if(!loading && callback){
                 callback();
 
-                // Stop this checking once we are done or there wil be random chaos
+                // Stop this checking once we are done or there will be random chaos
                 loader.stop();
             }
 
@@ -149,6 +155,12 @@ class ClientContainerServices{
         console.log('Subscribing to Dev Data');
 
         return loading;
+
+    }
+
+    getTestOutputLocationData(){
+
+        return TestOutputLocations.find({}).fetch();
 
     }
 

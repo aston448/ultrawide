@@ -14,6 +14,7 @@ export const ViewType = {
     ADMIN:                      'ADMIN',                    // Backup / Restore / User Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
     CONFIGURE:                  'CONFIGURE',                // Change user role and settings
+    TEST_OUTPUTS:               'TEST_OUTPUTS',             // Configure Test Outputs
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
     SELECT:                     'SELECT',                   // Main Selection Screen once in a Design
     DESIGN_NEW_EDIT:            'DESIGN_NEW_EDIT',          // Edit an unpublished design version
@@ -276,4 +277,9 @@ export const TestRunner = {
     CHIMP_MOCHA:    'Chimp Mocha',
     CHIMP_CUCUMBER: 'Chimp Cucumber',
     METEOR_MOCHA:   'Meteor Mocha'
-}
+};
+
+export const TestLocationType = {
+    SHARED:         'SHARED',
+    LOCAL:          'LOCAL'
+};

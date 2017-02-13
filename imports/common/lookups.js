@@ -15,6 +15,8 @@ class TextLookups {
                 return 'LOGIN';
             case ViewType.CONFIGURE:
                 return 'CONFIGURATION';
+            case ViewType.TEST_OUTPUTS:
+                return 'TEST OUTPUT LOCATIONS';
             case ViewType.DESIGN_NEW_EDIT:
                 return 'DESIGN EDITOR';
             case ViewType.DESIGN_PUBLISHED_VIEW:

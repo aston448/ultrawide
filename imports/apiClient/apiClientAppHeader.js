@@ -203,6 +203,11 @@ class ClientAppHeaderServices{
         return true;
     }
 
+    setViewTestOutput() {
+        store.dispatch(setCurrentView(ViewType.TEST_OUTPUTS));
+        return true;
+    }
+
     setViewConfigure() {
         // Returns to the Change Role or Config Screen
         store.dispatch(setCurrentView(ViewType.CONFIGURE));

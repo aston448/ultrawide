@@ -9,7 +9,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
-import AppConfigureContainer                from  '../../containers/app/AppConfigureContainer.jsx';
+import AppConfigureContainer                from  '../../containers/configure/AppConfigureContainer.jsx';
+import TestOutputsContainer                 from  '../../containers/configure/TestOutputsContainer.jsx';
 import DesignsContainer                     from  '../../containers/select/DesignsContainer.jsx';
 import DesignVersionsContainer              from  '../../containers/select/DesignVersionsContainer.jsx';
 import EditDesignContainer                  from  '../../containers/edit/EditDesignContainer.jsx';
@@ -64,6 +65,12 @@ class AppBody extends Component {
             case ViewType.CONFIGURE:
                 bodyHtml =
                     <AppConfigureContainer params={{
+                        userContext: userContext
+                    }}/>;
+                break;
+            case ViewType.TEST_OUTPUTS:
+                bodyHtml =
+                    <TestOutputsContainer params={{
                         userContext: userContext
                     }}/>;
                 break;

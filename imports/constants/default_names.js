@@ -33,3 +33,7 @@ export const DefaultDetailsText = {
     NEW_SCENARIO_DETAILS:           'Text relevant to this scenario may be entered here...',
     NEW_DICTIONARY_ENTRY_TEXT:      'Enter definition for Domain Term here...'
 };
+
+export const DefaultLocationText = {
+    NEW_TEST_OUTPUT_LOCATION_NAME:  'New Test Output Location',
+};

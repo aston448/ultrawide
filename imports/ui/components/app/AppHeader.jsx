@@ -66,6 +66,11 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewDesigns();
     }
 
+    onGoToTestOutput(){
+        // Go to Test Output configuration Screen
+        ClientAppHeaderServices.setViewTestOutput();
+    }
+
     onGoToConfigure(){
         // Back to Selection view
         ClientAppHeaderServices.setViewConfigure();
@@ -174,6 +179,9 @@ export class AppHeader extends Component {
         let designsButton =
             <Button id="butDesigns" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
 
+        let testOutputButton =
+            <Button id="butTestOutput" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToTestOutput()}>Configure Test Outputs</Button>;
+
         // View Mode and Zoom buttons
         let viewModeEditButton =
             <Button id="butEdit" bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
@@ -264,7 +272,22 @@ export class AppHeader extends Component {
             case ViewType.CONFIGURE:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
+                if(userRole == RoleType.DEVELOPER) {
+                    headerTopActions =
+                        <ButtonToolbar>
+                            {testOutputButton}
+                        </ButtonToolbar>;
+                }
                 break;
+            case ViewType.TEST_OUTPUTS:
+                headerUserInfo = userData;
+                headerTitleActions = logoutButton;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {designsButton}
+                        {configureScreenButton}
+                    </ButtonToolbar>;
+                    break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;

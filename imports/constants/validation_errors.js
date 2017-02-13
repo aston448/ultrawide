@@ -156,4 +156,8 @@ export const TextEditorValidationErrors = {
     TEXT_EDITOR_INVALID_ROLE_SAVE:                      'Only a Designer can update Details for a Design Component'
 };
 
+export const TestOutputLocationValidationErrors = {
+    LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new output locations'
+};
+
 

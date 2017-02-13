@@ -72,6 +72,9 @@ export function setCurrentView(view) {
             case ViewType.CONFIGURE:
                 message = 'Please select a role...';
                 break;
+            case ViewType.TEST_OUTPUTS:
+                message = 'Test Output Locations';
+                break;
             case ViewType.DESIGNS:
                 message = 'Available Designs';
                 break;

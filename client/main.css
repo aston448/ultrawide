@@ -369,6 +369,23 @@ input {
 .button-group-left{
     margin: 0 5px 0 0;
 }
+
+.test-output-location-edit{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid darkblue;
+    border-radius: 4px;
+    background-color: paleturquoise;
+}
+
+.test-output-location{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid darkblue;
+    border-radius: 4px;
+    background-color: aliceblue;
+}
+
 /* -- Role Selection ------------------------------------------------------------------------------------------------ */
 
 .role-button-active{
