@@ -6,6 +6,7 @@ import { UserCurrentEditContext }   from '../../imports/collections/context/user
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
 import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
+import ClientTextEditorServices         from '../../imports/apiClient/apiClientTextEditor.js';
 import DesignComponentModules           from '../../imports/service_modules/design/design_component_service_modules.js';
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
@@ -179,6 +180,22 @@ Meteor.methods({
         const outcome = ClientDesignComponentServices.updateComponentName(view, mode, userContext.designComponentId, newName, rawName)
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Selected Component Name');
+    },
+
+    'testDesignComponents.updateSelectedComponentDetailsText'(newText, userRole, userName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        // Assume view is correct
+        const view = ViewType.DESIGN_NEW_EDIT;
+        const mode = ViewMode.MODE_EDIT;
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const newRawText = DesignComponentModules.getRawTextFor(newText);
+
+        const outcome = ClientTextEditorServices.saveDesignComponentText(userRole, userContext.designComponentId, newRawText)
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Component Details Text');
     },
 
     'testDesignComponents.updateFeatureNarrative'(featureName, newText, mode, expectation){

@@ -19,6 +19,7 @@ import { WorkPackageComponents }    from '../collections/work/work_package_compo
 import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel, WorkPackageStatus, WorkPackageType } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 import ClientContainerServices from '../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageServices from '../apiClient/apiClientWorkPackage.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -405,6 +406,8 @@ class ClientUserContextServices {
 
     setViewFromUserContext(role, userContext){
 
+        const userViewOptions = UserCurrentViewOptions.findOne({userId: userContext.userId});
+
         // First set the chosen user role
         store.dispatch(setCurrentRole(role));
 
@@ -498,17 +501,8 @@ class ClientUserContextServices {
                             case WorkPackageStatus.WP_ADOPTED:
                             case WorkPackageStatus.WP_AVAILABLE:
                                 // Development
-                                switch(workPackage.workPackageType){
-                                    case WorkPackageType.WP_BASE:
-                                        store.dispatch(setCurrentView(ViewType.DEVELOP_BASE_WP));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
-                                        return;
-                                    case WorkPackageType.WP_UPDATE:
-                                        store.dispatch(setCurrentView(ViewType.DEVELOP_UPDATE_WP));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
-                                        return;
-                                }
-                                break;
+                                ClientWorkPackageServices.developWorkPackage(role, userContext, userViewOptions, userContext.workPackageId);
+                                return;
                             case WorkPackageStatus.WP_COMPLETE:
                                 // View Only
                                 switch(workPackage.workPackageType){

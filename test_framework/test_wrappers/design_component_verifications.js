@@ -69,6 +69,14 @@ class DesignComponentVerifications{
         );
     }
 
+    designerSelectedComponentDetailsTextIs(detailsText){
+        server.call('verifyDesignComponents.selectedComponentDetailsTextIs', detailsText, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
     designerSelectedComponentMergeStatusIs_(mergeStatus){
         server.call('verifyDesignComponents.selectedComponentMergeStatusIs', mergeStatus, 'gloria',
             (function(error, result){

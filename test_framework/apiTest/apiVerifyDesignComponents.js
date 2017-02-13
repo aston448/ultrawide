@@ -191,6 +191,22 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignComponents.selectedComponentDetailsTextIs'(detailsText, userName){
+        // Component MUST be selected first.  Note: can only test basic non-complex text here
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const selectedComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+
+        const rawDetails = selectedComponent.componentTextRaw;
+        const plainDetails = rawDetails.blocks[0].text;
+
+        if(plainDetails != detailsText){
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentName + " to have details text " + detailsText + " but found " + plainDetails);
+        } else {
+            return true;
+        }
+    },
+
     'verifyDesignComponents.featureNarrativeIs'(featureName, narrativeText){
 
         const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});

@@ -5,6 +5,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class DesignComponentActions{
 
+    // Add Components
     designerAddsApplication(expectation){
         server.call('testDesignComponents.addApplication', 'gloria', expectation);
     }
@@ -58,6 +59,7 @@ class DesignComponentActions{
         server.call('testDesignComponents.updateComponentName', ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, scenarioName, expectation);
     }
 
+    // Select
     designerSelectsComponentType_WithParent_Called_(componentType, componentParent, componentName){
         server.call('testDesignComponents.selectComponent', componentType, componentParent, componentName, 'gloria');
     }
@@ -82,10 +84,22 @@ class DesignComponentActions{
         server.call('testDesignComponents.selectComponent', ComponentType.SCENARIO, aspectName, scenarioName, 'gloria');
     }
 
+    // Edit Name
     designerEditsSelectedComponentNameTo_(newName, expectation){
         server.call('testDesignComponents.updateSelectedComponentName', newName, 'gloria', expectation);
     }
 
+    // Edit Feature Narrative
+    designerEditsSelectedFeatureNarrativeTo(newText, expectation){
+        server.call('testDesignComponents.updateSelectedFeatureNarrative', newText, 'gloria', expectation);
+    }
+
+    // Edit Text
+    designerEditsSelectedComponentTextTo(newText, expectation){
+        server.call('testDesignComponents.updateSelectedComponentDetailsText', newText, RoleType.DESIGNER, 'gloria', expectation);
+    }
+
+    // Remove
     designerRemovesDesignComponentOfType_WithParent_Called_(type, parentName, componentName, expectation){
         server.call('testDesignComponents.removeComponent', type, parentName, componentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
@@ -94,17 +108,16 @@ class DesignComponentActions{
         server.call('testDesignComponents.removeSelectedComponent', 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
+    // Move
     designerMovesSelectedComponentToTarget_WithParent_Called_(targetType, targetParentName, targetComponentName, expectation){
         server.call('testDesignComponents.moveSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
+    // Reorder
     designerReordersSelectedComponentToAbove_WithParent_Called_(targetType, targetParentName, targetComponentName, expectation){
         server.call('testDesignComponents.reorderSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    designerEditsSelectedFeatureNarrativeTo(newText, expectation){
-        server.call('testDesignComponents.updateSelectedFeatureNarrative', newText, 'gloria', expectation);
-    }
 }
 
 export default new DesignComponentActions();
