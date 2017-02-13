@@ -138,8 +138,129 @@ describe('UC 420 - Update Working Design Version', function(){
 
 
     // Consequences
-    it('When an Updatable Design Version is updated the latest changes in any Design Updates marked as Merge are added to it');
+    it('When an Updatable Design Version is updated the latest changes in any Design Updates marked as Merge are added to it', function(){
 
-    it('When an Updatable Design Version is updated any previous changes for Design Updates no longer marked as Merge are rolled back');
+        // Setup
+        // Add another Design Update
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add new stuff to it...
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section20');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application2', 'Section20', 'Feature20');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature20', 'Actions', 'Scenario20');
+        // Rename existing Feature2
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section2', 'Feature2');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature22');
+        // Publish
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
+
+        // Execute - will add DUs 1 and 2 to the Working DV
+        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section20', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature20', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Interface', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Interface', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion1', 0));
+        // The renamed feature
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
+    });
+
+    it('When an Updatable Design Version is updated any previous changes for Design Updates no longer marked as Merge are rolled back', function(){
+
+        // Setup
+        // Add another Design Update
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add new stuff to it...
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section20');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application2', 'Section20', 'Feature20');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature20', 'Actions', 'Scenario20');
+        // Rename existing Feature2
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section2', 'Feature2');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature22');
+        // Publish
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
+
+        // Check position when both updates added
+        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section20', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature20', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Interface', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Interface', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion1', 0));
+        // The renamed feature
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
+
+        // Set DU2 to Ignore
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
+
+        // Execute - Update the working DV
+        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+
+        // Verify DU1 stuff still there
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature3', 'Design1', 'DesignVersion1', 0));
+        // Verify DU2 stuff no longer included
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section20', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature20', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Interface', 'Design1', 'DesignVersion2', 4));  // Now 4 features in total as 1 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Interface', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion2', 4));  // Now 4 features in total as 1 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion2', 4));  // Now 4 features in total as 1 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion2', 4));  // Now 4 features in total as 1 added
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion1', 3));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion1', 0));
+        // The renamed feature is not renamed
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature2', 'Design1', 'DesignVersion1', 1));
+    });
 
 });
