@@ -10,7 +10,7 @@ import { UserRoles }            from '../../../collections/users/user_roles.js';
 
 // Ultrawide GUI Components
 import UserLogin                from '../../components/login/UserLogin.jsx';
-import UserConfiguration        from '../../components/configure/UserConfiguration.jsx';
+import UserConfiguration        from '../../components/configure/UserTestLocationConfiguration.jsx';
 
 
 // Ultrawide Services
@@ -18,7 +18,7 @@ import {ViewType}               from '../../../constants/constants.js'
 import ClientContainerServices  from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
-
+import {Grid, Row, Col, Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -37,20 +37,43 @@ class ConfigureScreen extends Component {
         super(props);
 
     }
+    renderTestLocationsList(userLocations){
 
-    render() {
+        if(userLocations.length > 0) {
+            return userLocations.map((userLocation) => {
+                return (
+                    <UserConfiguration
+                        key={userLocation._id}
+                        userLocation={userLocation}
+                    />
+                );
+            });
+        } else {
+            return(
+                <div className="design-item-note">No Test Output Locations Available</div>
+            )
+        }
+    };
 
-        const {userLocations} = this.props;
+    render(){
 
-        // Show Configuration Screen
+        const {userLocations, userRole} = this.props;
+
+        const headerText = 'Test Output Configuration for ' + userRole;
         return (
-            <UserConfiguration
-                userLocations={userLocations}
-            />
-        )
-
+            <Grid>
+                <Row>
+                    <Col md={6} className="col">
+                        <Panel header={headerText}>
+                            {this.renderTestLocationsList(userLocations)}
+                        </Panel>
+                    </Col>
+                </Row>
+            </Grid>
+        );
 
     }
+
 }
 
 ConfigureScreen.propTypes = {
@@ -60,7 +83,8 @@ ConfigureScreen.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        view:           state.currentAppView
+        view:           state.currentAppView,
+        userRole:       state.currentUserRole
     }
 }
 
@@ -69,8 +93,8 @@ ConfigureScreen = connect(mapStateToProps)(ConfigureScreen);
 
 
 
-export default AppConfigureContainer = createContainer(({params}) => {
+export default TestOutputsConfigureContainer = createContainer(({params}) => {
 
-    return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext)};
+    return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext, params.userRole)};
 
 }, ConfigureScreen);

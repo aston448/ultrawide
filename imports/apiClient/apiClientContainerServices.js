@@ -23,8 +23,9 @@ import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_p
 import { UserUnitTestMashData }              from '../collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
-import { TestOutputLocations }              from '../collections/dev/test_output_locations.js';
-import { TestOutputLocationFiles }          from '../collections/dev/test_output_location_files.js';
+import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
+import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
+import { UserTestTypeLocations }            from '../collections/configure/user_test_type_locations.js';
 
 // Ultrawide GUI Components
 
@@ -32,6 +33,7 @@ import { TestOutputLocationFiles }          from '../collections/dev/test_output
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType } from '../constants/constants.js';
 import ClientDesignServices from './apiClientDesign.js';
+import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 
 import { log } from '../common/utils.js';
 
@@ -59,6 +61,7 @@ class ClientContainerServices{
         const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
         const tlHandle = Meteor.subscribe('testOutputLocations');
         const tfHandle = Meteor.subscribe('testOutputLocationFiles');
+        const utHandle = Meteor.subscribe('userTestTypeLocations');
         const dHandle = Meteor.subscribe('designs');
         const dvHandle = Meteor.subscribe('designVersions');
 
@@ -69,7 +72,8 @@ class ClientContainerServices{
             !uuHandle.ready()   ||
             !tlHandle.ready()   ||
             !tfHandle.ready()   ||
-            !dHandle.ready()   ||
+            !utHandle.ready()   ||
+            !dHandle.ready()    ||
             !dvHandle.ready()
         );
 
@@ -164,11 +168,14 @@ class ClientContainerServices{
 
     }
 
-    getUserTestOutputLocationData(userContext){
+    getUserTestOutputLocationData(userContext, userRole){
 
-        // Returns all shared data and local data for this user
-        return TestOutputLocations.find({
-            //$or:[{locationType: TestLocationType.SHARED, userId: userContext.userId}]
+        // Updates the user data with the latest locations
+        ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, userRole)
+
+        return UserTestTypeLocations.find({
+            userId: userContext.userId,
+            userRole: userRole
         }).fetch();
     }
 

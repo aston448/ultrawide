@@ -157,7 +157,9 @@ export const TextEditorValidationErrors = {
 };
 
 export const TestOutputLocationValidationErrors = {
-    LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new output locations'
+    LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new test output locations',
+    LOCATION_INVALID_ROLE_SAVE:                         'Only a Developer can save test output location details',
+    LOCATION_INVALID_ROLE_REMOVE:                       'Only a Developer can remove test output locations'
 };
 
 

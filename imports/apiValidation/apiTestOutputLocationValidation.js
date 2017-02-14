@@ -18,6 +18,15 @@ class TestOutputLocationValidationApi{
         return TestOutputLocationValidationServices.validateAddLocation(userRole);
     };
 
+    validateSaveLocation(userRole, location){
+
+        return TestOutputLocationValidationServices.validateSaveLocation(userRole, location);
+    };
+
+    validateRemoveLocation(userRole){
+
+        return TestOutputLocationValidationServices.validateRemoveLocation(userRole)
+    };
 
 }
 export default new TestOutputLocationValidationApi();

@@ -94,5 +94,7 @@ export const TextEditorMessages = {
 
 export const TestOutputLocationMessages = {
 
-    MSG_LOCATION_ADDED:                 'Test output location added'
-}
+    MSG_LOCATION_ADDED:                 'Test output location added',
+    MSG_LOCATION_SAVED:                 'Test output location saved',
+    MSG_LOCATION_REMOVED:               'Test output location removed'
+};

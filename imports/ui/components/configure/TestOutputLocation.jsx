@@ -32,23 +32,44 @@ export class TestOutputLocation extends Component {
         super(props);
 
         this.state = {
-            editing:   false,
-            nameValue:  this.props.location.locationName,
-            typeValue:  this.props.location.locationType,
-            pathVale:   this.props.location.locationPath,
-
-            highlighted: false,
+            editing:                false,
+            nameValue:              this.props.location.locationName,
+            typeValue:              this.props.location.locationType,
+            pathValue:              this.props.location.locationPath,
+            serverNameValue:        this.props.location.locationServerName,
+            serverLoginValue:       this.props.location.serverLogin,
+            serverPasswordValue:    this.props.location.serverPassword,
+            highlighted:            false,
         };
 
     }
 
-    onSave(){
+    onSave(role){
+
+        event.preventDefault();
+
+        console.log("Updating location with name " + this.state.nameValue);
+
+        const location = {
+            _id:                    this.props.location._id,
+            locationName:           this.state.nameValue,
+            locationRawText:        null,
+            locationType:           this.state.typeValue,
+            locationUserId:         'NONE',
+            locationServerName:     this.state.serverNameValue,
+            serverLogin:            this.state.serverLoginValue,
+            serverPassword:         this.state.serverPasswordValue,
+            locationPath:           this.state.pathValue
+        };
+
+        ClientTestOutputLocationServices.saveLocation(role, location);
 
         this.setState({editing: false});
     }
 
-    onRemove(){
+    onRemove(role, location){
 
+        ClientTestOutputLocationServices.removeLocation(role, location._id);
     }
 
     onEdit(){
@@ -59,34 +80,51 @@ export class TestOutputLocation extends Component {
         this.setState({editing: false});
     }
 
+    onNameChange(e){
+        this.setState({nameValue: e.target.value})
+    }
+
+    onTypeChange(e){
+        this.setState({typeValue: e.target.value})
+    }
+
+    onPathChange(e){
+        this.setState({pathValue: e.target.value})
+    }
+
     render() {
-        const {location} = this.props;
+        const {location, userRole} = this.props;
 
         const viewInstance = (
             <div>
                 <Grid>
                     <Row>
                         <Col sm={2}>
-                            Location Name
+                            {location.locationType}
                         </Col>
-                        <Col sm={10}>
+                        <Col sm={4}>
                             {location.locationName}
+                        </Col>
+                        <Col sm={6}>
+                            {location.locationPath}
                         </Col>
                     </Row>
                 </Grid>
-                <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
-                <Button id="butRemove" bsSize="xs" onClick={() => this.onRemove()}>Remove</Button>
+                <div className="output-location-buttons">
+                    <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit()}>Edit</Button>
+                    <Button id="butRemove" bsSize="xs" onClick={() => this.onRemove(userRole, location)}>Remove</Button>
+                </div>
             </div>
         );
 
         const formInstance = (
-            <Form horizontal onSubmit={() => this.onSave()}>
+            <Form horizontal>
                 <FormGroup controlId="formLocationName">
                     <Col componentClass={ControlLabel} sm={2}>
                         Location Name
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder={location.locationName} />
+                        <FormControl type="text" placeholder={location.locationName} value={this.state.nameValue} onChange={(e) => this.onNameChange(e)} />
                     </Col>
                 </FormGroup>
 
@@ -95,7 +133,7 @@ export class TestOutputLocation extends Component {
                         Type
                     </Col>
                     <Col sm={10}>
-                    <FormControl componentClass="select" placeholder={location.locationType}>
+                    <FormControl componentClass="select" placeholder={location.locationType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
                         <option value="server">SERVER</option>
                         <option value="local">LOCAL</option>
                     </FormControl>
@@ -107,7 +145,7 @@ export class TestOutputLocation extends Component {
                         Location Path
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder={location.locationPath} />
+                        <FormControl type="text" placeholder={location.locationPath} value={this.state.pathValue} onChange={(e) => this.onPathChange(e)}/>
                     </Col>
                 </FormGroup>
 
@@ -138,10 +176,10 @@ export class TestOutputLocation extends Component {
                     </Col>
                 </FormGroup>
 
-                <Button type="submit">
+                <Button bsSize="xs" onClick={() => this.onSave(userRole)}>
                     Save
                 </Button>
-                <Button onClick={() => this.onCancel()}>
+                <Button bsSize="xs" onClick={() => this.onCancel()}>
                     Cancel
                 </Button>
 

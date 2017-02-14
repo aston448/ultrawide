@@ -1,8 +1,9 @@
 
 import {
     addLocation,
-    saveLocationDetails,
-    removeLocation
+    saveLocation,
+    removeLocation,
+    updateUserConfiguration
 } from '../apiValidatedMethods/test_output_location_methods.js'
 
 // =====================================================================================================================
@@ -23,6 +24,45 @@ class ServerTestOutputLocationApi {
             }
         );
     };
+
+    saveLocation(userRole, location, callback){
+
+        saveLocation.call(
+            {
+                userRole: userRole,
+                location: location
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    removeLocation(userRole, locationId, callback){
+
+        removeLocation.call(
+            {
+                userRole:   userRole,
+                locationId: locationId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateUserConfiguration(userId, userRole, callback){
+
+        updateUserConfiguration.call(
+            {
+                userId:     userId,
+                userRole:   userRole
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    }
 
 }
 

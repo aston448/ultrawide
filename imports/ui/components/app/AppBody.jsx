@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
 import AppRolesContainer                    from  '../../containers/app/AppRolesContainer.jsx';
-import AppConfigureContainer                from  '../../containers/configure/AppConfigureContainer.jsx';
+import TestOutputsConfigureContainer        from  '../../containers/configure/TestOutputsConfigureContainer.jsx';
 import TestOutputsContainer                 from  '../../containers/configure/TestOutputsContainer.jsx';
 import DesignsContainer                     from  '../../containers/select/DesignsContainer.jsx';
 import DesignVersionsContainer              from  '../../containers/select/DesignVersionsContainer.jsx';
@@ -47,7 +47,7 @@ class AppBody extends Component {
     }
 
     render() {
-        const {view, mode, userContext} = this.props;
+        const {view, mode, userContext, userRole} = this.props;
 
         if(userContext) {
             //console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
@@ -71,8 +71,9 @@ class AppBody extends Component {
                 break;
             case ViewType.CONFIGURE:
                 bodyHtml =
-                    <AppConfigureContainer params={{
-                        userContext: userContext
+                    <TestOutputsConfigureContainer params={{
+                        userContext: userContext,
+                        userRole: userRole
                     }}/>;
                 break;
             case ViewType.TEST_OUTPUTS:
@@ -162,6 +163,7 @@ function mapStateToProps(state) {
         view: state.currentAppView,
         mode: state.currentViewMode,
         userContext: state.currentUserItemContext,
+        userRole: state.currentUserRole,
         userViewOptions: state.currentUserViewOptions,
         currentViewDataValue: state.currentViewOptionsDataValue
     }
