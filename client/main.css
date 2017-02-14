@@ -386,6 +386,10 @@ input {
     background-color: aliceblue;
 }
 
+.output-location-buttons{
+    margin: 10px;
+}
+
 /* -- Role Selection ------------------------------------------------------------------------------------------------ */
 
 .role-button-active{
@@ -416,6 +420,15 @@ input {
     height: 300px;
     color: white;
     background-color: steelblue;
+}
+
+.role-text{
+    margin: 20px 20px 100px 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: white;
+    white-space: pre;
 }
 
 .path-item{

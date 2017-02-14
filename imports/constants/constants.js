@@ -13,7 +13,8 @@ export const RoleType = {
 export const ViewType = {
     ADMIN:                      'ADMIN',                    // Backup / Restore / User Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
-    CONFIGURE:                  'CONFIGURE',                // Change user role and settings
+    ROLES:                      'ROLES',                    // Role Selection Screen
+    CONFIGURE:                  'CONFIGURE',                // Change user settings
     TEST_OUTPUTS:               'TEST_OUTPUTS',             // Configure Test Outputs
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
     SELECT:                     'SELECT',                   // Main Selection Screen once in a Design

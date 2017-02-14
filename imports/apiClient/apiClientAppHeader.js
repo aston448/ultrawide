@@ -209,8 +209,14 @@ class ClientAppHeaderServices{
     }
 
     setViewConfigure() {
-        // Returns to the Change Role or Config Screen
+        // Returns to the Config Screen
         store.dispatch(setCurrentView(ViewType.CONFIGURE));
+        return true;
+    }
+
+    setViewRoles() {
+        // Returns to the Change Role Screen
+        store.dispatch(setCurrentView(ViewType.ROLES));
         return true;
     }
 

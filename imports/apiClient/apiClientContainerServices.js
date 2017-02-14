@@ -30,7 +30,7 @@ import { TestOutputLocationFiles }          from '../collections/dev/test_output
 
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel } from '../constants/constants.js';
+import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType } from '../constants/constants.js';
 import ClientDesignServices from './apiClientDesign.js';
 
 import { log } from '../common/utils.js';
@@ -164,6 +164,14 @@ class ClientContainerServices{
 
     }
 
+    getUserTestOutputLocationData(userContext){
+
+        // Returns all shared data and local data for this user
+        return TestOutputLocations.find({
+            //$or:[{locationType: TestLocationType.SHARED, userId: userContext.userId}]
+        }).fetch();
+    }
+
     getApplicationHeaderData(userContext, view){
 
         console.log("Getting header data for view: " + view + " and context design " + userContext.designId + " and design version " + userContext.designVersionId);
@@ -231,6 +239,28 @@ class ClientContainerServices{
                 currentWorkPackage: null
             };
         }
+    }
+
+    getUserRoles(userId){
+
+        let userRoles = [];
+        const user = UserRoles.findOne({userId: userId});
+
+        if(user){
+            if(user.isDesigner){
+                userRoles.push(RoleType.DESIGNER);
+            }
+
+            if(user.isDeveloper){
+                userRoles.push(RoleType.DEVELOPER);
+            }
+
+            if(user.isManager){
+                userRoles.push(RoleType.MANAGER);
+            }
+        }
+
+        return userRoles;
     }
 
     // Get a list of known Designs

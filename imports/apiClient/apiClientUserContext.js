@@ -83,7 +83,7 @@ class ClientUserContextServices {
                 featureFilesLocation:           'NONE',
                 acceptanceTestResultsLocation:  'NONE',
                 integrationTestResultsLocation: 'NONE',
-                unitTestResultsLocation:      'NONE',
+                unitTestResultsLocation:        'NONE',
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, true));
@@ -154,21 +154,35 @@ class ClientUserContextServices {
         return userViewOptions;
     }
 
+    setUserRole(roleType){
+        store.dispatch(setCurrentRole(roleType));
+    }
+
     loadMainData(userContext, roleType, view){
 
         console.log("Load Main Data");
 
-        if(userContext.designVersionId != 'NONE'){
+        const dvCount = DesignComponents.find({}).count();
 
-            store.dispatch(setCurrentView(ViewType.WAIT));
-
-            // This should wait until data loaded to call the function
-            ClientContainerServices.getDesignVersionData(userContext.designVersionId, () => this.getInitialSelectionSettings(userContext, roleType));
-
-        } else {
-            // Will have to wait for a DV to be selected to get data
+        if(dvCount > 0){
+            console.log("Data already loaded");
             this.getInitialSelectionSettings(userContext, roleType);
+        } else {
+            // Need to load data
+            if(userContext.designVersionId != 'NONE'){
+                console.log("Loading data");
+                store.dispatch(setCurrentView(ViewType.WAIT));
+
+                // This should wait until data loaded to call the function
+                ClientContainerServices.getDesignVersionData(userContext.designVersionId, () => this.getInitialSelectionSettings(userContext, roleType));
+
+            } else {
+                console.log("No DV known");
+                // Will have to wait for a DV to be selected to get data
+                this.getInitialSelectionSettings(userContext, roleType);
+            }
         }
+
     }
 
     getInitialSelectionSettings(userContext, roleType){
@@ -407,9 +421,6 @@ class ClientUserContextServices {
     setViewFromUserContext(role, userContext){
 
         const userViewOptions = UserCurrentViewOptions.findOne({userId: userContext.userId});
-
-        // First set the chosen user role
-        store.dispatch(setCurrentRole(role));
 
         // If no design / design version selected go to Designs screen
         if(userContext.designId === 'NONE' || userContext.designVersionId === 'NONE'){

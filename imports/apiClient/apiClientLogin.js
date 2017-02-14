@@ -53,7 +53,7 @@ class ClientLoginServices{
 
                         // And go to the home / role selection screen
                         store.dispatch(setCurrentUserName(user.displayName));
-                        store.dispatch(setCurrentView(ViewType.CONFIGURE));
+                        store.dispatch(setCurrentView(ViewType.ROLES));
 
                     } else {
                         store.dispatch(updateUserMessage({

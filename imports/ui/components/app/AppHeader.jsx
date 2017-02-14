@@ -76,6 +76,11 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewConfigure();
     }
 
+    onGoToRoles(){
+        // Back to Roles Screen
+        ClientAppHeaderServices.setViewRoles();
+    }
+
     onGoToSelection(){
         // Back to Selection view
         ClientAppHeaderServices.setViewSelection();
@@ -216,8 +221,11 @@ export class AppHeader extends Component {
             <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
 
 
-        let configureScreenButton =
-            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Role</Button>;
+        let rolesScreenButton =
+            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToRoles()}>Change Role</Button>;
+
+        let configScreenButton =
+            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Settings</Button>;
 
         let selectionScreenButton =
             <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
@@ -269,6 +277,10 @@ export class AppHeader extends Component {
         switch(view){
             case ViewType.AUTHORISE:
                 break;
+            case ViewType.ROLES:
+                headerUserInfo = userData;
+                headerTitleActions = logoutButton;
+                break;
             case ViewType.CONFIGURE:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
@@ -285,18 +297,18 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                     </ButtonToolbar>;
                     break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                headerTopActions = <ButtonToolbar>{configureScreenButton}</ButtonToolbar>;
+                headerTopActions = <ButtonToolbar>{rolesScreenButton}</ButtonToolbar>;
                 break;
             case ViewType.SELECT:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                headerTopActions = <ButtonToolbar>{configureScreenButton}{designsButton}</ButtonToolbar>;
+                headerTopActions = <ButtonToolbar>{rolesScreenButton}{designsButton}</ButtonToolbar>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
                 headerUserInfo = userData;
@@ -304,7 +316,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -338,7 +350,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -367,7 +379,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -397,7 +409,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -421,7 +433,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
@@ -441,7 +453,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
@@ -460,7 +472,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {configureScreenButton}
+                        {rolesScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;

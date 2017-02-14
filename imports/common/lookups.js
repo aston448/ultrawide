@@ -13,6 +13,8 @@ class TextLookups {
                 return 'ADMINISTRATION';
             case ViewType.AUTHORISE:
                 return 'LOGIN';
+            case ViewType.ROLES:
+                return 'ROLE SELECTION';
             case ViewType.CONFIGURE:
                 return 'CONFIGURATION';
             case ViewType.TEST_OUTPUTS:

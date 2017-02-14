@@ -40,12 +40,12 @@ class ConfigureScreen extends Component {
 
     render() {
 
-        const {user} = this.props;
+        const {userLocations} = this.props;
 
         // Show Configuration Screen
         return (
             <UserConfiguration
-                user={user}
+                userLocations={userLocations}
             />
         )
 
@@ -54,7 +54,7 @@ class ConfigureScreen extends Component {
 }
 
 ConfigureScreen.propTypes = {
-    user:       PropTypes.object.isRequired
+    userLocations:       PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -71,6 +71,6 @@ ConfigureScreen = connect(mapStateToProps)(ConfigureScreen);
 
 export default AppConfigureContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getUserData(params.userContext);
+    return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext)};
 
 }, ConfigureScreen);
