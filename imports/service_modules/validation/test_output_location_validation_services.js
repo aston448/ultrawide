@@ -1,7 +1,7 @@
 
 // Ultrawide Services
 import { RoleType } from '../../constants/constants.js';
-import { Validation, DesignValidationErrors } from '../../constants/validation_errors.js';
+import { Validation, TestOutputLocationValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
 //
@@ -16,10 +16,35 @@ class TestOutputLocationValidationServices{
     validateAddLocation(userRole){
 
         // To add a Location, user must be a Developer
-        if(userRole != RoleType.DEVELOPER){ return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_ADD }
+        if(userRole != RoleType.DEVELOPER){
+            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_ADD
+        }
 
         return Validation.VALID;
     };
+
+    validateSaveLocation(userRole, location){
+
+        // User must be a Developer
+        if(userRole != RoleType.DEVELOPER){
+            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE
+        }
+
+
+        // TODO - can add more validation of the details here
+
+        return Validation.VALID;
+    };
+
+    validateRemoveLocation(userRole){
+
+        // User must be a Developer
+        if(userRole != RoleType.DEVELOPER){
+            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_REMOVE
+        }
+
+        return Validation.VALID;
+    }
 
 
 }
