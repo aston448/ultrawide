@@ -24,6 +24,14 @@ describe('UC 421 - View Changes to Updatable Design Version', function(){
 
     before(function(){
 
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data
@@ -34,21 +42,9 @@ describe('UC 421 - View Changes to Updatable Design Version', function(){
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
-
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        TestFixtures.clearDesignUpdates();
-
         // Create a Design Update to preview-merge
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
-
     });
 
     afterEach(function(){

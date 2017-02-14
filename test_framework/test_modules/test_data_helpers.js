@@ -233,16 +233,12 @@ class TestDataHelpers {
         let parentComponent = null;
         const designVersion = DesignVersions.findOne({_id: designVersionId});
 
-        console.log("DUC: Looking for " +componentType + " : " + componentParentName + " : " + componentName );
-
         const designUpdateComponents = DesignUpdateComponents.find({
             designVersionId: designVersionId,
             designUpdateId: designUpdateId,
             componentType: componentType,
             componentNameNew:  componentName
         }).fetch();
-
-        console.log("DUC: Got " + designUpdateComponents.length + " components");
 
         // Get the component that has the expected parent- except for Applications that have no parent
         if(componentType != ComponentType.APPLICATION) {
@@ -252,11 +248,8 @@ class TestDataHelpers {
                     _id: component.componentParentIdNew
                 });
 
-                console.log("DUC: Got parent " + parentComponent.componentNameNew);
-
                 if (parentComponent.componentNameNew === componentParentName) {
                     designUpdateComponent = component;
-                    console.log("DUC: Match");
                 }
 
             });
