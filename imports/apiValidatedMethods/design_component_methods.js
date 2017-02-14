@@ -329,7 +329,6 @@ export const removeDesignComponent = new ValidatedMethod({
         const result = DesignComponentValidationApi.validateRemoveDesignComponent(view, mode, designComponentId);
 
         if (result != Validation.VALID) {
-            console.log(result);
             throw new Meteor.Error('designComponent.removeDesignComponent.failValidation', result)
         }
 

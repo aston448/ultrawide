@@ -343,7 +343,6 @@ export const removeDesignComponent = new ValidatedMethod({
         const result = DesignUpdateComponentValidationApi.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponentId);
 
         if (result != Validation.VALID) {
-            console.log(result);
             throw new Meteor.Error('designUpdateComponent.removeDesignComponent.failValidation', result)
         }
 
@@ -375,7 +374,6 @@ export const restoreDesignComponent = new ValidatedMethod({
         const result = DesignUpdateComponentValidationApi.validateRestoreDesignUpdateComponent(view, mode, designUpdateComponentId);
 
         if (result != Validation.VALID) {
-            console.log(result);
             throw new Meteor.Error('designUpdateComponent.restoreDesignComponent.failValidation', result)
         }
 
