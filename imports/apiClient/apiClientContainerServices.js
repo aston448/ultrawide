@@ -31,7 +31,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 
 
 // Ultrawide Services
-import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType } from '../constants/constants.js';
+import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction } from '../constants/constants.js';
 import ClientDesignServices from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 
@@ -278,6 +278,30 @@ class ClientContainerServices{
         }
 
         return userRoles;
+    }
+
+    getRoleActions(roleType){
+
+        let roleActions = [];
+
+        switch(roleType){
+            case RoleType.DESIGNER:
+                roleActions.push(UltrawideAction.ACTION_DESIGNS);
+                roleActions.push(UltrawideAction.ACTION_LAST_DESIGNER);
+                roleActions.push(UltrawideAction.ACTION_TEST_CONFIGURE);
+                break;
+            case RoleType.DEVELOPER:
+                roleActions.push(UltrawideAction.ACTION_DESIGNS);
+                roleActions.push(UltrawideAction.ACTION_LAST_DEVELOPER);
+                roleActions.push(UltrawideAction.ACTION_TEST_CONFIGURE);
+                break;
+            case RoleType.MANAGER:
+                roleActions.push(UltrawideAction.ACTION_DESIGNS);
+                roleActions.push(UltrawideAction.ACTION_LAST_MANAGER);
+                roleActions.push(UltrawideAction.ACTION_TEST_CONFIGURE);
+        }
+
+        return roleActions;
     }
 
     // Get a list of known Designs

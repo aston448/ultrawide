@@ -426,21 +426,18 @@ input {
 
 .well-designer{
     margin: 20px;
-    height: 300px;
     color: white;
     background-color: mediumseagreen;
 }
 
 .well-developer{
     margin: 20px;
-    height: 300px;
     color: white;
     background-color: indianred;
 }
 
 .well-manager{
     margin: 20px;
-    height: 300px;
     color: white;
     background-color: steelblue;
 }
@@ -456,6 +453,17 @@ input {
 
 .path-item{
     margin: 30px;
+}
+
+.role-action{
+    margin: 10px 20px 10px 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: white;
+    white-space: pre;
+    border: 1px solid darkgreen;
+    border-radius: 4px;
 }
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */

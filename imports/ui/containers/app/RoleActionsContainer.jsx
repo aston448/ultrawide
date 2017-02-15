@@ -8,7 +8,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UserRole                from '../../components/app/UserRole.jsx';
+import RoleAction                from '../../components/app/RoleAction.jsx';
 
 // Ultrawide Services
 import {ViewType}               from '../../../constants/constants.js'
@@ -26,57 +26,53 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Login Container.  Login if logged out or switch roles if logged in
+// Role Actions Container.  A list of Actions available to a User Role
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Login Screen
-class RolesScreen extends Component {
+class RoleActionsList extends Component {
     constructor(props) {
         super(props);
 
     }
 
-    renderRolesList(userRoles){
+    renderActionsList(roleActions, roleType){
 
-        if(userRoles.length > 0) {
-            return userRoles.map((role) => {
+        if(roleActions.length > 0) {
+            return roleActions.map((roleAction) => {
                 return (
-                    <UserRole
-                        key={role}
-                        userRole={role}
+                    <RoleAction
+                        key={roleAction}
+                        roleAction={roleAction}
+                        roleType={roleType}
                     />
                 );
             });
         } else {
             return(
-                <div className="design-item-note">No User Roles</div>
+                <div className="design-item-note">No Actions for this Role!</div>
             )
         }
     };
 
     render(){
 
-        const {userRoles} = this.props;
+        const {roleActions, roleType} = this.props;
 
         return (
-            <Grid>
-                <Row>
-                    <Col md={6} className="col">
-                        <Panel header="Available Roles">
-                            {this.renderRolesList(userRoles)}
-                        </Panel>
-                    </Col>
-                </Row>
-            </Grid>
+            <div>
+                {this.renderActionsList(roleActions, roleType)}
+            </div>
         );
 
     }
 
 }
 
-RolesScreen.propTypes = {
-    userRoles:  PropTypes.array.isRequired
+RoleActionsList.propTypes = {
+    roleActions:  PropTypes.array.isRequired,
+    roleType:     PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -87,13 +83,14 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-RolesScreen = connect(mapStateToProps)(RolesScreen);
+RoleActionsList = connect(mapStateToProps)(RoleActionsList);
 
 
-export default AppRolesContainer = createContainer(({params}) => {
+export default RoleActionsContainer = createContainer(({params}) => {
 
     return {
-        userRoles: ClientContainerServices.getUserRoles(params.userId)
+        roleActions: ClientContainerServices.getRoleActions(params.roleType),
+        roleType: params.roleType
     }
 
-}, RolesScreen);
+}, RoleActionsList);

@@ -9,6 +9,15 @@ export const RoleType = {
     MANAGER:    'MANAGER'
 };
 
+export const UltrawideAction = {
+
+    ACTION_DESIGNS:             'Go to Designs Menu',
+    ACTION_LAST_DESIGNER:       'Go to my current Design Version or Update',
+    ACTION_LAST_DEVELOPER:      'Go to my current Work Package',
+    ACTION_LAST_MANAGER:        'Go to my current Work Package',
+    ACTION_TEST_CONFIGURE:      'Go to Test Data Configuration'
+};
+
 // Determines what we are looking at
 export const ViewType = {
     ADMIN:                      'ADMIN',                    // Backup / Restore / User Management Screen

@@ -413,7 +413,7 @@ class ClientUserContextServices {
             true
         ));
 
-        this.setViewFromUserContext(roleType, userContext)
+        //this.setViewFromUserContext(roleType, userContext)
 
     }
 

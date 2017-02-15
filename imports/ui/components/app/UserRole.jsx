@@ -8,7 +8,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-
+import RoleActionsContainer     from '../../containers/app/RoleActionsContainer.jsx';
 
 // Ultrawide Services
 import {RoleType, LocationType, ViewType} from '../../../constants/constants.js';
@@ -41,24 +41,6 @@ class UserRole extends Component {
         super(props);
     }
 
-    onRoleSelect(roleType, userContext, view){
-
-        ClientUserContextServices.setUserRole(roleType);
-        ClientUserContextServices.loadMainData(userContext, roleType, view);
-    }
-
-    onGoToDesigns(roleType){
-
-        ClientUserContextServices.setUserRole(roleType);
-        ClientAppHeaderServices.setViewDesigns();
-    }
-
-    onGoToConfig(roleType){
-
-        ClientUserContextServices.setUserRole(roleType);
-        ClientAppHeaderServices.setViewConfigure();
-    }
-
     render() {
         const {userRole, userContext, view} = this.props;
 
@@ -70,18 +52,15 @@ class UserRole extends Component {
             case RoleType.DESIGNER:
                 wellStyle = 'well-designer';
                 roleName = 'DESIGNER';
-                roleText = ' - Manage Designs\n - Manage Design Updates\n - Edit Designs and Design Updates\n - View development progress against Design';
                 break;
             case RoleType.DEVELOPER:
                 wellStyle = 'well-developer';
                 roleName = 'DEVELOPER';
-                roleText = ' - View Designs and Design Updates\n - Adopt and Implement Work Packages\n - Manage Test Integration\n - View Integration and Unit Test Results';
                 break;
             case RoleType.MANAGER:
                 wellStyle = 'well-manager';
                 roleName = 'MANAGER';
-                roleText = ' - View Designs and Design Updates\n - View development progress against Design\n - Create and Edit Work Packages\n - View Work Package Progress';
-                break;
+               break;
         }
 
         return(
@@ -94,20 +73,12 @@ class UserRole extends Component {
                     </Row>
                     <Row>
                         <Col md={12}>
-                            <div className="role-text">{roleText}</div>
+                            <RoleActionsContainer params={{
+                                roleType: userRole
+                            }}/>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md={2}>
-                            <Button bsSize="small" onClick={() => this.onRoleSelect(userRole, userContext, view)}>Go to last item</Button>
-                        </Col>
-                        <Col md={2}>
-                            <Button bsSize="small" onClick={() => this.onGoToDesigns(userRole)}>Go to Designs</Button>
-                        </Col>
-                        <Col md={2}>
-                            <Button bsSize="small" onClick={() => this.onGoToConfig(userRole)}>Go to Configuration</Button>
-                        </Col>
-                    </Row>
+
                 </Grid>
             </Well>
         )
