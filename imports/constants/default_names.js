@@ -35,5 +35,7 @@ export const DefaultDetailsText = {
 };
 
 export const DefaultLocationText = {
-    NEW_TEST_OUTPUT_LOCATION_NAME:  'New Test Output Location',
+    NEW_TEST_OUTPUT_LOCATION_NAME:              'New Test Output Location',
+    NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS:        'Test Output File Alias',
+    NEW_TEST_OUTPUT_LOCATION_FILE_NAME:         'Test Output File Name',
 };

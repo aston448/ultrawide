@@ -57,9 +57,6 @@ class ChimpMochaTestServices{
             switch(testType){
                 case TestType.INTEGRATION:
 
-                    // Clear existing results for user
-                    UserIntTestResults.remove({userId: userId});
-
                     // Add latest results
                     resultsJson.passes.forEach((test) => {
                         UserIntTestResults.insert(

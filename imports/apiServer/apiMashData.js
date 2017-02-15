@@ -18,8 +18,8 @@ Meteor.methods({
         MashDataServices.populateWorkPackageMashData(userContext);
     },
 
-    'mash.updateTestData'(userContext, viewOptions){
-        MashDataServices.updateTestMashData(userContext, viewOptions);
+    'mash.updateTestData'(userContext, userRole, viewOptions){
+        MashDataServices.updateTestMashData(userContext, userRole, viewOptions, userRole);
     },
 
     'mash.updateMovedDesignStep'(designMashItemId){

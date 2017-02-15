@@ -14,6 +14,7 @@ const initialState = {
     domainDictionaryVisible: false,
     currentUserViewOptions: null,
     currentUserItemContext: null,
+    currentUserTestOutputLocationId: 'NONE',
     currentUserDevContext: null,
     currentUserOpenDesignItems: [],
     currentUserOpenDesignUpdateItems: [],
@@ -59,6 +60,11 @@ export function myApplication(state = initialState, action) {
             //console.log("Updated User Item Context: " + action.newUserItemContext);
             return Object.assign({}, state, {
                 currentUserItemContext: action.newUserItemContext
+            });
+        case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
+            console.log("SET OUTPUT LOCATION TO " + action.newUserTestOutputLocationId);
+            return Object.assign({}, state, {
+                currentUserTestOutputLocationId: action.newUserTestOutputLocationId
             });
         case Actions.SET_CURRENT_USER_DEV_CONTEXT:
             return Object.assign({}, state, {

@@ -4,6 +4,9 @@ import fs from 'fs';
 // Ultrawide Collections
 import { UserRoles }                    from '../../collections/users/user_roles.js';
 import { UserCurrentEditContext }       from '../../collections/context/user_current_edit_context.js';
+import { UserTestTypeLocations }        from '../../collections/configure/user_test_type_locations.js';
+import { TestOutputLocations }          from '../../collections/configure/test_output_locations.js';
+import { TestOutputLocationFiles }      from '../../collections/configure/test_output_location_files.js';
 import { Designs }                      from '../../collections/design/designs.js';
 import { DesignVersions }               from '../../collections/design/design_versions.js';
 import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
@@ -21,6 +24,7 @@ import { AppGlobalData }                from '../../collections/app/app_global_d
 import {getIdFromMap, log}              from '../../common/utils.js';
 import { DesignStatus, WorkPackageType, LogLevel} from '../../constants/constants.js';
 
+import TestOutputLocationServices       from '../configure/test_output_location_services.js';
 import DesignServices                   from '../design/design_services.js';
 import DesignVersionServices            from '../design/design_version_services.js';
 import DesignUpdateServices             from '../design_update/design_update_services.js';
@@ -316,6 +320,53 @@ class ImpExServices{
         });
     };
 
+    migrateTestOutputLocationData(testOutputLocationData, backupVersion, currentVersion){
+        // Add to this function for each release
+        let newTestOutputLocationData = testOutputLocationData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 2:
+                        // No changes
+                        newTestOutputLocationData = testOutputLocationData;
+                }
+        }
+
+        return newTestOutputLocationData;
+    };
+
+    migrateTestOutputLocationFileData(testOutputLocationFileData, backupVersion, currentVersion){
+        // Add to this function for each release
+        let newTestOutputLocationFileData = testOutputLocationFileData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 2:
+                        // No changes
+                        newTestOutputLocationFileData = testOutputLocationFileData;
+                }
+        }
+
+        return newTestOutputLocationFileData;
+    };
+
+    migrateUserTestTypeLocationData(userTestTypeLocationData, backupVersion, currentVersion){
+        // Add to this function for each release
+        let newUserTestTypeLocationData = userTestTypeLocationData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 2:
+                        // No changes
+                        newUserTestTypeLocationData = userTestTypeLocationData;
+                }
+        }
+
+        return newUserTestTypeLocationData;
+    };
 
     migrateDesignData(designData, backupVersion, currentVersion){
         // Add to this function for each release
@@ -487,6 +538,55 @@ class ImpExServices{
 
         return newDomainDictionaryData;
     };
+
+    restoreTestOutputLocationData(newTestOutputLocationData, userMapping){
+
+        let locationsMapping = [];
+
+        newTestOutputLocationData.forEach((location) => {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location: {}", location.locationName);
+
+            const userId = getIdFromMap(userMapping, location.userId);
+
+            let locationId = TestOutputLocationServices.importLocation(location, userId);
+            if (locationId) {
+                // Store the new Design ID
+                locationsMapping.push({oldId: location._id, newId: locationId});
+            }
+        });
+
+        return locationsMapping;
+    };
+
+    restoreTestOutputLocationFileData(newTestOutputLocationFileData, userMapping, locationsMapping){
+
+        newTestOutputLocationFileData.forEach((locationFile) => {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location File: {}", locationFile.fileAlias);
+
+            const locationId = getIdFromMap(locationsMapping, locationFile.locationId);
+            const userId = getIdFromMap(userMapping, locationFile.fileUserId);
+
+            let locationFileId = TestOutputLocationServices.importLocationFile(locationFile, locationId, userId);
+
+        });
+
+    };
+
+    restoreUserTestTypeLocationsData(newTestOutputLocationData, userMapping, locationsMapping){
+
+        newTestOutputLocationData.forEach((userLocation) => {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding User Test Location: {}", userLocation.locationName);
+
+            const locationId = getIdFromMap(locationsMapping, userLocation.locationId);
+            const userId = getIdFromMap(userMapping, userLocation.userId);
+
+            let userTestTypeLocationId = TestOutputLocationServices.importUserConfiguration(userLocation, locationId, userId);
+
+        });
+    }
 
     restoreDesignData(newDesignData){
 
@@ -807,6 +907,11 @@ class ImpExServices{
         // User Context
         this.produceExportFile(UserCurrentEditContext, 'USER_CONTEXT');
 
+        // Test Output Locations
+        this.produceExportFile(TestOutputLocations, 'TEST_OUTPUT_LOCATIONS');
+        this.produceExportFile(TestOutputLocationFiles, 'TEST_OUTPUT_LOCATION_FILES');
+        this.produceExportFile(UserTestTypeLocations, 'USER_TEST_TYPE_LOCATIONS');
+
         // Designs
         this.produceExportFile(Designs, 'DESIGNS');
 
@@ -856,6 +961,7 @@ class ImpExServices{
         // Users - TODO - currently being created by fixtures
 
         let usersMapping = [];
+        let testOutputLocationsMapping = [];
         let designsMapping = [];
         let designVersionsMapping = [];
         let designUpdatesMapping = [];
@@ -864,16 +970,16 @@ class ImpExServices{
         let designUpdateComponentsMapping = [];
         let workPackageComponentsMapping = [];
 
-        let designId = null;
-        let designVersionId = null;
-        let designUpdateId = null;
-        let workPackageId = null;
-        let domainTermId = null;
-        let designComponentId = null;
-        let designUpdateComponentId = null;
-        let workPackageComponentId = null;
-        let featureBackgroundStepId = null;
-        let scenarioStepId = null;
+        // let designId = null;
+        // let designVersionId = null;
+        // let designUpdateId = null;
+        // let workPackageId = null;
+        // let domainTermId = null;
+        // let designComponentId = null;
+        // let designUpdateComponentId = null;
+        // let workPackageComponentId = null;
+        // let featureBackgroundStepId = null;
+        // let scenarioStepId = null;
 
 
         // User Data ===================================================================================================
@@ -972,8 +1078,47 @@ class ImpExServices{
             });
         }
 
+        let locationData = '';
+        let locationFileData = '';
+        let userLocationData = '';
+        let outputLocations = [];
+        let outputLocationFiles = [];
+        let userOutputLocations = [];
+
         let backupDataVersion = 1;
         let currentDataVersion = 2;
+
+
+        // Test Output Locations ---------------------------------------------------------------------------------------
+        try {
+            locationData = fs.readFileSync(path + 'TEST_OUTPUT_LOCATIONS.EXP');
+            locationFileData = fs.readFileSync(path + 'TEST_OUTPUT_LOCATION_FILES.EXP');
+            userLocationData = fs.readFileSync(path + 'USER_TEST_TYPE_LOCATIONS.EXP');
+            outputLocations = JSON.parse(locationData);
+            outputLocationFiles = JSON.parse(locationFileData);
+            userOutputLocations = JSON.parse(userLocationData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Test Location files: {}", e);
+        }
+
+        if(outputLocations.length > 0){
+
+            let migratedLocations = this.migrateTestOutputLocationData(outputLocations, backupDataVersion, currentDataVersion);
+            testOutputLocationsMapping = this.restoreTestOutputLocationData(migratedLocations, usersMapping);
+        }
+
+        if(outputLocationFiles.length > 0){
+
+            let migratedLocationFiles = this.migrateTestOutputLocationFileData(outputLocationFiles, backupDataVersion, currentDataVersion);
+            this.restoreTestOutputLocationFileData(migratedLocationFiles, usersMapping, testOutputLocationsMapping);
+        }
+
+        if(userOutputLocations.length > 0){
+
+            let migratedUserOutputLocations = this.migrateUserTestTypeLocationData(userOutputLocations, backupDataVersion, currentDataVersion);
+            this.restoreUserTestTypeLocationsData(migratedUserOutputLocations, usersMapping, testOutputLocationsMapping);
+        }
+
 
         // Design Items ================================================================================================
 
@@ -1019,7 +1164,7 @@ class ImpExServices{
         if(designVersions.length > 0) {
 
             let migratedDesignVersions = this.migrateDesignVersionData(designVersions, backupDataVersion, currentDataVersion);
-            designVersionsMapping = this.restoreDesignVersionData(designVersions, designsMapping);
+            designVersionsMapping = this.restoreDesignVersionData(migratedDesignVersions, designsMapping);
 
         } else {
             // Abort - everything else needs a Design Version

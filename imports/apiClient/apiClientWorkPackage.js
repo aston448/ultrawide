@@ -397,7 +397,7 @@ class ClientWorkPackageServices {
         }
 
         // Get the latest test results
-        ClientMashDataServices.updateTestData(view, updatedContext, viewOptions);
+        ClientMashDataServices.updateTestData(view, updatedContext, userRole, viewOptions);
 
         // Switch to Dev View
         store.dispatch(setCurrentView(view));

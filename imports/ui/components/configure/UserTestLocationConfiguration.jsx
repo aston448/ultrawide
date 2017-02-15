@@ -8,11 +8,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import RoleSelect                           from  './UserRole.jsx';
-import LocationInput                        from  './LocationInput.jsx';
 
 // Ultrawide Services
 import {RoleType, LocationType, ViewType} from '../../../constants/constants.js'
+import ClientTestOutputLocationServices from '../../../apiClient/apiClientTestOutputLocations.js';
 
 // Bootstrap
 import {Grid, Row, Col, FormControl, Checkbox} from 'react-bootstrap';
@@ -32,7 +31,6 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-// App Body component - represents all the design content
 export class UserTestLocationConfiguration extends Component {
 
     constructor(props) {
@@ -40,9 +38,72 @@ export class UserTestLocationConfiguration extends Component {
 
         this.state = {
 
+            unitChecked:    this.props.userLocation.isUnitLocation,
+            intChecked:     this.props.userLocation.isIntLocation,
+            accChecked:     this.props.userLocation.isAccLocation
         };
     }
 
+    onUnitChange(e, userRole, userLocation){
+
+        this.setState({unitChecked: e.target.checked});
+
+        // Save changes
+        const userConfiguration = {
+            _id:                    userLocation._id,
+            locationId:             userLocation.locationId,
+            locationName:           userLocation.locationName,
+            locationType:           userLocation.locationType,
+            userId:                 userLocation.userId,
+            userRole:               userLocation.userRole,
+            isUnitLocation:         e.target.checked,
+            isIntLocation:          userLocation.isIntLocation,
+            isAccLocation:          userLocation.isAccLocation
+        };
+
+        ClientTestOutputLocationServices.saveUserConfiguration(userRole, userConfiguration);
+    }
+
+    onIntChange(e, userRole, userLocation){
+
+        this.setState({intChecked: e.target.checked});
+
+        // Save changes
+        const userConfiguration = {
+            _id:                    userLocation._id,
+            locationId:             userLocation.locationId,
+            locationName:           userLocation.locationName,
+            locationType:           userLocation.locationType,
+            userId:                 userLocation.userId,
+            userRole:               userLocation.userRole,
+            isUnitLocation:         userLocation.isUnitLocation,
+            isIntLocation:          e.target.checked,
+            isAccLocation:          userLocation.isAccLocation
+        };
+
+        ClientTestOutputLocationServices.saveUserConfiguration(userRole, userConfiguration);
+    }
+
+    onAccChange(e, userRole, userLocation){
+
+        this.setState({accChecked: e.target.checked});
+
+        // Save changes
+        const userConfiguration = {
+            _id:                    userLocation._id,
+            locationId:             userLocation.locationId,
+            locationName:           userLocation.locationName,
+            locationType:           userLocation.locationType,
+            userId:                 userLocation.userId,
+            userRole:               userLocation.userRole,
+            isUnitLocation:         userLocation.isUnitLocation,
+            isIntLocation:          userLocation.isIntLocation,
+            isAccLocation:          e.target.checked
+        };
+
+        ClientTestOutputLocationServices.saveUserConfiguration(userRole, userConfiguration);
+
+    }
 
 
     render() {
@@ -59,21 +120,24 @@ export class UserTestLocationConfiguration extends Component {
                     </Col>
                     <Col md={2}>
                         <div>
-                            <Checkbox>
+                            <Checkbox checked={this.state.unitChecked}
+                                      onChange={(e) => this.onUnitChange(e, userRole, userLocation)}>
                                 Unit Tests
                             </Checkbox>
                         </div>
                     </Col>
                     <Col md={2}>
                         <div>
-                            <Checkbox>
+                            <Checkbox checked={this.state.intChecked}
+                                      onChange={(e) => this.onIntChange(e, userRole, userLocation)}>
                                 Integration Tests
                             </Checkbox>
                         </div>
                     </Col>
                     <Col md={2}>
                         <div>
-                            <Checkbox>
+                            <Checkbox checked={this.state.accChecked}
+                                      onChange={(e) => this.onAccChange(e, userRole, userLocation)}>
                                 Acceptance Tests
                             </Checkbox>
                         </div>

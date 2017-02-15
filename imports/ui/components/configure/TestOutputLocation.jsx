@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import ClientTestOutputLocationServices from '../../../apiClient/apiClientTestOutputLocations.js';
-import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode} from '../../../constants/constants.js';
+import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, TestLocationType} from '../../../constants/constants.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -38,8 +38,7 @@ export class TestOutputLocation extends Component {
             pathValue:              this.props.location.locationPath,
             serverNameValue:        this.props.location.locationServerName,
             serverLoginValue:       this.props.location.serverLogin,
-            serverPasswordValue:    this.props.location.serverPassword,
-            highlighted:            false,
+            serverPasswordValue:    this.props.location.serverPassword
         };
 
     }
@@ -50,12 +49,18 @@ export class TestOutputLocation extends Component {
 
         console.log("Updating location with name " + this.state.nameValue);
 
+        // The user id is set if creating a local resource
+        let locationUserId = 'NONE';
+        if(this.state.typeValue === TestLocationType.LOCAL){
+            locationUserId = Meteor.userId();
+        }
+
         const location = {
             _id:                    this.props.location._id,
             locationName:           this.state.nameValue,
             locationRawText:        null,
             locationType:           this.state.typeValue,
-            locationUserId:         'NONE',
+            locationUserId:         locationUserId,
             locationServerName:     this.state.serverNameValue,
             serverLogin:            this.state.serverLoginValue,
             serverPassword:         this.state.serverPasswordValue,
@@ -65,6 +70,11 @@ export class TestOutputLocation extends Component {
         ClientTestOutputLocationServices.saveLocation(role, location);
 
         this.setState({editing: false});
+    }
+
+    setCurrentLocation(location){
+
+        ClientTestOutputLocationServices.selectLocation(location._id)
     }
 
     onRemove(role, location){
@@ -93,10 +103,13 @@ export class TestOutputLocation extends Component {
     }
 
     render() {
-        const {location, userRole} = this.props;
+        const {location, userRole, currentLocationId} = this.props;
+
+        const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
+
 
         const viewInstance = (
-            <div>
+            <div onClick={() => this.setCurrentLocation(location)}>
                 <Grid>
                     <Row>
                         <Col sm={2}>
@@ -134,8 +147,8 @@ export class TestOutputLocation extends Component {
                     </Col>
                     <Col sm={10}>
                     <FormControl componentClass="select" placeholder={location.locationType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
-                        <option value="server">SERVER</option>
-                        <option value="local">LOCAL</option>
+                        <option value="SERVER">SERVER</option>
+                        <option value="LOCAL">LOCAL</option>
                     </FormControl>
                     </Col>
                 </FormGroup>
@@ -196,7 +209,7 @@ export class TestOutputLocation extends Component {
             )
         } else {
             return (
-                <div className="test-output-location">
+                <div className={'test-output-location' + activeClass}>
                     {viewInstance}
                 </div>
             )
@@ -212,8 +225,9 @@ TestOutputLocation.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:                   state.currentUserRole,
-        userContext:                state.currentUserItemContext,
+        userRole:           state.currentUserRole,
+        userContext:        state.currentUserItemContext,
+        currentLocationId:  state.currentUserTestOutputLocationId
     }
 }
 

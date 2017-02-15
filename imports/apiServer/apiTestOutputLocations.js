@@ -3,6 +3,10 @@ import {
     addLocation,
     saveLocation,
     removeLocation,
+    addLocationFile,
+    saveLocationFile,
+    removeLocationFile,
+    saveUserConfiguration,
     updateUserConfiguration
 } from '../apiValidatedMethods/test_output_location_methods.js'
 
@@ -44,6 +48,58 @@ class ServerTestOutputLocationApi {
             {
                 userRole:   userRole,
                 locationId: locationId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    addLocationFile(userRole, locationId, callback){
+
+        addLocationFile.call(
+            {
+                userRole: userRole,
+                locationId: locationId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    saveLocationFile(userRole, locationFile, callback){
+
+        saveLocationFile.call(
+            {
+                userRole:       userRole,
+                locationFile:   locationFile
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    removeLocationFile(userRole, locationFileId, callback){
+
+        removeLocationFile.call(
+            {
+                userRole:       userRole,
+                locationFileId: locationFileId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    saveUserConfiguration(userRole, userConfiguration, callback){
+
+        saveUserConfiguration.call(
+            {
+                userRole:           userRole,
+                userConfiguration:  userConfiguration
             },
             (err, result) => {
                 callback(err, result);

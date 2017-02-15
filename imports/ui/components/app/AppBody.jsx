@@ -63,7 +63,7 @@ class AppBody extends Component {
                     <AppLoginContainer params={{
                     }}/>;
                 break;
-            case ViewType.ROLES:
+            case ViewType.HOME:
                 bodyHtml =
                     <AppRolesContainer params={{
                         userId: userContext.userId

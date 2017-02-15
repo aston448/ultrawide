@@ -43,10 +43,7 @@ class MeteorMochaTestServices{
             // Store Standard Data -------------------------------------------------------------------------------------
 
             switch(testType){
-                case TestType.MODULE:
-
-                    // Clear existing results for user
-                    UserUnitTestResults.remove({userId: userId});
+                case TestType.UNIT:
 
                     // Add latest results
                     resultsJson.passes.forEach((test) => {

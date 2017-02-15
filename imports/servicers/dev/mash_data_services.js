@@ -48,7 +48,7 @@ class MashDataServices{
         }
     }
 
-    updateTestMashData(userContext, viewOptions){
+    updateTestMashData(userContext, userRole, viewOptions){
 
         // User has chosen to update the test mash data with latest test results
 
@@ -72,12 +72,12 @@ class MashDataServices{
 
             if(viewOptions.devIntTestsVisible || testSummaryVisible){
                 // Get latest Int Test Results
-                MashDataModules.getIntegrationTestResults(TestRunner.CHIMP_MOCHA, userContext);
+                MashDataModules.getIntegrationTestResults(TestRunner.CHIMP_MOCHA, userContext, userRole);
             }
 
             if(viewOptions.devUnitTestsVisible || testSummaryVisible){
                 // Get latest Unit Test Results
-                MashDataModules.getUnitTestResults(TestRunner.METEOR_MOCHA, userContext);
+                MashDataModules.getUnitTestResults(TestRunner.METEOR_MOCHA, userContext, userRole);
             }
 
             if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible){

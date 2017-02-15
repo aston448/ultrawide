@@ -383,7 +383,22 @@ input {
     padding: 10px;
     border: 1px solid darkblue;
     border-radius: 4px;
-    background-color: aliceblue;
+}
+
+.test-output-file{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid darkgreen;
+    border-radius: 4px;
+    background-color: aquamarine;
+}
+
+.location-inactive{
+    background-color: ghostwhite;
+}
+
+.location-active{
+    background-color: paleturquoise;
 }
 
 .output-location-buttons{

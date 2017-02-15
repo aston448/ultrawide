@@ -10,6 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignComponentAdd       from '../../components/common/DesignComponentAdd.jsx';
 import TestOutputLocation       from '../../components/configure/TestOutputLocation.jsx';
+import TestOutputFilesContainer from '../../containers/configure/TestOutputFilesContainer.jsx';
 
 
 // Ultrawide Services
@@ -56,7 +57,7 @@ class TestOutputsScreen extends Component {
 
     render() {
 
-        const {locationData, userRole} = this.props;
+        const {locationData, userRole, locationId} = this.props;
 
         const addLocation =
             <div className="design-item-add">
@@ -78,9 +79,9 @@ class TestOutputsScreen extends Component {
                             </Panel>
                         </Col>
                         <Col md={6} className="col">
-                            {/*<DesignUpdatesContainer params={{*/}
-                                {/*currentDesignVersionId: userContext.designVersionId*/}
-                            {/*}}/>*/}
+                            <TestOutputFilesContainer params={{
+                                locationId: locationId
+                            }}/>
                         </Col>
                     </Row>
                 </Grid>
@@ -95,9 +96,9 @@ class TestOutputsScreen extends Component {
                             </Panel>
                         </Col>
                         <Col md={6} className="col">
-                            {/*<DesignUpdatesContainer params={{*/}
-                            {/*currentDesignVersionId: userContext.designVersionId*/}
-                            {/*}}/>*/}
+                            <TestOutputFilesContainer params={{
+                                locationId: locationId
+                            }}/>
                         </Col>
                     </Row>
                 </Grid>
@@ -114,7 +115,8 @@ TestOutputsScreen.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole:       state.currentUserRole
+        userRole:       state.currentUserRole,
+        locationId:     state.currentUserTestOutputLocationId
     }
 }
 

@@ -162,22 +162,32 @@ class ClientContainerServices{
 
     }
 
+    // Test Output Locations
     getTestOutputLocationData(){
 
         return TestOutputLocations.find({}).fetch();
 
     }
 
+    // Files for a Test Output Location
+    getTestOutputLocationFiles(locationId){
+
+        return TestOutputLocationFiles.find({locationId: locationId}).fetch();
+    }
+
+    // User configuration of Test Outputs
     getUserTestOutputLocationData(userContext, userRole){
 
         // Updates the user data with the latest locations
-        ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, userRole)
+        ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, userRole);
 
         return UserTestTypeLocations.find({
             userId: userContext.userId,
             userRole: userRole
         }).fetch();
     }
+
+
 
     getApplicationHeaderData(userContext, view){
 

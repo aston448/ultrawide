@@ -28,5 +28,25 @@ class TestOutputLocationValidationApi{
         return TestOutputLocationValidationServices.validateRemoveLocation(userRole)
     };
 
+    validateAddLocationFile(userRole){
+
+        return TestOutputLocationValidationServices.validateAddLocationFile(userRole);
+    };
+
+    validateSaveLocationFile(userRole, locationFile){
+
+        return TestOutputLocationValidationServices.validateSaveLocationFile(userRole);
+    }
+
+    validateRemoveLocationFile(userRole){
+
+        return TestOutputLocationValidationServices.validateRemoveLocationFile(userRole);
+    }
+
+    validateSaveUserConfiguration(){
+
+        return TestOutputLocationValidationServices.validateSaveUserConfiguration();
+    }
+
 }
 export default new TestOutputLocationValidationApi();

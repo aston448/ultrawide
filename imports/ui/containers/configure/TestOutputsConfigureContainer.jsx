@@ -9,8 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { UserRoles }            from '../../../collections/users/user_roles.js';
 
 // Ultrawide GUI Components
-import UserLogin                from '../../components/login/UserLogin.jsx';
-import UserConfiguration        from '../../components/configure/UserTestLocationConfiguration.jsx';
+import UserTestLocationConfiguration        from '../../components/configure/UserTestLocationConfiguration.jsx';
 
 
 // Ultrawide Services
@@ -42,7 +41,7 @@ class ConfigureScreen extends Component {
         if(userLocations.length > 0) {
             return userLocations.map((userLocation) => {
                 return (
-                    <UserConfiguration
+                    <UserTestLocationConfiguration
                         key={userLocation._id}
                         userLocation={userLocation}
                     />

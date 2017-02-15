@@ -7,17 +7,20 @@ import { ScenarioSteps }                    from '../../collections/design/scena
 import { WorkPackages }                     from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }            from '../../collections/work/work_package_components.js';
 import { UserWorkPackageMashData }          from '../../collections/dev/user_work_package_mash_data.js';
-import { UserUnitTestMashData }              from '../../collections/dev/user_unit_test_mash_data.js';
+import { UserUnitTestMashData }             from '../../collections/dev/user_unit_test_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 import { UserAccTestResults }               from '../../collections/dev/user_acc_test_results.js';
 import { UserIntTestResults }               from '../../collections/dev/user_int_test_results.js';
-import { UserUnitTestResults }               from '../../collections/dev/user_unit_test_results.js';
+import { UserUnitTestResults }              from '../../collections/dev/user_unit_test_results.js';
 import { UserDevFeatures }                  from '../../collections/dev/user_dev_features.js';
 import { UserDevFeatureScenarios }          from '../../collections/dev/user_dev_feature_scenarios.js';
 import { UserDevFeatureScenarioSteps }      from '../../collections/dev/user_dev_feature_scenario_steps.js';
+import { UserTestTypeLocations }            from '../../collections/configure/user_test_type_locations.js';
+import { TestOutputLocations }              from '../../collections/configure/test_output_locations.js';
+import { TestOutputLocationFiles }          from '../../collections/configure/test_output_location_files.js';
 
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, ScenarioStepStatus, ScenarioStepType, LogLevel } from '../../constants/constants.js';
+import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, ScenarioStepStatus, ScenarioStepType, TestLocationType, TestLocationFileType,  LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
 import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
@@ -207,55 +210,149 @@ class MashDataModules{
 
         // Call the correct results service to get the test data
 
-        switch (testRunner) {
-            case TestRunner.CHIMP_CUCUMBER:
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_CUCUMBER Results Data");
-                let testFile = userContext.acceptanceTestResultsLocation;
-
-                ChimpCucumberTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
-                break;
-
-        }
+        // switch (testRunner) {
+        //     case TestRunner.CHIMP_CUCUMBER:
+        //         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_CUCUMBER Results Data");
+        //         let testFile = userContext.acceptanceTestResultsLocation;
+        //
+        //         ChimpCucumberTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
+        //         break;
+        //
+        // }
     };
 
-    getIntegrationTestResults(testRunner, userContext){
+    getIntegrationTestResults(testRunner, userContext, userRole){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
             return;
         }
 
-        // Call the correct results service to get the test data
+        // Clear existing results for user
+        UserIntTestResults.remove({userId: userContext.userId});
 
-        switch (testRunner) {
-            case TestRunner.CHIMP_MOCHA:
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_MOCHA Results Data");
-                let testFile = userContext.integrationTestResultsLocation;
+        // Get a list of the expected test files for integration
 
-                ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
-                break;
+        // See which locations the user has marked as containing integration files for the current role
+        const userLocations = UserTestTypeLocations.find({
+            userId:         userContext.userId,
+            userRole:       userRole,
+            isIntLocation:  true
+        }).fetch();
 
-        }
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} user integration test locations", userLocations.length);
+
+        userLocations.forEach((userLocation) => {
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Processing user location {} of type {}", userLocation.locationName, userLocation.locationType);
+
+            // Get the actual location data
+            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Processing location {} of type {}", outputLocation.locationName, outputLocation.locationType);
+
+            if(outputLocation.locationType === TestLocationType.LOCAL){
+
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFiles.find({
+                    locationId: outputLocation._id,
+                    fileType:   TestLocationFileType.INTEGRATION
+                }).fetch();
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} user integration test files", testOutputFiles.length);
+
+                testOutputFiles.forEach((file) => {
+
+                    const testFile = outputLocation.locationPath + file.fileName;
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Results from {}", testFile);
+
+                    // Call the appropriate file parser
+                    switch (testRunner) {
+                        case TestRunner.CHIMP_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_MOCHA Results Data");
+
+                            ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
+                            break;
+
+                    }
+
+                });
+
+            } else {
+
+                // TODO - server access code...
+
+            }
+        });
+
+
     };
 
-    getUnitTestResults(testRunner, userContext){
+    getUnitTestResults(testRunner, userContext, userRole){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
             return;
         }
 
+        // Clear existing results for user
+        UserUnitTestResults.remove({userId: userContext.userId});
+
+        // Get a list of the expected test files for unit tests
+
+        // See which locations the user has marked as containing unit test files for the current role
+        const userLocations = UserTestTypeLocations.find({
+            userId: userContext.userId,
+            userRole: userRole,
+            isUnitLocation: true
+        }).fetch();
+
+        userLocations.forEach((userLocation) => {
+
+            // Get the actual location data
+            const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+
+            if(outputLocation.locationType === TestLocationType.LOCAL){
+
+                // Grab any files here marked as integration test outputs
+                const testOutputFiles = TestOutputLocationFiles.find({
+                    locationId: outputLocation._id,
+                    fileType:   TestLocationFileType.UNIT
+                }).fetch();
+
+                testOutputFiles.forEach((file) => {
+
+                    const testFile = outputLocation.locationPath + file.fileName;
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
+
+                    // Call the appropriate file parser
+                    switch (testRunner) {
+                        case TestRunner.METEOR_MOCHA:
+                            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting METEOR_MOCHA Results Data");
+
+                            MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
+                            break;
+
+                    }
+
+                });
+
+            } else {
+
+                // TODO - server access code...
+
+            }
+        });
+
+
+
+
+
         // Call the correct results service to get the test data
 
-        switch (testRunner) {
-            case TestRunner.METEOR_MOCHA:
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting METEOR_MOCHA Results Data");
-                let testFile = userContext.unitTestResultsLocation;
 
-                MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.MODULE);
-                break;
-
-        }
     };
 
     calculateWorkPackageMash(userContext){

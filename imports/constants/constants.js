@@ -13,7 +13,7 @@ export const RoleType = {
 export const ViewType = {
     ADMIN:                      'ADMIN',                    // Backup / Restore / User Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
-    ROLES:                      'ROLES',                    // Role Selection Screen
+    HOME:                       'HOME',                     // Home Screen - available user roles / actions
     CONFIGURE:                  'CONFIGURE',                // Change user settings
     TEST_OUTPUTS:               'TEST_OUTPUTS',             // Configure Test Outputs
     DESIGNS:                    'DESIGNS',                  // Designs screen - pick a Design
@@ -271,7 +271,7 @@ export const LogLevel = {
 export const TestType = {
     ACCEPTANCE:     'Acceptance',
     INTEGRATION:    'Integration',
-    MODULE:         'Module'
+    UNIT:           'Unit'
 };
 
 export const TestRunner = {
@@ -283,4 +283,11 @@ export const TestRunner = {
 export const TestLocationType = {
     SHARED:         'SHARED',
     LOCAL:          'LOCAL'
+};
+
+export const TestLocationFileType = {
+    NONE:           'NONE',
+    UNIT:           'UNIT',
+    INTEGRATION:    'INTEGRATION',
+    ACCEPTANCE:     'ACCEPTANCE'
 };

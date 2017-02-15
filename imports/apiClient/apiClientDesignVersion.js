@@ -327,7 +327,7 @@ class ClientDesignVersionServices{
 
         // Get the latest test results if summary showing
         if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
-            ClientMashDataServices.updateTestData(ViewType.DESIGN_NEW_EDIT, updatedContext, viewOptions, progressData);
+            ClientMashDataServices.updateTestData(ViewType.DESIGN_NEW_EDIT, updatedContext, userRole, viewOptions, progressData);
         }
 
         // Switch to the design editor view
@@ -405,7 +405,7 @@ class ClientDesignVersionServices{
 
         // Get the latest test results if summary showing
         if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
-            ClientMashDataServices.updateTestData(view, updatedContext, viewOptions, progressData);
+            ClientMashDataServices.updateTestData(view, updatedContext, userRole, viewOptions, progressData);
         }
 
         return {success: true, message: ''};

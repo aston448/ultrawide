@@ -96,5 +96,9 @@ export const TestOutputLocationMessages = {
 
     MSG_LOCATION_ADDED:                 'Test output location added',
     MSG_LOCATION_SAVED:                 'Test output location saved',
-    MSG_LOCATION_REMOVED:               'Test output location removed'
+    MSG_LOCATION_REMOVED:               'Test output location removed',
+    MSG_LOCATION_FILE_ADDED:            'Test output location file added',
+    MSG_LOCATION_FILE_SAVED:            'Test output location file saved',
+    MSG_LOCATION_FILE_REMOVED:          'Test output location file removed',
+    MSG_USER_CONFIGURATION_SAVED:       'Configuration for test output locations updated'
 };

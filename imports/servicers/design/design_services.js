@@ -60,7 +60,8 @@ class DesignServices{
                 {
                     designName: design.designName,
                     designRawText: design.designRawText,
-                    isRemovable: design.isRemovable
+                    isRemovable: design.isRemovable,
+                    designStatus: design.designStatus
                 }
             );
 

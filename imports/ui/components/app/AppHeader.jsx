@@ -48,9 +48,9 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode);
     }
 
-    onToggleViewOption(view, userContext, viewOptionType, currentOptions, currentViewDataValue){
+    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue){
         // Show / hide Domain Dictionary
-        ClientAppHeaderServices.toggleViewOption(view,userContext, viewOptionType, currentOptions, currentViewDataValue);
+        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue);
     }
 
     onZoomToFeatures(userContext){
@@ -76,7 +76,7 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewConfigure();
     }
 
-    onGoToRoles(){
+    onGoToHome(){
         // Back to Roles Screen
         ClientAppHeaderServices.setViewRoles();
     }
@@ -91,8 +91,8 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin(userContext.userId);
     }
 
-    onRefreshTestData(view, userContext, userViewOptions){
-        ClientMashDataServices.updateTestData(view, userContext, userViewOptions, this.props.currentProgressDataValue)
+    onRefreshTestData(view, userContext, userRole,  userViewOptions){
+        ClientMashDataServices.updateTestData(view, userContext, userRole, userViewOptions, this.props.currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
@@ -206,23 +206,23 @@ export class AppHeader extends Component {
         let detailsFixedButton =
             <Button id="butDetailsFixed" bsSize="xs" bsStyle={'info'}>Details</Button>;
         let detailsButton =
-            <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
+            <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
         let testSummaryButton =
-            <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
+            <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
         let accTestsButton =
-            <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, accTestOption, userViewOptions, currentViewDataValue)}>Acc Tests</Button>;
+            <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue)}>Acc Tests</Button>;
         let intTestsButton =
-            <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, intTestOption, userViewOptions, currentViewDataValue)}>Int Tests</Button>;
+            <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue)}>Int Tests</Button>;
         let unitTestsButton =
-            <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
+            <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
         let accFilesButton =
-            <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Acc Files</Button>;
+            <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Acc Files</Button>;
         let domainDictionaryButton =
-            <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
+            <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userRole, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
 
 
-        let rolesScreenButton =
-            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToRoles()}>Change Role</Button>;
+        let homeScreenButton =
+            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToHome()}>HOME</Button>;
 
         let configScreenButton =
             <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Settings</Button>;
@@ -231,7 +231,7 @@ export class AppHeader extends Component {
             <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestDataButton =
-            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userViewOptions)}>Refresh Test Data</Button>;
+            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions)}>Refresh Test Data</Button>;
 
 
         // The message display depends on the type of message being displayed
@@ -277,19 +277,18 @@ export class AppHeader extends Component {
         switch(view){
             case ViewType.AUTHORISE:
                 break;
-            case ViewType.ROLES:
+            case ViewType.HOME:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
                 break;
             case ViewType.CONFIGURE:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                if(userRole == RoleType.DEVELOPER) {
-                    headerTopActions =
-                        <ButtonToolbar>
-                            {testOutputButton}
-                        </ButtonToolbar>;
-                }
+                headerTopActions =
+                    <ButtonToolbar>
+                        {testOutputButton}
+                        {homeScreenButton}
+                    </ButtonToolbar>;
                 break;
             case ViewType.TEST_OUTPUTS:
                 headerUserInfo = userData;
@@ -297,18 +296,18 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                     </ButtonToolbar>;
                     break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                headerTopActions = <ButtonToolbar>{rolesScreenButton}</ButtonToolbar>;
+                headerTopActions = <ButtonToolbar>{homeScreenButton}</ButtonToolbar>;
                 break;
             case ViewType.SELECT:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                headerTopActions = <ButtonToolbar>{rolesScreenButton}{designsButton}</ButtonToolbar>;
+                headerTopActions = <ButtonToolbar>{homeScreenButton}{designsButton}</ButtonToolbar>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
                 headerUserInfo = userData;
@@ -316,7 +315,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -350,7 +349,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -379,7 +378,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -409,7 +408,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -433,7 +432,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
@@ -453,7 +452,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
@@ -472,7 +471,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {designsButton}
-                        {rolesScreenButton}
+                        {homeScreenButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;

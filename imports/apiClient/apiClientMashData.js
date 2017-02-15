@@ -31,17 +31,6 @@ import {setCurrentUserItemContext, updateProgressData, updateUserMessage} from '
 
 class ClientMashDataServices {
 
-    updateTestSummaryData(userContext, currentProgressDataValue){
-        Meteor.call('mash.updateTestSummary', userContext, (err) => {
-            //store.dispatch(updateProgressData(!currentProgressDataValue));
-        });
-    }
-
-    updateIntegrationTestData(userContext){
-        Meteor.call('mash.updateIntegrationTestData', userContext, (err) => {
-            //store.dispatch(updateProgressData(!currentProgressDataValue));
-        });
-    }
 
     populateWorkPackageMashData(userContext){
 
@@ -50,18 +39,18 @@ class ClientMashDataServices {
 
     }
 
-    updateTestData(view, userContext, viewOptions, currentProgressDataValue){
+    updateTestData(view, userContext, userRole, viewOptions, currentProgressDataValue){
 
         switch(view){
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 // Need the Mash data
                 Meteor.call('mash.populateWorkPackageMashData', userContext, done => {
-                    Meteor.call('mash.updateTestData', userContext, viewOptions, done => {
+                    Meteor.call('mash.updateTestData', userContext, userRole, viewOptions, done => {
 
                         // Make sure the design view updates when test summary data is showing
                         if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){
-                            console.log("UPDATING PROGRESS DATA - DEV")
+                            console.log("UPDATING PROGRESS DATA - DEV");
                             store.dispatch(updateProgressData(!currentProgressDataValue));
                         }
                     });
@@ -69,7 +58,7 @@ class ClientMashDataServices {
                 break;
             default:
                 // Just need the results
-                Meteor.call('mash.updateTestData', userContext, viewOptions, done => {
+                Meteor.call('mash.updateTestData', userContext, userRole, viewOptions, done => {
 
                     // Make sure the design view updates when test summary data is showing
                     if(viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.designTestSummaryVisible){

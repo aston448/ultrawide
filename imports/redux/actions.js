@@ -16,6 +16,7 @@ export const SET_CURRENT_USER_VIEW_OPTIONS = 'SET_CURRENT_USER_VIEW_OPTIONS';
 
 // Indicates the current data item context for a user - i.e. what they are looking at
 export const SET_CURRENT_USER_ITEM_CONTEXT = 'SET_CURRENT_USER_ITEM_CONTEXT';
+export const SET_CURRENT_USER_TEST_OUTPUT_LOCATION = 'SET_CURRENT_USER_TEST_OUTPUT_LOCATION';
 
 // Indicates the current development context for a developer - i.e. what they are working on
 export const SET_CURRENT_USER_DEV_CONTEXT = 'SET_CURRENT_USER_DEV_CONTEXT';
@@ -69,7 +70,7 @@ export function setCurrentView(view) {
             case ViewType.AUTHORISE:
                 message = 'Please log in...';
                 break;
-            case ViewType.ROLES:
+            case ViewType.HOME:
                 message = 'Choose an action for your desired Role...';
                 break;
             case ViewType.CONFIGURE:
@@ -172,6 +173,15 @@ export function setCurrentUserItemContext(contextItem, saveToDb){
         if(saveToDb) {
             Meteor.call('userContext.setCurrentUserContext', contextItem);
         }
+    };
+}
+
+// The currently selected test output location
+export function setCurrentUserTestOutputLocation(locationId){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_TEST_OUTPUT_LOCATION, newUserTestOutputLocationId: locationId});
     };
 }
 

@@ -23,7 +23,7 @@ class TestOutputLocationValidationServices{
         return Validation.VALID;
     };
 
-    validateSaveLocation(userRole, location){
+    validateSaveLocation(userRole, location, otherLocations){
 
         // User must be a Developer
         if(userRole != RoleType.DEVELOPER){
@@ -42,6 +42,26 @@ class TestOutputLocationValidationServices{
         if(userRole != RoleType.DEVELOPER){
             return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_REMOVE
         }
+
+        return Validation.VALID;
+    }
+
+    validateAddLocationFile(userRole){
+
+        return Validation.VALID;
+    }
+
+    validateSaveLocationFile(userRole, locationFile, otherLocationFiles){
+
+        return Validation.VALID;
+    }
+
+    validateRemoveLocationFile(userRole){
+
+        return Validation.VALID;
+    }
+
+    validateSaveUserConfiguration(){
 
         return Validation.VALID;
     }
