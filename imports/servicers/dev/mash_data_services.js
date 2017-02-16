@@ -56,7 +56,7 @@ class MashDataServices{
 
             let testSummaryVisible = (viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible);
 
-            console.log("TEST SUMMARY VISIBLE: " + testSummaryVisible)
+            console.log("TEST SUMMARY VISIBLE: " + testSummaryVisible);
 
             if(viewOptions.devAccTestsVisible || testSummaryVisible){
                 // Get the latest feature files
@@ -66,18 +66,18 @@ class MashDataServices{
                 MashDataModules.linkAcceptanceFilesToDesign(userContext);
 
                 // Get latest Acc Tests Results
-                MashDataModules.getAcceptanceTestResults(TestRunner.CHIMP_CUCUMBER, userContext);
+                MashDataModules.getAcceptanceTestResults(userContext);
 
             }
 
             if(viewOptions.devIntTestsVisible || testSummaryVisible){
                 // Get latest Int Test Results
-                MashDataModules.getIntegrationTestResults(TestRunner.CHIMP_MOCHA, userContext, userRole);
+                MashDataModules.getIntegrationTestResults(userContext, userRole);
             }
 
             if(viewOptions.devUnitTestsVisible || testSummaryVisible){
                 // Get latest Unit Test Results
-                MashDataModules.getUnitTestResults(TestRunner.METEOR_MOCHA, userContext, userRole);
+                MashDataModules.getUnitTestResults(userContext, userRole);
             }
 
             if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible){

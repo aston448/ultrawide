@@ -559,16 +559,15 @@ class ImpExServices{
         return locationsMapping;
     };
 
-    restoreTestOutputLocationFileData(newTestOutputLocationFileData, userMapping, locationsMapping){
+    restoreTestOutputLocationFileData(newTestOutputLocationFileData, locationsMapping){
 
         newTestOutputLocationFileData.forEach((locationFile) => {
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location File: {}", locationFile.fileAlias);
 
             const locationId = getIdFromMap(locationsMapping, locationFile.locationId);
-            const userId = getIdFromMap(userMapping, locationFile.fileUserId);
 
-            let locationFileId = TestOutputLocationServices.importLocationFile(locationFile, locationId, userId);
+            let locationFileId = TestOutputLocationServices.importLocationFile(locationFile, locationId);
 
         });
 
@@ -698,8 +697,10 @@ class ImpExServices{
 
     restoreDomainDictionaryData(newDictionaryData, designsMapping, designVersionsMapping){
 
+        let componentCount = 0;
+
         newDictionaryData.forEach((term) => {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Dictionary Term {}", term.domainTermNew);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Dictionary Term {}", term.domainTermNew);
 
             let designId = getIdFromMap(designsMapping, term.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, term.designVersionId);
@@ -711,16 +712,20 @@ class ImpExServices{
                 DomainDictionaryServices.updateTermName(domainTermId, term.domainTermNew, term.domainTermOld);
                 DomainDictionaryServices.updateTermDefinition(domainTermId, term.domainTextRaw)
             }
+
+            componentCount++;
         });
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Dictionary Terms", componentCount);
     };
 
     restoreDesignComponentData(newDesignComponentData, designsMapping, designVersionsMapping){
 
         let designComponentsMapping = [];
+        let componentCount = 0;
 
         newDesignComponentData.forEach((component) => {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Component {} - {}", component.componentType, component.componentName);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentName);
 
             let designId = getIdFromMap(designsMapping, component.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
@@ -736,6 +741,8 @@ class ImpExServices{
                 designComponentsMapping.push({oldId: component._id, newId: designComponentId});
             }
 
+            componentCount++;
+
         });
 
         // Update Design Component parents for the new design components
@@ -748,17 +755,20 @@ class ImpExServices{
             DesignServices.setRemovable(designMap.newId);
         });
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Design Components", componentCount);
+
         return designComponentsMapping;
     };
 
     restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping){
 
         let designUpdateComponentsMapping = [];
+        let componentCount = 0;
 
         if(designsMapping && designVersionsMapping && designUpdatesMapping) {
 
             newDesignUpdateComponentData.forEach((updateComponent) => {
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Update Component {} - {}", updateComponent.componentType, updateComponent.componentNameNew);
 
                 let designId = getIdFromMap(designsMapping, updateComponent.designId);
                 let designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
@@ -790,9 +800,14 @@ class ImpExServices{
             designsMapping.forEach((designMap) => {
                 DesignServices.setRemovable(designMap.newId);
             });
+
+            componentCount++;
+
         } else {
             log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {}", designsMapping, designVersionsMapping, designUpdatesMapping);
         }
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Design Update Components", componentCount);
 
         return designUpdateComponentsMapping;
     };
@@ -802,10 +817,10 @@ class ImpExServices{
         let workPackageComponentsMapping = [];
         let wpDesignComponentId = null;
         let workPackage = null;
-
+        let componentCount = 0;
 
         newWorkPackageComponentData.forEach((wpComponent) => {
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Work Package Component {} - {}", wpComponent.componentType, wpComponent._id);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Work Package Component {} - {}", wpComponent.componentType, wpComponent._id);
             let skip = false;
 
             let workPackageId = getIdFromMap(workPackagesMapping, wpComponent.workPackageId);
@@ -846,18 +861,24 @@ class ImpExServices{
                     // Map old component ids to new
                     workPackageComponentsMapping.push({oldId: wpComponent._id, newId: workPackageComponentId});
                 }
+
+                componentCount++;
             }
 
         });
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Work Package Components", componentCount);
 
         return workPackageComponentsMapping;
     };
 
     restoreFeatureBackgroundStepData(newFeatureBackgroundStepsData, designsMapping, designVersionsMapping, designUpdatesMapping){
 
+        let componentCount = 0;
+
         newFeatureBackgroundStepsData.forEach((step) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Background Step {} {}", step.stepType, step.stepText);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Background Step {} {}", step.stepType, step.stepText);
 
             let designId = getIdFromMap(designsMapping, step.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, step.designVersionId);
@@ -870,12 +891,17 @@ class ImpExServices{
                 step
             );
 
+            componentCount++;
             // Currently don't need to map step ids..
 
         });
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Feature Background Steps", componentCount);
     };
 
     restoreScenarioStepData(newScenarioStepsData, designsMapping, designVersionsMapping, designUpdatesMapping){
+
+        let componentCount = 0;
 
         newScenarioStepsData.forEach((step) => {
 
@@ -892,9 +918,12 @@ class ImpExServices{
                 step
             );
 
+            componentCount++;
             // Currently don't need to map step ids..
 
         });
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Scenario Steps", componentCount);
     }
 
 
@@ -1110,7 +1139,7 @@ class ImpExServices{
         if(outputLocationFiles.length > 0){
 
             let migratedLocationFiles = this.migrateTestOutputLocationFileData(outputLocationFiles, backupDataVersion, currentDataVersion);
-            this.restoreTestOutputLocationFileData(migratedLocationFiles, usersMapping, testOutputLocationsMapping);
+            this.restoreTestOutputLocationFileData(migratedLocationFiles, testOutputLocationsMapping);
         }
 
         if(userOutputLocations.length > 0){

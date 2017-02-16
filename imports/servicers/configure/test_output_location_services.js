@@ -105,14 +105,13 @@ class TestOutputLocationServices {
                 {
                     locationId:             locationId,
                     fileAlias:              DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS,
-                    fileType:               'NONE',
                     fileName:               DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_NAME
                 }
             )
         }
     };
 
-    importLocationFile(locationfile, locationId, userId){
+    importLocationFile(locationfile, locationId){
 
         if (Meteor.isServer) {
 
@@ -122,7 +121,7 @@ class TestOutputLocationServices {
                     fileAlias:              locationfile.fileAlias,
                     fileDescription:        locationfile.fileDescription,
                     fileType:               locationfile.fileType,
-                    fileUserId:             userId,
+                    testRunner:             locationfile.testRunner,
                     fileName:               locationfile.fileName,
                     allFilesOfType:         locationfile.allFilesOfType
                 }
@@ -143,7 +142,7 @@ class TestOutputLocationServices {
                         fileAlias:              locationFile.fileAlias,
                         fileDescription:        locationFile.fileDescription,
                         fileType:               locationFile.fileType,
-                        fileUserId:             locationFile.fileUserId,
+                        testRunner:             locationFile.testRunner,
                         fileName:               locationFile.fileName,
                         allFilesOfType:         locationFile.allFilesOfType
                     }

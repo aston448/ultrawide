@@ -6,8 +6,8 @@ let Schema = new SimpleSchema({
     locationId:             {type: String},                                         // Reference to Location
     fileAlias:              {type: String},                                         // Short identifying name for this file
     fileDescription:        {type: Object, blackbox: true, optional: true},         // Text descriptive of this location
-    fileType:               {type: String},                                         // UNIT TEST, INTEGRATION TEST or ACCEPTANCE TEST
-    fileUserId:             {type: String, defaultValue: 'NONE'},                   // Set for LOCAL location files only
+    fileType:               {type: String, defaultValue: 'NONE'},                   // UNIT, INTEGRATION or ACCEPTANCE
+    testRunner:             {type: String, defaultValue: 'NONE'},                   // Which plugin needed to read the test output
     fileName:               {type: String, defaultValue: 'NONE'},                   // Name of actual file
     allFilesOfType:         {type: String, defaultValue: 'NONE'},                   // Alternative to a name - *.xxx
 });

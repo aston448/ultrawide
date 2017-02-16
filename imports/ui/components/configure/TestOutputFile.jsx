@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import ClientTestOutputLocationServices from '../../../apiClient/apiClientTestOutputLocations.js';
-import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, TestLocationFileType} from '../../../constants/constants.js';
+import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, TestLocationFileType, TestRunner} from '../../../constants/constants.js';
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -35,6 +35,7 @@ export class TestOutputFile extends Component {
             editing:                false,
             aliasValue:             this.props.locationFile.fileAlias,
             typeValue:              this.props.locationFile.fileType,
+            runnerValue:            this.props.locationFile.testRunner,
             nameValue:              this.props.locationFile.fileName,
         };
 
@@ -44,13 +45,13 @@ export class TestOutputFile extends Component {
 
         event.preventDefault();
 
-        const locationFile = {
+          const locationFile = {
             _id:                    this.props.locationFile._id,
             locationId:             this.props.currentLocationId,
             fileAlias:              this.state.aliasValue,
             fileDescription:        null,
             fileType:               this.state.typeValue,
-            fileUserId:             'NONE',
+            testRunner:             this.state.runnerValue,
             fileName:               this.state.nameValue,
             allFilesOfType:         'NONE'
         };
@@ -82,6 +83,10 @@ export class TestOutputFile extends Component {
         this.setState({typeValue: e.target.value})
     }
 
+    onRunnerChange(e){
+        this.setState({runnerValue: e.target.value})
+    }
+
     onAliasChange(e){
         this.setState({aliasValue: e.target.value})
     }
@@ -95,14 +100,17 @@ export class TestOutputFile extends Component {
             <div>
                 <Grid>
                     <Row>
-                        <Col sm={5}>
+                        <Col sm={4}>
                             {locationFile.fileAlias}
                         </Col>
-                        <Col sm={5}>
+                        <Col sm={4}>
                             {locationFile.fileName}
                         </Col>
                         <Col sm={2}>
                             {locationFile.fileType}
+                        </Col>
+                        <Col sm={2}>
+                            {locationFile.testRunner}
                         </Col>
                     </Row>
                 </Grid>
@@ -147,8 +155,19 @@ export class TestOutputFile extends Component {
                     </Col>
                 </FormGroup>
 
-
-
+                <FormGroup controlId="formTypeSelect">
+                    <Col componentClass={ControlLabel} sm={2}>
+                        Test Runner
+                    </Col>
+                    <Col sm={10}>
+                        <FormControl componentClass="select" placeholder={locationFile.testRunner} value={this.state.runnerValue} onChange={(e) => this.onRunnerChange(e)}>
+                            <option value={TestRunner.NONE}>{TestRunner.NONE}</option>
+                            <option value={TestRunner.CHIMP_CUCUMBER}>{TestRunner.CHIMP_CUCUMBER}</option>
+                            <option value={TestRunner.CHIMP_MOCHA}>{TestRunner.CHIMP_MOCHA}</option>
+                            <option value={TestRunner.METEOR_MOCHA}>{TestRunner.METEOR_MOCHA}</option>
+                        </FormControl>
+                    </Col>
+                </FormGroup>
 
                 <Button bsSize="xs" onClick={() => this.onSave(userRole)}>
                     Save

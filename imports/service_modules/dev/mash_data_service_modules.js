@@ -201,7 +201,7 @@ class MashDataModules{
         });
     }
 
-    getAcceptanceTestResults(testRunner, userContext){
+    getAcceptanceTestResults(userContext){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
@@ -221,7 +221,7 @@ class MashDataModules{
         // }
     };
 
-    getIntegrationTestResults(testRunner, userContext, userRole){
+    getIntegrationTestResults(userContext, userRole){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
@@ -268,7 +268,7 @@ class MashDataModules{
                     log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Results from {}", testFile);
 
                     // Call the appropriate file parser
-                    switch (testRunner) {
+                    switch (file.testRunner) {
                         case TestRunner.CHIMP_MOCHA:
                             log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_MOCHA Results Data");
 
@@ -289,7 +289,7 @@ class MashDataModules{
 
     };
 
-    getUnitTestResults(testRunner, userContext, userRole){
+    getUnitTestResults(userContext, userRole){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
@@ -328,7 +328,7 @@ class MashDataModules{
                     log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
 
                     // Call the appropriate file parser
-                    switch (testRunner) {
+                    switch (file.testRunner) {
                         case TestRunner.METEOR_MOCHA:
                             log((msg) => console.log(msg), LogLevel.DEBUG, "Getting METEOR_MOCHA Results Data");
 

@@ -10,7 +10,6 @@ export const RoleType = {
 };
 
 export const UltrawideAction = {
-
     ACTION_DESIGNS:             'Go to Designs Menu',
     ACTION_LAST_DESIGNER:       'Go to my current Design Version or Update',
     ACTION_LAST_DEVELOPER:      'Go to my current Work Package',
@@ -278,18 +277,21 @@ export const LogLevel = {
 };
 
 export const TestType = {
+    NONE:           'NONE',
     ACCEPTANCE:     'Acceptance',
     INTEGRATION:    'Integration',
     UNIT:           'Unit'
 };
 
 export const TestRunner = {
+    NONE:           'Not Defined',
     CHIMP_MOCHA:    'Chimp Mocha',
     CHIMP_CUCUMBER: 'Chimp Cucumber',
     METEOR_MOCHA:   'Meteor Mocha'
 };
 
 export const TestLocationType = {
+    NONE:           'NONE',
     SHARED:         'SHARED',
     LOCAL:          'LOCAL'
 };
