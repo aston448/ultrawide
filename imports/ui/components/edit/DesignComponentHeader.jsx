@@ -7,7 +7,6 @@ import React, { Component, PropTypes} from 'react';
 
 
 // Ultrawide GUI Components
-import ProgressIndicator    from '../common/ProgressIndicator.jsx';
 import TestSummary          from '../dev/TestSummary.jsx';
 import FeatureTestSummary   from '../dev/FeatureTestSummary.jsx';
 
@@ -115,7 +114,7 @@ class DesignComponentHeader extends Component{
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.isDragging === this.props.isDragging &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue //&&
+                    nextProps.testDataFlag === this.props.testDataFlag //&&
                     //nextProps.currentViewDataValue === this.props.currentViewDataValue
                 );
                 break;
@@ -140,7 +139,7 @@ class DesignComponentHeader extends Component{
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
+                    nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.isDragging === this.props.isDragging
                 );
                 break;
@@ -153,7 +152,7 @@ class DesignComponentHeader extends Component{
                     nextProps.mode === this.props.mode &&
                     nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
                     nextProps.testSummary === this.props.testSummary &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
+                    nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.isOpen === this.props.isOpen
                 );
         }
@@ -1058,7 +1057,7 @@ DesignComponentHeader.propTypes = {
     testSummaryData: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
     //currentViewDataValue: PropTypes.bool.isRequired,
-    currentProgressDataValue: PropTypes.bool.isRequired
+    testDataFlag: PropTypes.bool.isRequired
 };
 
 // React DnD ===========================================================================================================

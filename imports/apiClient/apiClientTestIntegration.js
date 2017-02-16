@@ -14,7 +14,7 @@ import ClientContainerServices from '../apiClient/apiClientContainerServices.js'
 
 // REDUX services
 import store from '../redux/store'
-import {updateUserMessage, setMashDataStaleTo, updateProgressData, setCurrentView} from '../redux/actions'
+import {updateUserMessage, setMashDataStaleTo, updateTestDataFlag, setCurrentView} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Items
@@ -41,7 +41,7 @@ class ClientTestIntegrationServices {
     };
 
     // User is entering a screen where dev data is needed --------------------------------------------------------------
-    loadUserDevData(userContext, userRole, viewOptions, nextView, progressData){
+    loadUserDevData(userContext, userRole, viewOptions, nextView, testDataFlag){
 
         // Check that data not already loaded
         const mashDataCount = UserWorkPackageMashData.find({userId: userContext.userId}).count();
@@ -51,7 +51,7 @@ class ClientTestIntegrationServices {
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
             // Load user dev data and when done update the design mash and switch view if wanted
-            ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, progressData, nextView));
+            ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag, nextView));
         } else {
 
             // Not loading data but we may want to change view
@@ -63,7 +63,7 @@ class ClientTestIntegrationServices {
     }
 
     // Update the test summary data - when user opens the Test Summary -------------------------------------------------
-    updateTestSummaryData(userContext, userRole, viewOptions, progressData){
+    updateTestSummaryData(userContext, userRole, viewOptions, testDataFlag){
 
         // It is possible that dev data has not yet been loaded yet
         const mashDataCount = UserWorkPackageMashData.find({userId: userContext.userId}).count();
@@ -73,32 +73,33 @@ class ClientTestIntegrationServices {
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
             // Load user dev data and when done update the design mash and switch view if wanted
-            ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, progressData));
+            ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag));
+
         } else {
 
-            this.updateTestSummary(userContext, userRole, progressData)
+            this.updateTestSummary(userContext, userRole, testDataFlag)
         }
 
 
     };
 
     // Update the WP test details - when user opens a Test View --------------------------------------------------------
-    updateWorkPackageTestData(userContext, userRole, viewOptions, mashDataStale){
+    updateWorkPackageTestData(userContext, userRole, viewOptions, mashDataStale, testDataFlag){
 
         // Load the WP Design Data if it needs it
         if (mashDataStale) {
 
-            this.updateMashData(userContext, userRole, viewOptions);
+            this.updateMashData(userContext, userRole, viewOptions, testDataFlag);
 
         } else {
 
             // Just load the test results
-            this.updateTestResults(userContext, userRole, viewOptions);
+            this.updateTestResults(userContext, userRole, viewOptions, testDataFlag);
         }
     };
 
     // User has requested a complete refresh of test data --------------------------------------------------------------
-    refreshTestData(userContext, userRole, viewOptions, mashDataStale, progressData, nextView){
+    refreshTestData(userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView){
 
         // Is this a Work Package view?
         if(userContext.workPackageId != 'NONE') {
@@ -109,7 +110,7 @@ class ClientTestIntegrationServices {
                 // Load the WP Design Data if it needs it
                 if (mashDataStale) {
 
-                    this.updateMashData(userContext, userRole, viewOptions, progressData, nextView);
+                    this.updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView);
 
                 } else {
 
@@ -119,17 +120,17 @@ class ClientTestIntegrationServices {
                     // If developer also has test summary open load that too but don't trigger next view yet
                     if(viewOptions.devTestSummaryVisible){
 
-                        this.updateTestSummary(userContext, userRole, progressData);
+                        this.updateTestSummary(userContext, userRole, testDataFlag);
                     }
 
-                    this.updateTestResults(userContext, userRole, viewOptions, progressData, nextView)
+                    this.updateTestResults(userContext, userRole, viewOptions, testDataFlag, nextView)
                 }
             } else {
 
                 // Are we wanting to see just the Test Summary
-                if(viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible){
+                if(viewOptions.devTestSummaryVisible){
 
-                    this.updateTestSummary(userContext, userRole, progressData, nextView);
+                    this.updateTestSummary(userContext, userRole, testDataFlag, nextView);
                 }
             }
         } else {
@@ -137,16 +138,16 @@ class ClientTestIntegrationServices {
             // Must be a view where there only is a test summary
             if(viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible){
 
-                this.updateTestSummary(userContext, userRole, progressData, nextView);
+                this.updateTestSummary(userContext, userRole, testDataFlag, nextView);
             }
         }
 
     };
 
     // User has requested a refresh of everything because another user might have changed stuff ------------------------
-    refreshDesignMashData(userContext, userRole, viewOptions, progressData){
+    refreshDesignMashData(userContext, userRole, viewOptions, testDataFlag){
 
-        this.refreshTestData(userContext, userRole, viewOptions, true, progressData);
+        this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag);
 
     };
 
@@ -154,7 +155,7 @@ class ClientTestIntegrationServices {
     // Helper Methods ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     // Update the design-test mash data to which test results are applied - and then apply the test results
-    updateMashData(userContext, userRole, viewOptions, progressData, nextView){
+    updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView){
 
         store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
@@ -177,9 +178,9 @@ class ClientTestIntegrationServices {
                     } else {
 
                         store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Test data loaded'}));
-                        if(progressData) {
-                            store.dispatch(updateProgressData(!progressData));
-                        }
+
+                        // Ensure data refreshes
+                        store.dispatch(updateTestDataFlag(!testDataFlag));
 
                         // If we have passed in a view to go to after loading the data...
                         if(nextView){
@@ -195,7 +196,7 @@ class ClientTestIntegrationServices {
     };
 
     // Get latest test results required for current view options
-    updateTestResults(userContext, userRole, viewOptions, progressData, nextView){
+    updateTestResults(userContext, userRole, viewOptions, testDataFlag, nextView){
 
         store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Loading test data...'}));
 
@@ -207,9 +208,9 @@ class ClientTestIntegrationServices {
             } else {
 
                 store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Test data loaded'}));
-                if(progressData) {
-                    store.dispatch(updateProgressData(!progressData));
-                }
+
+                // Ensure data refreshes
+                store.dispatch(updateTestDataFlag(!testDataFlag));
 
                 // If we have passed in a view to go to after loading the data...
                 if(nextView){
@@ -220,7 +221,7 @@ class ClientTestIntegrationServices {
     };
 
     // Update the test summary data
-    updateTestSummary(userContext, userRole, progressData, nextView){
+    updateTestSummary(userContext, userRole, testDataFlag, nextView){
 
         store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Loading test summary data...'}));
 
@@ -232,9 +233,9 @@ class ClientTestIntegrationServices {
             } else {
 
                 store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Test summary data loaded'}));
-                if(progressData) {
-                    store.dispatch(updateProgressData(!progressData));
-                }
+
+                // Ensure data refreshes
+                store.dispatch(updateTestDataFlag(!testDataFlag));
 
                 // If we have passed in a view to go to after loading the data...
                 if(nextView){

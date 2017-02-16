@@ -15,7 +15,7 @@ import { mashMoveDropAllowed, log} from '../common/utils.js';
 
 // REDUX
 import store from '../redux/store'
-import {setCurrentUserItemContext, updateProgressData, updateUserMessage} from '../redux/actions'
+import {setCurrentUserItemContext, updateTestDataFlag, updateUserMessage} from '../redux/actions'
 
 // =====================================================================================================================
 

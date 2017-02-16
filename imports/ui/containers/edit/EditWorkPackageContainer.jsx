@@ -65,7 +65,7 @@ class WorkPackageApplicationsList extends Component {
     }
 
     // A list of top level applications in the work package view
-    renderViewApplications(wpViewApplications, context, view, mode) {
+    renderViewApplications(wpViewApplications, context, view, mode, testSummary) {
         return wpViewApplications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -75,7 +75,7 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
-                    testSummary={false}
+                    testSummary={testSummary}
                     testSummaryData={null}
                 />
             );
@@ -85,6 +85,8 @@ class WorkPackageApplicationsList extends Component {
     render() {
 
         const {wpScopeApplications, wpViewApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
+
+        console.log("WP Container. View = " + view + ". Test Summary =  " + viewOptions.devTestSummaryVisible);
 
         let layout = '';
 
@@ -97,7 +99,7 @@ class WorkPackageApplicationsList extends Component {
         // Actual View of the WP
         let wpViewComponent =
             <Panel header="Work Package Content" className="panel-update panel-update-body">
-                {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode)}
+                {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
             </Panel>;
 
         // Initial assumption is only 2 cols showing
@@ -105,7 +107,6 @@ class WorkPackageApplicationsList extends Component {
         let col1width = 6;
         let col2width = 6;
         let col3width = 6;
-        let col4width = 6;
 
         let wpTextComponent = '';
         let domainDictionary = '';
@@ -116,23 +117,22 @@ class WorkPackageApplicationsList extends Component {
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 
-                // Layout is WP | TEXT | opt DICT
+                // Layout is WP + opt Test Summary | TEXT | opt DICT |
                 // WHAT OPTIONAL COMPONENTS ARE VISIBLE (Besides Scope and WP)
 
                 // Start by assuming only 2 cols
                 col1width = 6;
                 col2width = 6;
                 col3width = 6;
-                col4width = 6;
 
                 // Details
                 let wpTextHeader = '';
 
                 switch(view){
-                    case ViewType.WORK_PACKAGE_BASE_EDIT:
+                    case ViewType.WORK_PACKAGE_BASE_VIEW:
                         wpTextHeader = 'Text';
                         break;
-                    case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                    case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                         wpTextHeader = 'New and Old Text';
                         break;
                 }
@@ -166,6 +166,30 @@ class WorkPackageApplicationsList extends Component {
                         col1width = 4;
                         col2width = 4;
                         col3width = 4;
+
+                        displayedItems++;
+                }
+
+                // Test Summary - this actually just makes col 1 wider
+                if(viewOptions.devTestSummaryVisible){
+
+                    switch(displayedItems){
+                        case 1:
+                            col1width = 12;
+                            col2width = 0;
+                            col3width = 0;
+                            break;
+                        case 2:
+                            col1width = 7;
+                            col2width = 5;
+                            col3width = 5;
+                            break;
+                        case 3:
+                            col1width = 6;
+                            col2width = 3;
+                            col3width = 3;
+                            break;
+                    }
                 }
 
                 // Create the layout depending on the current view...
@@ -191,6 +215,8 @@ class WorkPackageApplicationsList extends Component {
                             {domainDictionary}
                         </Col>;
                 }
+
+
 
                 // Make up the layout based on the view options
                 layout =

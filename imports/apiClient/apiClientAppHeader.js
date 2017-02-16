@@ -36,7 +36,7 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    toggleViewOption(view, userContext, userRole, optionType, currentOptions, currentDataValue, mashStale, progressData){
+    toggleViewOption(view, userContext, userRole, optionType, currentOptions, currentDataValue, mashStale, testDataFlag){
         // Toggles a particular view option
         let newOptions = currentOptions;
 
@@ -52,7 +52,7 @@ class ClientAppHeaderServices{
             case ViewOptionType.DEV_TEST_SUMMARY:
                 if(newOptions[optionType]){
                     // Item is being switched on so load up the data
-                    ClientTestIntegrationServices.updateTestSummaryData(userContext, userRole, progressData);
+                    ClientTestIntegrationServices.updateTestSummaryData(userContext, userRole, newOptions, testDataFlag);
                 }
                 break;
             case ViewOptionType.DEV_ACC_TESTS:
@@ -60,7 +60,7 @@ class ClientAppHeaderServices{
             case ViewOptionType.DEV_UNIT_TESTS:
                 if(newOptions[optionType]){
                     // Item is being switched on so load up the data
-                    ClientTestIntegrationServices.updateWorkPackageTestData(userContext, userRole, newOptions, mashStale);
+                    ClientTestIntegrationServices.updateWorkPackageTestData(userContext, userRole, newOptions, mashStale, testDataFlag);
                 }
                 break;
             default:

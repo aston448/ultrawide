@@ -78,6 +78,8 @@ class FeatureAspectsList extends Component {
                     break;
                 case ViewType.DEVELOP_BASE_WP:
                 case ViewType.DEVELOP_UPDATE_WP:
+                case ViewType.WORK_PACKAGE_BASE_VIEW:
+                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                     testSummary = viewOptions.devTestSummaryVisible;
                     break;
             }

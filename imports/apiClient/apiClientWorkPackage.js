@@ -367,7 +367,7 @@ class ClientWorkPackageServices {
     };
 
     // Developer chose to work on a work package
-    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId, progressData){
+    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId, testDataFlag){
 
         // Client validation
         let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, wpToDevelopId);
@@ -391,7 +391,7 @@ class ClientWorkPackageServices {
         }
 
         // Load dev data - will update test data once loaded and switch the view
-        ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, progressData);
+        ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag);
 
         return {success: true, message: ''};
 

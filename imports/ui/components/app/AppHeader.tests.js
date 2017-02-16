@@ -23,7 +23,7 @@ describe('JSX: AppHeader', () => {
             const userContext = {designId: 'AAA', designVersionId: 'BBB'};
             const userViewOptions = {};
             const message = 'No message';
-            const currentProgressDataValue = false;
+            const testDataFlag = false;
             const currentViewDataValue = false;
 
             const item = shallow(
@@ -35,7 +35,7 @@ describe('JSX: AppHeader', () => {
                     userContext={userContext}
                     userViewOptions={userViewOptions}
                     message={message}
-                    currentProgressDataValue={currentProgressDataValue}
+                    testDataFlag={testDataFlag}
                     currentViewDataValue={currentViewDataValue}
                 />
             );
@@ -53,7 +53,7 @@ describe('JSX: AppHeader', () => {
             const userContext = {designId: 'AAA', designVersionId: 'BBB'};
             const userViewOptions = {};
             const message = 'No message';
-            const currentProgressDataValue = false;
+            const testDataFlag = false;
             const currentViewDataValue = false;
 
             const item = shallow(
@@ -65,7 +65,7 @@ describe('JSX: AppHeader', () => {
                     userContext={userContext}
                     userViewOptions={userViewOptions}
                     message={message}
-                    currentProgressDataValue={currentProgressDataValue}
+                    testDataFlag={testDataFlag}
                     currentViewDataValue={currentViewDataValue}
                 />
             );
@@ -87,7 +87,7 @@ describe('JSX: AppHeader', () => {
             const userContext = {designId: 'AAA', designVersionId: 'BBB'};
             const userViewOptions = {};
             const message = 'No message';
-            const currentProgressDataValue = false;
+            const testDataFlag = false;
             const currentViewDataValue = false;
 
             const item = shallow(
@@ -99,7 +99,7 @@ describe('JSX: AppHeader', () => {
                     userContext={userContext}
                     userViewOptions={userViewOptions}
                     message={message}
-                    currentProgressDataValue={currentProgressDataValue}
+                    testDataFlag={testDataFlag}
                     currentViewDataValue={currentViewDataValue}
                 />
             );
@@ -118,7 +118,7 @@ describe('JSX: AppHeader', () => {
             const userContext = {designId: 'AAA', designVersionId: 'BBB'};
             const userViewOptions = {};
             const message = 'No message';
-            const currentProgressDataValue = false;
+            const testDataFlag = false;
             const currentViewDataValue = false;
 
             const item = shallow(
@@ -130,7 +130,7 @@ describe('JSX: AppHeader', () => {
                     userContext={userContext}
                     userViewOptions={userViewOptions}
                     message={message}
-                    currentProgressDataValue={currentProgressDataValue}
+                    testDataFlag={testDataFlag}
                     currentViewDataValue={currentViewDataValue}
                 />
             );

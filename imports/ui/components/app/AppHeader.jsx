@@ -48,9 +48,9 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode);
     }
 
-    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, progressData){
+    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, testDataFlag){
         // Show / hide Various view Options
-        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, progressData);
+        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, testDataFlag);
     }
 
     onZoomToFeatures(userContext){
@@ -92,7 +92,7 @@ export class AppHeader extends Component {
     }
 
     onRefreshTestData(view, userContext, userRole,  userViewOptions, mashStale){
-        ClientTestIntegrationServices.refreshTestData(userContext, userRole, userViewOptions, mashStale, this.props.currentProgressDataValue)
+        ClientTestIntegrationServices.refreshTestData(userContext, userRole, userViewOptions, mashStale, this.props.testDataFlag)
     }
 
     onExportFeatureUpdates(userContext){
@@ -117,7 +117,7 @@ export class AppHeader extends Component {
 
     render() {
 
-        const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, currentProgressDataValue, currentViewDataValue, mashStale} = this.props;
+        const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, testDataFlag, currentViewDataValue, mashStale} = this.props;
 
         let appName = ClientIdentityServices.getApplicationName();
 
@@ -153,11 +153,15 @@ export class AppHeader extends Component {
                 testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                detailsOption = ViewOptionType.WP_DETAILS;
+                dictOption = ViewOptionType.WP_DICT;
+                break;
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 detailsOption = ViewOptionType.WP_DETAILS;
                 dictOption = ViewOptionType.WP_DICT;
+                testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
@@ -207,25 +211,25 @@ export class AppHeader extends Component {
             <Button id="butDetailsFixed" bsSize="xs" bsStyle={'info'}>Details</Button>;
         let detailsButton =
             <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Details</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Details</Button>;
         let testSummaryButton =
             <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Test Summary</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Test Summary</Button>;
         let accTestsButton =
             <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Acc Tests</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Acc Tests</Button>;
         let intTestsButton =
             <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Int Tests</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Int Tests</Button>;
         let unitTestsButton =
             <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Unit Tests</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Unit Tests</Button>;
         let accFilesButton =
             <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Acc Files</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Acc Files</Button>;
         let domainDictionaryButton =
             <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userRole, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Domain Dict</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, dictOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Domain Dict</Button>;
 
 
         let homeScreenButton =
@@ -293,8 +297,8 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {testOutputButton}
                         {homeScreenButton}
+                        {testOutputButton}
                     </ButtonToolbar>;
                 break;
             case ViewType.TEST_OUTPUTS:
@@ -302,27 +306,34 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                     </ButtonToolbar>;
                     break;
             case ViewType.DESIGNS:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                headerTopActions = <ButtonToolbar>{homeScreenButton}</ButtonToolbar>;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {homeScreenButton}
+                    </ButtonToolbar>;
                 break;
             case ViewType.SELECT:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
-                headerTopActions = <ButtonToolbar>{homeScreenButton}{designsButton}</ButtonToolbar>;
+                headerTopActions =
+                    <ButtonToolbar>
+                        {homeScreenButton}
+                        {designsButton}
+                    </ButtonToolbar>;
                 break;
             case ViewType.DESIGN_NEW_EDIT:
                 headerUserInfo = userData;
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -355,8 +366,8 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -384,8 +395,8 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -414,8 +425,8 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -438,8 +449,8 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
@@ -458,9 +469,10 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
+                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
@@ -468,6 +480,9 @@ export class AppHeader extends Component {
                             {designFixedButton}
                             {detailsFixedButton}
                             {domainDictionaryButton}
+                        </ButtonGroup>
+                        <ButtonGroup>
+                            {testSummaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;
@@ -477,8 +492,8 @@ export class AppHeader extends Component {
                 headerTitleActions = logoutButton;
                 headerTopActions =
                     <ButtonToolbar>
-                        {designsButton}
                         {homeScreenButton}
+                        {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
                     </ButtonToolbar>;
@@ -584,7 +599,7 @@ function mapStateToProps(state) {
         userContext:                state.currentUserItemContext,
         userViewOptions:            state.currentUserViewOptions,
         message:                    state.currentUserMessage,
-        currentProgressDataValue:   state.currentProgressDataValue,
+        testDataFlag:   state.testDataFlag,
         currentViewDataValue:       state.currentViewOptionsDataValue,
         mashStale:                  state.mashDataStale,
     }

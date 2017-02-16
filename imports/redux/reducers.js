@@ -22,7 +22,7 @@ const initialState = {
     currentDesignComponentName: 'No Component',
     currentDesignComponentRawName: null,
     currentUserMessage: {messageType: MessageType.INFO, messageText: 'Please log in...' },
-    currentProgressDataValue: false,
+    testDataFlag: false,
     mashDataStale: true,
     currentViewOptionsDataValue: false
 
@@ -95,9 +95,9 @@ export function myApplication(state = initialState, action) {
             return Object.assign({}, state, {
                 currentUserMessage: action.newUserMessage
             });
-        case Actions.UPDATE_PROGRESS_DATA:
+        case Actions.UPDATE_TEST_DATA_FLAG:
             return Object.assign({}, state, {
-                currentProgressDataValue: action.newDataValue
+                testDataFlag: action.newDataValue
             });
         case Actions.UPDATE_MASH_DATA_STALE_FLAG:
             return Object.assign({}, state, {

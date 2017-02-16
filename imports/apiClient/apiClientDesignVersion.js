@@ -18,7 +18,7 @@ import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage, updateProgressData} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage, updateTestDataFlag} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -303,7 +303,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
-    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, progressData){
+    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag){
 
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
@@ -324,7 +324,7 @@ class ClientDesignVersionServices{
         // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
         if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
 
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, progressData);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag);
         } else {
 
             // Just switch to the design editor view
@@ -340,7 +340,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersion, progressData){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersion._id);
@@ -394,7 +394,7 @@ class ClientDesignVersionServices{
         // Get dev data and the latest test results if summary showing - and switch to the view when loaded
         if(viewOptions.designTestSummaryVisible) {
 
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, progressData);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag);
         } else {
 
             // Just switch to the design editor view

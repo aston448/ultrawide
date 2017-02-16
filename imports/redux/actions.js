@@ -33,7 +33,7 @@ export const UPDATE_DESIGN_COMPONENT_RAW_NAME = 'UPDATE_DESIGN_COMPONENT_RAW_NAM
 
 // This flag is toggled each time an update to test / design progress data is requested
 // Include it as a property in any components that should redraw
-export const UPDATE_PROGRESS_DATA = 'UPDATE_PROGRESS_DATA';
+export const UPDATE_TEST_DATA_FLAG = 'UPDATE_TEST_DATA_FLAG';
 
 // Flag to indicate when Design-Dev Mash data is stale
 export const UPDATE_MASH_DATA_STALE_FLAG = 'UPDATE_MASH_DATA_STALE_FLAG';
@@ -303,7 +303,7 @@ export function setCurrentUserOpenWorkPackageItems(userId, existingItems, compon
 // Updates the current design component name if changed
 export function updateDesignComponentName(designComponentName) {
     return function (dispatch) {
-        //console.log("ACTIONS: New component name: " + designComponentName);
+
         dispatch({type: UPDATE_DESIGN_COMPONENT_NAME, newDesignComponentName: designComponentName});
     };
 }
@@ -311,28 +311,28 @@ export function updateDesignComponentName(designComponentName) {
 // Updates the current design component raw name data if changed
 export function updateDesignComponentRawName(designComponentRawName) {
     return function (dispatch) {
-        //console.log("ACTIONS: New component raw name: " + designComponentRawName);
+
         dispatch({type: UPDATE_DESIGN_COMPONENT_RAW_NAME, newDesignComponentRawName: designComponentRawName});
     };
 }
 
 // Updates the current design component name if changed
 export function updateUserMessage(newMessage) {
-    //console.log("ACTIONS: New message: " + newMessage);
+
     return function (dispatch) {
         dispatch({type: UPDATE_USER_MESSAGE, newUserMessage: newMessage});
     };
 }
 
 // Toggle between true and false to trigger re-renders of design when data is updated
-export function updateProgressData(newValue) {
-    //console.log("ACTIONS: Progress data update: " + newValue);
+export function updateTestDataFlag(newValue) {
+
     return function (dispatch) {
-        dispatch({type: UPDATE_PROGRESS_DATA, newDataValue: newValue});
+        dispatch({type: UPDATE_TEST_DATA_FLAG, newDataValue: newValue});
     };
 }
 
-// Toggle between true and false to trigger re-renders of design when data is updated
+// Shows when design has been updated so mash data is out of date
 export function setMashDataStaleTo(newValue) {
 
     return function (dispatch) {
@@ -340,9 +340,9 @@ export function setMashDataStaleTo(newValue) {
     };
 }
 
-// Toggle between true and false to trigger re-renders of design when data is updated
+// User View Options
 export function updateViewOptionsData(newValue) {
-    //console.log("ACTIONS: View options data update: " + newValue);
+
     return function (dispatch) {
         dispatch({type: UPDATE_VIEW_OPTIONS_DATA, newDataValue: newValue});
     };

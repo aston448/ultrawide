@@ -93,7 +93,7 @@ class DesignComponent extends Component{
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue //&&
+                    nextProps.testDataFlag === this.props.testDataFlag //&&
                     //nextProps.currentViewDataValue === this.props.currentViewDataValue
                 );
                 break;
@@ -117,7 +117,7 @@ class DesignComponent extends Component{
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
+                    nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.mode === this.props.mode
                 );
                 break;
@@ -128,7 +128,7 @@ class DesignComponent extends Component{
                     nextState.highlighted === this.state.highlighted &&
                     nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.currentProgressDataValue === this.props.currentProgressDataValue &&
+                    nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.testSummary === this.props.testSummary
                  );
         }
@@ -334,7 +334,7 @@ class DesignComponent extends Component{
     // Render generic design component
     render() {
 
-        const {currentItem, designItem, updateItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, currentProgressDataValue, currentViewDataValue} = this.props;
+        const {currentItem, designItem, updateItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, testDataFlag, currentViewDataValue} = this.props;
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -371,7 +371,7 @@ class DesignComponent extends Component{
                     testSummary={testSummary}
                     testSummaryData={testSummaryData}
                     isOpen={this.state.open}
-                    currentProgressDataValue={currentProgressDataValue}
+                    testDataFlag={testDataFlag}
                     //currentViewDataValue={currentViewDataValue}
                 />
             </div>;
@@ -704,7 +704,7 @@ function mapStateToProps(state) {
         openDesignItems:            state.currentUserOpenDesignItems,
         openDesignUpdateItems:      state.currentUserOpenDesignUpdateItems,
         openWorkPackageItems:       state.currentUserOpenWorkPackageItems,
-        currentProgressDataValue:   state.currentProgressDataValue,
+        testDataFlag:   state.testDataFlag,
         //currentViewDataValue:       state.currentViewOptionsDataValue
     }
 }
