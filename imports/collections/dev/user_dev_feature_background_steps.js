@@ -24,8 +24,8 @@ UserDevFeatureBackgroundSteps.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDevFeatureBackgroundSteps', function userDevFeatureBackgroundStepsPublication(){
-        return UserDevFeatureBackgroundSteps.find({});
+    Meteor.publish('userDevFeatureBackgroundSteps', function userDevFeatureBackgroundStepsPublication(userId){
+        return UserDevFeatureBackgroundSteps.find({userId: userId});
     })
 }
 

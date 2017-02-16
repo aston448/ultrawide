@@ -22,7 +22,7 @@ UserUnitTestResults.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userUnitTestResults', function userUnitTestResults(){
-        return UserUnitTestResults.find({});
+    Meteor.publish('userUnitTestResults', function userUnitTestResults(userId){
+        return UserUnitTestResults.find({userId: userId});
     })
 }

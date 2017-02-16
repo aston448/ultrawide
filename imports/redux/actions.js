@@ -35,9 +35,11 @@ export const UPDATE_DESIGN_COMPONENT_RAW_NAME = 'UPDATE_DESIGN_COMPONENT_RAW_NAM
 // Include it as a property in any components that should redraw
 export const UPDATE_PROGRESS_DATA = 'UPDATE_PROGRESS_DATA';
 
+// Flag to indicate when Design-Dev Mash data is stale
+export const UPDATE_MASH_DATA_STALE_FLAG = 'UPDATE_MASH_DATA_STALE_FLAG';
+
 // Flag to trigger redraw on update of view options
 export const UPDATE_VIEW_OPTIONS_DATA = 'UPDATE_VIEW_OPTIONS_DATA';
-
 
 // Messaging system
 export const UPDATE_USER_MESSAGE = 'UPDATE_USER_MESSAGE';
@@ -89,7 +91,7 @@ export function setCurrentView(view) {
                 message = 'Select the item you want to work on...';
                 break;
             case ViewType.DESIGN_NEW_EDIT:
-                message = 'Editing Initial Design Version';
+                message = 'Initial Design Version';
                 break;
             case ViewType.DESIGN_PUBLISHED_VIEW:
                 message = 'View Design Version';
@@ -98,7 +100,7 @@ export function setCurrentView(view) {
                 message = 'View Design Version Progress';
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
-                message = 'Editing Design Update';
+                message = 'Design Update Editor';
                 break;
             case ViewType.DESIGN_UPDATE_VIEW:
                 message = 'View Design Update';
@@ -327,6 +329,14 @@ export function updateProgressData(newValue) {
     //console.log("ACTIONS: Progress data update: " + newValue);
     return function (dispatch) {
         dispatch({type: UPDATE_PROGRESS_DATA, newDataValue: newValue});
+    };
+}
+
+// Toggle between true and false to trigger re-renders of design when data is updated
+export function setMashDataStaleTo(newValue) {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_MASH_DATA_STALE_FLAG, newStaleValue: newValue});
     };
 }
 

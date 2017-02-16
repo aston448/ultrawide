@@ -127,39 +127,47 @@ class ClientContainerServices{
 
     }
 
-    getDevData(){
+    getDevData(userId, callback){
 
         // Subscribe to dev data when user enters dev work view
-        const dfHandle = Meteor.subscribe('userDevFeatures');
-        const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps');
-        const fsHandle = Meteor.subscribe('userDevFeatureScenarios');
-        const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps');
-        const wmHandle = Meteor.subscribe('userWorkPackageMashData');
-        const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData');
-        const mmHandle = Meteor.subscribe('userUnitTestMashData');
-        const arHandle = Meteor.subscribe('userAccTestResults');
-        const irHandle = Meteor.subscribe('userIntTestResults');
-        const mrHandle = Meteor.subscribe('userUnitTestResults');
-        const tsHandle = Meteor.subscribe('userDevTestSummaryData');
+        const dfHandle = Meteor.subscribe('userDevFeatures', userId);
+        const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
+        const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
+        const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
+        const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
+        const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
+        const mmHandle = Meteor.subscribe('userUnitTestMashData', userId);
+        const arHandle = Meteor.subscribe('userAccTestResults', userId);
+        const irHandle = Meteor.subscribe('userIntTestResults', userId);
+        const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
+        const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
 
-        const loading = (
-            !dfHandle.ready()   ||
-            !dbHandle.ready()   ||
-            !fsHandle.ready()   ||
-            !ssHandle.ready()   ||
-            !wmHandle.ready()   ||
-            !wsHandle.ready()   ||
-            !mmHandle.ready()   ||
-            !arHandle.ready()   ||
-            !irHandle.ready()   ||
-            !mrHandle.ready()   ||
-            !tsHandle.ready()
-        );
+        Tracker.autorun((loader) => {
 
-        console.log('Subscribing to Dev Data');
+            let loading = (
+                !dfHandle.ready()   ||
+                !dbHandle.ready()   ||
+                !fsHandle.ready()   ||
+                !ssHandle.ready()   ||
+                !wmHandle.ready()   ||
+                !wsHandle.ready()   ||
+                !mmHandle.ready()   ||
+                !arHandle.ready()   ||
+                !irHandle.ready()   ||
+                !mrHandle.ready()   ||
+                !tsHandle.ready()
+            );
 
-        return loading;
+            console.log("loading dev data = " + loading);
 
+            if(!loading && callback){
+                callback();
+
+                // Stop this checking once we are done or there will be random chaos
+                loader.stop();
+            }
+
+        });
     }
 
     // Test Output Locations

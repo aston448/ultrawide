@@ -13,10 +13,10 @@ import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.
 // Ultrawide Services
 import {ViewType, ViewMode, ViewOptionType, RoleType, MessageType} from '../../../constants/constants.js'
 
-import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
-import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
-import ClientIdentityServices       from '../../../apiClient/apiIdentity';
-import TextLookups                  from '../../../common/lookups.js';
+import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
+import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
+import ClientIdentityServices           from '../../../apiClient/apiIdentity';
+import TextLookups                      from '../../../common/lookups.js';
 
 // Bootstrap
 import {Alert} from 'react-bootstrap';
@@ -48,9 +48,9 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode);
     }
 
-    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue){
-        // Show / hide Domain Dictionary
-        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue);
+    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, progressData){
+        // Show / hide Various view Options
+        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, progressData);
     }
 
     onZoomToFeatures(userContext){
@@ -91,8 +91,8 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin(userContext.userId);
     }
 
-    onRefreshTestData(view, userContext, userRole,  userViewOptions){
-        ClientMashDataServices.updateTestData(view, userContext, userRole, userViewOptions, this.props.currentProgressDataValue)
+    onRefreshTestData(view, userContext, userRole,  userViewOptions, mashStale){
+        ClientTestIntegrationServices.refreshTestData(userContext, userRole, userViewOptions, mashStale, this.props.currentProgressDataValue)
     }
 
     onExportFeatureUpdates(userContext){
@@ -117,7 +117,7 @@ export class AppHeader extends Component {
 
     render() {
 
-        const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, currentProgressDataValue, currentViewDataValue} = this.props;
+        const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, currentProgressDataValue, currentViewDataValue, mashStale} = this.props;
 
         let appName = ClientIdentityServices.getApplicationName();
 
@@ -206,19 +206,26 @@ export class AppHeader extends Component {
         let detailsFixedButton =
             <Button id="butDetailsFixed" bsSize="xs" bsStyle={'info'}>Details</Button>;
         let detailsButton =
-            <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue)}>Details</Button>;
+            <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Details</Button>;
         let testSummaryButton =
-            <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue)}>Test Summary</Button>;
+            <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Test Summary</Button>;
         let accTestsButton =
-            <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue)}>Acc Tests</Button>;
+            <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Acc Tests</Button>;
         let intTestsButton =
-            <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue)}>Int Tests</Button>;
+            <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Int Tests</Button>;
         let unitTestsButton =
-            <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue)}>Unit Tests</Button>;
+            <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Unit Tests</Button>;
         let accFilesButton =
-            <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue)}>Acc Files</Button>;
+            <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Acc Files</Button>;
         let domainDictionaryButton =
-            <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)} onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userRole, userViewOptions, currentViewDataValue)}>Domain Dict</Button>;
+            <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)}
+                    onClick={ () => this.onToggleViewOption(view, userContext, dictOption, userRole, userViewOptions, currentViewDataValue, mashStale, currentProgressDataValue)}>Domain Dict</Button>;
 
 
         let homeScreenButton =
@@ -231,7 +238,7 @@ export class AppHeader extends Component {
             <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestDataButton =
-            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions)}>Refresh Test Data</Button>;
+            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions, mashStale)}>Refresh Test Data</Button>;
 
 
         // The message display depends on the type of message being displayed
@@ -578,7 +585,8 @@ function mapStateToProps(state) {
         userViewOptions:            state.currentUserViewOptions,
         message:                    state.currentUserMessage,
         currentProgressDataValue:   state.currentProgressDataValue,
-        currentViewDataValue:       state.currentViewOptionsDataValue
+        currentViewDataValue:       state.currentViewOptionsDataValue,
+        mashStale:                  state.mashDataStale,
     }
 }
 

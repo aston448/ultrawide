@@ -8,7 +8,7 @@ import { WorkPackageComponents } from '../collections/work/work_package_componen
 
 // Ultrawide Services
 import { ViewType, ViewOptionType, ComponentType, RoleType, MessageType } from '../constants/constants.js';
-import ClientMashDataServices from '../apiClient/apiClientMashData.js';
+import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration.js';
 
 
 // REDUX services
@@ -36,7 +36,7 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    toggleViewOption(view, userContext, userRole, optionType, currentOptions, currentDataValue){
+    toggleViewOption(view, userContext, userRole, optionType, currentOptions, currentDataValue, mashStale, progressData){
         // Toggles a particular view option
         let newOptions = currentOptions;
 
@@ -50,12 +50,17 @@ class ClientAppHeaderServices{
             case ViewOptionType.DESIGN_TEST_SUMMARY:
             case ViewOptionType.UPDATE_TEST_SUMMARY:
             case ViewOptionType.DEV_TEST_SUMMARY:
+                if(newOptions[optionType]){
+                    // Item is being switched on so load up the data
+                    ClientTestIntegrationServices.updateTestSummaryData(userContext, userRole, progressData);
+                }
+                break;
             case ViewOptionType.DEV_ACC_TESTS:
             case ViewOptionType.DEV_INT_TESTS:
             case ViewOptionType.DEV_UNIT_TESTS:
                 if(newOptions[optionType]){
                     // Item is being switched on so load up the data
-                    ClientMashDataServices.updateTestData(view, userContext, userRole, newOptions);
+                    ClientTestIntegrationServices.updateWorkPackageTestData(userContext, userRole, newOptions, mashStale);
                 }
                 break;
             default:

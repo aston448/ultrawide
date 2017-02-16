@@ -100,7 +100,8 @@ export class WorkPackage extends Component {
             userRole,
             userContext,
             viewOptions,
-            wp._id
+            wp._id,
+            this.props.progressData
         );
     }
 
@@ -233,7 +234,8 @@ function mapStateToProps(state) {
     return {
         userRole:               state.currentUserRole,
         viewOptions:            state.currentUserViewOptions,
-        userContext:            state.currentUserItemContext
+        userContext:            state.currentUserItemContext,
+        progressData:           state.currentProgressDataValue
     }
 }
 

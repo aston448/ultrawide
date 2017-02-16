@@ -24,7 +24,7 @@ UserAccTestResults.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userAccTestResults', function userAccTestResults(){
-        return UserAccTestResults.find({});
+    Meteor.publish('userAccTestResults', function userAccTestResults(userId){
+        return UserAccTestResults.find({userId: userId});
     })
 }

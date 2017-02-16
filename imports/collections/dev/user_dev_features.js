@@ -30,7 +30,7 @@ UserDevFeatures.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDevFeatures', function userDevFeaturesPublication(){
-        return UserDevFeatures.find({});
+    Meteor.publish('userDevFeatures', function userDevFeaturesPublication(userId){
+        return UserDevFeatures.find({userId: userId});
     })
 }

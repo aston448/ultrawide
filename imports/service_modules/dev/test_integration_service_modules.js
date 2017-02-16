@@ -31,13 +31,13 @@ import ChimpCucumberTestServices    from '../../service_modules/dev/test_results
 
 //======================================================================================================================
 //
-// Server Modules for Mash Data Services.
+// Server Modules for Test Integration Services.
 //
 // Methods called from within main API methods
 //
 //======================================================================================================================
 
-class MashDataModules{
+class TestIntegrationModules{
 
     linkAcceptanceFilesToDesign(userContext){
 
@@ -1138,4 +1138,4 @@ class MashDataModules{
 
 }
 
-export default new MashDataModules();
+export default new TestIntegrationModules();

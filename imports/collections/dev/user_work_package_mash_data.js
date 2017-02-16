@@ -47,7 +47,7 @@ UserWorkPackageMashData.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userWorkPackageMashData', function userWorkPackageMashDataPublication(){
-        return UserWorkPackageMashData.find({});
+    Meteor.publish('userWorkPackageMashData', function userWorkPackageMashDataPublication(userId){
+        return UserWorkPackageMashData.find({userId: userId});
     })
 }

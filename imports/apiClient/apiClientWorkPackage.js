@@ -12,7 +12,7 @@ import { WorkPackageMessages } from '../constants/message_texts.js';
 import WorkPackageValidationApi from '../apiValidation/apiWorkPackageValidation.js';
 import ServerWorkPackageApi     from '../apiServer/apiWorkPackage.js';
 import ClientContainerServices  from './apiClientContainerServices.js';
-import ClientMashDataServices   from './apiClientMashData.js';
+import ClientTestIntegrationServices   from './apiClientTestIntegration';
 
 // REDUX services
 import store from '../redux/store'
@@ -367,7 +367,7 @@ class ClientWorkPackageServices {
     };
 
     // Developer chose to work on a work package
-    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId){
+    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId, progressData){
 
         // Client validation
         let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, wpToDevelopId);
@@ -382,12 +382,6 @@ class ClientWorkPackageServices {
         // Set the current context
         let updatedContext = this.setWorkPackage(userContext, wpToDevelopId);
 
-        // Load dev data
-        let loading = ClientContainerServices.getDevData();
-
-        // Get the latest design data for the Mash
-        ClientMashDataServices.populateWorkPackageMashData(updatedContext);
-
         // Get new View...
         let view = ViewType.SELECT;
         if(userContext.designUpdateId === 'NONE') {
@@ -396,11 +390,8 @@ class ClientWorkPackageServices {
             view = ViewType.DEVELOP_UPDATE_WP;
         }
 
-        // Get the latest test results
-        ClientMashDataServices.updateTestData(view, updatedContext, userRole, viewOptions);
-
-        // Switch to Dev View
-        store.dispatch(setCurrentView(view));
+        // Load dev data - will update test data once loaded and switch the view
+        ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, progressData);
 
         return {success: true, message: ''};
 

@@ -33,7 +33,7 @@ UserDevFeatureScenarioSteps.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDevFeatureScenarioSteps', function userDevFeatureScenarioStepsPublication(){
-        return UserDevFeatureScenarioSteps.find({});
+    Meteor.publish('userDevFeatureScenarioSteps', function userDevFeatureScenarioStepsPublication(userId){
+        return UserDevFeatureScenarioSteps.find({userId: userId});
     })
 }

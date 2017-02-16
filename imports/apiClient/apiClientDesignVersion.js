@@ -11,10 +11,10 @@ import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
 
-import ClientMashDataServices       from '../apiClient/apiClientMashData.js';
-import ClientContainerServices      from '../apiClient/apiClientContainerServices.js';
-import DesignVersionValidationApi   from '../apiValidation/apiDesignVersionValidation.js';
-import ServerDesignVersionApi       from '../apiServer/apiDesignVersion.js';
+import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
+import ClientContainerServices          from '../apiClient/apiClientContainerServices.js';
+import DesignVersionValidationApi       from '../apiValidation/apiDesignVersionValidation.js';
+import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -320,18 +320,16 @@ class ClientDesignVersionServices{
         // Ensure that the current version is the version we chose to edit
         let updatedContext = this.setDesignVersion(userContext, designVersionToEditId);
 
-        // Subscribe to Dev data
-        if(Meteor.isClient) {
-            let loading = ClientContainerServices.getDevData();
-        }
 
-        // Get the latest test results if summary showing
+        // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
         if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
-            ClientMashDataServices.updateTestData(ViewType.DESIGN_NEW_EDIT, updatedContext, userRole, viewOptions, progressData);
-        }
 
-        // Switch to the design editor view
-        store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, progressData);
+        } else {
+
+            // Just switch to the design editor view
+            store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
+        }
 
         // Put the view in edit mode
         store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
@@ -357,12 +355,6 @@ class ClientDesignVersionServices{
 
         // Ensure that the current version is the version we chose to view
         let updatedContext = this.setDesignVersion(userContext, designVersion._id);
-
-        // Subscribe to Dev data
-        if(Meteor.isClient) {
-            let loading = ClientContainerServices.getDevData();
-        }
-
 
         // Decide what the actual view should be.  A designer with a New or Draft DV
         // can have the option to switch into edit mode.  Anyone else is view only
@@ -399,13 +391,14 @@ class ClientDesignVersionServices{
                 break;
         }
 
-        // And change the view
-        store.dispatch(setCurrentView(view));
-        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+        // Get dev data and the latest test results if summary showing - and switch to the view when loaded
+        if(viewOptions.designTestSummaryVisible) {
 
-        // Get the latest test results if summary showing
-        if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
-            ClientMashDataServices.updateTestData(view, updatedContext, userRole, viewOptions, progressData);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, progressData);
+        } else {
+
+            // Just switch to the design editor view
+            store.dispatch(setCurrentView(view));
         }
 
         return {success: true, message: ''};

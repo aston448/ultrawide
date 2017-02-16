@@ -28,8 +28,8 @@ UserUnitTestMashData.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userUnitTestMashData', function userUnitTestMashDataPublication(){
-        return UserUnitTestMashData.find({});
+    Meteor.publish('userUnitTestMashData', function userUnitTestMashDataPublication(userId){
+        return UserUnitTestMashData.find({userId: userId});
     })
 }
 

@@ -26,8 +26,8 @@ UserDevTestSummaryData.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userDevTestSummaryData', function userDevTestSummaryDataPublication(){
-        return UserDevTestSummaryData.find({});
+    Meteor.publish('userDevTestSummaryData', function userDevTestSummaryDataPublication(userId){
+        return UserDevTestSummaryData.find({userId: userId});
     })
 }
 

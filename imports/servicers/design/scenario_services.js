@@ -9,7 +9,7 @@ import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_wor
 import { ScenarioStepType, ScenarioStepStatus, StepContext, MashStatus, MashTestStatus} from '../../constants/constants.js';
 import { DefaultComponentNames, DefaultDetailsText } from '../../constants/default_names.js';
 
-import MashDataModules                  from '../../service_modules/dev/mash_data_service_modules.js';
+import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
 
 //======================================================================================================================
 //

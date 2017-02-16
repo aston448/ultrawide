@@ -11,7 +11,7 @@ import {WorkPackageComponents}          from '../../collections/work/work_packag
 import {UserDevFeatures}                from '../../collections/dev/user_dev_features.js';
 import {UserDevFeatureScenarios}        from '../../collections/dev/user_dev_feature_scenarios.js';
 import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js';
-import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
+//import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
 import {UserCurrentDevContext}          from '../../collections/context/user_current_dev_context.js';
 import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 
@@ -22,7 +22,7 @@ import {log}                            from '../../common/utils.js';
 
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from '../design/scenario_services.js';
-import MashDataModules                  from '../../service_modules/dev/mash_data_service_modules.js';
+import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
 import MashFeatureFileModules           from '../../service_modules/dev/mash_feature_file_service_modules.js';
 import TestSummaryServices              from '../../servicers/dev/test_summary_services.js';
 
@@ -34,7 +34,7 @@ import TestSummaryServices              from '../../servicers/dev/test_summary_s
 //
 //======================================================================================================================
 
-class MashDataServices{
+class TestIntegrationServices{
 
     populateWorkPackageMashData(userContext){
 
@@ -54,11 +54,7 @@ class MashDataServices{
 
         if(Meteor.isServer){
 
-            let testSummaryVisible = (viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible);
-
-            console.log("TEST SUMMARY VISIBLE: " + testSummaryVisible);
-
-            if(viewOptions.devAccTestsVisible || testSummaryVisible){
+            if(viewOptions.devAccTestsVisible){
                 // Get the latest feature files
                 MashFeatureFileModules.loadUserFeatureFileData(userContext);
 
@@ -70,12 +66,12 @@ class MashDataServices{
 
             }
 
-            if(viewOptions.devIntTestsVisible || testSummaryVisible){
+            if(viewOptions.devIntTestsVisible){
                 // Get latest Int Test Results
                 MashDataModules.getIntegrationTestResults(userContext, userRole);
             }
 
-            if(viewOptions.devUnitTestsVisible || testSummaryVisible){
+            if(viewOptions.devUnitTestsVisible){
                 // Get latest Unit Test Results
                 MashDataModules.getUnitTestResults(userContext, userRole);
             }
@@ -85,15 +81,24 @@ class MashDataServices{
                 MashDataModules.updateMashResults(userContext, viewOptions)
             }
 
-
-            if(testSummaryVisible){
-                // Recreate the summary mash
-                console.log("Refreshing SUMMARY")
-                TestSummaryServices.refreshTestSummaryData(userContext);
-            }
-
         }
     };
+
+    updateTestSummaryData(userContext, userRole){
+
+        // Called if the test summary needs a refresh
+
+        if(Meteor.isServer){
+
+            MashDataModules.getAcceptanceTestResults(userContext);
+            MashDataModules.getIntegrationTestResults(userContext, userRole);
+            MashDataModules.getUnitTestResults(userContext, userRole);
+
+            // Recreate the summary mash
+            console.log("Refreshing SUMMARY");
+            TestSummaryServices.refreshTestSummaryData(userContext);
+        }
+    }
 
 
      // A Design Only step is moved into the Linked Steps area...
@@ -152,28 +157,28 @@ class MashDataServices{
 
     }
 
-    exportScenario(scenarioReferenceId, userContext){
-
-        // Make out that this entire scenario is linked.  This should update the Scenario Entry and all the steps
-        UserAccTestMashData.update(
-            {
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                workPackageId:                  userContext.workPackageId,
-                designScenarioReferenceId:      scenarioReferenceId
-            },
-            {
-                $set:{
-                    mashStatus: MashStatus.MASH_LINKED
-                }
-            },
-            { multi: true }
-        );
-
-        // Then export the whole feature
-        this.exportFeatureConfiguration(userContext);
-    }
+    // exportScenario(scenarioReferenceId, userContext){
+    //
+    //     // Make out that this entire scenario is linked.  This should update the Scenario Entry and all the steps
+    //     UserAccTestMashData.update(
+    //         {
+    //             userId:                         userContext.userId,
+    //             designVersionId:                userContext.designVersionId,
+    //             designUpdateId:                 userContext.designUpdateId,
+    //             workPackageId:                  userContext.workPackageId,
+    //             designScenarioReferenceId:      scenarioReferenceId
+    //         },
+    //         {
+    //             $set:{
+    //                 mashStatus: MashStatus.MASH_LINKED
+    //             }
+    //         },
+    //         { multi: true }
+    //     );
+    //
+    //     // Then export the whole feature
+    //     this.exportFeatureConfiguration(userContext);
+    // }
 
     exportFeatureConfiguration(userContext){
 
@@ -223,4 +228,4 @@ class MashDataServices{
 
 }
 
-export default new MashDataServices();
+export default new TestIntegrationServices();

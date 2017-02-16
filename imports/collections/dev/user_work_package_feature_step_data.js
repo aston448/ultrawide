@@ -41,7 +41,7 @@ UserWorkPackageFeatureStepData.attachSchema(Schema);
 // Publish
 if(Meteor.isServer){
 
-    Meteor.publish('userWorkPackageFeatureStepData', function userWorkPackageFeatureStepDataPublication(){
-        return UserWorkPackageFeatureStepData.find({});
+    Meteor.publish('userWorkPackageFeatureStepData', function userWorkPackageFeatureStepDataPublication(userId){
+        return UserWorkPackageFeatureStepData.find({userId: userId});
     })
 }
