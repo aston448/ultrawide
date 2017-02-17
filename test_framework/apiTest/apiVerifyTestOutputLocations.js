@@ -35,7 +35,7 @@ Meteor.methods({
             if(location.locationName === locationDetails.locationName){
                 if(location.locationType === locationDetails.locationType){
                     if(location.locationAccessType === locationDetails.locationAccessType){
-                        if(location.isShared === locationDetails.isShared){
+                        if(location.locationIsShared === locationDetails.locationIsShared){
                             if(location.locationServerName === locationDetails.locationServerName){
                                 if(location.serverLogin === locationDetails.serverLogin){
                                     if(location.serverPassword === locationDetails.serverPassword){
@@ -54,7 +54,7 @@ Meteor.methods({
                                 throw new Meteor.Error("FAIL", "Expecting location server name " + locationDetails.locationServerName + " but got " + location.locationServerName);
                             }
                         } else {
-                            throw new Meteor.Error("FAIL", "Expecting location is shared " + locationDetails.isShared + " but got " + location.isShared);
+                            throw new Meteor.Error("FAIL", "Expecting location is shared " + locationDetails.locationIsShared + " but got " + location.locationIsShared);
                         }
                     } else {
                         throw new Meteor.Error("FAIL", "Expecting location access type " + locationDetails.locationAccessType + " but got " + location.locationAccessType);

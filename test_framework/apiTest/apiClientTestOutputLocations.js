@@ -37,7 +37,7 @@ Meteor.methods({
         location.locationName = newLocation.locationName;
         location.locationType = newLocation.locationType;
         location.locationAccessType = newLocation.locationAccessType;
-        location.isShared = newLocation.isShared;
+        location.locationIsShared = newLocation.locationIsShared;
         location.locationServerName = newLocation.locationServerName;
         location.serverLogin = newLocation.serverLogin;
         location.serverPassword = newLocation.serverPassword;
@@ -46,6 +46,30 @@ Meteor.methods({
         const outcome = ClientTestOutputLocationServices.saveLocation(role, location);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location');
+    },
+
+    'testOutPutLocations.setLocationShared'(role, locationName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        let location = TestDataHelpers.getTestOutputLocation(locationName);
+        location.locationIsShared = true;
+
+        const outcome = ClientTestOutputLocationServices.saveLocation(role, location);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Set Location Shared');
+    },
+
+    'testOutPutLocations.setLocationPrivate'(role, locationName, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        let location = TestDataHelpers.getTestOutputLocation(locationName);
+        location.locationIsShared = false;
+
+        const outcome = ClientTestOutputLocationServices.saveLocation(role, location);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Set Location Private');
     },
 
     'testOutputLocations.addNewLocationFile'(role, locationName, expectation){

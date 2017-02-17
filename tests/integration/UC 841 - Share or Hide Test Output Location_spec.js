@@ -10,6 +10,8 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
     before(function(){
 
+
+
     });
 
     after(function(){
@@ -20,6 +22,10 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Don't need any design data for these tests
         TestFixtures.clearAllData();
+
+        // Add a new location
+        OutputLocationsActions.developerAddsNewLocation();
+
     });
 
     afterEach(function(){
@@ -28,9 +34,66 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
 
     // Actions
-    it('A Developer can update a shared Test Output Location to be private');
+    it('A Developer can update a private Test Output Location to be shared', function(){
 
-    it('A Developer can update a private Test Output Location to be shared');
+        // Setup - current location is private
+        const expectedLocation = {
+            locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
+            locationType:       TestLocationType.NONE,
+            locationAccessType: TestLocationAccessType.NONE,
+            locationIsShared:   false,
+            locationServerName: 'NONE',
+            serverLogin:        'NONE',
+            serverPassword:     'NONE',
+            locationPath:       'NONE'
+        };
+
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectedLocation));
+
+        // Execute
+        OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Verify
+        const newExpectedLocation = {
+            locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
+            locationType:       TestLocationType.NONE,
+            locationAccessType: TestLocationAccessType.NONE,
+            locationIsShared:   true,
+            locationServerName: 'NONE',
+            serverLogin:        'NONE',
+            serverPassword:     'NONE',
+            locationPath:       'NONE'
+        };
+
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newExpectedLocation));
+
+
+    });
+
+    it('A Developer can update a shared Test Output Location to be private', function(){
+
+        // Setup - share it first
+        OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Execute
+        OutputLocationsActions.developerSetsLocationAsPrivate(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Verify
+        const expectedLocation = {
+            locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
+            locationType:       TestLocationType.NONE,
+            locationAccessType: TestLocationAccessType.NONE,
+            locationIsShared:   false,
+            locationServerName: 'NONE',
+            serverLogin:        'NONE',
+            serverPassword:     'NONE',
+            locationPath:       'NONE'
+        };
+
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectedLocation));
+    });
+
+
 
 
     // Conditions

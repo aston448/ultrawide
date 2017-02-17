@@ -42,6 +42,15 @@ class OutputLocationActions{
     managerSavesLocation(locationName, newDetails, expectation){
         server.call('testOutputLocations.saveLocation', RoleType.MANAGER, locationName, newDetails, expectation);
     }
+
+    // Set Private / Shared
+    developerSetsLocationAsShared(locationName, expectation){
+        server.call('testOutPutLocations.setLocationShared', RoleType.DEVELOPER, locationName, expectation);
+    }
+
+    developerSetsLocationAsPrivate(locationName, expectation){
+        server.call('testOutPutLocations.setLocationPrivate', RoleType.DEVELOPER, locationName, expectation);
+    }
 }
 
 export default new OutputLocationActions();

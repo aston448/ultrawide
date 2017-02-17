@@ -77,7 +77,7 @@ describe('UC 840 - Add Test Output Location', function(){
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
             locationType:       TestLocationType.NONE,
             locationAccessType: TestLocationAccessType.NONE,
-            isShared:           false,
+            locationIsShared:   false,
             locationServerName: 'NONE',
             serverLogin:        'NONE',
             serverPassword:     'NONE',
