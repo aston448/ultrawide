@@ -35,7 +35,7 @@ export const toggleInScope = new ValidatedMethod({
             WorkPackageComponentServices.toggleScope(wpComponentId, newScope);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('workPackageComponent.toggleInScope.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 

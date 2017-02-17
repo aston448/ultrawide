@@ -31,7 +31,7 @@ export const saveDesignComponentText = new ValidatedMethod({
             TextEditorServices.saveText(designComponentId, newRawText);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('textEditor.saveDesignComponentText.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -59,7 +59,7 @@ export const saveDesignUpdateComponentText = new ValidatedMethod({
             TextEditorServices.saveUpdateText(designUpdateComponentId, newRawText);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('textEditor.saveDesignUpdateComponentText.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 

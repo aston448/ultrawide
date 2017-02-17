@@ -32,7 +32,7 @@ export const updateDesignVersionName = new ValidatedMethod({
             DesignVersionServices.updateDesignVersionName(designVersionId, newName);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.updateDesignVersionName.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -60,7 +60,7 @@ export const updateDesignVersionNumber = new ValidatedMethod({
             DesignVersionServices.updateDesignVersionNumber(designVersionId, newNumber);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.updateDesignVersionNumber.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -88,7 +88,7 @@ export const publishDesignVersion = new ValidatedMethod({
             DesignVersionServices.publishDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.publishDesignVersion.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -115,7 +115,7 @@ export const withdrawDesignVersion = new ValidatedMethod({
             DesignVersionServices.withdrawDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.withdrawDesignVersion.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -142,7 +142,7 @@ export const updateWorkingDesignVersion = new ValidatedMethod({
             DesignVersionServices.updateWorkingDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.updateWorkingDesignVersion.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -169,7 +169,7 @@ export const createNextDesignVersion = new ValidatedMethod({
             DesignVersionServices.createNextDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('designVersion.createNextDesignVersion.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 

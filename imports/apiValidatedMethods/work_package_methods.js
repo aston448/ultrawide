@@ -35,7 +35,7 @@ export const addWorkPackage = new ValidatedMethod({
             WorkPackageServices.addNewWorkPackage(designVersionId, designUpdateId, workPackageType, true);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('workPackage.addWorkPackage.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -64,7 +64,7 @@ export const updateWorkPackageName = new ValidatedMethod({
             WorkPackageServices.updateWorkPackageName(workPackageId, newName);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('workPackage.updateWorkPackageName.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -92,7 +92,7 @@ export const publishWorkPackage = new ValidatedMethod({
             WorkPackageServices.publishWorkPackage(workPackageId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('workPackage.publishWorkPackage.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -120,7 +120,7 @@ export const withdrawWorkPackage = new ValidatedMethod({
             WorkPackageServices.withdrawWorkPackage(workPackageId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('workPackage.withdrawWorkPackage.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -148,7 +148,7 @@ export const removeWorkPackage = new ValidatedMethod({
             WorkPackageServices.removeWorkPackage(workPackageId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('workPackage.removeWorkPackage.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });

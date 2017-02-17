@@ -31,7 +31,7 @@ export const backupDesign = new ValidatedMethod({
             ImpExServices.backupDesign(designId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('backup.backupDesign.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 

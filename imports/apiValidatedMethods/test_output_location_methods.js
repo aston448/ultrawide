@@ -167,7 +167,7 @@ export const removeLocationFile = new ValidatedMethod({
             TestOutputLocationServices.removeLocationFile(locationFileId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.removeLocationFile.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -194,7 +194,7 @@ export const saveUserConfiguration = new ValidatedMethod({
             TestOutputLocationServices.saveUserConfiguration(userConfiguration);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.saveUserConfiguration.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -216,7 +216,7 @@ export const updateUserConfiguration = new ValidatedMethod({
             TestOutputLocationServices.updateUserConfiguration(userId, userRole);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.updateUserConfiguration.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
