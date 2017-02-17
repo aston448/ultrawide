@@ -244,6 +244,9 @@ export class AppHeader extends Component {
         let refreshTestDataButton =
             <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions, mashStale)}>Refresh Test Data</Button>;
 
+        let refreshDesignDataButton =
+            <Button id="butRefreshDesignData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions, true)}>Refresh Design Data</Button>;
+
 
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
@@ -505,6 +508,7 @@ export class AppHeader extends Component {
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
+                        {refreshDesignDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
