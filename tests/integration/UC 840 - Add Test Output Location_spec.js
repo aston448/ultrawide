@@ -9,9 +9,6 @@ describe('UC 840 - Add Test Output Location', function(){
 
     before(function(){
 
-        // Don't need any design data for these tests
-        TestFixtures.clearAllData();
-
     });
 
     after(function(){
@@ -20,6 +17,8 @@ describe('UC 840 - Add Test Output Location', function(){
 
     beforeEach(function(){
 
+        // Don't need any design data for these tests
+        TestFixtures.clearAllData();
     });
 
     afterEach(function(){
