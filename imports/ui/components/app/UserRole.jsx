@@ -68,7 +68,7 @@ class UserRole extends Component {
                 <Grid>
                     <Row>
                         <Col md={12}>
-                            <div className="ultrawide-logo">{roleName}</div>
+                            <div className="role-name">{roleName}</div>
                         </Col>
                     </Row>
                     <Row>

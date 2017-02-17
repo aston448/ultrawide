@@ -426,45 +426,63 @@ input {
 
 .well-designer{
     margin: 20px;
-    color: white;
+    color: lightgreen;
     background-color: mediumseagreen;
 }
 
 .well-developer{
     margin: 20px;
-    color: white;
+    color: lightpink;
     background-color: indianred;
 }
 
 .well-manager{
     margin: 20px;
-    color: white;
+    color: paleturquoise;
     background-color: steelblue;
 }
 
-.role-text{
-    margin: 20px 20px 100px 0px;
-    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
-    font-weight: normal;
-    color: white;
-    white-space: pre;
-}
 
 .path-item{
     margin: 30px;
 }
 
+.role-name{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  22px;
+    font-weight: normal;
+    letter-spacing: 8px;
+}
+
 .role-action{
     margin: 10px 20px 10px 0px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
+    font-size:  18px;
     font-weight: normal;
-    color: white;
+    color: black;
     white-space: pre;
     border: 1px solid darkgreen;
     border-radius: 4px;
 }
+
+.role-action-icon{
+    margin: 0 10px 0 10px;
+    font-size:  14px;
+}
+
+.active-designer{
+    color: lime;
+}
+
+.active-developer{
+    color: lightpink;
+}
+
+.active-manager{
+    color: turquoise;
+}
+
+
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */
 

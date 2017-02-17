@@ -39,6 +39,21 @@ class RoleAction extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            highlighted: false,
+        };
+    }
+
+    // Highlight the item and the parent component it will add stuff to when mouse over
+    setActionHighlighted(){
+        this.setState({highlighted: true});
+    }
+
+    // Switch off highlighting when mouse not over
+    setActionNormal(){
+        this.setState({highlighted: false});
+
     }
 
     onActionSelect(roleAction, roleType, userContext, userRole, view){
@@ -72,15 +87,30 @@ class RoleAction extends Component {
     render() {
         const {roleAction, roleType,  userContext, userRole, view} = this.props;
 
+        let activeClass = '';
+        switch(roleType){
+            case RoleType.DESIGNER:
+                activeClass = ' active-designer';
+                break;
+            case RoleType.DEVELOPER:
+                activeClass = ' active-developer';
+                break;
+            case RoleType.MANAGER:
+                activeClass = ' active-manager';
+        }
 
         return(
             <Grid>
                 <Row>
                     <Col md={12}>
-                        <div className="role-action" onClick={() => this.onActionSelect(roleAction, roleType, userContext, userRole, view)}>
+                        <div className={this.state.highlighted ? 'role-action' + activeClass : 'role-action'}
+                             onClick={() => this.onActionSelect(roleAction, roleType, userContext, userRole, view)}
+                             onMouseEnter={ () => this.setActionHighlighted()} onMouseLeave={ () => this.setActionNormal()}>
                             <InputGroup>
                                 <InputGroup.Addon>
-                                    <Glyphicon glyph='th-large'/>
+                                    <div className={'role-action-icon' + activeClass}>
+                                        <Glyphicon glyph='th-large'/>
+                                    </div>
                                 </InputGroup.Addon>
                                 <div>
                                     {roleAction}

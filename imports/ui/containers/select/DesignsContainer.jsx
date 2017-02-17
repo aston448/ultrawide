@@ -76,16 +76,28 @@ export class DesignsList extends Component {
 
         if(designs && designs.length > 0) {
             return (
-                <Panel header="Designs">
-                    {this.renderDesignList(designs)}
-                    {addDesign}
-                </Panel>
+                <Grid>
+                    <Row>
+                        <Col md={6}>
+                            <Panel header="Designs">
+                                {this.renderDesignList(designs)}
+                                {addDesign}
+                            </Panel>
+                        </Col>
+                    </Row>
+                </Grid>
             );
         } else {
             return(
-                <Panel header="Designs">
-                    {addDesign}
-                </Panel>
+                <Grid>
+                    <Row>
+                        <Col md={6}>
+                            <Panel header="Designs">
+                                {addDesign}
+                            </Panel>
+                        </Col>
+                    </Row>
+                </Grid>
             )
         }
     }
