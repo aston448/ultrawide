@@ -12,6 +12,9 @@ import { DesignUpdateComponents }   from '../../imports/collections/design_updat
 import { FeatureBackgroundSteps }   from '../../imports/collections/design/feature_background_steps.js';
 import { ScenarioSteps }            from '../../imports/collections/design/scenario_steps.js';
 import { DomainDictionary }         from '../../imports/collections/design/domain_dictionary.js';
+import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
+import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
+import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
@@ -46,11 +49,14 @@ Meteor.methods({
             DesignUpdates.remove({});
             DesignVersions.remove({});
             Designs.remove({});
-
-            const featureFilesDir = '/Users/aston/WebstormProjects/ultrawide-test/tests/features/';
-            const accTestResults = '/Users/aston/WebstormProjects/shared/test/test_results.json';
-            const intTestResults = '/Users/aston/WebstormProjects/shared/test/mocha_results.json';
-            const unitTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json';
+            UserTestTypeLocations.remove({});
+            TestOutputLocationFiles.remove({});
+            TestOutputLocations.remove({});
+            //
+            // const featureFilesDir = '/Users/aston/WebstormProjects/ultrawide-test/tests/features/';
+            // const accTestResults = '/Users/aston/WebstormProjects/shared/test/test_results.json';
+            // const intTestResults = '/Users/aston/WebstormProjects/shared/test/mocha_results.json';
+            // const unitTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json';
 
             // Clear current edit context for all users - but not the file locations
             UserCurrentEditContext.update(
@@ -68,10 +74,10 @@ Meteor.methods({
                         scenarioReferenceId: 'NONE',
                         scenarioStepId: 'NONE',
 
-                        featureFilesLocation:           featureFilesDir,
-                        acceptanceTestResultsLocation:  accTestResults,
-                        integrationTestResultsLocation: intTestResults,
-                        unitTestResultsLocation:      unitTestResults
+                        // featureFilesLocation:           featureFilesDir,
+                        // acceptanceTestResultsLocation:  accTestResults,
+                        // integrationTestResultsLocation: intTestResults,
+                        // unitTestResultsLocation:      unitTestResults
                     }
                 },
                 {multi: true}
@@ -134,28 +140,28 @@ Meteor.methods({
                 // Start new users with default context
 
                 UserCurrentEditContext.insert({
-                    userId: designerUserId,
-                    featureFilesLocation:           featureFilesDir,
-                    acceptanceTestResultsLocation:  accTestResults,
-                    integrationTestResultsLocation: intTestResults,
-                    unitTestResultsLocation:      unitTestResults
+                    userId: designerUserId
+                    // featureFilesLocation:           featureFilesDir,
+                    // acceptanceTestResultsLocation:  accTestResults,
+                    // integrationTestResultsLocation: intTestResults,
+                    // unitTestResultsLocation:      unitTestResults
                 });
 
                 UserCurrentEditContext.insert({
-                    userId: developerUserId,
-                    featureFilesLocation:           featureFilesDir,
-                    acceptanceTestResultsLocation:  accTestResults,
-                    integrationTestResultsLocation: intTestResults,
-                    unitTestResultsLocation:      unitTestResults
+                    userId: developerUserId
+                    // featureFilesLocation:           featureFilesDir,
+                    // acceptanceTestResultsLocation:  accTestResults,
+                    // integrationTestResultsLocation: intTestResults,
+                    // unitTestResultsLocation:      unitTestResults
                 });
 
 
                 UserCurrentEditContext.insert({
-                    userId: managerUserId,
-                    featureFilesLocation:           featureFilesDir,
-                    acceptanceTestResultsLocation:  accTestResults,
-                    integrationTestResultsLocation: intTestResults,
-                    unitTestResultsLocation:      unitTestResults
+                    userId: managerUserId
+                    // featureFilesLocation:           featureFilesDir,
+                    // acceptanceTestResultsLocation:  accTestResults,
+                    // integrationTestResultsLocation: intTestResults,
+                    // unitTestResultsLocation:      unitTestResults
                 });
 
             }

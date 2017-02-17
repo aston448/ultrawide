@@ -41,7 +41,10 @@ class ClientUserContextServices {
 
     getUserContext(userId){
 
+        console.log("Getting user context for user " + userId);
+
         const userContext = UserCurrentEditContext.findOne({userId: userId});
+
 
         if(userContext){
 
@@ -503,6 +506,7 @@ class ClientUserContextServices {
             case RoleType.DEVELOPER:
                 // If a developer go to the Work Package they are currently working on if it is set
                 if(userContext.workPackageId != 'NONE'){
+
                     const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
                     // If bad data return to Designs

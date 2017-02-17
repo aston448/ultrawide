@@ -13,6 +13,9 @@ import { WorkPackageComponents }    from '../../imports/collections/work/work_pa
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserCurrentViewOptions }   from '../../imports/collections/context/user_current_view_options.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
+import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
+import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
+import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
 
@@ -434,6 +437,35 @@ class TestDataHelpers {
 
 
     }
+
+    getTestOutputLocation(locationName){
+
+        const location = TestOutputLocations.findOne({locationName: locationName});
+
+        if(!location){
+            throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
+        } else {
+            return location;
+        }
+    };
+
+    getTestOutputLocationFile(locationName, fileAlias){
+
+        const location = TestOutputLocations.findOne({locationName: locationName});
+
+        if(!location){
+            throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
+        } else {
+
+            const file = TestOutputLocationFiles.findOne({locationId: location._id, fileAlias: fileAlias});
+
+            if(!file){
+                throw new Meteor.Error("FAIL", "Test Output Location File " + fileAlias + " not found for location " + locationName);
+            } else {
+                return file;
+            }
+        }
+    };
 
 }
 
