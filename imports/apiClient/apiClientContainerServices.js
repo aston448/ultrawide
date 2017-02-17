@@ -171,9 +171,12 @@ class ClientContainerServices{
     }
 
     // Test Output Locations
-    getTestOutputLocationData(){
+    getTestOutputLocationData(userId){
 
-        return TestOutputLocations.find({}).fetch();
+        // You can see either shared locations or private ones made by you
+        return TestOutputLocations.find({
+           $or:[{locationIsShared: true}, {locationUserId: userId}]
+        }).fetch();
 
     }
 

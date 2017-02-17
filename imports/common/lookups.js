@@ -16,7 +16,7 @@ class TextLookups {
             case ViewType.HOME:
                 return 'HOME';
             case ViewType.CONFIGURE:
-                return 'CONFIGURATION';
+                return 'LOCAL SETTINGS';
             case ViewType.TEST_OUTPUTS:
                 return 'TEST OUTPUT LOCATIONS';
             case ViewType.DESIGN_NEW_EDIT:

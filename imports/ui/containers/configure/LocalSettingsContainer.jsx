@@ -27,11 +27,11 @@ import {connect} from 'react-redux';
 
 // -- CLASS ------------------------------------------------------------------------------------------------------------
 //
-// Configure Container.  Change user roles and set file paths
+// User Local Settings Container.
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class ConfigureScreen extends Component {
+class LocalSettingsScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -67,6 +67,13 @@ class ConfigureScreen extends Component {
                             {this.renderTestLocationsList(userLocations)}
                         </Panel>
                     </Col>
+                    <Col md={6} className="col">
+                        <Panel header="Other configuration settings">
+                            <div className="design-item-note">
+                                Other user settings to go here
+                            </div>
+                        </Panel>
+                    </Col>
                 </Row>
             </Grid>
         );
@@ -75,7 +82,7 @@ class ConfigureScreen extends Component {
 
 }
 
-ConfigureScreen.propTypes = {
+LocalSettingsScreen.propTypes = {
     userLocations:       PropTypes.array.isRequired
 };
 
@@ -88,12 +95,12 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-ConfigureScreen = connect(mapStateToProps)(ConfigureScreen);
+LocalSettingsScreen = connect(mapStateToProps)(LocalSettingsScreen);
 
 
 
-export default TestOutputsConfigureContainer = createContainer(({params}) => {
+export default LocalSettingsContainer = createContainer(({params}) => {
 
     return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext, params.userRole)};
 
-}, ConfigureScreen);
+}, LocalSettingsScreen);

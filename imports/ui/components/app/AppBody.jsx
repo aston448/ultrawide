@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import AppLoginContainer                    from  '../../containers/app/AppLoginContainer.jsx';
 import AppRolesContainer                    from  '../../containers/app/AppRolesContainer.jsx';
-import TestOutputsConfigureContainer        from  '../../containers/configure/TestOutputsConfigureContainer.jsx';
+import LocalSettingsContainer               from  '../../containers/configure/LocalSettingsContainer.jsx';
 import TestOutputsContainer                 from  '../../containers/configure/TestOutputsContainer.jsx';
 import DesignsContainer                     from  '../../containers/select/DesignsContainer.jsx';
 import DesignVersionsContainer              from  '../../containers/select/DesignVersionsContainer.jsx';
@@ -71,7 +71,7 @@ class AppBody extends Component {
                 break;
             case ViewType.CONFIGURE:
                 bodyHtml =
-                    <TestOutputsConfigureContainer params={{
+                    <LocalSettingsContainer params={{
                         userContext: userContext,
                         userRole: userRole
                     }}/>;

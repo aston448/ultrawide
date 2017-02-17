@@ -289,12 +289,26 @@ export const TestRunner = {
     CHIMP_CUCUMBER: 'Chimp Cucumber',
     METEOR_MOCHA:   'Meteor Mocha'
 };
+// Array for Display lists
+export const TestRunners = [TestRunner.NONE, TestRunner.CHIMP_MOCHA, TestRunner.CHIMP_CUCUMBER, TestRunner.METEOR_MOCHA];
 
 export const TestLocationType = {
     NONE:           'NONE',
-    SHARED:         'SHARED',
+    REMOTE:         'REMOTE',
     LOCAL:          'LOCAL'
 };
+// Array for Display lists
+export const TestLocationTypes = [TestLocationType.NONE, TestLocationType.REMOTE, TestLocationType.LOCAL];
+
+
+export const TestLocationAccessType = {
+    FILE:           'FILE',
+    RLOGIN:         'RLOGIN',
+    FTP:            'FTP'
+};
+// Array for Display lists
+export const TestLocationAccessTypes = [TestLocationAccessType.FILE, TestLocationAccessType.RLOGIN, TestLocationAccessType.FTP];
+
 
 export const TestLocationFileType = {
     NONE:           'NONE',
@@ -302,3 +316,5 @@ export const TestLocationFileType = {
     INTEGRATION:    'INTEGRATION',
     ACCEPTANCE:     'ACCEPTANCE'
 };
+// Array for Display lists
+export const TestLocationFileTypes = [TestLocationFileType.NONE, TestLocationFileType.UNIT, TestLocationFileType.INTEGRATION, TestLocationFileType.ACCEPTANCE]

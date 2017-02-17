@@ -236,7 +236,7 @@ export class AppHeader extends Component {
             <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToHome()}>HOME</Button>;
 
         let configScreenButton =
-            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Change Settings</Button>;
+            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Local Settings</Button>;
 
         let selectionScreenButton =
             <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
@@ -307,7 +307,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
-                        {designsButton}
+                        {configScreenButton}
                     </ButtonToolbar>;
                     break;
             case ViewType.DESIGNS:
@@ -316,6 +316,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                     </ButtonToolbar>;
                 break;
             case ViewType.SELECT:
@@ -324,6 +325,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                     </ButtonToolbar>;
                 break;
@@ -333,6 +335,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
@@ -367,6 +370,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
@@ -396,6 +400,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
@@ -426,6 +431,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
@@ -450,6 +456,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
@@ -470,6 +477,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
@@ -493,6 +501,7 @@ export class AppHeader extends Component {
                 headerTopActions =
                     <ButtonToolbar>
                         {homeScreenButton}
+                        {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}

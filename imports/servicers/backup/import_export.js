@@ -789,6 +789,8 @@ class ImpExServices{
                     });
                 }
 
+                componentCount++;
+
             });
 
             // Update Design Update Component parents for the new design update components
@@ -800,8 +802,6 @@ class ImpExServices{
             designsMapping.forEach((designMap) => {
                 DesignServices.setRemovable(designMap.newId);
             });
-
-            componentCount++;
 
         } else {
             log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {}", designsMapping, designVersionsMapping, designUpdatesMapping);
@@ -905,7 +905,7 @@ class ImpExServices{
 
         newScenarioStepsData.forEach((step) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Scenario Step {} {}", step.stepType, step.stepText);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Scenario Step {} {}", step.stepType, step.stepText);
 
             let designId = getIdFromMap(designsMapping, step.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, step.designVersionId);

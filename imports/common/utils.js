@@ -1,6 +1,7 @@
 /**
  * Created by aston on 08/09/2016.
  */
+import React, { Component, PropTypes } from 'react';
 
 import {ComponentType} from '../constants/constants.js';
 import {DesignComponents} from '../collections/design/design_components.js';
@@ -40,6 +41,17 @@ export function hasBootstrapClass(html, className){
 
     return (propIndex != -1);
 
+}
+
+export function createSelectionList(typesArray){
+
+    let items = [];
+
+    typesArray.forEach((item) => {
+        items.push(<option key={item} value={item}>{item}</option>);
+    });
+
+    return items;
 }
 
 export function getComponentClass(currentItem, view, context, isNarrative){

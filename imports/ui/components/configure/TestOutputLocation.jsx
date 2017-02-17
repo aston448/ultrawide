@@ -10,10 +10,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import ClientTestOutputLocationServices from '../../../apiClient/apiClientTestOutputLocations.js';
-import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, TestLocationType} from '../../../constants/constants.js';
+import {TestLocationTypes, TestLocationAccessTypes} from '../../../constants/constants.js';
+import { createSelectionList } from '../../../common/utils.js'
 
 // Bootstrap
-import {Button, ButtonGroup} from 'react-bootstrap';
+import {Checkbox, Button, ButtonGroup} from 'react-bootstrap';
 import {Form, FormGroup, FormControl, Grid, Row, Col, ControlLabel} from 'react-bootstrap';
 
 // REDUX services
@@ -35,6 +36,8 @@ export class TestOutputLocation extends Component {
             editing:                false,
             nameValue:              this.props.location.locationName,
             typeValue:              this.props.location.locationType,
+            accessTypeValue:        this.props.location.locationAccessType,
+            isSharedValue:          this.props.location.locationIsShared,
             pathValue:              this.props.location.locationPath,
             serverNameValue:        this.props.location.locationServerName,
             serverLoginValue:       this.props.location.serverLogin,
@@ -47,11 +50,14 @@ export class TestOutputLocation extends Component {
 
         event.preventDefault();
 
-        console.log("Updating location with name " + this.state.nameValue);
 
-        // The user id is set if creating a local resource
-        let locationUserId = 'NONE';
-        if(this.state.typeValue === TestLocationType.LOCAL){
+
+        // The user id is set if creating a non-shared resource
+        let locationUserId = '';
+
+        if(this.state.isSharedValue){
+            locationUserId = 'NONE';
+        } else {
             locationUserId = Meteor.userId();
         }
 
@@ -60,12 +66,16 @@ export class TestOutputLocation extends Component {
             locationName:           this.state.nameValue,
             locationRawText:        null,
             locationType:           this.state.typeValue,
+            locationAccessType:     this.state.accessTypeValue,
+            locationIsShared:       this.state.isSharedValue,
             locationUserId:         locationUserId,
             locationServerName:     this.state.serverNameValue,
             serverLogin:            this.state.serverLoginValue,
             serverPassword:         this.state.serverPasswordValue,
             locationPath:           this.state.pathValue
         };
+
+        console.log("Updating location with name " + location.locationName + " and user id " + location.locationUserId);
 
         ClientTestOutputLocationServices.saveLocation(role, location);
 
@@ -98,6 +108,14 @@ export class TestOutputLocation extends Component {
         this.setState({typeValue: e.target.value})
     }
 
+    onAccessTypeChange(e){
+        this.setState({accessTypeValue: e.target.value})
+    }
+
+    onIsSharedChange(e){
+        this.setState({isSharedValue: e.target.checked})
+    }
+
     onPathChange(e){
         this.setState({pathValue: e.target.value})
     }
@@ -107,19 +125,26 @@ export class TestOutputLocation extends Component {
 
         const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
 
+        const sharedText = this.state.isSharedValue ? 'Shared' : 'Not Shared';
 
         const viewInstance = (
             <div onClick={() => this.setCurrentLocation(location)}>
                 <Grid>
                     <Row>
-                        <Col sm={2}>
+                        <Col sm={1}>
                             {location.locationType}
                         </Col>
-                        <Col sm={4}>
+                        <Col sm={1}>
+                            {location.locationAccessType}
+                        </Col>
+                        <Col sm={3}>
                             {location.locationName}
                         </Col>
-                        <Col sm={6}>
+                        <Col sm={5}>
                             {location.locationPath}
+                        </Col>
+                        <Col sm={2}>
+                            {sharedText}
                         </Col>
                     </Row>
                 </Grid>
@@ -132,6 +157,17 @@ export class TestOutputLocation extends Component {
 
         const formInstance = (
             <Form horizontal>
+                <FormGroup controlId="formLocationName">
+                    <Col componentClass={ControlLabel} sm={2}>
+                        Location Is Shared
+                    </Col>
+                    <Col sm={10}>
+                        <Checkbox checked={this.state.isSharedValue}
+                                  onChange={(e) => this.onIsSharedChange(e)}>
+                        </Checkbox>
+                    </Col>
+                </FormGroup>
+
                 <FormGroup controlId="formLocationName">
                     <Col componentClass={ControlLabel} sm={2}>
                         Location Name
@@ -147,9 +183,19 @@ export class TestOutputLocation extends Component {
                     </Col>
                     <Col sm={10}>
                     <FormControl componentClass="select" placeholder={location.locationType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
-                        <option value="SERVER">SERVER</option>
-                        <option value="LOCAL">LOCAL</option>
+                        {createSelectionList(TestLocationTypes)}
                     </FormControl>
+                    </Col>
+                </FormGroup>
+
+                <FormGroup controlId="formTypeSelect">
+                    <Col componentClass={ControlLabel} sm={2}>
+                        Access Type
+                    </Col>
+                    <Col sm={10}>
+                        <FormControl componentClass="select" placeholder={location.locationAccessType} value={this.state.accessTypeValue} onChange={(e) => this.onAccessTypeChange(e)}>
+                            {createSelectionList(TestLocationAccessTypes)}
+                        </FormControl>
                     </Col>
                 </FormGroup>
 

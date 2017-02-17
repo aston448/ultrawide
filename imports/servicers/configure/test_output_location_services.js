@@ -28,7 +28,7 @@ class TestOutputLocationServices {
             TestOutputLocations.insert(
                 {
                     locationName:           DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-                    locationType:           TestLocationType.SHARED
+                    locationType:           TestLocationType.REMOTE
                 }
             );
         }
@@ -44,6 +44,8 @@ class TestOutputLocationServices {
                     locationName:           location.locationName,
                     locationRawText:        location.locationRawText,
                     locationType:           location.locationType,
+                    locationAccessType:     location.locationAccessType,
+                    locationIsShared:       location.locationIsShared,
                     locationUserId:         userId,
                     locationServerName:     location.locationServerName,
                     serverLogin:            location.serverLogin,
@@ -69,6 +71,8 @@ class TestOutputLocationServices {
                         locationName:           location.locationName,
                         locationRawText:        location.locationRawText,
                         locationType:           location.locationType,
+                        locationAccessType:     location.locationAccessType,
+                        locationIsShared:       location.locationIsShared,
                         locationUserId:         location.locationUserId,
                         locationServerName:     location.locationServerName,
                         serverLogin:            location.serverLogin,
@@ -216,7 +220,7 @@ class TestOutputLocationServices {
             });
 
             // If not found and the location is either Shared or created by this user then add it in for the current user / role
-            if(!userLocation && (location.locationType === TestLocationType.SHARED || location.locationUserId === userId)){
+            if(!userLocation && (location.locationIsShared || location.locationUserId === userId)){
 
                 UserTestTypeLocations.insert({
                     locationId:             location._id,

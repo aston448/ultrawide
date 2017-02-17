@@ -127,7 +127,7 @@ TestOutputsScreen = connect(mapStateToProps)(TestOutputsScreen);
 
 export default TestOutputsContainer = createContainer(({params}) => {
 
-    const locationData =  ClientContainerServices.getTestOutputLocationData();
+    const locationData =  ClientContainerServices.getTestOutputLocationData(params.userContext.userId);
     return {locationData: locationData};
 
 }, TestOutputsScreen);

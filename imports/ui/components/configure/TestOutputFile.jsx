@@ -10,7 +10,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import ClientTestOutputLocationServices from '../../../apiClient/apiClientTestOutputLocations.js';
-import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, TestLocationFileType, TestRunner} from '../../../constants/constants.js';
+import {TestLocationFileType, TestLocationFileTypes, TestRunner, TestRunners} from '../../../constants/constants.js';
+import { createSelectionList } from '../../../common/utils.js'
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -147,10 +148,7 @@ export class TestOutputFile extends Component {
                     </Col>
                     <Col sm={10}>
                         <FormControl componentClass="select" placeholder={locationFile.fileType} value={this.state.typeValue} onChange={(e) => this.onTypeChange(e)}>
-                            <option value={TestLocationFileType.NONE}>{TestLocationFileType.NONE}</option>
-                            <option value={TestLocationFileType.UNIT}>{TestLocationFileType.UNIT}</option>
-                            <option value={TestLocationFileType.INTEGRATION}>{TestLocationFileType.INTEGRATION}</option>
-                            <option value={TestLocationFileType.ACCEPTANCE}>{TestLocationFileType.ACCEPTANCE}</option>
+                            {createSelectionList(TestLocationFileTypes)}
                         </FormControl>
                     </Col>
                 </FormGroup>
@@ -161,10 +159,7 @@ export class TestOutputFile extends Component {
                     </Col>
                     <Col sm={10}>
                         <FormControl componentClass="select" placeholder={locationFile.testRunner} value={this.state.runnerValue} onChange={(e) => this.onRunnerChange(e)}>
-                            <option value={TestRunner.NONE}>{TestRunner.NONE}</option>
-                            <option value={TestRunner.CHIMP_CUCUMBER}>{TestRunner.CHIMP_CUCUMBER}</option>
-                            <option value={TestRunner.CHIMP_MOCHA}>{TestRunner.CHIMP_MOCHA}</option>
-                            <option value={TestRunner.METEOR_MOCHA}>{TestRunner.METEOR_MOCHA}</option>
+                            {createSelectionList(TestRunners)}
                         </FormControl>
                     </Col>
                 </FormGroup>
@@ -177,8 +172,6 @@ export class TestOutputFile extends Component {
                 </Button>
 
             </Form>
-
-
         );
 
         if(this.state.editing) {
