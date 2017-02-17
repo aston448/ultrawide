@@ -55,13 +55,16 @@ class ServerTestIntegrationApi {
         );
     };
 
-    exportIntegrationTests(userContext, callback){
+    exportIntegrationTests(userContext, userRole, testRunner, callback){
 
         exportIntegrationTests.call(
             {
-                userContext: userContext
+                userContext:    userContext,
+                userRole:       userRole,
+                testRunner:     testRunner
             },
             (err, result) => {
+                console.log(err);
                 callback(err, result);
             }
         );

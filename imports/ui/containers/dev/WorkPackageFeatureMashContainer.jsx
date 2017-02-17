@@ -20,10 +20,10 @@ import {RoleType, DisplayContext, UserDevFeatureStatus, MashStatus, ComponentTyp
 import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
-import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
-import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
-
+import ClientContainerServices          from '../../../apiClient/apiClientContainerServices.js';
+import UserContextServices              from '../../../apiClient/apiClientUserContext.js';
+import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
+import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
 
 
 // Bootstrap
@@ -60,8 +60,8 @@ class WorkPackageFeatureMashList extends Component {
         ClientMashDataServices.exportFeature(userContext);
     }
 
-    onExportIntegrationData(userContext){
-        ClientMashDataServices.exportIntegrationTests(userContext);
+    onExportIntegrationTests(userContext, userRole){
+        ClientTestIntegrationServices.exportIntegrationTestFile(userContext, userRole);
     }
 
     renderFeatures(mashData, displayContext){
@@ -98,7 +98,7 @@ class WorkPackageFeatureMashList extends Component {
 
     render() {
 
-        const {designMashItemData, nonDesignScenarioData, existingFeatureFile, displayContext, userContext} = this.props;
+        const {designMashItemData, nonDesignScenarioData, existingFeatureFile, displayContext, userContext, userRole} = this.props;
 
         let panelHeader = '';
         let secondPanelHeader = '';
@@ -154,7 +154,7 @@ class WorkPackageFeatureMashList extends Component {
                                     </Col>
                                     <Col md={4}>
                                         <div className="pull-right">
-                                            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportIntegrationData(userContext)}>Export as Test File</Button>
+                                            <Button bsSize="xs" bsStyle="info" onClick={ () => this.onExportIntegrationTests(userContext, userRole)}>Export as Test File</Button>
                                         </div>
                                     </Col>
                                 </Row>
@@ -289,7 +289,8 @@ WorkPackageFeatureMashList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext:        state.currentUserItemContext
+        userContext:        state.currentUserItemContext,
+        userRole:           state.currentUserRole
     }
 }
 

@@ -25,6 +25,7 @@ import ScenarioServices                 from '../design/scenario_services.js';
 import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
 import MashFeatureFileModules           from '../../service_modules/dev/mash_feature_file_service_modules.js';
 import TestSummaryServices              from '../../servicers/dev/test_summary_services.js';
+import ChimpMochaTestServices           from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 //======================================================================================================================
 //
@@ -99,6 +100,17 @@ class TestIntegrationServices{
             TestSummaryServices.refreshTestSummaryData(userContext);
         }
     }
+
+    // User generates a test file from a Design or Design Update Feature
+    exportIntegrationTestFile(userContext, testRunner){
+
+        // Add in other test generation here...
+        switch(testRunner){
+            case TestRunner.CHIMP_MOCHA:
+                ChimpMochaTestServices.writeIntegrationTestFile(userContext);
+                break;
+        }
+    };
 
 
      // A Design Only step is moved into the Linked Steps area...
@@ -189,11 +201,11 @@ class TestIntegrationServices{
 
     }
 
-    exportIntegrationTests(userContext){
-
-        FeatureFileServices.writeIntegrationFile(userContext);
-
-    }
+    // exportIntegrationTests(userContext){
+    //
+    //     FeatureFileServices.writeIntegrationFile(userContext);
+    //
+    // }
 
 
     // GENERIC FIND FUNCTIONS ==========================================================================================

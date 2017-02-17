@@ -25,9 +25,9 @@ import { log } from '../../common/utils.js';
 
 import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
-import MeteorMochaTestServices      from '../../service_modules/dev/test_results_processor_meteor_mocha.js';
-import ChimpMochaTestServices       from '../../service_modules/dev/test_results_processor_chimp_mocha.js';
-import ChimpCucumberTestServices    from '../../service_modules/dev/test_results_processor_chimp_cucumber.js';
+import MeteorMochaTestServices      from './test_processor_meteor_mocha.js';
+import ChimpMochaTestServices       from './test_processor_chimp_mocha.js';
+import ChimpCucumberTestServices    from './test_processor_chimp_cucumber.js';
 
 //======================================================================================================================
 //

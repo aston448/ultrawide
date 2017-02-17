@@ -11,7 +11,7 @@ import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, Lo
 import {log}        from '../../common/utils.js'
 
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
-import ChimpMochaTestServices       from '../../service_modules/dev/test_results_processor_chimp_mocha.js';
+import ChimpMochaTestServices       from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 //======================================================================================================================
 //

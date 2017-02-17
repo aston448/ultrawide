@@ -1,8 +1,8 @@
 
 import { Validation } from '../constants/validation_errors.js'
 
-import DesignValidationApi      from '../apiValidation/apiDesignValidation.js';
-import  TestIntegrationServices            from '../servicers/dev/test_integration_services.js';
+import TestIntegrationValidationApi         from '../apiValidation/apiTestIntegrationValidation.js';
+import TestIntegrationServices              from '../servicers/dev/test_integration_services.js';
 
 //======================================================================================================================
 //
@@ -24,7 +24,7 @@ export const populateWorkPackageMashData = new ValidatedMethod({
             TestIntegrationServices.populateWorkPackageMashData(userContext);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testIntegration.populateWorkPackageMashData.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -45,7 +45,7 @@ export const updateTestData = new ValidatedMethod({
             TestIntegrationServices.updateTestMashData(userContext, userRole, viewOptions);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testIntegration.updateTestData.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -65,7 +65,7 @@ export const updateTestSummaryData = new ValidatedMethod({
             TestIntegrationServices.updateTestSummaryData(userContext, userRole);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testIntegration.updateTestSummaryData.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });
@@ -75,16 +75,24 @@ export const exportIntegrationTests = new ValidatedMethod({
     name: 'testIntegration.exportIntegrationTests',
 
     validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true}
+        userContext:    {type: Object, blackbox: true},
+        userRole:       {type: String},
+        testRunner:     {type: String}
     }).validator(),
 
-    run({userContext}){
+    run({userContext, userRole, testRunner}){
+
+        const result = TestIntegrationValidationApi.validateExportIntegrationTests(userRole, userContext);
+
+        if (result != Validation.VALID) {
+            throw new Meteor.Error('textEditor.exportIntegrationTests.failValidation', result)
+        }
 
         try {
-            TestIntegrationServices.exportIntegrationTests(userContext);
+            TestIntegrationServices.exportIntegrationTestFile(userContext, testRunner);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testIntegration.exportIntegrationTests.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 });

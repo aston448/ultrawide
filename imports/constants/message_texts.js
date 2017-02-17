@@ -92,6 +92,11 @@ export const TextEditorMessages = {
     MSG_TEXT_EDITOR_DETAILS_UPDATED:    'Design Component Details updated'
 };
 
+export const TestIntegrationMessages = {
+
+    MSG_INT_TEST_EXPORTED:              'Integration tests exported for Feature'
+};
+
 export const TestOutputLocationMessages = {
 
     MSG_LOCATION_ADDED:                 'Test output location added',

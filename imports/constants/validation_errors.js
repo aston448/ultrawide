@@ -156,6 +156,12 @@ export const TextEditorValidationErrors = {
     TEXT_EDITOR_INVALID_ROLE_SAVE:                      'Only a Designer can update Details for a Design Component'
 };
 
+export const TestIntegrationValidationErrors = {
+    EXPORT_INT_INVALID_ROLE:                            'Only a Developer may export integration tests',
+    EXPORT_INT_NO_COMPONENT:                            'A component must be selected to export an integration test',
+    EXPORT_INT_NOT_FEATURE:                             'Only Features canbe exported as integration tests'
+}
+
 export const TestOutputLocationValidationErrors = {
     LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new test output locations',
     LOCATION_INVALID_ROLE_SAVE:                         'Only a Developer can save test output location details',

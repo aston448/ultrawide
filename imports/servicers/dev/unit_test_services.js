@@ -8,7 +8,7 @@ import {UserUnitTestMashData}            from '../../collections/dev/user_unit_t
 import {ComponentType, MashStatus, MashTestStatus, LogLevel} from '../../constants/constants.js';
 import {log}                            from '../../common/utils.js';
 
-import MeteorMochaTestServices          from '../../service_modules/dev/test_results_processor_meteor_mocha.js';
+import MeteorMochaTestServices          from '../../service_modules/dev/test_processor_meteor_mocha.js';
 
 //======================================================================================================================
 //
