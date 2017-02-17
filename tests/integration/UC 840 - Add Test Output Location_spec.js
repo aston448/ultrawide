@@ -76,7 +76,7 @@ describe('UC 840 - Add Test Output Location', function(){
         const expectedLocation = {
             locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
             locationType:       TestLocationType.NONE,
-            locationAccessType: TestLocationAccessType.FILE,
+            locationAccessType: TestLocationAccessType.NONE,
             isShared:           false,
             locationServerName: 'NONE',
             serverLogin:        'NONE',

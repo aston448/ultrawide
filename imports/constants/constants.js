@@ -302,6 +302,7 @@ export const TestLocationTypes = [TestLocationType.NONE, TestLocationType.REMOTE
 
 
 export const TestLocationAccessType = {
+    NONE:           'NONE',
     FILE:           'FILE',
     RLOGIN:         'RLOGIN',
     FTP:            'FTP'
