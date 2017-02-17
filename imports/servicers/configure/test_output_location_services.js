@@ -28,7 +28,7 @@ class TestOutputLocationServices {
             TestOutputLocations.insert(
                 {
                     locationName:           DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-                    locationType:           TestLocationType.REMOTE
+                    locationType:           TestLocationType.NONE
                 }
             );
         }
