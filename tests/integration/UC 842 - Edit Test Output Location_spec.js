@@ -156,7 +156,7 @@ describe('UC 842 - Edit Test Output Location', function(){
             locationPath:       '/test/integration/output_files/'
         };
 
-        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails2);
+        OutputLocationsActions.developerSavesLocation('Location1', newDetails2);
         // Get users to check out their data
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.designerEditsTestLocationConfig();
