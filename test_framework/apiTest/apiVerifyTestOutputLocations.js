@@ -111,4 +111,39 @@ Meteor.methods({
         }
     },
 
+    'verifyTestOutputLocations.userConfigDetailsAre'(locationName, userName, userRole, configDetails){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const userTestTypeLocation = UserTestTypeLocations.findOne({
+            userId: userContext.userId,
+            userRole: userRole,
+            locationName: locationName
+        });
+
+        if(!userTestTypeLocation){
+            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName + " with role " + userRole);
+        } else {
+            // OK we know the ame was OK...
+            if(userTestTypeLocation.locationType === configDetails.locationType){
+                if(userTestTypeLocation.isUnitLocation === configDetails.isUnitLocation){
+                    if(userTestTypeLocation.isIntLocation === configDetails.isIntLocation){
+                        if(userTestTypeLocation.isAccLocation === configDetails.isAccLocation){
+                            return true;
+                        } else {
+                            throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Acc flag " + configDetails.isAccLocation + " but got " + userTestTypeLocation.isAccLocation + "  for user " + userName + " with role " + userRole);
+                        }
+                    } else {
+                        throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Int flag " + configDetails.isIntLocation + " but got " + userTestTypeLocation.isIntLocation + "  for user " + userName + " with role " + userRole);
+                    }
+                } else {
+                    throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Unit flag " + configDetails.isUnitLocation + " but got " + userTestTypeLocation.isUnitLocation + "  for user " + userName + " with role " + userRole);
+                }
+            } else {
+                throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have location type " + configDetails.locationType + " but got " + userTestTypeLocation.locationType + "  for user " + userName + " with role " + userRole);
+            }
+        }
+
+    }
+
 });

@@ -110,6 +110,77 @@ describe('UC 842 - Edit Test Output Location', function(){
 
 
     // Consequences
-    it('When a Test Output Location is updated the changes are visible in the Test Output Location Configurations available to other users');
+    it('When a Test Output Location is updated the changes are visible in the Test Output Location Configurations available to other users', function(){
+
+        // Setup - developer changes location to shared and changes details
+        const newDetails1 = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.REMOTE,
+            locationAccessType: TestLocationAccessType.RLOGIN,
+            locationIsShared:   true,
+            locationServerName: 'Server1',
+            serverLogin:        'login1',
+            serverPassword:     'password1',
+            locationPath:       '/test/integration/output_files/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails1);
+
+        // Get users to check out their data
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.managerEditsTestLocationConfig();
+        OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
+
+        const expectedConfig1 = {
+            locationType:  TestLocationType.REMOTE,
+            isUnitLocation: false,
+            isIntLocation: false,
+            isAccLocation: false
+        };
+
+        expect(OutputLocationsVerifications.designerTestConfigurationIs('Location1', expectedConfig1));
+        expect(OutputLocationsVerifications.developerTestConfigurationIs('Location1', expectedConfig1));
+        expect(OutputLocationsVerifications.anotherDeveloperTestConfigurationIs('Location1', expectedConfig1));
+        expect(OutputLocationsVerifications.managerTestConfigurationIs('Location1', expectedConfig1));
+
+        // Execute
+        const newDetails2 = {
+            locationName:       'Location2',
+            locationType:       TestLocationType.LOCAL,
+            locationAccessType: TestLocationAccessType.FILE,
+            locationIsShared:   true,
+            locationServerName: 'NONE',
+            serverLogin:        'NONE',
+            serverPassword:     'NONE',
+            locationPath:       '/test/integration/output_files/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails2);
+        // Get users to check out their data
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.managerEditsTestLocationConfig();
+        OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
+
+        // Verify
+        const expectedConfig2 = {
+            locationType:  TestLocationType.LOCAL,
+            isUnitLocation: false,
+            isIntLocation: false,
+            isAccLocation: false
+        };
+
+        // Now Location2, LOCAL
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation('Location1'));
+
+        expect(OutputLocationsVerifications.designerTestConfigurationIs('Location2', expectedConfig2));
+        expect(OutputLocationsVerifications.developerTestConfigurationIs('Location2', expectedConfig2));
+        expect(OutputLocationsVerifications.anotherDeveloperTestConfigurationIs('Location2', expectedConfig2));
+        expect(OutputLocationsVerifications.managerTestConfigurationIs('Location2', expectedConfig2));
+    });
 
 });

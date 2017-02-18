@@ -98,6 +98,38 @@ class OutputLocationsVerifications{
             })
         );
     };
+
+    designerTestConfigurationIs(locationName, configDetails){
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'gloria', RoleType.DESIGNER, configDetails,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    developerTestConfigurationIs(locationName, configDetails){
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'hugh', RoleType.DEVELOPER, configDetails,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    anotherDeveloperTestConfigurationIs(locationName, configDetails){
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'davey', RoleType.DEVELOPER, configDetails,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    managerTestConfigurationIs(locationName, configDetails){
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'miles', RoleType.MANAGER, configDetails,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
 }
 
 export default new OutputLocationsVerifications();
