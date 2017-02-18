@@ -4,6 +4,8 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class OutputLocationsVerifications{
 
+    // LOCATIONS -------------------------------------------------------------------------------------------------------
+
     locationExistsCalled(locationName){
         server.call('verifyTestOutputLocations.locationExistsCalled', locationName,
             (function(error, result){
@@ -28,6 +30,74 @@ class OutputLocationsVerifications{
         );
     };
 
+    // LOCATION FILES --------------------------------------------------------------------------------------------------
+
+
+    // USER CONFIG -----------------------------------------------------------------------------------------------------
+
+    designerHasTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'gloria', RoleType.DESIGNER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    developerHasTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'hugh', RoleType.DEVELOPER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    anotherDeveloperHasTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'davey', RoleType.DEVELOPER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    managerHasTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'miles', RoleType.MANAGER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    designerDoesNotHaveTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'gloria', RoleType.DESIGNER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    developerDoesNotHaveTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'hugh', RoleType.DEVELOPER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    anotherDeveloperDoesNotHaveTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'davey', RoleType.DEVELOPER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    managerDoesNotHaveTestConfigLocation(locationName){
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'miles', RoleType.MANAGER,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
 }
 
 export default new OutputLocationsVerifications();

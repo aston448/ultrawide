@@ -97,12 +97,61 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
 
     // Conditions
-    it('Only a Developer can update a Test Output Location as private or shared');
+    it('Only a Developer can update a Test Output Location as private or shared', function(){
+
+        // Check expected validation error is raised
+
+        // Designer
+        const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE};
+        OutputLocationsActions.designerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectation);
+
+        // Manager
+        OutputLocationsActions.managerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, expectation);
+    });
 
 
     // Consequences
-    it('When a Test Output Location is marked as private it is no longer available to other Ultrawide users');
+    it('When a Test Output Location is marked as private it is no longer available to other Ultrawide users', function(){
 
-    it('When a Test Output Location is marked as shared it becomes available to other Ultrawide users');
+        // Setup - Mark as public
+        OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        // Check
+        expect(OutputLocationsVerifications.designerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.managerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        // A second developer has it too...
+        expect(OutputLocationsVerifications.anotherDeveloperHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+
+        // Execute
+        OutputLocationsActions.developerSetsLocationAsPrivate(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Verify
+        // Designer and Manager no longer have config
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        // Developer still does as he changed it...
+        expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        // But another Developer does not have it as its private
+        expect(OutputLocationsVerifications.anotherDeveloperDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+    });
+
+    it('When a Test Output Location is marked as shared it becomes available to other Ultrawide users', function(){
+
+        // Setup - initially only the creating Developer has access...
+        expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        // And others do not
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.anotherDeveloperDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+
+        // Execute
+        OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Verify - all have access now
+        expect(OutputLocationsVerifications.designerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.managerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.anotherDeveloperHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+    });
 
 });

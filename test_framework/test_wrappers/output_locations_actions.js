@@ -4,6 +4,8 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class OutputLocationActions{
 
+    // LOCATIONS -------------------------------------------------------------------------------------------------------
+
     // Add Location
     developerAddsNewLocation(expectation){
         server.call('testOutputLocations.addNewLocation', RoleType.DEVELOPER, expectation);
@@ -48,8 +50,33 @@ class OutputLocationActions{
         server.call('testOutPutLocations.setLocationShared', RoleType.DEVELOPER, locationName, expectation);
     }
 
+    designerSetsLocationAsShared(locationName, expectation){
+        server.call('testOutPutLocations.setLocationShared', RoleType.DESIGNER, locationName, expectation);
+    }
+
+    managerSetsLocationAsShared(locationName, expectation){
+        server.call('testOutPutLocations.setLocationShared', RoleType.MANAGER, locationName, expectation);
+    }
+
     developerSetsLocationAsPrivate(locationName, expectation){
         server.call('testOutPutLocations.setLocationPrivate', RoleType.DEVELOPER, locationName, expectation);
+    }
+
+    designerSetsLocationAsPrivate(locationName, expectation){
+        server.call('testOutPutLocations.setLocationPrivate', RoleType.DESIGNER, locationName, expectation);
+    }
+
+    managerSetsLocationAsPrivate(locationName, expectation){
+        server.call('testOutPutLocations.setLocationPrivate', RoleType.MANAGER, locationName, expectation);
+    }
+
+    // LOCATION FILES --------------------------------------------------------------------------------------------------
+
+    // USER CONFIG -----------------------------------------------------------------------------------------------------
+
+    // Edit config
+    developerEditsTestLocationConfig(expectation){
+
     }
 }
 

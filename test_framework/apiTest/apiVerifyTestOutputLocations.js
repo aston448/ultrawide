@@ -4,7 +4,11 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
+import TestDataHelpers              from '../test_modules/test_data_helpers.js'
+
 Meteor.methods({
+
+    // LOCATIONS -------------------------------------------------------------------------------------------------------
 
     'verifyTestOutputLocations.locationExistsCalled'(locationName){
 
@@ -65,6 +69,45 @@ Meteor.methods({
             } else {
                 throw new Meteor.Error("FAIL", "Expecting location name " + locationDetails.locationName + " but got " + location.locationName);
             }
+        }
+    },
+
+    // LOCATION FILES --------------------------------------------------------------------------------------------------
+
+
+    // USER CONFIG -----------------------------------------------------------------------------------------------------
+
+    'verifyTestOutputLocations.userConfigIncludesLocation'(locationName, userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const locationConfig = UserTestTypeLocations.findOne({
+            userId:         userContext.userId,
+            userRole:       userRole,
+            locationName:   locationName
+        });
+
+        if(locationConfig){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName + " with role " + userRole);
+        }
+    },
+
+    'verifyTestOutputLocations.userConfigDoesNotIncludeLocation'(locationName, userName, userRole){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const locationConfig = UserTestTypeLocations.findOne({
+            userId:         userContext.userId,
+            userRole:       userRole,
+            locationName:   locationName
+        });
+
+        if(locationConfig){
+            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " EXISTS for user " + userName + " with role " + userRole);
+        } else {
+            return true;
         }
     },
 

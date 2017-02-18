@@ -8,6 +8,8 @@ import {RoleType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
+    // LOCATIONS -------------------------------------------------------------------------------------------------------
+
     'testOutputLocations.addNewLocation'(role, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -72,6 +74,8 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Set Location Private');
     },
 
+    // LOCATION FILES --------------------------------------------------------------------------------------------------
+
     'testOutputLocations.addNewLocationFile'(role, locationName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -110,4 +114,18 @@ Meteor.methods({
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location File');
     },
+
+    // USER CONFIG -----------------------------------------------------------------------------------------------------
+
+    'testOutputLocations.editUserTestLocationConfig'(userName, role, expectation) {
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // This is what is called when user goes to config screen to refresh their data
+        const outcome = ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, role);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location File');
+    }
 });

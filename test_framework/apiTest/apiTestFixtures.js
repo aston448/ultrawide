@@ -120,6 +120,22 @@ Meteor.methods({
                     isManager: false
                 });
 
+                let anotherDeveloperUserId = Accounts.createUser(
+                    {
+                        username: 'davey',
+                        password: 'davey'
+                    }
+                );
+
+                UserRoles.insert({
+                    userId: developerUserId,
+                    userName: 'davey',
+                    displayName: 'Davey Rocket',
+                    isDesigner: false,
+                    isDeveloper: true,
+                    isManager: false
+                });
+
                 let managerUserId = Accounts.createUser(
                     {
                         username: 'miles',
@@ -154,6 +170,15 @@ Meteor.methods({
                     // integrationTestResultsLocation: intTestResults,
                     // unitTestResultsLocation:      unitTestResults
                 });
+
+                UserCurrentEditContext.insert({
+                    userId: anotherDeveloperUserId
+                    // featureFilesLocation:           featureFilesDir,
+                    // acceptanceTestResultsLocation:  accTestResults,
+                    // integrationTestResultsLocation: intTestResults,
+                    // unitTestResultsLocation:      unitTestResults
+                });
+
 
 
                 UserCurrentEditContext.insert({

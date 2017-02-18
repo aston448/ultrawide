@@ -9,7 +9,7 @@ class TestFixtures{
 
         // In this test framework there are 3 users set up each with a single role:
         // Gloria Slap - 'gloria' - Designer
-        // Hugh Jengine - 'hugh' - Developer
+        // Hugh Gengine - 'hugh' - Developer
         // Miles Behind - 'miles' - Manager
 
         switch(role){
@@ -20,6 +20,8 @@ class TestFixtures{
             case RoleType.MANAGER:
                 return 'miles';
         }
+
+        // Note we also have a second Developer, Davey Rocket
     };
 
     clearAllData(){
