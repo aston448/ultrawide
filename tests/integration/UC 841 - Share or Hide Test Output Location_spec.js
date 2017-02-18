@@ -115,6 +115,11 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Setup - Mark as public
         OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        // Get users to check out their data
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.managerEditsTestLocationConfig();
+        OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
         // Check
         expect(OutputLocationsVerifications.designerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
         expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
@@ -124,6 +129,11 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Execute
         OutputLocationsActions.developerSetsLocationAsPrivate(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        // Get users to check out their data
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.managerEditsTestLocationConfig();
+        OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
 
         // Verify
         // Designer and Manager no longer have config
@@ -138,6 +148,12 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
     it('When a Test Output Location is marked as shared it becomes available to other Ultrawide users', function(){
 
         // Setup - initially only the creating Developer has access...
+        // Get users to check out their data
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.managerEditsTestLocationConfig();
+        OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
+
         expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
         // And others do not
         expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
@@ -146,6 +162,11 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Execute
         OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        // Get users to check out their data
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.managerEditsTestLocationConfig();
+        OutputLocationsActions.anotherDeveloperEditsTestLocationConfig();
 
         // Verify - all have access now
         expect(OutputLocationsVerifications.designerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));

@@ -76,7 +76,19 @@ class OutputLocationActions{
 
     // Edit config
     developerEditsTestLocationConfig(expectation){
+        server.call('testOutputLocations.editUserTestLocationConfig', 'hugh', RoleType.DEVELOPER, expectation);
+    }
 
+    anotherDeveloperEditsTestLocationConfig(expectation){
+        server.call('testOutputLocations.editUserTestLocationConfig', 'davey', RoleType.DEVELOPER, expectation);
+    }
+
+    designerEditsTestLocationConfig(expectation){
+        server.call('testOutputLocations.editUserTestLocationConfig', 'gloria', RoleType.DESIGNER, expectation);
+    }
+
+    managerEditsTestLocationConfig(expectation){
+        server.call('testOutputLocations.editUserTestLocationConfig', 'miles', RoleType.MANAGER, expectation);
     }
 }
 
