@@ -79,14 +79,14 @@ class ClientTestIntegrationServices {
     // User is entering a screen where dev data is needed --------------------------------------------------------------
     loadUserDevData(userContext, userRole, viewOptions, nextView, testDataFlag){
 
-        // Check that data not already loaded
-        const mashDataCount = UserWorkPackageMashData.find({userId: userContext.userId}).count();
+        // Check if data needs loading
+        ///const mashDataCount = UserWorkPackageMashData.find({userId: userContext.userId}).count();
 
-        if(mashDataCount === 0) {
+        if(store.getState().mashDataStale) {
 
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
-            // Load user dev data and when done update the design mash and switch view if wanted
+            // Load user dev data (if needed) and when done update the design mash and switch view if wanted
             ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag, nextView));
         } else {
 
