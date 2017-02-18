@@ -1,3 +1,11 @@
+
+import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
+import OutputLocationsActions           from '../../test_framework/test_wrappers/output_locations_actions.js';
+import OutputLocationsVerifications     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
+import {TestLocationType, TestLocationAccessType} from '../../imports/constants/constants.js';
+
 describe('UC 842 - Edit Test Output Location', function(){
 
     before(function(){
@@ -17,30 +25,8 @@ describe('UC 842 - Edit Test Output Location', function(){
     });
 
 
-    // Interface
-    it('A Test Output Location has an option to edit it');
-
-    it('A Test Output Location being edited has a field to edit the location name');
-
-    it('A Test Output Location being edited has a list to select the location type');
-
-    it('A Test Output Location being edited has a list to select the access type');
-
-    it('A Test Output Location being edited has a field to edit the server name');
-
-    it('A Test Output Location being edited has a field to edit the server login');
-
-    it('A Test Output Location being edited has a field to edit the server password');
-
-    it('A Test Output Location being edited has a field to edit the file path');
-
-    it('A Test Output Location being edited has an option to cancel the edit');
-
-
     // Actions
     it('A Developer can update and save the properties of a Test Output Location');
-
-    it('A Developer can cancel an edit of a Test Output Location and retain existing properties');
 
 
     // Conditions

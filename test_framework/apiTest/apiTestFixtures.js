@@ -128,7 +128,7 @@ Meteor.methods({
                 );
 
                 UserRoles.insert({
-                    userId: developerUserId,
+                    userId: anotherDeveloperUserId,
                     userName: 'davey',
                     displayName: 'Davey Rocket',
                     isDesigner: false,
