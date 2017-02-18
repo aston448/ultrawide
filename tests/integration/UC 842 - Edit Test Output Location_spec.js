@@ -18,6 +18,11 @@ describe('UC 842 - Edit Test Output Location', function(){
 
     beforeEach(function(){
 
+        // Don't need any design data for these tests
+        TestFixtures.clearAllData();
+
+        // Add a new location
+        OutputLocationsActions.developerAddsNewLocation();
     });
 
     afterEach(function(){
@@ -26,7 +31,16 @@ describe('UC 842 - Edit Test Output Location', function(){
 
 
     // Actions
-    it('A Developer can update and save the properties of a Test Output Location');
+    it('A Developer can update and save the properties of a Test Output Location', function(){
+
+        // Setup
+        const newDetails = {
+
+        }
+
+        // Execute
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails)
+    });
 
 
     // Conditions

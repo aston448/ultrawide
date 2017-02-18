@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
+import { UserCurrentViewOptions}    from '../../imports/collections/context/user_current_view_options.js';
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
@@ -52,13 +53,9 @@ Meteor.methods({
             UserTestTypeLocations.remove({});
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
-            //
-            // const featureFilesDir = '/Users/aston/WebstormProjects/ultrawide-test/tests/features/';
-            // const accTestResults = '/Users/aston/WebstormProjects/shared/test/test_results.json';
-            // const intTestResults = '/Users/aston/WebstormProjects/shared/test/mocha_results.json';
-            // const unitTestResults = '/Users/aston/WebstormProjects/ultrawide-test/mocha-unit-output.json';
 
-            // Clear current edit context for all users - but not the file locations
+
+            // Clear current edit context for all users
             UserCurrentEditContext.update(
                 {},
                 {
@@ -73,11 +70,6 @@ Meteor.methods({
                         featureAspectReferenceId: 'NONE',
                         scenarioReferenceId: 'NONE',
                         scenarioStepId: 'NONE',
-
-                        // featureFilesLocation:           featureFilesDir,
-                        // acceptanceTestResultsLocation:  accTestResults,
-                        // integrationTestResultsLocation: intTestResults,
-                        // unitTestResultsLocation:      unitTestResults
                     }
                 },
                 {multi: true}
@@ -154,39 +146,41 @@ Meteor.methods({
 
 
                 // Start new users with default context
-
                 UserCurrentEditContext.insert({
                     userId: designerUserId
-                    // featureFilesLocation:           featureFilesDir,
-                    // acceptanceTestResultsLocation:  accTestResults,
-                    // integrationTestResultsLocation: intTestResults,
-                    // unitTestResultsLocation:      unitTestResults
                 });
 
                 UserCurrentEditContext.insert({
                     userId: developerUserId
-                    // featureFilesLocation:           featureFilesDir,
-                    // acceptanceTestResultsLocation:  accTestResults,
-                    // integrationTestResultsLocation: intTestResults,
-                    // unitTestResultsLocation:      unitTestResults
                 });
 
                 UserCurrentEditContext.insert({
                     userId: anotherDeveloperUserId
-                    // featureFilesLocation:           featureFilesDir,
-                    // acceptanceTestResultsLocation:  accTestResults,
-                    // integrationTestResultsLocation: intTestResults,
-                    // unitTestResultsLocation:      unitTestResults
                 });
-
-
 
                 UserCurrentEditContext.insert({
                     userId: managerUserId
-                    // featureFilesLocation:           featureFilesDir,
-                    // acceptanceTestResultsLocation:  accTestResults,
-                    // integrationTestResultsLocation: intTestResults,
-                    // unitTestResultsLocation:      unitTestResults
+                });
+
+
+                // And default view options
+                UserCurrentViewOptions.insert({
+                    userId: designerUserId
+                });
+
+                // And default view options
+                UserCurrentViewOptions.insert({
+                    userId: developerUserId
+                });
+
+                // And default view options
+                UserCurrentViewOptions.insert({
+                    userId: anotherDeveloperUserId
+                });
+
+                // And default view options
+                UserCurrentViewOptions.insert({
+                    userId: managerUserId
                 });
 
             }
