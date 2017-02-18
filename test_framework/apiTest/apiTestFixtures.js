@@ -75,7 +75,7 @@ Meteor.methods({
                 {multi: true}
             );
 
-            // Recreate users only needed after a reset
+            // Recreate users only needed after a reset - NOTE:  Make sure there is no backup data to restore or it will confuse this
             if (UserRoles.find({}).count() === 0) {
 
                 console.log('Inserting user data...');
