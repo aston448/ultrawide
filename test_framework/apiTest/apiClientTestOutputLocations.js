@@ -4,7 +4,7 @@ import ClientTestOutputLocationServices from '../../imports/apiClient/apiClientT
 
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
-import {RoleType} from '../../imports/constants/constants.js';
+import {RoleType, TestType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
@@ -98,17 +98,17 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Output Location File');
     },
 
-    'testOutputLocations.saveLocationFile'(role, locationName, fileAlias, newFile, expectation){
+    'testOutputLocations.saveLocationFile'(role, locationName, fileAlias, fileDetails, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
         let file = TestDataHelpers.getTestOutputLocationFile(locationName, fileAlias);
 
-        file.fileAlias = newFile.fileAlias;
-        file.fileType = newFile.fileType;
-        file.testRunner = newFile.testRunner;
-        file.fileName = newFile.fileName;
-        file.allFilesOfType = newFile.allFilesOfType;
+        file.fileAlias = fileDetails.fileAlias;
+        file.fileType = fileDetails.fileType;
+        file.testRunner = fileDetails.testRunner;
+        file.fileName = fileDetails.fileName;
+        file.allFilesOfType = fileDetails.allFilesOfType;
 
         const outcome = ClientTestOutputLocationServices.saveLocationFile(role, file);
 
@@ -125,6 +125,32 @@ Meteor.methods({
 
         // This is what is called when user goes to config screen to refresh their data
         const outcome = ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, role);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location File');
+    },
+
+    'testOutputLocations.setUserTestLocationConfigTestTypeTo'(userName, role, locationName, testType, setting, expectation) {
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const userConfiguration = TestDataHelpers.getUserTestOutputConfiguration(locationName, userContext.userId, role);
+
+        switch(testType){
+            case TestType.UNIT:
+                userConfiguration.isUnitLocation = setting;
+                break;
+            case TestType.INTEGRATION:
+                userConfiguration.isIntLocation = setting;
+                break;
+            case TestType.ACCEPTANCE:
+                userConfiguration.isAccLocation = setting;
+                break;
+        }
+
+        // This is what is called when user goes to config screen to refresh their data
+        const outcome = ClientTestOutputLocationServices.saveUserConfiguration(role, userConfiguration);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location File');
     }

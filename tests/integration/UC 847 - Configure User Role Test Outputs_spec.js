@@ -1,3 +1,11 @@
+
+import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
+import OutputLocationsActions           from '../../test_framework/test_wrappers/output_locations_actions.js';
+import OutputLocationsVerifications     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {TestOutputLocationFileValidationErrors}   from '../../imports/constants/validation_errors.js';
+import {TestLocationType, TestLocationAccessType} from '../../imports/constants/constants.js';
+
 describe('UC 847 - Configure User Role Test Outputs', function(){
 
     before(function(){
@@ -10,6 +18,11 @@ describe('UC 847 - Configure User Role Test Outputs', function(){
 
     beforeEach(function(){
 
+        // Don't need any design data for these tests
+        TestFixtures.clearAllData();
+
+        // Add a new location
+        OutputLocationsActions.developerAddsNewLocation();
     });
 
     afterEach(function(){
@@ -17,20 +30,37 @@ describe('UC 847 - Configure User Role Test Outputs', function(){
     });
 
 
-    // Interface
-    it('The Test Output Location Configuration list shows all shared Test Output Locations');
-
-    it('For a Developer the Test Output Location Configuration list shows private Test Output Locations created by that Developer');
-
-    it('Each Test Output Location Configuration has an option to retrieve Unit tests');
-
-    it('Each Test Output Location Configuration has an option to retrieve Integration tests');
-
-    it('Each Test Output Location Configuration has an option to retrieve Acceptance tests');
-
-
     // Actions
-    it('One or more test options may be selected for a Test Output Location Configuration');
+    it('One or more test options may be selected for a Test Output Location Configuration', function(){
+
+        const defaultConfig = {
+            locationType:   TestLocationType.NONE,
+            isUnitLocation: false,
+            isIntLocation:  false,
+            isAccLocation:  false
+        };
+
+        const newConfig = {
+            locationType:   TestLocationType.NONE,
+            isUnitLocation: true,
+            isIntLocation:  true,
+            isAccLocation:  false
+        };
+
+        // Setup - confirm Developer has default config for the privale location
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        expect(OutputLocationsVerifications.developerTestConfigurationIs(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultConfig));
+
+        // Execute - select all then unselect Acc
+        OutputLocationsActions.developerSelectsUnitTestsInConfigForLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        OutputLocationsActions.developerSelectsIntTestsInConfigForLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+        OutputLocationsActions.developerSelectsAccTestsInConfigForLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        OutputLocationsActions.developerClearsAccTestsInConfigForLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
+
+        // Verify
+        expect(OutputLocationsVerifications.developerTestConfigurationIs(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newConfig));
+    });
 
 
     // Conditions

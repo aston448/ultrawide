@@ -160,12 +160,19 @@ export const TestIntegrationValidationErrors = {
     EXPORT_INT_INVALID_ROLE:                            'Only a Developer may export integration tests',
     EXPORT_INT_NO_COMPONENT:                            'A component must be selected to export an integration test',
     EXPORT_INT_NOT_FEATURE:                             'Only Features canbe exported as integration tests'
-}
+};
 
 export const TestOutputLocationValidationErrors = {
     LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new test output locations',
     LOCATION_INVALID_ROLE_SAVE:                         'Only a Developer can save test output location details',
-    LOCATION_INVALID_ROLE_REMOVE:                       'Only a Developer can remove test output locations'
+    LOCATION_INVALID_ROLE_REMOVE:                       'Only a Developer can remove test output locations',
+    LOCATION_INVALID_NAME_DUPLICATE:                    'A test output location cannot be given the same name as an existing location'
 };
 
+export const TestOutputLocationFileValidationErrors = {
+    LOCATION_FILE_INVALID_ROLE_ADD:                     'Only a Developer can add new test output location filess',
+    LOCATION_FILE_INVALID_ROLE_SAVE:                    'Only a Developer can save test output location file details',
+    LOCATION_FILE_INVALID_ROLE_REMOVE:                  'Only a Developer can remove test output location files',
+    LOCATION_FILE_INVALID_ALIAS_DUPLICATE:              'A test output location file cannot be given the same alias as an existing file for the location'
+};
 

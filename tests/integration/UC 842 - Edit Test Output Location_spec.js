@@ -108,6 +108,44 @@ describe('UC 842 - Edit Test Output Location', function(){
 
     });
 
+    it('A Test Output Location may not be given the same name as an existing Test Output Location', function(){
+
+        const defaultDetails = {
+            locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
+            locationType:       TestLocationType.NONE,
+            locationAccessType: TestLocationAccessType.NONE,
+            locationIsShared:   false,
+            locationServerName: 'NONE',
+            serverLogin:        'NONE',
+            serverPassword:     'NONE',
+            locationPath:       'NONE'
+        };
+
+        // Setup - update the new Location
+        const newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.REMOTE,
+            locationAccessType: TestLocationAccessType.RLOGIN,
+            locationIsShared:   true,
+            locationServerName: 'Server1',
+            serverLogin:        'login1',
+            serverPassword:     'password1',
+            locationPath:       '/test/integration/output_files/'
+        };
+
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
+
+        // Add another location
+        OutputLocationsActions.developerAddsNewLocation();
+
+        // Execute - try to update it with same name - Location1
+        const expectation = {success:false, message: TestOutputLocationValidationErrors.LOCATION_INVALID_NAME_DUPLICATE};
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails, expectation);
+
+        // Verify - still default
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultDetails));
+    });
+
 
     // Consequences
     it('When a Test Output Location is updated the changes are visible in the Test Output Location Configurations available to other users', function(){

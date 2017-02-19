@@ -36,44 +36,107 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "No Test Output Location exists called " + locationName);
         } else {
 
-            if(location.locationName === locationDetails.locationName){
-                if(location.locationType === locationDetails.locationType){
-                    if(location.locationAccessType === locationDetails.locationAccessType){
-                        if(location.locationIsShared === locationDetails.locationIsShared){
-                            if(location.locationServerName === locationDetails.locationServerName){
-                                if(location.serverLogin === locationDetails.serverLogin){
-                                    if(location.serverPassword === locationDetails.serverPassword){
-                                        if(location.locationPath === locationDetails.locationPath){
-                                            return true;
-                                        } else {
-                                            throw new Meteor.Error("FAIL", "Expecting location server password " + locationDetails.locationPath + " but got " + location.locationPath);
-                                        }
+            // Already know name is OK...
+            if(location.locationType === locationDetails.locationType){
+                if(location.locationAccessType === locationDetails.locationAccessType){
+                    if(location.locationIsShared === locationDetails.locationIsShared){
+                        if(location.locationServerName === locationDetails.locationServerName){
+                            if(location.serverLogin === locationDetails.serverLogin){
+                                if(location.serverPassword === locationDetails.serverPassword){
+                                    if(location.locationPath === locationDetails.locationPath){
+                                        return true;
                                     } else {
-                                        throw new Meteor.Error("FAIL", "Expecting location server password " + locationDetails.serverPassword + " but got " + location.serverPassword);
+                                        throw new Meteor.Error("FAIL", "Expecting location server password " + locationDetails.locationPath + " but got " + location.locationPath + " for location " + locationName);
                                     }
                                 } else {
-                                    throw new Meteor.Error("FAIL", "Expecting location server login " + locationDetails.serverLogin + " but got " + location.serverLogin);
+                                    throw new Meteor.Error("FAIL", "Expecting location server password " + locationDetails.serverPassword + " but got " + location.serverPassword + " for location " + locationName);
                                 }
                             } else {
-                                throw new Meteor.Error("FAIL", "Expecting location server name " + locationDetails.locationServerName + " but got " + location.locationServerName);
+                                throw new Meteor.Error("FAIL", "Expecting location server login " + locationDetails.serverLogin + " but got " + location.serverLogin + " for location " + locationName);
                             }
                         } else {
-                            throw new Meteor.Error("FAIL", "Expecting location is shared " + locationDetails.locationIsShared + " but got " + location.locationIsShared);
+                            throw new Meteor.Error("FAIL", "Expecting location server name " + locationDetails.locationServerName + " but got " + location.locationServerName + " for location " + locationName);
                         }
                     } else {
-                        throw new Meteor.Error("FAIL", "Expecting location access type " + locationDetails.locationAccessType + " but got " + location.locationAccessType);
+                        throw new Meteor.Error("FAIL", "Expecting location is shared " + locationDetails.locationIsShared + " but got " + location.locationIsShared + " for location " + locationName);
                     }
                 } else {
-                    throw new Meteor.Error("FAIL", "Expecting location type " + locationDetails.locationType + " but got " + location.locationType);
+                    throw new Meteor.Error("FAIL", "Expecting location access type " + locationDetails.locationAccessType + " but got " + location.locationAccessType + " for location " + locationName);
                 }
             } else {
-                throw new Meteor.Error("FAIL", "Expecting location name " + locationDetails.locationName + " but got " + location.locationName);
+                throw new Meteor.Error("FAIL", "Expecting location type " + locationDetails.locationType + " but got " + location.locationType + " for location " + locationName);
             }
         }
     },
 
     // LOCATION FILES --------------------------------------------------------------------------------------------------
 
+    'verifyTestOutputLocations.locationHasFile'(locationName, fileAlias){
+
+        const location = TestDataHelpers.getTestOutputLocation(locationName);
+
+        const locationFile = TestOutputLocationFiles.findOne({
+            locationId: location._id,
+            fileAlias: fileAlias
+        });
+
+        if(locationFile){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "No Test Output Location File exists called " + fileAlias + " for Location " + locationName);
+        }
+    },
+
+    'verifyTestOutputLocations.locationDoesNotHaveFile'(locationName, fileAlias){
+
+        const location = TestDataHelpers.getTestOutputLocation(locationName);
+
+        const locationFile = TestOutputLocationFiles.findOne({
+            locationId: location._id,
+            fileAlias: fileAlias
+        });
+
+        if(locationFile){
+            throw new Meteor.Error("FAIL", "Test Output Location File EXISTS called " + fileAlias + " for Location " + locationName);
+        } else {
+            return true;
+        }
+    },
+
+    'verifyTestOutputLocations.locationFileDetailsAre'(locationName, fileAlias, fileDetails){
+
+        const location = TestDataHelpers.getTestOutputLocation(locationName);
+
+        const locationFile = TestOutputLocationFiles.findOne({
+            locationId: location._id,
+            fileAlias: fileAlias
+        });
+
+        if(locationFile){
+
+            // We already know the alias is as expected...
+            if(locationFile.fileType === fileDetails.fileType){
+                if(locationFile.testRunner === fileDetails.testRunner){
+                    if(locationFile.fileName === fileDetails.fileName){
+                        if(locationFile.allFilesOfType === fileDetails.allFilesOfType){
+                            return true;
+                        } else {
+                            throw new Meteor.Error("FAIL", "Expecting file wildcard " + fileDetails.allFilesOfType + " but got " + locationFile.allFilesOfType + " for file " + fileAlias);
+                        }
+                    } else {
+                        throw new Meteor.Error("FAIL", "Expecting file name " + fileDetails.fileName + " but got " + locationFile.fileName + " for file " + fileAlias);
+                    }
+                } else {
+                    throw new Meteor.Error("FAIL", "Expecting test runner " + fileDetails.testRunner + " but got " + locationFile.testRunner + " for file " + fileAlias);
+                }
+            } else {
+                throw new Meteor.Error("FAIL", "Expecting file type " + fileDetails.fileType + " but got " + locationFile.fileType + " for file " + fileAlias);
+            }
+
+        } else {
+            throw new Meteor.Error("FAIL", "No Test Output Location File exists called " + fileAlias + " for Location " + locationName);
+        }
+    },
 
     // USER CONFIG -----------------------------------------------------------------------------------------------------
 
@@ -124,7 +187,7 @@ Meteor.methods({
         if(!userTestTypeLocation){
             throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName + " with role " + userRole);
         } else {
-            // OK we know the ame was OK...
+            // OK we know the name was OK...
             if(userTestTypeLocation.locationType === configDetails.locationType){
                 if(userTestTypeLocation.isUnitLocation === configDetails.isUnitLocation){
                     if(userTestTypeLocation.isIntLocation === configDetails.isIntLocation){

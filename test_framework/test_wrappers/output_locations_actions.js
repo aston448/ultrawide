@@ -1,5 +1,5 @@
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, TestType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 class OutputLocationActions{
@@ -72,6 +72,46 @@ class OutputLocationActions{
 
     // LOCATION FILES --------------------------------------------------------------------------------------------------
 
+    // Add File
+    developerAddsFileToLocation(locationName, expectation){
+        server.call('testOutputLocations.addNewLocationFile', RoleType.DEVELOPER, locationName, expectation);
+    }
+
+    designerAddsFileToLocation(locationName, expectation){
+        server.call('testOutputLocations.addNewLocationFile', RoleType.DESIGNER, locationName, expectation);
+    }
+
+    managerAddsFileToLocation(locationName, expectation){
+        server.call('testOutputLocations.addNewLocationFile', RoleType.MANAGER, locationName, expectation);
+    }
+
+    // Remove File
+    developerRemovesLocationFile(locationName, fileAlias, expectation){
+        server.call('testOutputLocations.removeLocationFile', RoleType.DEVELOPER, locationName, fileAlias, expectation);
+    }
+
+    designerRemovesLocationFile(locationName, fileAlias, expectation){
+        server.call('testOutputLocations.removeLocationFile', RoleType.DESIGNER, locationName, fileAlias, expectation);
+    }
+
+    managerRemovesLocationFile(locationName, fileAlias, expectation){
+        server.call('testOutputLocations.removeLocationFile', RoleType.MANAGER, locationName, fileAlias, expectation);
+    }
+
+    // Save File Details
+    developerSavesLocationFile(locationName, fileAlias, fileDetails, expectation){
+        server.call('testOutputLocations.saveLocationFile', RoleType.DEVELOPER, locationName, fileAlias, fileDetails, expectation);
+    }
+
+    designerSavesLocationFile(locationName, fileAlias, fileDetails, expectation){
+        server.call('testOutputLocations.saveLocationFile', RoleType.DESIGNER, locationName, fileAlias, fileDetails, expectation);
+    }
+
+    managerSavesLocationFile(locationName, fileAlias, fileDetails, expectation){
+        server.call('testOutputLocations.saveLocationFile', RoleType.MANAGER, locationName, fileAlias, fileDetails, expectation);
+    }
+
+
     // USER CONFIG -----------------------------------------------------------------------------------------------------
 
     // Edit config
@@ -90,6 +130,33 @@ class OutputLocationActions{
     managerEditsTestLocationConfig(expectation){
         server.call('testOutputLocations.editUserTestLocationConfig', 'miles', RoleType.MANAGER, expectation);
     }
+
+    // Change Settings
+    developerSelectsUnitTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.UNIT, true, expectation);
+    }
+
+    developerClearsUnitTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.UNIT, false, expectation);
+    }
+
+    developerSelectsIntTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.INTEGRATION, true, expectation);
+    }
+
+    developerClearsIntTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.INTEGRATION, false, expectation);
+    }
+
+    developerSelectsAccTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.ACCEPTANCE, true, expectation);
+    }
+
+    developerClearsAccTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.ACCEPTANCE, false, expectation);
+    }
+
+
 }
 
 export default new OutputLocationActions();

@@ -115,7 +115,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Setup - Mark as public
         OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
-        // Get users to check out their data
+        // Get users to check their data
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.designerEditsTestLocationConfig();
         OutputLocationsActions.managerEditsTestLocationConfig();
@@ -129,7 +129,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Execute
         OutputLocationsActions.developerSetsLocationAsPrivate(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
-        // Get users to check out their data
+        // Get users to check their data
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.designerEditsTestLocationConfig();
         OutputLocationsActions.managerEditsTestLocationConfig();
@@ -148,7 +148,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
     it('When a Test Output Location is marked as shared it becomes available to other Ultrawide users', function(){
 
         // Setup - initially only the creating Developer has access...
-        // Get users to check out their data
+        // Get users to check their data
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.designerEditsTestLocationConfig();
         OutputLocationsActions.managerEditsTestLocationConfig();
@@ -162,7 +162,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
 
         // Execute
         OutputLocationsActions.developerSetsLocationAsShared(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
-        // Get users to check out their data
+        // Get users to check their data
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.designerEditsTestLocationConfig();
         OutputLocationsActions.managerEditsTestLocationConfig();

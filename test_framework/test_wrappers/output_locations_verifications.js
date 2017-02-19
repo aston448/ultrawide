@@ -32,6 +32,29 @@ class OutputLocationsVerifications{
 
     // LOCATION FILES --------------------------------------------------------------------------------------------------
 
+    locationFileExistsForLocation_Called(locationName, fileAlias){
+        server.call('verifyTestOutputLocations.locationHasFile', locationName, fileAlias,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    locationFileDoesNotExistForLocation_Called(locationName, fileAlias){
+        server.call('verifyTestOutputLocations.locationDoesNotHaveFile', locationName, fileAlias,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    };
+
+    locationFile_ForLocation_HasDetails(fileAlias, locationName, fileDetails){
+        server.call('verifyTestOutputLocations.locationFileDetailsAre', locationName, fileAlias, fileDetails,
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    };
 
     // USER CONFIG -----------------------------------------------------------------------------------------------------
 
