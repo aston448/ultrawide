@@ -221,7 +221,7 @@ class TestIntegrationModules{
         // }
     };
 
-    getIntegrationTestResults(userContext, userRole){
+    getIntegrationTestResults(userContext){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
@@ -236,7 +236,6 @@ class TestIntegrationModules{
         // See which locations the user has marked as containing integration files for the current role
         const userLocations = UserTestTypeLocations.find({
             userId:         userContext.userId,
-            userRole:       userRole,
             isIntLocation:  true
         }).fetch();
 
@@ -289,7 +288,7 @@ class TestIntegrationModules{
 
     };
 
-    getUnitTestResults(userContext, userRole){
+    getUnitTestResults(userContext){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
         if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
@@ -304,7 +303,6 @@ class TestIntegrationModules{
         // See which locations the user has marked as containing unit test files for the current role
         const userLocations = UserTestTypeLocations.find({
             userId: userContext.userId,
-            userRole: userRole,
             isUnitLocation: true
         }).fetch();
 

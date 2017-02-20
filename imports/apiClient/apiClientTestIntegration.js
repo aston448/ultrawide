@@ -113,7 +113,7 @@ class ClientTestIntegrationServices {
 
         } else {
 
-            this.updateTestSummary(userContext, userRole, testDataFlag)
+            this.updateTestSummary(userContext, testDataFlag)
         }
 
 
@@ -130,7 +130,7 @@ class ClientTestIntegrationServices {
         } else {
 
             // Just load the test results
-            this.updateTestResults(userContext, userRole, viewOptions, testDataFlag);
+            this.updateTestResults(userContext, viewOptions, testDataFlag);
         }
     };
 
@@ -156,17 +156,17 @@ class ClientTestIntegrationServices {
                     // If developer also has test summary open load that too but don't trigger next view yet
                     if(viewOptions.devTestSummaryVisible){
 
-                        this.updateTestSummary(userContext, userRole, testDataFlag);
+                        this.updateTestSummary(userContext, testDataFlag);
                     }
 
-                    this.updateTestResults(userContext, userRole, viewOptions, testDataFlag, nextView)
+                    this.updateTestResults(userContext, viewOptions, testDataFlag, nextView)
                 }
             } else {
 
                 // Are we wanting to see just the Test Summary
                 if(viewOptions.devTestSummaryVisible){
 
-                    this.updateTestSummary(userContext, userRole, testDataFlag, nextView);
+                    this.updateTestSummary(userContext, testDataFlag, nextView);
                 }
             }
         } else {
@@ -174,7 +174,7 @@ class ClientTestIntegrationServices {
             // Must be a view where there only is a test summary
             if(viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible){
 
-                this.updateTestSummary(userContext, userRole, testDataFlag, nextView);
+                this.updateTestSummary(userContext, testDataFlag, nextView);
             }
         }
 
@@ -206,7 +206,7 @@ class ClientTestIntegrationServices {
                 store.dispatch(setMashDataStaleTo(false));
 
                 // And on success of that update the test data
-                ServerTestIntegrationApi.updateTestData(userContext, userRole, viewOptions, (err, result) => {
+                ServerTestIntegrationApi.updateTestData(userContext, viewOptions, (err, result) => {
 
                     if(err){
 
@@ -232,11 +232,11 @@ class ClientTestIntegrationServices {
     };
 
     // Get latest test results required for current view options
-    updateTestResults(userContext, userRole, viewOptions, testDataFlag, nextView){
+    updateTestResults(userContext, viewOptions, testDataFlag, nextView){
 
         store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Loading test data...'}));
 
-        ServerTestIntegrationApi.updateTestData(userContext, userRole, viewOptions, (err, result) => {
+        ServerTestIntegrationApi.updateTestData(userContext, viewOptions, (err, result) => {
 
             if(err){
 
@@ -257,11 +257,11 @@ class ClientTestIntegrationServices {
     };
 
     // Update the test summary data
-    updateTestSummary(userContext, userRole, testDataFlag, nextView){
+    updateTestSummary(userContext, testDataFlag, nextView){
 
         store.dispatch(updateUserMessage({messageType: MessageType.INFO, messageText: 'Loading test summary data...'}));
 
-        ServerTestIntegrationApi.updateTestSummaryData(userContext, userRole, (err, result) => {
+        ServerTestIntegrationApi.updateTestSummaryData(userContext, (err, result) => {
 
             if(err){
 

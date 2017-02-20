@@ -28,12 +28,11 @@ class ServerTestIntegrationApi {
         );
     };
 
-    updateTestData(userContext, userRole, viewOptions, callback){
+    updateTestData(userContext, viewOptions, callback){
 
         updateTestData.call(
             {
                 userContext: userContext,
-                userRole: userRole,
                 viewOptions: viewOptions
             },
             (err, result) => {
@@ -42,12 +41,11 @@ class ServerTestIntegrationApi {
         );
     };
 
-    updateTestSummaryData(userContext, userRole, callback){
+    updateTestSummaryData(userContext, callback){
 
         updateTestSummaryData.call(
             {
-                userContext: userContext,
-                userRole: userRole
+                userContext: userContext
             },
             (err, result) => {
                 callback(err, result);

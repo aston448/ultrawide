@@ -49,7 +49,7 @@ class TestIntegrationServices{
         }
     }
 
-    updateTestMashData(userContext, userRole, viewOptions){
+    updateTestMashData(userContext, viewOptions){
 
         // User has chosen to update the test mash data with latest test results
 
@@ -69,12 +69,12 @@ class TestIntegrationServices{
 
             if(viewOptions.devIntTestsVisible){
                 // Get latest Int Test Results
-                MashDataModules.getIntegrationTestResults(userContext, userRole);
+                MashDataModules.getIntegrationTestResults(userContext);
             }
 
             if(viewOptions.devUnitTestsVisible){
                 // Get latest Unit Test Results
-                MashDataModules.getUnitTestResults(userContext, userRole);
+                MashDataModules.getUnitTestResults(userContext);
             }
 
             if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible){
@@ -85,15 +85,15 @@ class TestIntegrationServices{
         }
     };
 
-    updateTestSummaryData(userContext, userRole){
+    updateTestSummaryData(userContext){
 
         // Called if the test summary needs a refresh
 
         if(Meteor.isServer){
 
             MashDataModules.getAcceptanceTestResults(userContext);
-            MashDataModules.getIntegrationTestResults(userContext, userRole);
-            MashDataModules.getUnitTestResults(userContext, userRole);
+            MashDataModules.getIntegrationTestResults(userContext);
+            MashDataModules.getUnitTestResults(userContext);
 
             // Recreate the summary mash
             console.log("Refreshing SUMMARY");

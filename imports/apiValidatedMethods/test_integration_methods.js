@@ -35,14 +35,13 @@ export const updateTestData = new ValidatedMethod({
 
     validate: new SimpleSchema({
         userContext:    {type: Object, blackbox: true},
-        userRole:       {type: String},
         viewOptions:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({userContext, userRole, viewOptions}){
+    run({userContext, viewOptions}){
 
         try {
-            TestIntegrationServices.updateTestMashData(userContext, userRole, viewOptions);
+            TestIntegrationServices.updateTestMashData(userContext, viewOptions);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)
@@ -55,14 +54,13 @@ export const updateTestSummaryData = new ValidatedMethod({
     name: 'testIntegration.updateTestSummaryData',
 
     validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true},
-        userRole:       {type: String}
+        userContext:    {type: Object, blackbox: true}
     }).validator(),
 
-    run({userContext, userRole}){
+    run({userContext}){
 
         try {
-            TestIntegrationServices.updateTestSummaryData(userContext, userRole);
+            TestIntegrationServices.updateTestSummaryData(userContext);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)
