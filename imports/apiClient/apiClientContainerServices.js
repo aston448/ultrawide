@@ -129,45 +129,51 @@ class ClientContainerServices{
 
     getDevData(userId, callback){
 
-        // See if we have already got the data subscribed...
-        const devFeatureCount = UserDevFeatures.find({}).count();
+        if(Meteor.isClient) {
 
-        if(devFeatureCount > 0) {
+            // See if we have already got the data subscribed...
+            const devFeatureCount = UserDevFeatures.find({}).count();
 
-            // Just carry on
-            callback();
+            if (devFeatureCount > 0) {
 
+                // Just carry on
+                callback();
+
+            } else {
+
+                // Subscribe to dev data
+                const dfHandle = Meteor.subscribe('userDevFeatures', userId);
+                const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
+                const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
+                const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
+                const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
+                const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
+                const mmHandle = Meteor.subscribe('userUnitTestMashData', userId);
+                const arHandle = Meteor.subscribe('userAccTestResults', userId);
+                const irHandle = Meteor.subscribe('userIntTestResults', userId);
+                const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
+                const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
+
+                Tracker.autorun((loader) => {
+
+                    let loading = (
+                        !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready()
+                    );
+
+                    console.log("loading dev data = " + loading);
+
+                    if (!loading && callback) {
+                        callback();
+
+                        // Stop this checking once we are done or there will be random chaos
+                        loader.stop();
+                    }
+
+                });
+            }
         } else {
-
-            // Subscribe to dev data
-            const dfHandle = Meteor.subscribe('userDevFeatures', userId);
-            const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
-            const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
-            const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
-            const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
-            const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
-            const mmHandle = Meteor.subscribe('userUnitTestMashData', userId);
-            const arHandle = Meteor.subscribe('userAccTestResults', userId);
-            const irHandle = Meteor.subscribe('userIntTestResults', userId);
-            const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
-            const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
-
-            Tracker.autorun((loader) => {
-
-                let loading = (
-                    !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready()
-                );
-
-                console.log("loading dev data = " + loading);
-
-                if (!loading && callback) {
-                    callback();
-
-                    // Stop this checking once we are done or there will be random chaos
-                    loader.stop();
-                }
-
-            });
+            // If called on server (tests) don't need to subscribe, just carry on
+            callback();
         }
     }
 
