@@ -496,7 +496,7 @@ class TestDataHelpers {
                 locationId: location._id,
                 fileType: TestLocationFileType.INTEGRATION,
                 testRunner: TestRunner.CHIMP_MOCHA
-            }).fetch;
+            }).fetch();
         } else {
             throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
         }

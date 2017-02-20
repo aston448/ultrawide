@@ -35,7 +35,7 @@ describe('UC 341 - View Integration Test Results', function(){
         const newFile = {
             fileAlias:      'IntegrationOutput',
             fileType:       TestLocationFileType.INTEGRATION,
-            testRunner:     TestRunner.CHIMP_CUCUMBER,
+            testRunner:     TestRunner.CHIMP_MOCHA,
             fileName:       'test_integration_test.json',
             allFilesOfType: 'NONE'
         };

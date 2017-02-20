@@ -417,7 +417,7 @@ Meteor.methods({
                     break
             }
 
-            const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n \"pending\": ' + pendingCount + ',\n \"failures\": ' + failCount + ',\n \"start\": \"2017-02-20T12:21:26.237Z\",\n \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000/n },\n'
+            const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n  \"pending\": ' + pendingCount + ',\n  \"failures\": ' + failCount + ',\n  \"start\": \"2017-02-20T12:21:26.237Z\",\n  \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000/n },\n'
 
             fileText += stats;
 
@@ -425,19 +425,19 @@ Meteor.methods({
             // Add in pending
             let pendingText = '';
             if (scenario1Result === MashTestStatus.MASH_PENDING) {
-                pendingText = '\n  {\n  \"title\": \n"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                pendingText = '\n  {\n  \"title\": \"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += pendingText;
             }
             if (scenario2Result === MashTestStatus.MASH_PENDING) {
-                pendingText = '\n  {\n  \"title\": \n"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                pendingText = '\n  {\n  \"title\": \"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += pendingText;
             }
             if (scenario3Result === MashTestStatus.MASH_PENDING) {
-                pendingText = '\n  {\n  \"title\": \n"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                pendingText = '\n  {\n  \"title\": \"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += pendingText;
             }
             if (scenario4Result === MashTestStatus.MASH_PENDING) {
-                pendingText = '\n  {\n  \"title\": \n"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                pendingText = '\n  {\n  \"title\": \"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += pendingText;
             }
             fileText += '],\n';
@@ -446,19 +446,19 @@ Meteor.methods({
             // Add in failed
             let failedText = '';
             if (scenario1Result === MashTestStatus.MASH_FAIL) {
-                failedText = '\n  {\n  \"title\": \n"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                failedText = '\n  {\n  \"title\": \"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {\n      \"message\": \"[FAIL] Failure Message\"\n      \"reason\": \"Failure Message\"\n}\n },';
                 fileText += failedText;
             }
             if (scenario2Result === MashTestStatus.MASH_FAIL) {
-                failedText = '\n  {\n  \"title\": \n"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                failedText = '\n  {\n  \"title\": \"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {\n      \"message\": \"[FAIL] Failure Message\"\n      \"reason\": \"Failure Message\"\n}\n },';
                 fileText += failedText;
             }
             if (scenario3Result === MashTestStatus.MASH_FAIL) {
-                failedText = '\n  {\n  \"title\": \n"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                failedText = '\n  {\n  \"title\": \"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {\n      \"message\": \"[FAIL] Failure Message\"\n      \"reason\": \"Failure Message\"\n}\n },';
                 fileText += failedText;
             }
             if (scenario4Result === MashTestStatus.MASH_FAIL) {
-                failedText = '\n  {\n  \"title\": \n"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                failedText = '\n  {\n  \"title\": \"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {\n      \"message\": \"[FAIL] Failure Message\"\n      \"reason\": \"Failure Message\"\n    }\n  },';
                 fileText += failedText;
             }
             fileText += '],\n';
@@ -467,19 +467,19 @@ Meteor.methods({
             // Add in passed
             let passingText = '';
             if (scenario1Result === MashTestStatus.MASH_PASS) {
-                passingText = '\n  {\n  \"title\": \n"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                passingText = '\n  {\n  \"title\": \"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += passingText;
             }
             if (scenario2Result === MashTestStatus.MASH_PASS) {
-                passingText = '\n  {\n  \"title\": \n"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                passingText = '\n  {\n  \"title\": \"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += passingText;
             }
             if (scenario3Result === MashTestStatus.MASH_PASS) {
-                passingText = '\n  {\n  \"title\": \n"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                passingText = '\n  {\n  \"title\": \"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += passingText;
             }
             if (scenario4Result === MashTestStatus.MASH_PASS) {
-                passingText = '\n  {\n  \"title\": \n"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                passingText = '\n  {\n  \"title\": \"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {}\n },';
                 fileText += passingText;
             }
             fileText += ']\n}\n';
