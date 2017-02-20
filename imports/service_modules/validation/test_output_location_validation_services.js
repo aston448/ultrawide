@@ -13,6 +13,8 @@ import { Validation, TestOutputLocationValidationErrors, TestOutputLocationFileV
 
 class TestOutputLocationValidationServices{
 
+    // LOCATIONS -------------------------------------------------------------------------------------------------------
+
     validateAddLocation(userRole){
 
         // To add a Location, user must be a Developer
@@ -60,6 +62,8 @@ class TestOutputLocationValidationServices{
         return Validation.VALID;
     }
 
+    // LOCATION FILES --------------------------------------------------------------------------------------------------
+
     validateAddLocationFile(userRole){
 
         // To add a Location File, user must be a Developer
@@ -94,8 +98,15 @@ class TestOutputLocationValidationServices{
 
     validateRemoveLocationFile(userRole){
 
+        // User must be a Developer
+        if(userRole != RoleType.DEVELOPER){
+            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_REMOVE;
+        }
+
         return Validation.VALID;
     }
+
+    // USER CONFIG -----------------------------------------------------------------------------------------------------
 
     validateSaveUserConfiguration(){
 
