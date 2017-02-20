@@ -124,7 +124,7 @@ describe('UC 341 - View Integration Test Results', function(){
         // Setup
         // Developer goes to WP
         DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionVerifications.developerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
 
