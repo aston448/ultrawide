@@ -224,9 +224,9 @@ class TestIntegrationModules{
     getIntegrationTestResults(userContext){
 
         // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
-        if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
-            return;
-        }
+        // if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
+        //     return;
+        // }
 
         // Clear existing results for user
         UserIntTestResults.remove({userId: userContext.userId});

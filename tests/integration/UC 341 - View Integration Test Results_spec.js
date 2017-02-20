@@ -14,8 +14,9 @@ import WorkPackageActions           from '../../test_framework/test_wrappers/wor
 import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
 import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
-import OutputLocationsActions           from '../../test_framework/test_wrappers/output_locations_actions.js';
-import OutputLocationsVerifications     from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import OutputLocationsActions       from '../../test_framework/test_wrappers/output_locations_actions.js';
+import OutputLocationsVerifications from '../../test_framework/test_wrappers/output_locations_verifications.js';
+import TestResultActions            from '../../test_framework/test_wrappers/test_result_actions.js';
 import TestResultVerifications      from '../../test_framework/test_wrappers/test_result_verifications.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
@@ -70,6 +71,15 @@ describe('UC 341 - View Integration Test Results', function(){
         };
 
         OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile);
+
+        const results = {
+            scenario1Result: MashTestStatus.MASH_PASS,
+            scenario2Result: MashTestStatus.MASH_FAIL,
+            scenario3Result: MashTestStatus.MASH_PENDING,
+            scenario4Result: MashTestStatus.MASH_PENDING,
+        };
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
     });
 
@@ -128,19 +138,11 @@ describe('UC 341 - View Integration Test Results', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
 
-        // Execute - run tests
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_PENDING,
-        };
-
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results)
-
+        // Execute
         // Have a look at WP with INT results on
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        TestResultActions.developerRefreshesTestResultsWithIntTestsVisible();
 
         // Verify
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
