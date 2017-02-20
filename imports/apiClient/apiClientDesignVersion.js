@@ -303,7 +303,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
-    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag){
+    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag, mashDataStale){
 
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
@@ -324,7 +324,7 @@ class ClientDesignVersionServices{
         // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
         if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
 
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag, mashDataStale);
         } else {
 
             // Just switch to the design editor view
@@ -340,7 +340,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag, mashDataStale){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersion._id);
@@ -394,7 +394,7 @@ class ClientDesignVersionServices{
         // Get dev data and the latest test results if summary showing - and switch to the view when loaded
         if(viewOptions.designTestSummaryVisible) {
 
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag, mashDataStale);
         } else {
 
             // Just switch to the design editor view

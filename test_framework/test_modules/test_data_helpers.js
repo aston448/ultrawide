@@ -16,6 +16,7 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
+import { UserWorkPackageMashData }  from '../../imports/collections/dev/user_work_package_mash_data.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
@@ -485,7 +486,7 @@ class TestDataHelpers {
         } else {
             throw new Meteor.Error("FAIL", "User Test Location Config not found for location " + locationName + " for user name " + user.userName );
         }
-    }
+    };
 
     getIntegrationResultsOutputFiles_ChimpMocha(locationName){
 
@@ -499,6 +500,23 @@ class TestDataHelpers {
             }).fetch();
         } else {
             throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
+        }
+    };
+
+    getMashTestResult(userContext, scenarioName){
+
+        const testResult = UserWorkPackageMashData.findOne({
+            userId:             userContext.userId,
+            designVersionId:    userContext.designVersionId,
+            designUpdateId:     userContext.designUpdateId,
+            workPackageId:      userContext.workPackageId,
+            mashItemName:       scenarioName
+        });
+
+        if(testResult) {
+            return testResult
+        } else {
+            throw new Meteor.Error("FAIL", "Test Result not found  for Scenario " + scenarioName + " in user context DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
         }
     }
 

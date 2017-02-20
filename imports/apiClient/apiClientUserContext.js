@@ -516,7 +516,7 @@ class ClientUserContextServices {
                             case WorkPackageStatus.WP_ADOPTED:
                             case WorkPackageStatus.WP_AVAILABLE:
                                 // Development
-                                ClientWorkPackageServices.developWorkPackage(role, userContext, userViewOptions, userContext.workPackageId);
+                                ClientWorkPackageServices.developWorkPackage(role, userContext, userViewOptions, userContext.workPackageId, true, true);
                                 return;
                             case WorkPackageStatus.WP_COMPLETE:
                                 // View Only

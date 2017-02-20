@@ -101,7 +101,8 @@ export class WorkPackage extends Component {
             userContext,
             viewOptions,
             wp._id,
-            this.props.testDataFlag
+            this.props.testDataFlag,
+            this.props.mashDataStale
         );
     }
 
@@ -235,7 +236,8 @@ function mapStateToProps(state) {
         userRole:               state.currentUserRole,
         viewOptions:            state.currentUserViewOptions,
         userContext:            state.currentUserItemContext,
-        testDataFlag:           state.testDataFlag
+        testDataFlag:           state.testDataFlag,
+        mashDataStale:          state.mashDataStale
     }
 }
 

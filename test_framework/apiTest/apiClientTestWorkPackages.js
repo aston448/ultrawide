@@ -111,6 +111,20 @@ Meteor.methods({
         const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove WP');
+    },
+
+    'testWorkPackages.developSelectedWorkPackage'(userName, userRole, viewOptions, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        viewOptions.userId = userContext.userId;
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const mashDataStale = true; // Make the data load for the WP (REDUX setting)
+
+        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false, mashDataStale);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Develop WP');
     }
 
 });

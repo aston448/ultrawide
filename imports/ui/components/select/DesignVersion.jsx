@@ -38,7 +38,8 @@ export class DesignVersion extends Component {
             viewOptions,
             userContext,
             dv._id,
-            testDataFlag
+            testDataFlag,
+            this.props.mashDataStale
         );
     }
 
@@ -49,7 +50,8 @@ export class DesignVersion extends Component {
             viewOptions,
             userContext,
             dv,
-            testDataFlag
+            testDataFlag,
+            this.props.mashDataStale
         );
     }
 
@@ -244,7 +246,8 @@ function mapStateToProps(state) {
         userRole:                   state.currentUserRole,
         viewOptions:                state.currentUserViewOptions,
         userContext:                state.currentUserItemContext,
-        testDataFlag:               state.testDataFlag
+        testDataFlag:               state.testDataFlag,
+        mashDataStale:              state.mashDataStale
     }
 }
 

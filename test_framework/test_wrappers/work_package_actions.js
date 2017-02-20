@@ -4,6 +4,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class WorkPackageActions{
 
+    // Add
     managerAddsBaseDesignWorkPackage(expectation){
         server.call('testWorkPackages.addNewWorkPackage', WorkPackageType.WP_BASE, RoleType.MANAGER, 'miles', expectation);
     }
@@ -24,6 +25,7 @@ class WorkPackageActions{
         server.call('testWorkPackages.updateWorkPackageName', wpName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Select
     managerSelectsWorkPackage(wpName){
         server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.MANAGER, 'miles');
     }
@@ -36,10 +38,12 @@ class WorkPackageActions{
         server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DESIGNER, 'gloria');
     }
 
+    // Update Name
     managerUpdatesSelectedWpNameTo(newName, expectation){
         server.call('testWorkPackages.updateWorkPackageName', newName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Publish / Withdraw
     managerPublishesSelectedWorkPackage(expectation){
         server.call('testWorkPackages.publishSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
     }
@@ -48,10 +52,12 @@ class WorkPackageActions{
         server.call('testWorkPackages.withdrawSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
     }
 
+    // Remove
     managerRemovesSelectedWorkPackage(expectation){
         server.call('testWorkPackages.removeSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
     }
 
+    // Edit
     managerEditsBaseWorkPackage(wpName, expectation){
         server.call('testWorkPackages.editWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
@@ -64,6 +70,7 @@ class WorkPackageActions{
         server.call('testWorkPackages.editSelectedWorkPackage', WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
 
+    // View
     managerViewsBaseWorkPackage(wpName, expectation){
         server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_BASE, 'miles', RoleType.MANAGER, expectation);
     }
@@ -88,6 +95,52 @@ class WorkPackageActions{
         server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_UPDATE, 'gloria', RoleType.DESIGNER, expectation);
     }
 
+    // Develop
+    developerDevelopsSelectedBaseWorkPackageWithNoTests(expectation){
+
+        const viewOptions = {
+            userId:                     'NONE',
+            designDetailsVisible:       true,
+            designTestSummaryVisible:   false,
+            designDomainDictVisible:    false,
+            updateDetailsVisible:       true,
+            updateTestSummaryVisible:   false,
+            updateDomainDictVisible:    false,
+            wpDetailsVisible:           true,
+            wpDomainDictVisible:        false,
+            devDetailsVisible:          false,
+            devAccTestsVisible:         false,
+            devIntTestsVisible:         false,
+            devUnitTestsVisible:        false,
+            devTestSummaryVisible:      false,
+            devFeatureFilesVisible:     false,
+            devDomainDictVisible:       false
+        };
+        server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
+    }
+
+    developerDevelopsSelectedBaseWorkPackageWithIntegrationTests(expectation){
+
+        const viewOptions = {
+            userId:                     'NONE',
+            designDetailsVisible:       true,
+            designTestSummaryVisible:   false,
+            designDomainDictVisible:    false,
+            updateDetailsVisible:       true,
+            updateTestSummaryVisible:   false,
+            updateDomainDictVisible:    false,
+            wpDetailsVisible:           true,
+            wpDomainDictVisible:        false,
+            devDetailsVisible:          false,
+            devAccTestsVisible:         false,
+            devIntTestsVisible:         true,       // Set
+            devUnitTestsVisible:        false,
+            devTestSummaryVisible:      false,
+            devFeatureFilesVisible:     false,
+            devDomainDictVisible:       false
+        };
+        server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
+    }
 
 }
 
