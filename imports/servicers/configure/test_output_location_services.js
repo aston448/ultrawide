@@ -208,7 +208,7 @@ class TestOutputLocationServices {
         // Make sure config contains all the possible locations for this user
         // Either is is Shared or it belongs to the current user...
         const testOutputLocations = TestOutputLocations.find({
-            $or:[{locationIsShared}, {locationUserId: userId}]
+            $or:[{locationIsShared: true}, {locationUserId: userId}]
         }).fetch();
 
         let userLocation = null;
