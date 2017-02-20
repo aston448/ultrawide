@@ -140,52 +140,49 @@ Meteor.methods({
 
     // USER CONFIG -----------------------------------------------------------------------------------------------------
 
-    'verifyTestOutputLocations.userConfigIncludesLocation'(locationName, userName, userRole){
+    'verifyTestOutputLocations.userConfigIncludesLocation'(locationName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
         const locationConfig = UserTestTypeLocations.findOne({
             userId:         userContext.userId,
-            userRole:       userRole,
             locationName:   locationName
         });
 
         if(locationConfig){
             return true;
         } else {
-            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName + " with role " + userRole);
+            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName);
         }
     },
 
-    'verifyTestOutputLocations.userConfigDoesNotIncludeLocation'(locationName, userName, userRole){
+    'verifyTestOutputLocations.userConfigDoesNotIncludeLocation'(locationName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
         const locationConfig = UserTestTypeLocations.findOne({
             userId:         userContext.userId,
-            userRole:       userRole,
             locationName:   locationName
         });
 
         if(locationConfig){
-            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " EXISTS for user " + userName + " with role " + userRole);
+            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " EXISTS for user " + userName);
         } else {
             return true;
         }
     },
 
-    'verifyTestOutputLocations.userConfigDetailsAre'(locationName, userName, userRole, configDetails){
+    'verifyTestOutputLocations.userConfigDetailsAre'(locationName, userName, configDetails){
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
         const userTestTypeLocation = UserTestTypeLocations.findOne({
             userId: userContext.userId,
-            userRole: userRole,
             locationName: locationName
         });
 
         if(!userTestTypeLocation){
-            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName + " with role " + userRole);
+            throw new Meteor.Error("FAIL", "Test Config for Location " + locationName + " does not exist for user " + userName);
         } else {
             // OK we know the name was OK...
             if(userTestTypeLocation.locationType === configDetails.locationType){
@@ -194,16 +191,16 @@ Meteor.methods({
                         if(userTestTypeLocation.isAccLocation === configDetails.isAccLocation){
                             return true;
                         } else {
-                            throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Acc flag " + configDetails.isAccLocation + " but got " + userTestTypeLocation.isAccLocation + "  for user " + userName + " with role " + userRole);
+                            throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Acc flag " + configDetails.isAccLocation + " but got " + userTestTypeLocation.isAccLocation + "  for user " + userName);
                         }
                     } else {
-                        throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Int flag " + configDetails.isIntLocation + " but got " + userTestTypeLocation.isIntLocation + "  for user " + userName + " with role " + userRole);
+                        throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Int flag " + configDetails.isIntLocation + " but got " + userTestTypeLocation.isIntLocation + "  for user " + userName);
                     }
                 } else {
-                    throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Unit flag " + configDetails.isUnitLocation + " but got " + userTestTypeLocation.isUnitLocation + "  for user " + userName + " with role " + userRole);
+                    throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have Unit flag " + configDetails.isUnitLocation + " but got " + userTestTypeLocation.isUnitLocation + "  for user " + userName);
                 }
             } else {
-                throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have location type " + configDetails.locationType + " but got " + userTestTypeLocation.locationType + "  for user " + userName + " with role " + userRole);
+                throw new Meteor.Error("FAIL", "Expecting config " + locationName + " to have location type " + configDetails.locationType + " but got " + userTestTypeLocation.locationType + "  for user " + userName);
             }
         }
 

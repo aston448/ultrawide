@@ -95,11 +95,10 @@ class ServerTestOutputLocationApi {
         );
     };
 
-    saveUserConfiguration(userRole, userConfiguration, callback){
+    saveUserConfiguration(userConfiguration, callback){
 
         saveUserConfiguration.call(
             {
-                userRole:           userRole,
                 userConfiguration:  userConfiguration
             },
             (err, result) => {

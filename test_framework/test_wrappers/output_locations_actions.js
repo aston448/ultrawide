@@ -116,44 +116,44 @@ class OutputLocationActions{
 
     // Edit config
     developerEditsTestLocationConfig(expectation){
-        server.call('testOutputLocations.editUserTestLocationConfig', 'hugh', RoleType.DEVELOPER, expectation);
+        server.call('testOutputLocations.editUserTestLocationConfig', 'hugh', expectation);
     }
 
     anotherDeveloperEditsTestLocationConfig(expectation){
-        server.call('testOutputLocations.editUserTestLocationConfig', 'davey', RoleType.DEVELOPER, expectation);
+        server.call('testOutputLocations.editUserTestLocationConfig', 'davey', expectation);
     }
 
     designerEditsTestLocationConfig(expectation){
-        server.call('testOutputLocations.editUserTestLocationConfig', 'gloria', RoleType.DESIGNER, expectation);
+        server.call('testOutputLocations.editUserTestLocationConfig', 'gloria', expectation);
     }
 
     managerEditsTestLocationConfig(expectation){
-        server.call('testOutputLocations.editUserTestLocationConfig', 'miles', RoleType.MANAGER, expectation);
+        server.call('testOutputLocations.editUserTestLocationConfig', 'miles', expectation);
     }
 
     // Change Settings
     developerSelectsUnitTestsInConfigForLocation(locationName, expectation){
-        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.UNIT, true, expectation);
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.UNIT, true, expectation);
     }
 
     developerClearsUnitTestsInConfigForLocation(locationName, expectation){
-        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.UNIT, false, expectation);
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.UNIT, false, expectation);
     }
 
     developerSelectsIntTestsInConfigForLocation(locationName, expectation){
-        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.INTEGRATION, true, expectation);
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.INTEGRATION, true, expectation);
     }
 
     developerClearsIntTestsInConfigForLocation(locationName, expectation){
-        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.INTEGRATION, false, expectation);
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.INTEGRATION, false, expectation);
     }
 
     developerSelectsAccTestsInConfigForLocation(locationName, expectation){
-        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.ACCEPTANCE, true, expectation);
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.ACCEPTANCE, true, expectation);
     }
 
     developerClearsAccTestsInConfigForLocation(locationName, expectation){
-        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', RoleType.DEVELOPER, locationName, TestType.ACCEPTANCE, false, expectation);
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.ACCEPTANCE, false, expectation);
     }
 
 

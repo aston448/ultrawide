@@ -179,11 +179,10 @@ export const saveUserConfiguration = new ValidatedMethod({
     name: 'testOutputs.saveUserConfiguration',
 
     validate: new SimpleSchema({
-        userRole:           {type: String},
         userConfiguration:  {type: Object, blackbox: true}
     }).validator(),
 
-    run({userRole, userConfiguration}){
+    run({userConfiguration}){
 
         const result = TestOutputLocationValidationApi.validateSaveUserConfiguration();
 

@@ -44,64 +44,61 @@ export class UserTestLocationConfiguration extends Component {
         };
     }
 
-    onUnitChange(e, userRole, userLocation){
+    onUnitChange(e, userLocationConfig){
 
         this.setState({unitChecked: e.target.checked});
 
         // Save changes
         const userConfiguration = {
-            _id:                    userLocation._id,
-            locationId:             userLocation.locationId,
-            locationName:           userLocation.locationName,
-            locationType:           userLocation.locationType,
-            userId:                 userLocation.userId,
-            userRole:               userLocation.userRole,
+            _id:                    userLocationConfig._id,
+            locationId:             userLocationConfig.locationId,
+            locationName:           userLocationConfig.locationName,
+            locationType:           userLocationConfig.locationType,
+            userId:                 userLocationConfig.userId,
             isUnitLocation:         e.target.checked,
-            isIntLocation:          userLocation.isIntLocation,
-            isAccLocation:          userLocation.isAccLocation
+            isIntLocation:          userLocationConfig.isIntLocation,
+            isAccLocation:          userLocationConfig.isAccLocation
         };
 
-        ClientTestOutputLocationServices.saveUserConfiguration(userRole, userConfiguration);
+        ClientTestOutputLocationServices.saveUserConfiguration(userConfiguration);
     }
 
-    onIntChange(e, userRole, userLocation){
+    onIntChange(e, userLocationConfig){
 
         this.setState({intChecked: e.target.checked});
 
         // Save changes
         const userConfiguration = {
-            _id:                    userLocation._id,
-            locationId:             userLocation.locationId,
-            locationName:           userLocation.locationName,
-            locationType:           userLocation.locationType,
-            userId:                 userLocation.userId,
-            userRole:               userLocation.userRole,
-            isUnitLocation:         userLocation.isUnitLocation,
+            _id:                    userLocationConfig._id,
+            locationId:             userLocationConfig.locationId,
+            locationName:           userLocationConfig.locationName,
+            locationType:           userLocationConfig.locationType,
+            userId:                 userLocationConfig.userId,
+            isUnitLocation:         userLocationConfig.isUnitLocation,
             isIntLocation:          e.target.checked,
-            isAccLocation:          userLocation.isAccLocation
+            isAccLocation:          userLocationConfig.isAccLocation
         };
 
-        ClientTestOutputLocationServices.saveUserConfiguration(userRole, userConfiguration);
+        ClientTestOutputLocationServices.saveUserConfiguration(userConfiguration);
     }
 
-    onAccChange(e, userRole, userLocation){
+    onAccChange(e, userLocationConfig){
 
         this.setState({accChecked: e.target.checked});
 
         // Save changes
         const userConfiguration = {
-            _id:                    userLocation._id,
-            locationId:             userLocation.locationId,
-            locationName:           userLocation.locationName,
-            locationType:           userLocation.locationType,
-            userId:                 userLocation.userId,
-            userRole:               userLocation.userRole,
-            isUnitLocation:         userLocation.isUnitLocation,
-            isIntLocation:          userLocation.isIntLocation,
+            _id:                    userLocationConfig._id,
+            locationId:             userLocationConfig.locationId,
+            locationName:           userLocationConfig.locationName,
+            locationType:           userLocationConfig.locationType,
+            userId:                 userLocationConfig.userId,
+            isUnitLocation:         userLocationConfig.isUnitLocation,
+            isIntLocation:          userLocationConfig.isIntLocation,
             isAccLocation:          e.target.checked
         };
 
-        ClientTestOutputLocationServices.saveUserConfiguration(userRole, userConfiguration);
+        ClientTestOutputLocationServices.saveUserConfiguration(userConfiguration);
 
     }
 
@@ -121,7 +118,7 @@ export class UserTestLocationConfiguration extends Component {
                     <Col md={2}>
                         <div>
                             <Checkbox checked={this.state.unitChecked}
-                                      onChange={(e) => this.onUnitChange(e, userRole, userLocation)}>
+                                      onChange={(e) => this.onUnitChange(e, userLocation)}>
                                 Unit Tests
                             </Checkbox>
                         </div>
@@ -129,7 +126,7 @@ export class UserTestLocationConfiguration extends Component {
                     <Col md={2}>
                         <div>
                             <Checkbox checked={this.state.intChecked}
-                                      onChange={(e) => this.onIntChange(e, userRole, userLocation)}>
+                                      onChange={(e) => this.onIntChange(e, userLocation)}>
                                 Integration Tests
                             </Checkbox>
                         </div>
@@ -137,7 +134,7 @@ export class UserTestLocationConfiguration extends Component {
                     <Col md={2}>
                         <div>
                             <Checkbox checked={this.state.accChecked}
-                                      onChange={(e) => this.onAccChange(e, userRole, userLocation)}>
+                                      onChange={(e) => this.onAccChange(e, userLocation)}>
                                 Acceptance Tests
                             </Checkbox>
                         </div>

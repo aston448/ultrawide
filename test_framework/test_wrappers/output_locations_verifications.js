@@ -59,7 +59,7 @@ class OutputLocationsVerifications{
     // USER CONFIG -----------------------------------------------------------------------------------------------------
 
     designerHasTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'gloria', RoleType.DESIGNER,
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'gloria',
             (function(error, result){
                 return(error === null);
             })
@@ -67,7 +67,7 @@ class OutputLocationsVerifications{
     };
 
     developerHasTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'hugh', RoleType.DEVELOPER,
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'hugh',
             (function(error, result){
                 return(error === null);
             })
@@ -75,7 +75,7 @@ class OutputLocationsVerifications{
     };
 
     anotherDeveloperHasTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'davey', RoleType.DEVELOPER,
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'davey',
             (function(error, result){
                 return(error === null);
             })
@@ -83,7 +83,7 @@ class OutputLocationsVerifications{
     };
 
     managerHasTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'miles', RoleType.MANAGER,
+        server.call('verifyTestOutputLocations.userConfigIncludesLocation', locationName, 'miles',
             (function(error, result){
                 return(error === null);
             })
@@ -91,7 +91,7 @@ class OutputLocationsVerifications{
     };
 
     designerDoesNotHaveTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'gloria', RoleType.DESIGNER,
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'gloria',
             (function(error, result){
                 return(error === null);
             })
@@ -99,7 +99,7 @@ class OutputLocationsVerifications{
     };
 
     developerDoesNotHaveTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'hugh', RoleType.DEVELOPER,
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'hugh',
             (function(error, result){
                 return(error === null);
             })
@@ -107,7 +107,7 @@ class OutputLocationsVerifications{
     };
 
     anotherDeveloperDoesNotHaveTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'davey', RoleType.DEVELOPER,
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'davey',
             (function(error, result){
                 return(error === null);
             })
@@ -115,7 +115,7 @@ class OutputLocationsVerifications{
     };
 
     managerDoesNotHaveTestConfigLocation(locationName){
-        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'miles', RoleType.MANAGER,
+        server.call('verifyTestOutputLocations.userConfigDoesNotIncludeLocation', locationName, 'miles',
             (function(error, result){
                 return(error === null);
             })
@@ -123,7 +123,7 @@ class OutputLocationsVerifications{
     };
 
     designerTestConfigurationIs(locationName, configDetails){
-        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'gloria', RoleType.DESIGNER, configDetails,
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'gloria', configDetails,
             (function(error, result){
                 return(error === null);
             })
@@ -131,7 +131,7 @@ class OutputLocationsVerifications{
     }
 
     developerTestConfigurationIs(locationName, configDetails){
-        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'hugh', RoleType.DEVELOPER, configDetails,
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'hugh', configDetails,
             (function(error, result){
                 return(error === null);
             })
@@ -139,7 +139,7 @@ class OutputLocationsVerifications{
     }
 
     anotherDeveloperTestConfigurationIs(locationName, configDetails){
-        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'davey', RoleType.DEVELOPER, configDetails,
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'davey', configDetails,
             (function(error, result){
                 return(error === null);
             })
@@ -147,7 +147,7 @@ class OutputLocationsVerifications{
     }
 
     managerTestConfigurationIs(locationName, configDetails){
-        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'miles', RoleType.MANAGER, configDetails,
+        server.call('verifyTestOutputLocations.userConfigDetailsAre', locationName, 'miles', configDetails,
             (function(error, result){
                 return(error === null);
             })

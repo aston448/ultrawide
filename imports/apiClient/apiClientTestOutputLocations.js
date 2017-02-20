@@ -223,7 +223,7 @@ class ClientTestOutputLocationServices{
     }
 
     // User changes local configuration --------------------------------------------------------------------------------
-    saveUserConfiguration(userRole, userConfiguration){
+    saveUserConfiguration(userConfiguration){
 
         // Client validation
         let result = TestOutputLocationValidationApi.validateSaveUserConfiguration();
@@ -235,7 +235,7 @@ class ClientTestOutputLocationServices{
         }
 
         // Real action call - server actions
-        ServerTestOutputLocationApi.saveUserConfiguration(userRole, userConfiguration, (err, result) => {
+        ServerTestOutputLocationApi.saveUserConfiguration(userConfiguration, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -256,7 +256,7 @@ class ClientTestOutputLocationServices{
     }
 
     // Update of user location configuration ---------------------------------------------------------------------------
-    updateUserConfiguration(userId, userRole){
+    updateUserConfiguration(userId){
 
         // Real action call - server actions
         ServerTestOutputLocationApi.updateUserConfiguration(userId, (err, result) => {

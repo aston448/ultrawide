@@ -119,25 +119,25 @@ Meteor.methods({
 
     // USER CONFIG -----------------------------------------------------------------------------------------------------
 
-    'testOutputLocations.editUserTestLocationConfig'(userName, role, expectation) {
+    'testOutputLocations.editUserTestLocationConfig'(userName, expectation) {
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
         // This is what is called when user goes to config screen to refresh their data
-        const outcome = ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, role);
+        const outcome = ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location File');
     },
 
-    'testOutputLocations.setUserTestLocationConfigTestTypeTo'(userName, role, locationName, testType, setting, expectation) {
+    'testOutputLocations.setUserTestLocationConfigTestTypeTo'(userName, locationName, testType, setting, expectation) {
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const userConfiguration = TestDataHelpers.getUserTestOutputConfiguration(locationName, userContext.userId, role);
+        const userConfiguration = TestDataHelpers.getUserTestOutputConfiguration(locationName, userContext.userId);
 
         switch(testType){
             case TestType.UNIT:
@@ -152,7 +152,7 @@ Meteor.methods({
         }
 
         // This is what is called when user goes to config screen to refresh their data
-        const outcome = ClientTestOutputLocationServices.saveUserConfiguration(role, userConfiguration);
+        const outcome = ClientTestOutputLocationServices.saveUserConfiguration(userConfiguration);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save Output Location File');
     }

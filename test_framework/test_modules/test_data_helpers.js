@@ -467,11 +467,10 @@ class TestDataHelpers {
         }
     };
 
-    getUserTestOutputConfiguration(locationName, userId, userRole){
+    getUserTestOutputConfiguration(locationName, userId){
 
         const config = UserTestTypeLocations.findOne({
             userId:         userId,
-            userRole:       userRole,
             locationName:   locationName
         });
 
@@ -484,7 +483,7 @@ class TestDataHelpers {
         if(config){
             return config;
         } else {
-            throw new Meteor.Error("FAIL", "User Test Location Config not found for location " + locationName + " for user name " + user.userName + " and role " + userRole);
+            throw new Meteor.Error("FAIL", "User Test Location Config not found for location " + locationName + " for user name " + user.userName );
         }
     }
 
