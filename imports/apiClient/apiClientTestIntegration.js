@@ -96,6 +96,9 @@ class ClientTestIntegrationServices {
             }
         }
 
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
+
     }
 
     // Update the test summary data - when user opens the Test Summary -------------------------------------------------
@@ -116,6 +119,8 @@ class ClientTestIntegrationServices {
             this.updateTestSummary(userContext, testDataFlag)
         }
 
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
 
     };
 
@@ -132,6 +137,9 @@ class ClientTestIntegrationServices {
             // Just load the test results
             this.updateTestResults(userContext, viewOptions, testDataFlag);
         }
+
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
     };
 
     // User has requested a complete refresh of test data --------------------------------------------------------------
@@ -178,12 +186,18 @@ class ClientTestIntegrationServices {
             }
         }
 
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
+
     };
 
     // User has requested a refresh of everything because another user might have changed stuff ------------------------
     refreshDesignMashData(userContext, userRole, viewOptions, testDataFlag){
 
         this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag);
+
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
 
     };
 
