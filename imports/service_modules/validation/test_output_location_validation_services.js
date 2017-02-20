@@ -54,7 +54,7 @@ class TestOutputLocationValidationServices{
 
         // User must be a Developer
         if(userRole != RoleType.DEVELOPER){
-            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_REMOVE
+            return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_REMOVE;
         }
 
         return Validation.VALID;
@@ -71,6 +71,23 @@ class TestOutputLocationValidationServices{
     }
 
     validateSaveLocationFile(userRole, locationFile, otherLocationFiles){
+
+        // User must be a Developer
+        if(userRole != RoleType.DEVELOPER){
+            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_SAVE;
+        }
+
+        // Alias must not be same as that for another file at this location
+        let duplicate = false;
+        otherLocationFiles.forEach((otherLocationFile) => {
+            if(otherLocationFile.fileAlias === locationFile.fileAlias){
+                duplicate = true;
+            }
+        });
+
+        if(duplicate){
+            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ALIAS_DUPLICATE;
+        }
 
         return Validation.VALID;
     }

@@ -103,6 +103,21 @@ Meteor.methods({
         }
     },
 
+    'verifyTestOutputLocations.fileDoesNotExistWithAlias'(fileAlias){
+        // Used to confirm no file when location removed.  Must not have other locations with same alias in this test
+
+        const locationFile = TestOutputLocationFiles.findOne({
+            fileAlias: fileAlias
+        });
+
+        if(locationFile){
+            throw new Meteor.Error("FAIL", "Test Output Location File EXISTS called " + fileAlias);
+        } else {
+            return true;
+        }
+
+    },
+
     'verifyTestOutputLocations.locationFileDetailsAre'(locationName, fileAlias, fileDetails){
 
         const location = TestDataHelpers.getTestOutputLocation(locationName);

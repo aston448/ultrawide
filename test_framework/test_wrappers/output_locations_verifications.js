@@ -48,6 +48,14 @@ class OutputLocationsVerifications{
         );
     };
 
+    locationFileDoesNotExistCalled(fileAlias){
+        server.call('verifyTestOutputLocations.fileDoesNotExistWithAlias', fileAlias,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     locationFile_ForLocation_HasDetails(fileAlias, locationName, fileDetails){
         server.call('verifyTestOutputLocations.locationFileDetailsAre', locationName, fileAlias, fileDetails,
             (function(error, result){

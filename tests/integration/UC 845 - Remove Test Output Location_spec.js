@@ -76,8 +76,8 @@ describe('UC 845 - Remove Test Output Location', function(){
         // Execute - remove location
         OutputLocationsActions.developerRemovesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME);
 
-        // Verify - file gone too
-        expect(OutputLocationsVerifications.locationFileDoesNotExistForLocation_Called(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS));
+        // Verify - file gone too - can't check at location as location gone...
+        expect(OutputLocationsVerifications.locationFileDoesNotExistCalled(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS));
 
     });
 
