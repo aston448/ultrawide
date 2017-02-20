@@ -72,14 +72,11 @@ describe('UC 341 - View Integration Test Results', function(){
 
         OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile);
 
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_PENDING,
-        };
+        // Developer sets up location config
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
 
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+
 
     });
 
@@ -123,36 +120,117 @@ describe('UC 341 - View Integration Test Results', function(){
 
     it('A Feature Aspect is not shown in the test results if it contains no Scenarios');
 
-    it('A Scenario not included in an integration test file results is shown as Not Tested');
-
-    it('A Scenario included in pending integration test file results is shown as Pending');
-
-    it('A Scenario included in failure integration test file results is shown as Fail');
-
-    it('A Scenario included in pass integration test file results is shown as Pass', function(){
+    it('A Scenario not included in an integration test file results is shown as Not Tested', function(){
 
         // Setup
-        // Developer sets up location config
-        OutputLocationsActions.developerEditsTestLocationConfig();
-        OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
-
         // Developer goes to WP
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
 
-        // Execute
+        // Execute - Run Tests
+        const results = {
+            scenario1Result: MashTestStatus.MASH_PASS,
+            scenario2Result: MashTestStatus.MASH_FAIL,
+            scenario3Result: MashTestStatus.MASH_PENDING,
+            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
+        };
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+
         // Have a look at WP with INT results on
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
-        //TestResultActions.developerRefreshesTestResultsWithIntTestsVisible();
 
         // Verify
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PENDING));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_PENDING));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
+    });
+
+    it('A Scenario included in pending integration test file results is shown as Pending', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+
+        // Execute - Run Tests
+        const results = {
+            scenario1Result: MashTestStatus.MASH_PASS,
+            scenario2Result: MashTestStatus.MASH_FAIL,
+            scenario3Result: MashTestStatus.MASH_PENDING,
+            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
+        };
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+
+        // Have a look at WP with INT results on
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+
+        // Verify
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PENDING));
+
+    });
+
+    it('A Scenario included in failure integration test file results is shown as Fail', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+
+        // Execute - Run Tests
+        const results = {
+            scenario1Result: MashTestStatus.MASH_PASS,
+            scenario2Result: MashTestStatus.MASH_FAIL,
+            scenario3Result: MashTestStatus.MASH_PENDING,
+            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
+        };
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+
+        // Have a look at WP with INT results on
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+
+        // Verify
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
+
+    });
+
+    it('A Scenario included in pass integration test file results is shown as Pass', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+
+        // Execute - Run Tests
+        const results = {
+            scenario1Result: MashTestStatus.MASH_PASS,
+            scenario2Result: MashTestStatus.MASH_FAIL,
+            scenario3Result: MashTestStatus.MASH_PENDING,
+            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
+        };
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+
+        // Have a look at WP with INT results on
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+
+        // Verify
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
     });
 
 });
