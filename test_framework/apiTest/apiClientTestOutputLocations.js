@@ -16,7 +16,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const outcome = ClientTestOutputLocationServices.addLocation(role, userContext.userId);
+        const outcome = ClientTestOutputLocationServices.addLocation(role, userContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Output Location');
     },
