@@ -1,7 +1,7 @@
 
 // Ultrawide Services
-import { RoleType } from '../../constants/constants.js';
-import { Validation, TestOutputLocationValidationErrors } from '../../constants/validation_errors.js';
+import { RoleType, TestLocationType, TestLocationAccessType } from '../../constants/constants.js';
+import { Validation, TestOutputLocationValidationErrors, TestOutputLocationFileValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
 //
@@ -30,8 +30,22 @@ class TestOutputLocationValidationServices{
             return TestOutputLocationValidationErrors.LOCATION_INVALID_ROLE_SAVE
         }
 
+        // Location name cannot be the same as another location
+        let duplicate = false;
+        otherLocations.forEach((otherLocation) => {
+            if(otherLocation.locationName === location.locationName){
+                duplicate = true;
+            }
+        });
 
-        // TODO - can add more validation of the details here
+        if(duplicate){
+            return TestOutputLocationValidationErrors.LOCATION_INVALID_NAME_DUPLICATE;
+        }
+
+        // If location is remote, the access type must be set
+        if(location.locationType === TestLocationType.REMOTE && location.locationAccessType === TestLocationAccessType.NONE){
+            return TestOutputLocationValidationErrors.LOCATION_ACCESS_TYPE_NOT_SET;
+        }
 
         return Validation.VALID;
     };
@@ -47,6 +61,11 @@ class TestOutputLocationValidationServices{
     }
 
     validateAddLocationFile(userRole){
+
+        // To add a Location File, user must be a Developer
+        if(userRole != RoleType.DEVELOPER){
+            return TestOutputLocationFileValidationErrors.LOCATION_FILE_INVALID_ROLE_ADD;
+        }
 
         return Validation.VALID;
     }

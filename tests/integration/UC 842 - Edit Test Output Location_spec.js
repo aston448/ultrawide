@@ -146,6 +146,41 @@ describe('UC 842 - Edit Test Output Location', function(){
         expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultDetails));
     });
 
+    it('A remote Test Output Location must have an access type set', function(){
+
+        // Setup
+        const oldDetails = {
+            locationName:       DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
+            locationType:       TestLocationType.NONE,
+            locationAccessType: TestLocationAccessType.NONE,
+            locationIsShared:   false,
+            locationServerName: 'NONE',
+            serverLogin:        'NONE',
+            serverPassword:     'NONE',
+            locationPath:       'NONE'
+        };
+
+        const newDetails = {
+            locationName:       'Location1',
+            locationType:       TestLocationType.REMOTE,
+            locationAccessType: TestLocationAccessType.NONE,
+            locationIsShared:   true,
+            locationServerName: 'Server1',
+            serverLogin:        'login1',
+            serverPassword:     'password1',
+            locationPath:       '/test/integration/output_files/'
+        };
+
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
+
+        // Execute
+        const expectation = {success: false, message: TestOutputLocationValidationErrors.LOCATION_ACCESS_TYPE_NOT_SET};
+        OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails, expectation);
+
+        // Verify
+        expect(OutputLocationsVerifications.location_DetailsAre(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, oldDetails));
+
+    });
 
     // Consequences
     it('When a Test Output Location is updated the changes are visible in the Test Output Location Configurations available to other users', function(){

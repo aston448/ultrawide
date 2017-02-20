@@ -284,7 +284,7 @@ export const TestType = {
 };
 
 export const TestRunner = {
-    NONE:           'Not Defined',
+    NONE:           'NONE',
     CHIMP_MOCHA:    'Chimp Mocha',
     CHIMP_CUCUMBER: 'Chimp Cucumber',
     METEOR_MOCHA:   'Meteor Mocha'

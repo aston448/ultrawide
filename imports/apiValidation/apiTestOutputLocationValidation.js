@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import {  } from '../collections/design/designs.js';
+import { TestOutputLocations } from '../collections/configure/test_output_locations.js';
 
 // Ultrawide Services
 import TestOutputLocationValidationServices from '../service_modules/validation/test_output_location_validation_services.js';
@@ -20,7 +20,9 @@ class TestOutputLocationValidationApi{
 
     validateSaveLocation(userRole, location){
 
-        return TestOutputLocationValidationServices.validateSaveLocation(userRole, location);
+        const otherLocations = TestOutputLocations.find({_id: {$ne: location._id}}).fetch();
+
+        return TestOutputLocationValidationServices.validateSaveLocation(userRole, location, otherLocations);
     };
 
     validateRemoveLocation(userRole){

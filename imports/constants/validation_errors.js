@@ -166,7 +166,8 @@ export const TestOutputLocationValidationErrors = {
     LOCATION_INVALID_ROLE_ADD:                          'Only a Developer can add new test output locations',
     LOCATION_INVALID_ROLE_SAVE:                         'Only a Developer can save test output location details',
     LOCATION_INVALID_ROLE_REMOVE:                       'Only a Developer can remove test output locations',
-    LOCATION_INVALID_NAME_DUPLICATE:                    'A test output location cannot be given the same name as an existing location'
+    LOCATION_INVALID_NAME_DUPLICATE:                    'A test output location cannot be given the same name as an existing location',
+    LOCATION_ACCESS_TYPE_NOT_SET:                       'The access type must be set for a remote location'
 };
 
 export const TestOutputLocationFileValidationErrors = {
