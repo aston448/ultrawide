@@ -25,7 +25,7 @@ class ClientTestOutputLocationServices{
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User adds a new Location ----------------------------------------------------------------------------------------
-    addLocation(userRole){
+    addLocation(userRole, userContext){
 
         // Client validation
         let result = TestOutputLocationValidationApi.validateAddLocation(userRole);
@@ -37,7 +37,7 @@ class ClientTestOutputLocationServices{
         }
 
         // Real action call - server actions
-        ServerTestOutputLocationApi.addLocation(userRole, (err, result) => {
+        ServerTestOutputLocationApi.addLocation(userRole, userContext.userId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

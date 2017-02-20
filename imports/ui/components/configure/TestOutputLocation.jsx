@@ -46,19 +46,18 @@ export class TestOutputLocation extends Component {
 
     }
 
-    onSave(role){
+    onSave(role, userContext){
 
         event.preventDefault();
-
-
 
         // The user id is set if creating a non-shared resource
         let locationUserId = '';
 
+        // If sharing it no longer owned by user.  If making private make sure user is set
         if(this.state.isSharedValue){
             locationUserId = 'NONE';
         } else {
-            locationUserId = Meteor.userId();
+            locationUserId = userContext.userId;
         }
 
         const location = {
@@ -121,7 +120,7 @@ export class TestOutputLocation extends Component {
     }
 
     render() {
-        const {location, userRole, currentLocationId} = this.props;
+        const {location, userRole, userContext, currentLocationId} = this.props;
 
         const activeClass = (location._id === currentLocationId ? ' location-active' : ' location-inactive');
 
@@ -235,7 +234,7 @@ export class TestOutputLocation extends Component {
                     </Col>
                 </FormGroup>
 
-                <Button bsSize="xs" onClick={() => this.onSave(userRole)}>
+                <Button bsSize="xs" onClick={() => this.onSave(userRole, userContext)}>
                     Save
                 </Button>
                 <Button bsSize="xs" onClick={() => this.onCancel()}>

@@ -20,15 +20,16 @@ import { DefaultLocationText } from '../../constants/default_names.js';
 class TestOutputLocationServices {
 
     // Add a new location with default details
-    addLocation() {
+    addLocation(userId) {
 
         if (Meteor.isServer) {
 
-            // Create a new default entry...
+            // Create a new default entry.  Mark as owned by the creating user so they can edit it.
             TestOutputLocations.insert(
                 {
                     locationName:           DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME,
-                    locationType:           TestLocationType.NONE
+                    locationType:           TestLocationType.NONE,
+                    locationUserId:         userId,
                 }
             );
         }

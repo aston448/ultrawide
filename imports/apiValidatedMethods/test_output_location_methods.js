@@ -15,10 +15,11 @@ export const addLocation = new ValidatedMethod({
     name: 'testOutputs.addLocation',
 
     validate: new SimpleSchema({
-        userRole: {type: String}
+        userRole:   {type: String},
+        userId:     {type: String}
     }).validator(),
 
-    run({userRole}){
+    run({userRole, userId}){
 
         const result = TestOutputLocationValidationApi.validateAddLocation(userRole);
 
@@ -27,7 +28,7 @@ export const addLocation = new ValidatedMethod({
         }
 
         try {
-            TestOutputLocationServices.addLocation();
+            TestOutputLocationServices.addLocation(userId);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error('testOutputs.addLocation.fail', e)

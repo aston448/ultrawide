@@ -40,8 +40,8 @@ class TestOutputsScreen extends Component {
 
     };
 
-    addNewLocation(role) {
-        ClientTestOutputLocationServices.addLocation(role);
+    addNewLocation(role, userContext) {
+        ClientTestOutputLocationServices.addLocation(role, userContext);
     };
 
     renderLocationsList(locations){
@@ -57,13 +57,13 @@ class TestOutputsScreen extends Component {
 
     render() {
 
-        const {locationData, userRole, locationId} = this.props;
+        const {locationData, userRole, userContext, locationId} = this.props;
 
         const addLocation =
             <div className="design-item-add">
                 <DesignComponentAdd
                     addText="Add Location"
-                    onClick={ () => this.addNewLocation(userRole)}
+                    onClick={ () => this.addNewLocation(userRole, userContext)}
                 />
             </div>;
 
@@ -116,6 +116,7 @@ TestOutputsScreen.propTypes = {
 function mapStateToProps(state) {
     return {
         userRole:       state.currentUserRole,
+        userContext:    state.currentUserItemContext,
         locationId:     state.currentUserTestOutputLocationId
     }
 }

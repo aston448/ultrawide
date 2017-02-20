@@ -8,15 +8,15 @@ class OutputLocationActions{
 
     // Add Location
     developerAddsNewLocation(expectation){
-        server.call('testOutputLocations.addNewLocation', RoleType.DEVELOPER, expectation);
+        server.call('testOutputLocations.addNewLocation', RoleType.DEVELOPER, 'hugh', expectation);
     }
 
     designerAddsNewLocation(expectation){
-        server.call('testOutputLocations.addNewLocation', RoleType.DESIGNER, expectation);
+        server.call('testOutputLocations.addNewLocation', RoleType.DESIGNER, 'gloria', expectation);
     }
 
     managerAddsNewLocation(expectation){
-        server.call('testOutputLocations.addNewLocation', RoleType.MANAGER, expectation);
+        server.call('testOutputLocations.addNewLocation', RoleType.MANAGER, 'miles', expectation);
     }
 
     // Remove Location

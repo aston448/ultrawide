@@ -10,11 +10,13 @@ Meteor.methods({
 
     // LOCATIONS -------------------------------------------------------------------------------------------------------
 
-    'testOutputLocations.addNewLocation'(role, expectation){
+    'testOutputLocations.addNewLocation'(role, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const outcome = ClientTestOutputLocationServices.addLocation(role);
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const outcome = ClientTestOutputLocationServices.addLocation(role, userContext.userId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Output Location');
     },

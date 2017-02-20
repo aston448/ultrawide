@@ -17,11 +17,12 @@ import {
 // =====================================================================================================================
 class ServerTestOutputLocationApi {
 
-    addLocation(userRole, callback){
+    addLocation(userRole, userId,  callback){
 
         addLocation.call(
             {
-                userRole: userRole
+                userRole:   userRole,
+                userId:     userId
             },
             (err, result) => {
                 callback(err, result);
