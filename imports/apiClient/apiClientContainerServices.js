@@ -191,11 +191,10 @@ class ClientContainerServices{
     getUserTestOutputLocationData(userContext, userRole){
 
         // Updates the user data with the latest locations
-        ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId, userRole);
+        ClientTestOutputLocationServices.updateUserConfiguration(userContext.userId);
 
         return UserTestTypeLocations.find({
-            userId: userContext.userId,
-            userRole: userRole
+            userId: userContext.userId
         }).fetch();
     }
 

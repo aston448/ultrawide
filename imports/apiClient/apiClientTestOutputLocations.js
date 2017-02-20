@@ -259,7 +259,7 @@ class ClientTestOutputLocationServices{
     updateUserConfiguration(userId, userRole){
 
         // Real action call - server actions
-        ServerTestOutputLocationApi.updateUserConfiguration(userId, userRole, (err, result) => {
+        ServerTestOutputLocationApi.updateUserConfiguration(userId, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

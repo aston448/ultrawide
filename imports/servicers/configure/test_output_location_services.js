@@ -6,7 +6,8 @@ import { UserTestTypeLocations }    from '../../collections/configure/user_test_
 
 
 // Ultrawide Services
-import { TestLocationType, ComponentType} from '../../constants/constants.js';
+import { log } from '../../common/utils.js';
+import { TestLocationType, ComponentType, LogLevel} from '../../constants/constants.js';
 import { DefaultLocationText } from '../../constants/default_names.js';
 
 //======================================================================================================================
@@ -175,7 +176,6 @@ class TestOutputLocationServices {
                     locationName:           userConfiguration.locationName,
                     locationType:           userConfiguration.locationType,
                     userId:                 userId,
-                    userRole:               userConfiguration.userRole,
                     isUnitLocation:         userConfiguration.isUnitLocation,
                     isIntLocation:          userConfiguration.isIntLocation,
                     isAccLocation:          userConfiguration.isAccLocation
@@ -204,7 +204,9 @@ class TestOutputLocationServices {
         }
     }
 
-    updateUserConfiguration(userId, userRole){
+    updateUserConfiguration(userId){
+
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Updating user config for user {}", userId);
 
         // Make sure config contains all the possible locations for this user
         // Either is is Shared or it belongs to the current user...
@@ -216,21 +218,23 @@ class TestOutputLocationServices {
 
         testOutputLocations.forEach((location) => {
 
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Checking location {}", location.locationName);
+
             userLocation = UserTestTypeLocations.findOne({
                 locationId: location._id,
-                userId: userId,
-                userRole: userRole
+                userId: userId
             });
 
             // If not found add it in for the current user / role
             if(!userLocation){
 
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding user location {}", location.locationName);
+
                 UserTestTypeLocations.insert({
                     locationId:             location._id,
                     locationName:           location.locationName,
                     locationType:           location.locationType,
-                    userId:                 userId,
-                    userRole:               userRole
+                    userId:                 userId
                 });
             } else {
 
@@ -238,8 +242,7 @@ class TestOutputLocationServices {
                 UserTestTypeLocations.update(
                     {
                         locationId: location._id,
-                        userId: userId,
-                        userRole: userRole
+                        userId: userId
                     },
                     {
                         $set:{
@@ -253,27 +256,32 @@ class TestOutputLocationServices {
 
         // And remove any locations that have been removed or changed to private
         const userTestLocations = UserTestTypeLocations.find({
-            userId: userId,
-            userRole: userRole
+            userId: userId
         }).fetch();
 
         let testLocation = null;
+        let locationsToRemove = [];
+
 
         userTestLocations.forEach((userLocation) => {
 
+            // Find locations that are shared or owned by current user
             testLocation = TestOutputLocations.findOne({
                 _id:                userLocation.locationId,
-                locationIsShared:   true
+                $or:[{locationIsShared: true}, {locationUserId: userId}]
             });
 
             if(!testLocation){
-                UserTestTypeLocations.remove({
-                    userId:     userId,
-                    userRole:   userRole,
-                    locationId: userLocation.locationId
-                });
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Removing user location {}", userLocation._id);
+                locationsToRemove.push(userLocation._id)
             }
-        })
+        });
+
+        locationsToRemove.forEach((userLocationId) => {
+            UserTestTypeLocations.remove({
+                _id: userLocationId
+            });
+        });
     }
 }
 

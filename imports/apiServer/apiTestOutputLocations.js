@@ -108,12 +108,11 @@ class ServerTestOutputLocationApi {
         );
     };
 
-    updateUserConfiguration(userId, userRole, callback){
+    updateUserConfiguration(userId, callback){
 
         updateUserConfiguration.call(
             {
-                userId:     userId,
-                userRole:   userRole
+                userId:     userId
             },
             (err, result) => {
                 callback(err, result);

@@ -7,7 +7,6 @@ let Schema = new SimpleSchema({
     locationName:           {type: String},                                         // Denormalised
     locationType:           {type: String},                                         // SHARED or LOCAL
     userId:                 {type: String},                                         // User with this config
-    userRole:               {type: String},                                         // User can have different configs for different roles
     isUnitLocation:         {type: Boolean, defaultValue: false},                   // This location has unit tests
     isIntLocation:          {type: Boolean, defaultValue: false},                   // This location has integration tests
     isAccLocation:          {type: Boolean, defaultValue: false},                   // This location has acceptance tests

@@ -101,6 +101,6 @@ LocalSettingsScreen = connect(mapStateToProps)(LocalSettingsScreen);
 
 export default LocalSettingsContainer = createContainer(({params}) => {
 
-    return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext, params.userRole)};
+    return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext)};
 
 }, LocalSettingsScreen);

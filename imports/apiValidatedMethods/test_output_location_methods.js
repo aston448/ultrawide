@@ -206,15 +206,13 @@ export const updateUserConfiguration = new ValidatedMethod({
     name: 'testOutputs.updateUserConfiguration',
 
     validate: new SimpleSchema({
-        userId:     {type: String},
-        userRole:   {type: String}
-
+        userId:     {type: String}
     }).validator(),
 
     run({userId, userRole}){
 
         try {
-            TestOutputLocationServices.updateUserConfiguration(userId, userRole);
+            TestOutputLocationServices.updateUserConfiguration(userId);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)
