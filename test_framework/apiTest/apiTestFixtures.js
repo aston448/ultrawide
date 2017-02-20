@@ -1,5 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
+import fs from 'fs';
+
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserCurrentViewOptions}    from '../../imports/collections/context/user_current_view_options.js';
@@ -17,7 +19,7 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus} from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import ClientIdentityServices from '../../imports/apiClient/apiIdentity.js';
 
@@ -338,7 +340,162 @@ Meteor.methods({
         const scenario4Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario4');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario4Component._id, 'Scenario4', rawName);
+    },
+
+    'testFixtures.writeIntegrationTestResults_ChimpMocha'(locationName, results){
+
+        const scenario1Result = results.scenario1Result;
+        const scenario2Result = results.scenario2Result;
+        const scenario3Result = results.scenario3Result;
+        const scenario4Result = results.scenario4Result;
+
+        const location = TestDataHelpers.getTestOutputLocation(locationName);
+        const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
+
+        if(filesExpected.length === 1) {
+            // Single output file test case
+            const fileName = location.locationPath + filesExpected[0].fileName;
+
+            const headerBollox = '[32m Master Chimp and become a testing Ninja! Check out our course: [39m[4m[34mhttp://bit.ly/2btQaFu [39m[24m [33m [chimp] Running...[39m\n';
+
+            let fileText = '';
+
+            fileText += headerBollox;
+
+            // Proper start of file
+            fileText += '{\n';
+
+            let passCount = 0;
+            let failCount = 0;
+            let pendingCount = 0;
+
+            switch (scenario1Result) {
+                case MashTestStatus.MASH_PASS:
+                    passCount++;
+                    break;
+                case MashTestStatus.MASH_FAIL:
+                    failCount++;
+                    break;
+                case MashTestStatus.MASH_PENDING:
+                    pendingCount++;
+                    break
+            }
+
+            switch (scenario2Result) {
+                case MashTestStatus.MASH_PASS:
+                    passCount++;
+                    break;
+                case MashTestStatus.MASH_FAIL:
+                    failCount++;
+                    break;
+                case MashTestStatus.MASH_PENDING:
+                    pendingCount++;
+                    break
+            }
+
+            switch (scenario3Result) {
+                case MashTestStatus.MASH_PASS:
+                    passCount++;
+                    break;
+                case MashTestStatus.MASH_FAIL:
+                    failCount++;
+                    break;
+                case MashTestStatus.MASH_PENDING:
+                    pendingCount++;
+                    break
+            }
+
+            switch (scenario4Result) {
+                case MashTestStatus.MASH_PASS:
+                    passCount++;
+                    break;
+                case MashTestStatus.MASH_FAIL:
+                    failCount++;
+                    break;
+                case MashTestStatus.MASH_PENDING:
+                    pendingCount++;
+                    break
+            }
+
+            const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n \"pending\": ' + pendingCount + ',\n \"failures\": ' + failCount + ',\n \"start\": \"2017-02-20T12:21:26.237Z\",\n \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000/n },\n'
+
+            fileText += stats;
+
+            fileText += '\"pending\": [';
+            // Add in pending
+            let pendingText = '';
+            if (scenario1Result === MashTestStatus.MASH_PENDING) {
+                pendingText = '\n  {\n  \"title\": \n"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += pendingText;
+            }
+            if (scenario2Result === MashTestStatus.MASH_PENDING) {
+                pendingText = '\n  {\n  \"title\": \n"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += pendingText;
+            }
+            if (scenario3Result === MashTestStatus.MASH_PENDING) {
+                pendingText = '\n  {\n  \"title\": \n"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += pendingText;
+            }
+            if (scenario4Result === MashTestStatus.MASH_PENDING) {
+                pendingText = '\n  {\n  \"title\": \n"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += pendingText;
+            }
+            fileText += '],\n';
+
+            fileText += '\"failures\": [\n';
+            // Add in failed
+            let failedText = '';
+            if (scenario1Result === MashTestStatus.MASH_FAIL) {
+                failedText = '\n  {\n  \"title\": \n"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                fileText += failedText;
+            }
+            if (scenario2Result === MashTestStatus.MASH_FAIL) {
+                failedText = '\n  {\n  \"title\": \n"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                fileText += failedText;
+            }
+            if (scenario3Result === MashTestStatus.MASH_FAIL) {
+                failedText = '\n  {\n  \"title\": \n"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                fileText += failedText;
+            }
+            if (scenario4Result === MashTestStatus.MASH_FAIL) {
+                failedText = '\n  {\n  \"title\": \n"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {\n  \"message\": \"[FAIL] Failure Message\"\n  \"reason\": \"Failure Message\"\n}\n }';
+                fileText += failedText;
+            }
+            fileText += '],\n';
+
+            fileText += '\"passes\": [\n';
+            // Add in passed
+            let passingText = '';
+            if (scenario1Result === MashTestStatus.MASH_PASS) {
+                passingText = '\n  {\n  \"title\": \n"Scenario1",\n  \"fullTitle\": \"Feature1 Scenario1\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += passingText;
+            }
+            if (scenario2Result === MashTestStatus.MASH_PASS) {
+                passingText = '\n  {\n  \"title\": \n"Scenario2",\n  \"fullTitle\": \"Feature1 Scenario2\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += passingText;
+            }
+            if (scenario3Result === MashTestStatus.MASH_PASS) {
+                passingText = '\n  {\n  \"title\": \n"Scenario3",\n  \"fullTitle\": \"Feature2 Scenario3\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += passingText;
+            }
+            if (scenario4Result === MashTestStatus.MASH_PASS) {
+                passingText = '\n  {\n  \"title\": \n"Scenario4",\n  \"fullTitle\": \"Feature2 Scenario4\",\n  \"currentRetry": 0,\n  \"err\": {}\n }';
+                fileText += passingText;
+            }
+            fileText += ']\n}\n';
+
+            // Write the file
+            fs.writeFileSync(fileName, fileText);
+        } else {
+
+            // Support for testing 2 outputs
+            if(filesExpected.length === 2){
+                // TODO Add this
+            }
+        }
     }
+
+
 
 });
 

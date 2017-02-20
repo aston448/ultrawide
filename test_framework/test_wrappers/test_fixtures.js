@@ -63,6 +63,10 @@ class TestFixtures{
         server.call('testFixtures.AddBasicDesignData', 'Design1', 'DesignVersion1', expectation);
     }
 
+    writeIntegrationTestResults_ChimpMocha(locationName, results){
+        server.call('testFixtures.writeIntegrationTestResults_ChimpMocha', locationName, results);
+    }
+
 }
 
 export default new TestFixtures();

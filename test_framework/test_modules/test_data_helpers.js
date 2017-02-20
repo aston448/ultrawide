@@ -17,7 +17,7 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../imports/constants/constants.js';
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
 class TestDataHelpers {
 
@@ -484,6 +484,21 @@ class TestDataHelpers {
             return config;
         } else {
             throw new Meteor.Error("FAIL", "User Test Location Config not found for location " + locationName + " for user name " + user.userName );
+        }
+    }
+
+    getIntegrationResultsOutputFiles_ChimpMocha(locationName){
+
+        const location = TestOutputLocations.findOne({locationName: locationName});
+
+        if(location) {
+            return TestOutputLocationFiles.find({
+                locationId: location._id,
+                fileType: TestLocationFileType.INTEGRATION,
+                testRunner: TestRunner.CHIMP_MOCHA
+            }).fetch;
+        } else {
+            throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
         }
     }
 
