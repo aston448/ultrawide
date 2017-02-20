@@ -138,7 +138,7 @@ describe('UC 841 - Share or Hide Test Output Location', function(){
         // Verify
         // Designer and Manager no longer have config
         expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
-        expect(OutputLocationsVerifications.designerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
+        expect(OutputLocationsVerifications.managerDoesNotHaveTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
         // Developer still does as he changed it...
         expect(OutputLocationsVerifications.developerHasTestConfigLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME));
         // But another Developer does not have it as its private

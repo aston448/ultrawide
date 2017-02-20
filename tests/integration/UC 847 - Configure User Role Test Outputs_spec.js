@@ -47,7 +47,7 @@ describe('UC 847 - Configure User Role Test Outputs', function(){
             isAccLocation:  false
         };
 
-        // Setup - confirm Developer has default config for the privale location
+        // Setup - confirm Developer has default config for the private location
         OutputLocationsActions.developerEditsTestLocationConfig();
         expect(OutputLocationsVerifications.developerTestConfigurationIs(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, defaultConfig));
 

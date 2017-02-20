@@ -206,8 +206,10 @@ class TestOutputLocationServices {
     updateUserConfiguration(userId, userRole){
 
         // Make sure config contains all the possible locations for this user
-
-        const testOutputLocations = TestOutputLocations.find({}).fetch();
+        // Either is is Shared or it belongs to the current user...
+        const testOutputLocations = TestOutputLocations.find({
+            $or:[{locationIsShared}, {locationUserId: userId}]
+        }).fetch();
 
         let userLocation = null;
 
@@ -219,8 +221,8 @@ class TestOutputLocationServices {
                 userRole: userRole
             });
 
-            // If not found and the location is either Shared or created by this user then add it in for the current user / role
-            if(!userLocation && (location.locationIsShared || location.locationUserId === userId)){
+            // If not found add it in for the current user / role
+            if(!userLocation){
 
                 UserTestTypeLocations.insert({
                     locationId:             location._id,
@@ -248,7 +250,7 @@ class TestOutputLocationServices {
             }
         });
 
-        // And remove any old locations that have been removed
+        // And remove any locations that have been removed or changed to private
         const userTestLocations = UserTestTypeLocations.find({
             userId: userId,
             userRole: userRole
@@ -258,12 +260,15 @@ class TestOutputLocationServices {
 
         userTestLocations.forEach((userLocation) => {
 
-            testLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
+            testLocation = TestOutputLocations.findOne({
+                _id:                userLocation.locationId,
+                locationIsShared:   true
+            });
 
             if(!testLocation){
                 UserTestTypeLocations.remove({
-                    userId: userId,
-                    userRole: userRole,
+                    userId:     userId,
+                    userRole:   userRole,
                     locationId: userLocation.locationId
                 });
             }
