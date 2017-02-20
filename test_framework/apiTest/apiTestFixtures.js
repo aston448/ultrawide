@@ -417,7 +417,7 @@ Meteor.methods({
                     break
             }
 
-            const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n  \"pending\": ' + pendingCount + ',\n  \"failures\": ' + failCount + ',\n  \"start\": \"2017-02-20T12:21:26.237Z\",\n  \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000/n },\n'
+            const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n  \"pending\": ' + pendingCount + ',\n  \"failures\": ' + failCount + ',\n  \"start\": \"2017-02-20T12:21:26.237Z\",\n  \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000\n },\n'
 
             fileText += stats;
 

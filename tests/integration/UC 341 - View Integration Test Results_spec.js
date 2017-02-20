@@ -132,6 +132,10 @@ describe('UC 341 - View Integration Test Results', function(){
     it('A Scenario included in pass integration test file results is shown as Pass', function(){
 
         // Setup
+        // Developer sets up location config
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
+
         // Developer goes to WP
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
@@ -142,7 +146,7 @@ describe('UC 341 - View Integration Test Results', function(){
         // Have a look at WP with INT results on
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
-        TestResultActions.developerRefreshesTestResultsWithIntTestsVisible();
+        //TestResultActions.developerRefreshesTestResultsWithIntTestsVisible();
 
         // Verify
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
