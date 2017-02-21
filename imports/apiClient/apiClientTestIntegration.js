@@ -87,7 +87,8 @@ class ClientTestIntegrationServices {
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
             // Load user dev data (if needed) and when done update the design mash and switch view if wanted
-            ClientContainerServices.getDevData(userContext.userId, this.refreshTestData, userContext, userRole, viewOptions, true, testDataFlag, nextView);
+            ClientContainerServices.getDevData(userContext.userId);
+            this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag, nextView);
         } else {
 
             // Not loading data but we may want to change view
@@ -112,7 +113,8 @@ class ClientTestIntegrationServices {
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
             // Load user dev data and when done update the design mash and switch view if wanted
-            ClientContainerServices.getDevData(userContext.userId, this.refreshTestData, userContext, userRole, viewOptions, true, testDataFlag);
+            ClientContainerServices.getDevData(userContext.userId);
+            this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag)
 
         } else {
 
@@ -255,7 +257,6 @@ class ClientTestIntegrationServices {
             }
 
         });
-
 
     };
 

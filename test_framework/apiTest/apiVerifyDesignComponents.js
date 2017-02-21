@@ -118,15 +118,22 @@ Meteor.methods({
         if(!designComponent){
             throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
         }
-        const featureComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentName: featureName});
+        const featureComponent = DesignComponents.findOne({
+            designVersionId: designVersion._id,
+            componentType: ComponentType.FEATURE,
+            componentName: featureName
+        });
 
         let featureRef = 'NONE';
+
         if(featureComponent){
             featureRef = featureComponent.componentReferenceId;
+        } else {
+            throw new Meteor.Error("FAIL", "Feature Component " + featureName + " not found for Design Version " + designVersionName);
         }
 
-        if(designComponent.featureReferenceId != featureRef){
-            throw new Meteor.Error("FAIL", "Expected feature reference to be " + featureRef + " but got " + designComponent.featureReferenceId);
+        if(designComponent.componentFeatureReferenceId != featureRef){
+            throw new Meteor.Error("FAIL", "Expected feature reference to be " + featureRef + " but got " + designComponent.componentFeatureReferenceId + " for component " + componentName);
         } else {
             return true;
         }
