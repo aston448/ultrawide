@@ -47,6 +47,37 @@ Meteor.methods({
         return true;
     },
 
+    'verifyDesignUpdateComponents.componentHasFeatureReference'(componentType, parentName, componentName, featureName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // This will throw an error if the component is not found
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            parentName,
+            componentName
+        );
+
+        const featureComponent = DesignUpdateComponents.findOne({
+            designUpdateId: userContext.designUpdateId,
+            componentNameNew: featureName,
+            componentTYpe: ComponentType.FEATURE
+        });
+
+        if(featureComponent){
+            if(designUpdateComponent.componentFeatureReferenceIdNew === featureComponent.componentReferenceId){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expecting feature ref for component " + componentName + " to be " + featureComponent.componentReferenceId + " but found " + designUpdateComponent.componentFeatureReferenceIdNew);
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "Feature not found with name " + featureName + " in Design Update " + userContext.designUpdateId);
+        }
+
+    },
+
     'verifyDesignUpdateComponents.componentCountWithNameIs'(componentType, componentName, expectedCount, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

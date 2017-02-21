@@ -108,6 +108,31 @@ Meteor.methods({
 
     },
 
+    'verifyDesignComponents.componentInDesignVersionFeatureRefIs'(designName, designVersionName, componentType, componentParent, componentName, featureName){
+
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
+        const designComponent = TestDataHelpers.getDesignComponentWithParent(designVersion._id, componentType, componentParent, componentName);
+
+        if(!designComponent){
+            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
+        }
+        const featureComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentName: featureName});
+
+        let featureRef = 'NONE';
+        if(featureComponent){
+            featureRef = featureComponent.componentReferenceId;
+        }
+
+        if(designComponent.featureReferenceId != featureRef){
+            throw new Meteor.Error("FAIL", "Expected feature reference to be " + featureRef + " but got " + designComponent.featureReferenceId);
+        } else {
+            return true;
+        }
+
+    },
+
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentLevelIs'(componentType, componentName, componentLevel){
 

@@ -137,7 +137,9 @@ class ClientContainerServices{
             if (devFeatureCount > 0) {
 
                 // Just carry on
-                callback();
+                if(callback) {
+                    callback();
+                }
 
             } else {
 
@@ -162,8 +164,10 @@ class ClientContainerServices{
 
                     console.log("loading dev data = " + loading);
 
-                    if (!loading && callback) {
-                        callback();
+                    if (!loading) {
+                        if(callback) {
+                            callback();
+                        }
 
                         // Stop this checking once we are done or there will be random chaos
                         loader.stop();
@@ -173,7 +177,9 @@ class ClientContainerServices{
             }
         } else {
             // If called on server (tests) don't need to subscribe, just carry on
-            callback();
+            if(callback) {
+                callback();
+            }
         }
     }
 

@@ -127,6 +127,7 @@ class DesignComponentServices{
     importComponent(designId, designVersionId, component){
 
         if(Meteor.isServer) {
+
             // Fix missing feature refs
             let componentFeatureReferenceId = component.componentFeatureReferenceId;
             if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceId === 'NONE') {
@@ -208,17 +209,34 @@ class DesignComponentServices{
                 newLevel = newParent.componentLevel + 1;
             }
 
-            let updated = DesignComponents.update(
-                {_id: designComponentId},
-                {
-                    $set: {
-                        componentParentId: newParentId,
-                        componentParentReferenceId: newParent.componentReferenceId,
-                        componentFeatureReferenceId: newParent.componentFeatureReferenceId,
-                        componentLevel: newLevel
+            let updated =0;
+
+            if(movingComponent.componentType === ComponentType.FEATURE){
+                // The Feature Reference does not change
+                updated = DesignComponents.update(
+                    {_id: designComponentId},
+                    {
+                        $set: {
+                            componentParentId: newParentId,
+                            componentParentReferenceId: newParent.componentReferenceId,
+                            componentLevel: newLevel
+                        }
                     }
-                }
-            );
+                );
+            } else {
+                // The Feature Reference is the feature reference of the new parent.  A Feature has its own reference as the Feature Reference
+                updated = DesignComponents.update(
+                    {_id: designComponentId},
+                    {
+                        $set: {
+                            componentParentId: newParentId,
+                            componentParentReferenceId: newParent.componentReferenceId,
+                            componentFeatureReferenceId: newParent.componentFeatureReferenceId,
+                            componentLevel: newLevel
+                        }
+                    }
+                );
+            }
 
             if(updated > 0){
                 // Make sure new Parent is now not removable as it must have a child

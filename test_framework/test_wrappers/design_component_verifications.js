@@ -29,6 +29,14 @@ class DesignComponentVerifications{
         );
     }
 
+    componentOfType_Called_InDesign_Version_FeatureRefIs_(type, parentName, name, designName, designVersionName, featureName){
+        server.call('verifyDesignComponents.componentInDesignVersionFeatureRefIs', designName, designVersionName, type, parentName, name, featureName,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     componentOfType_Called_InDesign_Version_CountIs_(type, name, designName, designVersionName, count){
         server.call('verifyDesignComponents.componentCountCalledIs', type, name, designName, designVersionName, count,
           (function(error, result){

@@ -568,10 +568,12 @@ class ClientDesignComponentServices{
         if(designComponent.componentType === ComponentType.FEATURE){
             // Open or close the whole feature
 
+            console.log("Open-Close Feature " + designComponent.componentFeatureReferenceId);
+
             const featureComponents = DesignComponents.find(
                 {
                     designVersionId: designComponent.designVersionId,
-                    componentFeatureReferenceId: designComponent.componentFeatureReferenceId
+                    componentFeatureReferenceId: designComponent.componentReferenceId
                 }
             );
 

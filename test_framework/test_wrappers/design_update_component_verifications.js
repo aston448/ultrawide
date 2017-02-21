@@ -13,6 +13,14 @@ class UpdateComponentVerifications{
         )
     };
 
+    componentFeatureReferenceForDesignerCurrentUpdateIs(type, parentName, name, featureName){
+        server.call('verifyDesignUpdateComponents.componentHasFeatureReference', type, parentName, name, featureName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    };
+
     componentDoesNotExistForDesignerCurrentUpdate(type, name){
         server.call('verifyDesignUpdateComponents.componentDoesNotExistCalled', type, name, 'gloria',
             (function(error, result){

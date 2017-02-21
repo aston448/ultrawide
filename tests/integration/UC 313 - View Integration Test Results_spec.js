@@ -25,7 +25,7 @@ import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
 import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType} from '../../imports/constants/constants.js';
 
-describe('UC 341 - View Integration Test Results', function(){
+describe('UC 313 - View Integration Test Results', function(){
 
     before(function(){
 

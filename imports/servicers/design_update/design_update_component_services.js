@@ -140,6 +140,13 @@ class DesignUpdateComponentServices{
 
     importComponent(designId, designVersionId, designUpdateId, component){
         if(Meteor.isServer) {
+
+            // Fix any missing feature refs
+            let componentFeatureReferenceId = component.componentFeatureReferenceIdNew;
+            if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceId === 'NONE') {
+                componentFeatureReferenceId = component.componentReferenceId;
+            }
+
             const designUpdateComponentId = DesignUpdateComponents.insert(
                 {
                     // Identity
@@ -154,7 +161,7 @@ class DesignUpdateComponentServices{
                     componentParentReferenceIdOld: component.componentParentReferenceIdOld,
                     componentParentReferenceIdNew: component.componentParentReferenceIdNew,
                     componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
-                    componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
+                    componentFeatureReferenceIdNew: componentFeatureReferenceId,
                     componentIndexOld: component.componentIndexOld,
                     componentIndexNew: component.componentIndexNew,
 
@@ -249,18 +256,35 @@ class DesignUpdateComponentServices{
                 newLevel = newParent.componentLevel + 1;
             }
 
-            let updatedComponents = DesignUpdateComponents.update(
-                {_id: componentId},
-                {
-                    $set: {
-                        componentParentIdNew: newParentId,
-                        componentParentReferenceIdNew: newParent.componentReferenceId,
-                        componentFeatureReferenceIdNew: newParent.componentFeatureReferenceIdNew,
-                        componentLevel: newLevel,
-                        isMoved: isMoved
+            let updatedComponents = 0;
+            if(movingComponent.componentType === ComponentType.FEATURE) {
+                // The Feature Reference does not change
+                updatedComponents = DesignUpdateComponents.update(
+                    {_id: componentId},
+                    {
+                        $set: {
+                            componentParentIdNew: newParentId,
+                            componentParentReferenceIdNew: newParent.componentReferenceId,
+                            componentLevel: newLevel,
+                            isMoved: isMoved
+                        }
                     }
-                }
-            );
+                );
+            } else {
+                // The Feature Reference is the feature reference of the new parent.  A Feature has its own reference as the Feature Reference
+                updatedComponents = DesignUpdateComponents.update(
+                    {_id: componentId},
+                    {
+                        $set: {
+                            componentParentIdNew: newParentId,
+                            componentParentReferenceIdNew: newParent.componentReferenceId,
+                            componentFeatureReferenceIdNew: newParent.componentFeatureReferenceIdNew,
+                            componentLevel: newLevel,
+                            isMoved: isMoved
+                        }
+                    }
+                );
+            }
 
             if(updatedComponents > 0){
 

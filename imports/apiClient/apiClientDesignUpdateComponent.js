@@ -571,7 +571,7 @@ class ClientDesignUpdateComponentServices{
                 {
                     designVersionId: designComponent.designVersionId,
                     designUpdateId: designComponent.designUpdateId,
-                    componentFeatureReferenceIdNew: designComponent.componentFeatureReferenceIdNew
+                    componentFeatureReferenceIdNew: designComponent.componentReferenceId
                 }
             );
 

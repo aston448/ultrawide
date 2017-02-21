@@ -99,12 +99,16 @@ describe('UC 555 - Move Design Update Component', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
+
         // Execute - move it to Section2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
         UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
         // Verify parent now Section2
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature3'));
+        // And check that feature refs moved with it correctly
+        expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.FEATURE, 'Section2', 'Feature3', 'Feature3'));
+        expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions', 'Feature3'));
     });
 
     it('A new Scenario for a Design Update can be moved to a different in Scope Feature');
@@ -125,7 +129,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Verify parent now Feature2 Conditions
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario99'));
-
+        // And check that feature refs moved with it correctly
+        expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.SCENARIO, 'Actions', 'Scenario99', 'Feature1'));
     });
 
     it('A new Feature Aspect for a Design Update can be moved to a different in Scope Feature');
