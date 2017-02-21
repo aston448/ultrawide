@@ -120,8 +120,8 @@ describe('UC 145 - Move Design Component', function(){
 
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Interface'));
-        // And check feature ref is still OK
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.SCENARIO, 'Interface', 'Scenario1', 'Design1', 'DesignVersion1', 'Feature1'));
+        // And check feature ref is OK - now Feature 2
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.SCENARIO, 'Interface', 'Scenario1', 'Design1', 'DesignVersion1', 'Feature2'));
     });
 
 
