@@ -400,6 +400,13 @@ Meteor.methods({
         const scenario3Result = results.scenario3Result;
         const scenario4Result = results.scenario4Result;
 
+        // There is an optional scenario5 for testing data added
+        let scenario5Result = '';
+
+        if(results.scenario5Result){
+            scenario5Result = results.scenario5Result
+        }
+
         const location = TestDataHelpers.getTestOutputLocation(locationName);
         const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
 
@@ -468,6 +475,20 @@ Meteor.methods({
                     break
             }
 
+            if(results.scenario5Result){
+                switch (scenario5Result) {
+                    case MashTestStatus.MASH_PASS:
+                        passCount++;
+                        break;
+                    case MashTestStatus.MASH_FAIL:
+                        failCount++;
+                        break;
+                    case MashTestStatus.MASH_PENDING:
+                        pendingCount++;
+                        break
+                }
+            }
+
             const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n  \"pending\": ' + pendingCount + ',\n  \"failures\": ' + failCount + ',\n  \"start\": \"2017-02-20T12:21:26.237Z\",\n  \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000\n},\n';
 
             fileText += stats;
@@ -490,6 +511,12 @@ Meteor.methods({
             if (scenario4Result === MashTestStatus.MASH_PENDING) {
                 pendingText = '\n  {\n    \"title\": \"Scenario4\",\n    \"fullTitle\": \"Feature2 Scenario4\",\n    \"currentRetry\": 0,\n    \"err\": {}\n  },';
                 fileText += pendingText;
+            }
+            if(results.scenario5Result) {
+                if (scenario5Result === MashTestStatus.MASH_PENDING) {
+                    pendingText = '\n  {\n    \"title\": \"Scenario5\",\n    \"fullTitle\": \"Feature2 Scenario5\",\n    \"currentRetry\": 0,\n    \"err\": {}\n  },';
+                    fileText += pendingText;
+                }
             }
 
             // Remove final comma
@@ -517,6 +544,12 @@ Meteor.methods({
                 failedText = '\n  {\n    \"title\": \"Scenario4\",\n    \"fullTitle\": \"Feature2 Scenario4\",\n    \"currentRetry\": 0,\n    \"err\": {\n      \"message\": \"[FAIL] Failure Message\",\n      \"reason\": \"Failure Message\"\n    }\n  },';
                 fileText += failedText;
             }
+            if(results.scenario5Result) {
+                if (scenario5Result === MashTestStatus.MASH_FAIL) {
+                    failedText = '\n  {\n    \"title\": \"Scenario5\",\n    \"fullTitle\": \"Feature2 Scenario5\",\n    \"currentRetry\": 0,\n    \"err\": {\n      \"message\": \"[FAIL] Failure Message\",\n      \"reason\": \"Failure Message\"\n    }\n  },';
+                    fileText += failedText;
+                }
+            }
 
             // Remove final comma
             if(fileText.endsWith(',')) {
@@ -542,6 +575,12 @@ Meteor.methods({
             if (scenario4Result === MashTestStatus.MASH_PASS) {
                 passingText = '\n  {\n    \"title\": \"Scenario4\",\n    \"fullTitle\": \"Feature2 Scenario4\",\n    \"currentRetry\": 0,\n    \"err\": {}\n  },';
                 fileText += passingText;
+            }
+            if(results.scenario5Result) {
+                if (scenario5Result === MashTestStatus.MASH_PASS) {
+                    passingText = '\n  {\n    \"title\": \"Scenario5\",\n    \"fullTitle\": \"Feature2 Scenario5\",\n    \"currentRetry\": 0,\n    \"err\": {}\n  },';
+                    fileText += passingText;
+                }
             }
 
             // Remove final comma

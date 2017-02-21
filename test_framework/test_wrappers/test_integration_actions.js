@@ -6,12 +6,15 @@ class TestIntegrationActions {
 
     // REFRESH ---------------------------------------------------------------------------------------------------------
 
-
     developerRefreshesTestResults(expectation){
 
         server.call('testIntegration.refreshTestResults', RoleType.DEVELOPER, 'hugh', expectation);
-
     };
+
+    developerRefreshesTestData(expectation){
+
+        server.call('testIntegration.refreshTestData', RoleType.DEVELOPER, 'hugh', expectation)
+    }
 
 
 }

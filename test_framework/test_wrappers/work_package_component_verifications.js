@@ -66,6 +66,14 @@ class WpComponentVerifications{
             })
         );
     }
+
+    componentIsInDeveloperCurrentWp(componentType, parentName, componentName){
+        server.call('verifyWorkPackageComponents.componentExistsInCurrentWpCalled', componentType, parentName, componentName, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
 }
 
 export default new WpComponentVerifications();
