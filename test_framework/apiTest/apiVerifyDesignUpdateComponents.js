@@ -63,7 +63,7 @@ Meteor.methods({
         const featureComponent = DesignUpdateComponents.findOne({
             designUpdateId: userContext.designUpdateId,
             componentNameNew: featureName,
-            componentTYpe: ComponentType.FEATURE
+            componentType: ComponentType.FEATURE
         });
 
         if(featureComponent){

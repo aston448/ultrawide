@@ -130,7 +130,7 @@ describe('UC 555 - Move Design Update Component', function(){
         // Verify parent now Feature2 Conditions
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario99'));
         // And check that feature refs moved with it correctly
-        expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.SCENARIO, 'Actions', 'Scenario99', 'Feature1'));
+        expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.SCENARIO, 'Conditions', 'Scenario99', 'Feature1'));
     });
 
     it('A new Feature Aspect for a Design Update can be moved to a different in Scope Feature');

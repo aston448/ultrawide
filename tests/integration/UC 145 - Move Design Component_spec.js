@@ -102,7 +102,7 @@ describe('UC 145 - Move Design Component', function(){
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 'Section2'));
         // And check feature ref is still OK for all moved components
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.FEATURE, 'Section1', 'Feature1', 'Design1', 'DesignVersion1', 'Feature1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.FEATURE, 'Section2', 'Feature1', 'Design1', 'DesignVersion1', 'Feature1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions', 'Design1', 'DesignVersion1', 'Feature1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.SCENARIO, 'Actions', 'Scenario1', 'Design1', 'DesignVersion1', 'Feature1'));
     });
@@ -121,7 +121,7 @@ describe('UC 145 - Move Design Component', function(){
         // Verify new parent
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 'Interface'));
         // And check feature ref is still OK
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.SCENARIO, 'Actions', 'Scenario1', 'Design1', 'DesignVersion1', 'Feature1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_FeatureRefIs_(ComponentType.SCENARIO, 'Interface', 'Scenario1', 'Design1', 'DesignVersion1', 'Feature1'));
     });
 
 

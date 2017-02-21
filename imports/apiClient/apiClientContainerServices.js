@@ -127,9 +127,11 @@ class ClientContainerServices{
 
     }
 
-    getDevData(userId, callback){
+    getDevData(userId, callback, userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView){
 
         if(Meteor.isClient) {
+
+            console.log("In getDevData with callback " + callback);
 
             // See if we have already got the data subscribed...
             const devFeatureCount = UserDevFeatures.find({}).count();
@@ -138,7 +140,7 @@ class ClientContainerServices{
 
                 // Just carry on
                 if(callback) {
-                    callback();
+                    callback(userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView);
                 }
 
             } else {
@@ -166,7 +168,7 @@ class ClientContainerServices{
 
                     if (!loading) {
                         if(callback) {
-                            callback();
+                            callback(userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView);
                         }
 
                         // Stop this checking once we are done or there will be random chaos
@@ -178,7 +180,7 @@ class ClientContainerServices{
         } else {
             // If called on server (tests) don't need to subscribe, just carry on
             if(callback) {
-                callback();
+                callback(userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView);
             }
         }
     }

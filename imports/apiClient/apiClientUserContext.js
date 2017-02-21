@@ -450,7 +450,7 @@ class ClientUserContextServices {
                             // Straight to edit of new update
 
                             // Subscribe to Dev data as we'll need it for progress indications
-                            ClientContainerServices.getDevData();
+                            ClientContainerServices.getDevData(userContext.userId);
 
                             store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
                             store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));

@@ -87,7 +87,7 @@ class ClientTestIntegrationServices {
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
             // Load user dev data (if needed) and when done update the design mash and switch view if wanted
-            ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag, nextView));
+            ClientContainerServices.getDevData(userContext.userId, this.refreshTestData, userContext, userRole, viewOptions, true, testDataFlag, nextView);
         } else {
 
             // Not loading data but we may want to change view
@@ -112,7 +112,7 @@ class ClientTestIntegrationServices {
             store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
 
             // Load user dev data and when done update the design mash and switch view if wanted
-            ClientContainerServices.getDevData(userContext.userId, () => this.refreshTestData(userContext, userRole, viewOptions, true, testDataFlag));
+            ClientContainerServices.getDevData(userContext.userId, this.refreshTestData, userContext, userRole, viewOptions, true, testDataFlag);
 
         } else {
 
@@ -145,6 +145,8 @@ class ClientTestIntegrationServices {
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView){
 
+        console.log("In refresh test data with WP " + userContext.workPackageId);
+
         // Is this a Work Package view?
         if(userContext.workPackageId != 'NONE') {
 
@@ -154,12 +156,14 @@ class ClientTestIntegrationServices {
                 // Load the WP Design Data if it needs it
                 if (mashDataStale) {
 
+                    console.log("Updating mash data... ");
                     this.updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView);
 
                 } else {
 
+                    console.log("Refreshing test data... ");
                     // Just load the test results
-                    store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Loading test data...  Please wait...'}));
+                    store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Refreshing test data...  Please wait...'}));
 
                     // If developer also has test summary open load that too but don't trigger next view yet
                     if(viewOptions.devTestSummaryVisible){
@@ -173,8 +177,13 @@ class ClientTestIntegrationServices {
 
                 // Are we wanting to see just the Test Summary
                 if(viewOptions.devTestSummaryVisible){
-
+                    console.log("Updating test summary... ");
                     this.updateTestSummary(userContext, testDataFlag, nextView);
+                } else {
+                    // Otherwise just update the view
+                    if(nextView){
+                        store.dispatch(setCurrentView(nextView));
+                    }
                 }
             }
         } else {
@@ -183,6 +192,11 @@ class ClientTestIntegrationServices {
             if(viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible || viewOptions.devTestSummaryVisible){
 
                 this.updateTestSummary(userContext, testDataFlag, nextView);
+            } else {
+                // Otherwise just update the view
+                if(nextView){
+                    store.dispatch(setCurrentView(nextView));
+                }
             }
         }
 
