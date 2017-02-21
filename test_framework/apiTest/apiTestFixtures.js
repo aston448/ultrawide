@@ -77,6 +77,31 @@ Meteor.methods({
                 {multi: true}
             );
 
+            // And clear down the View Options to defaults too
+            UserCurrentViewOptions.update(
+                {},
+                {
+                    $set:{
+                        designDetailsVisible:       true,
+                        designTestSummaryVisible:   false,
+                        designDomainDictVisible:    true,
+                        updateDetailsVisible:       true,
+                        updateTestSummaryVisible:   false,
+                        updateDomainDictVisible:    false,
+                        wpDetailsVisible:           true,
+                        wpDomainDictVisible:        false,
+                        devDetailsVisible:          false,
+                        devAccTestsVisible:         false,
+                        devIntTestsVisible:         false,
+                        devUnitTestsVisible:        false,
+                        devTestSummaryVisible:      false,
+                        devFeatureFilesVisible:     false,
+                        devDomainDictVisible:       false
+                    }
+                },
+                {multi: true}
+            );
+
             // Recreate users only needed after a reset - NOTE:  Make sure there is no backup data to restore or it will confuse this
             if (UserRoles.find({}).count() === 0) {
 
