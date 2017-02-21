@@ -1,6 +1,4 @@
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageType} from '../../imports/constants/constants.js'
-import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
-import { ViewOptionType, RoleType, ViewType } from '../../imports/constants/constants.js';
+import {RoleType, ViewOptionType, ViewType} from '../../imports/constants/constants.js'
 
 class ViewOptionsActions {
 
