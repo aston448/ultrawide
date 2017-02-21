@@ -29,11 +29,15 @@ class TestFixtures{
     };
 
     clearDesignUpdates(){
-        server.call('textFixtures.clearDesignUpdates');
+        server.call('testFixtures.clearDesignUpdates');
     }
 
     clearWorkPackages(){
-        server.call('textFixtures.clearWorkPackages');
+        server.call('testFixtures.clearWorkPackages');
+    }
+
+    resetUserViewOptions(){
+        server.call('testFixtures.resetUserViewOptions');
     }
 
     setDummyUserContextForDesigner(){

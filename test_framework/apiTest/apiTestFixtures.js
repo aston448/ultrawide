@@ -216,14 +216,40 @@ Meteor.methods({
 
     },
 
-    'textFixtures.clearDesignUpdates'(){
+    'testFixtures.clearDesignUpdates'(){
         DesignUpdateComponents.remove({});
         DesignUpdates.remove({});
     },
 
-    'textFixtures.clearWorkPackages'(){
+    'testFixtures.clearWorkPackages'(){
         WorkPackageComponents.remove({});
         WorkPackages.remove({});
+    },
+
+    'testFixtures.resetUserViewOptions'(){
+        UserCurrentViewOptions.update(
+            {},
+            {
+                $set:{
+                    designDetailsVisible:       true,
+                    designTestSummaryVisible:   false,
+                    designDomainDictVisible:    true,
+                    updateDetailsVisible:       true,
+                    updateTestSummaryVisible:   false,
+                    updateDomainDictVisible:    false,
+                    wpDetailsVisible:           true,
+                    wpDomainDictVisible:        false,
+                    devDetailsVisible:          false,
+                    devAccTestsVisible:         false,
+                    devIntTestsVisible:         false,
+                    devUnitTestsVisible:        false,
+                    devTestSummaryVisible:      false,
+                    devFeatureFilesVisible:     false,
+                    devDomainDictVisible:       false
+                }
+            },
+            {multi: true}
+        );
     },
 
     'testFixtures.AddBasicDesignData'(designName, designVersionName){

@@ -88,6 +88,8 @@ describe('UC 341 - View Integration Test Results', function(){
 
     beforeEach(function(){
 
+        // Ensure default view options before each test
+        TestFixtures.resetUserViewOptions();
     });
 
     afterEach(function(){
