@@ -42,6 +42,8 @@ describe('UC 341 - View Integration Test Results', function(){
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section2', 'Feature2');
+        // But make sure Scenario444 in Feature1 is not in scope
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario444');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
 
@@ -114,15 +116,107 @@ describe('UC 341 - View Integration Test Results', function(){
 
 
     // Actions
-    it('The integration test results panel may be displayed for a Work Package that is being developed by a Developer');
+    it('The integration test results panel may be displayed for a Work Package that is being developed by a Developer', function(){
 
-    it('The integration test results panel may be hidden for a Work Package that is being developed by a Developer');
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Execute
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+
+        // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
+    });
+
+    it('The integration test results panel may be hidden for a Work Package that is being developed by a Developer', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
+
+        // Execute
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+
+        // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+    });
 
 
     // Conditions
-    it('Integration test results do not include Design Sections, Features or Scenarios outside the Work Package');
+    it('Integration test results include all Features and Scenarios in the Work Package scope', function(){
 
-    it('A Feature Aspect is not shown in the test results if it contains no Scenarios');
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature1', 'Actions'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario1'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature1', 'Conditions'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario2'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature2'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature2', 'Actions'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario3'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature2', 'Conditions'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario4'));
+
+    });
+
+    it('Integration test results do not include Features or Scenarios outside the Work Package', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - Feature444 and Scenario444 are not included
+        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeature('Feature444'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainScenario('Scenario444'));
+    });
+
+    it('A Feature Aspect is not shown in the test results if it contains no Scenarios', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - Feature1 Interface, Consequences are not shown as no Scenarios
+        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeatureAspect('Feature1', 'Interface'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeatureAspect('Feature1', 'Consequences'));
+    });
 
     it('A Scenario not included in an integration test file results is shown as Not Tested', function(){
 
