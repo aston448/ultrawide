@@ -191,10 +191,10 @@ export class DesignVersion extends Component {
                             <div>
                                 <ButtonGroup>
                                     <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
-                                </ButtonGroup>;
+                                </ButtonGroup>
                                 <ButtonGroup>
                                     <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update this Design Version</Button>
-                                </ButtonGroup>;
+                                </ButtonGroup>
                             </div>;
                         break;
                     case RoleType.MANAGER:

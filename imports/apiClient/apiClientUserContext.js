@@ -23,7 +23,7 @@ import ClientWorkPackageServices from '../apiClient/apiClientWorkPackage.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, changeApplicationMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
+import {setCurrentView, setCurrentViewMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -119,7 +119,7 @@ class ClientUserContextServices {
                 devDetailsVisible:          userViewOptions.devDetailsVisible,
                 devAccTestsVisible:         userViewOptions.devAccTestsVisible,
                 devIntTestsVisible:         userViewOptions.devIntTestsVisible,
-                devUnitTestsVisible:         userViewOptions.devUnitTestsVisible,
+                devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
                 devTestSummaryVisible:      userViewOptions.devTestSummaryVisible,
                 devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
                 devDomainDictVisible:       userViewOptions.devDomainDictVisible
@@ -143,11 +143,11 @@ class ClientUserContextServices {
                 wpDomainDictVisible:        false,
                 // Developer Screen - Design always visible
                 devDetailsVisible:          false,
-                devAccTestsVisible:         true,
+                devAccTestsVisible:         false,
                 devIntTestsVisible:         false,
-                devUnitTestsVisible:         false,
+                devUnitTestsVisible:        false,
                 devTestSummaryVisible:      false,
-                devFeatureFilesVisible:     true,
+                devFeatureFilesVisible:     false,
                 devDomainDictVisible:       false
             };
 
@@ -453,7 +453,7 @@ class ClientUserContextServices {
                             ClientContainerServices.getDevData();
 
                             store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
-                            store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+                            store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
                             return;
 
                         case DesignVersionStatus.VERSION_UPDATABLE:
@@ -468,12 +468,12 @@ class ClientUserContextServices {
                                         case DesignUpdateStatus.UPDATE_NEW:
                                             // Go to edit update in Edit Mode
                                             store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
-                                            store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+                                            store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
                                             return;
                                         case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
                                             // Go to edit update in View Mode.  If user wants to edit can toggle in to edit mode
                                             store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
-                                            store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                            store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                             return;
                                         default:
                                             // Anything else, just view the update
@@ -523,11 +523,11 @@ class ClientUserContextServices {
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_VIEW));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                         return;
                                     case WorkPackageType.WP_UPDATE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_VIEW));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                         return;
                                 }
                                 break;
@@ -560,11 +560,11 @@ class ClientUserContextServices {
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_EDIT));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                         return;
                                     case WorkPackageType.WP_UPDATE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_EDIT));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                         return;
                                 }
                                 break;
@@ -573,11 +573,11 @@ class ClientUserContextServices {
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_VIEW));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                         return;
                                     case WorkPackageType.WP_UPDATE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_VIEW));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
                                         return;
                                 }
                                 break;
@@ -586,11 +586,11 @@ class ClientUserContextServices {
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_EDIT));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
                                         return;
                                     case WorkPackageType.WP_UPDATE:
                                         store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_EDIT));
-                                        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
                                         return;
                                 }
                                 return;

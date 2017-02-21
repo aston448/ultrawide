@@ -13,7 +13,7 @@ import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, changeApplicationMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -32,7 +32,7 @@ class ClientAppHeaderServices{
 
     setEditorMode(newMode){
         // Sets the design editor to Edit or View mode
-        store.dispatch(changeApplicationMode(newMode));
+        store.dispatch(setCurrentViewMode(newMode));
         return true;
     };
 

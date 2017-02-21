@@ -18,7 +18,7 @@ import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage, updateTestDataFlag} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, updateTestDataFlag} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -332,7 +332,7 @@ class ClientDesignVersionServices{
         }
 
         // Put the view in edit mode
-        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+        store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
 
         return {success: true, message: ''};
 
@@ -358,6 +358,9 @@ class ClientDesignVersionServices{
 
         // Decide what the actual view should be.  A designer with a New or Draft DV
         // can have the option to switch into edit mode.  Anyone else is view only
+
+        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
+
         let view = ViewType.SELECT;
 
         switch(userRole){

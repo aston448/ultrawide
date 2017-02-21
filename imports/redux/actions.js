@@ -135,7 +135,7 @@ export function setCurrentView(view) {
 }
 
 // Toggles between EDIT and VIEW mode
-export function changeApplicationMode(newMode) {
+export function setCurrentViewMode(newMode) {
     return function (dispatch) {
         dispatch({type: SET_CURRENT_VIEW_MODE, newMode: newMode});
     };

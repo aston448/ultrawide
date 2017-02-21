@@ -14,7 +14,7 @@ import ClientMashDataServices       from '../apiClient/apiClientMashData.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Update Items
@@ -359,7 +359,7 @@ class ClientDesignUpdateServices {
         //ClientMashDataServices.updateTestData(viewOptions, newContext);
 
         // Edit mode
-        store.dispatch(changeApplicationMode(ViewMode.MODE_EDIT));
+        store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
 
         // Switch to update edit view
         store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
@@ -387,7 +387,7 @@ class ClientDesignUpdateServices {
         // ClientMashDataServices.updateTestData(viewOptions, newContext);
 
         // View mode
-        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
         // Switch to update view-only
         store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));

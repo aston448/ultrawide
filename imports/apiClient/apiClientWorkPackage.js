@@ -16,7 +16,7 @@ import ClientTestIntegrationServices   from './apiClientTestIntegration';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, changeApplicationMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -320,7 +320,7 @@ class ClientWorkPackageServices {
         this.setWorkPackage(userContext, workPackageToEditId);
 
         // Actually in View mode as you can't change the Design
-        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
         // Switch to appropriate WP edit view
         switch(wpType){
@@ -353,7 +353,7 @@ class ClientWorkPackageServices {
         this.setWorkPackage(userContext, workPackageToViewId);
 
         // Make sure in View only mode so no Design Editing
-        store.dispatch(changeApplicationMode(ViewMode.MODE_VIEW));
+        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
         // Switch to appropriate WP view
         switch(wpType){
