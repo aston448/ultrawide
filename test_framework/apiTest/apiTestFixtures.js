@@ -493,7 +493,9 @@ Meteor.methods({
             }
 
             // Remove final comma
-            fileText = fileText.substring(0, fileText.length -1);
+            if(fileText.endsWith(',')) {
+                fileText = fileText.substring(0, fileText.length - 1);
+            }
             fileText += '\n],\n';
 
             fileText += '\"failures\": [';
@@ -517,7 +519,9 @@ Meteor.methods({
             }
 
             // Remove final comma
-            fileText = fileText.substring(0, fileText.length -1);
+            if(fileText.endsWith(',')) {
+                fileText = fileText.substring(0, fileText.length - 1);
+            }
             fileText += '\n],\n';
 
             fileText += '\"passes\": [';
@@ -541,7 +545,9 @@ Meteor.methods({
             }
 
             // Remove final comma
-            fileText = fileText.substring(0, fileText.length -1);
+            if(fileText.endsWith(',')) {
+                fileText = fileText.substring(0, fileText.length - 1);
+            }
             fileText += '\n]\n}\n';
 
             // Write the file
