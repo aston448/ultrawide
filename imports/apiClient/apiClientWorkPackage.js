@@ -263,7 +263,7 @@ class ClientWorkPackageServices {
             newContext = this.setWorkPackage(userContext, workPackage._id);
         }
 
-        return newContext;
+        return newContext.userContext;
     }
 
     // Sets the currently selected work package as part of the global state
@@ -273,7 +273,7 @@ class ClientWorkPackageServices {
 
         if(newWorkPackageId != userContext.workPackageId) {
 
-            const context = {
+            const newContext = {
                 userId:                         userContext.userId,
                 designId:                       userContext.designId,
                 designVersionId:                userContext.designVersionId,
@@ -291,16 +291,16 @@ class ClientWorkPackageServices {
                 unitTestResultsLocation:      userContext.unitTestResultsLocation
             };
 
-            store.dispatch(setCurrentUserItemContext(context, true));
+            store.dispatch(setCurrentUserItemContext(newContext, true));
 
             // If we are changing WP, set the Design Mash data as stale as we need to reload a new lot
             store.dispatch(setMashDataStaleTo(true));
 
-            return context;
+            return {userContext: newContext, mashStale: true};
         }
 
         // Not an error - just indicates no update needed
-        return userContext;
+        return {userContext: userContext, mashStale: false};
     };
 
     // Manager chose to edit a Work Package ----------------------------------------------------------------------------
@@ -394,7 +394,7 @@ class ClientWorkPackageServices {
         }
 
         // Load dev data - will update test data once loaded and switch the view
-        ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag, mashDataStale);
+        ClientTestIntegrationServices.loadUserDevData(updatedContext.userContext, userRole, viewOptions, view, testDataFlag, updatedContext.mashStale);
 
         return {success: true, message: ''};
 
