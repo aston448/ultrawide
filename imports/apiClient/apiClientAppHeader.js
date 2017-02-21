@@ -67,7 +67,7 @@ class ClientAppHeaderServices{
               // No action
         }
 
-        return true;
+        return {success: true, message: ''};
     }
 
     setViewLevelFeatures(userContext){

@@ -96,51 +96,55 @@ class WorkPackageActions{
     }
 
     // Develop
-    developerDevelopsSelectedBaseWorkPackageWithNoTests(expectation){
-
-        const viewOptions = {
-            userId:                     'NONE',
-            designDetailsVisible:       true,
-            designTestSummaryVisible:   false,
-            designDomainDictVisible:    false,
-            updateDetailsVisible:       true,
-            updateTestSummaryVisible:   false,
-            updateDomainDictVisible:    false,
-            wpDetailsVisible:           true,
-            wpDomainDictVisible:        false,
-            devDetailsVisible:          false,
-            devAccTestsVisible:         false,
-            devIntTestsVisible:         false,
-            devUnitTestsVisible:        false,
-            devTestSummaryVisible:      false,
-            devFeatureFilesVisible:     false,
-            devDomainDictVisible:       false
-        };
-        server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
+    developerDevelopsSelectedBaseWorkPackage(expectation){
+        server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation)
     }
 
-    developerDevelopsSelectedBaseWorkPackageWithIntegrationTests(expectation){
-
-        const viewOptions = {
-            userId:                     'NONE',
-            designDetailsVisible:       true,
-            designTestSummaryVisible:   false,
-            designDomainDictVisible:    false,
-            updateDetailsVisible:       true,
-            updateTestSummaryVisible:   false,
-            updateDomainDictVisible:    false,
-            wpDetailsVisible:           true,
-            wpDomainDictVisible:        false,
-            devDetailsVisible:          false,
-            devAccTestsVisible:         false,
-            devIntTestsVisible:         true,       // Set
-            devUnitTestsVisible:        false,
-            devTestSummaryVisible:      false,
-            devFeatureFilesVisible:     false,
-            devDomainDictVisible:       false
-        };
-        server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
-    }
+    // developerDevelopsSelectedBaseWorkPackageWithNoTests(expectation){
+    //
+    //     const viewOptions = {
+    //         userId:                     'NONE',
+    //         designDetailsVisible:       true,
+    //         designTestSummaryVisible:   false,
+    //         designDomainDictVisible:    false,
+    //         updateDetailsVisible:       true,
+    //         updateTestSummaryVisible:   false,
+    //         updateDomainDictVisible:    false,
+    //         wpDetailsVisible:           true,
+    //         wpDomainDictVisible:        false,
+    //         devDetailsVisible:          false,
+    //         devAccTestsVisible:         false,
+    //         devIntTestsVisible:         false,
+    //         devUnitTestsVisible:        false,
+    //         devTestSummaryVisible:      false,
+    //         devFeatureFilesVisible:     false,
+    //         devDomainDictVisible:       false
+    //     };
+    //     server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
+    // }
+    //
+    // developerDevelopsSelectedBaseWorkPackageWithIntegrationTests(expectation){
+    //
+    //     const viewOptions = {
+    //         userId:                     'NONE',
+    //         designDetailsVisible:       true,
+    //         designTestSummaryVisible:   false,
+    //         designDomainDictVisible:    false,
+    //         updateDetailsVisible:       true,
+    //         updateTestSummaryVisible:   false,
+    //         updateDomainDictVisible:    false,
+    //         wpDetailsVisible:           true,
+    //         wpDomainDictVisible:        false,
+    //         devDetailsVisible:          false,
+    //         devAccTestsVisible:         false,
+    //         devIntTestsVisible:         true,       // Set
+    //         devUnitTestsVisible:        false,
+    //         devTestSummaryVisible:      false,
+    //         devFeatureFilesVisible:     false,
+    //         devDomainDictVisible:       false
+    //     };
+    //     server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
+    // }
 
 }
 

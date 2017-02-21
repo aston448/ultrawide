@@ -113,14 +113,15 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove WP');
     },
 
-    'testWorkPackages.developSelectedWorkPackage'(userName, userRole, viewOptions, expectation){
+    'testWorkPackages.developSelectedWorkPackage'(userName, userRole, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        viewOptions.userId = userContext.userId;
+        const viewOptions = TestDataHelpers.getViewOptions(userName);
+
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
-        const mashDataStale = true; // Make the data load for the WP (REDUX setting)
+        const mashDataStale = true; // Make the data load for the WP if view options require it (REDUX setting)
 
         const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false, mashDataStale);
 

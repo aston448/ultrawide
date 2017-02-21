@@ -8,7 +8,7 @@ import {RoleType, TestType} from '../../imports/constants/constants.js';
 
 Meteor.methods({
 
-    'testResults.refreshTestResults'(role, userName, viewOptions, expectation){
+    'testIntegration.refreshTestResults'(role, userName, viewOptions, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 

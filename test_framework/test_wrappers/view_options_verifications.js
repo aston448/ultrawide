@@ -1,0 +1,30 @@
+
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+
+import TestFixtures from './test_fixtures.js';
+
+class ViewOptionsVerifications {
+
+    developerViewOption_IsVisible(viewOption) {
+
+        server.call('verifyUserViewOptions.optionIsVisible', viewOption, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+    };
+
+    developerViewOption_IsHidden(viewOption) {
+
+        server.call('verifyUserViewOptions.optionIsHidden', viewOption, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+    };
+}
+
+export default new ViewOptionsVerifications();

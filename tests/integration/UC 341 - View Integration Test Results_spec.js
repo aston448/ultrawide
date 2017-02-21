@@ -16,12 +16,14 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import OutputLocationsActions       from '../../test_framework/test_wrappers/output_locations_actions.js';
 import OutputLocationsVerifications from '../../test_framework/test_wrappers/output_locations_verifications.js';
-import TestResultActions            from '../../test_framework/test_wrappers/test_result_actions.js';
+import TestResultActions            from '../../test_framework/test_wrappers/test_integration_actions.js';
 import TestResultVerifications      from '../../test_framework/test_wrappers/test_result_verifications.js';
+import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
+import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus} from '../../imports/constants/constants.js';
+import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType} from '../../imports/constants/constants.js';
 
 describe('UC 341 - View Integration Test Results', function(){
 
@@ -127,26 +129,23 @@ describe('UC 341 - View Integration Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
-        // Execute - Run Tests
+        // Execute - Run Tests - outside of ULTRAWIDE
         const results = {
             scenario1Result: MashTestStatus.MASH_PASS,
             scenario2Result: MashTestStatus.MASH_FAIL,
             scenario3Result: MashTestStatus.MASH_PENDING,
             scenario4Result: MashTestStatus.MASH_NOT_LINKED,
         };
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
-        // Have a look at WP with INT results on
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
 
         // Verify
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PENDING));
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
     });
 
@@ -157,23 +156,23 @@ describe('UC 341 - View Integration Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
-        // Execute - Run Tests
+        // Execute - Run Tests - outside of ULTRAWIDE
         const results = {
             scenario1Result: MashTestStatus.MASH_PASS,
             scenario2Result: MashTestStatus.MASH_FAIL,
             scenario3Result: MashTestStatus.MASH_PENDING,
             scenario4Result: MashTestStatus.MASH_NOT_LINKED,
         };
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
-        // Have a look at WP with INT results on
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
 
         // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PENDING));
 
     });
@@ -185,23 +184,23 @@ describe('UC 341 - View Integration Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
-        // Execute - Run Tests
+        // Execute - Run Tests - outside of ULTRAWIDE
         const results = {
             scenario1Result: MashTestStatus.MASH_PASS,
             scenario2Result: MashTestStatus.MASH_FAIL,
             scenario3Result: MashTestStatus.MASH_PENDING,
             scenario4Result: MashTestStatus.MASH_NOT_LINKED,
         };
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
-        // Have a look at WP with INT results on
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
 
         // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
 
     });
@@ -213,23 +212,23 @@ describe('UC 341 - View Integration Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
-        // Execute - Run Tests
+        // Execute - Run Tests - outside of ULTRAWIDE
         const results = {
             scenario1Result: MashTestStatus.MASH_PASS,
             scenario2Result: MashTestStatus.MASH_FAIL,
             scenario3Result: MashTestStatus.MASH_PENDING,
             scenario4Result: MashTestStatus.MASH_NOT_LINKED,
         };
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
-        // Have a look at WP with INT results on
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackageWithIntegrationTests();
+        // Open the Int Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
 
         // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
     });
 
