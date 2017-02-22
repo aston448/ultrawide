@@ -125,6 +125,64 @@ export const withdrawWorkPackage = new ValidatedMethod({
     }
 });
 
+export const adoptWorkPackage = new ValidatedMethod({
+
+    name: 'workPackage.adoptWorkPackage',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        workPackageId:      {type: String},
+        userId:             {type: String}
+    }).validator(),
+
+    run({userRole, workPackageId, userId}){
+
+        // Server validation
+        const result = WorkPackageValidationApi.validateAdoptWorkPackage(userRole, workPackageId);
+
+        if (result != Validation.VALID) {
+            throw new Meteor.Error('workPackage.adoptWorkPackage.failValidation', result)
+        }
+
+        // Server action
+        try {
+            WorkPackageServices.adoptWorkPackage(workPackageId, userId);
+        } catch (e) {
+            console.log(e);
+            throw new Meteor.Error(e.error, e.message)
+        }
+    }
+});
+
+export const releaseWorkPackage = new ValidatedMethod({
+
+    name: 'workPackage.releaseWorkPackage',
+
+    validate: new SimpleSchema({
+        userRole:           {type: String},
+        workPackageId:      {type: String},
+        userId:             {type: String}
+    }).validator(),
+
+    run({userRole, workPackageId, userId}){
+
+        // Server validation
+        const result = WorkPackageValidationApi.validateReleaseWorkPackage(userRole, userId, workPackageId);
+
+        if (result != Validation.VALID) {
+            throw new Meteor.Error('workPackage.releaseWorkPackage.failValidation', result)
+        }
+
+        // Server action
+        try {
+            WorkPackageServices.releaseWorkPackage(workPackageId);
+        } catch (e) {
+            console.log(e);
+            throw new Meteor.Error(e.error, e.message)
+        }
+    }
+});
+
 export const removeWorkPackage = new ValidatedMethod({
 
     name: 'workPackage.removeWorkPackage',

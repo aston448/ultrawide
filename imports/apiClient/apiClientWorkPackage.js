@@ -194,6 +194,103 @@ class ClientWorkPackageServices {
         return {success: true, message: ''};
     };
 
+    // Developer adopts an available WP --------------------------------------------------------------------------------
+    adoptWorkPackage(userRole, userContext, workPackageId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateAdoptWorkPackage(userRole, workPackageId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.adoptWorkPackage(userRole, workPackageId, userContext.userId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Ensure that the adopted WP is set in the current user context
+                this.setWorkPackage(userContext, workPackageId);
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_ADOPTED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
+
+    // Developer or Manager releases an adopted WP ---------------------------------------------------------------------
+    releaseWorkPackage(userRole, userContext, workPackageId){
+
+        // Client validation
+        let result = WorkPackageValidationApi.validateReleaseWorkPackage(userRole, userContext.userId, workPackageId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return {success: false, message: result};
+        }
+
+        // Real action call - server actions
+        ServerWorkPackageApi.releaseWorkPackage(userRole, workPackageId, userContext.userId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+
+                // Clear WP from user context if Developer
+                if(userRole === RoleType.DEVELOPER) {
+
+                    const context = {
+                        userId: userContext.userId,
+                        designId: userContext.designId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: userContext.designUpdateId,
+                        workPackageId: 'NONE',
+                        designComponentId: 'NONE',
+                        designComponentType: 'NONE',
+                        featureReferenceId: 'NONE',
+                        featureAspectReferenceId: 'NONE',
+                        scenarioReferenceId: 'NONE',
+                        scenarioStepId: 'NONE',
+                        featureFilesLocation: userContext.featureFilesLocation,
+                        acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
+                        integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                        unitTestResultsLocation: userContext.unitTestResultsLocation
+                    };
+
+                    store.dispatch(setCurrentUserItemContext(context, true));
+                }
+
+                // Show action success on screen
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: WorkPackageMessages.MSG_WORK_PACKAGE_RELEASED
+                }));
+            }
+        });
+
+        // Indicate that business validation passed
+        return {success: true, message: ''};
+    };
+
     // Manager chose to delete a WP ------------------------------------------------------------------------------------
     removeWorkPackage(userRole, userContext, workPackageToDeleteId){
 

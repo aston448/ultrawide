@@ -85,6 +85,24 @@ export class WorkPackage extends Component {
         );
     };
 
+    onAdoptWorkPackage(userRole, userContext, wp){
+
+        ClientWorkPackageServices.adoptWorkPackage(
+            userRole,
+            userContext,
+            wp._id
+        );
+    };
+
+    onReleaseWorkPackage(userRole, userContext, wp){
+
+        ClientWorkPackageServices.releaseWorkPackage(
+            userRole,
+            userContext,
+            wp._id
+        );
+    };
+
     onSelectWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.selectWorkPackage(
@@ -174,11 +192,11 @@ export class WorkPackage extends Component {
                 switch(userRole) {
                     case RoleType.DEVELOPER:
 
-                        // Developers can view or develop a WP
+                        // Developers can view or adopt a WP
                         buttons =
                             <ButtonGroup className="button-group-left">
                                 <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
-                                 <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>
+                                <Button id="butAdopt" bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>
                             </ButtonGroup>;
 
                         break;
@@ -190,6 +208,38 @@ export class WorkPackage extends Component {
                                 <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
                                 <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
                                 <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>
+                            </ButtonGroup>;
+
+                        break;
+                    case RoleType.DESIGNER:
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                            </ButtonGroup>;
+                        break;
+                }
+                break;
+            case WorkPackageStatus.WP_ADOPTED:
+                switch(userRole) {
+                    case RoleType.DEVELOPER:
+
+                        // Developers can view or develop / release  a WP if adopted by them
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                                <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>
+                                <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>
+                            </ButtonGroup>;
+
+                        break;
+                    case RoleType.MANAGER:
+
+                        // Managers can view or edit or release the WP
+                        buttons =
+                            <ButtonGroup>
+                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
+                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                                <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>
                             </ButtonGroup>;
 
                         break;

@@ -55,7 +55,8 @@ class WorkPackageServices{
                     workPackageType: workPackage.workPackageType,
                     workPackageName: workPackage.workPackageName,
                     workPackageRawText: workPackage.workPackageRawText,
-                    workPackageStatus: workPackage.workPackageStatus
+                    workPackageStatus: workPackage.workPackageStatus,
+                    adoptingUserId: workPackage.adoptingUserId
                 }
             );
 
@@ -120,6 +121,36 @@ class WorkPackageServices{
             );
         }
     };
+
+    adoptWorkPackage(workPackageId, userId){
+
+        if(Meteor.isServer) {
+            WorkPackages.update(
+                {_id: workPackageId},
+                {
+                    $set: {
+                        workPackageStatus: WorkPackageStatus.WP_ADOPTED,
+                        adoptingUserId: userId
+                    }
+                }
+            );
+        }
+    }
+
+    releaseWorkPackage(workPackageId){
+
+        if(Meteor.isServer) {
+            WorkPackages.update(
+                {_id: workPackageId},
+                {
+                    $set: {
+                        workPackageStatus: WorkPackageStatus.WP_AVAILABLE,
+                        adoptingUserId: 'NONE'
+                    }
+                }
+            );
+        }
+    }
 
     completeWorkPackage(workPackageId){
 

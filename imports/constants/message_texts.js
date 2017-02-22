@@ -38,8 +38,10 @@ export const WorkPackageMessages = {
 
     MSG_WORK_PACKAGE_ADDED:             'New Work Package added',
     MSG_WORK_PACKAGE_NAME_UPDATED:      'Work Package name updated',
-    MSG_WORK_PACKAGE_PUBLISHED:         'Work Package now Published Draft',
-    MSG_WORK_PACKAGE_WITHDRAWN:         'Work Package reverted to New',
+    MSG_WORK_PACKAGE_PUBLISHED:         'Work Package now available for adoption',
+    MSG_WORK_PACKAGE_WITHDRAWN:         'Work Package no longer available',
+    MSG_WORK_PACKAGE_ADOPTED:           'Work Package now adopted by you',
+    MSG_WORK_PACKAGE_RELEASED:          'Work Package available for adoption again',
     MSG_WORK_PACKAGE_REMOVED:           'Work Package removed',
 };
 

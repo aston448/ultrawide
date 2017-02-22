@@ -97,6 +97,43 @@ class WorkPackageValidationServices{
         return Validation.VALID;
     };
 
+    validateAdoptWorkPackage(userRole, wpStatus){
+
+        // Adopter must be a Developer
+        if(userRole != RoleType.DEVELOPER){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_ADOPT;
+        }
+
+        // WP must be Available
+        if(wpStatus != WorkPackageStatus.WP_AVAILABLE){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_ADOPT;
+        }
+
+        return Validation.VALID;
+    }
+
+    validateReleaseWorkPackage(userRole, userId, wp){
+
+        // Releaser must be a Developer or Manager
+        if(!(userRole === RoleType.DEVELOPER || userRole === RoleType.MANAGER)){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_RELEASE;
+        }
+
+        // If Developer must be adopted by them
+        if(userRole === RoleType.DEVELOPER){
+            if(wp.adoptingUserId != userId){
+                return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_USER_RELEASE;
+            }
+        }
+
+        // WP must be Adopted
+        if(wp.workPackageStatus != WorkPackageStatus.WP_ADOPTED){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_RELEASE;
+        }
+
+        return Validation.VALID;
+    }
+
     validateRemoveWorkPackage(userRole, wpStatus){
 
         // To remove a WP, user must be a Manager

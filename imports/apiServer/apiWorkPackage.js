@@ -1,5 +1,13 @@
 
-import { addWorkPackage, updateWorkPackageName, publishWorkPackage, withdrawWorkPackage, removeWorkPackage } from '../apiValidatedMethods/work_package_methods.js'
+import {
+    addWorkPackage,
+    updateWorkPackageName,
+    publishWorkPackage,
+    withdrawWorkPackage,
+    adoptWorkPackage,
+    releaseWorkPackage,
+    removeWorkPackage
+} from '../apiValidatedMethods/work_package_methods.js'
 
 // =====================================================================================================================
 // Server API for Work Package Items
@@ -52,6 +60,32 @@ class ServerWorkPackageApi {
             {
                 userRole: userRole,
                 workPackageId: workPackageId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    adoptWorkPackage(userRole, workPackageId, userId, callback){
+        adoptWorkPackage.call(
+            {
+                userRole: userRole,
+                workPackageId: workPackageId,
+                userId: userId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    releaseWorkPackage(userRole, workPackageId, userId, callback){
+        releaseWorkPackage.call(
+            {
+                userRole: userRole,
+                workPackageId: workPackageId,
+                userId: userId
             },
             (err, result) => {
                 callback(err, result);

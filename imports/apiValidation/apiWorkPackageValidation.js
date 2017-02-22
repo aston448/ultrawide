@@ -55,6 +55,20 @@ class WorkPackageValidationApi {
         return WorkPackageValidationServices.validateWithdrawWorkPackage(userRole, wp.workPackageStatus);
     };
 
+    validateAdoptWorkPackage(userRole, workPackageId){
+
+        const wp = WorkPackages.findOne({_id: workPackageId});
+
+        return WorkPackageValidationServices.validateAdoptWorkPackage(userRole, wp.workPackageStatus);
+    };
+
+    validateReleaseWorkPackage(userRole, userId, workPackageId){
+
+        const wp = WorkPackages.findOne({_id: workPackageId});
+
+        return WorkPackageValidationServices.validateReleaseWorkPackage(userRole, userId, wp);
+    };
+
     validateRemoveWorkPackage(userRole, workPackageId){
 
         const wp = WorkPackages.findOne({_id: workPackageId});
