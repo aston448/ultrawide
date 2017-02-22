@@ -724,9 +724,6 @@ class DesignComponentHeader extends Component{
                     <InputGroup.Addon onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
-                    {/*<InputGroup.Addon>*/}
-                        {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                    {/*</InputGroup.Addon>*/}
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <div className={"readOnlyItem " + itemStyle} >
                         <Editor
@@ -745,9 +742,6 @@ class DesignComponentHeader extends Component{
                     <InputGroup.Addon>
                         <div className="invisible"><Glyphicon glyph="star"/></div>
                     </InputGroup.Addon>
-                    {/*<InputGroup.Addon>*/}
-                        {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                    {/*</InputGroup.Addon>*/}
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <div className="editableItem">
                         <Editor
@@ -785,9 +779,6 @@ class DesignComponentHeader extends Component{
                         <InputGroup.Addon onClick={ () => this.toggleOpen()}>
                             <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                         </InputGroup.Addon>
-                        {/*<InputGroup.Addon>*/}
-                            {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                        {/*</InputGroup.Addon>*/}
                         <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                         <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
                             <Editor
@@ -814,23 +805,40 @@ class DesignComponentHeader extends Component{
                                 </div>)
                             }
                         </InputGroup.Addon>
-                        {/*<InputGroup.Addon>*/}
-                            {/*<ProgressIndicator*/}
-                                {/*indicatorType="IMPL"*/}
-                                {/*componentType={currentItem.componentType}*/}
-                                {/*progressData={this.state.progressData}*/}
-                            {/*/>*/}
-                        {/*</InputGroup.Addon>*/}
-                        {/*<InputGroup.Addon>*/}
-                            {/*<ProgressIndicator*/}
-                                {/*indicatorType="TEST"*/}
-                                {/*componentType={currentItem.componentType}*/}
-                                {/*progressData={this.state.progressData}*/}
-                            {/*/>*/}
-                        {/*</InputGroup.Addon>*/}
                     </InputGroup>
                 </div>
             );
+
+        let nonDraggableHeader =
+            <div>
+                <InputGroup>
+                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
+                    <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
+                        <Editor
+                            editorState={this.state.editorState}
+                            handleKeyCommand={this.handleTitleKeyCommand}
+                            keyBindingFn={this.keyBindings}
+                            spellCheck={false}
+                            ref="editorReadOnly"
+                            readOnly={true}
+                        />
+                    </div>
+                    <InputGroup.Addon onClick={ () => this.editComponentName()}>
+                        <OverlayTrigger overlay={tooltipEdit}>
+                            <div className="blue"><Glyphicon glyph="edit"/></div>
+                        </OverlayTrigger>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                        <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon>
+                        <div className="invisible"><Glyphicon glyph="star"/></div>
+                    </InputGroup.Addon>
+                </InputGroup>
+            </div>;
 
         let viewOnlyVersionProgressHeader =
             <div>
@@ -940,7 +948,7 @@ class DesignComponentHeader extends Component{
 
                             } else {
                                 // Not being edited now
-                                designComponentElement = draggableHeader;
+                                designComponentElement = nonDraggableHeader;
                             }
                         } else {
                             // Item is out of scope so cannot be edited or dragged
