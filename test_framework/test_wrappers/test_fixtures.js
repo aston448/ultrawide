@@ -71,6 +71,10 @@ class TestFixtures{
         server.call('testFixtures.writeIntegrationTestResults_ChimpMocha', locationName, results);
     }
 
+    writeUnitTestResults_MeteorMocha(locationName, results){
+        server.call('testFixtures.writeUnitTestResults_MeteorMocha', locationName, results);
+    }
+
 }
 
 export default new TestFixtures();

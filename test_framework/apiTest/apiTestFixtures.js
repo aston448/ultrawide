@@ -598,7 +598,191 @@ Meteor.methods({
                 // TODO Add this
             }
         }
-    }
+    },
+
+    'testFixtures.writeUnitTestResults_MeteorMocha'(locationName, results){
+
+        const location = TestDataHelpers.getTestOutputLocation(locationName);
+        const filesExpected = TestDataHelpers.getUnitResultsOutputFiles_MeteorMocha(locationName);
+
+        if(filesExpected.length === 1) {
+            // Single output file test case
+            const fileName = location.locationPath + filesExpected[0].fileName;
+
+            // Expected test input is:
+            // results
+            //   scenarios[
+            //      scenario{
+            //          scenarioName
+            //          scenarioGroup
+            //          unitResults[
+            //              result{
+            //                  resultName
+            //                  resultOutcome
+            //              }
+            //          ]
+            //      }
+            //  ]
+
+            let outputTests = [];
+            let outputPending = [];
+            let outputFailures = [];
+            let outputPasses = [];
+
+            let fullTitle = '';
+            let resultData = {};
+            let errorData = {};
+
+            results.scenarios.forEach((scenario) => {
+
+                fullTitle = scenario.scenarioGroup + ' ' + scenario.scenarioName;
+
+                scenario.unitResults.forEach((result) => {
+
+                    // Make error data if a failure
+                    if(result.resultOutcome === MashTestStatus.MASH_FAIL){
+                        errorData = {
+                            message: 'ERROR',
+                            expected: 'this',
+                            actual: 'that',
+                            stack: 'Stack Trace'
+                        }
+                    } else {
+                        errorData = {};
+                    }
+
+                    resultData = {
+                        title: result.resultName,
+                        fullTitle: fullTitle,
+                        duration: 5,
+                        currentRetry: 0,
+                        err: errorData
+                    };
+
+                    // Everything is added to tests
+                    outputTests.push(resultData);
+
+                    // Divvy up rest as expected
+                    switch(result.resultOutcome){
+                        case MashTestStatus.MASH_PENDING:
+                            outputPending.push(resultData);
+                            break;
+                        case MashTestStatus.MASH_FAIL:
+                            outputFailures.push(resultData);
+                            break;
+                        case MashTestStatus.MASH_PASS:
+                            outputPasses.push(resultData);
+                            break;
+                    }
+
+                });
+
+            });
+
+            let outputData = {
+                stats: {
+                    suites: 4,
+                    tests: 10,
+                    passes: 6,
+                    failures: 2,
+                    start: "2017-01-27T12:38:02.415Z",
+                    end: "2017-01-27T12:38:08.588Z",
+                    duration: 1000
+                },
+                tests: outputTests,
+                pending: outputPending,
+                failures: outputFailures,
+                passes: outputPasses,
+            };
+
+            const jsonData = JSON.stringify(outputData);
+
+            fs.writeFile(fileName, jsonData);
+
+
+            // let fileText = '';
+            //
+            // // TODO - could calc these properly but not needed
+            // const passCount = 3;
+            // const pendingCount = 0;
+            // const failCount = 1;
+            //
+            // const scenario1Name = results.scenario1Name;
+            // const scenario2Name = results.scenario2Name;
+            // const scenario3Name = results.scenario3Name;
+            // const scenario4Name = results.scenario4Name;
+            //
+            // const scenario1Group = results.scenario1Group;
+            // const scenario2Group = results.scenario2Group;
+            // const scenario3Group = results.scenario3Group;
+            // const scenario4Group = results.scenario4Group;
+            //
+            // // Arrays of unit test results
+            // const scenario1Results = results.scenario1Results;
+            // const scenario2Results = results.scenario2Results;
+            // const scenario3Results = results.scenario3Results;
+            // const scenario4Results = results.scenario4Results;
+            //
+            //
+            // // Proper start of file
+            // fileText += '{\n';
+            //
+            // const stats = '\"stats\": {\n  \"suites\": 2,\n  \"tests\": 4,\n  \"passes\": ' + passCount + ',\n  \"pending\": ' + pendingCount + ',\n  \"failures\": ' + failCount + ',\n  \"start\": \"2017-02-20T12:21:26.237Z\",\n  \"end\": \"2017-02-20T12:21:28.411Z\",\n  \"duration\": 1000\n},\n';
+            //
+            // fileText += stats;
+            //
+            // // ---------------------------------------------------------------------------------------------------------
+            // fileText += '\"tests\": [';
+            // let testText = '';
+            //
+            // scenario1Results.forEach((s1Result) => {
+            //     testText = '\n  {\n    \"title\": \"' + s1Result.testName + '\",\n    \"fullTitle\": \"' + scenario1Group + ' ' + scenario1Name + '\",\n    \"currentRetry\": 0,\n    \"currentRetry\": 0,\n    \"err\": {}\n  },';
+            //     fileText += passingText;
+            // });
+            //
+            // // Remove final comma
+            // if(fileText.endsWith(',')) {
+            //     fileText = fileText.substring(0, fileText.length - 1);
+            // }
+            // fileText += '\n],\n';
+            //
+            // // ---------------------------------------------------------------------------------------------------------
+            // fileText += '\"pending\": [';
+            //
+            // // Remove final comma
+            // if(fileText.endsWith(',')) {
+            //     fileText = fileText.substring(0, fileText.length - 1);
+            // }
+            // fileText += '\n],\n';
+            //
+            // // ---------------------------------------------------------------------------------------------------------
+            // fileText += '\"failures\": [';
+            //
+            // // Remove final comma
+            // if(fileText.endsWith(',')) {
+            //     fileText = fileText.substring(0, fileText.length - 1);
+            // }
+            // fileText += '\n],\n';
+            //
+            // // ---------------------------------------------------------------------------------------------------------
+            // fileText += '\"passes\": [';
+            //
+            // // Remove final comma
+            // if(fileText.endsWith(',')) {
+            //     fileText = fileText.substring(0, fileText.length - 1);
+            // }
+            // fileText += '\n]\n}\n';
+            //
+            // // ---------------------------------------------------------------------------------------------------------
+            //
+            // // Write the file
+            // fs.writeFileSync(fileName, fileText);
+
+
+        } else {
+            // Support for multipe files here
+        }
+    },
 
 
 

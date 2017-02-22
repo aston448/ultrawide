@@ -503,6 +503,21 @@ class TestDataHelpers {
         }
     };
 
+    getUnitResultsOutputFiles_MeteorMocha(locationName){
+
+        const location = TestOutputLocations.findOne({locationName: locationName});
+
+        if(location) {
+            return TestOutputLocationFiles.find({
+                locationId: location._id,
+                fileType: TestLocationFileType.UNIT,
+                testRunner: TestRunner.METEOR_MOCHA
+            }).fetch();
+        } else {
+            throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
+        }
+    };
+
     getMashTestResult(userContext, scenarioName){
 
         const testResult = UserWorkPackageMashData.findOne({
