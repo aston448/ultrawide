@@ -228,12 +228,29 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
-        };
+        const results = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PENDING
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_NOT_LINKED
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
@@ -255,12 +272,29 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
-        };
+        const results = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PENDING
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_NOT_LINKED
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
@@ -283,12 +317,29 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
-        };
+        const results = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PENDING
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_NOT_LINKED
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
@@ -311,12 +362,29 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
-        };
+        const results = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PENDING
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_NOT_LINKED
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
