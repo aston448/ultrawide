@@ -203,30 +203,9 @@ class TestIntegrationModules{
 
     getAcceptanceTestResults(userContext){
 
-        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
-        if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
-            return;
-        }
-
-        // Call the correct results service to get the test data
-
-        // switch (testRunner) {
-        //     case TestRunner.CHIMP_CUCUMBER:
-        //         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_CUCUMBER Results Data");
-        //         let testFile = userContext.acceptanceTestResultsLocation;
-        //
-        //         ChimpCucumberTestServices.getJsonTestResults(testFile, userContext.userId, TestType.ACCEPTANCE);
-        //         break;
-        //
-        // }
     };
 
     getIntegrationTestResults(userContext){
-
-        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
-        // if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
-        //     return;
-        // }
 
         // Clear existing results for user
         UserIntTestResults.remove({userId: userContext.userId});
@@ -289,11 +268,6 @@ class TestIntegrationModules{
     };
 
     getUnitTestResults(userContext){
-
-        // Don't bother if not actual Ultrawide instance.  Don't want test instance trying to read its own test data
-        if (ClientIdentityServices.getApplicationName() != 'ULTRAWIDE') {
-            return;
-        }
 
         // Clear existing results for user
         UserUnitTestResults.remove({userId: userContext.userId});
