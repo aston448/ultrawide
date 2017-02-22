@@ -42,8 +42,8 @@ describe('UC 310 - Refresh Test Data', function(){
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section2', 'Feature2');
-        // But make sure Scenario444 in Feature1 is not in scope
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario444');
+        // But make sure Scenario7 in Feature1 is not in scope
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario7');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
 

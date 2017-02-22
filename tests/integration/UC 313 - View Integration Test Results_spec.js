@@ -42,8 +42,8 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section2', 'Feature2');
-        // But make sure Scenario444 in Feature1 is not in scope
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario444');
+        // But make sure Scenario7 in Feature1 is not in scope
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario7');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
 
@@ -178,9 +178,9 @@ describe('UC 313 - View Integration Test Results', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
 
-        // Verify - Feature444 and Scenario444 are not included
+        // Verify - Feature444 and Scenario7 are not included
         expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeature('Feature444'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainScenario('Scenario444'));
+        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainScenario('Scenario7'));
     });
 
     it('A Feature Aspect is not shown in the test results if it contains no Scenarios', function(){

@@ -64,7 +64,7 @@ describe('UC 144 - Remove Design Component', function(){
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Remove Scenarios so Aspect can be removed
         DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444');
+        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario7');
         // There are originally 3 Actions in default data
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
 

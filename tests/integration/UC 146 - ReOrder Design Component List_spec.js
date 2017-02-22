@@ -179,10 +179,10 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         // Add another Scenario to Feature1 Actions
         DesignComponentActions.designerAddsScenarioToFeatureAspect_Called('Feature1', 'Actions', 'Scenario555');
-        // Check ordering is as created: Scenario1, Scenario444, Scenario555
+        // Check ordering is as created: Scenario1, Scenario7, Scenario555
         DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
-        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario444');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario7'));
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario7');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario555'));
 
         // Execute - move Scenario555 to above Scenario1
@@ -193,7 +193,7 @@ describe('UC 146 - ReOrder Design Component List', function(){
         DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario555');
         expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
         DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario444'));
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.SCENARIO, 'Actions', 'Scenario7'));
     });
 
 

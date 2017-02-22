@@ -87,15 +87,15 @@ describe('UC 312 - View Unit Test Results', function(){
                 ]
             },
             {
-                scenarioName: 'Scenario444',
+                scenarioName: 'Scenario7',
                 scenarioGroup: 'JSX Test',
                 unitResults: [
                     {
-                        resultName: 'Unit Test 4441',
+                        resultName: 'Unit Test 71',
                         resultOutcome: MashTestStatus.MASH_PASS
                     },
                     {
-                        resultName: 'Unit Test 4442',
+                        resultName: 'Unit Test 72',
                         resultOutcome: MashTestStatus.MASH_PASS
                     },
                 ]
@@ -118,8 +118,8 @@ describe('UC 312 - View Unit Test Results', function(){
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section2', 'Feature2');
-        // But make sure Scenario444 in Feature1 is not in scope
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario444');
+        // But make sure Scenario7 in Feature1 is not in scope
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario7');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
 
@@ -268,9 +268,9 @@ describe('UC 312 - View Unit Test Results', function(){
         ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
 
         // Verify - does not contain Scenario 444 and its unit tests
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainScenario('Scenario444'));
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario444', 'Unit Test 4441'));
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario444', 'Unit Test 4442'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainScenario('Scenario7'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario7', 'Unit Test 71'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario7', 'Unit Test 72'));
     });
 
     it('A Feature Aspect is not shown in the unit test results if it contains no Scenarios', function(){
