@@ -204,7 +204,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'ExtraAspect', 2));
     });
 
-    it('A Scenario name may not be part of an existing Scenario name in the Design Update or Base Design Version', function(){
+    it('An update Scenario name may not be part of an existing Scenario name in the Design Update or Base Design Version', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
@@ -224,7 +224,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
     });
 
-    it('A Scenario name may not include an existing Scenario name in the Design Update or Base Design Version', function(){
+    it('An update Scenario name may not include an existing Scenario name in the Design Update or Base Design Version', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');

@@ -481,18 +481,18 @@ class DesignComponentHeader extends Component{
 
         let item = this.props.designItem;
 
-        let success = false;
+        let result = {};
 
         // What is saved depends on the context
         switch (view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DEVELOP_BASE_WP:
                 // Updates to the base design
-                success = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
+                result = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 // Updates to a design update
-                success = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
+                result = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
 
             case ViewType.DEVELOP_UPDATE_WP:
@@ -500,7 +500,7 @@ class DesignComponentHeader extends Component{
 
         }
 
-        if(success){
+        if(result.success){
             // Finished editing
             this.setState({editable: false});
             this.setCurrentComponent();

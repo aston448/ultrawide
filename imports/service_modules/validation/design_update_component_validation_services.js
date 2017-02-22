@@ -184,7 +184,7 @@ class DesignUpdateComponentValidationServices{
             }
 
             if(superset){
-                return DesignUpdateComponentValidationErrors.DESIGN_UDATE_COMPONENT_INVALID_NAME_SUPERSET;
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_SUPERSET;
             }
         }
 
