@@ -68,7 +68,7 @@ class WorkPackageScenarioMashList extends Component {
         });
     };
 
-    renderModuleScenarios(mashData){
+    renderUnitScenarios(mashData){
 
         return mashData.map((mashItem) => {
             if(mashItem) {
@@ -106,7 +106,7 @@ class WorkPackageScenarioMashList extends Component {
             case DisplayContext.MASH_UNIT_TESTS:
                 return(
                     <div>
-                        {this.renderModuleScenarios(designMashItemData)}
+                        {this.renderUnitScenarios(designMashItemData)}
                     </div>
                 );
                 break;

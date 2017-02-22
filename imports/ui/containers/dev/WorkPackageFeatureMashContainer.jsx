@@ -252,8 +252,15 @@ class WorkPackageFeatureMashList extends Component {
                             break;
                         case DisplayContext.MASH_UNIT_TESTS:
                             // Show the module tests for the Scenario
-
-
+                            mainPanel =
+                                <Panel className="panel-text panel-text-body" header={panelHeader}>
+                                    <WorkPackageScenarioMashContainer params={{
+                                        userContext:    userContext,
+                                        parentMash:     null,
+                                        displayContext:  displayContext
+                                    }}/>
+                                </Panel>;
+                            break;
                     }
 
 
