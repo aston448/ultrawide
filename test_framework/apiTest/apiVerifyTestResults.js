@@ -24,6 +24,20 @@ Meteor.methods({
         }
     },
 
+    'verifyTestResults.scenarioUnitTestResultIs'(scenarioName, result, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const testResult = TestDataHelpers.getMashTestResult(userContext, scenarioName);
+
+
+        if (testResult.unitMashTestStatus != result) {
+            throw new Meteor.Error("FAIL", "Expecting test result " + result + " but got " + testResult.unitMashTestStatus + " for Scenario " + scenarioName);
+        } else {
+            return true;
+        }
+    },
+
     'verifyTestResults.testMashWindowContainsComponent'(componentType, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

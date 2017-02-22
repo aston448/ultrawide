@@ -5,6 +5,7 @@ import TestFixtures from './test_fixtures.js';
 
 class TestResultVerifications {
 
+    // INTEGRATION -----------------------------------------------------------------------------------------------------
     // Check test result
     developerIntegrationTestResultForScenario_Is(scenarioName, result) {
 
@@ -72,6 +73,17 @@ class TestResultVerifications {
         );
     }
 
+    // UNIT ------------------------------------------------------------------------------------------------------------
+    // Check test result
+    developerUnitTestResultForScenario_Is(scenarioName, result) {
+
+        server.call('verifyTestResults.scenarioUnitTestResultIs', scenarioName, result, 'hugh',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+
+    };
 }
 
 export default new TestResultVerifications();

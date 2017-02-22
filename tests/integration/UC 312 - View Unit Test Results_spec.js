@@ -27,20 +27,67 @@ import {ComponentType, TestLocationType, TestLocationAccessType, TestLocationFil
 
 describe('UC 312 - View Unit Test Results', function(){
 
-    // Expected test input is:
-    // results
-    //   scenarios[
-    //      scenario{
-    //          scenarioName
-    //          scenarioGroup
-    //          unitResults[
-    //              result{
-    //                  resultName
-    //                  resultOutcome
-    //              }
-    //          ]
-    //      }
-    //  ]
+    // Test results outside ULTRAWIDE
+    const results = {
+        scenarios: [
+            {
+                scenarioName: 'Scenario1',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 11',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                    {
+                        resultName: 'Unit Test 12',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                ]
+            },
+            {
+                scenarioName: 'Scenario2',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 21',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                    {
+                        resultName: 'Unit Test 22',
+                        resultOutcome: MashTestStatus.MASH_FAIL
+                    },
+                ]
+            },
+            {
+                scenarioName: 'Scenario3',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 31',
+                        resultOutcome: MashTestStatus.MASH_FAIL
+                    },
+                    {
+                        resultName: 'Unit Test 32',
+                        resultOutcome: MashTestStatus.MASH_PENDING
+                    },
+                ]
+            },
+            {
+                scenarioName: 'Scenario4',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 41',
+                        resultOutcome: MashTestStatus.MASH_NOT_LINKED
+                    },
+                    {
+                        resultName: 'Unit Test 42',
+                        resultOutcome: MashTestStatus.MASH_NOT_LINKED
+                    },
+                ]
+            }
+        ]
+    };
 
     before(function(){
 
@@ -95,69 +142,6 @@ describe('UC 312 - View Unit Test Results', function(){
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.developerSelectsUnitTestsInConfigForLocation('Location1');
 
-        // TEMP - Test out file output
-        const results = {
-            scenarios: [
-                {
-                    scenarioName: 'Scenario1',
-                    scenarioGroup: 'JSX Test',
-                    unitResults: [
-                        {
-                            resultName: 'Unit Test 11',
-                            resultOutcome: MashTestStatus.MASH_PASS
-                        },
-                        {
-                            resultName: 'Unit Test 12',
-                            resultOutcome: MashTestStatus.MASH_PASS
-                        },
-                    ]
-                },
-                {
-                    scenarioName: 'Scenario2',
-                    scenarioGroup: 'JSX Test',
-                    unitResults: [
-                        {
-                            resultName: 'Unit Test 21',
-                            resultOutcome: MashTestStatus.MASH_PASS
-                        },
-                        {
-                            resultName: 'Unit Test 22',
-                            resultOutcome: MashTestStatus.MASH_FAIL
-                        },
-                    ]
-                },
-                {
-                    scenarioName: 'Scenario3',
-                    scenarioGroup: 'JSX Test',
-                    unitResults: [
-                        {
-                            resultName: 'Unit Test 31',
-                            resultOutcome: MashTestStatus.MASH_FAIL
-                        },
-                        {
-                            resultName: 'Unit Test 32',
-                            resultOutcome: MashTestStatus.MASH_PENDING
-                        },
-                    ]
-                },
-                {
-                    scenarioName: 'Scenario4',
-                    scenarioGroup: 'JSX Test',
-                    unitResults: [
-                        {
-                            resultName: 'Unit Test 41',
-                            resultOutcome: MashTestStatus.MASH_PENDING
-                        },
-                        {
-                            resultName: 'Unit Test 42',
-                            resultOutcome: MashTestStatus.MASH_PENDING
-                        },
-                    ]
-                }
-            ]
-        };
-
-        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results)
 
     });
 
@@ -207,10 +191,71 @@ describe('UC 312 - View Unit Test Results', function(){
 
     it('A Feature Aspect is not shown in the unit test results if it contains no Scenarios');
 
-    it('A Scenario with no unit results is shown as Not Tested');
+    it('A Scenario with no unit results is shown as Not Tested', function(){
 
-    it('A Scenario with any failing unit test results is shown as Fail');
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
-    it('A Scenario with all passing unit test results is shown as Pass');
+        // Tests are run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
+
+        // Open the Unit Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - scenario 4 is not tested as no tests
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
+
+
+    });
+
+    it('A Scenario with any failing unit test results is shown as Fail', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Tests are run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
+
+        // Open the Unit Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - scenario 2 and 3 both failed as have 1 failure
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_FAIL));
+
+    });
+
+    it('A Scenario with all passing unit test results is shown as Pass', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Tests are run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
+
+        // Open the Unit Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - scenario 1 passed as all tests passed
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+    });
 
 });
