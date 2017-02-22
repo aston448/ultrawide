@@ -26,6 +26,9 @@ class WpComponentActions{
         server.call('testWorkPackageComponents.selectWorkPackageComponent', type, parentName, name, 'miles');
     }
 
+    developerSelectsWorkPackageComponent(type, parentName, name){
+        server.call('testWorkPackageComponents.selectWorkPackageComponent', type, parentName, name, 'hugh');
+    }
 
     // Specific Scoping - Add
     managerAddsApplicationToScopeForCurrentBaseWp(appName, expectation){

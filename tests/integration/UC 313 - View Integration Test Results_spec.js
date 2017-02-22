@@ -99,22 +99,6 @@ describe('UC 313 - View Integration Test Results', function(){
     });
 
 
-    // Interface
-    it('A list of Scenarios and their integration test status is shown for an Application selected in a Work Package');
-
-    it('A list of Scenarios and their integration test status is shown for a Design Section selected in a Work Package');
-
-    it('A list of Scenarios and their integration test status is shown for a Feature selected in a Work Package');
-
-    it('A list of Scenarios and their integration test status is shown for a Feature Aspect selected in a Work Package');
-
-    it('Scenarios are grouped by Design Section, Feature and Feature Aspect when listed');
-
-    it('The integration test result is shown for a failing test Scenario');
-
-    it('The integration test execution time is shown for a passing Scenario');
-
-
     // Actions
     it('The integration test results panel may be displayed for a Work Package that is being developed by a Developer', function(){
 

@@ -17,6 +17,7 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserWorkPackageMashData }  from '../../imports/collections/dev/user_work_package_mash_data.js';
+import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
@@ -532,6 +533,49 @@ class TestDataHelpers {
             return testResult
         } else {
             throw new Meteor.Error("FAIL", "Test Result not found  for Scenario " + scenarioName + " in user context DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
+        }
+    };
+
+    getUnitTestResult(userContext, scenarioName, unitTestName, expectFailure = false){
+
+        let testScenario = null;
+
+        if(userContext.designUpdateId === 'NONE'){
+            testScenario = DesignComponents.findOne({
+                designVersionId:    userContext.designVersionId,
+                componentName:      scenarioName
+            });
+        } else {
+            testScenario = DesignUpdateComponents.findOne({
+                designVersionId:    userContext.designVersionId,
+                designUpdateId:     userContext.designUpdateId,
+                componentNameNew:   scenarioName
+            });
+        }
+
+        if(testScenario){
+
+            // Assumption that unit test names are unique in a scenario in the test data
+            const unitTestResult = UserUnitTestMashData.findOne({
+                designScenarioReferenceId:  testScenario.componentReferenceId,
+                testName:                   unitTestName
+            });
+
+            if(unitTestResult){
+                if(expectFailure){
+                    throw new Meteor.Error("FAIL", "Unit Test Result WAS found for test " + unitTestName + " in Scenario " + scenarioName);
+                } else {
+                    return unitTestResult;
+                }
+            } else {
+                if(expectFailure){
+                    return true;
+                } else {
+                    throw new Meteor.Error("FAIL", "Unit Test Result not found for test " + unitTestName + " in Scenario " + scenarioName);
+                }
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "Test Scenario " + scenarioName + " not found in design");
         }
     }
 

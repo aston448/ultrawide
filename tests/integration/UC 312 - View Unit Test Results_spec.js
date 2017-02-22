@@ -85,6 +85,20 @@ describe('UC 312 - View Unit Test Results', function(){
                         resultOutcome: MashTestStatus.MASH_NOT_LINKED
                     },
                 ]
+            },
+            {
+                scenarioName: 'Scenario444',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 4441',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                    {
+                        resultName: 'Unit Test 4442',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                ]
             }
         ]
     };
@@ -151,6 +165,8 @@ describe('UC 312 - View Unit Test Results', function(){
 
     beforeEach(function(){
 
+        // Ensure default view options before each test
+        TestFixtures.resetUserViewOptions();
     });
 
     afterEach(function(){
@@ -158,38 +174,116 @@ describe('UC 312 - View Unit Test Results', function(){
     });
 
 
-    // Interface
-    it('A list of Features, Feature Aspects, Scenarios and the unit tests for each Scenario is shown for an Application selected in a Work Package');
-
-    it('A list of Features, Feature Aspects, Scenarios and the unit tests for each Scenario is shown for a Design Section selected in a Work Package');
-
-    it('A list of Feature Aspects, Scenarios and the unit tests for each Scenario is shown for a Feature selected in a Work Package');
-
-    it('A list of Scenarios and the unit tests for each Scenario is shown for a Feature Aspect selected in a Work Package');
-
-    it('A list of unit tests for the Scenario is shown for a Scenario selected in a Work Package');
-
-    it('A Scenario has a unit test status that reflects the status of the unit tests for that Scenario');
-
-    it('Each unit test displays the test status for that unit test');
-
-    it('A failed unit test displays the failure reason');
-
-    it('A passing unit test displays the execution time');
-
-
     // Actions
-    it('The unit test results panel may be displayed for a Work Package that is being developed by a Developer');
+    it('The unit test results panel may be displayed for a Work Package that is being developed by a Developer', function(){
 
-    it('The unit test results panel may be hidden for a Work Package that is being developed by a Developer');
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Execute
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+    });
+
+    it('The unit test results panel may be hidden for a Work Package that is being developed by a Developer', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+
+        // Execute
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+    });
 
 
     // Conditions
-    it('Unit test results include all Features and Scenarios in the Work Package scope');
+    it('Unit test results include all Features and Scenarios in the Work Package scope', function(){
 
-    it('Unit test results do not include Features or Scenarios outside the Work Package');
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
-    it('A Feature Aspect is not shown in the unit test results if it contains no Scenarios');
+        // Open the Unit Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects plus the unit tests available
+        expect(TestResultVerifications.developerUnitTestsWindowContainsFeature('Feature1'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature1', 'Actions'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario1'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature1', 'Conditions'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario2'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario2', 'Unit Test 21'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario2', 'Unit Test 22'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsFeature('Feature2'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature2', 'Actions'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario3'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario3', 'Unit Test 31'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario3', 'Unit Test 32'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature2', 'Conditions'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario4'));
+        // But non tested tests are not there
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario4', 'Unit Test 41'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario4', 'Unit Test 42'));
+    });
+
+    it('Unit test results do not include Features or Scenarios outside the Work Package', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Open the Unit Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - does not contain Scenario 444 and its unit tests
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainScenario('Scenario444'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario444', 'Unit Test 4441'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario444', 'Unit Test 4442'));
+    });
+
+    it('A Feature Aspect is not shown in the unit test results if it contains no Scenarios', function(){
+
+        // Setup
+        // Developer goes to WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Open the Unit Tests window - this should load the expected data
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+
+        // Verify - does not contain Feature 1 Interface and Consequences
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainFeatureAspect('Feature1', 'Interface'));
+        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainFeatureAspect('Feature1', 'Consequences'));
+    });
 
     it('A Scenario with no unit results is shown as Not Tested', function(){
 

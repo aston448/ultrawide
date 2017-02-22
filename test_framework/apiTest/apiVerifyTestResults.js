@@ -38,6 +38,19 @@ Meteor.methods({
         }
     },
 
+    'verifyTestResults.unitTestResultIs'(scenarioName, unitTestName, result, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName);
+
+        if (testResult.testOutcome != result) {
+            throw new Meteor.Error("FAIL", "Expecting unit test result " + result + " but got " + testResult.testOutcome + " for Scenario " + scenarioName + " unit test " + unitTestName);
+        } else {
+            return true;
+        }
+    },
+
     'verifyTestResults.testMashWindowContainsComponent'(componentType, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -58,6 +71,14 @@ Meteor.methods({
         }
     },
 
+    'verifyTestResults.testMashWindowContainsUnitTest'(scenarioName, unitTestName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // This will error if not found
+        const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName);
+    },
+
     'verifyTestResults.testMashWindowDoesNotContainComponent'(componentType, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -76,6 +97,14 @@ Meteor.methods({
         } else {
             return true;
         }
+    },
+
+    'verifyTestResults.testMashWindowDoesNotContainUnitTest'(scenarioName, unitTestName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // This will error if not found so pass in expect failure
+        const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName, true);
     },
 
     'verifyTestResults.testMashWindowContainsFeatureAspect'(featureName, aspectName, userName){
