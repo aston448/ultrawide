@@ -204,6 +204,46 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'ExtraAspect', 2));
     });
 
+    it('A Scenario name may not be part of an existing Scenario name in the Design Update or Base Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // Add Scenario
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Interface');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Interface');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
+
+        // Try to call it Scenar
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Interface', DefaultComponentNames.NEW_SCENARIO_NAME);
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_SUBSET};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenar', expectation);
+
+        // Verify - still 1 of each
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
+    });
+
+    it('A Scenario name may not include an existing Scenario name in the Design Update or Base Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // Add Scenario
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Interface');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Interface');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
+
+        // Try to call it Scenario1 Extra
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Interface', DefaultComponentNames.NEW_SCENARIO_NAME);
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_SUPERSET};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario1 Extra', expectation);
+
+        // Verify - still 1 of each
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario1', 1));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
+    });
+
 
     // Consequences
     it('Updating the name of a Design Update Component updates it in any Work Package that includes the Design Update Component', function(){

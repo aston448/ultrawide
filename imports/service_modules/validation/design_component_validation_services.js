@@ -107,8 +107,6 @@ class DesignComponentValidationServices{
 
             if(duplicate){
                 return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT;
-            } else {
-                return Validation.VALID;
             }
         } else {
 
@@ -123,10 +121,37 @@ class DesignComponentValidationServices{
 
             if(duplicate){
                 return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE;
-            } else {
-                return Validation.VALID;
             }
         }
+
+        // A Scenario name must not be the subset or superset of another Scenario name
+        if(componentType === ComponentType.SCENARIO){
+
+            let subset = false;
+            let superset = false;
+
+            existingComponents.forEach((component) => {
+
+                if(component.componentName.includes(newName)){
+                    subset = true;
+                }
+
+                if(newName.includes(component.componentName)){
+                    superset = true;
+                }
+            });
+
+            if(subset){
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_SUBSET;
+            }
+
+            if(superset){
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_SUPERSET;
+            }
+        }
+
+
+        return Validation.VALID;
     };
 
     validateUpdateFeatureNarrative(view, mode){

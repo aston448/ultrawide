@@ -200,6 +200,44 @@ describe('UC 143 - Edit Design Component Name', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Aspect1', 'Design1', 'DesignVersion1', 2));
     });
 
+    it('A Scenario name may not be part of an existing Scenario name in the Design', function(){
+
+        // Setup
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
+        // Check both scenarios are there
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
+
+        // Execute - try to update Scenario2 to Scenar
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_SUBSET};
+        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenar', expectation);
+
+        // Verify - not changed to Scenar - should still be Scenario2
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
+    });
+
+    it('A Scenario name may not include the name of an existing Scenario in the Design', function(){
+
+        // Setup
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
+        // Check both scenarios are there
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
+
+        // Execute - try to update Scenario2 to Scenario1 Extra
+        DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_SUPERSET};
+        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenario1 Extra', expectation);
+
+        // Verify - not changed to Scenario1 Extra - should still be Scenario2
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario2', 'Design1', 'DesignVersion1', 1));
+    });
+
 
     // Consequences
     it('Updating the name of a Design Component in a base Design Version updates it in any related Work Package', function(){

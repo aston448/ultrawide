@@ -95,6 +95,8 @@ export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_INVALID_REORDER:           'This Design Component cannot be moved to the location where it was dropped',
     DESIGN_COMPONENT_INVALID_NAME_DUPLICATE:    'This Design Component cannot have the same name as another component of the same type in this Design Version',
     DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT: 'This Design Component cannot have the same name as another component of the same type under the same parent',
+    DESIGN_COMPONENT_INVALID_NAME_SUBSET:       'This Scenario cannot have a name that is a part of an existing Scenario name',
+    DESIGN_COMPONENT_INVALID_NAME_SUPERSET:     'This Scenario cannot have a name that contains an existing Scenario name',
     DESIGN_COMPONENT_NOT_REMOVABLE:             'A Design Component containing other components is not removable.  Delete from bottom up to remove.',
     DESIGN_COMPONENT_NOT_REMOVABLE_DEV:         'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
     DESIGN_COMPONENT_NOT_WP_UPDATABLE:          'A Design Component is only updatable from a WP if is a Scenario or is a Feature Aspect added by the Developer'
@@ -123,6 +125,8 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_INVALID_REORDER_EXISTING:           'Existing Design Components cannot be reordered in a Design Update',
     DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE:             'This Design Update Component cannot have the same name as another component of the same type in this Design Version',
     DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT:  'This Design Update Component cannot have the same name as another component of the same type under the same parent',
+    DESIGN_UPDATE_COMPONENT_INVALID_NAME_SUBSET:                'This Scenario cannot have a name that is a part of an existing Scenario name',
+    DESIGN_UPDATE_COMPONENT_INVALID_NAME_SUPERSET:              'This Scenario cannot have a name that contains an existing Scenario name',
     DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE:                      'A Design Update Component containing other components is not removable.  Delete from bottom up to remove',
     DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_NEW:                  'A Design Update Component containing NEW components added in this or another update is not removable',
     DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_SCOPE:                'A Design Update Component containing IN SCOPE components in another update is not removable',
