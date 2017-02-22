@@ -222,6 +222,9 @@ describe('UC 312 - View Unit Test Results', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
+        // Tests are run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
+
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
@@ -257,6 +260,9 @@ describe('UC 312 - View Unit Test Results', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
 
+        // Tests are run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
+
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
@@ -275,6 +281,9 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+
+        // Tests are run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
