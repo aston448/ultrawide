@@ -103,12 +103,29 @@ describe('UC 310 - Refresh Test Data', function(){
 
         // Setup - run tests...
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
-        };
+        const results = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PENDING
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_NOT_LINKED
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Go to WP and look at results
@@ -127,12 +144,29 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
 
         // New Test Run after Scenario4 test added and Scenario3 run...
-        const newResults = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PASS,
-            scenario4Result: MashTestStatus.MASH_FAIL,
-        };
+        const newResults = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_FAIL
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newResults);
 
         // Not changed in Ultrawide yet...
@@ -164,12 +198,29 @@ describe('UC 310 - Refresh Test Data', function(){
 
         // Setup - run tests...
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PENDING,
-            scenario4Result: MashTestStatus.MASH_NOT_LINKED,
-        };
+        const results = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PENDING
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_NOT_LINKED
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Go to WP and look at results
@@ -188,12 +239,29 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
 
         // New Test Run after Scenario4 test added and Scenario3 run...
-        const newResults = {
-            scenario1Result: MashTestStatus.MASH_PASS,
-            scenario2Result: MashTestStatus.MASH_FAIL,
-            scenario3Result: MashTestStatus.MASH_PASS,
-            scenario4Result: MashTestStatus.MASH_FAIL,
-        };
+        const newResults = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario1',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_FAIL
+            }
+        ];
+
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newResults);
 
         // Not changed in Ultrawide yet...
