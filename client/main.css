@@ -370,6 +370,18 @@ input {
     margin: 0 5px 0 0;
 }
 
+.adopter{
+    margin: 3px 0 3px 0;
+    padding: 2px 0 2px 5px;
+    border: 1px solid indianred;
+    border-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: normal;
+    color: indianred;
+    background-color: pink;
+}
+
 .test-output-location-edit{
     margin: 10px;
     padding: 10px;
@@ -412,6 +424,7 @@ input {
     border-radius: 4px;
     background-color: #EEFFEE;
 }
+
 
 /* -- Role Selection ------------------------------------------------------------------------------------------------ */
 

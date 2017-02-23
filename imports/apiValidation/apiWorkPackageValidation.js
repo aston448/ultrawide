@@ -90,12 +90,11 @@ class WorkPackageValidationApi {
         return WorkPackageValidationServices.validateViewWorkPackage(userRole, wp.workPackageStatus);
     };
 
-    validateDevelopWorkPackage(userRole, workPackageId){
+    validateDevelopWorkPackage(userRole, userId, workPackageId){
 
-        //TODO add in adoption validation
         const wp = WorkPackages.findOne({_id: workPackageId});
 
-        return WorkPackageValidationServices.validateDevelopWorkPackage(userRole, wp.workPackageStatus);
+        return WorkPackageValidationServices.validateDevelopWorkPackage(userRole, userId, wp);
     };
 }
 

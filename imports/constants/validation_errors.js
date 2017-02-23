@@ -82,6 +82,7 @@ export const WorkPackageValidationErrors = {
     WORK_PACKAGE_INVALID_STATE_REMOVE:          'Only new Work Packages can be removed',
     WORK_PACKAGE_INVALID_ROLE_DEVELOP:          'Only a Developer can develop Work Packages',
     WORK_PACKAGE_INVALID_STATE_DEVELOP:         'Only Adopted Work Packages can be developed',
+    WORK_PACKAGE_INVALID_USER_DEVELOP:          'Only the adopting user may develop a work package',
     WORK_PACKAGE_INVALID_TYPE:                  'Unknown type for Work Package'
 };
 

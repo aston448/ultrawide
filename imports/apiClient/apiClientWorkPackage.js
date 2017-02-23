@@ -1,8 +1,9 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import { WorkPackages } from '../collections/work/work_packages.js';
-import { WorkPackageComponents } from '../collections/work/work_package_components.js';
+import { WorkPackages }             from '../collections/work/work_packages.js';
+import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
+import { UserRoles }                from '../collections/users/user_roles.js';
 
 // Ultrawide Services
 import { RoleType, ViewType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus, MessageType} from '../constants/constants.js';
@@ -466,11 +467,11 @@ class ClientWorkPackageServices {
 
     };
 
-    // Developer chose to work on a work package
+    // Developer chose to work on a work package -----------------------------------------------------------------------
     developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId, testDataFlag, mashDataStale){
 
         // Client validation
-        let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, wpToDevelopId);
+        let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, userContext.userId, wpToDevelopId);
 
         if(result != Validation.VALID){
 
@@ -495,6 +496,18 @@ class ClientWorkPackageServices {
 
         return {success: true, message: ''};
 
+    };
+
+    // Return the adopter for a WP -------------------------------------------------------------------------------------
+    getAdopterName(userId){
+
+        const user = UserRoles.findOne({userId: userId});
+
+        if(user){
+            return user.displayName;
+        } else {
+            return 'Unknown User'
+        }
     }
 }
 

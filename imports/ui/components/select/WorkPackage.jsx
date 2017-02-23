@@ -122,45 +122,11 @@ export class WorkPackage extends Component {
             this.props.testDataFlag,
             this.props.mashDataStale
         );
+    };
+
+    getAdopterName(userId){
+        return ClientWorkPackageServices.getAdopterName(userId)
     }
-
-    // getUpdateAdoptionStatus(devContext, du){
-    //
-    //     // Return true if we have updates in the dev context and this one is included
-    //     if(devContext.designUpdateIds){
-    //         return devContext.designUpdateIds.includes(du._id);
-    //     } else {
-    //         return false;
-    //     }
-    // };
-
-    // setUpdateAdoptionStatus(e, du, duList, context){
-    //
-    //     console.log("ON CHANGE: " + e.target.checked);
-    //
-    //     let checked = e.target.checked;
-    //
-    //     // If ticking add to list, if unticking subtract from it.
-    //     // State change depends on actual success of update not on ticking
-    //
-    //     if(this.state.adopted && !checked){
-    //         if(ClientDesignUpdateServices.setUpdateAdoptionStatus(du, duList, 'SUBTRACT', context.designId)) {
-    //             this.setState({adopted: false});
-    //             return;
-    //         } else {
-    //             //TODO warn user that it failed
-    //         }
-    //     }
-    //
-    //     if(!this.state.adopted && checked) {
-    //         if(ClientDesignUpdateServices.setUpdateAdoptionStatus(du, duList, 'ADD', context.designId)){
-    //             this.setState({adopted: true});
-    //             return;
-    //         } else {
-    //             //TODO warn user that it failed
-    //         }
-    //     }
-    // }
 
     render() {
         const {workPackage, userRole, viewOptions, userContext} = this.props;
@@ -171,6 +137,7 @@ export class WorkPackage extends Component {
 
         let buttons = '';
         let options = '';
+        let adopter = <div></div>;
 
         switch(workPackage.workPackageStatus){
             case WorkPackageStatus.WP_NEW:
@@ -250,6 +217,9 @@ export class WorkPackage extends Component {
                             </ButtonGroup>;
                         break;
                 }
+                // Set up label to show who has adopted
+                adopter = <div className="adopter">{'Adopted by ' + this.getAdopterName(workPackage.adoptingUserId)}</div>;
+
                 break;
             case WorkPackageStatus.WP_COMPLETE:
                 // View only for everyone
@@ -270,6 +240,7 @@ export class WorkPackage extends Component {
                     currentItemStatus={workPackage.workPackageStatus}
                     onSelectItem={ () => this.onSelectWorkPackage(userRole, userContext, workPackage) }
                 />
+                {adopter}
                 {buttons}
             </div>
         );
