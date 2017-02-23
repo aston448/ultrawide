@@ -73,14 +73,14 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute
         WorkPackageActions.developerReleasesSelectedWorkPackage();
 
         // Verify
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 
     });
@@ -93,7 +93,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute
@@ -103,7 +103,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.managerReleasesSelectedWorkPackage();
 
         // Verify
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
     });
 
@@ -117,7 +117,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute
@@ -128,7 +128,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.designerReleasesSelectedWorkPackage(expectation);
 
         // Verify - not changed
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
     });
 
@@ -140,7 +140,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.anotherDeveloperSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.anotherDeveloperAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForAnotherDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
 
         // Execute - first developer tries to release it
@@ -151,7 +151,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerReleasesSelectedWorkPackage(expectation);
 
         // Verify - no change
-        expect(WorkPackageVerifications.workPackage_StatusForAnotherDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
     });
 
@@ -161,7 +161,7 @@ describe('UC 302 - Release Work Package', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 
         // Execute - try to release Available WP
@@ -169,7 +169,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerReleasesSelectedWorkPackage(expectation);
 
         // Verify - no change
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 
         // Manager withdraw WP
@@ -181,14 +181,14 @@ describe('UC 302 - Release Work Package', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_NEW));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_NEW));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 
         // Execute - try to release New WP - same expectation
         WorkPackageActions.developerReleasesSelectedWorkPackage(expectation);
 
         // Verify - no change
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
     });
 

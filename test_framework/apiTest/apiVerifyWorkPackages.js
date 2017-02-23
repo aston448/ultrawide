@@ -30,6 +30,18 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackages.currentWorkPackageStatusIs'(newStatus, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+
+        if(workPackage.workPackageStatus === newStatus){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected WP status " + newStatus + " but has status " + workPackage.workPackageStatus);
+        }
+    },
+
     'verifyWorkPackages.currentWorkPackageNameIs'(workPackageName, userName){
 
         // WP must be selected by user before this test will work
@@ -59,9 +71,7 @@ Meteor.methods({
         // WP must be selected by user before this test will work
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const workPackage = WorkPackages.findOne({
-            _id: userContext.workPackageId
-        });
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         if(workPackage) {
             const adopterUser = TestDataHelpers.getUser(adopterName);
@@ -71,8 +81,6 @@ Meteor.methods({
             } else {
                 throw new Meteor.Error("FAIL", "Expected WP adopter to be " + adopterName + " but got " + adopterUser.userName);
             }
-        } else {
-            throw new Meteor.Error("FAIL", "No current WP found for user " + userName);
         }
     },
 
@@ -81,9 +89,7 @@ Meteor.methods({
         // WP must be selected by user before this test will work
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const workPackage = WorkPackages.findOne({
-            _id: userContext.workPackageId
-        });
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         if(workPackage) {
             if (workPackage.adoptingUserId === 'NONE') {
@@ -91,8 +97,6 @@ Meteor.methods({
             } else {
                 throw new Meteor.Error("FAIL", "Expected WP adopter to be NONE but got user id" + aworkPackage.adoptingUserId);
             }
-        } else {
-            throw new Meteor.Error("FAIL", "No current WP found for user " + userName);
         }
     },
 

@@ -68,6 +68,39 @@ class WorkPackageVerifications{
         );
     }
 
+    currentDeveloperWorkPackageStatusIs(wpStatus){
+        server.call('verifyWorkPackages.currentWorkPackageStatusIs', wpStatus, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    currentAnotherDeveloperWorkPackageStatusIs(wpStatus){
+        server.call('verifyWorkPackages.currentWorkPackageStatusIs', wpStatus, 'davey',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    currentManagerWorkPackageStatusIs(wpStatus){
+        server.call('verifyWorkPackages.currentWorkPackageStatusIs', wpStatus, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    currentDesignerWorkPackageStatusIs(wpStatus){
+        server.call('verifyWorkPackages.currentWorkPackageStatusIs', wpStatus, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+
     currentManagerWorkPackageIs(workPackageName){
         server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'miles',
             (function(error, result){
