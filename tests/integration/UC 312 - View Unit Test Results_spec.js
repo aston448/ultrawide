@@ -182,7 +182,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
@@ -199,7 +200,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
@@ -220,7 +222,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
@@ -258,7 +261,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
@@ -280,7 +284,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
@@ -301,7 +306,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
@@ -324,7 +330,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
@@ -347,7 +354,8 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);

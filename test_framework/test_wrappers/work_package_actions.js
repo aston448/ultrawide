@@ -122,7 +122,7 @@ class WorkPackageActions{
     }
 
     // Develop
-    developerDevelopsSelectedBaseWorkPackage(expectation){
+    developerDevelopsSelectedWorkPackage(expectation){
         server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation)
     }
 

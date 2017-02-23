@@ -106,7 +106,8 @@ describe('UC 311 - Refresh Design Test Mash Data', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));

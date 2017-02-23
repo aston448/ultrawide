@@ -150,7 +150,7 @@ describe('UC 420 - Update Working Design Version', function(){
         UpdateComponentActions.designerAddsApplicationCalled('Application2');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section20');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application2', 'Section20', 'Feature20');
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature20', 'Actions', 'Scenario20');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature20', 'Actions', 'Scenario8');
         // Rename existing Feature2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section2', 'Feature2');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature22');
@@ -175,8 +175,8 @@ describe('UC 420 - Update Working Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion1', 3));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion2', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion1', 0));
         // The renamed feature
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion2', 1));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion1', 0));
@@ -196,7 +196,7 @@ describe('UC 420 - Update Working Design Version', function(){
         UpdateComponentActions.designerAddsApplicationCalled('Application2');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application2', 'Section20');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application2', 'Section20', 'Feature20');
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature20', 'Actions', 'Scenario20');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature20', 'Actions', 'Scenario8');
         // Rename existing Feature2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section2', 'Feature2');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature22');
@@ -221,8 +221,8 @@ describe('UC 420 - Update Working Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion2', 5));  // Now 5 features in total as 2 added
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion1', 3));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion2', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion2', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion1', 0));
         // The renamed feature
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion2', 1));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion1', 0));
@@ -254,8 +254,8 @@ describe('UC 420 - Update Working Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Conditions', 'Design1', 'DesignVersion1', 3));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion2', 4));  // Now 4 features in total as 1 added
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Consequences', 'Design1', 'DesignVersion1', 3));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion2', 0));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario20', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion2', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion1', 0));
         // The renamed feature is not renamed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion2', 0));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature22', 'Design1', 'DesignVersion1', 0));

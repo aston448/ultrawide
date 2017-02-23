@@ -132,7 +132,8 @@ describe('UC 310 - Refresh Test Data', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
@@ -227,7 +228,8 @@ describe('UC 310 - Refresh Test Data', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerDevelopsSelectedBaseWorkPackage();
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
