@@ -14,6 +14,10 @@ class DesignVersionActions{
         server.call('testDesignVersions.selectDesignVersion', versionName, 'hugh');
     }
 
+    anotherDeveloperSelectsDesignVersion(versionName){
+        server.call('testDesignVersions.selectDesignVersion', versionName, 'davey');
+    }
+
     managerSelectsDesignVersion(versionName){
         server.call('testDesignVersions.selectDesignVersion', versionName, 'miles');
     }

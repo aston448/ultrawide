@@ -54,6 +54,48 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackages.currentWorkPackageAdopterIs'(adopterName, userName){
+
+        // WP must be selected by user before this test will work
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const workPackage = WorkPackages.findOne({
+            _id: userContext.workPackageId
+        });
+
+        if(workPackage) {
+            const adopterUser = TestDataHelpers.getUser(adopterName);
+
+            if (workPackage.adoptingUserId === adopterUser._id) {
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expected WP adopter to be " + adopterName + " but got " + adopterUser.userName);
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "No current WP found for user " + userName);
+        }
+    },
+
+    'verifyWorkPackages.currentWorkPackageHasNoAdopter'(userName){
+
+        // WP must be selected by user before this test will work
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const workPackage = WorkPackages.findOne({
+            _id: userContext.workPackageId
+        });
+
+        if(workPackage) {
+            if (workPackage.adoptingUserId === 'NONE') {
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expected WP adopter to be NONE but got user id" + aworkPackage.adoptingUserId);
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "No current WP found for user " + userName);
+        }
+    },
+
     'verifyWorkPackages.workPackageExistsCalled'(workPackageName, userName){
 
         // For testing that WP creation succeeded.  Make sure WP is unique

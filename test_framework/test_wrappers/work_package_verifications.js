@@ -44,6 +44,30 @@ class WorkPackageVerifications{
         );
     }
 
+    workPackage_StatusForDeveloperIs(wpName, wpStatus){
+        server.call('verifyWorkPackages.workPackageStatusIs', wpName, wpStatus, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    workPackage_StatusForAnotherDeveloperIs(wpName, wpStatus){
+        server.call('verifyWorkPackages.workPackageStatusIs', wpName, wpStatus, 'davey',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    workPackage_StatusForDesignerIs(wpName, wpStatus){
+        server.call('verifyWorkPackages.workPackageStatusIs', wpName, wpStatus, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     currentManagerWorkPackageIs(workPackageName){
         server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'miles',
             (function(error, result){
@@ -62,6 +86,46 @@ class WorkPackageVerifications{
 
     currentDesignerWorkPackageIs(workPackageName){
         server.call('verifyWorkPackages.currentWorkPackageNameIs', workPackageName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper(){
+        server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    currentDeveloperWorkPackageAdopterIsAdoptedByAnotherDeveloper(){
+        server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'davey', 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    currentDesignerWorkPackageAdopterIsAdoptedByDeveloper(){
+        server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    currentManagerWorkPackageAdopterIsAdoptedByDeveloper(){
+        server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    currentDeveloperWorkPackageHasNoAdopter(){
+        server.call('verifyWorkPackages.currentWorkPackageHasNoAdoper', 'hugh',
             (function(error, result){
                 return(error === null);
             })

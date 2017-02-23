@@ -34,6 +34,11 @@ class WorkPackageActions{
         server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DEVELOPER, 'hugh');
     }
 
+    anotherDeveloperSelectsWorkPackage(wpName){
+        server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DEVELOPER, 'davey');
+    }
+
+
     designerSelectsWorkPackage(wpName){
         server.call('testWorkPackages.selectWorkPackage', wpName, RoleType.DESIGNER, 'gloria');
     }
@@ -100,6 +105,10 @@ class WorkPackageActions{
         server.call('testWorkPackages.adoptSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation);
     }
 
+    anotherDeveloperAdoptsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.adoptSelectedWorkPackage', 'davey', RoleType.DEVELOPER, expectation);
+    }
+
     designerAdoptsSelectedWorkPackage(expectation){
         server.call('testWorkPackages.adoptSelectedWorkPackage', 'gloria', RoleType.DESIGNER, expectation);
     }
@@ -124,6 +133,18 @@ class WorkPackageActions{
     // Develop
     developerDevelopsSelectedWorkPackage(expectation){
         server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation)
+    }
+
+    anotherDeveloperDevelopsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.developSelectedWorkPackage', 'davey', RoleType.DEVELOPER, expectation)
+    }
+
+    managerDevelopsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.developSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation)
+    }
+
+    designerDevelopsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.developSelectedWorkPackage', 'gloria', RoleType.DESIGNER, expectation)
     }
 
 

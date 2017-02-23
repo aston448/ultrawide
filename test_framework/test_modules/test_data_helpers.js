@@ -67,6 +67,17 @@ class TestDataHelpers {
         }
     };
 
+    getUser(userName){
+
+        const user = UserRoles.findOne({userName: userName});
+
+        if(user){
+            return user;
+        } else {
+            throw new Meteor.Error("FAIL", "User not found for " + userName);
+        }
+    }
+
     getUserContext(userName){
 
         const user = UserRoles.findOne({userName: userName});

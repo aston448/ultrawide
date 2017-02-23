@@ -58,6 +58,10 @@ class DesignActions{
         server.call('testDesigns.workDesign', designName, 'hugh', expectation);
     }
 
+    anotherDeveloperWorksOnDesign(designName, expectation){
+        server.call('testDesigns.workDesign', designName, 'davey', expectation);
+    }
+
     managerWorksOnDesign(designName, expectation){
         server.call('testDesigns.workDesign', designName, 'miles', expectation);
     }
