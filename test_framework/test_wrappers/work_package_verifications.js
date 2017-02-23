@@ -92,7 +92,7 @@ class WorkPackageVerifications{
         );
     }
 
-    currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper(){
+    currentDeveloperWorkPackageIsAdoptedByDeveloper(){
         server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'hugh',
             (function(error, result){
                 return(error === null);
@@ -100,7 +100,7 @@ class WorkPackageVerifications{
         );
     }
 
-    currentDeveloperWorkPackageAdopterIsAdoptedByAnotherDeveloper(){
+    currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper(){
         server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'davey', 'hugh',
             (function(error, result){
                 return(error === null);
@@ -108,7 +108,7 @@ class WorkPackageVerifications{
         );
     }
 
-    currentDesignerWorkPackageAdopterIsAdoptedByDeveloper(){
+    currentDesignerWorkPackageIsAdoptedByDeveloper(){
         server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'gloria',
             (function(error, result){
                 return(error === null);
@@ -116,7 +116,7 @@ class WorkPackageVerifications{
         );
     }
 
-    currentManagerWorkPackageAdopterIsAdoptedByDeveloper(){
+    currentManagerWorkPackageIsAdoptedByDeveloper(){
         server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'miles',
             (function(error, result){
                 return(error === null);
@@ -125,7 +125,7 @@ class WorkPackageVerifications{
     }
 
     currentDeveloperWorkPackageHasNoAdopter(){
-        server.call('verifyWorkPackages.currentWorkPackageHasNoAdoper', 'hugh',
+        server.call('verifyWorkPackages.currentWorkPackageHasNoAdopter', 'hugh',
             (function(error, result){
                 return(error === null);
             })

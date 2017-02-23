@@ -114,23 +114,17 @@ describe('UC 301 - Adopt Work Package', function(){
 
     it('Only an Available Work Package can be adopted', function(){
 
-        // Setup - Manager withdraws WP
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.managerWithdrawsSelectedWorkPackage();
+        // Setup - Developer Adopts WP
         // Developer selects it...
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_NEW));
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
 
-        // Execute
+        // Execute - try to adopt it again - expect failure
         const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_ADOPT};
         WorkPackageActions.developerAdoptsSelectedWorkPackage(expectation);
-
-        // Verify - not changed
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_NEW));
     });
 
 });

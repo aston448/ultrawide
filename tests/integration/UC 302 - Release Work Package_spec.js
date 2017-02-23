@@ -74,7 +74,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
         expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute
         WorkPackageActions.developerReleasesSelectedWorkPackage();
@@ -94,7 +94,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
         expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute
         DesignActions.managerWorksOnDesign('Design1');
@@ -118,7 +118,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
         expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute
         DesignActions.designerWorksOnDesign('Design1');
@@ -129,7 +129,7 @@ describe('UC 302 - Release Work Package', function(){
 
         // Verify - not changed
         expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
     });
 
     it('A Developer cannot release a Work Package adopted by another Developer', function(){
@@ -141,7 +141,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.anotherDeveloperAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
         expect(WorkPackageVerifications.workPackage_StatusForAnotherDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByAnotherDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
 
         // Execute - first developer tries to release it
         DesignActions.developerWorksOnDesign('Design1');
@@ -152,7 +152,7 @@ describe('UC 302 - Release Work Package', function(){
 
         // Verify - no change
         expect(WorkPackageVerifications.workPackage_StatusForAnotherDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByAnotherDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
     });
 
     it('Only an Adopted Work Package can be released', function(){
