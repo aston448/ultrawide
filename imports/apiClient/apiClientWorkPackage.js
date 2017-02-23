@@ -468,7 +468,7 @@ class ClientWorkPackageServices {
     };
 
     // Developer chose to work on a work package -----------------------------------------------------------------------
-    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId, testDataFlag, mashDataStale){
+    developWorkPackage(userRole, userContext, viewOptions, wpToDevelopId, testDataFlag){
 
         // Client validation
         let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, userContext.userId, wpToDevelopId);

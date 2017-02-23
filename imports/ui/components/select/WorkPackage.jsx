@@ -119,8 +119,7 @@ export class WorkPackage extends Component {
             userContext,
             viewOptions,
             wp._id,
-            this.props.testDataFlag,
-            this.props.mashDataStale
+            this.props.testDataFlag
         );
     };
 

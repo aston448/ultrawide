@@ -113,6 +113,34 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove WP');
     },
 
+    'testWorkPackages.adoptSelectedWorkPackage'(userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userName);
+
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        const outcome = ClientWorkPackageServices.adoptWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Adopt WP');
+    },
+
+    'testWorkPackages.releaseSelectedWorkPackage'(userName, userRole, expectation){
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const viewOptions = TestDataHelpers.getViewOptions(userName);
+
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        const outcome = ClientWorkPackageServices.releaseWorkPackage(userRole, userContext, workPackage._id);
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Release WP');
+    },
+
     'testWorkPackages.developSelectedWorkPackage'(userName, userRole, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -121,9 +149,8 @@ Meteor.methods({
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
-        const mashDataStale = true; // Make the data load for the WP if view options require it (REDUX setting)
 
-        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false, mashDataStale);
+        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Develop WP');
     }

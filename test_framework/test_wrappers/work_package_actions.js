@@ -95,56 +95,38 @@ class WorkPackageActions{
         server.call('testWorkPackages.viewWorkPackage', wpName, WorkPackageType.WP_UPDATE, 'gloria', RoleType.DESIGNER, expectation);
     }
 
+    // Adopt
+    developerAdoptsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.adoptSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation);
+    }
+
+    designerAdoptsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.adoptSelectedWorkPackage', 'gloria', RoleType.DESIGNER, expectation);
+    }
+
+    managerAdoptsSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.adoptSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
+    }
+
+    // Release
+    developerReleasesSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.releaseSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation);
+    }
+
+    designerReleasesSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.releaseSelectedWorkPackage', 'gloria', RoleType.DESIGNER, expectation);
+    }
+
+    managerReleasesSelectedWorkPackage(expectation){
+        server.call('testWorkPackages.releaseSelectedWorkPackage', 'miles', RoleType.MANAGER, expectation);
+    }
+
     // Develop
     developerDevelopsSelectedBaseWorkPackage(expectation){
         server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, expectation)
     }
 
-    // developerDevelopsSelectedBaseWorkPackageWithNoTests(expectation){
-    //
-    //     const viewOptions = {
-    //         userId:                     'NONE',
-    //         designDetailsVisible:       true,
-    //         designTestSummaryVisible:   false,
-    //         designDomainDictVisible:    false,
-    //         updateDetailsVisible:       true,
-    //         updateTestSummaryVisible:   false,
-    //         updateDomainDictVisible:    false,
-    //         wpDetailsVisible:           true,
-    //         wpDomainDictVisible:        false,
-    //         devDetailsVisible:          false,
-    //         devAccTestsVisible:         false,
-    //         devIntTestsVisible:         false,
-    //         devUnitTestsVisible:        false,
-    //         devTestSummaryVisible:      false,
-    //         devFeatureFilesVisible:     false,
-    //         devDomainDictVisible:       false
-    //     };
-    //     server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
-    // }
-    //
-    // developerDevelopsSelectedBaseWorkPackageWithIntegrationTests(expectation){
-    //
-    //     const viewOptions = {
-    //         userId:                     'NONE',
-    //         designDetailsVisible:       true,
-    //         designTestSummaryVisible:   false,
-    //         designDomainDictVisible:    false,
-    //         updateDetailsVisible:       true,
-    //         updateTestSummaryVisible:   false,
-    //         updateDomainDictVisible:    false,
-    //         wpDetailsVisible:           true,
-    //         wpDomainDictVisible:        false,
-    //         devDetailsVisible:          false,
-    //         devAccTestsVisible:         false,
-    //         devIntTestsVisible:         true,       // Set
-    //         devUnitTestsVisible:        false,
-    //         devTestSummaryVisible:      false,
-    //         devFeatureFilesVisible:     false,
-    //         devDomainDictVisible:       false
-    //     };
-    //     server.call('testWorkPackages.developSelectedWorkPackage', 'hugh', RoleType.DEVELOPER, viewOptions, expectation)
-    // }
+
 
 }
 
