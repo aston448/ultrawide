@@ -79,6 +79,12 @@ describe('UC 310 - Refresh Test Data', function(){
         // Developer sets up location config
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
+
+        // Make sure WP is adopted for Developer
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
     });
 
     after(function(){
@@ -129,10 +135,6 @@ describe('UC 310 - Refresh Test Data', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Go to WP and look at results
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
@@ -225,10 +227,6 @@ describe('UC 310 - Refresh Test Data', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Go to WP and look at results
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));

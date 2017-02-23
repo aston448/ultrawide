@@ -156,7 +156,11 @@ describe('UC 312 - View Unit Test Results', function(){
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.developerSelectsUnitTestsInConfigForLocation('Location1');
 
-
+        // Make sure WP is adopted for Developer
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
     });
 
     after(function(){
@@ -179,10 +183,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute
@@ -197,10 +197,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
@@ -219,10 +215,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
@@ -258,10 +250,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
@@ -281,10 +269,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
@@ -303,10 +287,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
@@ -327,10 +307,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run
@@ -351,10 +327,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Tests are run

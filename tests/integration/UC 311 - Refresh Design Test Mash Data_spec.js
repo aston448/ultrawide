@@ -79,6 +79,12 @@ describe('UC 311 - Refresh Design Test Mash Data', function(){
         // Developer sets up location config
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
+
+        // Make sure WP is adopted for Developer
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
     });
 
     after(function(){
@@ -103,10 +109,6 @@ describe('UC 311 - Refresh Design Test Mash Data', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Open the Int Tests window - this should load the expected data

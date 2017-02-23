@@ -80,8 +80,11 @@ describe('UC 313 - View Integration Test Results', function(){
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
 
-
-
+        // Make sure WP is adopted for Developer
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
     });
 
     after(function(){
@@ -104,10 +107,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute
@@ -122,10 +121,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
@@ -144,10 +139,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Open the Int Tests window - this should load the expected data
@@ -172,10 +163,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Open the Int Tests window - this should load the expected data
@@ -191,10 +178,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Open the Int Tests window - this should load the expected data
@@ -211,10 +194,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
@@ -256,10 +235,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
@@ -302,10 +277,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
@@ -348,10 +319,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Setup
         // Developer goes to WP
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
