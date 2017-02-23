@@ -317,7 +317,7 @@ class ClientDesignUpdateServices {
                 unitTestResultsLocation: userContext.unitTestResultsLocation
             };
 
-            store.dispatch(setCurrentUserItemContext(context, true));
+            store.dispatch(setCurrentUserItemContext(newContext, true));
 
         }
 

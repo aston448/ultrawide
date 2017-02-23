@@ -58,11 +58,9 @@ class RoleAction extends Component {
 
     onActionSelect(roleAction, roleType, userContext, userRole, view){
 
-        if(userRole === RoleType.NONE){
-            // User not yet chosen a role so load data as well
-            ClientUserContextServices.setUserRole(roleType);
-            userRole = roleType;
-        }
+        // Set the role as desired...
+        ClientUserContextServices.setUserRole(roleType);
+        userRole = roleType;
 
         // Now go where the user wanted...
         switch(roleAction){
