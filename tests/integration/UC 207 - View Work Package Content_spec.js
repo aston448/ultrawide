@@ -171,7 +171,7 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
     it('A Manager may view a New Design Update Work Package', function(){
 
         // Setup - select a different WP to change the context
-        DesignUpdateActions.managerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.managerSelectsWorkPackage('UpdateWorkPackage1');
         expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage1'));
 
         // Execute
@@ -185,7 +185,7 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
 
         // MANAGER
         // Setup - select a different WP to change the context
-        DesignUpdateActions.managerSelectsWorkPackage('UpdateWorkPackage2');
+        WorkPackageActions.managerSelectsWorkPackage('UpdateWorkPackage2');
         expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage2'));
 
         // Execute
