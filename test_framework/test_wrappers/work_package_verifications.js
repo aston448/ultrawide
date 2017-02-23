@@ -141,6 +141,22 @@ class WorkPackageVerifications{
         );
     }
 
+    currentAnotherDeveloperWorkPackageIsAdoptedByDeveloper(){
+        server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'davey',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    currentAnotherDeveloperWorkPackageIsAdoptedByAnotherDeveloper(){
+        server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'davey', 'davey',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     currentDesignerWorkPackageIsAdoptedByDeveloper(){
         server.call('verifyWorkPackages.currentWorkPackageAdopterIs', 'hugh', 'gloria',
             (function(error, result){

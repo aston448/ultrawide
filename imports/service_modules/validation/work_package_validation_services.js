@@ -119,17 +119,18 @@ class WorkPackageValidationServices{
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_RELEASE;
         }
 
-        // If Developer must be adopted by them
+        // WP must be Adopted
+        if(wp.workPackageStatus != WorkPackageStatus.WP_ADOPTED){
+            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_RELEASE;
+        }
+
+        // If Developer and Adopted, must be adopted by them
         if(userRole === RoleType.DEVELOPER){
             if(wp.adoptingUserId != userId){
                 return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_USER_RELEASE;
             }
         }
 
-        // WP must be Adopted
-        if(wp.workPackageStatus != WorkPackageStatus.WP_ADOPTED){
-            return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_RELEASE;
-        }
 
         return Validation.VALID;
     }

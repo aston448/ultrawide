@@ -142,7 +142,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.anotherDeveloperAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
         expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
+        expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
 
         // Execute - first developer tries to release it
         DesignActions.developerWorksOnDesign('Design1');
@@ -152,7 +152,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerReleasesSelectedWorkPackage(expectation);
 
         // Verify - no change
-        expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
     });
 

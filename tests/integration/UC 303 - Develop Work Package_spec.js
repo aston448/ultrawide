@@ -74,8 +74,8 @@ describe('UC 303 - Develop Work Package', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Execute with expectation of success
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
@@ -91,8 +91,8 @@ describe('UC 303 - Develop Work Package', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByDeveloper());
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageIsAdoptedByDeveloper());
 
         // Manager try to develop - expect failure
         DesignActions.managerWorksOnDesign('Design1');
@@ -116,8 +116,8 @@ describe('UC 303 - Develop Work Package', function(){
         WorkPackageActions.anotherDeveloperSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.anotherDeveloperAdoptsSelectedWorkPackage();
         // Confirm it is adopted by this developer
-        expect(WorkPackageVerifications.workPackage_StatusForAnotherDeveloperIs('WorkPackage1', WorkPackageStatus.WP_ADOPTED));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageAdopterIsAdoptedByAnotherDeveloper());
+        expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_ADOPTED));
+        expect(WorkPackageVerifications.currentAnotherDeveloperWorkPackageIsAdoptedByAnotherDeveloper());
 
         // Execute - first developer tries to develop it
         DesignActions.developerWorksOnDesign('Design1');
@@ -133,7 +133,7 @@ describe('UC 303 - Develop Work Package', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_AVAILABLE));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 
         // Confirm failure for Available WP
@@ -149,7 +149,7 @@ describe('UC 303 - Develop Work Package', function(){
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.workPackage_StatusForDeveloperIs('WorkPackage1', WorkPackageStatus.WP_NEW));
+        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_NEW));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 
         // Same expectation

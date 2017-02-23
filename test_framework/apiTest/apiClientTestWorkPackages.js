@@ -118,7 +118,6 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
 
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
@@ -132,7 +131,6 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
 
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
