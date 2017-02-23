@@ -170,9 +170,9 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
 
     it('A Manager may view a New Design Update Work Package', function(){
 
-        // Setup - select DU first to clear WPs...
-        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
-        expect(WorkPackageVerifications.currentManagerWorkPackageIs('NONE'));
+        // Setup - select a different WP to change the context
+        DesignUpdateActions.managerSelectsWorkPackage('UpdateWorkPackage1');
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage1'));
 
         // Execute
         WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage2');
@@ -184,9 +184,9 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
     it('Any user role may view a Draft Design Update Work Package', function(){
 
         // MANAGER
-        // Setup - select DU first to clear WPs...
-        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
-        expect(WorkPackageVerifications.currentManagerWorkPackageIs('NONE'));
+        // Setup - select a different WP to change the context
+        DesignUpdateActions.managerSelectsWorkPackage('UpdateWorkPackage2');
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage2'));
 
         // Execute
         WorkPackageActions.managerViewsUpdateWorkPackage('UpdateWorkPackage1');
@@ -195,11 +195,10 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
         expect(WorkPackageVerifications.currentManagerWorkPackageIs('UpdateWorkPackage1'));
 
         // DESIGNER
-        // Setup - select DU first to clear WPs...
+        // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
-        expect(WorkPackageVerifications.currentDesignerWorkPackageIs('NONE'));
 
         // Execute
         WorkPackageActions.designerViewsUpdateWorkPackage('UpdateWorkPackage1');
@@ -208,11 +207,10 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
         expect(WorkPackageVerifications.currentDesignerWorkPackageIs('UpdateWorkPackage1'));
 
         // DEVELOPER
-        // Setup - select DU first to clear WPs...
+        // Setup
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('NONE'));
 
         // Execute
         WorkPackageActions.developerViewsUpdateWorkPackage('UpdateWorkPackage1');

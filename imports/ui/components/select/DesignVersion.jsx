@@ -100,7 +100,8 @@ export class DesignVersion extends Component {
         // Changing the design version updates the user context
         ClientDesignVersionServices.setDesignVersion(
             userContext,
-            dv._id
+            dv._id,
+            false
         );
 
     }

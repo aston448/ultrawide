@@ -58,7 +58,6 @@ describe('UC 503 - View Design Update Content', function(){
 
         // Setup
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
 
         // Execute
         DesignUpdateActions.designerViewsUpdate('DesignUpdate1');
@@ -68,7 +67,6 @@ describe('UC 503 - View Design Update Content', function(){
 
         // Setup
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
 
         // Execute
         DesignUpdateActions.designerViewsUpdate('DesignUpdate2');
@@ -84,7 +82,6 @@ describe('UC 503 - View Design Update Content', function(){
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
 
         // Execute
         DesignUpdateActions.developerViewsUpdate('DesignUpdate1');
@@ -98,7 +95,6 @@ describe('UC 503 - View Design Update Content', function(){
         // Setup
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
 
         // Execute
         DesignUpdateActions.managerViewsUpdate('DesignUpdate1');
@@ -114,14 +110,11 @@ describe('UC 503 - View Design Update Content', function(){
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
 
         // Execute
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW};
         DesignUpdateActions.developerViewsUpdate('DesignUpdate2', expectation);
 
-        // Verify
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
     });
 
     it('A Manager cannot view a New Design Update', function(){
@@ -129,14 +122,11 @@ describe('UC 503 - View Design Update Content', function(){
         // Setup
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
 
         // Execute
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW};
         DesignUpdateActions.managerViewsUpdate('DesignUpdate2', expectation);
 
-        // Verify
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
     });
 
 

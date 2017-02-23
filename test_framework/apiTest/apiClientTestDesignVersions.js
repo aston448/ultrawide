@@ -13,7 +13,7 @@ Meteor.methods({
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
         // This is not a validated method - don't process outcome
-        ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id);
+        ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id, false);
 
     },
 

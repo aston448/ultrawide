@@ -59,7 +59,6 @@ describe('UC 504 - Edit Design Update Content', function(){
 
         // Setup
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
 
         // Execute
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
@@ -72,7 +71,6 @@ describe('UC 504 - Edit Design Update Content', function(){
 
         // Setup
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDesignerIs('NONE'));
 
         // Execute
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
@@ -90,14 +88,11 @@ describe('UC 504 - Edit Design Update Content', function(){
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
 
         // Execute
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT};
         DesignUpdateActions.developerEditsUpdate('DesignUpdate1', expectation);
 
-        // Verify
-        expect(DesignUpdateVerifications.currentUpdateForDeveloperIs('NONE'));
     });
 
     it('A Manager cannot edit a Design Update', function(){
@@ -105,14 +100,11 @@ describe('UC 504 - Edit Design Update Content', function(){
         // Setup
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
 
         // Execute
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT};
         DesignUpdateActions.managerEditsUpdate('DesignUpdate1', expectation);
 
-        // Verify
-        expect(DesignUpdateVerifications.currentUpdateForManagerIs('NONE'));
     });
 
 });

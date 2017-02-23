@@ -115,7 +115,7 @@ class ClientDesignVersionServices{
         }
 
         // Ensure that the current version is the version we chose to publish
-        this.setDesignVersion(userContext, designVersionToPublishId);
+        this.setDesignVersion(userContext, designVersionToPublishId, false);
 
         // Real action call - server actions
         ServerDesignVersionApi.publishDesignVersion(userRole, designVersionToPublishId, (err, result) => {
@@ -153,7 +153,7 @@ class ClientDesignVersionServices{
         }
 
         // Ensure that the current version is the version we chose to unpublish
-        this.setDesignVersion(userContext, designVersionToUnPublishId);
+        this.setDesignVersion(userContext, designVersionToUnPublishId, false);
 
         // Real action call - server actions
         ServerDesignVersionApi.withdrawDesignVersion(userRole, designVersionToUnPublishId, (err, result) => {
@@ -191,7 +191,7 @@ class ClientDesignVersionServices{
         }
 
         // Ensure that the current version is the version we chose to update and that user context is updated
-        this.setDesignVersion(userContext, workingDesignVersionId);
+        this.setDesignVersion(userContext, workingDesignVersionId, false);
 
         // Real action call - server actions
         ServerDesignVersionApi.updateWorkingDesignVersion(userRole, workingDesignVersionId, (err, result) => {
@@ -239,7 +239,7 @@ class ClientDesignVersionServices{
                 // Client actions:
 
                 // Ensure that the current version is the version we chose to update from
-                this.setDesignVersion(userContext, baseDesignVersionId);
+                this.setDesignVersion(userContext, baseDesignVersionId, false);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -268,12 +268,13 @@ class ClientDesignVersionServices{
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // Sets the currently selected design version as part of the global state
-    setDesignVersion(userContext, newDesignVersionId){
+    setDesignVersion(userContext, newDesignVersionId, forceReset){
 
         let newContext = userContext;
 
         // On change clears current DU / WP if any
-        if(newDesignVersionId != userContext.designVersionId) {
+        // Force reset is for when we want to forget about any Design Update / WP in the context
+        if(forceReset || (newDesignVersionId != userContext.designVersionId)) {
 
             newContext = {
                 userId: userContext.userId,
@@ -320,8 +321,8 @@ class ClientDesignVersionServices{
 
         // Now valid to edit so make updates:
 
-        // Ensure that the current version is the version we chose to edit
-        let updatedContext = this.setDesignVersion(userContext, designVersionToEditId);
+        // Ensure that the current version is the version we chose to edit.  Reset User Context
+        let updatedContext = this.setDesignVersion(userContext, designVersionToEditId, true);
 
 
         // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
@@ -357,7 +358,7 @@ class ClientDesignVersionServices{
         }
 
         // Ensure that the current version is the version we chose to view
-        let updatedContext = this.setDesignVersion(userContext, designVersionId);
+        let updatedContext = this.setDesignVersion(userContext, designVersionId, true);
 
         // Decide what the actual view should be.  A designer with a New or Draft DV
         // can have the option to switch into edit mode.  Anyone else is view only
