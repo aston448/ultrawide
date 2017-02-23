@@ -80,6 +80,7 @@ describe('UC 302 - Release Work Package', function(){
         WorkPackageActions.developerReleasesSelectedWorkPackage();
 
         // Verify
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
 

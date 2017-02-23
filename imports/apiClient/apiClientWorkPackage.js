@@ -256,30 +256,6 @@ class ClientWorkPackageServices {
             } else {
                 // Client actions:
 
-                // Clear WP from user context if Developer
-                if(userRole === RoleType.DEVELOPER) {
-
-                    const context = {
-                        userId: userContext.userId,
-                        designId: userContext.designId,
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: 'NONE',
-                        designComponentId: 'NONE',
-                        designComponentType: 'NONE',
-                        featureReferenceId: 'NONE',
-                        featureAspectReferenceId: 'NONE',
-                        scenarioReferenceId: 'NONE',
-                        scenarioStepId: 'NONE',
-                        featureFilesLocation: userContext.featureFilesLocation,
-                        acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
-                        integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                        unitTestResultsLocation: userContext.unitTestResultsLocation
-                    };
-
-                    store.dispatch(setCurrentUserItemContext(context, true));
-                }
-
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
