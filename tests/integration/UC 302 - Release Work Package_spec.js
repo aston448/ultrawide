@@ -172,25 +172,6 @@ describe('UC 302 - Release Work Package', function(){
         // Verify - no change
         expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
         expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
-
-        // Manager withdraw WP
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.managerWithdrawsSelectedWorkPackage();
-
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_NEW));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
-
-        // Execute - try to release New WP - same expectation
-        WorkPackageActions.developerReleasesSelectedWorkPackage(expectation);
-
-        // Verify - no change
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_AVAILABLE));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
     });
 
 });

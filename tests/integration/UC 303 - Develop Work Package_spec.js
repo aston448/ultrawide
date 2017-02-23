@@ -140,21 +140,6 @@ describe('UC 303 - Develop Work Package', function(){
         const expectation = {success: false, message: WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_DEVELOP};
         WorkPackageActions.developerDevelopsSelectedWorkPackage(expectation);
 
-        // And for New
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.managerWithdrawsSelectedWorkPackage();
-
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageStatusIs(WorkPackageStatus.WP_NEW));
-        expect(WorkPackageVerifications.currentDeveloperWorkPackageHasNoAdopter());
-
-        // Same expectation
-        WorkPackageActions.developerDevelopsSelectedWorkPackage(expectation);
-
     });
 
 });
