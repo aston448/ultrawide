@@ -143,6 +143,18 @@ class TestDataHelpers {
         return designUpdate;
     }
 
+    getContextWorkPackage(workPackageId){
+
+        const workPackage = WorkPackages.findOne({_id: workPackageId});
+
+        if(workPackage){
+            return workPackage;
+        } else {
+            throw new Meteor.Error("FAIL", "Work Package not found for User Context id " + workPackageId);
+        }
+
+    }
+
     getWorkPackage(designVersionId, designUpdateId, workPackageName){
 
         const designVersion = DesignVersions.findOne({_id: designVersionId});

@@ -34,7 +34,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.publishWorkPackage(userRole, userContext, workPackage._id);
 
@@ -46,7 +46,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.withdrawWorkPackage(userRole, userContext, workPackage._id);
 
@@ -70,7 +70,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.editWorkPackage(userRole, userContext, workPackage._id, workPackageType);
 
@@ -106,7 +106,7 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
 
@@ -120,7 +120,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.adoptWorkPackage(userRole, userContext, workPackage._id);
 
@@ -134,7 +134,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.releaseWorkPackage(userRole, userContext, workPackage._id);
 
@@ -148,7 +148,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
         const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false);
 

@@ -66,7 +66,7 @@ Meteor.methods({
         if(workPackage) {
             const adopterUser = TestDataHelpers.getUser(adopterName);
 
-            if (workPackage.adoptingUserId === adopterUser._id) {
+            if (workPackage.adoptingUserId === adopterUser.userId) {
                 return true;
             } else {
                 throw new Meteor.Error("FAIL", "Expected WP adopter to be " + adopterName + " but got " + adopterUser.userName);
