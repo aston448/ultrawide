@@ -62,7 +62,7 @@ Meteor.methods({
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion, false, true);
+        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion._id, false, true);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View Design Version');
     },

@@ -270,35 +270,38 @@ class ClientDesignVersionServices{
     // Sets the currently selected design version as part of the global state
     setDesignVersion(userContext, newDesignVersionId){
 
-        // Also clears current DU / WP if any
+        let newContext = userContext;
 
-        const context = {
-            userId:                         userContext.userId,
-            designId:                       userContext.designId,       // Must be the same design
-            designVersionId:                newDesignVersionId,         // The new design version
-            designUpdateId:                 'NONE',                     // Everything else reset for new Design
-            workPackageId:                  'NONE',
-            designComponentId:              'NONE',
-            designComponentType:            'NONE',
-            featureReferenceId:             'NONE',
-            featureAspectReferenceId:       'NONE',
-            scenarioReferenceId:            'NONE',
-            scenarioStepId:                 'NONE',
-            featureFilesLocation:           userContext.featureFilesLocation,
-            acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-            integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-            unitTestResultsLocation:      userContext.unitTestResultsLocation
-        };
+        // On change clears current DU / WP if any
+        if(newDesignVersionId != userContext.designVersionId) {
 
-        store.dispatch(setCurrentUserItemContext(context, true));
+            newContext = {
+                userId: userContext.userId,
+                designId: userContext.designId,       // Must be the same design
+                designVersionId: newDesignVersionId,         // The new design version
+                designUpdateId: 'NONE',                     // Everything else reset for new Design
+                workPackageId: 'NONE',
+                designComponentId: 'NONE',
+                designComponentType: 'NONE',
+                featureReferenceId: 'NONE',
+                featureAspectReferenceId: 'NONE',
+                scenarioReferenceId: 'NONE',
+                scenarioStepId: 'NONE',
+                featureFilesLocation: userContext.featureFilesLocation,
+                acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                unitTestResultsLocation: userContext.unitTestResultsLocation
+            };
 
-        // Subscribe to the appropriate data for the new DV
-        if(Meteor.isClient) {
+            store.dispatch(setCurrentUserItemContext(newContext, true));
+
+            // Subscribe to the appropriate data for the new DV if DV changing
             console.log("Reset Design Version");
             ClientContainerServices.getDesignVersionData(newDesignVersionId);
+
         }
 
-        return context;
+        return newContext;
 
     };
 
@@ -322,7 +325,7 @@ class ClientDesignVersionServices{
 
 
         // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
-        if(viewOptions.designTestSummaryVisible || viewOptions.devTestSummaryVisible || viewOptions.updateTestSummaryVisible) {
+        if(viewOptions.designTestSummaryVisible) {
 
             ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag, mashDataStale);
         } else {
@@ -340,10 +343,10 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag, mashDataStale){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersionId, testDataFlag, mashDataStale){
 
         // Validation
-        let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersion._id);
+        let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersionId);
 
         if(result != Validation.VALID){
             log((msg) => console.log(msg), LogLevel.WARNING, result);
@@ -354,7 +357,7 @@ class ClientDesignVersionServices{
         }
 
         // Ensure that the current version is the version we chose to view
-        let updatedContext = this.setDesignVersion(userContext, designVersion._id);
+        let updatedContext = this.setDesignVersion(userContext, designVersionId);
 
         // Decide what the actual view should be.  A designer with a New or Draft DV
         // can have the option to switch into edit mode.  Anyone else is view only
@@ -362,6 +365,8 @@ class ClientDesignVersionServices{
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
         let view = ViewType.SELECT;
+
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
 
         switch(userRole){
             case RoleType.DESIGNER:

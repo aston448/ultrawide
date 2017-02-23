@@ -96,34 +96,38 @@ class ClientContainerServices{
 
     getDesignVersionData(designVersionId, callback){
 
-        console.log("Getting Design Version Data for DV " + designVersionId);
+        if(Meteor.isClient) {
 
-        let duHandle = Meteor.subscribe('designUpdates', designVersionId);
-        let dcHandle = Meteor.subscribe('designComponents', designVersionId);
-        let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
-        let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
-        let ssHandle = Meteor.subscribe('scenarioSteps', designVersionId);
-        let ddHandle = Meteor.subscribe('domainDictionary', designVersionId);
-        let wpHandle = Meteor.subscribe('workPackages', designVersionId);
-        let wcHandle = Meteor.subscribe('workPackageComponents', designVersionId);
+            console.log("Getting Design Version Data for DV " + designVersionId);
+
+            let duHandle = Meteor.subscribe('designUpdates', designVersionId);
+            let dcHandle = Meteor.subscribe('designComponents', designVersionId);
+            let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
+            let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
+            let ssHandle = Meteor.subscribe('scenarioSteps', designVersionId);
+            let ddHandle = Meteor.subscribe('domainDictionary', designVersionId);
+            let wpHandle = Meteor.subscribe('workPackages', designVersionId);
+            let wcHandle = Meteor.subscribe('workPackageComponents', designVersionId);
 
 
-        Tracker.autorun((loader) => {
+            Tracker.autorun((loader) => {
 
-            let loading = (
-                !duHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
-            );
+                let loading = (
+                    !duHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
+                );
 
-            console.log("loading = " + loading);
+                console.log("loading = " + loading);
 
-            if(!loading && callback){
-                callback();
+                if (!loading && callback) {
+                    callback();
 
-                // Stop this checking once we are done or there will be random chaos
-                loader.stop();
-            }
+                    // Stop this checking once we are done or there will be random chaos
+                    loader.stop();
+                }
 
-        });
+            });
+
+        }
 
     }
 
@@ -134,11 +138,7 @@ class ClientContainerServices{
             // See if we have already got the data subscribed...
             const devFeatureCount = UserDevFeatures.find({}).count();
 
-            if (devFeatureCount > 0) {
-
-                return;
-
-            } else {
+            if (devFeatureCount === 0) {
 
                 // Subscribe to dev data
                 const dfHandle = Meteor.subscribe('userDevFeatures', userId);
@@ -169,9 +169,6 @@ class ClientContainerServices{
 
                 });
             }
-        } else {
-            // If called on server (tests) don't need to subscribe, just carry on
-            return;
         }
     }
 

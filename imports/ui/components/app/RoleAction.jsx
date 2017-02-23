@@ -61,9 +61,7 @@ class RoleAction extends Component {
         if(userRole === RoleType.NONE){
             // User not yet chosen a role so load data as well
             ClientUserContextServices.setUserRole(roleType);
-            ClientUserContextServices.loadMainData(userContext, roleType, view);
-        } else {
-            ClientUserContextServices.setUserRole(roleType);
+            userRole = roleType;
         }
 
         // Now go where the user wanted...
@@ -71,7 +69,8 @@ class RoleAction extends Component {
             case UltrawideAction.ACTION_LAST_DESIGNER:
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
-                ClientUserContextServices.setViewFromUserContext(roleType, userContext);
+                ClientUserContextServices.setOpenItems(userContext, userRole);
+                ClientUserContextServices.setViewFromUserContext(userContext, userRole);
                 break;
             case UltrawideAction.ACTION_TEST_CONFIGURE:
                 ClientAppHeaderServices.setViewConfigure();

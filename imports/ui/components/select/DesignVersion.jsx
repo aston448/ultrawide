@@ -49,7 +49,7 @@ export class DesignVersion extends Component {
             userRole,
             viewOptions,
             userContext,
-            dv,
+            dv._id,
             testDataFlag,
             this.props.mashDataStale
         );

@@ -16,10 +16,15 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel, WorkPackageStatus, WorkPackageType } from '../constants/constants.js';
+import { RoleType, ViewType, ViewMode, DisplayContext, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel, WorkPackageStatus, WorkPackageType } from '../constants/constants.js';
 import { log } from '../common/utils.js';
-import ClientContainerServices from '../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageServices from '../apiClient/apiClientWorkPackage.js';
+
+import ClientContainerServices          from '../apiClient/apiClientContainerServices.js';
+import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
+import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
+import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
+import ClientDesignComponentServices    from '../apiClient/apiClientDesignComponent.js';
+
 
 // REDUX services
 import store from '../redux/store'
@@ -161,37 +166,44 @@ class ClientUserContextServices {
         store.dispatch(setCurrentRole(roleType));
     }
 
-    loadMainData(userContext, roleType, view){
-
-        console.log("Load Main Data");
+    loadMainData(userContext){
+        log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
 
         const dvCount = DesignComponents.find({}).count();
 
         if(dvCount > 0){
-            console.log("Data already loaded");
-            this.getInitialSelectionSettings(userContext, roleType);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
+
+            this.onMainDataLoaded();
         } else {
             // Need to load data
             if(userContext.designVersionId != 'NONE'){
-                console.log("Loading data");
+                log((msg) => console.log(msg), LogLevel.TRACE, "Loading data for DV {}", userContext.designVersionId);
+
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
                 // This should wait until data loaded to call the function
-                ClientContainerServices.getDesignVersionData(userContext.designVersionId, () => this.getInitialSelectionSettings(userContext, roleType));
+                ClientContainerServices.getDesignVersionData(userContext.designVersionId, this.onMainDataLoaded);
 
             } else {
-                console.log("No DV known");
+                log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
                 // Will have to wait for a DV to be selected to get data
-                this.getInitialSelectionSettings(userContext, roleType);
+                this.onMainDataLoaded();
             }
         }
 
     }
 
-    getInitialSelectionSettings(userContext, roleType){
+    onMainDataLoaded(){
+
+        // Go to Home screen
+        store.dispatch(setCurrentView(ViewType.HOME));
+
+    }
+
+    setOpenItems(userContext, roleType){
 
         // Set default view settings for open items
-        // TODO - could get persisted settings here
 
         console.log("Get Initial Settings: " + roleType + " " + userContext.designVersionId);
 
@@ -416,12 +428,10 @@ class ClientUserContextServices {
             true
         ));
 
-        //this.setViewFromUserContext(roleType, userContext)
-
     }
 
 
-    setViewFromUserContext(role, userContext){
+    setViewFromUserContext(userContext, userRole){
 
         const userViewOptions = UserCurrentViewOptions.findOne({userId: userContext.userId});
 
@@ -432,7 +442,7 @@ class ClientUserContextServices {
         }
 
         // Decide where to go depending on the user context
-        switch(role){
+        switch(userRole){
             case RoleType.DESIGNER:
 
                 // If a designer, go to the design version that is in the context.  If its new, editing it.
@@ -447,18 +457,23 @@ class ClientUserContextServices {
                     switch (designVersion.designVersionStatus) {
                         case DesignVersionStatus.VERSION_NEW:
                         case DesignVersionStatus.VERSION_DRAFT:
-                            // Straight to edit of new update
+                            console.log("USER DESIGN COMPONENT IS: " + userContext.designComponentId);
 
-                            // Subscribe to Dev data as we'll need it for progress indications
-                            ClientContainerServices.getDevData(userContext.userId);
+                            // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
+                            ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, true);
 
-                            store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
-                            store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
+                            console.log("USER DESIGN COMPONENT IS: " + userContext.designComponentId);
+
+                            if(userContext.designComponentId != 'NONE'){
+                                ClientDesignComponentServices.setDesignComponent(userContext.designComponentId, userContext, DisplayContext.BASE_EDIT);
+                            }
                             return;
 
                         case DesignVersionStatus.VERSION_UPDATABLE:
+
                             // If there is an update in the context go to that otherwise go to selection
                             if (userContext.designUpdateId != 'NONE') {
+
                                 // See what the status of this update is - is it editable?
                                 const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
@@ -466,18 +481,14 @@ class ClientUserContextServices {
                                 if (designUpdate) {
                                     switch (designUpdate.updateStatus) {
                                         case DesignUpdateStatus.UPDATE_NEW:
+
                                             // Go to edit update in Edit Mode
-                                            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
-                                            store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
+                                            ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId);
                                             return;
-                                        case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
-                                            // Go to edit update in View Mode.  If user wants to edit can toggle in to edit mode
-                                            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
-                                            store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
-                                            return;
+
                                         default:
-                                            // Anything else, just view the update
-                                            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+                                            // Anything else, just view the update - but there will be an option to switch to edit for DRAFT
+                                            ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId)
                                             return;
                                     }
                                 } else {
@@ -492,8 +503,9 @@ class ClientUserContextServices {
                             }
                         case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                         case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+
                             // View that final design version
-                            store.dispatch(setCurrentView(ViewType.DESIGN_PUBLISHED_VIEW));
+                            ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, true);
                             return;
                     }
                 } else {
@@ -505,6 +517,9 @@ class ClientUserContextServices {
                 break;
             case RoleType.DEVELOPER:
                 // If a developer go to the Work Package they are currently working on if it is set
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Developer Context WP is {}", userContext.workPackageId);
+
                 if(userContext.workPackageId != 'NONE'){
 
                     const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
@@ -512,32 +527,23 @@ class ClientUserContextServices {
                     // If bad data return to Designs
                     if(workPackage){
                         switch(workPackage.workPackageStatus){
-                            // TODO - Change this when implementing Adoption
                             case WorkPackageStatus.WP_ADOPTED:
-                            case WorkPackageStatus.WP_AVAILABLE:
+
                                 // Development
-                                ClientWorkPackageServices.developWorkPackage(role, userContext, userViewOptions, userContext.workPackageId, true);
+                                ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, true);
                                 return;
+
+                            case WorkPackageStatus.WP_AVAILABLE:
                             case WorkPackageStatus.WP_COMPLETE:
-                                // View Only
-                                switch(workPackage.workPackageType){
-                                    case WorkPackageType.WP_BASE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_VIEW));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
-                                        return;
-                                    case WorkPackageType.WP_UPDATE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_VIEW));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
-                                        return;
-                                }
-                                break;
                             case WorkPackageStatus.WP_NEW:
-                                // Must have been withdrawn so go back to Select
+
+                                // Anything else, allow developer to select a WP
                                 store.dispatch(setCurrentView(ViewType.SELECT));
                                 return;
                         }
                     } else {
-                        store.dispatch(setCurrentView(ViewType.DESIGNS));
+                        log((msg) => console.log(msg), LogLevel.TRACE, "WP Not Found!");
+                        store.dispatch(setCurrentView(ViewType.SELECT));
                         return;
                     }
                 } else {
@@ -548,55 +554,48 @@ class ClientUserContextServices {
             case RoleType.MANAGER:
                 // If a manager go to a WP if being edited
                 if(userContext.workPackageId != 'NONE'){
+
                     const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
-                    // If bad data return to Designs
+                    // If bad data return to Selection
                     if(workPackage){
                         switch(workPackage.workPackageStatus){
-                            // TODO - Change this when implementing Adoption
-                            case WorkPackageStatus.WP_ADOPTED:
+
+                            case WorkPackageStatus.WP_NEW:
                             case WorkPackageStatus.WP_AVAILABLE:
-                                // Development so editable but just view for now
+                            case WorkPackageStatus.WP_ADOPTED:
+
+                                // New or Development so still editable
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_EDIT));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
+
+                                        ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
                                         return;
+
                                     case WorkPackageType.WP_UPDATE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_EDIT));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
+
+                                        ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
                                         return;
                                 }
                                 break;
                             case WorkPackageStatus.WP_COMPLETE:
+
                                 // View Only
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_VIEW));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
+
+                                        ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
                                         return;
+
                                     case WorkPackageType.WP_UPDATE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_VIEW));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
+
+                                        ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
                                         return;
                                 }
                                 break;
-                            case WorkPackageStatus.WP_NEW:
-                                // You are editing this WP
-                                switch(workPackage.workPackageType){
-                                    case WorkPackageType.WP_BASE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_BASE_EDIT));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
-                                        return;
-                                    case WorkPackageType.WP_UPDATE:
-                                        store.dispatch(setCurrentView(ViewType.WORK_PACKAGE_UPDATE_EDIT));
-                                        store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
-                                        return;
-                                }
-                                return;
                         }
                     } else {
-                        store.dispatch(setCurrentView(ViewType.DESIGNS));
+                        store.dispatch(setCurrentView(ViewType.SELECT));
                         return;
                     }
                 } else {

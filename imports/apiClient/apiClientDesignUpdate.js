@@ -1,10 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
+import {DesignUpdates}              from '../collections/design_update/design_updates.js';
+import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, ComponentType, MessageType } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, ComponentType, MessageType, DesignUpdateStatus } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignUpdateMessages } from '../constants/message_texts.js';
 
@@ -293,29 +294,34 @@ class ClientDesignUpdateServices {
     // Sets the currently selected design update as part of the global state -------------------------------------------
     setDesignUpdate(userContext, newDesignUpdateId){
 
-        // Also clears current WP selection...
+        let newContext = userContext;
 
-        const context = {
-            userId:                         userContext.userId,
-            designId:                       userContext.designId,           // Must be the same design
-            designVersionId:                userContext.designVersionId,    // Must be same design version
-            designUpdateId:                 newDesignUpdateId,              // Update selected
-            workPackageId:                  'NONE',
-            designComponentId:              'NONE',
-            designComponentType:            'NONE',
-            featureReferenceId:             'NONE',
-            featureAspectReferenceId:       'NONE',
-            scenarioReferenceId:            'NONE',
-            scenarioStepId:                 'NONE',
-            featureFilesLocation:           userContext.featureFilesLocation,
-            acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-            integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-            unitTestResultsLocation:      userContext.unitTestResultsLocation
-        };
+        if(newDesignUpdateId != userContext.designUpdateId) {
 
-        store.dispatch(setCurrentUserItemContext(context, true));
+            // Also clears current WP selection when DU changes
+            newContext = {
+                userId: userContext.userId,
+                designId: userContext.designId,           // Must be the same design
+                designVersionId: userContext.designVersionId,    // Must be same design version
+                designUpdateId: newDesignUpdateId,              // Update selected
+                workPackageId: 'NONE',
+                designComponentId: 'NONE',
+                designComponentType: 'NONE',
+                featureReferenceId: 'NONE',
+                featureAspectReferenceId: 'NONE',
+                scenarioReferenceId: 'NONE',
+                scenarioStepId: 'NONE',
+                featureFilesLocation: userContext.featureFilesLocation,
+                acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
+                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                unitTestResultsLocation: userContext.unitTestResultsLocation
+            };
 
-        return context;
+            store.dispatch(setCurrentUserItemContext(context, true));
+
+        }
+
+        return newContext;
 
     };
 
@@ -389,8 +395,20 @@ class ClientDesignUpdateServices {
         // View mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
-        // Switch to update view-only
-        store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+        // If user is Designer and Update is editable, allow for switching to editing...
+        if(userRole === RoleType.DESIGNER){
+            const designUpdate = DesignUpdates.findOne({_id: designUpdateToViewId});
+
+            if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_MERGED){
+                // Editable (though in View mode)
+                store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
+            } else {
+                // definitely read only
+                store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+            }
+        } else {
+            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+        }
 
         return {success: true, message: ''};
 

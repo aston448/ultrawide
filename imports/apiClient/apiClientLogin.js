@@ -48,12 +48,12 @@ class ClientLoginServices{
                     const user = UserRoles.findOne({userId: userId});
                     if (user) {
                         // Properly logged in so retrieve user settings - stored to REDUX
-                        ClientUserContextServices.getUserContext(userId);
+                        const userContext = ClientUserContextServices.getUserContext(userId);
                         ClientUserContextServices.getUserViewOptions(userId);
-
-                        // And go to the home / role selection screen
                         store.dispatch(setCurrentUserName(user.displayName));
-                        store.dispatch(setCurrentView(ViewType.HOME));
+
+                        // Having got these go to a WAIT screen until the design data is loaded...
+                        ClientUserContextServices.loadMainData(userContext);
 
                     } else {
                         store.dispatch(updateUserMessage({
