@@ -308,7 +308,7 @@ export const TestLocationAccessType = {
     FTP:            'FTP'
 };
 // Array for Display lists
-export const TestLocationAccessTypes = [TestLocationAccessType.FILE, TestLocationAccessType.RLOGIN, TestLocationAccessType.FTP];
+export const TestLocationAccessTypes = [TestLocationAccessType.NONE, TestLocationAccessType.FILE, TestLocationAccessType.RLOGIN, TestLocationAccessType.FTP];
 
 
 export const TestLocationFileType = {
