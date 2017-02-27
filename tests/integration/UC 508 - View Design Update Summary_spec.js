@@ -312,7 +312,7 @@ describe('UC 508 - View Design Update Summary', function(){
 
         // Verify - not in changes - still in New as new name
         expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsNotInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario Name'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('New Feature Name'));
+        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('New Scenario Name'));
     });
 
 });
