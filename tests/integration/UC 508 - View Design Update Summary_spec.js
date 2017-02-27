@@ -186,7 +186,11 @@ describe('UC 508 - View Design Update Summary', function(){
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
 
-        // Then remove it again
+        // Then remove it again (have to remove all aspects first)
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Interface');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Conditions');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Consequences');
         UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3');
 
         // Refresh Summary
@@ -222,7 +226,7 @@ describe('UC 508 - View Design Update Summary', function(){
 
         // Verify - not in addition or removal
         expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
+        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario8'));
     });
 
     it('An existing Feature that has been modified is listed in the changes list with its old and new text', function(){

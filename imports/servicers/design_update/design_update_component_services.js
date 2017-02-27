@@ -535,6 +535,9 @@ class DesignUpdateComponentServices{
                     if (designUpdateComponent.componentType === ComponentType.FEATURE) {
                         DesignServices.setRemovable(designUpdateComponent.designId);
                     }
+
+                    // Set as stale so that adding and removing a new component is picked up
+                    DesignUpdates.update({_id: designUpdateComponent.designUpdateId}, {$set: {summaryDataStale: true}});
                 }
 
             } else {
