@@ -125,6 +125,15 @@ Meteor.methods({
         const outcome = ClientDesignUpdateServices.deleteDesignUpdate(userRole, userContext, designUpdate._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Update');
+    },
+
+    'testDesignUpdates.refreshUpdateSummary'(userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        if(userContext.designUpdateId != 'NONE') {
+            ClientDesignUpdateServices.refreshSummary(userContext.designUpdateId);
+        }
     }
 
 });

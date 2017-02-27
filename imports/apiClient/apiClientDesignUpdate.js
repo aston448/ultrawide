@@ -319,10 +319,10 @@ class ClientDesignUpdateServices {
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
-            // Load or refresh DU Summary data
-            ClientDesignUpdateSummary.getDesignUpdateSummary(newDesignUpdateId);
-
         }
+
+        // Load or refresh DU Summary data
+        ClientDesignUpdateSummary.getDesignUpdateSummary(newDesignUpdateId);
 
         return newContext;
 
@@ -416,6 +416,12 @@ class ClientDesignUpdateServices {
         return {success: true, message: ''};
 
     };
+
+    // User chose to refresh the Update Summary ------------------------------------------------------------------------
+    refreshSummary(designUpdateId){
+
+        ClientDesignUpdateSummary.getDesignUpdateSummary(designUpdateId);
+    }
 
 }
 

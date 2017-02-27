@@ -66,8 +66,9 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
@@ -77,13 +78,14 @@ describe('UC 508 - View Design Update Summary', function(){
     it('A new Scenario added to an existing Feature in the Design Update is listed in the additions list', function(){
 
         // Setup
-        // Add a new Scenario to Feature1 Actions - need to Scope Feature1
+        // Add a new Scenario to Feature1 Actions - need to Scope Actions
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify only scenario in list
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
@@ -98,8 +100,9 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify - both in list
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
@@ -113,8 +116,9 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature444');
         UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature444');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature444'));
@@ -128,8 +132,9 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario1'));
@@ -142,8 +147,9 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature2'));
@@ -156,8 +162,9 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature2'));
@@ -172,8 +179,9 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
@@ -181,8 +189,9 @@ describe('UC 508 - View Design Update Summary', function(){
         // Then remove it again
         UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify - not in addition or removal
         expect(DesignUpdateSummaryVerifications.feature_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
@@ -192,13 +201,14 @@ describe('UC 508 - View Design Update Summary', function(){
     it('A new Scenario added and removed in the Design Update is not listed in the additions or removals list', function(){
 
         // Setup
-        // Add a new Scenario to Feature1 Actions - need to Scope Feature1
+        // Add a new Scenario to Feature1 Actions - need to Scope Actions
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify only scenario in list
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
@@ -206,8 +216,9 @@ describe('UC 508 - View Design Update Summary', function(){
         // Then remove it again
         UpdateComponentActions.designerRemovesUpdateScenario('Actions', 'Scenario8');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify - not in addition or removal
         expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
@@ -223,8 +234,9 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Feature Name');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.feature_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Feature1', 'New Feature Name'));
@@ -239,8 +251,9 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario Name');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify
         expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario Name'));
@@ -253,15 +266,18 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
         expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
 
         // Change the name of Feature3
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Feature Name');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify - not in changes - still in New as new name
         expect(DesignUpdateSummaryVerifications.feature_ChangedTo_IsNotInCurrentDesignUpdateSummaryChangesForDesigner('Feature3', 'New Feature Name'));
@@ -272,20 +288,23 @@ describe('UC 508 - View Design Update Summary', function(){
     it('A new Scenario modified in the Design Update is not shown in the changes list', function(){
 
         // Setup
-        // Add a new Scenario to Feature1 Actions - need to Scope Feature1
+        // Add a new Scenario to Feature1 Actions - need to Scope Actions
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
 
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
 
         // Modify name
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario Name');
 
-        // Look at Summary
+        // Refresh Summary
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerRefreshesUpdateSummary();
 
         // Verify - not in changes - still in New as new name
         expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsNotInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario Name'));

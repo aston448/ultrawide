@@ -84,6 +84,11 @@ class DesignUpdate extends Component {
         );
     }
 
+    onRefreshSummary(du){
+
+        ClientDesignUpdateServices.refreshSummary(du._id);
+    }
+
     setNewDesignUpdateActive(context, du){
 
         ClientDesignUpdateServices.setDesignUpdate(
@@ -106,44 +111,6 @@ class DesignUpdate extends Component {
 
     }
 
-    // getUpdateAdoptionStatus(devContext, du){
-    //
-    //     // Return true if we have updates in the dev context and this one is included
-    //     if(devContext.designUpdateIds){
-    //         return devContext.designUpdateIds.includes(du._id);
-    //     } else {
-    //         return false;
-    //     }
-    // };
-
-    // setUpdateAdoptionStatus(e, du, duList, context){
-    //
-    //     console.log("ON CHANGE: " + e.target.checked);
-    //
-    //     let checked = e.target.checked;
-    //
-    //     // If ticking add to list, if unticking subtract from it.
-    //     // State change depends on actual success of update not on ticking
-    //
-    //     if(this.state.adopted && !checked){
-    //         if(ClientDesignUpdateServices.setUpdateAdoptionStatus(du, duList, 'SUBTRACT', context.designId)) {
-    //             this.setState({adopted: false});
-    //             return;
-    //         } else {
-    //             //TODO warn user that it failed
-    //         }
-    //     }
-    //
-    //     if(!this.state.adopted && checked) {
-    //         if(ClientDesignUpdateServices.setUpdateAdoptionStatus(du, duList, 'ADD', context.designId)){
-    //             this.setState({adopted: true});
-    //             return;
-    //         } else {
-    //             //TODO warn user that it failed
-    //         }
-    //     }
-    // }
-
     render() {
         const {designUpdate, userRole, userContext, viewOptions} = this.props;
 
@@ -155,46 +122,46 @@ class DesignUpdate extends Component {
 
         switch(designUpdate.updateStatus){
             case DesignUpdateStatus.UPDATE_NEW:
-                if(userRole === RoleType.DEVELOPER){
-                    // Developers can't do anything with design updates until published
-                    buttons = <div></div>;
-                } else {
-                    // Designers can edit, delete or publish a new update
-                    buttons =
-                        <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>
-                            <Button bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>
-                        </ButtonGroup>;
+                switch(userRole){
+                    case RoleType.DEVELOPER:
+                    case RoleType.MANAGER:
+                    // Developers and Managers can't do anything with design updates until published
+                        buttons = <div></div>;
+                        break;
+                    case RoleType.DESIGNER:
+                        // Designers can edit, delete or publish a new update
+                        buttons =
+                            <ButtonGroup>
+                                <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
+                                <Button bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>
+                                <Button bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>
+                            </ButtonGroup>;
+                        break;
                 }
                 break;
             case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
-                if(userRole === RoleType.DEVELOPER){
+                switch(userRole){
+                    case RoleType.DEVELOPER:
                     // Developers can view or select an update to include in the adopted design
                     buttons =
                         <div>
                             <ButtonGroup className="button-group-left">
                                 <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
+                                <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
                             </ButtonGroup>
                             <ButtonGroup>
                                 <Button bsSize="xs" onClick={ () => this.onDevelopDesignUpdate(userContext, designUpdate)}>Develop this Update</Button>
                             </ButtonGroup>
-                        </div>
-                    // options =
-                    //     <FormGroup>
-                    //         <Checkbox
-                    //             checked={this.state.adopted}
-                    //             onChange={ (e) => this.setUpdateAdoptionStatus(e, designUpdate, currentUserDevContext.designUpdateIds, userContext)}>
-                    //             Select for Development
-                    //         </Checkbox>
-                    //     </FormGroup>;
-                } else {
+                        </div>;
+                        break;
+                    case RoleType.DESIGNER:
                     // Designers can view, edit or withdraw the update or specify how it is to be merged into the next Design Version
                     buttons =
                         <ButtonGroup>
                             <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
                             <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
                             <Button bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>
+                            <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
                         </ButtonGroup>;
                     options =
                         <FormGroup>
@@ -211,6 +178,17 @@ class DesignUpdate extends Component {
                                 {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
                             </Radio>
                         </FormGroup>;
+                        break;
+                    case RoleType.MANAGER:
+                        // Managers can just view or refresh the summary
+                        buttons =
+                            <div>
+                                <ButtonGroup className="button-group-left">
+                                    <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
+                                    <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
+                                </ButtonGroup>
+                            </div>;
+                        break;
                 }
                 break;
             case DesignUpdateStatus.UPDATE_MERGED:
