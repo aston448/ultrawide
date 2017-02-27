@@ -35,6 +35,19 @@ class ClientDesignUpdateSummary{
 
     getDesignUpdateSummary(designUpdateId){
 
+        // Refresh data if required
+        DesignUpdateSummaryServices.refreshDesignUpdateSummary(designUpdateId, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+
+            }
+        });
+    };
+
+    getDesignUpdateSummaryData(designUpdateId){
 
         // Nothing if no Design Update is set
         if(designUpdateId === 'NONE'){
@@ -45,26 +58,6 @@ class ClientDesignUpdateSummary{
                 designUpdateName: 'NONE'
             };
         }
-
-        // Refresh data if required
-        DesignUpdateSummaryServices.refreshDesignUpdateSummary(designUpdateId, (err, result) => {
-
-            if (err) {
-                // Unexpected error as all expected errors already handled - show alert.
-                // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-
-            } else {
-                // Client actions - retrieve and return data
-                return this.getDesignUpdateSummaryData();
-            }
-        });
-
-        return this.getDesignUpdateSummaryData(designUpdateId);
-
-    };
-
-    getDesignUpdateSummaryData(designUpdateId){
 
         const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
         let designUpdateName = 'NONE';

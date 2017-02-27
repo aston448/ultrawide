@@ -142,6 +142,6 @@ DesignUpdateSummaryList = connect(mapStateToProps)(DesignUpdateSummaryList);
 
 export default DesignUpdateSummaryContainer = createContainer(({params}) => {
 
-    return ClientDesignUpdateSummary.getDesignUpdateSummary(params.designUpdateId);
+    return ClientDesignUpdateSummary.getDesignUpdateSummaryData(params.designUpdateId);
 
 }, DesignUpdateSummaryList);

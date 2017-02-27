@@ -11,7 +11,7 @@ import { DesignUpdateMessages } from '../constants/message_texts.js';
 
 import DesignUpdateValidationApi    from '../apiValidation/apiDesignUpdateValidation.js';
 import ServerDesignUpdateApi        from '../apiServer/apiDesignUpdate.js';
-import ClientMashDataServices       from '../apiClient/apiClientMashData.js';
+import ClientDesignUpdateSummary    from '../apiClient/apiClientDesignUpdateSummary.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -318,6 +318,9 @@ class ClientDesignUpdateServices {
             };
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
+
+            // Load or refresh DU Summary data
+            ClientDesignUpdateSummary.getDesignUpdateSummary(newDesignUpdateId);
 
         }
 
