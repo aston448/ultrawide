@@ -458,7 +458,7 @@ class ClientContainerServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(view, designVersionId, designUpdateId, workPackageId){
 
-        //console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
+        console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
 
 
         const baseApplications = DesignComponents.find(
@@ -470,7 +470,7 @@ class ClientContainerServices{
         );
 
         let baseApplicationsArr = baseApplications.fetch();
-        //console.log("Found " + baseApplicationsArr.length + " base applications.");
+        console.log("Found " + baseApplicationsArr.length + " base applications.");
 
 
         // Get Update Apps if update Id provided

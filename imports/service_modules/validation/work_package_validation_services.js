@@ -125,11 +125,11 @@ class WorkPackageValidationServices{
         }
 
         // If Developer and Adopted, must be adopted by them
-        // if(userRole === RoleType.DEVELOPER){
-        //     if(wp.adoptingUserId != userId){
-        //         return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_USER_RELEASE;
-        //     }
-        // }
+        if(userRole === RoleType.DEVELOPER){
+            if(wp.adoptingUserId != userId){
+                return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_USER_RELEASE;
+            }
+        }
 
 
         return Validation.VALID;
