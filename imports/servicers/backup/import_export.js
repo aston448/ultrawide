@@ -745,6 +745,7 @@ class ImpExServices{
                     let workPackageId = WorkPackageServices.importWorkPackage(
                         designVersionId,
                         designUpdateId,
+                        adoptingUserId,
                         workPackage
                     );
 

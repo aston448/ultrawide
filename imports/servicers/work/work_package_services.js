@@ -45,7 +45,7 @@ class WorkPackageServices{
         }
     };
 
-    importWorkPackage(designVersionId, designUpdateId, workPackage){
+    importWorkPackage(designVersionId, designUpdateId, adoptingUserId, workPackage){
 
         if(Meteor.isServer) {
             const workPackageId = WorkPackages.insert(
@@ -56,7 +56,7 @@ class WorkPackageServices{
                     workPackageName: workPackage.workPackageName,
                     workPackageRawText: workPackage.workPackageRawText,
                     workPackageStatus: workPackage.workPackageStatus,
-                    adoptingUserId: workPackage.adoptingUserId
+                    adoptingUserId: adoptingUserId
                 }
             );
 
