@@ -495,7 +495,69 @@ input {
     color: turquoise;
 }
 
+/* -- Design Update Summary ----------------------------------------------------------------------------------------- */
 
+.summary-header{
+    margin: 3px 10px 3px 0;
+    padding: 2px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    background-color: ghostwhite;
+}
+
+.summary-modify{
+    margin: 0 5px 0 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: blue;
+}
+
+.summary-add{
+    margin: 0 5px 0 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: green;
+}
+
+.summary-remove{
+    margin: 0 5px 0 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: red;
+}
+
+.summary-to-from{
+    margin: 0 5px 0 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+    color: blue;
+}
+
+.summary-item{
+    margin: 3px 5px 0 0;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+    color: darkslategray;
+}
+
+.summary-icon{
+    font-size:  12px;
+    font-weight: normal;
+    color: darkslategray;
+}
+
+.item-old{
+    color: red;
+}
+
+.item-new{
+    color: green;
+}
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */
 

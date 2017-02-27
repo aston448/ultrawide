@@ -53,7 +53,8 @@ class DesignUpdateServices{
                     updateReference:    designUpdate.updateReference,
                     updateRawText:      designUpdate.updateRawText,
                     updateStatus:       designUpdate.updateStatus,
-                    updateMergeAction:  designUpdate.updateMergeAction
+                    updateMergeAction:  designUpdate.updateMergeAction,
+                    summaryDataStale:   designUpdate.summaryDataStale
                 }
             );
 

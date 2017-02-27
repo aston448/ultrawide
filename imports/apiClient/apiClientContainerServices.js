@@ -101,6 +101,7 @@ class ClientContainerServices{
             console.log("Getting Design Version Data for DV " + designVersionId);
 
             let duHandle = Meteor.subscribe('designUpdates', designVersionId);
+            let dsHandle = Meteor.subscribe('designUpdateSummaries', designVersionId);
             let dcHandle = Meteor.subscribe('designComponents', designVersionId);
             let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
             let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
@@ -113,13 +114,16 @@ class ClientContainerServices{
             Tracker.autorun((loader) => {
 
                 let loading = (
-                    !duHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
+                    !duHandle.ready() || !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
                 );
 
                 console.log("loading = " + loading);
 
-                if (!loading && callback) {
-                    callback();
+                if (!loading) {
+                    // If an action wanted after loading call it...
+                    if(callback) {
+                        callback();
+                    }
 
                     // Stop this checking once we are done or there will be random chaos
                     loader.stop();

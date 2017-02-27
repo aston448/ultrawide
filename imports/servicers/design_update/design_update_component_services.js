@@ -1,6 +1,7 @@
 
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
+import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide services
@@ -134,6 +135,9 @@ class DesignUpdateComponentServices{
                         }
                     );
                 }
+
+                // And the Design Update Summary is now stale
+                DesignUpdates.update({_id: designUpdateId}, {$set:{summaryDataStale: true}});
             }
         }
     };
@@ -451,9 +455,9 @@ class DesignUpdateComponentServices{
             // Item only counts as logically changed if the new name is still different to that in the existing design version.
             // So it becomes not changed if reverted back to the original name after a change...
 
-            let componentOldName = DesignUpdateComponents.findOne({_id: designUpdateComponentId}).componentNameOld;
+            let duComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-            let changed = (componentNewName != componentOldName);
+            let changed = (componentNewName != duComponent.componentNameOld);
 
             // Update the new names for the update
             DesignUpdateComponents.update(
@@ -466,6 +470,11 @@ class DesignUpdateComponentServices{
                     }
                 }
             );
+
+            // And the Design Update Summary is now stale if it was a real change
+            if(changed) {
+                DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+            }
         }
     };
 
@@ -574,6 +583,8 @@ class DesignUpdateComponentServices{
                     // And we logically delete the components in all parallel updates to prevent contradictory instructions
                     DesignUpdateComponentModules.logicallyDeleteChildrenForAllUpdates(designUpdateComponentId);
 
+                    // This is a real change to functionality so set DU Summary as stale
+                    DesignUpdates.update({_id: thisComponent.designUpdateId}, {$set: {summaryDataStale: true}});
                 }
             }
         }

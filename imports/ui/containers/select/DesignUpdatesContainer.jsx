@@ -87,7 +87,7 @@ class DesignUpdatesList extends Component {
                     return (
                         <Grid>
                             <Row>
-                                <Col md={6} className="col">
+                                <Col md={6} className="scroll-col">
                                     <WorkPackagesContainer params={{
                                         wpType: WorkPackageType.WP_BASE,
                                         designVersionId: userContext.designVersionId,
@@ -125,19 +125,19 @@ class DesignUpdatesList extends Component {
                     return (
                         <Grid>
                             <Row>
-                                <Col md={3} className="col">
+                                <Col md={3} className="scroll-col">
                                     <Panel header="Design Updates">
                                         {updatesPanelContent}
                                     </Panel>
                                 </Col>
-                                <Col md={4} className="col">
+                                <Col md={3} className="scroll-col">
                                     <WorkPackagesContainer params={{
                                         wpType: WorkPackageType.WP_UPDATE,
                                         designVersionId: userContext.designVersionId,
                                         designUpdateId: userContext.designUpdateId
                                     }}/>
                                 </Col>
-                                <Col md={5} className="col">
+                                <Col md={6} className="scroll-col">
                                     <UpdateSummaryContainer params={{
                                         designUpdateId: userContext.designUpdateId
                                     }}/>
@@ -163,108 +163,6 @@ class DesignUpdatesList extends Component {
                 </Grid>
             );
         }
-
-        // let developerButtons = <div></div>;
-
-        // if(designUpdates.length > 0){
-        //     developerButtons =
-        //         <ButtonGroup>
-        //             <Button bsSize="xs" onClick={ () => this.onDevelopDesignUpdates()}>Develop Selected Updates</Button>
-        //         </ButtonGroup>
-        // }
-
-        // // When a design version is selected...
-        // if(userContext.designVersionId){
-        //     switch(designVersionStatus){
-        //         case DesignVersionStatus.VERSION_NEW:
-        //         case DesignVersionStatus.VERSION_PUBLISHED_DRAFT:
-        //             // No design updates available and none can be added...
-        //             if(userRole === RoleType.DEVELOPER){
-        //                 updatesPanelContent =
-        //                     <div className="design-item-note">No Updates Yet</div>;
-        //             } else {
-        //                 updatesPanelContent =
-        //                     <div className="design-item-note">Updates may only be added to an Updatable Design Version...</div>;
-        //             }
-        //             break;
-        //         case DesignVersionStatus.VERSION_PUBLISHED_UPDATABLE:
-        //             if(userRole != RoleType.DESIGNER){
-        //                 // Developers and Managers can't add design updates
-        //                 updatesPanelContent =
-        //                     <div>
-        //                         {this.renderDesignUpdatesList()}
-        //                         {/*<div className="design-item-button">*/}
-        //                             {/*{developerButtons}*/}
-        //                         {/*</div>*/}
-        //                     </div>;
-        //             } else {
-        //                 // Design updates may be added
-        //                 updatesPanelContent =
-        //                     <div>
-        //                         {this.renderDesignUpdatesList()}
-        //                         <div className="design-item-add">
-        //                             <DesignComponentAdd
-        //                                 addText="Add Design Update"
-        //                                 onClick={ () => this.addDesignUpdate(userRole, userContext.designVersionId)}
-        //                             />
-        //                         </div>
-        //                     </div>;
-        //             }
-        //             break;
-        //         case DesignVersionStatus.VERSION_PUBLISHED_COMPLETE:
-        //             // Design updates may be viewed only
-        //             updatesPanelContent =
-        //                 <div>
-        //                     {this.renderDesignUpdatesList()}
-        //                 </div>;
-        //             break;
-        //     }
-        // }
-        //
-        // if(userRole === RoleType.MANAGER){
-        //     // Additional Work Package Column
-        //     return (
-        //         <Grid>
-        //             <Row>
-        //                 <Col md={3} className="col">
-        //                     <Panel header="Design Updates">
-        //                         {updatesPanelContent}
-        //                     </Panel>
-        //                 </Col>
-        //                 <Col md={4} className="col">
-        //                     <WorkPackagesContainer params={{
-        //                         wpType: WorkPackageType.WP_UPDATE,
-        //                         designVersionId: userContext.designVersionId,
-        //                         designUpdateId: userContext.designUpdateId
-        //                     }}/>
-        //                 </Col>
-        //                 <Col md={5} className="col">
-        //                     <UpdateSummaryContainer params = {{
-        //                         designUpdateId: userContext.designUpdateId
-        //                     }}/>
-        //                 </Col>
-        //             </Row>
-        //         </Grid>
-        //     );
-        // } else {
-        //     return (
-        //         <Grid>
-        //             <Row>
-        //                 <Col md={4} className="col">
-        //                     <Panel header="Design Updates">
-        //                         {updatesPanelContent}
-        //                     </Panel>
-        //                 </Col>
-        //                 <Col md={8} className="col">
-        //                     <UpdateSummaryContainer params = {{
-        //                         designUpdateId: userContext.designUpdateId
-        //                     }}/>
-        //                 </Col>
-        //             </Row>
-        //         </Grid>
-        //     );
-        // }
-
 
     }
 }

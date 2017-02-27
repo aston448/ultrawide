@@ -35,85 +35,136 @@ class UpdateSummaryItem extends Component {
     render(){
         const {updateSummaryData} = this.props;
 
+        let itemHeader = <div></div>;
         let item = <div></div>;
+        let itemNew = <div></div>;
+        let hasNew = false;
+        let iconClassName = 'summary-icon';
 
         switch(updateSummaryData.summaryType){
             case DesignUpdateSummaryType.SUMMARY_ADD:
-                item =
+                itemHeader =
                     <div>
-                        {'MODIFY: ' + updateSummaryData.itemParentName + ' ADD: ' + updateSummaryData.itemName}
+                        <span className="summary-modify">MODIFY:</span>
+                        <span className="summary-item">{updateSummaryData.itemParentName}</span>
+                        <span className="summary-add">ADD FEATURE</span>
                     </div>;
+                item =
+                    <div className="summary-item">
+                        {updateSummaryData.itemName}
+                    </div>;
+
+                    iconClassName += ' item-new';
                 break;
             case DesignUpdateSummaryType.SUMMARY_ADD_TO:
-                item =
+                itemHeader =
                     <div>
-                        {'MODIFY: ' + updateSummaryData.itemParentName + ' ADD: ' + updateSummaryData.itemName + ' to ' + updateSummaryData.itemSectionName}
+                        <span className="summary-modify">MODIFY:</span>
+                        <span className="summary-item">{updateSummaryData.itemFeatureName + ' - ' + updateSummaryData.itemParentName}</span>
+                        <span className="summary-add">ADD SCENARIO</span>
                     </div>;
+                item =
+                    <div className="summary-item">
+                        {updateSummaryData.itemName}
+                    </div>;
+
+                iconClassName += ' item-new';
                 break;
             case DesignUpdateSummaryType.SUMMARY_REMOVE:
-                item =
+                itemHeader =
                     <div>
-                        {'MODIFY: ' + updateSummaryData.itemParentName + ' REMOVE: ' + updateSummaryData.itemName}
+                        <span className="summary-modify">MODIFY:</span>
+                        <span className="summary-item">{updateSummaryData.itemParentName}</span>
+                        <span className="summary-remove">REMOVE FEATURE</span>
+
                     </div>;
+                item =
+                    <div className="summary-item">
+                        {updateSummaryData.itemName}
+                    </div>;
+
+                iconClassName += ' item-old';
                 break;
             case DesignUpdateSummaryType.SUMMARY_REMOVE_FROM:
-                item =
+                itemHeader =
                     <div>
-                        {'MODIFY: ' + updateSummaryData.itemParentName + ' REMOVE: ' + updateSummaryData.itemName + ' from ' + updateSummaryData.itemSectionName}
+                        <span className="summary-modify">MODIFY:</span>
+                        <span className="summary-item">{updateSummaryData.itemFeatureName + ' - ' + updateSummaryData.itemParentName}</span>
+                        <span className="summary-remove">REMOVE SCENARIO</span>
                     </div>;
+                item =
+                    <div className="summary-item">
+                        {updateSummaryData.itemName}
+                    </div>;
+
+                iconClassName += ' item-old';
                 break;
             case DesignUpdateSummaryType.SUMMARY_CHANGE:
-                switch(updateSummaryData.summaryComponentType){
-                    case DesignUpdateSummaryItem.SUMMARY_FEATURE:
-                        if(updateSummaryData.itemOldName != updateSummaryData.itemName){
-                            item =
-                                <div>
-                                    {'MODIFY: '+ updateSummaryData.itemParentName + ' CHANGE: ' + updateSummaryData.itemOldName + ' to ' + updateSummaryData.itemName}
-                                </div>;
-                        } else {
-                            item =
-                                <div>
-                                    {'MODIFY: '+ updateSummaryData.itemParentName + ' CHANGE Details of ' + updateSummaryData.itemName}
-                                </div>;
-                        }
-                        break;
-                    case DesignUpdateSummaryItem.SUMMARY_SCENARIO_IN_FEATURE:
-                        if(updateSummaryData.itemOldName != updateSummaryData.itemName){
-                            item =
-                                <div>
-                                    <span>{'MODIFY: '+ updateSummaryData.itemParentName + ' CHANGE: '}</span><span className="change-item-old">{updateSummaryData.itemOldName}</span> <span> to </span><span className="change-item-new">{updateSummaryData.itemName}</span>
-                                </div>;
-                        } else {
-                            item =
-                                <div>
-                                    {'MODIFY: '+ updateSummaryData.itemParentName + ' CHANGE Details of ' + updateSummaryData.itemName}
-                                </div>;
-                        }
-                        break;
-                    case DesignUpdateSummaryItem.SUMMARY_SCENARIO_IN_ASPECT:
-                        if(updateSummaryData.itemOldName != updateSummaryData.itemName){
-                            item =
-                                <div>
-                                    {'MODIFY: '+ updateSummaryData.itemParentName + ' CHANGE: ' + updateSummaryData.itemOldName + ' in ' + updateSummaryData.itemSectionName + ' to ' + updateSummaryData.itemName}
-                                </div>;
-                        } else {
-                            item =
-                                <div>
-                                    {'MODIFY: '+ updateSummaryData.itemParentName + ' CHANGE Details of ' + updateSummaryData.itemName + ' in ' + updateSummaryData.itemSectionName}
-                                </div>;
-                        }
-                        break;
+                if(updateSummaryData.itemNameOld != updateSummaryData.itemName){
+                    itemHeader =
+                        <div>
+                            <span className="summary-modify">MODIFY:</span>
+                            <span className="summary-item">{updateSummaryData.itemParentName}</span>
+                            <span className="summary-modify">CHANGE FEATURE</span>
+                        </div>;
+                    item =
+                        <div className="summary-item">
+                            {'WAS: ' + updateSummaryData.itemNameOld}
+                        </div>;
+                    itemNew =
+                        <div className="summary-item">
+                            {'NOW: ' + updateSummaryData.itemName}
+                        </div>;
+                    hasNew = true;
                 }
                 break;
-
+            case DesignUpdateSummaryType.SUMMARY_CHANGE_IN:
+                if(updateSummaryData.itemNameOld != updateSummaryData.itemName){
+                    itemHeader =
+                        <div>
+                            <span className="summary-modify">MODIFY:</span>
+                            <span className="summary-item">{updateSummaryData.itemFeatureName + ' - ' + updateSummaryData.itemParentName}</span>
+                            <span className="summary-modify">CHANGE SCENARIO</span>
+                        </div>;
+                    item =
+                        <div className="summary-item">
+                            {'WAS: ' + updateSummaryData.itemNameOld}
+                        </div>;
+                    itemNew =
+                        <div className="summary-item">
+                            {'NOW: ' + updateSummaryData.itemName}
+                        </div>;
+                    hasNew = true;
+                }
+                break;
         }
 
-        return(
-            <InputGroup>
-                {item}
-                <InputGroup.Addon><Glyphicon glyph="edit"/></InputGroup.Addon>
-            </InputGroup>
-        )
+        if(hasNew){
+            return(
+                <div className="summary-header">
+                    {itemHeader}
+                    <InputGroup>
+                        <InputGroup.Addon><div className="summary-icon item-old"><Glyphicon glyph="th"/></div></InputGroup.Addon>
+                        {item}
+                    </InputGroup>
+                    <InputGroup>
+                        <InputGroup.Addon><div className="summary-icon item-new"><Glyphicon glyph="th"/></div></InputGroup.Addon>
+                        {itemNew}
+                    </InputGroup>
+                </div>
+            )
+        } else {
+            return(
+                <div className="summary-header">
+                    {itemHeader}
+                    <InputGroup>
+                        <InputGroup.Addon><div className={iconClassName}><Glyphicon glyph="th"/></div></InputGroup.Addon>
+                        {item}
+                    </InputGroup>
+                </div>
+            )
+        }
+
     }
 }
 

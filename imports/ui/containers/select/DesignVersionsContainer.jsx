@@ -65,12 +65,12 @@ export class DesignVersionsList extends Component {
         return (
             <Grid>
                 <Row>
-                    <Col md={3} className="col">
+                    <Col md={2} className="scroll-col">
                         <Panel header="Design Versions">
                             {this.renderDesignVersionsList(designVersions)}
                         </Panel>
                     </Col>
-                    <Col md={9} className="col">
+                    <Col md={10} className="col">
                         <DesignUpdatesContainer params={{
                             currentDesignVersionId: userContext.designVersionId
                         }}/>

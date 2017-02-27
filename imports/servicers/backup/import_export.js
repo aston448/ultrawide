@@ -10,6 +10,7 @@ import { TestOutputLocationFiles }      from '../../collections/configure/test_o
 import { Designs }                      from '../../collections/design/designs.js';
 import { DesignVersions }               from '../../collections/design/design_versions.js';
 import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
+import { DesignUpdateSummaries }        from '../../collections/design_update/design_update_summaries.js';
 import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { DomainDictionary }             from '../../collections/design/domain_dictionary.js'
 import { DesignComponents }             from '../../collections/design/design_components.js';
@@ -28,6 +29,7 @@ import TestOutputLocationServices       from '../configure/test_output_location_
 import DesignServices                   from '../design/design_services.js';
 import DesignVersionServices            from '../design/design_version_services.js';
 import DesignUpdateServices             from '../design_update/design_update_services.js';
+import DesignUpdateSummaryServices      from '../design_update/design_update_summary_services.js';
 import WorkPackageServices              from '../work/work_package_services.js';
 import DomainDictionaryServices         from '../design/domain_dictionary_services.js';
 import DesignComponentServices          from '../design/design_component_services.js';
@@ -52,6 +54,9 @@ class ImpExServices{
 
             // All updates in this Version
             DesignUpdates.remove({designVersionId: designVersion._id});
+
+            // All DU Summaries for this version
+            DesignUpdateSummaries.remove({designVersionId: designVersion._id});
 
             // All Work packages in this version
             let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
@@ -95,6 +100,7 @@ class ImpExServices{
 
             let designVersions = [];
             let designUpdates = [];
+            let designUpdateSummaries = [];
             let workPackages = [];
             let designComponents = [];
             let designUpdateComponents = [];
@@ -110,6 +116,12 @@ class ImpExServices{
                 let designUpdateData = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
                 designUpdateData.forEach((designUpdate) => {
                     designUpdates.push(designUpdate);
+                });
+
+                // All update summaries in this Version
+                let designUpdateSummaryData = DesignUpdateSummaries.find({designVersionId: designVersion._id}).fetch();
+                designUpdateSummaryData.forEach((designUpdateSummary) => {
+                    designUpdateSummaries.push(designUpdateSummary);
                 });
 
                 // All Work packages in this version
@@ -160,6 +172,7 @@ class ImpExServices{
                 designs: designData,
                 designVersions: designVersions,
                 designUpdates: designUpdates,
+                designUpdateSummaries: designUpdateSummaries,
                 workPackages: workPackages,
                 designComponents: designComponents,
                 designUpdateComponents: designUpdateComponents,
@@ -220,6 +233,7 @@ class ImpExServices{
             let newDesignData = backupData.designs;
             let newDesignVersionData = backup.designVersions;
             let newDesignUpdateData = backup.designUpdates;
+            let newDesignUpdateSummaryData = backup.designUpdateSummaries;
             let newWorkPackageData = backup.workPackages;
             let newDesignComponentData = backup.designComponents;
             let newDesignUpdateComponentData = backup.designUpdateComponents;
@@ -233,6 +247,7 @@ class ImpExServices{
                 newDesignData = this.migrateDesignData(backupData.designs, backup.dataVersion, latestDataVersion);
                 newDesignVersionData = this.migrateDesignVersionData(backupData.designVersions, backup.dataVersion, latestDataVersion);
                 newDesignUpdateData = this.migrateDesignUpdateData(backupData.designUpdates, backup.dataVersion, latestDataVersion);
+                newDesignUpdateSummaryData = this.migrateDesignUpdateSummaryData(backupData.designUpdateSummaries, backup.dataVersion, latestDataVersion);
                 newWorkPackageData = this.migrateWorkPackageData(backupData.workPackages, backup.dataVersion, latestDataVersion);
                 newDesignComponentData = this.migrateDesignComponentData(backupData.designComponents, backup.dataVersion, latestDataVersion);
                 newDesignUpdateComponentData = this.migrateDesignUpdateComponentData(backupData.designUpdateComponents, backup.dataVersion, latestDataVersion);
@@ -249,8 +264,18 @@ class ImpExServices{
 
             let designUpdatesMapping = this.restoreDesignUpdateData(newDesignUpdateData, designVersionsMapping);
 
+            this.restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping);
+
             let hasUpdates = newDesignUpdateData.length > 0;
-            let workPackagesMapping = this.restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, hasUpdates);
+
+            // Get current user mapping for WP adoption
+            let userMapping = [];
+
+            UserRoles.forEach((user) => {
+                userMapping.push({oldId: user.userId, newId: user.userId});
+            });
+
+            let workPackagesMapping = this.restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasUpdates);
 
             let designComponentsMapping = this.restoreDesignComponentData(newDesignComponentData, designsMapping, designVersionsMapping);
 
@@ -283,6 +308,8 @@ class ImpExServices{
                 // All updates in this Version
                 DesignUpdates.remove({designVersionId: designVersion._id});
 
+                // All update summaries in this Version
+                DesignUpdateSummaries.remove({designVersionId: designVersion._id});
 
                 let workPackages = WorkPackages.find({designVersionId: designVersion._id}).fetch();
                 workPackages.forEach((workPackage) => {
@@ -425,6 +452,22 @@ class ImpExServices{
         }
 
         return newDesignUpdateData;
+    };
+
+    migrateDesignUpdateSummaryData(designUpdateSummaryData, backupVersion, currentVersion){
+        // Add to this function for each release
+        let newDesignUpdateSummaryData = designUpdateSummaryData;
+
+        switch(backupVersion){
+            case 1:
+                switch(currentVersion){
+                    case 2:
+                        // No changes
+                        newDesignUpdateSummaryData = designUpdateSummaryData
+                }
+        }
+
+        return newDesignUpdateSummaryData;
     };
 
     migrateWorkPackageData(workPackageData, backupVersion, currentVersion){
@@ -656,13 +699,34 @@ class ImpExServices{
         return designUpdatesMapping;
     };
 
-    restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, hasDesignUpdates){
+    restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping){
+
+        newDesignUpdateSummaryData.forEach((designUpdateSummary) => {
+            let designVersionId = getIdFromMap(designVersionsMapping, designUpdateSummary.designVersionId);
+            let designUpdateId = getIdFromMap(designUpdatesMapping, designUpdateSummary.designUpdateId);
+
+            if (designVersionId && designUpdateId) {
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Summary to Design Version {}", designVersionId);
+
+                let designUpdateSummaryId = DesignUpdateSummaryServices.importDesignUpdateSummary(
+                    designVersionId,
+                    designUpdateId,
+                    designUpdateSummary
+                );
+
+            }
+        });
+    };
+
+    restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasDesignUpdates){
 
         let workPackagesMapping = [];
 
         newWorkPackageData.forEach((workPackage) => {
 
             let designVersionId = getIdFromMap(designVersionsMapping, workPackage.designVersionId);
+            let adoptingUserId = getIdFromMap(userMapping, workPackage.adoptingUserId);
 
             if (designVersionId) {
 
@@ -950,6 +1014,9 @@ class ImpExServices{
         // Design Updates
         this.produceExportFile(DesignUpdates, 'DESIGN_UPDATES');
 
+        // Design Update Summaries
+        this.produceExportFile(DesignUpdateSummaries, 'DESIGN_UPDATE_SUMMARIES');
+
         // Work Packages
         this.produceExportFile(WorkPackages, 'WORK_PACKAGES');
 
@@ -1224,6 +1291,27 @@ class ImpExServices{
             hasDesignUpdates = false;
         }
 
+        // Design Update Summaries -------------------------------------------------------------------------------------
+        let designUpdateSummaryData = '';
+        let designUpdateSummaries = [];
+
+        try{
+            designUpdateSummaryData = fs.readFileSync(path + 'DESIGN_UPDATE_SUMMARIES.EXP');
+            designUpdateSummaries = JSON.parse(designUpdateSummaryData);
+        } catch (e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Update Summaries export file: {}", e);
+        }
+
+        if(designUpdateSummaries.length > 0) {
+
+            let migratedDesignUpdateSummaries = this.migrateDesignUpdateSummaryData(designUpdateSummaries, backupDataVersion, currentDataVersion);
+            this.restoreDesignUpdateSummaryData(migratedDesignUpdateSummaries, designVersionsMapping, designUpdatesMapping);
+
+        } else {
+            // No Design Update Summaries - could be OK
+            log((msg) => console.log(msg), LogLevel.INFO, "No Design Update Summaries found...");
+        }
+
         // Work Packages -----------------------------------------------------------------------------------------------
         let workPackagesData = '';
         let workPackages = [];
@@ -1235,13 +1323,10 @@ class ImpExServices{
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Work Packages export file: {}", e);
         }
 
-        designVersionId = null;
-        designUpdateId = null;
-
         if(workPackages.length > 0) {
 
             let migratedWorkPackages = this.migrateWorkPackageData(workPackages, backupDataVersion, currentDataVersion);
-            workPackagesMapping = this.restoreWorkPackageData(migratedWorkPackages, designVersionsMapping, designUpdatesMapping, hasDesignUpdates);
+            workPackagesMapping = this.restoreWorkPackageData(migratedWorkPackages, designVersionsMapping, designUpdatesMapping, usersMapping, hasDesignUpdates);
 
         } else {
             // No Work Packages - could be OK
