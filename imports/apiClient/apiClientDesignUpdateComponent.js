@@ -10,6 +10,7 @@ import { Validation }                       from '../constants/validation_errors
 
 import ServerDesignUpdateComponentApi       from '../apiServer/apiDesignUpdateComponent.js';
 import DesignUpdateComponentValidationApi   from '../apiValidation/apiDesignUpdateComponentValidation.js';
+import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdateSummary.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -25,10 +26,10 @@ class ClientDesignUpdateComponentServices{
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User saved a change to design component name --------------------------------------------------------------------
-    updateComponentName(view, mode, designUpdateComponentId, newPlainText, newRawText){
+    updateComponentName(view, mode, designUpdateComponent, newPlainText, newRawText){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponentId, newPlainText);
+        let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponent._id, newPlainText);
 
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
@@ -37,7 +38,7 @@ class ClientDesignUpdateComponentServices{
         }
 
         // Real action call
-        ServerDesignUpdateComponentApi.updateComponentName(view, mode, designUpdateComponentId, newPlainText, newRawText, (err, result) => {
+        ServerDesignUpdateComponentApi.updateComponentName(view, mode, designUpdateComponent._id, newPlainText, newRawText, (err, result) => {
 
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
@@ -49,6 +50,8 @@ class ClientDesignUpdateComponentServices{
                 // Temp update for the redux state to the local new value - otherwise does not get changed in time
                 // This allows the text area to immediately display any updates to current component name
                 store.dispatch(updateDesignComponentName(newPlainText));
+
+                this.refreshDesignUpdateSummary(designUpdateComponent);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -250,6 +253,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Actions:
+                    this.refreshDesignUpdateSummary(parentComponent);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -332,6 +336,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Scenario Actions:
+                    this.refreshDesignUpdateSummary(parentComponent);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -373,6 +378,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
+                    this.refreshDesignUpdateSummary(designUpdateComponent);
 
                     // No need to remove from user context as only a logical delete and still visible
 
@@ -416,6 +422,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
+                    this.refreshDesignUpdateSummary(designUpdateComponent);
 
                     // No need to remove from user context as only a logical delete and still visible
 
@@ -634,6 +641,14 @@ class ClientDesignUpdateComponentServices{
             return false;
         }
     };
+
+    // Call this after a change that might need the summary updating.  It wil only actually update if the data has been
+    // marked as stale on the server...
+    refreshDesignUpdateSummary(designUpdateComponent){
+
+        ClientDesignUpdateServices.getDesignUpdateSummary(designUpdateComponent.designUpdateId);
+
+    }
 
 }
 

@@ -229,7 +229,7 @@ Meteor.methods({
         
         const newNameRaw = DesignComponentModules.getRawTextFor(newName);
         
-        const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
+        const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent, newName, newNameRaw);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Update Component Name');
     },
@@ -248,7 +248,7 @@ Meteor.methods({
 
         const newNameRaw = DesignComponentModules.getRawTextFor(newName);
 
-        const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent._id, newName, newNameRaw);
+        const outcome = ClientDesignUpdateComponentServices.updateComponentName(view, mode, targetComponent, newName, newNameRaw);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd Update Selected Component Name');
     },

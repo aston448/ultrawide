@@ -406,7 +406,6 @@ export class AppHeader extends Component {
                         {configScreenButton}
                         {designsButton}
                         {selectionScreenButton}
-                        {refreshTestDataButton}
                     </ButtonToolbar>;
                 headerBottomActionsOne =
                     <ButtonToolbar>
@@ -422,9 +421,6 @@ export class AppHeader extends Component {
                             {designFixedButton}
                             {detailsButton}
                             {domainDictionaryButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {testSummaryButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;

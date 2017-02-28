@@ -9,10 +9,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
+import DesignComponentTarget        from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
-import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
+import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
+import UpdateSummaryContainer       from '../../containers/select/UpdateSummaryContainer.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -50,7 +51,7 @@ class UpdateApplicationsList extends Component {
 
 
     // A list of top level applications in the design update
-    renderUpdateApplications(updateApplications, context, view, mode) {
+    renderUpdateApplications(updateApplications, context, view, mode, testSummary) {
         return updateApplications.map((application) => {
             // All applications are shown even in update edit view even if not in scope so that new items can be added to them
             return (
@@ -61,33 +62,33 @@ class UpdateApplicationsList extends Component {
                     displayContext={context}
                     view={view}
                     mode={mode}
-                    testSummary={false}
+                    testSummary={testSummary}
                 />
             );
 
         });
     }
 
-    // A depiction of the base Design Version
-    renderBaseApplications(baseApplications, context, view, mode) {
-        return baseApplications.map((application) => {
-            return (
-                <DesignComponentTarget
-                    key={application._id}
-                    currentItem={application}
-                    designItem={application}
-                    displayContext={context}
-                    view={view}
-                    mode={mode}
-                    testSummary={false}
-                />
-            );
-        });
-    }
+    // // A depiction of the base Design Version
+    // renderBaseApplications(baseApplications, context, view, mode) {
+    //     return baseApplications.map((application) => {
+    //         return (
+    //             <DesignComponentTarget
+    //                 key={application._id}
+    //                 currentItem={application}
+    //                 designItem={application}
+    //                 displayContext={context}
+    //                 view={view}
+    //                 mode={mode}
+    //                 testSummary={false}
+    //             />
+    //         );
+    //     });
+    // }
 
     render() {
 
-        const {updateApplications, baseApplications, currentUserItemContext, currentItemName, view, mode, domainDictionaryVisible} = this.props;
+        const {updateApplications, baseApplications, userContext, currentItemName, view, mode, viewOptions} = this.props;
 
         let layout = '';
 
@@ -104,7 +105,7 @@ class UpdateApplicationsList extends Component {
                         <td className="control-table-data-app">
                             <DesignComponentAdd
                                 addText="Add Application"
-                                onClick={ () => this.onAddApplication(view, mode, currentUserItemContext.designVersionId, currentUserItemContext.designUpdateId)}
+                                onClick={ () => this.onAddApplication(view, mode, userContext.designVersionId, userContext.designUpdateId)}
                             />
                         </td>
                     </tr>
@@ -112,106 +113,119 @@ class UpdateApplicationsList extends Component {
                 </table>
         }
 
+        // Scope for Design Update
+        let updateScopeComponent =
+            <Panel header="Update Scope" className="panel-update panel-update-body">
+                {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
+            </Panel>;
+
+        // Edit for Design Update
+        let updateEditComponent =
+            <Panel header="Update Editor" className="panel-update panel-update-body">
+                {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode, false)}
+                {addComponent}
+            </Panel>;
+
+        // View Design Update Content
+        let updateViewComponent =
+            <Panel header="Design Update" className="panel-update panel-update-body">
+                {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
+            </Panel>;
+
+        // Text / Scenario Steps for Design Update - Editable
+        let updateTextComponent =
+            <Panel header="New and Old Text" className="panel-update panel-update-body">
+                <DesignComponentTextContainer params={{
+                    currentContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.UPDATE_EDIT
+                }}/>
+            </Panel>;
+
+        // Text / Scenario Steps for Design Update - Read Only
+        let updateViewTextComponent =
+            <Panel header="New and Old Text" className="panel-update panel-update-body">
+                <DesignComponentTextContainer params={{
+                    currentContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.UPDATE_VIEW
+                }}/>
+            </Panel>;
+
         // Domain Dictionary
         let domainDictionary =
             <DomainDictionaryContainer params={{
-                designId: currentUserItemContext.designId,
-                designVersionId: currentUserItemContext.designVersionId
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId
             }}/>;
+
+        // Design Update Summary
+        let updateSummary =
+            <UpdateSummaryContainer params={{
+                designUpdateId: userContext.designUpdateId
+            }}/>;
+
 
         // Create the layout depending on the current view...
         if(updateApplications) {
-            switch (view) {
-                case ViewType.DESIGN_UPDATE_EDIT:
-                    // Layout is SCOPE | UPDATE | TEXT | BASE or DICT
 
-                    // Scope for Design Update
-                    let updateScopeComponent =
-                        <Panel header="Update Scope" className="panel-update panel-update-body">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode)}
-                        </Panel>;
+            if(view === ViewType.DESIGN_UPDATE_EDIT && mode === ViewMode.MODE_EDIT){
+                // Editable DU
 
-                    // Edit for Design Update
-                    let updateEditComponent =
-                        <Panel header="Update Editor" className="panel-update panel-update-body">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode)}
-                            {addComponent}
-                        </Panel>;
+                // Layout is SCOPE | UPDATE | TEXT | SUMMARY or DICT
 
-                    // Text / Scenario Steps for Design Update
-                    let updateTextComponent =
-                        <Panel header="New and Old Text" className="panel-update panel-update-body">
-                            <DesignComponentTextContainer params={{
-                                currentContext: currentUserItemContext,
-                                view: view,
-                                displayContext: DisplayContext.UPDATE_EDIT
-                            }}/>
-                        </Panel>;
+                // If dictionary visible, this replaces the base view
+                let col4component = updateSummary;
 
-                    // Base Design for Design Update
-                    let updateBaseComponent =
-                        <Panel header="Base Design Version" className="panel-update panel-update-body">
-                            {this.renderBaseApplications(baseApplications, DisplayContext.BASE_VIEW, view, mode)}
-                        </Panel>;
+                if (viewOptions.updateDomainDictVisible) {
+                    col4component = domainDictionary;
+                }
 
-                    // If dictionary visible, this replaces the base view
-                    let col4component = updateBaseComponent;
+                layout =
+                    <Grid>
+                        <Row>
+                            <Col md={3} className="scroll-col">
+                                {updateScopeComponent}
+                            </Col>
+                            <Col md={3} className="scroll-col">
+                                {updateEditComponent}
+                            </Col>
+                            <Col md={3}>
+                                {updateTextComponent}
+                            </Col>
+                            <Col md={3} className="scroll-col">
+                                {col4component}
+                            </Col>
+                        </Row>
+                    </Grid>;
 
-                    if(domainDictionaryVisible){
-                        col4component = domainDictionary;
-                    }
+            } else {
+                // Read Only DU
 
+                // Layout is UPDATE | TEXT | SUMMARY or DICT
+                // or UPDATE + TEST SUMMARY | UPDATE SUMMARY
+
+                // If dictionary visible, this replaces the base view
+                let col3component = updateSummary;
+
+                if(viewOptions.updateDomainDictVisible){
+                    col3component = domainDictionary;
+                }
+
+                // Adjust layout if Test Summary Visible
+                if(viewOptions.updateTestSummaryVisible){
                     layout =
                         <Grid>
                             <Row>
-                                <Col md={3} className="scroll-col">
-                                    {updateScopeComponent}
+                                <Col md={6}>
+                                    {updateViewComponent}
                                 </Col>
-                                <Col md={3} className="scroll-col">
-                                    {updateEditComponent}
-                                </Col>
-                                <Col md={3}>
-                                    {updateTextComponent}
-                                </Col>
-                                <Col md={3} className="scroll-col">
-                                    {col4component}
+                                <Col md={6}>
+                                    {updateSummary}
                                 </Col>
                             </Row>
                         </Grid>;
-                    break;
-
-                case ViewType.DESIGN_UPDATE_VIEW:
-                    // Layout is UPDATE | TEXT | BASE or DICT
-
-                    // Update components
-                    let updateViewComponent =
-                        <Panel header="Design Update" className="panel-update panel-update-body">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode)}
-                        </Panel>;
-
-                    // Text / Scenario Steps for Design Update
-                    let updateViewTextComponent =
-                        <Panel header="New and Old Text" className="panel-update panel-update-body">
-                            <DesignComponentTextContainer params={{
-                                currentContext: currentUserItemContext,
-                                view: view,
-                                displayContext: DisplayContext.UPDATE_VIEW
-                            }}/>
-                        </Panel>;
-
-                    // Base Design for Design Update
-                    let updateViewBaseComponent =
-                        <Panel header="Base Design Version" className="panel-update panel-update-body">
-                            {this.renderBaseApplications(baseApplications, DisplayContext.BASE_VIEW, view, mode)}
-                        </Panel>;
-
-                    // If dictionary visible, this replaces the base view
-                    let col3component = updateViewBaseComponent;
-
-                    if(domainDictionaryVisible){
-                        col3component = domainDictionary;
-                    }
-
+                } else {
                     layout =
                         <Grid>
                             <Row>
@@ -226,7 +240,8 @@ class UpdateApplicationsList extends Component {
                                 </Col>
                             </Row>
                         </Grid>;
-                    break;
+                }
+
             }
 
             return (
@@ -257,11 +272,12 @@ UpdateApplicationsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserItemContext: state.currentUserItemContext,
-        currentItemName: state.currentDesignComponentName,
-        view: state.currentAppView,
-        mode: state.currentViewMode,
-        domainDictionaryVisible: state.domainDictionaryVisible
+        userContext:            state.currentUserItemContext,
+        currentItemName:        state.currentDesignComponentName,
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        viewOptions:            state.currentUserViewOptions
+
     }
 }
 

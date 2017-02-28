@@ -15,7 +15,7 @@ import ClientDesignUpdateSummary    from '../apiClient/apiClientDesignUpdateSumm
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage, setCurrentUserViewOptions} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Update Items
@@ -364,8 +364,11 @@ class ClientDesignUpdateServices {
         // Ensure that the current update is the update we chose to edit
         const newContext = this.setDesignUpdate(userContext, designUpdateToEditId);
 
-        // Get the latest test results
-        //ClientMashDataServices.updateTestData(viewOptions, newContext);
+        // Test summary must not be shown when editing update
+        const newOptions = viewOptions;
+        newOptions.updateTestSummaryVisible = false;
+
+        store.dispatch(setCurrentUserViewOptions(newOptions, true));
 
         // Edit mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
@@ -398,20 +401,7 @@ class ClientDesignUpdateServices {
         // View mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
-        // If user is Designer and Update is editable, allow for switching to editing...
-        if(userRole === RoleType.DESIGNER){
-            const designUpdate = DesignUpdates.findOne({_id: designUpdateToViewId});
-
-            if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_MERGED){
-                // Editable (though in View mode)
-                store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
-            } else {
-                // definitely read only
-                store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
-            }
-        } else {
-            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
-        }
+        store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
 
         return {success: true, message: ''};
 

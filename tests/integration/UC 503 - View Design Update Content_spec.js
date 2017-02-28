@@ -130,9 +130,4 @@ describe('UC 503 - View Design Update Content', function(){
     });
 
 
-    // Consequences
-    it('When a non-editable Design Update is viewed it is opened View Only with no option to edit');
-
-    it('When an editable Design Update is opened by a Designer it is opened View Only with an option to edit');
-
 });
