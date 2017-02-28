@@ -381,6 +381,43 @@ input {
     color: indianred;
     background-color: pink;
 }
+/* -- User Management ----------------------------------------------------------------------------------------------- */
+
+.user-edit{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid darkblue;
+    border-radius: 4px;
+    background-color: paleturquoise;
+}
+
+.user-view{
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid darkblue;
+    border-radius: 4px;
+}
+
+.user-not-selected{
+    background-color: ghostwhite;
+}
+
+.user-selected{
+    background-color: paleturquoise;
+}
+
+.user-active{
+    color: black;
+}
+.user-inactive{
+    color: darkgrey;
+}
+
+.user-buttons{
+    margin: 10px;
+}
+
+/* -- Test Output Locations ----------------------------------------------------------------------------------------- */
 
 .test-output-location-edit{
     margin: 10px;

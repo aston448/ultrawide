@@ -88,7 +88,7 @@ export class AppHeader extends Component {
 
     onLogOut(userContext){
         // Back to authorisation view (i.e. log the user out)
-        ClientAppHeaderServices.setViewLogin(userContext.userId);
+        ClientAppHeaderServices.setViewLogin(userContext);
     }
 
     onRefreshTestData(view, userContext, userRole,  userViewOptions, mashStale){
@@ -254,12 +254,24 @@ export class AppHeader extends Component {
         let domStyle = (domainDictionaryVisible ? 'success' : 'default');
 
         let userData = <div></div>;
-        if(view != ViewType.AUTHORISE){
-            userData =
-                <div>
-                    <span className="header-data">{userName}</span>
-                    <span className="header-title">({userRole})</span>
-                </div>;
+        switch(view){
+            case ViewType.AUTHORISE:
+                // No header
+                break;
+            case ViewType.ADMIN:
+                userData =
+                    <div>
+                        <span className="header-data">ADMIN</span>
+                        <span className="header-title">(USER MANAGEMENT)</span>
+                    </div>;
+                break;
+            default:
+                // Everything else:
+                userData =
+                    <div>
+                        <span className="header-data">{userName}</span>
+                        <span className="header-title">({userRole})</span>
+                    </div>;
         }
 
         let headerMessage =
@@ -290,6 +302,10 @@ export class AppHeader extends Component {
         // Display the required buttons for the current view
         switch(view){
             case ViewType.AUTHORISE:
+                break;
+            case ViewType.ADMIN:
+                headerUserInfo = userData;
+                headerTitleActions = logoutButton;
                 break;
             case ViewType.HOME:
                 headerUserInfo = userData;

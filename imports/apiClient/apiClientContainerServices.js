@@ -176,6 +176,15 @@ class ClientContainerServices{
         }
     }
 
+    // Ultrawide Users
+    getUltrawideUsers(){
+
+        // Return everything except the admin user
+        return UserRoles.find({
+            isAdmin: false
+        }).fetch();
+    }
+
     // Test Output Locations
     getTestOutputLocationData(userId){
 

@@ -9,6 +9,7 @@ import {RoleType, ViewType, ViewMode, MessageType} from '../constants/constants.
 const initialState = {
     currentUserRole: RoleType.NONE,
     currentUserName: '',
+    currentUserId: 'NONE',                  // Note this is only the currently selected user in the ADMIN screen
     currentAppView: ViewType.AUTHORISE,
     currentViewMode: ViewMode.MODE_VIEW,
     domainDictionaryVisible: false,
@@ -40,6 +41,10 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_NAME:
             return Object.assign({}, state, {
                 currentUserName: action.newUserName
+            });
+        case Actions.SET_CURRENT_USER_ID:
+            return Object.assign({}, state, {
+                currentUserId: action.newUserId
             });
         case Actions.SET_CURRENT_VIEW:
             return Object.assign({}, state, {

@@ -51,6 +51,7 @@ import '../imports/apiServer/apiFeatureFiles.js';
 import '../imports/apiServer/apiTestIntegration.js';
 import '../imports/apiServer/apiFixtures.js';
 import '../imports/apiServer/apiTestOutputLocations.js';
+import '../imports/apiServer/apiUserManagement.js';
 
 // Meteor Validated Methods
 import '../imports/apiValidatedMethods/design_methods.js';

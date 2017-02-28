@@ -11,6 +11,16 @@ export const BackupValidationErrors = {
     BACKUP_DESIGN_INVALID_ROLE:     'Only a Manager or Designer can backup a Design'
 };
 
+export const UserManagementValidationErrors = {
+    USER_MANAGEMENT_NO_ADMIN_USER:              'No admin user found!',
+    USER_MANAGEMENT_INVALID_USER_ADD:           'Only the Admin user can add new users',
+    USER_MANAGEMENT_INVALID_USER_SAVE:          'Only the Admin user can save changes to users',
+    USER_MANAGEMENT_INVALID_USER_ACTIVATE:      'Only the Admin user can activate users',
+    USER_MANAGEMENT_INVALID_USER_DEACTIVATE:    'Only the Admin user can deactivate users',
+    USER_MANAGEMENT_INVALID_USER_NAME_ADMIN:    'The user name \"admin\" is reserved',
+    USER_MANAGEMENT_INVALID_USER_NAME_DUPLICATE:'A user already exists with this user name',
+};
+
 export const DesignValidationErrors = {
     DESIGN_NOT_EXIST:               'Design does not exist!',
     DESIGN_INVALID_ROLE_REMOVE:     'Only a Designer can remove Designs',

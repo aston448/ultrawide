@@ -14,6 +14,9 @@ export const TOGGLE_DOMAIN_DICTIONARY = 'TOGGLE_DOMAIN_DICTIONARY';
 
 export const SET_CURRENT_USER_VIEW_OPTIONS = 'SET_CURRENT_USER_VIEW_OPTIONS';
 
+// the currently selected user in the User Management screen - NOT the currently logged in user
+export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
+
 // Indicates the current data item context for a user - i.e. what they are looking at
 export const SET_CURRENT_USER_ITEM_CONTEXT = 'SET_CURRENT_USER_ITEM_CONTEXT';
 export const SET_CURRENT_USER_TEST_OUTPUT_LOCATION = 'SET_CURRENT_USER_TEST_OUTPUT_LOCATION';
@@ -175,6 +178,14 @@ export function setCurrentUserItemContext(contextItem, saveToDb){
         if(saveToDb) {
             Meteor.call('userContext.setCurrentUserContext', contextItem);
         }
+    };
+}
+// The currently selected user in User Management
+export function setCurrentUserId(userId){
+
+    return function (dispatch) {
+
+        dispatch({type: SET_CURRENT_USER_ID, newUserId: userId});
     };
 }
 

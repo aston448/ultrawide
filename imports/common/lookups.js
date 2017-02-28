@@ -10,7 +10,7 @@ class TextLookups {
 
         switch(view){
             case ViewType.ADMIN:
-                return 'ADMINISTRATION';
+                return 'USER MANAGEMENT';
             case ViewType.AUTHORISE:
                 return 'LOGIN';
             case ViewType.HOME:

@@ -1050,12 +1050,34 @@ class ImpExServices{
 
     }
 
+    createAdminUser(){
+
+        // Create a new Meteor account
+        let userId = Accounts.createUser(
+            {
+                username: 'admin',
+                password: 'admin'
+            }
+        );
+
+        UserRoles.insert({
+            userId:         userId,
+            userName:       'admin',
+            password:       'admin',
+            displayName:    'Admin User',
+            isDesigner:     false,
+            isDeveloper:    false,
+            isManager:      false,
+            isAdmin:        true
+        });
+
+
+    }
+
     importUltrawideData(){
         // Recreate the data using the latest code so that it is compatible...
 
         let path = process.env["PWD"] + '/backup/';
-
-        // Users - TODO - currently being created by fixtures
 
         let usersMapping = [];
         let testOutputLocationsMapping = [];
@@ -1066,17 +1088,6 @@ class ImpExServices{
         let designComponentsMapping = [];
         let designUpdateComponentsMapping = [];
         let workPackageComponentsMapping = [];
-
-        // let designId = null;
-        // let designVersionId = null;
-        // let designUpdateId = null;
-        // let workPackageId = null;
-        // let domainTermId = null;
-        // let designComponentId = null;
-        // let designUpdateComponentId = null;
-        // let workPackageComponentId = null;
-        // let featureBackgroundStepId = null;
-        // let scenarioStepId = null;
 
 
         // User Data ===================================================================================================
@@ -1099,80 +1110,100 @@ class ImpExServices{
 
         if(users.length > 0){
 
+            // Recreate admin
+            this.createAdminUser();
+
             users.forEach((user) => {
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Processing User : {}", user.displayName);
 
-                // Create a new Meteor account
-                let userId = Accounts.createUser(
-                    {
-                        username: user.userName,
-                        password: user.userName
+                // Don't restore the admin user if there was one
+                if(user.userName != 'admin') {
+
+                    let password = user.password;
+
+                    if(!(password)){
+                        password = 'password';
                     }
-                );
 
-                UserRoles.insert({
-                    userId: userId,
-                    userName: user.userName,
-                    displayName: user.displayName,
-                    isDesigner: user.isDesigner,
-                    isDeveloper: user.isDeveloper,
-                    isManager: user.isManager
-                });
-
-                usersMapping.push({oldId: user.userId, newId: userId});
-
-                // And create some basic new User Context
-                if(userContexts.length > 0) {
-                    userContexts.forEach((userContext) => {
-
-                        if (userContext.userId === user.userId) {
-                            // This context relates to the old user id so insert a new context, just restoring path info
-
-                            UserCurrentEditContext.insert({
-                                userId: userId,             // New User Id
-                                designId: 'NONE',
-                                designVersionId: 'NONE',
-                                designUpdateId: 'NONE',
-                                workPackageId: 'NONE',
-                                designComponentId: 'NONE',
-                                designComponentType: 'NONE',
-
-                                featureReferenceId: 'NONE',
-                                featureAspectReferenceId: 'NONE',
-                                scenarioReferenceId: 'NONE',
-                                scenarioStepId: 'NONE',
-
-                                featureFilesLocation: userContext.featureFilesLocation,
-                                acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
-                                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                                unitTestResultsLocation: userContext.unitTestResultsLocation
-                            });
+                    // Create a new Meteor account
+                    let userId = Accounts.createUser(
+                        {
+                            username: user.userName,
+                            password: password
                         }
-                    });
-                } else {
-                    // Use empty user context
-                    UserCurrentEditContext.insert({
-                        userId: userId,             // New User Id
-                        designId: 'NONE',
-                        designVersionId: 'NONE',
-                        designUpdateId: 'NONE',
-                        workPackageId: 'NONE',
-                        designComponentId: 'NONE',
-                        designComponentType: 'NONE',
+                    );
 
-                        featureReferenceId: 'NONE',
-                        featureAspectReferenceId: 'NONE',
-                        scenarioReferenceId: 'NONE',
-                        scenarioStepId: 'NONE',
-
-                        featureFilesLocation: 'NONE',
-                        acceptanceTestResultsLocation: 'NONE',
-                        integrationTestResultsLocation: 'NONE',
-                        unitTestResultsLocation: 'NONE'
+                    UserRoles.insert({
+                        userId: userId,
+                        userName: user.userName,
+                        password: user.password,
+                        displayName: user.displayName,
+                        isDesigner: user.isDesigner,
+                        isDeveloper: user.isDeveloper,
+                        isManager: user.isManager,
+                        isAdmin: false,
+                        isActive: user.isActive
                     });
+
+                    usersMapping.push({oldId: user.userId, newId: userId});
+
+                    // And create some basic new User Context
+                    if (userContexts.length > 0) {
+                        userContexts.forEach((userContext) => {
+
+                            if (userContext.userId === user.userId) {
+                                // This context relates to the old user id so insert a new context, just restoring path info
+
+                                UserCurrentEditContext.insert({
+                                    userId: userId,             // New User Id
+                                    designId: 'NONE',
+                                    designVersionId: 'NONE',
+                                    designUpdateId: 'NONE',
+                                    workPackageId: 'NONE',
+                                    designComponentId: 'NONE',
+                                    designComponentType: 'NONE',
+
+                                    featureReferenceId: 'NONE',
+                                    featureAspectReferenceId: 'NONE',
+                                    scenarioReferenceId: 'NONE',
+                                    scenarioStepId: 'NONE',
+
+                                    featureFilesLocation: userContext.featureFilesLocation,
+                                    acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
+                                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
+                                    unitTestResultsLocation: userContext.unitTestResultsLocation
+                                });
+                            }
+                        });
+                    } else {
+                        // Use empty user context
+                        UserCurrentEditContext.insert({
+                            userId: userId,             // New User Id
+                            designId: 'NONE',
+                            designVersionId: 'NONE',
+                            designUpdateId: 'NONE',
+                            workPackageId: 'NONE',
+                            designComponentId: 'NONE',
+                            designComponentType: 'NONE',
+
+                            featureReferenceId: 'NONE',
+                            featureAspectReferenceId: 'NONE',
+                            scenarioReferenceId: 'NONE',
+                            scenarioStepId: 'NONE',
+
+                            featureFilesLocation: 'NONE',
+                            acceptanceTestResultsLocation: 'NONE',
+                            integrationTestResultsLocation: 'NONE',
+                            unitTestResultsLocation: 'NONE'
+                        });
+                    }
                 }
 
             });
+        } else {
+            // No user data
+            log((msg) => console.log(msg), LogLevel.DEBUG, "NO USER DATA - creating basic admin user");
+            this.createAdminUser();
         }
 
         let locationData = '';

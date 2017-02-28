@@ -19,7 +19,7 @@ export const UltrawideAction = {
 
 // Determines what we are looking at
 export const ViewType = {
-    ADMIN:                      'ADMIN',                    // Backup / Restore / User Management Screen
+    ADMIN:                      'ADMIN',                    // User Management Screen
     AUTHORISE:                  'AUTHORISE',                // Login screen
     HOME:                       'HOME',                     // Home Screen - available user roles / actions
     CONFIGURE:                  'CONFIGURE',                // Change user settings

@@ -231,36 +231,41 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    setViewLogin(userId){
-        Meteor.call('impex.exportData');
+    setViewLogin(userContext){
 
-        // Clear User Context
-        const emptyContext = {
-            userId:                         userId,
-            designId:                       'NONE',
-            designVersionId:                'NONE',
-            designUpdateId:                 'NONE',
-            workPackageId:                  'NONE',
-            designComponentId:              'NONE',
-            designComponentType:            'NONE',
-            featureReferenceId:             'NONE',
-            featureAspectReferenceId:       'NONE',
-            scenarioReferenceId:            'NONE',
-            scenarioStepId:                 'NONE',
-            featureFilesLocation:           'NONE',
-            acceptanceTestResultsLocation:  'NONE',
-            integrationTestResultsLocation: 'NONE',
-            unitTestResultsLocation:        'NONE',
-        };
+        // Will be no context for Admin user
+        if(userContext) {
 
-        // Update REDUX but DON'T save to DB!
-        store.dispatch(setCurrentUserItemContext(emptyContext, false));
+            Meteor.call('impex.exportData');
 
-        console.log("User Context cleared");
+            // Clear User Context
+            const emptyContext = {
+                userId: userContext.userId,
+                designId: 'NONE',
+                designVersionId: 'NONE',
+                designUpdateId: 'NONE',
+                workPackageId: 'NONE',
+                designComponentId: 'NONE',
+                designComponentType: 'NONE',
+                featureReferenceId: 'NONE',
+                featureAspectReferenceId: 'NONE',
+                scenarioReferenceId: 'NONE',
+                scenarioStepId: 'NONE',
+                featureFilesLocation: 'NONE',
+                acceptanceTestResultsLocation: 'NONE',
+                integrationTestResultsLocation: 'NONE',
+                unitTestResultsLocation: 'NONE',
+            };
 
-        // Clear role and username
-        store.dispatch(setCurrentRole(RoleType.NONE));
-        store.dispatch(setCurrentUserName(''));
+            // Update REDUX but DON'T save to DB!
+            store.dispatch(setCurrentUserItemContext(emptyContext, false));
+
+            console.log("User Context cleared");
+
+            // Clear role and username
+            store.dispatch(setCurrentRole(RoleType.NONE));
+            store.dispatch(setCurrentUserName(''));
+        }
 
         // Returns to the login screen
         Meteor.logout();

@@ -6,7 +6,7 @@ import TestOutputLocationServices           from '../servicers/configure/test_ou
 
 //======================================================================================================================
 //
-// Meteor Validated Methods for Design Items
+// Meteor Validated Methods for Test Output Locations
 //
 //======================================================================================================================
 
@@ -31,7 +31,7 @@ export const addLocation = new ValidatedMethod({
             TestOutputLocationServices.addLocation(userId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.addLocation.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -58,7 +58,7 @@ export const saveLocation = new ValidatedMethod({
             TestOutputLocationServices.saveLocation(location);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.saveLocation.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -86,7 +86,7 @@ export const removeLocation = new ValidatedMethod({
             TestOutputLocationServices.removeLocation(locationId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.removeLocation.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -113,7 +113,7 @@ export const addLocationFile = new ValidatedMethod({
             TestOutputLocationServices.addLocationFile(locationId);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.addLocationFile.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 
@@ -140,7 +140,7 @@ export const saveLocationFile = new ValidatedMethod({
             TestOutputLocationServices.saveLocationFile(locationFile);
         } catch (e) {
             console.log(e);
-            throw new Meteor.Error('testOutputs.saveLocationFile.fail', e)
+            throw new Meteor.Error(e.error, e.message)
         }
     }
 

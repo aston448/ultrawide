@@ -7,6 +7,13 @@ export const BackupMessages = {
     MSG_DESIGN_BACKUP:              'Design backup saved'
 };
 
+export const UserManagementMessages = {
+    MSG_USER_ADDED:                 'New User added',
+    MSG_USER_UPDATED:               'User details saved',
+    MSG_USER_ACTIVATED:             'User made active',
+    MSG_USER_DEACTIVATED:           'User made inactive'
+};
+
 export const DesignMessages = {
 
     MSG_DESIGN_ADDED:               'New Design added',

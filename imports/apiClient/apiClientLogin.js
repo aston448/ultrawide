@@ -45,16 +45,33 @@ class ClientLoginServices{
                     let userId = Meteor.userId();
                     //console.log("LOGGED IN AS METEOR USER: " + userId);
 
-                    const user = UserRoles.findOne({userId: userId});
+                    // User must be active to log in
+                    const user = UserRoles.findOne({
+                        userId: userId,
+                    });
                     if (user) {
-                        // Properly logged in so retrieve user settings - stored to REDUX
-                        const userContext = ClientUserContextServices.getUserContext(userId);
-                        ClientUserContextServices.getUserViewOptions(userId);
-                        store.dispatch(setCurrentUserName(user.displayName));
+                        if(user.isActive) {
+                            if (user.isAdmin) {
 
-                        // Having got these go to a WAIT screen until the design data is loaded...
-                        ClientUserContextServices.loadMainData(userContext);
+                                // Special case - can only access the user admin view
+                                store.dispatch(setCurrentView(ViewType.ADMIN));
 
+                            } else {
+
+                                // Properly logged in as normal user so retrieve user settings - stored to REDUX
+                                const userContext = ClientUserContextServices.getUserContext(userId);
+                                ClientUserContextServices.getUserViewOptions(userId);
+                                store.dispatch(setCurrentUserName(user.displayName));
+
+                                // Having got these go to a WAIT screen until the design data is loaded...
+                                ClientUserContextServices.loadMainData(userContext);
+                            }
+                        } else {
+                            store.dispatch(updateUserMessage({
+                                messageType: MessageType.ERROR,
+                                messageText: 'This user is no longer active'
+                            }));
+                        }
                     } else {
                         store.dispatch(updateUserMessage({
                             messageType: MessageType.ERROR,
