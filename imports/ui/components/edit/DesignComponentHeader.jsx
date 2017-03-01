@@ -490,11 +490,12 @@ class DesignComponentHeader extends Component{
                 result = ClientDesignComponentServices.updateComponentName(view, mode, item._id, plainText, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DEVELOP_UPDATE_WP:
                 // Updates to a design update
                 result = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item, plainText, rawText);
                 break;
 
-            case ViewType.DEVELOP_UPDATE_WP:
+
                 break;
 
         }

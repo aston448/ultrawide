@@ -112,6 +112,27 @@ class WpComponentActions{
         server.call('testWorkPackageComponents.toggleUpdateWpComponentOutScope', ComponentType.SCENARIO, parentName, scenarioName, 'miles', expectation);
     }
 
+    // WP Editing
+    developerUpdatesSelectedComponentNameTo(newName, expectation){
+        server.call('testWorkPackageComponents.updateSelectedComponentName', newName, 'hugh', expectation);
+    }
+
+    developerAddsScenarioToSelectedFeatureAspect(expectation){
+        server.call('testWorkPackageComponents.addNewScenarioToSelectedComponent', 'hugh', expectation);
+    }
+
+    developerAddsFeatureAspectToSelectedFeature(expectation){
+        server.call('testWorkPackageComponents.addNewFeatureAspectToSelectedComponent', 'hugh', expectation);
+    }
+
+    developerRemovesSelectedScenario(expectation){
+        server.call('testWorkPackageComponents.removeSelectedComponent', ComponentType.SCENARIO, 'hugh', expectation);
+    }
+
+    developerRemovesSelectedFeatureAspect(expectation){
+        server.call('testWorkPackageComponents.removeSelectedComponent', ComponentType.FEATURE_ASPECT, 'hugh', expectation);
+    }
+
 }
 
 export default new WpComponentActions();

@@ -5,6 +5,7 @@ import { DesignUpdateComponents }   from '../../imports/collections/design_updat
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType} from '../../imports/constants/constants.js';
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
@@ -191,6 +192,29 @@ Meteor.methods({
             return true;
         }
 
+    },
+
+    'verifyWorkPackageComponents.currentComponentNameIs'(componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+
+        switch(workPackage.workPackageType){
+            case WorkPackageType.WP_BASE:
+
+                const designComponent = TestDataHelpers.getContextDesignComponent(userContext.designComponentId);
+                if(designComponent.componentName != componentName){
+                    throw new Meteor.Error("FAIL", 'Expected component name to be ' + componentName + ' but got ' + designComponent.componentName);
+                }
+                break;
+            case WorkPackageType.WP_UPDATE:
+
+                const designUpdateComponent = TestDataHelpers.getContextDesignUpdateComponent(userContext.designComponentId);
+                if(designUpdateComponent.componentNameNew != componentName){
+                    throw new Meteor.Error("FAIL", 'Expected update component name to be ' + componentName + ' but got ' + designUpdateComponent.componentNameNew);
+                }
+                break;
+        }
     }
 
 });

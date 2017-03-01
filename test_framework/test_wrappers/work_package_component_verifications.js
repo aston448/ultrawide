@@ -74,6 +74,14 @@ class WpComponentVerifications{
             })
         )
     }
+
+    developerSelectedComponentNameIs(componentName){
+        server.call('verifyWorkPackageComponents.currentComponentNameIs', componentName, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
 }
 
 export default new WpComponentVerifications();

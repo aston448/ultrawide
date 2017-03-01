@@ -155,6 +155,30 @@ class TestDataHelpers {
 
     }
 
+    getContextDesignComponent(componentId){
+
+        const component = DesignComponents.findOne({_id: componentId});
+
+        if(component){
+            return component;
+        } else {
+            throw new Meteor.Error("FAIL", "Design Component not found for User Context component id " + componentId);
+        }
+
+    }
+
+    getContextDesignUpdateComponent(componentId){
+
+        const updateComponent = DesignUpdateComponents.findOne({_id: componentId});
+
+        if(updateComponent){
+            return updateComponent;
+        } else {
+            throw new Meteor.Error("FAIL", "Update Component not found for User Context component id " + componentId);
+        }
+
+    }
+
     getWorkPackage(designVersionId, designUpdateId, workPackageName){
 
         const designVersion = DesignVersions.findOne({_id: designVersionId});
