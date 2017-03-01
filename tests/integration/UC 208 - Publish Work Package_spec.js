@@ -19,7 +19,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 208 - Publish Work Package - Initial Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 208 - Publish Work Package - Initial Design Version');
     });
 
     after(function(){

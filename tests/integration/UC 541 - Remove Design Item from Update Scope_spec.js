@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 541 - Remove Design Item from Update Scope', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 541 - Remove Design Item from Update Scope');
 
         TestFixtures.clearAllData();
 

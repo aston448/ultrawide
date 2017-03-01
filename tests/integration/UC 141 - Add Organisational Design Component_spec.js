@@ -20,7 +20,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 141 - Add Organisational Design Component', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 141 - Add Organisational Design Component');
     });
 
     after(function(){

@@ -24,6 +24,7 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
 
 
     before(function(){
+        TestFixtures.logTestSuite('UC 556 - ReOrder Design Update Component List');
 
         TestFixtures.clearAllData();
 

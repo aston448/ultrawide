@@ -28,8 +28,7 @@ import { WorkPackageStatus } from '../../imports/constants/constants.js';
 describe('UC 301 - Adopt Work Package', function(){
 
     before(function(){
-
-        // Basic Design Version
+        TestFixtures.logTestSuite('UC 301 - Adopt Work Package');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

@@ -18,7 +18,7 @@ import {DesignVersionValidationErrors} from '../../imports/constants/validation_
 describe('UC 110 - Edit Design Version Name and Number', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 110 - Edit Design Version Name and Number');
     });
 
     after(function(){

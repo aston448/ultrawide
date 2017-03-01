@@ -8,6 +8,15 @@ import {RoleType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 101 - Add New Design', function() {
+
+    before(function(){
+        TestFixtures.logTestSuite('UC 101 - Add New Design');
+    });
+
+    after(function(){
+
+    });
+
     beforeEach(function(){
         TestFixtures.clearAllData();
     });

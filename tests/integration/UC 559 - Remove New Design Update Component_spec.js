@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 559 - Remove New Design Update Component', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 559 - Remove New Design Update Component');
 
         TestFixtures.clearAllData();
 

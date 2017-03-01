@@ -19,7 +19,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 202 - Add New Design Update Work Package', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 202 - Add New Design Update Work Package');
     });
 
     after(function(){

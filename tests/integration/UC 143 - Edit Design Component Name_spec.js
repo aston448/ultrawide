@@ -22,7 +22,7 @@ import {DesignComponentValidationErrors} from '../../imports/constants/validatio
 describe('UC 143 - Edit Design Component Name', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 143 - Edit Design Component Name');
     });
 
     after(function(){

@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 550 - Add Organisational Design Update Component', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 550 - Add Organisational Design Update Component');
 
         TestFixtures.clearAllData();
 

@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 540 - Add Design Item to Update Scope', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 540 - Add Design Item to Update Scope');
 
         TestFixtures.clearAllData();
 
@@ -33,9 +34,6 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-
-
-
     });
 
     after(function(){

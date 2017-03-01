@@ -22,7 +22,7 @@ import {DesignComponentValidationErrors} from '../../imports/constants/validatio
 describe('UC 145 - Move Design Component', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 145 - Move Design Component');
     });
 
     after(function(){

@@ -9,7 +9,6 @@ describe('UC 801 - Create New User', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 801 - Create New User');
-
     });
 
     after(function(){

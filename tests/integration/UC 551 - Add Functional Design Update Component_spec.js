@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 551 - Add Functional Design Update Component', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 551 - Add Functional Design Update Component');
 
         TestFixtures.clearAllData();
 

@@ -22,7 +22,7 @@ import {WorkPackageComponentValidationErrors} from '../../imports/constants/vali
 describe('UC 222 - Select Work Package Component', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 222 - Select Work Package Component');
     });
 
     after(function(){

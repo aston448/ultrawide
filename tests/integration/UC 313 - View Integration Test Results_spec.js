@@ -28,6 +28,7 @@ import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunn
 describe('UC 313 - View Integration Test Results', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 313 - View Integration Test Results');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 554 - Restore Removed Design Update Component', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 554 - Restore Removed Design Update Component');
 
         TestFixtures.clearAllData();
 

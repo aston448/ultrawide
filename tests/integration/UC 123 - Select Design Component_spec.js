@@ -22,7 +22,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 123 - Select Design Component', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 123 - Select Design Component');
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data

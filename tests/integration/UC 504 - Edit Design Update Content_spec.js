@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 504 - Edit Design Update Content', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 504 - Edit Design Update Content');
 
         TestFixtures.clearAllData();
 

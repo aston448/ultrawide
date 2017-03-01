@@ -15,6 +15,14 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 describe('UC 105 - Withdraw Design Version', function(){
 
+    before(function(){
+        TestFixtures.logTestSuite('UC 105 - Withdraw Design Version');
+    });
+
+    after(function(){
+
+    });
+
     beforeEach(function(){
 
         TestFixtures.clearAllData();

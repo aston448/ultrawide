@@ -9,7 +9,7 @@ import {TestLocationType, TestLocationAccessType} from '../../imports/constants/
 describe('UC 847 - Configure User Role Test Outputs', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 847 - Configure User Role Test Outputs');
     });
 
     after(function(){

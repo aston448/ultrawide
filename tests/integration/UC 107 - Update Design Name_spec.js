@@ -17,6 +17,14 @@ import {DesignValidationErrors} from '../../imports/constants/validation_errors.
 
 describe('UC 107 - Update Design Name', function() {
 
+    before(function(){
+        TestFixtures.logTestSuite('UC 107 - Update Design Name');
+    });
+
+    after(function(){
+
+    });
+
     beforeEach(function(){
         TestFixtures.clearAllData();
     });

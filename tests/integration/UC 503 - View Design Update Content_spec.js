@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 503 - View Design Update Content', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 503 - View Design Update Content');
 
         TestFixtures.clearAllData();
 

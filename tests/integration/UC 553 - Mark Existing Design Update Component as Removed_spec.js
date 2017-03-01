@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 553 - Mark Existing Design Update Component as Removed', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 553 - Mark Existing Design Update Component as Removed');
 
         TestFixtures.clearAllData();
 

@@ -14,6 +14,14 @@ import {DesignValidationErrors} from '../../imports/constants/validation_errors.
 
 describe('UC 103 - Remove Design', function() {
 
+    before(function(){
+        TestFixtures.logTestSuite('UC 103 - Remove Design');
+    });
+
+    after(function(){
+
+    });
+
     beforeEach(function(){
         TestFixtures.clearAllData();
 

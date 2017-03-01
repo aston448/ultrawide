@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 552 - Edit Design Update Component Name', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 552 - Edit Design Update Component Name');
 
         TestFixtures.clearAllData();
 

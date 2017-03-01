@@ -23,7 +23,7 @@ import {DesignVersionValidationErrors} from '../../imports/constants/validation_
 describe('UC 421 - View Changes to Updatable Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 421 - View Changes to Updatable Design Version');
     });
 
     after(function(){

@@ -17,7 +17,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 111 - Select Existing Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 111 - Select Existing Design Version');
     });
 
     after(function(){

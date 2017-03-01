@@ -28,8 +28,7 @@ import { WorkPackageStatus } from '../../imports/constants/constants.js';
 describe('UC 303 - Develop Work Package', function(){
 
     before(function(){
-
-        // Basic Design Version
+        TestFixtures.logTestSuite('UC 303 - Develop Work Package');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

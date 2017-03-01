@@ -1,7 +1,7 @@
 describe('UC 320 - View Acceptance Test Results', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 320 - View Acceptance Test Results');
     });
 
     after(function(){

@@ -22,8 +22,7 @@ import {WorkPackageComponentValidationErrors} from '../../imports/constants/vali
 describe('UC 231 - Add Design Component to Work Package Scope - Initial Design Version', function(){
 
     before(function(){
-
-
+        TestFixtures.logTestSuite('UC 231 - Add Design Component to Work Package Scope - Initial Design Version');
     });
 
     after(function(){
@@ -348,7 +347,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
 describe('UC 231 - Add Design Component to Work Package Scope - Design Update', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 231 - Add Design Component to Work Package Scope - Design Update');
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data

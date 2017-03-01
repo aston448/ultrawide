@@ -28,6 +28,7 @@ import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunn
 describe('UC 310 - Refresh Test Data', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 310 - Refresh Test Data');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

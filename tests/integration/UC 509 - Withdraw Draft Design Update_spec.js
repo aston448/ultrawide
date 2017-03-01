@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 509 - Withdraw Draft Design Update', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 509 - Withdraw Draft Design Update');
 
         TestFixtures.clearAllData();
 

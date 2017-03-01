@@ -25,7 +25,7 @@ import {DomainDictionaryValidationErrors} from '../../imports/constants/validati
 describe('UC 703 - Edit Domain Dictionary Term Definition', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 703 - Edit Domain Dictionary Term Definition');
     });
 
     after(function(){

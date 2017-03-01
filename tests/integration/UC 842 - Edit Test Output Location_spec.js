@@ -9,7 +9,7 @@ import {TestLocationType, TestLocationAccessType} from '../../imports/constants/
 describe('UC 842 - Edit Test Output Location', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 842 - Edit Test Output Location');
     });
 
     after(function(){

@@ -22,6 +22,8 @@ describe('UC 204 - Select Existing Work Package - Base Design', function(){
     // Tests for Initial Design Version Work Packages
 
     before(function(){
+        TestFixtures.logTestSuite('UC 204 - Select Existing Work Package - Base Design');
+
         // This test data is reused for all tests
 
         TestFixtures.clearAllData();

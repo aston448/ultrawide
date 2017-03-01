@@ -7,6 +7,14 @@ import {RoleType} from '../../imports/constants/constants.js'
 
 describe('UC 102 - Select Existing Design', function() {
 
+    before(function(){
+        TestFixtures.logTestSuite('UC 102 - Select Existing Design');
+    });
+
+    after(function(){
+
+    });
+
     beforeEach(function(){
         TestFixtures.clearAllData();
     });

@@ -21,6 +21,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 501 - Add New Design Update', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 501 - Add New Design Update');
 
         TestFixtures.clearAllData();
 

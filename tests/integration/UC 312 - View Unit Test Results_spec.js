@@ -104,6 +104,7 @@ describe('UC 312 - View Unit Test Results', function(){
     };
 
     before(function(){
+        TestFixtures.logTestSuite('UC 312 - View Unit Test Results');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

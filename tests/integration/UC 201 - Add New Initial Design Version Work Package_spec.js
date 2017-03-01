@@ -19,7 +19,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 201 - Add New Initial Design Version Work Package', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 201 - Add New Initial Design Version Work Package');
     });
 
     after(function(){

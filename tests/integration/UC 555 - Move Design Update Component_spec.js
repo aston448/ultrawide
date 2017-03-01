@@ -23,6 +23,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 555 - Move Design Update Component', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 555 - Move Design Update Component');
 
         TestFixtures.clearAllData();
 

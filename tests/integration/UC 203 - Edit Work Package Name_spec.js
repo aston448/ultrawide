@@ -20,7 +20,7 @@ import {WorkPackageValidationErrors} from '../../imports/constants/validation_er
 describe('UC 203 - Edit Work Package Name', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 203 - Edit Work Package Name');
     });
 
     after(function(){

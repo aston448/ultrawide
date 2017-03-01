@@ -9,7 +9,7 @@ import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunn
 describe('UC 844 - Edit Test Output Location File', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 844 - Edit Test Output Location File');
     });
 
     after(function(){

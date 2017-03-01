@@ -28,8 +28,7 @@ import { WorkPackageStatus } from '../../imports/constants/constants.js';
 describe('UC 302 - Release Work Package', function(){
 
     before(function(){
-
-        // Basic Design Version
+        TestFixtures.logTestSuite('UC 302 - Release Work Package');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

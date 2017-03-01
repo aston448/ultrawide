@@ -25,7 +25,7 @@ import {DomainDictionaryValidationErrors} from '../../imports/constants/validati
 describe('UC 702 - Edit Domain Dictionary Term Name', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 702 - Edit Domain Dictionary Term Name');
     });
 
     after(function(){

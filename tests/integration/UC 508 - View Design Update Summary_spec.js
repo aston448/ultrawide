@@ -24,6 +24,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 508 - View Design Update Summary', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 508 - View Design Update Summary');
 
         TestFixtures.clearAllData();
 

@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 522 - Select Design Update Component', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 522 - Select Design Update Component');
 
         TestFixtures.clearAllData();
 

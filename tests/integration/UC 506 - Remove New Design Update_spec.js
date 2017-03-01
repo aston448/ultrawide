@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 506 - Remove New Design Update', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 506 - Remove New Design Update');
 
         TestFixtures.clearAllData();
 

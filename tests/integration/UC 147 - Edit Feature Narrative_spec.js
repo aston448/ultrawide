@@ -21,7 +21,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 147 - Edit Feature Narrative', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 147 - Edit Feature Narrative');
     });
 
     after(function(){

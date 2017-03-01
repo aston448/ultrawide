@@ -28,6 +28,7 @@ import {ComponentType, TestLocationType, TestLocationAccessType, TestLocationFil
 describe('UC 311 - Refresh Design Test Mash Data', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 311 - Refresh Design Test Mash Data');
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();

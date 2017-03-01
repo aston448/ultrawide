@@ -19,7 +19,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 206 - Edit Work Package Content - Initial Design', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 206 - Edit Work Package Content - Initial Design');
     });
 
     after(function(){

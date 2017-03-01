@@ -15,6 +15,14 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 describe('UC 104 - Publish New Design Version', function() {
 
+    before(function(){
+        TestFixtures.logTestSuite('UC 104 - Publish New Design Version');
+    });
+
+    after(function(){
+
+    });
+
     beforeEach(function(){
         TestFixtures.clearAllData();
 

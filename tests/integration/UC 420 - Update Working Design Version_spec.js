@@ -24,7 +24,7 @@ import {DesignVersionValidationErrors} from '../../imports/constants/validation_
 describe('UC 420 - Update Working Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 420 - Update Working Design Version');
     });
 
     after(function(){

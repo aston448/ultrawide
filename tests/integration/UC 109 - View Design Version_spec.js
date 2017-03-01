@@ -17,7 +17,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 109 - View Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 109 - View Design Version');
     });
 
     after(function(){

@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 507 - Set Design Update Action for Next Design Version', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 507 - Set Design Update Action for Next Design Version');
 
         TestFixtures.clearAllData();
 

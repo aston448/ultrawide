@@ -9,7 +9,7 @@ import {TestLocationType, TestLocationAccessType} from '../../imports/constants/
 describe('UC 846 - Remove Test Output Location File', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 846 - Remove Test Output Location File');
     });
 
     after(function(){

@@ -25,7 +25,7 @@ import {DomainDictionaryValidationErrors} from '../../imports/constants/validati
 describe('UC 704 - Remove Domain Dictionary Term', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 704 - Remove Domain Dictionary Term');
     });
 
     after(function(){

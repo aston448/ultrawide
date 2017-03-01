@@ -20,7 +20,7 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 describe('UC 142 - Add Functional Design Component', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 142 - Add Functional Design Component');
     });
 
     after(function(){

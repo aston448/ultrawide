@@ -20,7 +20,7 @@ import {WorkPackageValidationErrors} from '../../imports/constants/validation_er
 describe('UC 205 - Remove Work Package - Initial Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 205 - Remove Work Package - Initial Design Version');
     });
 
     after(function(){

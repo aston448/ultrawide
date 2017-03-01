@@ -22,6 +22,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 502 - Edit Design Update Name and Reference', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 502 - Edit Design Update Name and Reference');
 
         TestFixtures.clearAllData();
 

@@ -23,6 +23,7 @@ import {DesignUpdateValidationErrors} from '../../imports/constants/validation_e
 describe('UC 505 - Publish New Design Update', function(){
 
     before(function(){
+        TestFixtures.logTestSuite('UC 505 - Publish New Design Update');
 
         TestFixtures.clearAllData();
 

@@ -9,9 +9,7 @@ import {TestLocationType, TestLocationAccessType} from '../../imports/constants/
 describe('UC 841 - Share or Hide Test Output Location', function(){
 
     before(function(){
-
-
-
+        TestFixtures.logTestSuite('UC 841 - Share or Hide Test Output Location');
     });
 
     after(function(){

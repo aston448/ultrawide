@@ -25,7 +25,7 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 describe('UC 701 - Add Domain Dictionary Term', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 701 - Add Domain Dictionary Term');
     });
 
     after(function(){

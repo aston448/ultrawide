@@ -21,7 +21,7 @@ import {DefaultItemNames, DefaultComponentNames, DefaultDetailsText} from '../..
 describe('UC 148 - Edit Design Component Text', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 148 - Edit Design Component Text');
     });
 
     after(function(){

@@ -22,7 +22,7 @@ import {DesignComponentValidationErrors} from '../../imports/constants/validatio
 describe('UC 144 - Remove Design Component', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 144 - Remove Design Component');
     });
 
     after(function(){

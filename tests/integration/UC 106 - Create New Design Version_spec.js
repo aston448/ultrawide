@@ -18,7 +18,7 @@ import {DesignVersionValidationErrors} from '../../imports/constants/validation_
 describe('UC 106 - Create New Design Version', function(){
 
     before(function(){
-
+        TestFixtures.logTestSuite('UC 106 - Create New Design Version');
     });
 
     after(function(){
