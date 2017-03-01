@@ -43,7 +43,6 @@ class AppHeaderData extends Component {
         const {view, currentDesign, currentDesignVersion, currentDesignUpdate, currentWorkPackage} = this.props;
 
         // What is shown here depends on the current view
-        console.log("RENDERING HEADER " + view + ' ' + currentDesign + ' ' + currentDesignVersion);
         let headerData = '';
 
         // Ignore renderings of this before we know where we are

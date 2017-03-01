@@ -46,8 +46,6 @@ class ClientUserContextServices {
 
     getUserContext(userId){
 
-        console.log("Getting user context for user " + userId);
-
         const userContext = UserCurrentEditContext.findOne({userId: userId});
 
 
@@ -204,8 +202,6 @@ class ClientUserContextServices {
     setOpenItems(userContext, roleType){
 
         // Set default view settings for open items
-
-        console.log("Get Initial Settings: " + roleType + " " + userContext.designVersionId);
 
         let dvArr = [];
         let duArr = [];
@@ -404,7 +400,7 @@ class ClientUserContextServices {
             }
         }
         catch(e){
-            console.log("ERROR Loading open item settings: " + e)
+            log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open item settings: {}", e);
         }
 
         store.dispatch(setCurrentUserOpenDesignItems(
@@ -457,12 +453,9 @@ class ClientUserContextServices {
                     switch (designVersion.designVersionStatus) {
                         case DesignVersionStatus.VERSION_NEW:
                         case DesignVersionStatus.VERSION_DRAFT:
-                            console.log("USER DESIGN COMPONENT IS: " + userContext.designComponentId);
 
                             // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
                             ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, true);
-
-                            console.log("USER DESIGN COMPONENT IS: " + userContext.designComponentId);
 
                             if(userContext.designComponentId != 'NONE'){
                                 ClientDesignComponentServices.setDesignComponent(userContext.designComponentId, userContext, DisplayContext.BASE_EDIT);

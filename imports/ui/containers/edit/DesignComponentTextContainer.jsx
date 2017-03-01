@@ -11,9 +11,10 @@ import TextEditor from '../../components/edit/TextEditor.jsx';
 import ScenarioStepsContainer from './ScenarioStepsContainer.jsx';
 
 // Ultrawide Services
-import { ViewType, ComponentType, DisplayContext, StepContext } from '../../../constants/constants.js';
+import { ViewType, ComponentType, DisplayContext, StepContext, LogLevel } from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import { log } from '../../../common/utils.js'
 
 // Bootstrap
 import { Panel } from 'react-bootstrap';
@@ -69,7 +70,6 @@ class DesignComponentText extends Component {
                 baseComponent = currentDesignComponent;
                 if(mainComponent) {
                     mainComponentFeatureReference = mainComponent.componentFeatureReferenceIdNew;
-                    console.log("Feature ref is: " + mainComponent.componentFeatureReferenceIdNew);
                     titleName = mainComponent.componentNameNew;
                     titleNameOld = mainComponent.componentNameOld;
                     textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
@@ -114,7 +114,8 @@ class DesignComponentText extends Component {
                 }
                 break;
             default:
-                console.log("Unknown view type: " + view);
+                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", view);
+
         }
 
         // Could be up to 4 panels:
@@ -164,7 +165,6 @@ class DesignComponentText extends Component {
             }
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
-            console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component feature ref: " + mainComponentFeatureReference + " Display Context: " + displayContext);
             if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && (mainComponentFeatureReference != 'NONE')) {
                 panel2 =
                     <div>

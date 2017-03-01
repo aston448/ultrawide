@@ -95,10 +95,6 @@ class TestSummaryServices {
             // Unit Tests - tests related to a Scenario
             let searchRegex = new RegExp(scenarioName);
 
-            if(scenarioName === 'A list of all Designs is visible to all users') {
-                console.log("Looking for test results for " + searchRegex);
-            }
-
             unitTestPasses = UserUnitTestResults.find({
                 userId:         userContext.userId,
                 testFullName:   {$regex: searchRegex},
@@ -110,10 +106,6 @@ class TestSummaryServices {
                 testFullName:   {$regex: searchRegex},
                 testResult:     MashTestStatus.MASH_FAIL
             }).count();
-
-            if(scenarioName === 'A list of all Designs is visible to all users') {
-                console.log("    Found " + unitTestPasses + " passes");
-            }
 
             UserDevTestSummaryData.insert({
                 userId:                         userContext.userId,
@@ -154,8 +146,6 @@ class TestSummaryServices {
         }
 
         designFeatures.forEach((designFeature) =>{
-
-            console.log("Getting summary data for Feature " + designFeature.componentName);
 
             let featureScenarios = UserDevTestSummaryData.find({featureReferenceId: designFeature.componentReferenceId}).fetch();
 

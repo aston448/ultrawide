@@ -335,7 +335,6 @@ class DesignComponentHeader extends Component{
                     break;
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     // If there is an item whose name has changed then create a new editor entry showing both
-                    console.log("Component name: " + item.componentName + " Update Item: " + props.updateItem);
                     if(props.updateItem){
                         if(props.updateItem.componentNameOld != item.componentName) {
                             existingRawText = this.getNewAndOldRawText(item.componentName, props.updateItem.componentNameOld);

@@ -487,8 +487,6 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
 
-        console.log("MOVE DESIGN UPDATE COMPONENT: " + result);
-
         if(result != Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));

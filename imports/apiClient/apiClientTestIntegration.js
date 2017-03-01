@@ -147,8 +147,6 @@ class ClientTestIntegrationServices {
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext, userRole, viewOptions, mashDataStale, testDataFlag, nextView){
 
-        console.log("In refresh test data with WP " + userContext.workPackageId);
-
         // Is this a Work Package view?
         if(userContext.workPackageId != 'NONE') {
 
@@ -158,14 +156,12 @@ class ClientTestIntegrationServices {
                 // Load the WP Design Data if it needs it
                 if (mashDataStale) {
 
-                    console.log("Updating mash data... ");
                     // Load user dev data (if needed) and when done update the design mash and switch view if wanted
                     ClientContainerServices.getDevData(userContext.userId);
                     this.updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView);
 
                 } else {
 
-                    console.log("Refreshing test data... ");
                     // Just load the test results
                     store.dispatch(updateUserMessage({messageType: MessageType.WARNING, messageText: 'Refreshing test data...  Please wait...'}));
 
@@ -181,7 +177,6 @@ class ClientTestIntegrationServices {
 
                 // Are we wanting to see just the Test Summary
                 if(viewOptions.devTestSummaryVisible){
-                    console.log("Updating test summary... ");
                     this.updateTestSummary(userContext, testDataFlag, nextView);
                 } else {
                     // Otherwise just update the view

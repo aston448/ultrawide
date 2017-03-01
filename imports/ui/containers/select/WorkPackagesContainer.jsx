@@ -12,9 +12,10 @@ import WorkPackage from '../../components/select/WorkPackage.jsx';
 import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, WorkPackageType, RoleType} from '../../../constants/constants.js';
+import {DesignVersionStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+import { log } from '../../../common/utils.js';
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -171,7 +172,7 @@ class WorkPackagesList extends Component {
                     break;
 
                 default:
-                    console.log("Unknown Design Version Status: " + designVersionStatus);
+                    log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
             }
         }
 

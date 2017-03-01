@@ -15,10 +15,10 @@ import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
+import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
-
+import { log } from '../../../common/utils.js'
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
@@ -86,7 +86,7 @@ class WorkPackageApplicationsList extends Component {
 
         const {wpScopeApplications, wpViewApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
 
-        console.log("WP Container. View = " + view + ". Test Summary =  " + viewOptions.devTestSummaryVisible);
+        //console.log("WP Container. View = " + view + ". Test Summary =  " + viewOptions.devTestSummaryVisible);
 
         let layout = '';
 
@@ -374,7 +374,7 @@ class WorkPackageApplicationsList extends Component {
                 break;
 
             default:
-                console.log("Unexpected View Type: " + view);
+                log((msg) => console.log(msg), LogLevel.ERROR, "Unexpected View Type: {}", view);
         }
 
 

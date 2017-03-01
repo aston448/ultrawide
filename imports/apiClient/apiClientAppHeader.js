@@ -142,7 +142,6 @@ class ClientAppHeaderServices{
                 }
             });
 
-            console.log("WP Open list: " + componentArray.length);
             store.dispatch(setCurrentUserOpenWorkPackageItems(
                 Meteor.userId(),
                 componentArray,
@@ -169,7 +168,6 @@ class ClientAppHeaderServices{
                 }
             });
 
-            console.log("DESIGN Open list: " + componentArray.length);
             store.dispatch(setCurrentUserOpenDesignItems(
                 Meteor.userId(),
                 componentArray,
@@ -260,7 +258,6 @@ class ClientAppHeaderServices{
             // Update REDUX but DON'T save to DB!
             store.dispatch(setCurrentUserItemContext(emptyContext, false));
 
-            console.log("User Context cleared");
 
             // Clear role and username
             store.dispatch(setCurrentRole(RoleType.NONE));
@@ -269,8 +266,6 @@ class ClientAppHeaderServices{
 
         // Returns to the login screen
         Meteor.logout();
-
-        console.log("logged out");
 
         store.dispatch(setCurrentView(ViewType.AUTHORISE));
         return true

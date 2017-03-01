@@ -113,7 +113,6 @@ class ScenarioStep extends Component {
 
         if(newRawText){
             // Immediate update of latest text
-            console.log("Updating step editor with " + newRawText);
             currentContent = convertFromRaw(newRawText);
         } else {
             // Getting stored text
@@ -135,7 +134,6 @@ class ScenarioStep extends Component {
         // If editing update step suggestion
 
         if (currentContent.hasText()) {
-            console.log("recreating txt");
             this.state.editorState = EditorState.createWithContent(currentContent, compositeDecorator);
         } else {
             this.state = {editorState: EditorState.createEmpty(compositeDecorator)};
@@ -221,7 +219,6 @@ class ScenarioStep extends Component {
             rawText = convertToRaw(this.state.editorState.getCurrentContent());
         }
 
-        console.log("UPDATE STEP TEXT with " + plainText);
         let success = ClientScenarioStepServices.updateScenarioStepText(view, mode, parentInScope, step._id, stepType, plainText, rawText, stepContext);
 
         if(success){

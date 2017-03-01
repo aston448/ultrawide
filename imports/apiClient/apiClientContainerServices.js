@@ -98,7 +98,7 @@ class ClientContainerServices{
 
         if(Meteor.isClient) {
 
-            console.log("Getting Design Version Data for DV " + designVersionId);
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", designVersionId);
 
             let duHandle = Meteor.subscribe('designUpdates', designVersionId);
             let dsHandle = Meteor.subscribe('designUpdateSummaries', designVersionId);
@@ -117,7 +117,7 @@ class ClientContainerServices{
                     !duHandle.ready() || !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
                 );
 
-                console.log("loading = " + loading);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "loading = {}", loading);
 
                 if (!loading) {
                     // If an action wanted after loading call it...
@@ -163,7 +163,7 @@ class ClientContainerServices{
                         !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready()
                     );
 
-                    console.log("loading dev data = " + loading);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading dev data = {}", loading);
 
                     if (!loading) {
 
@@ -216,7 +216,7 @@ class ClientContainerServices{
 
     getApplicationHeaderData(userContext, view){
 
-        console.log("Getting header data for view: " + view + " and context design " + userContext.designId + " and design version " + userContext.designVersionId);
+        //console.log("Getting header data for view: " + view + " and context design " + userContext.designId + " and design version " + userContext.designVersionId);
 
         // The data required depends on the view
         if(userContext && view) {
@@ -263,7 +263,6 @@ class ClientContainerServices{
                     // No data required
             }
 
-            console.log("Returning design" + currentDesign);
             return {
                 view: view,
                 currentDesign: currentDesign,
@@ -467,8 +466,7 @@ class ClientContainerServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(view, designVersionId, designUpdateId, workPackageId){
 
-        console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
-
+        //console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
 
         const baseApplications = DesignComponents.find(
             {
@@ -479,8 +477,7 @@ class ClientContainerServices{
         );
 
         let baseApplicationsArr = baseApplications.fetch();
-        console.log("Found " + baseApplicationsArr.length + " base applications.");
-
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} base applications.", baseApplicationsArr.length);
 
         // Get Update Apps if update Id provided
         let updateApplicationsArr = [];
@@ -756,7 +753,7 @@ class ClientContainerServices{
     getBackgroundStepsInFeature(view, displayContext, stepContext, designId, designVersionId, updateId, featureReferenceId){
         let backgroundSteps = null;
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Looking for feature background steps in feature: {}", featureReferenceId);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature background steps in feature: {}", featureReferenceId);
 
         // Assume feature is in scope unless we find it isn't for an Update
         let featureInScope = true;
@@ -779,7 +776,7 @@ class ClientContainerServices{
                     {sort:{stepIndex: 1}}
                 );
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Feature Background Steps found: {}", backgroundSteps.count());
+                log((msg) => console.log(msg), LogLevel.TRACE, "Feature Background Steps found: {}", backgroundSteps.count());
 
                 return {
                     steps: backgroundSteps.fetch(),
@@ -810,7 +807,7 @@ class ClientContainerServices{
                             {sort:{stepIndex: 1}}
                         );
 
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Update Feature Background Steps found: {}", backgroundSteps.count());
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Update Feature Background Steps found: {}", backgroundSteps.count());
 
                         // For updates, check if feature is REALLY in scope
                         const feature = DesignUpdateComponents.findOne(
@@ -841,7 +838,7 @@ class ClientContainerServices{
                             {sort:{stepIndex: 1}}
                         );
 
-                        log((msg) => console.log(msg), LogLevel.DEBUG, "Update Base Background Steps found: {}", backgroundSteps.count());
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Update Base Background Steps found: {}", backgroundSteps.count());
 
                         break;
                 }
@@ -885,8 +882,6 @@ class ClientContainerServices{
                     {sort:{stepIndex: 1}}
                 );
 
-                console.log("Scenario Steps found: " + scenarioSteps.count());
-
                 return {
                     steps: scenarioSteps.fetch(),
                     displayContext: displayContext,
@@ -914,8 +909,6 @@ class ClientContainerServices{
                             },
                             {sort:{stepIndex: 1}}
                         );
-
-                        console.log("Update Scenario Steps found: " + scenarioSteps.count());
 
                         // For updates, check if scenario is REALLY in scope
                         const scenario = DesignUpdateComponents.findOne(
@@ -946,8 +939,6 @@ class ClientContainerServices{
                             },
                             {sort:{stepIndex: 1}}
                         );
-
-                        console.log("Update Base Scenario Steps found: " + scenarioSteps.count());
 
                         break;
 
@@ -983,7 +974,6 @@ class ClientContainerServices{
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
 
-                    console.log("DCT Container: UC Design component is " + userContext.designComponentId);
                     currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
 
                     break;
@@ -998,16 +988,11 @@ class ClientContainerServices{
 
                     // For an update the current item is the update item but we can also get its equivalent in the original design
                     if(currentUpdateComponent) {
-                        console.log("DCT Container: Update component is " + currentUpdateComponent.componentNameNew);
 
                         currentDesignComponent = DesignComponents.findOne({
                             designVersionId:        currentUpdateComponent.designVersionId,
                             componentReferenceId:   currentUpdateComponent.componentReferenceId
                         });
-
-                        if(currentDesignComponent) {
-                            console.log("DCT Container: Design component is " + currentDesignComponent.componentName);
-                        }
                     }
                     break;
 
@@ -1031,7 +1016,7 @@ class ClientContainerServices{
                     break;
 
                 default:
-                    console.log("Unknown view type: " + view);
+                    log((msg) => console.log(msg), LogLevel.ERROR, "INVALID VIEW TYPE!: {}", view);
             }
 
             return {

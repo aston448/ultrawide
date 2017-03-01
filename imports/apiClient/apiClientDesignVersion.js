@@ -297,7 +297,6 @@ class ClientDesignVersionServices{
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
             // Subscribe to the appropriate data for the new DV if DV changing
-            console.log("Reset Design Version");
             ClientContainerServices.getDesignVersionData(newDesignVersionId);
 
         }
@@ -416,8 +415,6 @@ class ClientDesignVersionServices{
     // Get the Design Update item that relates to an Updatable Design Version
     getDesignUpdateItem(designComponent){
 
-        console.log("Getting Update Item for: " + designComponent.componentName);
-
         // There may be several Design Updates for the Design Version.
         // We will look for the one that has changed.  It should not be possible to change the same component in more than one update.
         // However the details text might also be changed so there could be more than one...
@@ -437,12 +434,10 @@ class ClientDesignVersionServices{
 
         if(updateComponents.length > 0){
             // Just return the first item found
-            console.log("Returning Update Item: " + updateComponents[0].componentNameNew);
             return updateComponents[0];
 
         } else {
             // No changes to this item
-            console.log("Returning NULL");
             return null;
         }
 

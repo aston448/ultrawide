@@ -96,7 +96,6 @@ class TestIntegrationServices{
             MashDataModules.getUnitTestResults(userContext);
 
             // Recreate the summary mash
-            console.log("Refreshing SUMMARY");
             TestSummaryServices.refreshTestSummaryData(userContext);
         }
     }

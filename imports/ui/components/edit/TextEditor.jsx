@@ -8,9 +8,10 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewMode, ViewType, DisplayContext, ComponentType} from '../../../constants/constants.js';
+import {ViewMode, ViewType, DisplayContext, ComponentType, LogLevel} from '../../../constants/constants.js';
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices         from '../../../apiClient/apiClientTextEditor.js';
+import { log } from '../../../common/utils.js'
 
 // Bootstrap
 import {Glyphicon} from 'react-bootstrap';
@@ -121,7 +122,7 @@ export class TextEditor extends Component {
                 break;
 
             default:
-                console.log("Unknown View Type!");
+                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", props.view);
         }
 
         if (rawText) {

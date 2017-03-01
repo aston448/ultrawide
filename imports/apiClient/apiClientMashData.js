@@ -36,7 +36,7 @@ class ClientMashDataServices {
     relocateMashStep(view, mode, targetContext, movingComponent, targetComponent, userContext){
 
         // Need to update the mash data and, if step comes from Dev, add step to Design
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Relocate Mash Step: View: {}, Mode: {}, DropContext: {} UserContext: {}", view, mode, targetContext, userContext);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Relocate Mash Step: View: {}, Mode: {}, DropContext: {} UserContext: {}", view, mode, targetContext, userContext);
         // Validation
         if((view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP) &&
             mode === ViewMode.MODE_EDIT
@@ -45,7 +45,7 @@ class ClientMashDataServices {
         ){
             if(movingComponent.accMashStatus === MashStatus.MASH_NOT_IMPLEMENTED) {
                 // A Design Item being added to the final config...
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Updating {} to Linked", movingComponent.stepText);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Updating {} to Linked", movingComponent.stepText);
 
                 // In this case all we are doing is changing the status of the component to be linked
                 // It will keep is position from the design
@@ -57,7 +57,7 @@ class ClientMashDataServices {
                 return true;
             } else {
                 // A Dev item being added to the Design
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Dev Step {} to Linked", movingComponent.stepText);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Dev Step {} to Linked", movingComponent.stepText);
 
                 // Add to the final config in the position dropped
                 Meteor.call('mash.updateMovedDevStep', movingComponent._id, targetComponent._id, userContext);
@@ -79,7 +79,7 @@ class ClientMashDataServices {
 
     featureHasAspects(userContext, featureComponentId){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Checking for feature aspects for feature {}", featureComponentId);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Checking for feature aspects for feature {}", featureComponentId);
 
         if(userContext.designUpdateId === 'NONE'){
             return DesignComponents.find({componentParentId: featureComponentId, componentType: ComponentType.FEATURE_ASPECT}).count() > 0;

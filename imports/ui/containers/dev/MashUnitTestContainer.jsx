@@ -100,7 +100,6 @@ export default MashUnitTestContainer = createContainer(({params}) => {
     switch(params.displayContext){
         case DisplayContext.VIEW_UNIT_MASH:
             testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.userContext, params.scenario);
-            console.log("Found " + testResults.length + " unit tests for scenario " + params.scenario.designScenarioReferenceId + " and user " + params.scenario.userId) ;
             break;
 
         case DisplayContext.VIEW_UNIT_UNLINKED:

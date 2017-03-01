@@ -154,8 +154,6 @@ ScenarioStepsList = connect(mapStateToProps)(ScenarioStepsList);
 
 export default ScenarioStepsContainer = createContainer(({params}) => {
 
-    console.log("Getting Steps Container data...")
-
     switch(params.stepContext){
         case StepContext.STEP_FEATURE:
         case StepContext.STEP_FEATURE_SCENARIO:

@@ -56,8 +56,6 @@ class DesignUpdateSummaryServices {
 
         if (Meteor.isServer) {
 
-            console.log("Refreshing DU Summary for DU: " + designUpdateId);
-
             const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
             const designVersionId = designUpdate.designVersionId;
 

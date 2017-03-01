@@ -8,11 +8,11 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewMode, ViewType, DisplayContext} from '../../../constants/constants.js';
+import {ViewMode, ViewType, DisplayContext, LogLevel} from '../../../constants/constants.js';
 import ClientDesignComponentServices            from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices      from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
-import {getComponentClass}                      from '../../../common/utils.js';
+import {getComponentClass, log}                      from '../../../common/utils.js';
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
@@ -184,7 +184,7 @@ export default class Narrative extends React.Component {
                 }
                 break;
             default:
-                console.log("Invalid view: " + props.view)
+                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", props.view);
         }
 
         if (rawNarrative) {

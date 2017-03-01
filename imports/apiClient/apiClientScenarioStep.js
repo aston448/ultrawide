@@ -29,7 +29,7 @@ class ClientScenarioStepServices {
     // User has added a new Feature background step
     addNewBackgroundStep(view, mode, featureReferenceId, userItemContext, featureInScope){
         // Validate - can only add if design is editable and for in-scope update features
-        log((msg)=> console.log(msg), LogLevel.DEBUG, "Adding feature step with view: {} and mode: {} and in scope: {}", view, mode , featureInScope);
+        log((msg)=> console.log(msg), LogLevel.TRACE, "Adding feature step with view: {} and mode: {} and in scope: {}", view, mode , featureInScope);
 
         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && featureInScope){
             Meteor.call('scenario.addNewFeatureBackgroundStep', featureReferenceId, userItemContext, featureInScope);
@@ -43,7 +43,7 @@ class ClientScenarioStepServices {
     addNewScenarioStep(view, mode, scenarioReferenceId, userContext, scenarioInScope){
 
         // Validate - can only add if design is editable and for in-scope update scenarios
-        log((msg)=> console.log(msg), LogLevel.DEBUG, "Adding scenario step with view: {} and mode: {} and in scope: {}", view, mode , scenarioInScope);
+        log((msg)=> console.log(msg), LogLevel.TRACE, "Adding scenario step with view: {} and mode: {} and in scope: {}", view, mode , scenarioInScope);
 
         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && scenarioInScope){
             Meteor.call('scenario.addNewScenarioStep', scenarioReferenceId, userContext, scenarioInScope);
@@ -64,7 +64,7 @@ class ClientScenarioStepServices {
     removeScenarioStep(view, mode, parentInScope, stepId, stepContext){
 
         // Validate - can only remove if design is editable and for in-scope update scenarios
-        log((msg)=> console.log(msg), LogLevel.DEBUG, "Removing scenario step with view: {} and mode: {} and in scope: {}", view, mode , parentInScope);
+        log((msg)=> console.log(msg), LogLevel.TRACE, "Removing scenario step with view: {} and mode: {} and in scope: {}", view, mode , parentInScope);
 
         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope) {
             Meteor.call('scenario.removeScenarioStep', stepId, stepContext);
@@ -88,10 +88,10 @@ class ClientScenarioStepServices {
     // User edited and saved Scenario Step text
     updateScenarioStepText(view, mode, parentInScope, stepId, stepType, newPlainText, newRawText, stepContext){
 
-        log((msg)=> console.log(msg), LogLevel.DEBUG, "Saving scenario step {} text with view: {} and mode: {} and in scope: {}", stepId, view, mode , parentInScope);
+        log((msg)=> console.log(msg), LogLevel.TRACE, "Saving scenario step {} text with view: {} and mode: {} and in scope: {}", stepId, view, mode , parentInScope);
         // Validate - can only update if design is editable and for in-scope update scenarios
         if((view === ViewType.DESIGN_NEW_EDIT  || view === ViewType.DESIGN_UPDATE_EDIT) && mode === ViewMode.MODE_EDIT && parentInScope){
-            log((msg)=> console.log(msg), LogLevel.DEBUG, "Saving scenario step text {} with context {}", newRawText.blocks[0].text, stepContext);
+            log((msg)=> console.log(msg), LogLevel.TRACE, "Saving scenario step text {} with context {}", newRawText.blocks[0].text, stepContext);
 
             Meteor.call('scenario.updateScenarioStepText', stepId, stepType, newPlainText, newRawText, stepContext);
             return true;

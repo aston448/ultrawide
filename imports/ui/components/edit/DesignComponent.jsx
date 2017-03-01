@@ -351,12 +351,6 @@ class DesignComponent extends Component{
             itemStyle = (currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
         }
 
-
-        if(itemStyle == 'design-component dc-active'){
-            console.log("ACTIVE ITEM: " + currentItem.componentName);
-        }
-
-
         // For work packages make sure the active component refers to the actual design component
         let activeComponentId = workPackageItem ? designItem._id : currentItem._id;
 

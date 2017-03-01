@@ -10,7 +10,8 @@ import DesignItemHeader from './DesignItemHeader.jsx';
 
 // Ultrawide Services
 import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js';
-import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode} from '../../../constants/constants.js';
+import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
+import { log } from '../../../common/utils.js'
 
 // Bootstrap
 import {Button, ButtonGroup} from 'react-bootstrap';
@@ -216,7 +217,7 @@ export class DesignVersion extends Component {
                 break;
 
             default:
-                console.log("Unknown Design Version Status: " + designVersion.designVersionStatus)
+                log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersion.designVersionStatus);
 
         }
 

@@ -62,7 +62,6 @@ class ServerTestIntegrationApi {
                 testRunner:     testRunner
             },
             (err, result) => {
-                console.log(err);
                 callback(err, result);
             }
         );

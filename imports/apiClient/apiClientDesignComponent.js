@@ -572,10 +572,8 @@ class ClientDesignComponentServices{
     setOpenClosed(designComponent, currentList, newState){
 
         if(designComponent.componentType === ComponentType.FEATURE){
+
             // Open or close the whole feature
-
-            console.log("Open-Close Feature " + designComponent.componentFeatureReferenceId);
-
             const featureComponents = DesignComponents.find(
                 {
                     designVersionId: designComponent.designVersionId,

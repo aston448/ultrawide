@@ -74,8 +74,6 @@ export class TestOutputLocation extends Component {
             locationPath:           this.state.pathValue
         };
 
-        console.log("Updating location with name " + location.locationName + " and user id " + location.locationUserId);
-
         ClientTestOutputLocationServices.saveLocation(role, location);
 
         this.setState({editing: false});

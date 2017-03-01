@@ -14,9 +14,10 @@ import UpdateSummaryContainer from './UpdateSummaryContainer.jsx';
 import WorkPackagesContainer from './WorkPackagesContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, RoleType, WorkPackageType} from '../../../constants/constants.js';
+import {DesignVersionStatus, RoleType, WorkPackageType, LogLevel} from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';
+import { log } from '../../../common/utils.js';
 
 // Bootstrap
 import {Grid, Row, Col, Button, ButtonGroup} from 'react-bootstrap';
@@ -42,8 +43,6 @@ class DesignUpdatesList extends Component {
     }
 
     renderDesignUpdatesList(designUpdates){
-
-        console.log("rendering design updates list with " + designUpdates);
 
         if(designUpdates.length > 0) {
             return designUpdates.map((designUpdate) => {
@@ -147,7 +146,7 @@ class DesignUpdatesList extends Component {
                     );
                     break;
                 default:
-                    console.log("UNKNOWN Design Version Status: " + designVersionStatus)
+                    log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
             }
         } else {
             // No version selected as yet

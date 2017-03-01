@@ -11,13 +11,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, ViewOptionType, RoleType, MessageType} from '../../../constants/constants.js'
+import {ViewType, ViewMode, ViewOptionType, RoleType, MessageType, LogLevel} from '../../../constants/constants.js'
 
 import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
 import ClientIdentityServices           from '../../../apiClient/apiIdentity';
 import TextLookups                      from '../../../common/lookups.js';
-
+ import { log } from '../../../common/utils.js'
 // Bootstrap
 import {Alert} from 'react-bootstrap';
 import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
@@ -120,8 +120,6 @@ export class AppHeader extends Component {
         const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, testDataFlag, currentViewDataValue, mashStale} = this.props;
 
         let appName = ClientIdentityServices.getApplicationName();
-
-        console.log("App Header with role " + userRole + " and view " + view);
 
         // The header display depends on the current application View
         let headerTitleActions = '';
@@ -550,7 +548,7 @@ export class AppHeader extends Component {
                     </ButtonToolbar>;
                 break;
             default:
-                console.log("Invalid view type: " + view);
+                log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", view);
         }
 
         if (view) {

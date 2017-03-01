@@ -20,8 +20,9 @@ import { TestOutputLocations }      from '../../imports/collections/configure/te
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus} from '../../imports/constants/constants.js';
+import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
+import { log } from '../../imports/common/utils.js';
 import ClientIdentityServices from '../../imports/apiClient/apiIdentity.js';
 
 import ClientDesignComponentServices    from '../../imports/apiClient/apiClientDesignComponent.js';
@@ -31,7 +32,7 @@ import TestDataHelpers                  from '../test_modules/test_data_helpers.
 Meteor.methods({
 
     'testFixtures.logTestSuite'(suiteName){
-        console.log("--- " + suiteName + " ---");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "----- {} -----", suiteName);
     },
 
     'testFixtures.removeMeteorUsers'(){

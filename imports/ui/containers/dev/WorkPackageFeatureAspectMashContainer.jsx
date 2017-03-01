@@ -13,9 +13,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import WorkPackageFeatureAspectMashItem   from '../../components/dev/WorkPackageFeatureAspectMashItem.jsx';
 
 // Ultrawide Services
-import {RoleType, DisplayContext, MashStatus, ComponentType}    from '../../../constants/constants.js';
+import {RoleType, DisplayContext, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import { log } from '../../../common/utils.js'
 
 // Bootstrap
 import {Panel} from 'react-bootstrap';
@@ -45,8 +46,6 @@ class WorkPackageFeatureAspectsMashList extends Component {
     }
 
     renderFeatureAspects(mashData, displayContext){
-
-        console.log("Rendering mash list of length " + mashData.length);
 
         return mashData.map((mashItem) => {
             if(mashItem) {
