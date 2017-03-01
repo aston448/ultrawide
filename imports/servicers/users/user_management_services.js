@@ -3,8 +3,9 @@
 import { UserRoles }      from '../../collections/users/user_roles.js'
 
 // Ultrawide Services
-import { log } from '../../common/utils.js';
-import { LogLevel} from '../../constants/constants.js';
+import { log }                      from '../../common/utils.js';
+import { LogLevel}                  from '../../constants/constants.js';
+import { DefaultUserDetails }       from '../../constants/default_names.js'
 
 
 //======================================================================================================================
@@ -38,9 +39,9 @@ class UserManagementServices {
             UserRoles.insert(
                 {
                     userId:             userId,
-                    userName:           'newUser',
-                    password:           'password',
-                    displayName:        'New User',
+                    userName:           DefaultUserDetails.NEW_USER_NAME,
+                    password:           DefaultUserDetails.NEW_USER_PASSWORD,
+                    displayName:        DefaultUserDetails.NEW_USER_DISPLAY_NAME,
                     isDesigner:         false,
                     isDeveloper:        false,
                     isManager:          false,

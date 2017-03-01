@@ -32,7 +32,7 @@ describe('UC 802 - Edit User Details', function(){
 
 
     // Conditions
-    it('A user may not be saved with the username 'admin'');
+    it('A user may not be saved with the username \'admin\'');
 
     it('A user may not be saved with a username that is the same as for an existing active user');
 

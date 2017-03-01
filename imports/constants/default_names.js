@@ -39,3 +39,9 @@ export const DefaultLocationText = {
     NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS:        'Test Output File Alias',
     NEW_TEST_OUTPUT_LOCATION_FILE_NAME:         'Test Output File Name',
 };
+
+export const DefaultUserDetails = {
+    NEW_USER_NAME:                  'newUser',
+    NEW_USER_PASSWORD:              'password',
+    NEW_USER_DISPLAY_NAME:          'New User'
+};

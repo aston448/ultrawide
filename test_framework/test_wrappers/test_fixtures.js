@@ -24,9 +24,17 @@ class TestFixtures{
         // Note we also have a second Developer, Davey Rocket
     };
 
+    logTestSuite(suiteName){
+        server.call('testFixtures.logTestSuite', suiteName);
+    }
+
     clearAllData(){
         server.call('testFixtures.clearAllData');
     };
+
+    removeAllMeteorUsers(){
+        server.call('testFixtures.removeMeteorUsers');
+    }
 
     clearDesignUpdates(){
         server.call('testFixtures.clearDesignUpdates');

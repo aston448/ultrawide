@@ -9,32 +9,32 @@ import TestDataHelpers                  from '../test_modules/test_data_helpers.
 
 Meteor.methods({
 
-    'testUserManagement.addNewUser'(expectation){
+    'testUserManagement.addNewUser'(actioningUserName, expectation){
 
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const adminUser = UserRoles.findOne({userName: 'admin'});
+        const actioningUser = UserRoles.findOne({userName: actioningUserName});
 
-        if(!adminUser){
-            throw new Meteor.Error("FAIL", "Admin user not found");
+        if(!actioningUser){
+            throw new Meteor.Error("FAIL", "Actioning user " + actioningUserName + " not found");
         }
 
-        const outcome = ClientUserManagementServices.addUser(adminUser.userId);
+        const outcome = ClientUserManagementServices.addUser(actioningUser.userId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add User');
 
     },
 
-    'testUserManagement.saveUser'(userName, newDetails, expectation){
+    'testUserManagement.saveUser'(actioningUserName, userName, newDetails, expectation){
 
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const adminUser = UserRoles.findOne({userName: 'admin'});
+        const actioningUser = UserRoles.findOne({userName: actioningUserName});
 
-        if(!adminUser){
-            throw new Meteor.Error("FAIL", "Admin user not found");
+        if(!actioningUser){
+            throw new Meteor.Error("FAIL", "Actioning user " + actioningUserName + " not found");
         }
 
         const targetUser = UserRoles.findOne({userName: userName});
@@ -55,21 +55,21 @@ Meteor.methods({
             isActive:       targetUser.isActive
         };
 
-        const outcome = ClientUserManagementServices.saveUser(adminUser.userId, newUser);
+        const outcome = ClientUserManagementServices.saveUser(actioningUser.userId, newUser);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Save User');
 
     },
 
-    'testUserManagement.deactivateUser'(userName, expectation){
+    'testUserManagement.deactivateUser'(actioningUserName, userName, expectation){
 
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const adminUser = UserRoles.findOne({userName: 'admin'});
+        const actioningUser = UserRoles.findOne({userName: actioningUserName});
 
-        if(!adminUser){
-            throw new Meteor.Error("FAIL", "Admin user not found");
+        if(!actioningUser){
+            throw new Meteor.Error("FAIL", "Actioning user " + actioningUserName + " not found");
         }
 
         const targetUser = UserRoles.findOne({userName: userName});
@@ -78,21 +78,21 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "User " + userName + " not found");
         }
 
-        const outcome = ClientUserManagementServices.deactivateUser(adminUser.userId, targetUser.userId);
+        const outcome = ClientUserManagementServices.deactivateUser(actioningUser.userId, targetUser.userId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Deactivate User');
 
     },
 
-    'testUserManagement.activateUser'(userName, expectation){
+    'testUserManagement.activateUser'(actioningUserName, userName, expectation){
 
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const adminUser = UserRoles.findOne({userName: 'admin'});
+        const actioningUser = UserRoles.findOne({userName: actioningUserName});
 
-        if(!adminUser){
-            throw new Meteor.Error("FAIL", "Admin user not found");
+        if(!actioningUser){
+            throw new Meteor.Error("FAIL", "Actioning user " + actioningUserName + " not found");
         }
 
         const targetUser = UserRoles.findOne({userName: userName});
@@ -101,7 +101,7 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "User " + userName + " not found");
         }
 
-        const outcome = ClientUserManagementServices.activateUser(adminUser.userId, targetUser.userId);
+        const outcome = ClientUserManagementServices.activateUser(actioningUser.userId, targetUser.userId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Activate User');
 

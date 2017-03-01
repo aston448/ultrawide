@@ -30,6 +30,16 @@ import TestDataHelpers                  from '../test_modules/test_data_helpers.
 
 Meteor.methods({
 
+    'testFixtures.logTestSuite'(suiteName){
+        console.log("--- " + suiteName + " ---");
+    },
+
+    'testFixtures.removeMeteorUsers'(){
+        // To be called only when new users have been added in a test as an After Each action to prevent tests creating duplicate users
+        // Before each must then populate the data agsin with clearAllData
+        Meteor.users.remove({});
+    },
+
     'testFixtures.clearAllData'(){
 
         //console.log('Test Fixtures: CLEAR DB!');
@@ -63,7 +73,6 @@ Meteor.methods({
             UserRoles.remove({});
 
             // Recreate users and default contexts and options
-            console.log('Inserting user data...');
 
             let adminUserId = '';
             let designerUserId = '';
@@ -77,6 +86,7 @@ Meteor.methods({
 
             const adminUser = Accounts.findUserByUsername('admin');
             if(!adminUser){
+                console.log('Recreating admin user');
                 adminUserId = Accounts.createUser(
                     {
                         username: 'admin',
@@ -103,6 +113,7 @@ Meteor.methods({
             // Designer ------------------------------------------------------------------------------------------------
             const designerUser = Accounts.findUserByUsername('gloria');
             if(!designerUser) {
+                console.log('Recreating designer user');
                 designerUserId = Accounts.createUser(
                     {
                         username: 'gloria',
@@ -126,6 +137,7 @@ Meteor.methods({
             // Developer -----------------------------------------------------------------------------------------------
             const developerUser = Accounts.findUserByUsername('hugh');
             if(!developerUser) {
+                console.log('Recreating developer user');
                 developerUserId = Accounts.createUser(
                     {
                         username: 'hugh',
@@ -149,6 +161,7 @@ Meteor.methods({
             // Another developer ---------------------------------------------------------------------------------------
             const anotherDeveloperUser = Accounts.findUserByUsername('davey');
             if(!anotherDeveloperUser) {
+                console.log('Recreating another developer user');
                 anotherDeveloperUserId = Accounts.createUser(
                     {
                         username: 'davey',
@@ -172,6 +185,7 @@ Meteor.methods({
             // Manager -------------------------------------------------------------------------------------------------
             const managerUser = Accounts.findUserByUsername('miles');
             if(!managerUser) {
+                console.log('Recreating manager user');
                 managerUserId = Accounts.createUser(
                     {
                         username: 'miles',
