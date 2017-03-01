@@ -8,6 +8,7 @@ import { UserCurrentViewOptions}    from '../../imports/collections/context/user
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
+import { DesignUpdateSummaries }    from '../../imports/collections/design_update/design_update_summaries.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 import { DesignComponents }         from '../../imports/collections/design/design_components.js';
@@ -49,6 +50,7 @@ Meteor.methods({
             DesignComponents.remove({});
             WorkPackageComponents.remove({});
             WorkPackages.remove({});
+            DesignUpdateSummaries.remove({});
             DesignUpdates.remove({});
             DesignVersions.remove({});
             Designs.remove({});
@@ -56,163 +58,182 @@ Meteor.methods({
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
 
+            UserCurrentEditContext.remove({});
+            UserCurrentViewOptions.remove({});
+            UserRoles.remove({});
 
-            // Clear current edit context for all users
-            UserCurrentEditContext.update(
-                {},
-                {
-                    $set: {
-                        designId: 'NONE',
-                        designVersionId: 'NONE',
-                        designUpdateId: 'NONE',
-                        workPackageId: 'NONE',
-                        designComponentId: 'NONE',
-                        designComponentType: 'NONE',
-                        featureReferenceId: 'NONE',
-                        featureAspectReferenceId: 'NONE',
-                        scenarioReferenceId: 'NONE',
-                        scenarioStepId: 'NONE',
+            // Recreate users and default contexts and options
+            console.log('Inserting user data...');
+
+            let adminUserId = '';
+            let designerUserId = '';
+            let developerUserId = '';
+            let anotherDeveloperUserId = '';
+            let managerUserId = '';
+
+            // Only need to recreate meteor accounts after reset
+
+            // ADMIN USER ==============================================================================================
+
+            const adminUser = Accounts.findUserByUsername('admin');
+            if(!adminUser){
+                adminUserId = Accounts.createUser(
+                    {
+                        username: 'admin',
+                        password: 'admin'
                     }
-                },
-                {multi: true}
-            );
+                );
+            } else {
+                adminUserId = adminUser._id;
+            }
 
-            // And clear down the View Options to defaults too
-            UserCurrentViewOptions.update(
-                {},
-                {
-                    $set:{
-                        designDetailsVisible:       true,
-                        designTestSummaryVisible:   false,
-                        designDomainDictVisible:    true,
-                        updateDetailsVisible:       true,
-                        updateTestSummaryVisible:   false,
-                        updateDomainDictVisible:    false,
-                        wpDetailsVisible:           true,
-                        wpDomainDictVisible:        false,
-                        devDetailsVisible:          false,
-                        devAccTestsVisible:         false,
-                        devIntTestsVisible:         false,
-                        devUnitTestsVisible:        false,
-                        devTestSummaryVisible:      false,
-                        devFeatureFilesVisible:     false,
-                        devDomainDictVisible:       false
-                    }
-                },
-                {multi: true}
-            );
+            UserRoles.insert({
+                userId: adminUserId,
+                userName: 'admin',
+                password: 'admin',
+                displayName: 'Administrator',
+                isDesigner: false,
+                isDeveloper: false,
+                isManager: false,
+                isAdmin: true
+            });
 
-            // Recreate users only needed after a reset - NOTE:  Make sure there is no backup data to restore or it will confuse this
-            if (UserRoles.find({}).count() === 0) {
+            // NORMAL USERS ============================================================================================
 
-                console.log('Inserting user data...');
-                // Create a new accounts
-                let designerUserId = Accounts.createUser(
+            // Designer ------------------------------------------------------------------------------------------------
+            const designerUser = Accounts.findUserByUsername('gloria');
+            if(!designerUser) {
+                designerUserId = Accounts.createUser(
                     {
                         username: 'gloria',
                         password: 'gloria'
                     }
                 );
+            } else {
+                designerUserId = designerUser._id;
+            }
 
-                UserRoles.insert({
-                    userId: designerUserId,
-                    userName: 'gloria',
-                    displayName: 'Gloria Slap',
-                    isDesigner: true,
-                    isDeveloper: false,
-                    isManager: false
-                });
+            UserRoles.insert({
+                userId: designerUserId,
+                userName: 'gloria',
+                password: 'gloria',
+                displayName: 'Gloria Slap',
+                isDesigner: true,
+                isDeveloper: false,
+                isManager: false
+            });
 
-                let developerUserId = Accounts.createUser(
+            // Developer -----------------------------------------------------------------------------------------------
+            const developerUser = Accounts.findUserByUsername('hugh');
+            if(!developerUser) {
+                developerUserId = Accounts.createUser(
                     {
                         username: 'hugh',
                         password: 'hugh'
                     }
                 );
+            } else {
+                developerUserId = developerUser._id;
+            }
 
-                UserRoles.insert({
-                    userId: developerUserId,
-                    userName: 'hugh',
-                    displayName: 'Hugh Gengin',
-                    isDesigner: false,
-                    isDeveloper: true,
-                    isManager: false
-                });
+            UserRoles.insert({
+                userId: developerUserId,
+                userName: 'hugh',
+                password: 'hugh',
+                displayName: 'Hugh Gengin',
+                isDesigner: false,
+                isDeveloper: true,
+                isManager: false
+            });
 
-                let anotherDeveloperUserId = Accounts.createUser(
+            // Another developer ---------------------------------------------------------------------------------------
+            const anotherDeveloperUser = Accounts.findUserByUsername('davey');
+            if(!anotherDeveloperUser) {
+                anotherDeveloperUserId = Accounts.createUser(
                     {
                         username: 'davey',
                         password: 'davey'
                     }
                 );
+            } else {
+                anotherDeveloperUserId = anotherDeveloperUser._id;
+            }
 
-                UserRoles.insert({
-                    userId: anotherDeveloperUserId,
-                    userName: 'davey',
-                    displayName: 'Davey Rocket',
-                    isDesigner: false,
-                    isDeveloper: true,
-                    isManager: false
-                });
+            UserRoles.insert({
+                userId: anotherDeveloperUserId,
+                userName: 'davey',
+                password: 'davey',
+                displayName: 'Davey Rocket',
+                isDesigner: false,
+                isDeveloper: true,
+                isManager: false
+            });
 
-                let managerUserId = Accounts.createUser(
+            // Manager -------------------------------------------------------------------------------------------------
+            const managerUser = Accounts.findUserByUsername('miles');
+            if(!managerUser) {
+                managerUserId = Accounts.createUser(
                     {
                         username: 'miles',
                         password: 'miles'
                     }
                 );
-
-                UserRoles.insert({
-                    userId: managerUserId,
-                    userName: 'miles',
-                    displayName: 'Miles Behind',
-                    isDesigner: false,
-                    isDeveloper: false,
-                    isManager: true
-                });
-
-
-                // Start new users with default context
-                UserCurrentEditContext.insert({
-                    userId: designerUserId
-                });
-
-                UserCurrentEditContext.insert({
-                    userId: developerUserId
-                });
-
-                UserCurrentEditContext.insert({
-                    userId: anotherDeveloperUserId
-                });
-
-                UserCurrentEditContext.insert({
-                    userId: managerUserId
-                });
-
-
-                // And default view options
-                UserCurrentViewOptions.insert({
-                    userId: designerUserId
-                });
-
-                // And default view options
-                UserCurrentViewOptions.insert({
-                    userId: developerUserId
-                });
-
-                // And default view options
-                UserCurrentViewOptions.insert({
-                    userId: anotherDeveloperUserId
-                });
-
-                // And default view options
-                UserCurrentViewOptions.insert({
-                    userId: managerUserId
-                });
-
+            } else {
+                managerUserId = managerUser._id;
             }
 
+            UserRoles.insert({
+                userId: managerUserId,
+                userName: 'miles',
+                password: 'miles',
+                displayName: 'Miles Behind',
+                isDesigner: false,
+                isDeveloper: false,
+                isManager: true
+            });
+
+
+            // Start new users with default context
+            UserCurrentEditContext.insert({
+                userId: designerUserId
+            });
+
+            UserCurrentEditContext.insert({
+                userId: developerUserId
+            });
+
+            UserCurrentEditContext.insert({
+                userId: anotherDeveloperUserId
+            });
+
+            UserCurrentEditContext.insert({
+                userId: managerUserId
+            });
+
+
+            // And default view options
+            UserCurrentViewOptions.insert({
+                userId: designerUserId
+            });
+
+            // And default view options
+            UserCurrentViewOptions.insert({
+                userId: developerUserId
+            });
+
+            // And default view options
+            UserCurrentViewOptions.insert({
+                userId: anotherDeveloperUserId
+            });
+
+            // And default view options
+            UserCurrentViewOptions.insert({
+                userId: managerUserId
+            });
+
         }
+
+
 
     },
 

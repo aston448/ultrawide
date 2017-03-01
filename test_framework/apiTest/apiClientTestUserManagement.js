@@ -26,7 +26,7 @@ Meteor.methods({
 
     },
 
-    'testUserManagement.saveUser'(newUser, expectation){
+    'testUserManagement.saveUser'(userName, newDetails, expectation){
 
 
         expectation = TestDataHelpers.getExpectation(expectation);
@@ -36,6 +36,24 @@ Meteor.methods({
         if(!adminUser){
             throw new Meteor.Error("FAIL", "Admin user not found");
         }
+
+        const targetUser = UserRoles.findOne({userName: userName});
+
+        if(!targetUser){
+            throw new Meteor.Error("FAIL", "User " + userName + " not found");
+        }
+
+        const newUser = {
+            userId:         targetUser.userId,
+            userName:       newDetails.userName,
+            password:       newDetails.password,
+            displayName:    newDetails.displayName,
+            isDesigner:     newDetails.isDesigner,
+            isDeveloper:    newDetails.isDeveloper,
+            isManager:      newDetails.isManager,
+            isAdmin:        false,
+            isActive:       targetUser.isActive
+        };
 
         const outcome = ClientUserManagementServices.saveUser(adminUser.userId, newUser);
 
