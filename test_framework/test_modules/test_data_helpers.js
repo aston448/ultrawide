@@ -39,7 +39,7 @@ class TestDataHelpers {
     }
 
     getExpectation(expectation){
-        return (expectation != null) ? expectation : {success: true, message: ''};
+        return (expectation != null) ? expectation : {success: true, message: 'SUCCESS'};
     }
 
     processClientCallOutcome(outcome, expectation, location){

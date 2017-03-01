@@ -121,8 +121,8 @@ class DesignUpdateComponentValidationServices{
 
     validateUpdateDesignUpdateComponentName(view, mode, componentType, newName, existingUpdateComponents, componentParentId){
 
-        // Updates only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        // Updates only allowed in update edit or WP Develop when in edit mode
+        if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_EDIT;
         }
 
