@@ -189,10 +189,42 @@ describe('UC 802 - Edit User Details', function(){
 
     });
 
+    it('A user may not be saved with a username that contains non-alphanumeric characters', function(){
+
+        // Setup - add a new user
+        UserManagementActions.adminAddsNewUser();
+
+        // Expectation of dodgy user name
+        const expectation = {success: false, message: UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_NAME_ALPHANUM};
+
+        // Execute - try to save space in it
+        let newUserDetails = {
+            userName:       'user name',
+            password:       'password',
+            displayName:    'No Name',
+            isDesigner:     false,
+            isDeveloper:    false,
+            isManager:      true,
+            isAdmin:        false,
+            isActive:       true
+        };
+
+        UserManagementActions.adminSavesUserDetails(DefaultUserDetails.NEW_USER_NAME, newUserDetails, expectation);
+
+        // Non alpha characters
+        newUserDetails.userName = 'wilma@cargo';
+        UserManagementActions.adminSavesUserDetails(DefaultUserDetails.NEW_USER_NAME, newUserDetails, expectation);
+
+        newUserDetails.userName = 'wilma_cargo';
+        UserManagementActions.adminSavesUserDetails(DefaultUserDetails.NEW_USER_NAME, newUserDetails, expectation);
+
+    });
+
     it('A user may not be saved with no username', function(){
 
         // Setup - add a new user
         UserManagementActions.adminAddsNewUser();
+
 
         // Execute - try to save with no user name
         const newUserDetails = {

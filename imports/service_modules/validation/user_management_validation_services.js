@@ -2,6 +2,7 @@
 // Ultrawide Services
 import { RoleType, TestLocationType, TestLocationAccessType } from '../../constants/constants.js';
 import { Validation, UserManagementValidationErrors } from '../../constants/validation_errors.js';
+import { isAlphaNumeric } from '../../common/utils.js'
 
 //======================================================================================================================
 //
@@ -34,6 +35,21 @@ class UserManagementValidationServices {
         // The user cannot be given the user name 'admin'
         if(thisUser.userName === 'admin'){
             return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_NAME_ADMIN;
+        }
+
+        // The user name cannot be blank
+        if(thisUser.userName === ''){
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_NAME_BLANK;
+        }
+
+        // The user name should only contain alpha-numeric characters
+        if(!(isAlphaNumeric(thisUser.userName))){
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_USER_NAME_ALPHANUM;
+        }
+
+        // The password cannot be blank
+        if(thisUser.password === ''){
+            return UserManagementValidationErrors.USER_MANAGEMENT_INVALID_PASSWORD_BLANK;
         }
 
         // The user cannot be given an existing user name

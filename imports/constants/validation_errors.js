@@ -20,7 +20,9 @@ export const UserManagementValidationErrors = {
     USER_MANAGEMENT_INVALID_USER_NAME_ADMIN:    'The user name \"admin\" is reserved',
     USER_MANAGEMENT_INVALID_USER_NAME_DUPLICATE:'A user already exists with this user name',
     USER_MANAGEMENT_INVALID_USER_NAME_BLANK:    'A user cannot have no user name',
+    USER_MANAGEMENT_INVALID_USER_NAME_ALPHANUM: 'A user name should be alphanumeric with no spaces',
     USER_MANAGEMENT_INVALID_PASSWORD_BLANK:     'A user cannot have no password',
+
 };
 
 export const DesignValidationErrors = {
