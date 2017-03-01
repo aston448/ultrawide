@@ -5,7 +5,7 @@ import { DesignUpdates }            from '../../collections/design_update/design
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide services
-import { ComponentType, LogLevel }  from '../../constants/constants.js';
+import { ComponentType, ViewType, LogLevel }  from '../../constants/constants.js';
 import { DefaultComponentNames }    from '../../constants/default_names.js';
 import { getIdFromMap, log }        from '../../common/utils.js';
 
@@ -25,7 +25,7 @@ import DesignUpdateComponentModules from '../../service_modules/design_update/de
 class DesignUpdateComponentServices{
 
     // Add a new design update component to design update
-    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, isChanged = false){
+    addNewComponent(designVersionId, designUpdateId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, isChanged = false){
 
         if(Meteor.isServer) {
             // Get the parent reference id (if there is a parent)
@@ -43,6 +43,9 @@ class DesignUpdateComponentServices{
 
             // Get the design id - this is added to the components for easier access to data
             let designId = DesignVersions.findOne({_id: designVersionId}).designId;
+
+            // If adding from a Work Package set as dev added
+            let devAdded = (view === ViewType.DEVELOP_UPDATE_WP);
 
             let newUpdateComponentId = DesignUpdateComponents.insert(
                 {
@@ -73,6 +76,7 @@ class DesignUpdateComponentServices{
                     isTextChanged: false,           // For now - will go to true when text is edited
                     isMoved: false,
                     isRemoved: false,
+                    isDevAdded: devAdded,
 
                     isInScope: DesignUpdateModules.isScopable(componentType),         // If scopable then this must be in scope...
                     isParentScope: false,
@@ -120,7 +124,7 @@ class DesignUpdateComponentServices{
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
-                    DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '');
+                    DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '', view);
                 } else {
                     // Just update any WPs
                     DesignUpdateComponentModules.updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId);
@@ -187,6 +191,8 @@ class DesignUpdateComponentServices{
                     isTextChanged: component.isTextChanged,
                     isMoved: component.isMoved,
                     isRemoved: component.isRemoved,
+                    isDevUpdated: component.isDevUpdated,
+                    isDevAdded: component.isDevAdded,
 
                     // Editing state (shared and persistent)
                     isRemovable: component.isRemovable,

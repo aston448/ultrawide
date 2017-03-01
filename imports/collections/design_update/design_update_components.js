@@ -41,6 +41,8 @@ let Schema = new SimpleSchema({
     isTextChanged:                  {type: Boolean, defaultValue: false},               // Text notes changed in this update
     isMoved:                        {type: Boolean, defaultValue: false},               // Item moved in this update
     isRemoved:                      {type: Boolean, defaultValue: false} ,              // Removed in this update
+    isDevUpdated:                   {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been updated by a developer
+    isDevAdded:                     {type: Boolean, defaultValue: false},               // Flag to indicate an item (Scenario) that has been added by a developer
 
     // Editing state (shared and persistent)
     isRemovable:                    {type: Boolean, defaultValue: true} ,               // Flag to indicate if current component can be deleted

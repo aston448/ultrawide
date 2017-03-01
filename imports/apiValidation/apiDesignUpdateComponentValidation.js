@@ -97,7 +97,7 @@ class DesignUpdateComponentValidationApi{
             componentType:      thisUpdateComponent.componentType
         }).fetch();
 
-        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent.componentType, newName, existingUpdateComponents, thisUpdateComponent.componentParentIdNew);
+        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent.componentType, thisUpdateComponent.isDevAdded, newName, existingUpdateComponents, thisUpdateComponent.componentParentIdNew);
     };
 
     validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId){
