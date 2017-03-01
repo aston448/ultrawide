@@ -21,6 +21,7 @@ describe('UC 801 - Create New User', function(){
     });
 
     afterEach(function(){
+        // Need to do this or tests will fail due to existing Meteor users
         TestFixtures.removeAllMeteorUsers();
     });
 
