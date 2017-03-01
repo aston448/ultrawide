@@ -89,6 +89,7 @@ input {
 
 .panel-default > .panel-heading {
     color: darkred;
+    background-color: #DDEEEE;
     margin: 10px 10px 0 10px;
 }
 
@@ -127,8 +128,8 @@ input {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  18px;
-    font-weight: bold;
+    font-size:  20px;
+    font-weight: normal;
 }
 
 .sub-panel-heading {

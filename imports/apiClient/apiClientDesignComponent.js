@@ -555,6 +555,12 @@ class ClientDesignComponentServices{
 
             store.dispatch(setCurrentUserItemContext(context, true));
 
+            // Clear user message when new component selected
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.INFO,
+                messageText: 'Design item selected'
+            }));
+
             return context;
         }
 

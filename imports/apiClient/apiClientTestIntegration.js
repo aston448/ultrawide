@@ -159,6 +159,8 @@ class ClientTestIntegrationServices {
                 if (mashDataStale) {
 
                     console.log("Updating mash data... ");
+                    // Load user dev data (if needed) and when done update the design mash and switch view if wanted
+                    ClientContainerServices.getDevData(userContext.userId);
                     this.updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView);
 
                 } else {
