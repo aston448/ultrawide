@@ -246,7 +246,7 @@ describe('UC 381 - Update Work Package Scenario - Design Update', function(){
         WpComponentActions.developerUpdatesSelectedComponentNameTo('New Feature Name', expectation);
 
         // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Feature1'));
+        expect(WpComponentVerifications.developerSelectedComponentNameIs('Feature3'));
 
     });
 
