@@ -22,14 +22,14 @@ import TestResultVerifications      from '../../test_framework/test_wrappers/tes
 import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
 import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
 
-import {DefaultLocationText, DefaultItemNames} from '../../imports/constants/default_names.js';
+import {DefaultLocationText, DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {WorkPackageComponentValidationErrors, DesignComponentValidationErrors, DesignUpdateComponentValidationErrors}   from '../../imports/constants/validation_errors.js';
 import { ComponentType, WorkPackageStatus } from '../../imports/constants/constants.js';
 
-describe('UC 381 - Update Work Package Scenario - Base Design', function(){
+describe('UC 382 - Add Work Package Feature Aspect - Base Design', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 381 - Update Work Package Scenario - Base Design');
+        TestFixtures.logTestSuite('UC 382 - Add Work Package Feature Aspect - Base Design');
     });
 
     after(function(){
@@ -58,8 +58,9 @@ describe('UC 381 - Update Work Package Scenario - Base Design', function(){
 
     });
 
+
     // Actions
-    it('A Developer can edit the name of a Base Design Version Work Package Scenario and save changes', function(){
+    it('A Developer can add a new Feature Aspect to a Feature in a Base Design Version Work Package', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -69,16 +70,35 @@ describe('UC 381 - Update Work Package Scenario - Base Design', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Scenario Name');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
 
-        // Verify
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('New Scenario Name'));
+        // Verify - can select new Feature Aspect
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+    });
+
+    it('A Developer can edit the name of a Feature Aspect added to a Base Design Version Work Package', function(){
+
+        // Setup - Add new Aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+
+        // Execute - select and edit
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('Aspect1');
+
+        // Verify - can select new name
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Aspect1');
     });
 
 
     // Conditions
-    it('Features are not editable in a Base Design Version Work Package', function(){
+    it('A Developer cannot update the name of an existing Feature Aspect in a Base Design Version Work Package', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -87,54 +107,18 @@ describe('UC 381 - Update Work Package Scenario - Base Design', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute - expect fail
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        // Execute - select and edit - expect failure
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Feature Name', expectation);
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('Aspect1', expectation);
 
-        // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Feature1'));
-    });
-
-    it('Design Sections are not editable in a Base Design Version Work Package', function(){
-
-        // Setup
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Execute - expect fail
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
-        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Section Name', expectation);
-
-        // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Section1'));
-    });
-
-    it('Applications are not editable in a Base Design Version Work Package', function(){
-
-        // Setup
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Execute - expect fail
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
-        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Application Name', expectation);
-
-        // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Application1'));
+        // Verify - Actions still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
     });
 
 
     // Consequences
-    it('When a Base Design Version Work Package Scenario is edited by a Developer the new version appears in the Base Design Version', function(){
+    it('When a Base Design Version Work Package Feature Aspect is added by a Developer it appears in the Base Design Version', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -142,23 +126,23 @@ describe('UC 381 - Update Work Package Scenario - Base Design', function(){
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        // Check
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1', 0));
 
         // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Scenario Name');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'New Scenario Name', 'Design1', 'DesignVersion1', 1));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 'Design1', 'DesignVersion1', 1));
     });
-
 
 });
 
-describe('UC 381 - Update Work Package Scenario - Design Update', function(){
+describe('UC 382 - Add Work Package Feature Aspect - Design Update', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 381 - Update Work Package Scenario - Design Update');
+        TestFixtures.logTestSuite('UC 382 - Add Work Package Feature Aspect - Design Update');
 
         TestFixtures.clearAllData();
 
@@ -169,7 +153,6 @@ describe('UC 381 - Update Work Package Scenario - Design Update', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-
     });
 
     after(function(){
@@ -198,15 +181,15 @@ describe('UC 381 - Update Work Package Scenario - Design Update', function(){
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentUpdateWp('Section1', 'Feature3');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
-
     });
 
     afterEach(function(){
 
     });
 
+
     // Actions
-    it('A Developer can edit the name of a Design Update Work Package Scenario and save changes', function(){
+    it('A Developer can add a new Feature Aspect to a Feature in a Design Update Work Package', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -217,16 +200,36 @@ describe('UC 381 - Update Work Package Scenario - Design Update', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Scenario Name');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
 
-        // Verify
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('New Scenario Name'));
+        // Verify - can select new Feature Aspect
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+    });
+
+    it('A Developer can edit the name of a Feature Aspect added to a Design Update Work Package', function(){
+
+        // Setup - add New Aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+
+        // Execute - select and edit
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('Aspect1');
+
+        // Verify - can select new name
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Aspect1');
     });
 
 
     // Conditions
-    it('Features are not editable in a Design Update Work Package', function(){
+    it('A Developer cannot update the name of an existing Feature Aspect in a Design Update Work Package', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -236,57 +239,18 @@ describe('UC 381 - Update Work Package Scenario - Design Update', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute - expect fail
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Feature Name', expectation);
+        // Execute - select and edit - expect failure
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE};
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('Aspect1', expectation);
 
-        // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Feature3'));
-
-    });
-
-    it('Design Sections are not editable in a Design Update Work Package', function(){
-
-        // Setup
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
-        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Execute - expect fail
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Section Name', expectation);
-
-        // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Section1'));
-    });
-
-    it('Applications are not editable in a Design Update Work Package', function(){
-
-        // Setup
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
-        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Execute - expect fail
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Application Name', expectation);
-
-        // Verify - no change
-        expect(WpComponentVerifications.developerSelectedComponentNameIs('Application1'));
+        // Verify - Actions still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
     });
 
 
     // Consequences
-    it('When a Design Update Work Package Scenario is edited by a Developer the new version appears in the Design Update', function(){
+    it('When a Design Update Work Package Feature Aspect is added by a Developer it appears in the Design Update', function(){
 
         // Setup
         DesignActions.developerWorksOnDesign('Design1');
@@ -295,17 +259,15 @@ describe('UC 381 - Update Work Package Scenario - Design Update', function(){
         WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        // Check
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 0));
 
         // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Scenario Name');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
 
         // Verify
-        DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
-        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'New Scenario Name', 1));
-        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'Scenario8', 0));
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1));
     });
 
 });
