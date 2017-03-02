@@ -405,7 +405,7 @@ Meteor.methods({
         ClientDesignComponentServices.updateComponentName(view, mode, feature2Component._id, 'Feature2', rawName);
 
         // Add Feature99 to Section 99 - and make removable by removing Aspects
-        ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section2Component);
+        ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section99Component);
         const feature99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature99');
         ClientDesignComponentServices.updateComponentName(view, mode, feature99Component._id, 'Feature99', rawName);
