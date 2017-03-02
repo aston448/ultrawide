@@ -68,10 +68,10 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME);
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature99');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature3');
 
         // Verify
-        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature99'));
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
     });
 
 

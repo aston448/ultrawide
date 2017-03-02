@@ -101,13 +101,13 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 1));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 1));
 
         // Execute - Use Section99
-        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
+        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'SubSection1', 'Design1', 'DesignVersion1', 0));
     });
 
     it('An Application with no Design sections may be removed from a Design Version', function(){
@@ -115,15 +115,13 @@ describe('UC 144 - Remove Design Component', function(){
         // Setup
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 1));
-        // Remove Section99 from Application99
-        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application99', 'Section99');
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application88', 'Design1', 'DesignVersion1', 1));
 
         // Execute
-        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application99');
+        DesignComponentActions.designerRemovesDesignComponentOfType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application88');
 
         // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application99', 'Design1', 'DesignVersion1', 0));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application88', 'Design1', 'DesignVersion1', 0));
     });
 
 

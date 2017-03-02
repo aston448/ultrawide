@@ -328,7 +328,7 @@ Meteor.methods({
         //              Actions
         //              Conditions
         //              Consequences
-        //          SubSection1
+        //          SubSection1 - removable
         //      Section2
         //          Feature2
         //              Interface

@@ -295,10 +295,10 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Add new functionality to the first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        // New section - Section99
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section88');
-        // New Feature - Feature99
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section88', 'Feature88');
+        // New section - Section4
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
+        // New Feature - Feature4
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature4');
         // Set update to INCLUDE
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
@@ -310,10 +310,10 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Add new functionality to the second update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        // New section - Section99
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section99');
-        // New Feature - Feature99
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section99', 'Feature99');
+        // New section - Section5
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section5');
+        // New Feature - Feature5
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section5', 'Feature5');
         // Set update to ROLL FORWARD
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
         DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_ROLL);
