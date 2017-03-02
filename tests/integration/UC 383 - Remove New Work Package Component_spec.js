@@ -369,7 +369,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         // Execute - remove removable feature
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section99', 'Feature99');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedFeature();
+        WpComponentActions.developerRemovesSelectedFeature(expectation);
 
         // Verify - still there
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section99', 'Feature99');
