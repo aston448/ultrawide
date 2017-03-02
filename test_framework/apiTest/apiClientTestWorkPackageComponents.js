@@ -235,10 +235,10 @@ Meteor.methods({
 
                 switch(componentType){
                     case ComponentType.APPLICATION:
-                        outcome = ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId)
+                        outcome = ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId);
                         break;
                     case ComponentType.DESIGN_SECTION:
-                        if(designComponent.componentType === ComponentType.APPLICATION) {
+                        if(designUpdateComponent.componentType === ComponentType.APPLICATION) {
                             outcome = ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, designUpdateComponent)
                         } else {
                             outcome = ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, designUpdateComponent)
