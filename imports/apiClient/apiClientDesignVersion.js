@@ -287,11 +287,7 @@ class ClientDesignVersionServices{
                 featureReferenceId: 'NONE',
                 featureAspectReferenceId: 'NONE',
                 scenarioReferenceId: 'NONE',
-                scenarioStepId: 'NONE',
-                featureFilesLocation: userContext.featureFilesLocation,
-                acceptanceTestResultsLocation: userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                unitTestResultsLocation: userContext.unitTestResultsLocation
+                scenarioStepId: 'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(newContext, true));

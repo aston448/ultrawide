@@ -4,7 +4,6 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
 import { DesignComponents }         from '../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
 import { UserWorkPackageMashData }    from '../collections/dev/user_work_package_mash_data.js';

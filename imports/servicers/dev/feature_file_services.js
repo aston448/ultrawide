@@ -41,7 +41,7 @@ class MashFileServices{
             // In context 1 we want to include everything in the Design Feature
             // In context 2 we only want to include Scenario Steps that are LINKED in Ultrawide
 
-            log((msg) => console.log(msg), LogLevel.TRACE, 'Exporting feature file to {}', userContext.featureFilesLocation);
+            log((msg) => console.log(msg), LogLevel.TRACE, 'Exporting feature file to {}', 'NONE');
 
 
             const wp = WorkPackages.findOne({_id: userContext.workPackageId});
@@ -283,7 +283,8 @@ class MashFileServices{
                 });
             }
 
-            fs.writeFileSync(userContext.featureFilesLocation + fileName, fileText);
+            // TODO - FIX THIS WITH NEW USER SETTING
+            fs.writeFileSync('NONE' + fileName, fileText);
         }
 
     };

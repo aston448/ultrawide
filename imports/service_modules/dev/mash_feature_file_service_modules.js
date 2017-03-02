@@ -45,7 +45,8 @@ class MashFeatureFileModules{
         UserDevFeatureScenarioSteps.remove({userId: userContext.userId});
 
         // This means looking for feature files in the dev users test folder
-        let featureFiles = this.getFeatureFiles(userContext.featureFilesLocation);
+        // TODO - FIX THIS WITH NEW USER SETTING
+        let featureFiles = this.getFeatureFiles('NONE');
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} feature files", featureFiles.length);
 
@@ -56,7 +57,7 @@ class MashFeatureFileModules{
         // Load up data for any feature file found but highlighting those in the current WP scope
         featureFiles.forEach((file) => {
 
-            const fileText = this.getFeatureFileText(userContext.featureFilesLocation, file);
+            const fileText = this.getFeatureFileText('NONE', file);
             const feature = this.getFeatureName(fileText.toString());
             const featureName = feature.feature;
             const tag = feature.tag;

@@ -129,8 +129,8 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute - Remove existing Scenario
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        // Execute - Remove existing Scenario - must be a removable one
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedFeatureAspect(expectation);
 
@@ -147,13 +147,13 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute - Remove existing Scenario
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        // Execute - Remove existing Feature - the removable one
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section99', 'Feature99');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedFeature(expectation);
 
         // Verify - can still select
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section99', 'Feature99');
     });
 
     it('A Developer cannot remove an existing Design Section from a Base Design Version Work Package', function(){
@@ -165,13 +165,13 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute - Remove existing Scenario
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        // Execute - Remove existing Design Section - the removable one
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedDesignSection(expectation);
 
         // Verify - can still select
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
     });
 
     it('A Developer cannot remove an existing Application from a Base Design Version Work Package', function(){
@@ -183,13 +183,13 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute - Remove existing Scenario
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application1');
+        // Execute - Remove existing App - the removable one
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application88');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedApplication(expectation);
 
         // Verify - can still select
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application1');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application88');
     });
 
     it('A new Feature Aspect cannot be removed from a Base Design Version Work Package if it has a child Scenario', function(){
@@ -287,18 +287,21 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
-        // Add some new functionality to it and publish
+        // Add some new functionality to it and publish.  Add other existing stuff we need into scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section99', 'Feature99');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        // Manager creates Update WP that includes the new Feature3
+        // Manager creates Update WP
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentUpdateWp('Section1', 'Feature3');
+        // Make sure WP scope covers everything we want to play with
+        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application99');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
     });
 
@@ -380,7 +383,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Interface');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedFeatureAspect(expectation);
 
@@ -398,13 +401,13 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        // Execute - remove removable feature
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section99', 'Feature99');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedFeature();
 
         // Verify - still there
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section99', 'Feature99');
     });
 
     it('A Developer cannot remove an existing Design Section from a Design Update Work Package', function(){
@@ -417,13 +420,13 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Application1', 'Section1');
+        // Execute - try to remove the removable section
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'SubSection1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedDesignSection(expectation);
 
         // Verify - still there
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Application1', 'Section1');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'SubSection1');
     });
 
     it('A Developer cannot remove an existing Application from a Design Update Work Package', function(){
@@ -436,13 +439,13 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-        // Execute
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
+        // Execute - try to remove the removable application
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application88');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
         WpComponentActions.developerRemovesSelectedApplication(expectation);
 
         // Verify - still there
-        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application88');
     });
 
     it('A new Feature Aspect cannot be removed from a Design Update Work Package if it has a child Scenario', function(){

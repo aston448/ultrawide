@@ -93,16 +93,16 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_REMOVE;
         }
 
-        // Component must be removable
-        if(!designUpdateComponent.isRemovable){
-            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;
-        }
-
-        // If WP, must be removable AND added by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
-        if(view === ViewType.DEVELOP_BASE_WP){
+        // If WP, must added by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
+        if(view === ViewType.DEVELOP_UPDATE_WP){
             if(!designUpdateComponent.isDevAdded){
                 return DesignUpdateComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV;
             }
+        }
+
+        // Component must be removable - i.e. not have children
+        if(!designUpdateComponent.isRemovable){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;
         }
 
         return Validation.VALID;

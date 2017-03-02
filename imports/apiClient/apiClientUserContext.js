@@ -62,11 +62,7 @@ class ClientUserContextServices {
                 featureReferenceId:             userContext.featureReferenceId,
                 featureAspectReferenceId:       userContext.featureAspectReferenceId,
                 scenarioReferenceId:            userContext.scenarioReferenceId,
-                scenarioStepId:                 userContext.scenarioStepId,
-                featureFilesLocation:           userContext.featureFilesLocation,
-                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                unitTestResultsLocation:        userContext.unitTestResultsLocation
+                scenarioStepId:                 userContext.scenarioStepId
             };
 
             store.dispatch(setCurrentUserItemContext(context, false));  // Don't save - we are reading from DB here!
@@ -85,11 +81,7 @@ class ClientUserContextServices {
                 featureReferenceId:             'NONE',
                 featureAspectReferenceId:       'NONE',
                 scenarioReferenceId:            'NONE',
-                scenarioStepId:                 'NONE',
-                featureFilesLocation:           'NONE',
-                acceptanceTestResultsLocation:  'NONE',
-                integrationTestResultsLocation: 'NONE',
-                unitTestResultsLocation:        'NONE',
+                scenarioStepId:                 'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(emptyContext, true));
@@ -601,53 +593,6 @@ class ClientUserContextServices {
 
     };
 
-    updateContextFilePath(type, userContext, newPath){
-
-
-        // Set to original values
-        let newFeatureFilesLocation = userContext.featureFilesLocation;
-        let newAcceptanceTestResultsLocation = userContext.acceptanceTestResultsLocation;
-        let newIntegrationTestResultsLocation = userContext.integrationTestResultsLocation;
-        let newUnitTestResultsLocation = userContext.unitTestResultsLocation;
-
-        // Then update the one that changed
-        switch(type){
-            case LocationType.LOCATION_FEATURE_FILES:
-                newFeatureFilesLocation = newPath;
-                break;
-            case LocationType.LOCATION_ACCEPTANCE_TEST_OUTPUT:
-                newAcceptanceTestResultsLocation = newPath;
-                break;
-            case LocationType.LOCATION_INTEGRATION_TEST_OUTPUT:
-                newIntegrationTestResultsLocation = newPath;
-                break;
-            case LocationType.LOCATION_MODULE_TEST_OUTPUT:
-                newUnitTestResultsLocation = newPath;
-                break;
-        }
-
-        // And dispatch a new context
-        const context = {
-            userId:                         userContext.userId,
-            designId:                       userContext.designId,
-            designVersionId:                userContext.designVersionId,
-            designUpdateId:                 userContext.designUpdateId,
-            workPackageId:                  userContext.workPackageId,
-            designComponentId:              userContext.designComponentId,
-            designComponentType:            userContext.designComponentType,
-            featureReferenceId:             userContext.featureReferenceId,
-            featureAspectReferenceId:       userContext.featureAspectReferenceId,
-            scenarioReferenceId:            userContext.scenarioReferenceId,
-            scenarioStepId:                 userContext.scenarioStepId,
-            featureFilesLocation:           newFeatureFilesLocation,
-            acceptanceTestResultsLocation:  newAcceptanceTestResultsLocation,
-            integrationTestResultsLocation: newIntegrationTestResultsLocation,
-            unitTestResultsLocation:      newUnitTestResultsLocation
-        };
-
-        store.dispatch(setCurrentUserItemContext(context, true));
-
-    }
 
     // Get readable details of the current user context
     getContextNameData(userContext){

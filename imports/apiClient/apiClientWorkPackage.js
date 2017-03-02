@@ -303,11 +303,7 @@ class ClientWorkPackageServices {
                     featureReferenceId:             'NONE',
                     featureAspectReferenceId:       'NONE',
                     scenarioReferenceId:            'NONE',
-                    scenarioStepId:                 'NONE',
-                    featureFilesLocation:           userContext.featureFilesLocation,
-                    acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                    integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                    unitTestResultsLocation:      userContext.unitTestResultsLocation
+                    scenarioStepId:                 'NONE'
                 };
 
                 store.dispatch(setCurrentUserItemContext(context, true));
@@ -358,11 +354,7 @@ class ClientWorkPackageServices {
                 featureReferenceId:             'NONE',
                 featureAspectReferenceId:       'NONE',
                 scenarioReferenceId:            'NONE',
-                scenarioStepId:                 'NONE',
-                featureFilesLocation:           userContext.featureFilesLocation,
-                acceptanceTestResultsLocation:  userContext.acceptanceTestResultsLocation,
-                integrationTestResultsLocation: userContext.integrationTestResultsLocation,
-                unitTestResultsLocation:      userContext.unitTestResultsLocation
+                scenarioStepId:                 'NONE'
             };
 
             store.dispatch(setCurrentUserItemContext(newContext, true));

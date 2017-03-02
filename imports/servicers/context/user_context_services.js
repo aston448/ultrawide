@@ -32,11 +32,7 @@ class UserContextServices{
                     designComponentType:            context.designComponentType,
                     featureReferenceId:             context.featureReferenceId,
                     scenarioReferenceId:            context.scenarioReferenceId,
-                    scenarioStepId:                 context.scenarioStepId,
-                    featureFilesLocation:           context.featureFilesLocation,
-                    acceptanceTestResultsLocation:  context.acceptanceTestResultsLocation,
-                    integrationTestResultsLocation: context.integrationTestResultsLocation,
-                    unitTestResultsLocation:      context.unitTestResultsLocation
+                    scenarioStepId:                 context.scenarioStepId
                 }
             );
         }

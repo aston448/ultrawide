@@ -248,11 +248,7 @@ class ClientAppHeaderServices{
                 featureReferenceId: 'NONE',
                 featureAspectReferenceId: 'NONE',
                 scenarioReferenceId: 'NONE',
-                scenarioStepId: 'NONE',
-                featureFilesLocation: 'NONE',
-                acceptanceTestResultsLocation: 'NONE',
-                integrationTestResultsLocation: 'NONE',
-                unitTestResultsLocation: 'NONE',
+                scenarioStepId: 'NONE'
             };
 
             // Update REDUX but DON'T save to DB!

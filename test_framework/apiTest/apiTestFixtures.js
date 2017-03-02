@@ -295,6 +295,19 @@ Meteor.methods({
         const mode = ViewMode.MODE_EDIT;
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+        const userContext = {
+            userId:                         'NONE',
+            designId:                       design._id,
+            designVersionId:                designVersion._id,
+            designUpdateId:                 'NONE',
+            workPackageId:                  'NONE',
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE'
+        };
         let rawName = null;
 
         // Data Available:
@@ -324,15 +337,24 @@ Meteor.methods({
         //              Conditions
         //                  Scenario4
         //              Consequences
-        //          SubSection2
+        //          SubSection2 - removable
+        //  Application88 - removable
         //  Application99
         //      Section99
+        //          Feature99 - removable
+
 
         // Add Application1
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
         const application1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Application1');
         ClientDesignComponentServices.updateComponentName(view, mode, application1Component._id, 'Application1', rawName);
+
+        // Add Application88 in case a removable App needed
+        ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
+        const application88Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
+        rawName = DesignComponentModules.getRawTextFor('Application88');
+        ClientDesignComponentServices.updateComponentName(view, mode, application88Component._id, 'Application88', rawName);
 
         // Add Application99 in case a second Base App needed
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
@@ -381,6 +403,16 @@ Meteor.methods({
         const feature2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature2');
         ClientDesignComponentServices.updateComponentName(view, mode, feature2Component._id, 'Feature2', rawName);
+
+        // Add Feature99 to Section 99 - and make removable by removing Aspects
+        ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section2Component);
+        const feature99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
+        rawName = DesignComponentModules.getRawTextFor('Feature99');
+        ClientDesignComponentServices.updateComponentName(view, mode, feature99Component._id, 'Feature99', rawName);
+        const feature99Aspects = DesignComponents.find({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentParentId: feature99Component._id}).fetch();
+        feature99Aspects.forEach((aspect) => {
+            ClientDesignComponentServices.removeDesignComponent(view, mode, aspect, userContext)
+        });
 
         // Add SubSection1 to Section1
         ClientDesignComponentServices.addSectionToDesignSection(view, mode, section1Component);

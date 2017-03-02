@@ -21,11 +21,6 @@ let Schema = new SimpleSchema({
     featureAspectReferenceId:       {type: String, defaultValue: 'NONE'},       // DEV Mash Feature Aspect Ref (if any)
     scenarioReferenceId:            {type: String, defaultValue: 'NONE'},       // DEV Mash Scenario Ref (if any)
     scenarioStepId:                 {type: String, defaultValue: 'NONE'},       // DEV Mash Step Ref (if any)
-
-    featureFilesLocation:           {type: String, defaultValue: 'NONE'},       // Location of feature files in application being tested
-    acceptanceTestResultsLocation:  {type: String, defaultValue: 'NONE'},       // Name of JSON output file for acceptance tests
-    integrationTestResultsLocation: {type: String, defaultValue: 'NONE'},       // Name of JSON output file for integration tests
-    unitTestResultsLocation:      {type: String, defaultValue: 'NONE'},       // Name of JSON output file for module tests
 });
 
 UserCurrentEditContext.attachSchema(Schema);

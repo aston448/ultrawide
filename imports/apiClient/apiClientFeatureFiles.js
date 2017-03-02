@@ -4,7 +4,7 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import { UserCurrentDevContext }    from '../collections/context/user_current_dev_context.js';
+
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, LogLevel} from '../constants/constants.js';
@@ -28,9 +28,9 @@ class ClientFeatureFileServices {
     writeFeatureFile(featureReferenceId, userContext){
 
 
-        if(featureReferenceId && userContext.featureFilesLocation != 'NONE') {
+        if(featureReferenceId) {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}', userContext.featureFilesLocation);
+            log((msg) => console.log(msg), LogLevel.DEBUG, 'Exporting feature file to {}');
 
             Meteor.call('featureFiles.writeFeatureFile', featureReferenceId, userContext);
             return true;
