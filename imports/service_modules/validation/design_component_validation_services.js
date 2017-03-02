@@ -31,7 +31,7 @@ class DesignComponentValidationServices{
         if(view === ViewType.DEVELOP_BASE_WP){
 
             if(!(componentType === ComponentType.FEATURE_ASPECT || componentType === ComponentType.SCENARIO)){
-                return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_TYPE_ADD;
+                return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_ADDABLE;
             }
         }
 

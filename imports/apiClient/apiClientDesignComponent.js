@@ -178,7 +178,7 @@ class ClientDesignComponentServices{
     };
 
     // User clicked Add Sub Section inside a Design Section ------------------------------------------------------------
-    addDesignSectionToDesignSection(view, mode, parentComponent){
+    addSectionToDesignSection(view, mode, parentComponent){
 
         // Client validation
         let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);

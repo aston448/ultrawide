@@ -383,13 +383,13 @@ Meteor.methods({
         ClientDesignComponentServices.updateComponentName(view, mode, feature2Component._id, 'Feature2', rawName);
 
         // Add SubSection1 to Section1
-        ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, section1Component);
+        ClientDesignComponentServices.addSectionToDesignSection(view, mode, section1Component);
         const subSection1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('SubSection1');
         ClientDesignComponentServices.updateComponentName(view, mode, subSection1Component._id, 'SubSection1', rawName);
 
         // Add SubSection2 to Section2
-        ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, section2Component);
+        ClientDesignComponentServices.addSectionToDesignSection(view, mode, section2Component);
         const subSection2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('SubSection2');
         ClientDesignComponentServices.updateComponentName(view, mode, subSection2Component._id, 'SubSection2', rawName);

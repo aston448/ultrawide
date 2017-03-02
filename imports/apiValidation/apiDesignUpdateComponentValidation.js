@@ -16,7 +16,7 @@ import DesignUpdateComponentModules             from '../service_modules/design_
 
 class DesignUpdateComponentValidationApi{
 
-    validateAddDesignUpdateComponent(view, mode, parentComponentId){
+    validateAddDesignUpdateComponent(view, mode, parentComponentId, componentType){
 
         if(parentComponentId) {
             const parentComponent = DesignUpdateComponents.findOne({_id: parentComponentId});
@@ -25,10 +25,10 @@ class DesignUpdateComponentValidationApi{
                 designVersionId:        parentComponent.designVersionId,
                 designUpdateId:         {$ne: parentComponent.designUpdateId},
             }).fetch();
-            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, parentComponent, parentInOtherUpdates);
+            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, componentType, parentComponent, parentInOtherUpdates);
         } else{
             // Means this is an application being added so no need to check target
-            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, null, null);
+            return DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, componentType, null, null);
         }
 
 

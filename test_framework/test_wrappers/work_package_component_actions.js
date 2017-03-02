@@ -133,6 +133,18 @@ class WpComponentActions{
         server.call('testWorkPackageComponents.removeSelectedComponent', ComponentType.FEATURE_ASPECT, 'hugh', expectation);
     }
 
+    developerAddsApplicationToWorkPackage(expectation){
+        server.call('testWorkPackageComponents.addNewComponentToSelectedComponent', ComponentType.APPLICATION, 'hugh', expectation);
+    }
+
+    developerAddsDesignSectionToSelectedComponent(expectation){
+        server.call('testWorkPackageComponents.addNewComponentToSelectedComponent', ComponentType.DESIGN_SECTION, 'hugh', expectation);
+    }
+
+    developerAddsFeatureToSelectedDesignSection(expectation){
+        server.call('testWorkPackageComponents.addNewComponentToSelectedComponent', ComponentType.FEATURE, 'hugh', expectation);
+    }
+
 }
 
 export default new WpComponentActions();

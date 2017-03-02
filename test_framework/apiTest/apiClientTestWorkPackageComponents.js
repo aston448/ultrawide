@@ -185,6 +185,75 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Add Feature Aspect');
     },
 
+    'testWorkPackageComponents.addNewComponentToSelectedComponent'(componentType, userName, expectation){
+
+        // Generic function for testing what should not be allowed...
+
+        expectation = TestDataHelpers.getExpectation(expectation);
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+
+        let view = '';
+        let mode = ViewMode.MODE_EDIT;  // Assume we are in edit mode
+        let outcome = null;
+
+        switch(workPackage.workPackageType){
+            case WorkPackageType.WP_BASE:
+                view = ViewType.DEVELOP_BASE_WP;
+
+                // Get parent component - if not adding App
+                let designComponent = null;
+                if(componentType != ComponentType.APPLICATION) {
+                    designComponent = TestDataHelpers.getContextDesignComponent(userContext.designComponentId);
+                }
+
+                switch(componentType){
+                    case ComponentType.APPLICATION:
+                        outcome = ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId)
+                        break;
+                    case ComponentType.DESIGN_SECTION:
+                        if(designComponent.componentType === ComponentType.APPLICATION) {
+                            outcome = ClientDesignComponentServices.addDesignSectionToApplication(view, mode, designComponent)
+                        } else {
+                            outcome = ClientDesignComponentServices.addSectionToDesignSection(view, mode, designComponent)
+                        }
+                        break;
+                    case ComponentType.FEATURE:
+                        outcome = ClientDesignComponentServices.addFeatureToDesignSection(view, mode, designComponent);
+                        break;
+                }
+
+                break;
+            case WorkPackageType.WP_UPDATE:
+                view = ViewType.DEVELOP_UPDATE_WP;
+                // Get parent component - if not adding App
+                let designUpdateComponent = null;
+                if(componentType != ComponentType.APPLICATION) {
+                    designUpdateComponent = TestDataHelpers.getContextDesignUpdateComponent(userContext.designComponentId);
+                }
+
+                switch(componentType){
+                    case ComponentType.APPLICATION:
+                        outcome = ClientDesignUpdateComponentServices.addApplicationToDesignVersion(view, mode, userContext.designVersionId, userContext.designUpdateId)
+                        break;
+                    case ComponentType.DESIGN_SECTION:
+                        if(designComponent.componentType === ComponentType.APPLICATION) {
+                            outcome = ClientDesignUpdateComponentServices.addDesignSectionToApplication(view, mode, designUpdateComponent)
+                        } else {
+                            outcome = ClientDesignUpdateComponentServices.addSectionToDesignSection(view, mode, designUpdateComponent)
+                        }
+                        break;
+                    case ComponentType.FEATURE:
+                        outcome = ClientDesignUpdateComponentServices.addFeatureToDesignSection(view, mode, designUpdateComponent);
+                        break;
+                }
+                break;
+        }
+
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Add Component');
+    },
+
     'testWorkPackageComponents.removeSelectedComponent'(componentType, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);

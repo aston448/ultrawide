@@ -75,7 +75,7 @@ Meteor.methods({
         // And the parent component
         const sectionComponent = DesignComponents.findOne({componentType: ComponentType.DESIGN_SECTION, componentName: sectionName});
 
-        const outcome = ClientDesignComponentServices.addDesignSectionToDesignSection(view, mode, sectionComponent);
+        const outcome = ClientDesignComponentServices.addSectionToDesignSection(view, mode, sectionComponent);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Section to Section');
     },

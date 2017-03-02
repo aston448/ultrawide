@@ -103,7 +103,6 @@ export const WorkPackageValidationErrors = {
 export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_INVALID_VIEW_ADD:                      'A Design Component can only be added in the Base Design Editor',
     DESIGN_COMPONENT_INVALID_MODE_ADD:                      'A Design Component cannot be added in View Only mode',
-    DESIGN_COMPONENT_INVALID_TYPE_ADD:                      'Only Feature Aspects and Scenarios can be added to a Work Package',
     DESIGN_COMPONENT_INVALID_VIEW_EDIT:                     'A Design Component can only be edited in the Base Design Editor',
     DESIGN_COMPONENT_INVALID_MODE_EDIT:                     'A Design Component cannot be edited in View Only mode',
     DESIGN_COMPONENT_INVALID_VIEW_REMOVE:                   'A Design Component can only be removed in the Base Design Editor',
@@ -119,7 +118,8 @@ export const DesignComponentValidationErrors = {
     DESIGN_COMPONENT_INVALID_NAME_SUPERSET:                 'This Scenario cannot have a name that contains an existing Scenario name',
     DESIGN_COMPONENT_NOT_REMOVABLE:                         'A Design Component containing other components is not removable.  Delete from bottom up to remove.',
     DESIGN_COMPONENT_NOT_REMOVABLE_DEV:                     'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
-    DESIGN_COMPONENT_NOT_WP_UPDATABLE:                      'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer'
+    DESIGN_COMPONENT_NOT_WP_UPDATABLE:                      'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer',
+    DESIGN_COMPONENT_NOT_WP_ADDABLE:                        'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer'
 };
 
 export const DesignUpdateComponentValidationErrors = {
@@ -159,7 +159,8 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED:         'A component cannot be added to this item because it has been removed in this update',
     DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER:   'A component cannot be added to this item because it has been removed in another update',
     DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV:                  'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
-    DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE:                   'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer'
+    DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE:                   'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer',
+    DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE:                     'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer'
 };
 
 export const WorkPackageComponentValidationErrors = {

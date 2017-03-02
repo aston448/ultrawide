@@ -15,10 +15,10 @@ import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js
 
 class DesignUpdateComponentValidationServices{
 
-    validateAddDesignUpdateComponent(view, mode, parentComponent, parentInOtherUpdates){
+    validateAddDesignUpdateComponent(view, mode, componentType, parentComponent, parentInOtherUpdates){
 
-        // Additions only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        // Additions only allowed in update edit or WO develop when in edit mode
+        if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_ADD;
         }
 
@@ -47,6 +47,16 @@ class DesignUpdateComponentValidationServices{
                     if(parentComponent.isRemoved){
                         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
                     }
+            }
+        }
+
+        // For Update WPs, additions only allowed for Scenarios and Feature Aspects
+        if(view === ViewType.DEVELOP_UPDATE_WP){
+
+            // Anything that's not a Scenario or Feature aspect is no good
+            if(!(componentType === ComponentType.SCENARIO || componentType === ComponentType.FEATURE_ASPECT)){
+                // FAIL can't update any other components
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE;
             }
         }
 
