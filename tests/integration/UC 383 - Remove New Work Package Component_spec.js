@@ -113,7 +113,7 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         // Execute - Remove existing Scenario
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedScenario();
+        WpComponentActions.developerRemovesSelectedScenario(expectation);
 
         // Verify - can still select
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
@@ -132,7 +132,7 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         // Execute - Remove existing Scenario
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedFeatureAspect();
+        WpComponentActions.developerRemovesSelectedFeatureAspect(expectation);
 
         // Verify - can still select
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
@@ -150,7 +150,7 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         // Execute - Remove existing Scenario
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedFeature();
+        WpComponentActions.developerRemovesSelectedFeature(expectation);
 
         // Verify - can still select
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
@@ -168,7 +168,7 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         // Execute - Remove existing Scenario
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedDesignSection();
+        WpComponentActions.developerRemovesSelectedDesignSection(expectation);
 
         // Verify - can still select
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
@@ -186,7 +186,7 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         // Execute - Remove existing Scenario
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application1');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedApplication();
+        WpComponentActions.developerRemovesSelectedApplication(expectation);
 
         // Verify - can still select
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application1');
@@ -363,7 +363,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         // Execute
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedScenario();
+        WpComponentActions.developerRemovesSelectedScenario(expectation);
 
         // Verify - still there
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
@@ -382,7 +382,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         // Execute
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedFeatureAspect();
+        WpComponentActions.developerRemovesSelectedFeatureAspect(expectation);
 
         // Verify - still there
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
@@ -420,7 +420,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         // Execute
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Application1', 'Section1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedDesignSection();
+        WpComponentActions.developerRemovesSelectedDesignSection(expectation);
 
         // Verify - still there
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Application1', 'Section1');
@@ -439,7 +439,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         // Execute
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
-        WpComponentActions.developerRemovesSelectedApplication();
+        WpComponentActions.developerRemovesSelectedApplication(expectation);
 
         // Verify - still there
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
