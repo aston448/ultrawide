@@ -96,7 +96,7 @@ class DesignUpdateComponentValidationServices{
         // If WP, must added by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
         if(view === ViewType.DEVELOP_UPDATE_WP){
             if(!designUpdateComponent.isDevAdded){
-                return DesignUpdateComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV;
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV;
             }
         }
 
