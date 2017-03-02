@@ -83,8 +83,8 @@ class DesignUpdateComponentValidationServices{
 
     validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent){
 
-        // Updates only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        // Updates only allowed in update edit or WP development when in edit mode
+        if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_REMOVE;
         }
 
@@ -96,6 +96,13 @@ class DesignUpdateComponentValidationServices{
         // Component must be removable
         if(!designUpdateComponent.isRemovable){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;
+        }
+
+        // If WP, must be removable AND added by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
+        if(view === ViewType.DEVELOP_BASE_WP){
+            if(!designUpdateComponent.isDevAdded){
+                return DesignUpdateComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV;
+            }
         }
 
         return Validation.VALID;
