@@ -318,7 +318,7 @@ describe('UC 382 - Update Work Package Component Name - Design Update', function
         // Execute - expect failure
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('Aspect1');
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('Aspect1', expectation);
 
         // Verify - not changed
         expect(WpComponentVerifications.developerSelectedComponentNameIs('Actions'));
@@ -337,7 +337,7 @@ describe('UC 382 - Update Work Package Component Name - Design Update', function
         // Execute - expect failure
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Feature Name');
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Feature Name', expectation);
 
         // Verify - not changed
         expect(WpComponentVerifications.developerSelectedComponentNameIs('Feature3'));
@@ -356,7 +356,7 @@ describe('UC 382 - Update Work Package Component Name - Design Update', function
         // Execute - expect failure
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Section Name');
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Section Name', expectation);
 
         // Verify - not changed
         expect(WpComponentVerifications.developerSelectedComponentNameIs('Section1'));
@@ -375,7 +375,7 @@ describe('UC 382 - Update Work Package Component Name - Design Update', function
         // Execute - expect failure
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE};
-        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Application Name');
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('New Application Name', expectation);
 
         // Verify - not changed
         expect(WpComponentVerifications.developerSelectedComponentNameIs('Application1'));

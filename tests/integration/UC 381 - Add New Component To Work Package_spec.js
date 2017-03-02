@@ -90,7 +90,7 @@ describe('UC 381 - Add New Component To Work Package - Base Design', function(){
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
 
-        // Verify - can select new Feature Aspect
+        // Verify - can select new Scenario
         WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
     });
 

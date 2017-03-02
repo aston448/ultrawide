@@ -60,29 +60,201 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
 
 
     // Actions
-    it('A Developer can remove a Scenario that has been added to a Base Design Version Work Package');
+    it('A Developer can remove a Scenario that has been added to a Base Design Version Work Package', function(){
 
-    it('A Developer can remove a Feature Aspect that has been added to a Base Design Version Work Package');
+        // Setup - add a new Scenario
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+
+        // Execute - Remove it again
+        WpComponentActions.developerRemovesSelectedScenario();
+
+        // Verify
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME));
+    });
+
+    it('A Developer can remove a Feature Aspect that has been added to a Base Design Version Work Package', function(){
+
+        // Setup - add a new Feature Aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+
+        // Execute - Remove it again
+        WpComponentActions.developerRemovesSelectedFeatureAspect();
+
+        // Verify
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
+
+    });
 
 
     // Conditions
-    it('A Developer cannot remove an existing Scenario from a Base Design Version Work Package');
+    it('A Developer cannot remove an existing Scenario from a Base Design Version Work Package', function(){
 
-    it('A Developer cannot remove an existing Feature Aspect from a Base Design Version Work Package');
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-    it('A Developer cannot remove an existing Feature from a Base Design Version Work Package');
+        // Execute - Remove existing Scenario
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedScenario();
 
-    it('A Developer cannot remove an existing Design Section from a Base Design Version Work Package');
+        // Verify - can still select
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
 
-    it('A Developer cannot remove an existing Application from a Base Design Version Work Package');
+    });
 
-    it('A new Feature Aspect cannot be removed from a Base Design Version Work Package if it has a child Scenario');
+    it('A Developer cannot remove an existing Feature Aspect from a Base Design Version Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute - Remove existing Scenario
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedFeatureAspect();
+
+        // Verify - can still select
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+    });
+
+    it('A Developer cannot remove an existing Feature from a Base Design Version Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute - Remove existing Scenario
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedFeature();
+
+        // Verify - can still select
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+    });
+
+    it('A Developer cannot remove an existing Design Section from a Base Design Version Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute - Remove existing Scenario
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedDesignSection();
+
+        // Verify - can still select
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+    });
+
+    it('A Developer cannot remove an existing Application from a Base Design Version Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute - Remove existing Scenario
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application1');
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedApplication();
+
+        // Verify - can still select
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.DESIGN_SECTION, 'NONE', 'Application1');
+    });
+
+    it('A new Feature Aspect cannot be removed from a Base Design Version Work Package if it has a child Scenario', function(){
+
+        // Setup - add a new Feature Aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+        // And add a Scenario to it
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
+
+        // Execute - try to remove new Feature Aspect
+        const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_REMOVABLE};
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerRemovesSelectedFeatureAspect(expectation);
+
+        // Validate - can still select both
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, DefaultComponentNames.NEW_SCENARIO_NAME);
+    });
 
 
     // Consequences
-    it('When a Base Design Version Work Package Scenario is removed by a Developer it is no longer in the Base Design Version');
+    it('When a Base Design Version Work Package Scenario is removed by a Developer it is no longer in the Base Design Version', function(){
 
-    it('When a Base Design Version Work Package Feature Aspect is removed by a Developer it is no longer in the Base Design Version');
+        // Setup - add a new Scenario
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+
+        // Execute - Remove it again
+        WpComponentActions.developerRemovesSelectedScenario();
+
+        // Verify
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME));
+    });
+
+    it('When a Base Design Version Work Package Feature Aspect is removed by a Developer it is no longer in the Base Design Version', function(){
+
+        // Setup - add a new Feature Aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+
+        // Execute - Remove it again
+        WpComponentActions.developerRemovesSelectedFeatureAspect();
+
+        // Verify
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExist(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
+    });
 
 });
 
@@ -136,28 +308,209 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
 
 
     // Actions
-    it('A Developer can remove a Scenario that has been added to a Design Update Work Package');
+    it('A Developer can remove a Scenario that has been added to a Design Update Work Package', function(){
 
-    it('A Developer can remove a Feature Aspect that has been added to a Design Update Work Package');
+        // Setup - add a new Scenario
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
+        WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        WpComponentActions.developerRemovesSelectedScenario();
+
+        // Verify
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME));
+    });
+
+    it('A Developer can remove a Feature Aspect that has been added to a Design Update Work Package', function(){
+
+        // Setup - add a new Feature aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerRemovesSelectedFeatureAspect();
+
+        // Verify
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
+    });
 
 
     // Conditions
-    it('A Developer cannot remove an existing Scenario from a Design Update Work Package');
+    it('A Developer cannot remove an existing Scenario from a Design Update Work Package', function(){
 
-    it('A Developer cannot remove an existing Feature Aspect from a Design Update Work Package');
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-    it('A Developer cannot remove an existing Feature from a Design Update Work Package');
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedScenario();
 
-    it('A Developer cannot remove an existing Design Section from a Design Update Work Package');
+        // Verify - still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
+    });
 
-    it('A Developer cannot remove an existing Application from a Design Update Work Package');
+    it('A Developer cannot remove an existing Feature Aspect from a Design Update Work Package', function(){
 
-    it('A new Feature Aspect cannot be removed from a Design Update Work Package if it has a child Scenario');
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedFeatureAspect();
+
+        // Verify - still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
+    });
+
+    it('A Developer cannot remove an existing Feature from a Design Update Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedFeature();
+
+        // Verify - still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+    });
+
+    it('A Developer cannot remove an existing Design Section from a Design Update Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Application1', 'Section1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedDesignSection();
+
+        // Verify - still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Application1', 'Section1');
+    });
+
+    it('A Developer cannot remove an existing Application from a Design Update Work Package', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV};
+        WpComponentActions.developerRemovesSelectedApplication();
+
+        // Verify - still there
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
+    });
+
+    it('A new Feature Aspect cannot be removed from a Design Update Work Package if it has a child Scenario', function(){
+
+        // Setup
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+        // And add a Scenario to it
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
+
+        // Execute - try to remove new Feature Aspect
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE};
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerRemovesSelectedFeatureAspect(expectation);
+
+        // Validate - can still select both
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, DefaultComponentNames.NEW_SCENARIO_NAME);
+
+    });
 
 
     // Consequences
-    it('When a Design Update Work Package Scenario is removed by a Developer it is no longer in the Design Update');
+    it('When a Design Update Work Package Scenario is removed by a Developer it is no longer in the Design Update', function(){
 
-    it('When a Design Update Work Package Feature Aspect is removed by a Developer it is no longer in the Design Update');
+        // Setup - add a new Scenario
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions');
+        WpComponentActions.developerAddsScenarioToSelectedFeatureAspect();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        WpComponentActions.developerRemovesSelectedScenario();
+
+        // Verify
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME));
+    });
+
+    it('When a Design Update Work Package Feature Aspect is removed by a Developer it is no longer in the Design Update', function(){
+
+        // Setup - add a new Feature aspect
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
+        WpComponentActions.developerAddsFeatureAspectToSelectedFeature();
+
+        // Execute
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.FEATURE_ASPECT, 'Feature3', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
+        WpComponentActions.developerRemovesSelectedFeatureAspect();
+
+        // Verify
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
+    });
 
 });
