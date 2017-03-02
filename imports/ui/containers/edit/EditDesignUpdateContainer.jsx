@@ -116,20 +116,38 @@ class UpdateApplicationsList extends Component {
         // Scope for Design Update
         let updateScopeComponent =
             <Panel header="Update Scope" className="panel-update panel-update-body">
-                {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
+                <Grid>
+                    <Row>
+                        <Col md={12} className="scroll-col">
+                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
+                        </Col>
+                    </Row>
+                </Grid>
             </Panel>;
 
         // Edit for Design Update
         let updateEditComponent =
             <Panel header="Update Editor" className="panel-update panel-update-body">
-                {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode, false)}
-                {addComponent}
+                <Grid>
+                    <Row>
+                        <Col md={12} className="scroll-col">
+                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode, false)}
+                            {addComponent}
+                        </Col>
+                    </Row>
+                </Grid>
             </Panel>;
 
         // View Design Update Content
         let updateViewComponent =
             <Panel header="Design Update" className="panel-update panel-update-body">
-                {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
+                <Grid>
+                    <Row>
+                        <Col md={12} className="scroll-col">
+                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
+                        </Col>
+                    </Row>
+                </Grid>
             </Panel>;
 
         // Text / Scenario Steps for Design Update - Editable
@@ -181,23 +199,40 @@ class UpdateApplicationsList extends Component {
                     col4component = domainDictionary;
                 }
 
-                layout =
-                    <Grid>
-                        <Row>
-                            <Col md={3} className="scroll-col">
-                                {updateScopeComponent}
-                            </Col>
-                            <Col md={3} className="scroll-col">
-                                {updateEditComponent}
-                            </Col>
-                            <Col md={3}>
-                                {updateTextComponent}
-                            </Col>
-                            <Col md={3} className="scroll-col">
-                                {col4component}
-                            </Col>
-                        </Row>
-                    </Grid>;
+                if(viewOptions.updateDetailsVisible) {
+                    layout =
+                        <Grid>
+                            <Row>
+                                <Col md={3}>
+                                    {updateScopeComponent}
+                                </Col>
+                                <Col md={3}>
+                                    {updateEditComponent}
+                                </Col>
+                                <Col md={3}>
+                                    {updateTextComponent}
+                                </Col>
+                                <Col md={3}>
+                                    {col4component}
+                                </Col>
+                            </Row>
+                        </Grid>;
+                } else {
+                    layout =
+                        <Grid>
+                            <Row>
+                                <Col md={4}>
+                                    {updateScopeComponent}
+                                </Col>
+                                <Col md={4}>
+                                    {updateEditComponent}
+                                </Col>
+                                <Col md={4}>
+                                    {col4component}
+                                </Col>
+                            </Row>
+                        </Grid>;
+                }
 
             } else {
                 // Read Only DU
@@ -226,20 +261,34 @@ class UpdateApplicationsList extends Component {
                             </Row>
                         </Grid>;
                 } else {
-                    layout =
-                        <Grid>
-                            <Row>
-                                <Col md={4}>
-                                    {updateViewComponent}
-                                </Col>
-                                <Col md={4}>
-                                    {updateViewTextComponent}
-                                </Col>
-                                <Col md={4}>
-                                    {col3component}
-                                </Col>
-                            </Row>
-                        </Grid>;
+                    if(viewOptions.updateDetailsVisible) {
+                        layout =
+                            <Grid>
+                                <Row>
+                                    <Col md={4}>
+                                        {updateViewComponent}
+                                    </Col>
+                                    <Col md={4}>
+                                        {updateViewTextComponent}
+                                    </Col>
+                                    <Col md={4}>
+                                        {col3component}
+                                    </Col>
+                                </Row>
+                            </Grid>;
+                    } else {
+                        layout =
+                            <Grid>
+                                <Row>
+                                    <Col md={5}>
+                                        {updateViewComponent}
+                                    </Col>
+                                    <Col md={7}>
+                                        {col3component}
+                                    </Col>
+                                </Row>
+                            </Grid>;
+                    }
                 }
 
             }

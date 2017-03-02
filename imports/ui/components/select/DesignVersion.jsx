@@ -228,7 +228,7 @@ export class DesignVersion extends Component {
                     currentItemType={ItemType.DESIGN_VERSION}
                     currentItemId={designVersion._id}
                     currentItemName={designVersion.designVersionName}
-                    currentItemVersion={designVersion.designVersionNumber}
+                    currentItemRef={designVersion.designVersionNumber}
                     currentItemStatus={designVersion.designVersionStatus}
                     onSelectItem={ () => this.setNewDesignVersionActive(userContext, designVersion)}
                 />

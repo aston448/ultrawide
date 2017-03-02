@@ -114,7 +114,13 @@ class DevApplicationsList extends Component {
         // Working Design
         let design =
             <Panel header="Design Functionality in this Work Package" className="panel-update panel-update-body">
-                {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
+                <Grid>
+                    <Row>
+                        <Col md={12} className="scroll-col">
+                            {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
+                        </Col>
+                    </Row>
+                </Grid>
             </Panel>;
 
         // Details
@@ -133,10 +139,17 @@ class DevApplicationsList extends Component {
         if(viewOptions.devAccTestsVisible){
             featureTests =
                 <Panel header="Acceptance Test Implementation" className="panel-update panel-update-body">
-                    <WorkPackageFeatureMashContainer params={{
-                        userContext: userContext,
-                        displayContext: DisplayContext.MASH_ACC_TESTS
-                    }}/>
+                    <Grid>
+                        <Row>
+                            <Col md={12} className="scroll-col">
+                                <WorkPackageFeatureMashContainer params={{
+                                    userContext: userContext,
+                                    displayContext: DisplayContext.MASH_ACC_TESTS
+                                }}/>
+                            </Col>
+                        </Row>
+                    </Grid>
+
                 </Panel>;
 
             switch(displayedItems){
@@ -170,9 +183,15 @@ class DevApplicationsList extends Component {
 
             devFiles =
                 <Panel header="Build Feature Files" className="panel-update panel-update-body">
-                    <DevFilesContainer params={{
-                        userContext: userContext
-                    }}/>
+                    <Grid>
+                        <Row>
+                            <Col md={12} className="scroll-col">
+                                <DevFilesContainer params={{
+                                    userContext: userContext
+                                }}/>
+                            </Col>
+                        </Row>
+                    </Grid>
                 </Panel>;
 
             switch(displayedItems){
@@ -206,10 +225,16 @@ class DevApplicationsList extends Component {
 
             intTests =
                 <Panel header="Integration Test Implementation" className="panel-update panel-update-body">
-                    <WorkPackageFeatureMashContainer params={{
-                        userContext: userContext,
-                        displayContext: DisplayContext.MASH_INT_TESTS
-                    }}/>
+                    <Grid>
+                        <Row>
+                            <Col md={12} className="scroll-col">
+                                <WorkPackageFeatureMashContainer params={{
+                                    userContext: userContext,
+                                    displayContext: DisplayContext.MASH_INT_TESTS
+                                }}/>
+                            </Col>
+                        </Row>
+                    </Grid>
                 </Panel>;
 
             switch(displayedItems){
@@ -252,10 +277,16 @@ class DevApplicationsList extends Component {
 
             unitTests =
                 <Panel header="Unit Test Implementation" className="panel-update panel-update-body">
-                    <WorkPackageFeatureMashContainer params={{
-                        userContext: userContext,
-                        displayContext: DisplayContext.MASH_UNIT_TESTS
-                    }}/>
+                    <Grid>
+                        <Row>
+                            <Col md={12} className="scroll-col">
+                                <WorkPackageFeatureMashContainer params={{
+                                    userContext: userContext,
+                                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                                }}/>
+                            </Col>
+                        </Row>
+                    </Grid>
                 </Panel>;
 
             switch(displayedItems){
@@ -439,14 +470,14 @@ class DevApplicationsList extends Component {
         if(wpApplications) {
 
             let col1 =
-                <Col md={col1width} className="scroll-col">
+                <Col md={col1width}>
                     {design}
                 </Col>;
 
             let col2 = '';
             if(viewOptions.devDetailsVisible){
                 col2 =
-                    <Col md={col2width} className="scroll-col">
+                    <Col md={col2width} >
                         {designDetails}
                     </Col>;
             }
@@ -454,7 +485,7 @@ class DevApplicationsList extends Component {
             let col3 = '';
             if(viewOptions.devAccTestsVisible){
                 col3 =
-                    <Col md={col3width} className="scroll-col">
+                    <Col md={col3width}>
                         {featureTests}
                     </Col>;
             }
@@ -462,7 +493,7 @@ class DevApplicationsList extends Component {
             let col4 = '';
             if(viewOptions.devFeatureFilesVisible){
                 col4 =
-                    <Col md={col4width} className="scroll-col">
+                    <Col md={col4width}>
                         {devFiles}
                     </Col>;
             }
@@ -470,7 +501,7 @@ class DevApplicationsList extends Component {
             let col5 = '';
             if(viewOptions.devIntTestsVisible){
                 col5 =
-                    <Col md={col5width} className="scroll-col">
+                    <Col md={col5width}>
                         {intTests}
                     </Col>;
             }
@@ -478,7 +509,7 @@ class DevApplicationsList extends Component {
             let col6 = '';
             if(viewOptions.devUnitTestsVisible){
                 col6 =
-                    <Col md={col6width} className="scroll-col">
+                    <Col md={col6width}>
                         {unitTests}
                     </Col>;
             }
@@ -486,7 +517,7 @@ class DevApplicationsList extends Component {
             let col7 = '';
             if(viewOptions.devDomainDictVisible){
                 col7 =
-                    <Col md={col7width} className="scroll-col">
+                    <Col md={col7width}>
                         {domainDictionary}
                     </Col>;
             }

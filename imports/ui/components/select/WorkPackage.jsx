@@ -235,7 +235,7 @@ export class WorkPackage extends Component {
                     currentItemType={ItemType.WORK_PACKAGE}
                     currentItemId={workPackage._id}
                     currentItemName={workPackage.workPackageName}
-                    currentItemVersion=''
+                    currentItemRef=''
                     currentItemStatus={workPackage.workPackageStatus}
                     onSelectItem={ () => this.onSelectWorkPackage(userRole, userContext, workPackage) }
                 />

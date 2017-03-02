@@ -452,7 +452,6 @@ export class AppHeader extends Component {
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
-                            {scopeFixedButton}
                             {designFixedButton}
                             {detailsButton}
                             {domainDictionaryButton}

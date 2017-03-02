@@ -221,7 +221,7 @@ class DesignApplicationsList extends Component {
             let col2 = '';
             if(viewOptions.designDetailsVisible){
                 col2 =
-                    <Col md={col2width} className="scroll-col">
+                    <Col md={col2width}>
                         {designDetails}
                     </Col>;
             }
@@ -230,7 +230,7 @@ class DesignApplicationsList extends Component {
             let col3 = '';
             if(viewOptions.designDomainDictVisible){
                 col3 =
-                    <Col md={col3width} className="scroll-col">
+                    <Col md={col3width}>
                         {domainDictionary}
                     </Col>;
             }

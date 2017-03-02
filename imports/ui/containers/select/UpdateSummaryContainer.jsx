@@ -93,21 +93,28 @@ class DesignUpdateSummaryList extends Component {
                 <Panel header={'Design Update Summary for ' + designUpdateName}>
                     <Grid>
                         <Row>
-                            <Col md={12} className="col">
-                                {additions}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={12} className="col">
-                                {removals}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={12} className="col">
-                                {changes}
+                            <Col md={12} className="scroll-col">
+                                <Grid className="close-grid">
+                                    <Row>
+                                        <Col md={12} className="col">
+                                            {additions}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={12} className="col">
+                                            {removals}
+                                        </Col>
+                                    </Row>
+                                    <Row>
+                                        <Col md={12} className="col">
+                                            {changes}
+                                        </Col>
+                                    </Row>
+                                </Grid>
                             </Col>
                         </Row>
                     </Grid>
+
                 </Panel>
 
             );

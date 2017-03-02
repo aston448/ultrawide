@@ -136,7 +136,7 @@ class DesignUpdatesList extends Component {
                                         designUpdateId: userContext.designUpdateId
                                     }}/>
                                 </Col>
-                                <Col md={6} className="scroll-col">
+                                <Col md={6}>
                                     <UpdateSummaryContainer params={{
                                         designUpdateId: userContext.designUpdateId
                                     }}/>

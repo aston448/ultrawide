@@ -93,13 +93,26 @@ class WorkPackageApplicationsList extends Component {
         // Scope for Work Package
         let wpScopeComponent =
             <Panel header="Work Package Scope" className="panel-update panel-update-body">
-                {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
+                <Grid>
+                    <Row>
+                        <Col md={12} className="scroll-col">
+                            {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
+                        </Col>
+                    </Row>
+                </Grid>
             </Panel>;
 
         // Actual View of the WP
         let wpViewComponent =
             <Panel header="Work Package Content" className="panel-update panel-update-body">
-                {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
+                <Grid>
+                    <Row>
+                        <Col md={12} className="scroll-col">
+                            {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
+                        </Col>
+                    </Row>
+                </Grid>
+
             </Panel>;
 
         // Initial assumption is only 2 cols showing
@@ -196,7 +209,7 @@ class WorkPackageApplicationsList extends Component {
 
                 // Col 1 - Content
                 let col1 =
-                    <Col md={col1width} className="scroll-col">
+                    <Col md={col1width}>
                         {wpViewComponent}
                     </Col>;
 
@@ -211,7 +224,7 @@ class WorkPackageApplicationsList extends Component {
                 let col3 = '';
                 if(viewOptions.wpDomainDictVisible){
                     col3 =
-                        <Col md={col3width} className="scroll-col">
+                        <Col md={col3width}>
                             {domainDictionary}
                         </Col>;
                 }
@@ -318,13 +331,13 @@ class WorkPackageApplicationsList extends Component {
 
                     // Col 1 - Scope
                     let col1 =
-                        <Col md={col1width} className="scroll-col">
+                        <Col md={col1width}>
                             {wpScopeComponent}
                         </Col>;
 
                     // Col 2 - Content
                     let col2 =
-                        <Col md={col2width} className="scroll-col">
+                        <Col md={col2width}>
                             {wpViewComponent}
                         </Col>;
 
@@ -341,7 +354,7 @@ class WorkPackageApplicationsList extends Component {
                     let col4 = '';
                     if(viewOptions.wpDomainDictVisible){
                         col4 =
-                            <Col md={col4width} className="scroll-col">
+                            <Col md={col4width}>
                                 {domainDictionary}
                             </Col>;
                     }
