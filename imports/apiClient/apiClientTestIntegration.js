@@ -172,16 +172,10 @@ class ClientTestIntegrationServices {
             ClientContainerServices.getTestIntegrationData(userContext.userId);
         }
 
-        // Do test results need a reload?
-        if(testIntegrationDataContext.testDataStale){
+        // Always update the test data on opening the window
+        this.updateTestResults(userContext, viewOptions, testDataFlag);
 
-            this.updateTestResults(userContext, viewOptions, testDataFlag);
-        }
-
-        if(!testIntegrationDataContext.testSummaryDataLoaded){
-
-            this.updateTestSummary(userContext, testDataFlag)
-        }
+        this.updateTestSummary(userContext, testDataFlag);
 
         // Return default outcome for test purposes
         return {success: true, message: ''};
@@ -207,14 +201,12 @@ class ClientTestIntegrationServices {
         // Does mash need recalculation?
         if(testIntegrationDataContext.mashDataStale) {
 
-            this.updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView)
+            this.updateMashData(userContext, userRole, viewOptions, testDataFlag)
         }
 
-        // Do test results need a reload?
-        if(testIntegrationDataContext.testDataStale){
+        // Always update the test results when a new window is opened
+        this.updateTestResults(userContext, viewOptions, testDataFlag);
 
-            this.updateTestResults(userContext, viewOptions, testDataFlag);
-        }
 
         // Return default outcome for test purposes
         return {success: true, message: ''};
