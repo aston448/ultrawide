@@ -1,5 +1,5 @@
 
-import {RoleType, TestType} from '../../imports/constants/constants.js'
+import {RoleType, ViewType, TestType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 class TestIntegrationActions {
@@ -8,12 +8,12 @@ class TestIntegrationActions {
 
     developerRefreshesTestResults(expectation){
 
-        server.call('testIntegration.refreshTestResults', RoleType.DEVELOPER, 'hugh', expectation);
+        server.call('testIntegration.refreshTestResults', ViewType.DEVELOP_BASE_WP, RoleType.DEVELOPER, 'hugh', expectation);
     };
 
     developerRefreshesTestData(expectation){
 
-        server.call('testIntegration.refreshTestData', RoleType.DEVELOPER, 'hugh', expectation)
+        server.call('testIntegration.refreshTestData', ViewType.DEVELOP_BASE_WP, RoleType.DEVELOPER, 'hugh', expectation)
     }
 
 
