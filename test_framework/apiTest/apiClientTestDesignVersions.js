@@ -50,7 +50,15 @@ Meteor.methods({
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false);
+        const testIntegrationDataContext = {
+            designVersionDataLoaded:        true,
+            testIntegrationDataLoaded:      true,
+            testSummaryDataLoaded:          true,
+            mashDataStale:                  false,
+            testDataStale:                  false
+        };
+
+        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false, testIntegrationDataContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Design Version');
     },
@@ -63,7 +71,15 @@ Meteor.methods({
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion._id, false, true);
+        const testIntegrationDataContext = {
+            designVersionDataLoaded:        true,
+            testIntegrationDataLoaded:      true,
+            testSummaryDataLoaded:          true,
+            mashDataStale:                  false,
+            testDataStale:                  false
+        };
+
+        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion._id, false, testIntegrationDataContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View Design Version');
     },

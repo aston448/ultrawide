@@ -80,7 +80,9 @@ class DesignUpdate extends Component {
             userRole,
             userContext,
             viewOptions,
-            du._id
+            du._id,
+            this.props.testDataFlag,
+            this.getTestIntegrationDataContext()
         );
     }
 
@@ -97,8 +99,15 @@ class DesignUpdate extends Component {
         );
     };
 
-    onDevelopDesignUpdate(){
+    getTestIntegrationDataContext(){
 
+        return {
+            designVersionDataLoaded:        this.props.dvDataLoaded,
+            testIntegrationDataLoaded:      this.props.testDataLoaded,
+            testSummaryDataLoaded:          this.props.summaryDataLoaded,
+            mashDataStale:                  this.props.mashDataStale,
+            testDataStale:                  this.props.testDataStale
+        };
     }
 
     onMergeActionChange(userRole, du, newAction){
@@ -148,9 +157,6 @@ class DesignUpdate extends Component {
                             <ButtonGroup className="button-group-left">
                                 <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
                                 <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
-                            </ButtonGroup>
-                            <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onDevelopDesignUpdate(userContext, designUpdate)}>Develop this Update</Button>
                             </ButtonGroup>
                         </div>;
                         break;
@@ -224,9 +230,15 @@ DesignUpdate.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole: state.currentUserRole,
-        userContext: state.currentUserItemContext,
-        viewOptions: state.currentUserViewOptions
+        userRole:                   state.currentUserRole,
+        userContext:                state.currentUserItemContext,
+        viewOptions:                state.currentUserViewOptions,
+        testDataFlag:               state.testDataFlag,
+        dvDataLoaded:               state.designVersionDataLoaded,
+        testDataLoaded:             state.testIntegrationDataLoaded,
+        summaryDataLoaded:          state.testSummaryDataLoaded,
+        mashDataStale:              state.mashDataStale,
+        testDataStale:              state.testDataStale
     }
 }
 

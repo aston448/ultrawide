@@ -9,9 +9,10 @@ import { ViewType, ViewMode, RoleType, ComponentType, MessageType, DesignUpdateS
 import { Validation } from '../constants/validation_errors.js';
 import { DesignUpdateMessages } from '../constants/message_texts.js';
 
-import DesignUpdateValidationApi    from '../apiValidation/apiDesignUpdateValidation.js';
-import ServerDesignUpdateApi        from '../apiServer/apiDesignUpdate.js';
-import ClientDesignUpdateSummary    from '../apiClient/apiClientDesignUpdateSummary.js';
+import DesignUpdateValidationApi        from '../apiValidation/apiDesignUpdateValidation.js';
+import ServerDesignUpdateApi            from '../apiServer/apiDesignUpdate.js';
+import ClientDesignUpdateSummary        from '../apiClient/apiClientDesignUpdateSummary.js';
+import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -372,7 +373,7 @@ class ClientDesignUpdateServices {
     };
 
     // User chose to view a Design Update ------------------------------------------------------------------------------
-    viewDesignUpdate(userRole, userContext, viewOptions, designUpdateToViewId){
+    viewDesignUpdate(userRole, userContext, viewOptions, designUpdateToViewId, testDataFlag, testIntegrationDataContext){
 
         // Client validation
         let result = DesignUpdateValidationApi.validateViewDesignUpdate(userRole, designUpdateToViewId);
@@ -386,13 +387,19 @@ class ClientDesignUpdateServices {
         // Ensure that the current update is the update we chose to view
         const newContext = this.setDesignUpdate(userContext, designUpdateToViewId);
 
-        // Get the latest test results
-        // ClientMashDataServices.updateTestData(viewOptions, newContext);
-
         // View mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
-        store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+        // Get dev data and the latest test results if summary showing - and switch to the view when loaded
+        if(viewOptions.updateTestSummaryVisible) {
+            ClientTestIntegrationServices.loadUserDevData(newContext, userRole, viewOptions, ViewType.DESIGN_UPDATE_VIEW, testDataFlag, testIntegrationDataContext);
+        } else {
+
+            // Just switch to the design editor view
+            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
+        }
+
+
 
         return {success: true, message: ''};
 

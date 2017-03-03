@@ -74,7 +74,15 @@ Meteor.methods({
         const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
 
-        const outcome = ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, viewOptions, designUpdate._id);
+        const testIntegrationDataContext = {
+            designVersionDataLoaded:        true,
+            testIntegrationDataLoaded:      true,
+            testSummaryDataLoaded:          true,
+            mashDataStale:                  false,
+            testDataStale:                  false
+        };
+
+        const outcome = ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, viewOptions, designUpdate._id, false, testIntegrationDataContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View Update');
     },

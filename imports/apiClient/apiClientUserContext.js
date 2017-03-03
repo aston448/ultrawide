@@ -469,8 +469,8 @@ class ClientUserContextServices {
                                             return;
 
                                         default:
-                                            // Anything else, just view the update - but there will be an option to switch to edit for DRAFT
-                                            ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId)
+                                            // Anything else, just view the update - here there could be a test summary
+                                            ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId, false, testIntegrationDataContext);
                                             return;
                                     }
                                 } else {

@@ -146,9 +146,17 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
+        const testIntegrationDataContext = {
+            designVersionDataLoaded:        true,
+            testIntegrationDataLoaded:      true,
+            testSummaryDataLoaded:          true,
+            mashDataStale:                  false,
+            testDataStale:                  false
+        };
+
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
-        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false);
+        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false, testIntegrationDataContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Develop WP');
     }
