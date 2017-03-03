@@ -48,9 +48,9 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode);
     }
 
-    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, testDataFlag){
+    onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, testDataFlag){
         // Show / hide Various view Options
-        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, mashStale, testDataFlag);
+        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, testDataFlag, this.getTestIntegrationDataContext());
     }
 
     onZoomToFeatures(userContext){
@@ -91,8 +91,12 @@ export class AppHeader extends Component {
         ClientAppHeaderServices.setViewLogin(userContext);
     }
 
-    onRefreshTestData(view, userContext, userRole,  userViewOptions, mashStale){
-        ClientTestIntegrationServices.refreshTestData(userContext, userRole, userViewOptions, mashStale, this.props.testDataFlag)
+    onRefreshTestData(view, userContext, userRole,  userViewOptions){
+        ClientTestIntegrationServices.refreshTestData(view, userContext, userRole, userViewOptions, this.props.testDataFlag, this.getTestIntegrationDataContext())
+    }
+
+    onRefreshDesignData(view, userContext, userRole,  userViewOptions){
+        ClientTestIntegrationServices.refreshDesignMashData(view, userContext, userRole, userViewOptions, this.props.testDataFlag, this.getTestIntegrationDataContext())
     }
 
     onExportFeatureUpdates(userContext){
@@ -112,6 +116,19 @@ export class AppHeader extends Component {
             return 'default';
         }
 
+    }
+
+    getTestIntegrationDataContext(){
+
+        console.log("APP HEADER: data loaded = " + this.props.testDataLoaded);
+
+        return {
+            designVersionDataLoaded:        this.props.dvDataLoaded,
+            testIntegrationDataLoaded:      this.props.testDataLoaded,
+            testSummaryDataLoaded:          this.props.summaryDataLoaded,
+            mashDataStale:                  this.props.mashDataStale,
+            testDataStale:                  this.props.testDataStale
+        };
     }
 
 
@@ -209,25 +226,25 @@ export class AppHeader extends Component {
             <Button id="butDetailsFixed" bsSize="xs" bsStyle={'info'}>Details</Button>;
         let detailsButton =
             <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Details</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, testDataFlag)}>Details</Button>;
         let testSummaryButton =
             <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Test Summary</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, testDataFlag)}>Test Summary</Button>;
         let accTestsButton =
             <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Acc Tests</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, testDataFlag)}>Acc Tests</Button>;
         let intTestsButton =
             <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Int Tests</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, testDataFlag)}>Int Tests</Button>;
         let unitTestsButton =
             <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Unit Tests</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, testDataFlag)}>Unit Tests</Button>;
         let accFilesButton =
             <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Acc Files</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, testDataFlag)}>Acc Files</Button>;
         let domainDictionaryButton =
             <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, dictOption, userViewOptions, currentViewDataValue, mashStale, testDataFlag)}>Domain Dict</Button>;
+                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, dictOption, userViewOptions, currentViewDataValue, testDataFlag)}>Domain Dict</Button>;
 
 
         let homeScreenButton =
@@ -240,10 +257,10 @@ export class AppHeader extends Component {
             <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestDataButton =
-            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions, mashStale)}>Refresh Test Data</Button>;
+            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions)}>Refresh Test Data</Button>;
 
         let refreshDesignDataButton =
-            <Button id="butRefreshDesignData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions, true)}>Refresh Design Data</Button>;
+            <Button id="butRefreshDesignData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshDesignData(view, userContext, userRole, userViewOptions)}>Refresh Design Data</Button>;
 
 
         // The message display depends on the type of message being displayed
@@ -546,6 +563,10 @@ export class AppHeader extends Component {
                         </ButtonGroup>
                     </ButtonToolbar>;
                 break;
+            case ViewType.WAIT:
+                headerUserInfo = userData;
+                headerTitleActions = logoutButton;
+                break;
             default:
                 log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", view);
         }
@@ -621,9 +642,13 @@ function mapStateToProps(state) {
         userContext:                state.currentUserItemContext,
         userViewOptions:            state.currentUserViewOptions,
         message:                    state.currentUserMessage,
-        testDataFlag:   state.testDataFlag,
+        testDataFlag:               state.testDataFlag,
         currentViewDataValue:       state.currentViewOptionsDataValue,
-        mashStale:                  state.mashDataStale,
+        dvDataLoaded:               state.designVersionDataLoaded,
+        testDataLoaded:             state.testIntegrationDataLoaded,
+        summaryDataLoaded:          state.testSummaryDataLoaded,
+        mashDataStale:              state.mashDataStale,
+        testDataStale:              state.testDataStale
     }
 }
 

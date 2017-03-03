@@ -21,7 +21,7 @@ WorkPackages.attachSchema(Schema);
 
 // Publish Work Packages wanted
 if(Meteor.isServer){
-    Meteor.publish('workPackages', function workPackagesPublication(designVersionId){
-        return WorkPackages.find({designVersionId: designVersionId});
+    Meteor.publish('workPackages', function workPackagesPublication(){
+        return WorkPackages.find({});
     })
 }

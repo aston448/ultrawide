@@ -31,7 +31,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 
 
 // Ultrawide Services
-import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction } from '../constants/constants.js';
+import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction, MessageType } from '../constants/constants.js';
 import ClientDesignServices from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 
@@ -39,7 +39,7 @@ import { log } from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
-import { setCurrentUserItemContext } from '../redux/actions'
+import { setCurrentUserItemContext, setDesignVersionDataLoadedTo, setTestIntegrationDataLoadedTo, updateUserMessage } from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -64,6 +64,8 @@ class ClientContainerServices{
         const utHandle = Meteor.subscribe('userTestTypeLocations');
         const dHandle = Meteor.subscribe('designs');
         const dvHandle = Meteor.subscribe('designVersions');
+        const duHandle = Meteor.subscribe('designUpdates');
+        const wpHandle = Meteor.subscribe('workPackages');
 
         const loading = (
             !urHandle.ready()   ||
@@ -74,7 +76,9 @@ class ClientContainerServices{
             !tfHandle.ready()   ||
             !utHandle.ready()   ||
             !dHandle.ready()    ||
-            !dvHandle.ready()
+            !dvHandle.ready()   ||
+            !duHandle.ready()   ||
+            !wpHandle.ready()
         );
 
         return {isLoading: loading};
@@ -98,51 +102,74 @@ class ClientContainerServices{
 
         if(Meteor.isClient) {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", designVersionId);
+            if(store.getState().designVersionDataLoaded){
 
-            let duHandle = Meteor.subscribe('designUpdates', designVersionId);
-            let dsHandle = Meteor.subscribe('designUpdateSummaries', designVersionId);
-            let dcHandle = Meteor.subscribe('designComponents', designVersionId);
-            let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
-            let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
-            let ssHandle = Meteor.subscribe('scenarioSteps', designVersionId);
-            let ddHandle = Meteor.subscribe('domainDictionary', designVersionId);
-            let wpHandle = Meteor.subscribe('workPackages', designVersionId);
-            let wcHandle = Meteor.subscribe('workPackageComponents', designVersionId);
-
-
-            Tracker.autorun((loader) => {
-
-                let loading = (
-                    !duHandle.ready() || !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !wpHandle.ready() || !wcHandle.ready()
-                );
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "loading = {}", loading);
-
-                if (!loading) {
-                    // If an action wanted after loading call it...
-                    if(callback) {
-                        callback();
-                    }
-
-                    // Stop this checking once we are done or there will be random chaos
-                    loader.stop();
+                // Data is loaded already so callback if wanted
+                if(callback){
+                    callback();
                 }
 
-            });
+            } else {
 
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.WARNING,
+                    messageText: 'FETCHING DESIGN VERSION DATA FROM SERVER...'
+                }));
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", designVersionId);
+
+
+                let dsHandle = Meteor.subscribe('designUpdateSummaries', designVersionId);
+                let dcHandle = Meteor.subscribe('designComponents', designVersionId);
+                let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
+                let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
+                let ssHandle = Meteor.subscribe('scenarioSteps', designVersionId);
+                let ddHandle = Meteor.subscribe('domainDictionary', designVersionId);
+                let wcHandle = Meteor.subscribe('workPackageComponents', designVersionId);
+
+
+                Tracker.autorun((loader) => {
+
+                    let loading = (
+                        !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() ||  !wcHandle.ready()
+                    );
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading = {}", loading);
+
+                    if (!loading) {
+                        // Mark data as loaded
+                        store.dispatch(setDesignVersionDataLoadedTo(true));
+
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.INFO,
+                            messageText: 'Design Version data loaded'
+                        }));
+
+                        // If an action wanted after loading call it...
+                        if (callback) {
+                            callback();
+                        }
+
+                        // Stop this checking once we are done or there will be random chaos
+                        loader.stop();
+                    }
+
+                });
+            }
         }
-
     }
 
-    getDevData(userId){
+    getTestIntegrationData(userId){
 
         if(Meteor.isClient) {
 
             // See if we have already got the data subscribed...
-            const devFeatureCount = UserDevFeatures.find({}).count();
+            if (!(store.getState().testIntegrationDataLoaded)) {
 
-            if (devFeatureCount === 0) {
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.WARNING,
+                    messageText: 'Fetching your test data from server...  Please wait...'
+                }));
 
                 // Subscribe to dev data
                 const dfHandle = Meteor.subscribe('userDevFeatures', userId);
@@ -166,6 +193,13 @@ class ClientContainerServices{
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading dev data = {}", loading);
 
                     if (!loading) {
+
+                        store.dispatch(setTestIntegrationDataLoadedTo(true));
+
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.INFO,
+                            messageText: 'Test Data loaded'
+                        }));
 
                         // Stop this checking once we are done or there will be random chaos
                         loader.stop();

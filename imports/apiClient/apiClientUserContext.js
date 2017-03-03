@@ -419,7 +419,7 @@ class ClientUserContextServices {
     }
 
 
-    setViewFromUserContext(userContext, userRole){
+    setViewFromUserContext(userContext, userRole, testIntegrationDataContext){
 
         const userViewOptions = UserCurrentViewOptions.findOne({userId: userContext.userId});
 
@@ -447,7 +447,7 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_DRAFT:
 
                             // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
-                            ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, true);
+                            ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
 
                             if(userContext.designComponentId != 'NONE'){
                                 ClientDesignComponentServices.setDesignComponent(userContext.designComponentId, userContext, DisplayContext.BASE_EDIT);
@@ -490,7 +490,7 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
                             // View that final design version
-                            ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, true);
+                            ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
                             return;
                     }
                 } else {
@@ -515,7 +515,7 @@ class ClientUserContextServices {
                             case WorkPackageStatus.WP_ADOPTED:
 
                                 // Development
-                                ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, true);
+                                ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, true, testIntegrationDataContext);
                                 return;
 
                             case WorkPackageStatus.WP_AVAILABLE:
@@ -627,53 +627,57 @@ class ClientUserContextServices {
             contextNameData.workPackage = WorkPackages.findOne({_id: userContext.workPackageId}).workPackageName;
         }
 
-        if(userContext.designComponentId != 'NONE'){
-            switch(userContext.designComponentType){
-                case ComponentType.APPLICATION:
-                    if(userContext.designUpdateId === 'NONE'){
-                        contextNameData.application = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                    } else {
-                        contextNameData.application = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                    }
-                    break;
-                case ComponentType.DESIGN_SECTION:
-                    if(userContext.designUpdateId === 'NONE'){
-                        contextNameData.designSection = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                    } else {
-                        contextNameData.designSection = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                    }
-                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                    break;
-                case ComponentType.FEATURE:
-                    if(userContext.designUpdateId === 'NONE'){
-                        contextNameData.feature = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                    } else {
-                        contextNameData.feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                    }
-                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                    contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
-                    break;
-                case ComponentType.FEATURE_ASPECT:
-                    if(userContext.designUpdateId === 'NONE'){
-                        contextNameData.featureAspect = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                    } else {
-                        contextNameData.featureAspect = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                    }
-                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                    contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
-                    contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
-                    break;
-                case ComponentType.SCENARIO:
-                    if(userContext.designUpdateId === 'NONE'){
-                        contextNameData.scenario = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                    } else {
-                        contextNameData.scenario = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                    }
-                    contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                    contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
-                    contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
-                    contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext);
-                    break;
+        // After here is is possible that the data is not yet subscribed to so skip if not
+        if(store.getState().designVersionDataLoaded) {
+
+            if (userContext.designComponentId != 'NONE') {
+                switch (userContext.designComponentType) {
+                    case ComponentType.APPLICATION:
+                        if (userContext.designUpdateId === 'NONE') {
+                            contextNameData.application = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                        } else {
+                            contextNameData.application = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                        }
+                        break;
+                    case ComponentType.DESIGN_SECTION:
+                        if (userContext.designUpdateId === 'NONE') {
+                            contextNameData.designSection = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                        } else {
+                            contextNameData.designSection = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                        }
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                        break;
+                    case ComponentType.FEATURE:
+                        if (userContext.designUpdateId === 'NONE') {
+                            contextNameData.feature = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                        } else {
+                            contextNameData.feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                        }
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                        break;
+                    case ComponentType.FEATURE_ASPECT:
+                        if (userContext.designUpdateId === 'NONE') {
+                            contextNameData.featureAspect = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                        } else {
+                            contextNameData.featureAspect = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                        }
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
+                        break;
+                    case ComponentType.SCENARIO:
+                        if (userContext.designUpdateId === 'NONE') {
+                            contextNameData.scenario = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+                        } else {
+                            contextNameData.scenario = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+                        }
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
+                        contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext);
+                        break;
+                }
             }
         }
 

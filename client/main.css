@@ -382,6 +382,61 @@ input {
     color: indianred;
     background-color: pink;
 }
+/* -- Wait Screen --------------------------------------------------------------------------------------------------- */
+
+.wait-bar{
+    margin: 100px;
+    height: 40px;
+    width: 80%;
+    border: 1px solid darkblue;
+    border-radius: 2px;
+}
+
+.wait-animation{
+    margin: 0;
+    height: 38px;
+    background-color: deepskyblue;
+    animation-name: progress;
+    animation-duration: 10s;
+}
+
+@keyframes progress {
+
+    from{
+        width: 0;
+    }
+
+    to{
+        width: 80%
+    }
+}
+
+.wait-message{
+    margin: 100px;
+    padding: 20px;
+    border: 2px solid indianred;
+    border-radius: 4px;
+    background-color: pink;
+}
+
+.wait-message-main{
+    margin: 10px;
+    padding: 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  20px;
+    font-weight: normal;
+    color: black;
+}
+
+.wait-message-details{
+    margin: 10px;
+    padding: 0px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  20px;
+    font-weight: normal;
+    color: indianred;
+}
+
 /* -- User Management ----------------------------------------------------------------------------------------------- */
 
 .user-edit{
@@ -512,8 +567,19 @@ input {
     font-weight: normal;
     color: black;
     white-space: pre;
-    border: 1px solid darkgreen;
     border-radius: 4px;
+}
+
+.action-designer{
+    border: 1px solid darkgreen;
+}
+
+.action-developer{
+    border: 1px solid darkred;
+}
+
+.action-manager{
+    border: 1px solid darkblue;
 }
 
 .role-action-icon{
@@ -522,14 +588,29 @@ input {
 }
 
 .active-designer{
+    border: 1px solid darkgreen;
     color: lime;
 }
 
 .active-developer{
+    border: 1px solid darkred;
     color: lightpink;
 }
 
 .active-manager{
+    border: 1px solid darkblue;
+    color: turquoise;
+}
+
+.icon-designer{
+    color: lime;
+}
+
+.icon-developer{
+    color: lightpink;
+}
+
+.icon-manager{
     color: turquoise;
 }
 

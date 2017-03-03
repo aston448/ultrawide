@@ -119,12 +119,24 @@ export class WorkPackage extends Component {
             userContext,
             viewOptions,
             wp._id,
-            this.props.testDataFlag
+            this.props.testDataFlag,
+            this.getTestIntegrationDataContext()
         );
     };
 
     getAdopterName(userId){
         return ClientWorkPackageServices.getAdopterName(userId)
+    }
+
+    getTestIntegrationDataContext(){
+
+        return {
+            designVersionDataLoaded:        this.props.dvDataLoaded,
+            testIntegrationDataLoaded:      this.props.testDataLoaded,
+            testSummaryDataLoaded:          this.props.summaryDataLoaded,
+            mashDataStale:                  this.props.mashDataStale,
+            testDataStale:                  this.props.testDataStale
+        };
     }
 
     render() {
@@ -257,7 +269,11 @@ function mapStateToProps(state) {
         viewOptions:            state.currentUserViewOptions,
         userContext:            state.currentUserItemContext,
         testDataFlag:           state.testDataFlag,
-        mashDataStale:          state.mashDataStale
+        dvDataLoaded:           state.designVersionDataLoaded,
+        testDataLoaded:         state.testIntegrationDataLoaded,
+        summaryDataLoaded:      state.testSummaryDataLoaded,
+        mashDataStale:          state.mashDataStale,
+        testDataStale:          state.testDataStale
     }
 }
 

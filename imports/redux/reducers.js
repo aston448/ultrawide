@@ -7,25 +7,29 @@ import {RoleType, ViewType, ViewMode, MessageType} from '../constants/constants.
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {
-    currentUserRole: RoleType.NONE,
-    currentUserName: '',
-    currentUserId: 'NONE',                  // Note this is only the currently selected user in the ADMIN screen
-    currentAppView: ViewType.AUTHORISE,
-    currentViewMode: ViewMode.MODE_VIEW,
-    domainDictionaryVisible: false,
-    currentUserViewOptions: null,
-    currentUserItemContext: null,
-    currentUserTestOutputLocationId: 'NONE',
-    currentUserDevContext: null,
-    currentUserOpenDesignItems: [],
-    currentUserOpenDesignUpdateItems: [],
-    currentUserOpenWorkPackageItems: [],
-    currentDesignComponentName: 'No Component',
-    currentDesignComponentRawName: null,
-    currentUserMessage: {messageType: MessageType.INFO, messageText: 'Please log in...' },
-    testDataFlag: false,
-    mashDataStale: true,
-    currentViewOptionsDataValue: false
+    currentUserRole:                    RoleType.NONE,
+    currentUserName:                    '',
+    currentUserId:                      'NONE',                  // Note this is only the currently selected user in the ADMIN screen
+    currentAppView:                     ViewType.AUTHORISE,
+    currentViewMode:                    ViewMode.MODE_VIEW,
+    domainDictionaryVisible:            false,
+    currentUserViewOptions:             null,
+    currentUserItemContext:             null,
+    currentUserTestOutputLocationId:    'NONE',
+    currentUserDevContext:              null,
+    currentUserOpenDesignItems:         [],
+    currentUserOpenDesignUpdateItems:   [],
+    currentUserOpenWorkPackageItems:    [],
+    currentDesignComponentName:         'No Component',
+    currentDesignComponentRawName:      null,
+    currentUserMessage:                 {messageType: MessageType.INFO, messageText: 'Please log in...' },
+    testDataFlag:                       false,
+    designVersionDataLoaded:            false,      // True when data for the current DV is subscribed to
+    testIntegrationDataLoaded:          false,      // True when the test integration data for the current user is subscribed to
+    testSummaryDataLoaded:              false,      // True when the Test Summmary data has been calculated
+    testDataStale:                      true,       // True when new test data is available
+    mashDataStale:                      true,       // True when design has changed or mash needs recalculating
+    currentViewOptionsDataValue:        false
 
 };
 
@@ -104,9 +108,25 @@ export function myApplication(state = initialState, action) {
             return Object.assign({}, state, {
                 testDataFlag: action.newDataValue
             });
+        case Actions.UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG:
+            return Object.assign({}, state, {
+                designVersionDataLoaded: action.newDesignVersionDataLoadedValue
+            });
+        case Actions.UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG:
+            return Object.assign({}, state, {
+                testIntegrationDataLoaded: action.newTestIntegrationDataLoadedValue
+            });
+        case Actions.UPDATE_TEST_SUMMARY_DATA_LOADED_FLAG:
+            return Object.assign({}, state, {
+                testSummaryDataLoaded: action.newTestSummaryDataLoadedValue
+            });
+        case Actions.UPDATE_TEST_DATA_STALE_FLAG:
+            return Object.assign({}, state, {
+                testDataStale: action.newTestStaleValue
+            });
         case Actions.UPDATE_MASH_DATA_STALE_FLAG:
             return Object.assign({}, state, {
-                mashDataStale: action.newStaleValue
+                mashDataStale: action.newMashStaleValue
             });
         case Actions.UPDATE_VIEW_OPTIONS_DATA:
             return Object.assign({}, state, {

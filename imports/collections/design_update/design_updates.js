@@ -22,7 +22,7 @@ DesignUpdates.attachSchema(Schema);
 
 // Publish Design Updates wanted
 if(Meteor.isServer){
-    Meteor.publish('designUpdates', function designUpdatesPublication(designVersionId){
-        return DesignUpdates.find({designVersionId: designVersionId});
+    Meteor.publish('designUpdates', function designUpdatesPublication(){
+        return DesignUpdates.find({});
     })
 }

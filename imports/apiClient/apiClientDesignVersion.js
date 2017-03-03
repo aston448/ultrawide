@@ -18,7 +18,7 @@ import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, updateTestDataFlag} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -293,7 +293,10 @@ class ClientDesignVersionServices{
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
             // Subscribe to the appropriate data for the new DV if DV changing
-            ClientContainerServices.getDesignVersionData(newDesignVersionId);
+            if(newDesignVersionId != userContext.designVersionId) {
+                store.dispatch(setDesignVersionDataLoadedTo(false));
+                ClientContainerServices.getDesignVersionData(newDesignVersionId);
+            }
 
         }
 
@@ -302,7 +305,7 @@ class ClientDesignVersionServices{
     };
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
-    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag, mashDataStale){
+    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag, testIntegrationDataContext){
 
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
@@ -323,7 +326,7 @@ class ClientDesignVersionServices{
         // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
         if(viewOptions.designTestSummaryVisible) {
 
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag, mashDataStale);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag, testIntegrationDataContext);
         } else {
 
             // Just switch to the design editor view
@@ -339,7 +342,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersionId, testDataFlag, mashDataStale){
+    viewDesignVersion(userRole, viewOptions, userContext, designVersionId, testDataFlag, testIntegrationDataContext){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersionId);
@@ -398,7 +401,7 @@ class ClientDesignVersionServices{
         // Get dev data and the latest test results if summary showing - and switch to the view when loaded
         if(viewOptions.designTestSummaryVisible) {
 
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag, mashDataStale);
+            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag, testIntegrationDataContext);
         } else {
 
             // Just switch to the design editor view

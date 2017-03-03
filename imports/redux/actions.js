@@ -38,8 +38,19 @@ export const UPDATE_DESIGN_COMPONENT_RAW_NAME = 'UPDATE_DESIGN_COMPONENT_RAW_NAM
 // Include it as a property in any components that should redraw
 export const UPDATE_TEST_DATA_FLAG = 'UPDATE_TEST_DATA_FLAG';
 
-// Flag to indicate when Design-Dev Mash data is stale
+// Indication of whether DV data is loaded
+export const UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG = 'UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG';
+
+// Indication of whether Test Integration data is loaded
+export const UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG = 'UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG';
+
+// Indication of whether Test Summary data is loaded
+export const UPDATE_TEST_SUMMARY_DATA_LOADED_FLAG = 'UPDATE_TEST_SUMMARY_DATA_LOADED_FLAG';
+
+// Flags to indicate when Design-Dev Mash data is stale
 export const UPDATE_MASH_DATA_STALE_FLAG = 'UPDATE_MASH_DATA_STALE_FLAG';
+export const UPDATE_TEST_DATA_STALE_FLAG = 'UPDATE_TEST_DATA_STALE_FLAG';
+
 
 // Flag to trigger redraw on update of view options
 export const UPDATE_VIEW_OPTIONS_DATA = 'UPDATE_VIEW_OPTIONS_DATA';
@@ -318,11 +329,43 @@ export function updateTestDataFlag(newValue) {
     };
 }
 
+// Shows when design version data has been loaded
+export function setDesignVersionDataLoadedTo(newValue) {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG, newDesignVersionDataLoadedValue: newValue});
+    };
+}
+
+// Shows when test integration data has been loaded
+export function setTestIntegrationDataLoadedTo(newValue) {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG, newTestIntegrationDataLoadedValue: newValue});
+    };
+}
+
+// Shows when test summary data has been calculated
+export function setTestSummaryDataLoadedTo(newValue) {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_TEST_SUMMARY_DATA_LOADED_FLAG, newTestSummaryDataLoadedValue: newValue});
+    };
+}
+
+// Shows when user has indicated that new test data is availale
+export function setTestDataStaleTo(newValue) {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_TEST_DATA_STALE_FLAG, newTestStaleValue: newValue});
+    };
+}
+
 // Shows when design has been updated so mash data is out of date
 export function setMashDataStaleTo(newValue) {
 
     return function (dispatch) {
-        dispatch({type: UPDATE_MASH_DATA_STALE_FLAG, newStaleValue: newValue});
+        dispatch({type: UPDATE_MASH_DATA_STALE_FLAG, newMashStaleValue: newValue});
     };
 }
 

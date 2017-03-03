@@ -19,6 +19,7 @@ import EditDesignContainer                  from  '../../containers/edit/EditDes
 import EditDesignUpdateContainer            from  '../../containers/edit/EditDesignUpdateContainer.jsx';
 import EditWorkPackageContainer             from  '../../containers/edit/EditWorkPackageContainer.jsx';
 import EditDesignImplementationContainer    from  '../../containers/edit/EditDesignImplementationContainer.jsx';
+import WaitMessage                          from  './Wait.jsx';
 
 // Ultrawide Services
 import {ViewType} from '../../../constants/constants.js'
@@ -48,7 +49,7 @@ class AppBody extends Component {
     }
 
     render() {
-        const {view, mode, userContext, userRole} = this.props;
+        const {view, mode, userContext, userRole, currentUserMessage} = this.props;
 
         if(userContext) {
             //console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
@@ -148,7 +149,9 @@ class AppBody extends Component {
                 break;
             case ViewType.WAIT:
                 // While data is loading
-                bodyHtml = <div></div>
+                bodyHtml = <WaitMessage
+                    userMessage={currentUserMessage}
+                 />
         }
 
         return (
@@ -167,12 +170,13 @@ AppBody.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        view: state.currentAppView,
-        mode: state.currentViewMode,
-        userContext: state.currentUserItemContext,
-        userRole: state.currentUserRole,
-        userViewOptions: state.currentUserViewOptions,
-        currentViewDataValue: state.currentViewOptionsDataValue
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userContext:            state.currentUserItemContext,
+        userRole:               state.currentUserRole,
+        userViewOptions:        state.currentUserViewOptions,
+        currentViewDataValue:   state.currentViewOptionsDataValue,
+        currentUserMessage:     state.currentUserMessage
     }
 }
 

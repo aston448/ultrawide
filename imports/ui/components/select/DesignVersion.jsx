@@ -32,6 +32,17 @@ export class DesignVersion extends Component {
         super(props);
     }
 
+    getTestIntegrationDataContext(){
+
+        return {
+            designVersionDataLoaded:        this.props.dvDataLoaded,
+            testIntegrationDataLoaded:      this.props.testDataLoaded,
+            testSummaryDataLoaded:          this.props.summaryDataLoaded,
+            mashDataStale:                  this.props.mashDataStale,
+            testDataStale:                  this.props.testDataStale
+        };
+    }
+
     onEditDesignVersion(userRole, viewOptions, userContext, dv, testDataFlag){
 
         ClientDesignVersionServices.editDesignVersion(
@@ -40,7 +51,7 @@ export class DesignVersion extends Component {
             userContext,
             dv._id,
             testDataFlag,
-            this.props.mashDataStale
+            this.getTestIntegrationDataContext()
         );
     }
 
@@ -52,7 +63,7 @@ export class DesignVersion extends Component {
             userContext,
             dv._id,
             testDataFlag,
-            this.props.mashDataStale
+            this.getTestIntegrationDataContext()
         );
     }
 
@@ -249,7 +260,11 @@ function mapStateToProps(state) {
         viewOptions:                state.currentUserViewOptions,
         userContext:                state.currentUserItemContext,
         testDataFlag:               state.testDataFlag,
-        mashDataStale:              state.mashDataStale
+        dvDataLoaded:               state.designVersionDataLoaded,
+        testDataLoaded:             state.testIntegrationDataLoaded,
+        summaryDataLoaded:          state.testSummaryDataLoaded,
+        mashDataStale:              state.mashDataStale,
+        testDataStale:              state.testDataStale
     }
 }
 

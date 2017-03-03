@@ -62,13 +62,21 @@ class RoleAction extends Component {
         ClientUserContextServices.setUserRole(roleType);
         userRole = roleType;
 
+        const testIntegrationDataContext = {
+            designVersionDataLoaded:        this.props.dvDataLoaded,
+            testIntegrationDataLoaded:      this.props.testDataLoaded,
+            testSummaryDataLoaded:          this.props.summaryDataLoaded,
+            mashDataStale:                  this.props.mashDataStale,
+            testDataStale:                  this.props.testDataStale
+        };
+
         // Now go where the user wanted...
         switch(roleAction){
             case UltrawideAction.ACTION_LAST_DESIGNER:
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
                 ClientUserContextServices.setOpenItems(userContext, userRole);
-                ClientUserContextServices.setViewFromUserContext(userContext, userRole);
+                ClientUserContextServices.setViewFromUserContext(userContext, userRole, testIntegrationDataContext);
                 break;
             case UltrawideAction.ACTION_TEST_CONFIGURE:
                 ClientAppHeaderServices.setViewConfigure();
@@ -84,28 +92,36 @@ class RoleAction extends Component {
     render() {
         const {roleAction, roleType,  userContext, userRole, view} = this.props;
 
+        let roleClass = '';
         let activeClass = '';
+        let iconClass = '';
         switch(roleType){
             case RoleType.DESIGNER:
+                roleClass = ' action-designer';
                 activeClass = ' active-designer';
+                iconClass = ' icon-designer';
                 break;
             case RoleType.DEVELOPER:
+                roleClass = ' action-developer';
                 activeClass = ' active-developer';
+                iconClass = ' icon-developer';
                 break;
             case RoleType.MANAGER:
+                roleClass = ' action-manager';
                 activeClass = ' active-manager';
+                iconClass = ' icon-manager';
         }
 
         return(
             <Grid>
                 <Row>
                     <Col md={12}>
-                        <div className={this.state.highlighted ? 'role-action' + activeClass : 'role-action'}
+                        <div className={this.state.highlighted ? 'role-action' + activeClass : 'role-action' + roleClass}
                              onClick={() => this.onActionSelect(roleAction, roleType, userContext, userRole, view)}
                              onMouseEnter={ () => this.setActionHighlighted()} onMouseLeave={ () => this.setActionNormal()}>
                             <InputGroup>
                                 <InputGroup.Addon>
-                                    <div className={'role-action-icon' + activeClass}>
+                                    <div className={'role-action-icon' + iconClass}>
                                         <Glyphicon glyph='th-large'/>
                                     </div>
                                 </InputGroup.Addon>
@@ -131,9 +147,15 @@ RoleAction.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext:    state.currentUserItemContext,
-        userRole:       state.currentUserRole,
-        view:           state.currentAppView
+        userContext:        state.currentUserItemContext,
+        userRole:           state.currentUserRole,
+        view:               state.currentAppView,
+        dvDataLoaded:       state.designVersionDataLoaded,
+        testDataLoaded:     state.testIntegrationDataLoaded,
+        summaryDataLoaded:  state.testSummaryDataLoaded,
+        mashDataStale:      state.mashDataStale,
+        testDataStale:      state.testDataStale
+
     }
 }
 
