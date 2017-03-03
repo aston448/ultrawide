@@ -113,9 +113,9 @@ class ClientWorkPackageComponentServices {
             });
 
             store.dispatch(setCurrentUserOpenWorkPackageItems(
-                Meteor.userId(),
                 currentList,
-                null, null, true
+                null,
+                null
             ));
 
         } else {
@@ -123,7 +123,6 @@ class ClientWorkPackageComponentServices {
             if(newState) {
                 // Just open or close the item
                 store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    Meteor.userId(),
                     currentList,
                     wpComponent._id,
                     newState
@@ -151,7 +150,6 @@ class ClientWorkPackageComponentServices {
             childComponents.forEach((child) => {
 
                 store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    Meteor.userId(),
                     currentList,
                     wpComponent._id,
                     false

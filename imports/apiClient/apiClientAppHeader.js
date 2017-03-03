@@ -4,6 +4,7 @@
 
 // Ultrawide Collections
 import { DesignComponents } from '../collections/design/design_components.js';
+import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
@@ -13,7 +14,7 @@ import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -91,11 +92,12 @@ class ClientAppHeaderServices{
             });
 
             store.dispatch(setCurrentUserOpenWorkPackageItems(
-                Meteor.userId(),
                 componentArray,
                 null,
-                true
+                null
             ));
+
+            return;
         }
 
         if(userContext.designUpdateId === 'NONE'){
@@ -113,11 +115,32 @@ class ClientAppHeaderServices{
             });
 
             store.dispatch(setCurrentUserOpenDesignItems(
-                Meteor.userId(),
                 componentArray,
                 null,
-                true
+                null
             ));
+
+        } else {
+
+            const designUpdateOpenComponents = DesignUpdateComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
+                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+                },
+                {fields: {_id: 1}}
+            );
+
+            designUpdateOpenComponents.forEach((component) => {
+                componentArray.push(component._id);
+            });
+
+            store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                componentArray,
+                null,
+                null
+            ));
+
         }
     }
 
@@ -133,20 +156,20 @@ class ClientAppHeaderServices{
                     workPackageId: userContext.workPackageId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
 
-                }
+                },
+                {fields: {_id: 1, componentReferenceId: 1}}
             ).fetch();
 
             wpOpenComponents.forEach((component) => {
-                if(this.hasNoFeaturesWp(component)) {
+                if(this.hasNoFeaturesWp(userContext, component)) {
                     componentArray.push(component._id);
                 }
             });
 
             store.dispatch(setCurrentUserOpenWorkPackageItems(
-                Meteor.userId(),
                 componentArray,
                 null,
-                true
+                null
             ));
 
             return;
@@ -159,40 +182,76 @@ class ClientAppHeaderServices{
                     designVersionId: userContext.designVersionId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
 
-                }
+                },
+                {fields: {_id: 1, componentReferenceId: 1}}
             ).fetch();
 
             designVersionOpenComponents.forEach((component) => {
-                if(this.hasNoFeaturesDc(component)) {
+                if(this.hasNoFeaturesDc(userContext, component)) {
                     componentArray.push(component._id);
                 }
             });
 
             store.dispatch(setCurrentUserOpenDesignItems(
-                Meteor.userId(),
                 componentArray,
                 null,
-                true
+                null
             ));
 
-            return;
+        } else {
+
+            const designUpdateOpenComponents = DesignUpdateComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
+                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+                },
+                {fields: {_id: 1, componentReferenceId: 1}}
+            ).fetch();
+
+            designUpdateOpenComponents.forEach((component) => {
+                if(this.hasNoFeaturesDu(userContext, component)) {
+
+                    componentArray.push(component._id);
+                }
+            });
+
+            store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                componentArray,
+                null,
+                null
+            ));
+
         }
     }
 
-    hasNoFeaturesDc(component){
+    hasNoFeaturesDc(userContext, component){
 
         // Returns true if there are no features that are children of the component
-        return count =  DesignComponents.find({
+        return DesignComponents.find({
+                designVersionId: userContext.designVersionId,
                 componentParentReferenceId: component.componentReferenceId,
                 componentType: ComponentType.FEATURE
             }).count() === 0;
-
     }
 
-    hasNoFeaturesWp(component){
+    hasNoFeaturesDu(userContext, component){
+
+        // Returns true if there are no features that are children of the component
+        return DesignUpdateComponents.find({
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                componentParentReferenceIdNew: component.componentReferenceId,
+                componentType: ComponentType.FEATURE
+            }).count() === 0;
+    }
+
+    hasNoFeaturesWp(userContext, component){
 
         // Returns true if there are no features that are children of the component
         return WorkPackageComponents.find({
+            designVersionId: userContext.designVersionId,
+            workPackageId: userContext.workPackageId,
             componentParentReferenceId: component.componentReferenceId,
             componentType: ComponentType.FEATURE
         }).count() === 0;

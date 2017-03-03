@@ -173,7 +173,7 @@ class ClientUserContextServices {
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
                 // This should wait until data loaded to call the function
-                ClientContainerServices.getDesignVersionData(userContext.designVersionId, this.onMainDataLoaded);
+                ClientContainerServices.getDesignVersionData(userContext, this.onMainDataLoaded);
 
             } else {
                 log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
@@ -191,7 +191,7 @@ class ClientUserContextServices {
 
     }
 
-    setOpenItems(userContext, roleType){
+    setOpenItems(userContext){
 
         // Set default view settings for open items
 
@@ -396,24 +396,21 @@ class ClientUserContextServices {
         }
 
         store.dispatch(setCurrentUserOpenDesignItems(
-            Meteor.userId(),
             dvArr,
             null,
-            true
+            null
         ));
 
         store.dispatch(setCurrentUserOpenDesignUpdateItems(
-            Meteor.userId(),
             duArr,
             null,
-            true
+            null
         ));
 
         store.dispatch(setCurrentUserOpenWorkPackageItems(
-            Meteor.userId(),
             wpArr,
             null,
-            true
+            null
         ));
 
     }

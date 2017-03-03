@@ -575,7 +575,6 @@ class ClientDesignComponentServices{
 
             featureComponents.forEach((component) => {
                 store.dispatch(setCurrentUserOpenDesignItems(
-                    Meteor.userId(),
                     currentList,
                     component._id,
                     newState
@@ -587,7 +586,6 @@ class ClientDesignComponentServices{
             if(newState){
                 // Open - just open this item
                 store.dispatch(setCurrentUserOpenDesignItems(
-                    Meteor.userId(),
                     currentList,
                     designComponent._id,
                     newState
@@ -619,10 +617,7 @@ class ClientDesignComponentServices{
             if(childComponents.count() > 0){
                 childComponents.forEach((child) => {
 
-
-
                         store.dispatch(setCurrentUserOpenDesignItems(
-                            Meteor.userId(),
                             currentList,
                             designComponent._id,
                             false

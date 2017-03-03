@@ -444,6 +444,10 @@ export class AppHeader extends Component {
                             {viewModeEditButton}
                             {viewModeViewButton}
                         </ButtonGroup>
+                        <ButtonGroup>
+                            {viewFeatureLevelButton}
+                            {viewSectionLevelButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
@@ -465,6 +469,13 @@ export class AppHeader extends Component {
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
+                    </ButtonToolbar>;
+                headerBottomActionsOne =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {viewFeatureLevelButton}
+                            {viewSectionLevelButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
@@ -489,6 +500,13 @@ export class AppHeader extends Component {
                         {designsButton}
                         {selectionScreenButton}
                     </ButtonToolbar>;
+                headerBottomActionsOne =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {viewFeatureLevelButton}
+                            {viewSectionLevelButton}
+                        </ButtonGroup>
+                    </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>
                         <ButtonGroup>
@@ -510,6 +528,13 @@ export class AppHeader extends Component {
                         {designsButton}
                         {selectionScreenButton}
                         {refreshTestDataButton}
+                    </ButtonToolbar>;
+                headerBottomActionsOne =
+                    <ButtonToolbar>
+                        <ButtonGroup>
+                            {viewFeatureLevelButton}
+                            {viewSectionLevelButton}
+                        </ButtonGroup>
                     </ButtonToolbar>;
                 headerBottomActionsTwo =
                     <ButtonToolbar>

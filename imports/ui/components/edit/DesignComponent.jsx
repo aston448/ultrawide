@@ -703,7 +703,7 @@ function mapStateToProps(state) {
         openDesignItems:            state.currentUserOpenDesignItems,
         openDesignUpdateItems:      state.currentUserOpenDesignUpdateItems,
         openWorkPackageItems:       state.currentUserOpenWorkPackageItems,
-        testDataFlag:   state.testDataFlag,
+        testDataFlag:               state.testDataFlag,
         //currentViewDataValue:       state.currentViewOptionsDataValue
     }
 }

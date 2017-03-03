@@ -11,9 +11,10 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
+        const userRole = TestDataHelpers.getUserRole(userName);
 
         // This is not a validated method - don't process outcome
-        ClientDesignVersionServices.setDesignVersion(userContext, designVersion._id, false);
+        ClientDesignVersionServices.setDesignVersion(userContext, userRole, designVersion._id, false);
 
     },
 

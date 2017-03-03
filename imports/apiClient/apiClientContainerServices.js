@@ -32,8 +32,9 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction, MessageType } from '../constants/constants.js';
-import ClientDesignServices from './apiClientDesign.js';
+import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
+import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 import { log } from '../common/utils.js';
 
@@ -98,7 +99,7 @@ class ClientContainerServices{
 
     };
 
-    getDesignVersionData(designVersionId, callback){
+    getDesignVersionData(userContext, callback){
 
         if(Meteor.isClient) {
 
@@ -116,16 +117,16 @@ class ClientContainerServices{
                     messageText: 'FETCHING DESIGN VERSION DATA FROM SERVER...'
                 }));
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", designVersionId);
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
 
-                let dsHandle = Meteor.subscribe('designUpdateSummaries', designVersionId);
-                let dcHandle = Meteor.subscribe('designComponents', designVersionId);
-                let ducHandle = Meteor.subscribe('designUpdateComponents', designVersionId);
-                let fbHandle = Meteor.subscribe('featureBackgroundSteps', designVersionId);
-                let ssHandle = Meteor.subscribe('scenarioSteps', designVersionId);
-                let ddHandle = Meteor.subscribe('domainDictionary', designVersionId);
-                let wcHandle = Meteor.subscribe('workPackageComponents', designVersionId);
+                let dsHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
+                let dcHandle = Meteor.subscribe('designComponents', userContext.designVersionId);
+                let ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
+                let fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
+                let ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
+                let ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
+                let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
 
 
                 Tracker.autorun((loader) => {
@@ -144,6 +145,9 @@ class ClientContainerServices{
                             messageType: MessageType.INFO,
                             messageText: 'Design Version data loaded'
                         }));
+
+                        // Set open items now that data is loaded
+                        ClientUserContextServices.setOpenItems(userContext);
 
                         // If an action wanted after loading call it...
                         if (callback) {

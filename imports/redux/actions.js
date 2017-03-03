@@ -210,7 +210,7 @@ export function setCurrentUserTestOutputLocation(locationId){
 }
 
 // The current set of Open items for the User in a Design
-export function setCurrentUserOpenDesignItems(userId, existingItems, componentId, newState, saveToDb){
+export function setCurrentUserOpenDesignItems(existingItems, componentId, newState){
 
     return function (dispatch) {
 
@@ -233,17 +233,16 @@ export function setCurrentUserOpenDesignItems(userId, existingItems, componentId
 
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_ITEMS, newUserOpenDesignItems: newItems});
 
-        // TODO Could persist this state to DB for each user if we want
     };
 
 }
 
 // The current set of Open items for the user in a Design Update
-export function setCurrentUserOpenDesignUpdateItems(userId, existingItems, componentId, newState, saveToDb){
+export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newState){
 
     return function (dispatch) {
 
-        let newItems = existingItems;
+        let newItems = openItems;
 
         // Only adding or subtracting if a specific component id provided.  Otherwise assume a bulk set of data in existing items
         if(componentId) {
@@ -262,17 +261,16 @@ export function setCurrentUserOpenDesignUpdateItems(userId, existingItems, compo
 
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS, newUserOpenDesignUpdateItems: newItems});
 
-        // TODO Could persist this state to DB for each user if we want
     };
 
 }
 
 // The current set of Open items for the user in a Work Package
-export function setCurrentUserOpenWorkPackageItems(userId, existingItems, componentId, newState, saveToDb){
+export function setCurrentUserOpenWorkPackageItems(openItems, componentId, newState){
 
     return function (dispatch) {
 
-        let newItems = existingItems;
+        let newItems = openItems;
 
         // Only adding or subtracting if a specific component id provided.  Otherwise assume a bulk set of data in existing items
         if(componentId) {
@@ -290,8 +288,6 @@ export function setCurrentUserOpenWorkPackageItems(userId, existingItems, compon
         }
 
         dispatch({type: SET_CURRENT_USER_OPEN_WORK_PACKAGE_ITEMS, newUserOpenWorkPackageItems: newItems});
-
-        // TODO Could persist this state to DB for each user if we want
     };
 
 }

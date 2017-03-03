@@ -347,10 +347,9 @@ class ClientDesignUpdateServices {
         });
 
         store.dispatch(setCurrentUserOpenDesignUpdateItems(
-            userContext.userId,
             duArr,
             null,
-            true
+            null
         ));
 
         // Ensure that the current update is the update we chose to edit

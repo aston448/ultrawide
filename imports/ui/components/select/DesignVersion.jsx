@@ -107,11 +107,12 @@ export class DesignVersion extends Component {
         );
     }
 
-    setNewDesignVersionActive(userContext, dv){
+    setNewDesignVersionActive(userRole, userContext, dv){
 
         // Changing the design version updates the user context
         ClientDesignVersionServices.setDesignVersion(
             userContext,
+            userRole,
             dv._id,
             false
         );
@@ -241,7 +242,7 @@ export class DesignVersion extends Component {
                     currentItemName={designVersion.designVersionName}
                     currentItemRef={designVersion.designVersionNumber}
                     currentItemStatus={designVersion.designVersionStatus}
-                    onSelectItem={ () => this.setNewDesignVersionActive(userContext, designVersion)}
+                    onSelectItem={ () => this.setNewDesignVersionActive(userRole, userContext, designVersion)}
                 />
                 {buttons}
             </div>

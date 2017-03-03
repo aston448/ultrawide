@@ -582,7 +582,6 @@ class ClientDesignUpdateComponentServices{
 
             featureComponents.forEach((component) => {
                 store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                    Meteor.userId(),
                     currentList,
                     component._id,
                     newState
@@ -593,7 +592,6 @@ class ClientDesignUpdateComponentServices{
             if(newState){
                 // Open - just open this item
                 store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                    Meteor.userId(),
                     currentList,
                     designComponent._id,
                     newState
@@ -623,7 +621,6 @@ class ClientDesignUpdateComponentServices{
             childComponents.forEach((child) => {
 
                 store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                    Meteor.userId(),
                     currentList,
                     designComponent._id,
                     false

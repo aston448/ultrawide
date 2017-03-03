@@ -66,10 +66,9 @@ class ClientWorkPackageServices {
                 });
 
                 store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    userContext.userId,
                     openWpItems,
                     null,
-                    true
+                    null
                 ));
 
                 // Show action success on screen

@@ -94,6 +94,19 @@ class TestDataHelpers {
 
     };
 
+    getUserRole(userName){
+
+        switch(userName){
+            case 'gloria':
+                return RoleType.DESIGNER;
+            case 'hugh':
+            case 'davey':
+                return RoleType.DEVELOPER;
+            case 'miles':
+                return RoleType.MANAGER;
+        }
+    }
+
     getViewOptions(userName){
 
         const user = UserRoles.findOne({userName: userName});
