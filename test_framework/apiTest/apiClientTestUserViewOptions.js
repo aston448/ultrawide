@@ -47,15 +47,19 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        const outcome = ClientAppHeaderServices.toggleViewOption(currentView, userContext, userRole, optionType, viewOptions, false, mashStale, false);
+        const testIntegrationDataContext = {
+            designVersionDataLoaded:        true,
+            testIntegrationDataLoaded:      true,
+            testSummaryDataLoaded:          true,
+            mashDataStale:                  false,
+            testDataStale:                  false
+        };
+
+        const outcome = ClientAppHeaderServices.toggleViewOption(currentView, userContext, userRole, optionType, viewOptions, false, false, testIntegrationDataContext);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Toggle View Option');
 
     },
-
-
-
-
 
 
     'testViewOptions.setViewOption'(optionType, userName){
