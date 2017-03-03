@@ -4,6 +4,7 @@ import { DesignVersions }           from '../../collections/design/design_versio
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
 import { DesignComponents }         from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
+import { DomainDictionary }         from '../../collections/design/domain_dictionary.js';
 
 // Ultrawide Services
 import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, UpdateMergeStatus } from '../../constants/constants.js';
@@ -362,6 +363,30 @@ class DesignVersionModules{
         );
 
 
+    }
+
+    rollForwardDomainDictionary(oldDesignVersionId, newDesignVersionId){
+
+        // We want to copy ALL dictionary entries to the new DV.
+
+        const oldEntries = DomainDictionary.find({
+            designVersionId: oldDesignVersionId
+        }).fetch();
+
+        oldEntries.forEach((entry) => {
+
+            DomainDictionary.insert({
+                designId:               entry.designId,
+                designVersionId:        newDesignVersionId,
+                domainTermOld:          entry.domainTermOld,
+                domainTermNew:          entry.domainTermNew,
+                domainTextRaw:          entry.domainTextRaw,
+                sortingName:            entry.sortingName,
+                markInDesign:           entry.markInDesign,
+                isNew:                  entry.isNew,
+                isChanged:              entry.isChanged,
+            });
+        });
     }
 
     mergeStepUpdateOldVersion(oldDesignVersionId){

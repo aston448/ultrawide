@@ -120,7 +120,8 @@ class DesignVersionServices{
             // 3. Update the parent ids for the new design components
             // 4. Merge in the updates from the old DV that are for merging
             // 5. Carry forward the updates from the old DV that are for carrying forward
-            // 6. Set the old DV to Published Final
+            // 6. Carry forward Domain Dictionary terms
+            // 7. Set the old DV to Published Final
 
             // Get the current design version details
             const oldDesignVersion = DesignVersions.findOne({_id: previousDesignVersionId});
@@ -149,6 +150,9 @@ class DesignVersionServices{
 
                 // Process the updates to be Rolled Forward
                 DesignVersionModules.mergeStepRollForwardUpdates(previousDesignVersionId, newDesignVersionId);
+
+                // Carry forward the Domain Dictionary
+                DesignVersionModules.rollForwardDomainDictionary(previousDesignVersionId, newDesignVersionId);
 
                 // And finally update the old design version to complete
                 DesignVersionModules.mergeStepUpdateOldVersion(previousDesignVersionId);
