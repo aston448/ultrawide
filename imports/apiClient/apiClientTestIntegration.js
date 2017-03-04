@@ -126,14 +126,8 @@ class ClientTestIntegrationServices {
             }
         }
 
-        // Do test results need a reload?
-        if(testIntegrationDataContext.testDataStale){
-
-            if(this.testDataWanted(nextView, viewOptions)) {
-
-                this.updateTestResults(userContext, viewOptions, testDataFlag);
-            }
-        }
+        // Does test summary need an update?
+        let updateTestSummary = false;
 
         if(!testIntegrationDataContext.testSummaryDataLoaded){
 
@@ -142,16 +136,27 @@ class ClientTestIntegrationServices {
                 case ViewType.DESIGN_PUBLISHED_VIEW:
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     if(viewOptions.designTestSummaryVisible){
-                        this.updateTestSummary(userContext, testDataFlag);
+                        updateTestSummary = true;
                     }
                     break;
                 case ViewType.DESIGN_UPDATE_VIEW:
                     if(viewOptions.updateTestSummaryVisible){
-                        this.updateTestSummary(userContext, testDataFlag);
+                        updateTestSummary = true;
                     }
                     break;
             }
         }
+
+        // Do test results need a reload?  Will then update summary if required.
+        if(testIntegrationDataContext.testDataStale){
+
+            if(this.testDataWanted(nextView, viewOptions)) {
+
+                this.updateTestResults(userContext, viewOptions, testDataFlag, updateTestSummary);
+            }
+        }
+
+
 
         // Go to next view if specified
         if(nextView){
@@ -172,19 +177,25 @@ class ClientTestIntegrationServices {
             ClientContainerServices.getTestIntegrationData(userContext.userId);
         }
 
+        let summaryUpdated = false;
+
         // Get test results if no other views open to have got them already
         if(!(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP)){
             // The test summary is the only test window so do update the results
-            this.updateTestResults(userContext, viewOptions, testDataFlag);
+            this.updateTestResults(userContext, viewOptions, testDataFlag, true);
+            summaryUpdated = true;
         } else {
             // Otherwise check to see if other test windows already open in Dev WP
             if(this.testViewsOpen(viewOptions) === 0){
-                this.updateTestResults(userContext, viewOptions, testDataFlag);
+                this.updateTestResults(userContext, viewOptions, testDataFlag, true);
+                summaryUpdated = true;
             }
         }
 
-        // Always update the summary however as we are opening it
-        this.updateTestSummary(userContext, testDataFlag);
+        // Update the summary if we did not do so after loading results
+        if(!summaryUpdated) {
+            this.updateTestSummary(userContext, testDataFlag);
+        }
 
         // Return default outcome for test purposes
         return {success: true, message: ''};
@@ -332,6 +343,7 @@ class ClientTestIntegrationServices {
             ClientContainerServices.getTestIntegrationData(userContext.userId);
         }
 
+        let updateSummary = false;
 
         // Is this a Work Package view?
         if(view === ViewType.DEVELOP_UPDATE_WP || view === ViewType.DEVELOP_BASE_WP) {
@@ -347,19 +359,16 @@ class ClientTestIntegrationServices {
                 }
             }
 
-            // Have to update the test data as user has requested it
-            this.updateTestResults(userContext, viewOptions, testDataFlag);
-
             // If a test summary is showing, update that data too
             if(viewOptions.devTestSummaryVisible){
-                this.updateTestSummary(userContext, testDataFlag);
+                updateSummary = true;
             }
+
+            // Have to update the test data as user has requested it
+            this.updateTestResults(userContext, viewOptions, testDataFlag, updateSummary);
 
 
         } else {
-
-            // Have to update the test data as user has requested it
-            this.updateTestResults(userContext, viewOptions, testDataFlag);
 
             // Update the test summary if it is showing
             switch(view){
@@ -367,15 +376,18 @@ class ClientTestIntegrationServices {
                 case ViewType.DESIGN_PUBLISHED_VIEW:
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     if(viewOptions.designTestSummaryVisible){
-                        this.updateTestSummary(userContext, testDataFlag);
+                        updateSummary = true;
                     }
                     break;
                 case ViewType.DESIGN_UPDATE_VIEW:
                     if(viewOptions.updateTestSummaryVisible){
-                        this.updateTestSummary(userContext, testDataFlag);
+                        updateSummary = true;
                     }
                     break;
             }
+
+            // Have to update the test data as user has requested it - and update the summary afterwards if required
+            this.updateTestResults(userContext, viewOptions, testDataFlag, updateSummary);
         }
     }
 
@@ -421,7 +433,7 @@ class ClientTestIntegrationServices {
     };
 
     // Get latest test results required for current view options
-    updateTestResults(userContext, viewOptions, testDataFlag){
+    updateTestResults(userContext, viewOptions, testDataFlag, updateSummary = false){
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
@@ -440,11 +452,16 @@ class ClientTestIntegrationServices {
                     messageText: 'Test results loaded'
                 }));
 
-                // Ensure data refreshes
-                store.dispatch(updateTestDataFlag(!testDataFlag));
-
                 // Test Data is no longer stale
                 store.dispatch(setTestDataStaleTo(false));
+
+                // If Test summary needs an update do that now we have updated the results
+                if(updateSummary){
+                    this.updateTestSummary(userContext, testDataFlag)
+                } else {
+                    // Ensure data refreshes
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                }
             }
         });
     };
