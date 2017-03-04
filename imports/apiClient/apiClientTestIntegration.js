@@ -232,9 +232,11 @@ class ClientTestIntegrationServices {
         // But it does not invalidate the design mash per se...
 
         store.dispatch(setTestDataStaleTo(true));
+        testIntegrationDataContext.testDataStale = true;
 
         // This also means that test summary data needs reloading
         store.dispatch(setTestSummaryDataLoadedTo(false));
+        testIntegrationDataContext.testSummaryDataLoaded = false;
 
         this.updateTestData(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext);
 
@@ -250,10 +252,13 @@ class ClientTestIntegrationServices {
         // It also invalidates the test mash - user is saying the Design has changed as well
 
         store.dispatch(setMashDataStaleTo(true));
+        testIntegrationDataContext.mashDataStale = true;
         store.dispatch(setTestDataStaleTo(true));
+        testIntegrationDataContext.testDataStale = true;
 
         // This also means that test summary data needs reloading
         store.dispatch(setTestSummaryDataLoadedTo(false));
+        testIntegrationDataContext.testSummaryDataLoaded = false;
 
         this.updateTestData(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext);
 
