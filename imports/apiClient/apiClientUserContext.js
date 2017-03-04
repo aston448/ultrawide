@@ -444,10 +444,10 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_DRAFT:
 
                             // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
-                            ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
-
                             if(userContext.designComponentId != 'NONE'){
-                                ClientDesignComponentServices.setDesignComponent(userContext.designComponentId, userContext, DisplayContext.BASE_EDIT);
+                                ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
+                            } else {
+                                store.dispatch(setCurrentView(ViewType.SELECT));
                             }
                             return;
 
@@ -465,12 +465,20 @@ class ClientUserContextServices {
                                         case DesignUpdateStatus.UPDATE_NEW:
 
                                             // Go to edit update in Edit Mode
-                                            ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId);
+                                            if(userContext.designComponentId != 'NONE') {
+                                                ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId);
+                                            } else {
+                                                store.dispatch(setCurrentView(ViewType.SELECT));
+                                            }
                                             return;
 
                                         default:
                                             // Anything else, just view the update - here there could be a test summary
-                                            ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId, false, testIntegrationDataContext);
+                                            if(userContext.designComponentId != 'NONE') {
+                                                ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId, false, testIntegrationDataContext);
+                                            } else {
+                                                store.dispatch(setCurrentView(ViewType.SELECT));
+                                            }
                                             return;
                                     }
                                 } else {
@@ -486,8 +494,12 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
                         case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
-                            // View that final design version
-                            ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
+                            // View that final design version if user had selected something in it
+                            if(userContext.designComponentId != 'NONE') {
+                                ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
+                            } else {
+                                store.dispatch(setCurrentView(ViewType.SELECT));
+                            }
                             return;
                     }
                 } else {
@@ -512,7 +524,14 @@ class ClientUserContextServices {
                             case WorkPackageStatus.WP_ADOPTED:
 
                                 // Development
-                                ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, true, testIntegrationDataContext);
+
+                                // If a Design Component is selected then we are IN the work package...
+                                if(userContext.designComponentId != 'NONE') {
+                                    ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, true, testIntegrationDataContext);
+                                } else {
+                                    // Just go to WP selection
+                                    store.dispatch(setCurrentView(ViewType.SELECT));
+                                }
                                 return;
 
                             case WorkPackageStatus.WP_AVAILABLE:
@@ -550,13 +569,19 @@ class ClientUserContextServices {
                                 // New or Development so still editable
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
-
-                                        ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
+                                        if(userContext.designComponentId != 'NONE') {
+                                            ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
+                                        } else {
+                                            store.dispatch(setCurrentView(ViewType.SELECT));
+                                        }
                                         return;
 
                                     case WorkPackageType.WP_UPDATE:
-
-                                        ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
+                                        if(userContext.designComponentId != 'NONE') {
+                                            ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
+                                        } else {
+                                            store.dispatch(setCurrentView(ViewType.SELECT));
+                                        }
                                         return;
                                 }
                                 break;
@@ -565,13 +590,19 @@ class ClientUserContextServices {
                                 // View Only
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
-
-                                        ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
+                                        if(userContext.designComponentId != 'NONE') {
+                                            ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
+                                        } else {
+                                            store.dispatch(setCurrentView(ViewType.SELECT));
+                                        }
                                         return;
 
                                     case WorkPackageType.WP_UPDATE:
-
-                                        ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
+                                        if(userContext.designComponentId != 'NONE') {
+                                            ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
+                                        } else {
+                                            store.dispatch(setCurrentView(ViewType.SELECT));
+                                        }
                                         return;
                                 }
                                 break;

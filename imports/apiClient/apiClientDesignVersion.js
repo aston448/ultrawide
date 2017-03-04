@@ -273,7 +273,16 @@ class ClientDesignVersionServices{
         let newContext = userContext;
 
         // On change clears current DU / WP if any
+
         // Force reset is for when we want to forget about any Design Update / WP in the context
+
+        // Only want to reset component though if changing DV
+        let designComponentId = userContext.designComponentId;
+
+        if(newDesignVersionId != userContext.designVersionId){
+            designComponentId = 'NONE';
+        }
+
         if(forceReset || (newDesignVersionId != userContext.designVersionId)) {
 
             newContext = {
@@ -282,7 +291,7 @@ class ClientDesignVersionServices{
                 designVersionId: newDesignVersionId,         // The new design version
                 designUpdateId: 'NONE',                     // Everything else reset for new Design
                 workPackageId: 'NONE',
-                designComponentId: 'NONE',
+                designComponentId: designComponentId,
                 designComponentType: 'NONE',
                 featureReferenceId: 'NONE',
                 featureAspectReferenceId: 'NONE',
