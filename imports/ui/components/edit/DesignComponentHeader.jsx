@@ -64,7 +64,7 @@ const DomainSpan = (props) => {
 
 // -- DECORATOR CODE ---------------------------------------------------------------------------------------------------
 
-class DesignComponentHeader extends Component{
+export class DesignComponentHeader extends Component{
 
     constructor(...args){
         super(...args);
@@ -679,14 +679,14 @@ class DesignComponentHeader extends Component{
         let headerWithCheckbox =
             <div>
                 <InputGroup>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem)}>
+                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem)}>
                         <div className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={true}
@@ -700,14 +700,14 @@ class DesignComponentHeader extends Component{
         let viewOnlyScopeHeader =
             <div>
                 <InputGroup>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
                         <div className="invisible"><Glyphicon glyph="star"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={false}
@@ -721,11 +721,11 @@ class DesignComponentHeader extends Component{
         let viewOnlyHeader =
             <div>
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle} >
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} >
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={false}
@@ -743,7 +743,7 @@ class DesignComponentHeader extends Component{
                         <div className="invisible"><Glyphicon glyph="star"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className="editableItem">
+                    <div id="editorEdit" className="editableItem">
                         <Editor
                             editorState={this.state.editorState}
                             handleKeyCommand={this.handleTitleKeyCommand}
@@ -754,10 +754,10 @@ class DesignComponentHeader extends Component{
                             readOnly={false}
                         />
                     </div>
-                    <InputGroup.Addon onClick={ () => this.saveComponentName(view, mode)}>
+                    <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
                         <div className="green"><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.undoComponentNameChange()}>
+                    <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
                         <div className="red"><Glyphicon glyph="arrow-left"/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
@@ -772,15 +772,17 @@ class DesignComponentHeader extends Component{
                 </InputGroup>
             </div>;
 
-        let draggableHeader =
-            connectDragPreview(
+        // Need to remove this part from the design when unit testing as can't unit test DnD component
+        let draggableHeader = '';
+        if(Meteor.isTest){
+            draggableHeader =
                 <div>
                     <InputGroup>
-                        <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                        <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                             <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                        <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
+                        <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
                             <Editor
                                 editorState={this.state.editorState}
                                 handleKeyCommand={this.handleTitleKeyCommand}
@@ -790,17 +792,51 @@ class DesignComponentHeader extends Component{
                                 readOnly={true}
                             />
                         </div>
-                        <InputGroup.Addon onClick={ () => this.editComponentName()}>
+                        <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
                             <OverlayTrigger overlay={tooltipEdit}>
                                 <div className="blue"><Glyphicon glyph="edit"/></div>
                             </OverlayTrigger>
                         </InputGroup.Addon>
-                        <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                            <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon>
+                            <div id="actionMove" className="lgrey">
+                                <Glyphicon glyph="move"/>
+                            </div>
+                        </InputGroup.Addon>
+                    </InputGroup>
+                </div>
+        } else {
+            draggableHeader =
+            connectDragPreview(
+                <div>
+                    <InputGroup>
+                        <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
+                            <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
+                        <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
+                            <Editor
+                                editorState={this.state.editorState}
+                                handleKeyCommand={this.handleTitleKeyCommand}
+                                keyBindingFn={this.keyBindings}
+                                spellCheck={false}
+                                ref="editorReadOnly"
+                                readOnly={true}
+                            />
+                        </div>
+                        <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
+                            <OverlayTrigger overlay={tooltipEdit}>
+                                <div className="blue"><Glyphicon glyph="edit"/></div>
+                            </OverlayTrigger>
+                        </InputGroup.Addon>
+                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
                             <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
                             {connectDragSource(
-                                <div className="lgrey">
+                                <div id="actionMove" className="lgrey">
                                     <Glyphicon glyph="move"/>
                                 </div>)
                             }
@@ -808,15 +844,17 @@ class DesignComponentHeader extends Component{
                     </InputGroup>
                 </div>
             );
+        }
+
 
         let nonDraggableHeader =
             <div>
                 <InputGroup>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
                         <Editor
                             editorState={this.state.editorState}
                             handleKeyCommand={this.handleTitleKeyCommand}
@@ -826,12 +864,12 @@ class DesignComponentHeader extends Component{
                             readOnly={true}
                         />
                     </div>
-                    <InputGroup.Addon onClick={ () => this.editComponentName()}>
+                    <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
                         <OverlayTrigger overlay={tooltipEdit}>
                             <div className="blue"><Glyphicon glyph="edit"/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                    <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
                         <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
@@ -852,7 +890,7 @@ class DesignComponentHeader extends Component{
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div className={"readOnlyItem " + itemStyle + updateTextClass} >
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle + updateTextClass} >
                         <Editor
                             editorState={this.state.editorState}
                             customStyleMap={ClientTextEditorServices.getColourMap()}
@@ -1064,7 +1102,6 @@ DesignComponentHeader.propTypes = {
     testSummary: PropTypes.bool.isRequired,
     testSummaryData: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
-    //currentViewDataValue: PropTypes.bool.isRequired,
     testDataFlag: PropTypes.bool.isRequired
 };
 
@@ -1139,11 +1176,9 @@ function collectSource(connect, monitor) {
 }
 
 // Before exporting, wrap this component to make it draggable
-DesignComponentHeader = DragSource(ComponentType.DRAGGABLE_ITEM, componentSource, collectSource)(DesignComponentHeader);
+export default DragSource(ComponentType.DRAGGABLE_ITEM, componentSource, collectSource)(DesignComponentHeader);
 
 // =====================================================================================================================
 
-
-export default DesignComponentHeader;
 
 

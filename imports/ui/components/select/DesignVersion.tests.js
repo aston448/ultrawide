@@ -107,7 +107,7 @@ describe('JSX: DesignVersion', () => {
 
             //
             chai.expect(item.find('#butCreateNext')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butCreateNext').html())).to.equal('Create Next Design Version');
+            chai.expect(getBootstrapText(item.find('#butCreateNext').html())).to.equal('Create Next');
 
         });
 
@@ -123,7 +123,7 @@ describe('JSX: DesignVersion', () => {
 
             //
             chai.expect(item.find('#butCreateNext')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butCreateNext').html())).to.equal('Create Next Design Version');
+            chai.expect(getBootstrapText(item.find('#butCreateNext').html())).to.equal('Create Next');
 
         });
 
