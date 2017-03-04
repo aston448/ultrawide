@@ -327,16 +327,9 @@ class ClientTestIntegrationServices {
             ClientContainerServices.getTestIntegrationData(userContext.userId);
         }
 
-        // Have to update the test data as user has requested it
-        this.updateTestResults(userContext, viewOptions, testDataFlag);
 
         // Is this a Work Package view?
         if(view === ViewType.DEVELOP_UPDATE_WP || view === ViewType.DEVELOP_BASE_WP) {
-
-            // If a test summary is showing, update that data too
-            if(viewOptions.devTestSummaryVisible){
-                this.updateTestSummary(userContext, testDataFlag);
-            }
 
             // Are we wanting to see detailed test results?
             if(viewOptions.devUnitTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devAccTestsVisible) {
@@ -349,10 +342,21 @@ class ClientTestIntegrationServices {
                 }
             }
 
+            // Have to update the test data as user has requested it
+            this.updateTestResults(userContext, viewOptions, testDataFlag);
+
+            // If a test summary is showing, update that data too
+            if(viewOptions.devTestSummaryVisible){
+                this.updateTestSummary(userContext, testDataFlag);
+            }
+
+
         } else {
 
-            // Update the test summary if it is showing
+            // Have to update the test data as user has requested it
+            this.updateTestResults(userContext, viewOptions, testDataFlag);
 
+            // Update the test summary if it is showing
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
