@@ -164,7 +164,7 @@ class ClientTestIntegrationServices {
     }
 
     // Update the test summary data - when user opens the Test Summary -------------------------------------------------
-    updateTestSummaryData(userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
+    updateTestSummaryData(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
 
         // Check if data needs subscribing to
         if(!testIntegrationDataContext.testIntegrationDataLoaded){
@@ -172,9 +172,18 @@ class ClientTestIntegrationServices {
             ClientContainerServices.getTestIntegrationData(userContext.userId);
         }
 
-        // Always update the test data on opening the window
-        this.updateTestResults(userContext, viewOptions, testDataFlag);
+        // Get test results if no other views open to have got them already
+        if(!(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP)){
+            // The test summary is the only test window so do update the results
+            this.updateTestResults(userContext, viewOptions, testDataFlag);
+        } else {
+            // Otherwise check to see if other test windows already open in Dev WP
+            if(this.testViewsOpen(viewOptions) === 0){
+                this.updateTestResults(userContext, viewOptions, testDataFlag);
+            }
+        }
 
+        // Always update the summary however as we are opening it
         this.updateTestSummary(userContext, testDataFlag);
 
         // Return default outcome for test purposes
@@ -198,14 +207,18 @@ class ClientTestIntegrationServices {
             ClientContainerServices.getTestIntegrationData(userContext.userId);
         }
 
-        // Does mash need recalculation?
-        if(testIntegrationDataContext.mashDataStale) {
+        const firstTestView = (this.testViewsOpen(viewOptions) === 1);
+
+        // Update the mash data if this is the first window open or it is stale
+        if(firstTestView || testIntegrationDataContext.mashDataStale){
 
             this.updateMashData(userContext, userRole, viewOptions, testDataFlag)
         }
 
-        // Always update the test results when a new window is opened
-        this.updateTestResults(userContext, viewOptions, testDataFlag);
+        // Update the test data if this is the first window open or it is stale
+        if(firstTestView || testIntegrationDataContext.testDataStale) {
+            this.updateTestResults(userContext, viewOptions, testDataFlag);
+        }
 
 
         // Return default outcome for test purposes
@@ -284,6 +297,25 @@ class ClientTestIntegrationServices {
         }
 
         return testDataWanted;
+    }
+
+    testViewsOpen(viewOptions){
+
+        let testViewsCount = 0;
+
+        if(viewOptions.devUnitTestsVisible){
+            testViewsCount++;
+        }
+
+        if(viewOptions.devIntTestsVisible){
+            testViewsCount++;
+        }
+
+        if(viewOptions.devAccTestsVisible){
+            testViewsCount++
+        }
+
+        return testViewsCount;
     }
 
     // Update test data when user requests it
