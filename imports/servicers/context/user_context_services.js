@@ -60,6 +60,7 @@ class UserContextServices{
                 wpDomainDictVisible:            userViewOptions.wpDomainDictVisible,
                 // Developer Screen - Design always visible
                 devDetailsVisible:              userViewOptions.devDetailsVisible,
+                devTestSummaryVisible:          userViewOptions.devTestSummaryVisible,
                 devAccTestsVisible:             userViewOptions.devAccTestsVisible,
                 devIntTestsVisible:             userViewOptions.devIntTestsVisible,
                 devUnitTestsVisible:            userViewOptions.devUnitTestsVisible,

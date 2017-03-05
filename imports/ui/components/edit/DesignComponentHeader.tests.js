@@ -6,7 +6,6 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { DesignComponentHeader } from './DesignComponentHeader.jsx';  // Non Redux wrapped
 
 import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext} from '../../../constants/constants.js'
-import { getBootstrapText } from '../../../common/utils.js';
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 
@@ -48,7 +47,7 @@ describe('JSX: DesignComponentHeader', () => {
                     testSummary={testSummary}
                     testSummaryData={testSummaryData}
                     isOpen={isOpen}
-                    testDataFlag={viewOptions}
+                    testDataFlag={testDataFlag}
                 />
             );
 
@@ -100,7 +99,7 @@ describe('JSX: DesignComponentHeader', () => {
                     testSummary={testSummary}
                     testSummaryData={testSummaryData}
                     isOpen={isOpen}
-                    testDataFlag={viewOptions}
+                    testDataFlag={testDataFlag}
                 />
             );
 

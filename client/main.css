@@ -387,7 +387,7 @@ input {
 .wait-bar{
     margin: 100px;
     height: 40px;
-    width: 80%;
+    width: 90%;
     border: 1px solid darkblue;
     border-radius: 2px;
 }
@@ -407,7 +407,7 @@ input {
     }
 
     to{
-        width: 80%
+        width: 90%
     }
 }
 

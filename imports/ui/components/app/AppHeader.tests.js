@@ -6,7 +6,6 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { AppHeader } from './AppHeader';  // Non Redux wrapped
 
 import { DesignVersionStatus, RoleType, ViewType, ViewMode } from '../../../constants/constants.js'
-import { getBootstrapText, hasBootstrapClass } from '../../../common/utils.js';
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 
@@ -41,8 +40,8 @@ describe('JSX: AppHeader', () => {
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
-            chai.expect(hasBootstrapClass(item.find('#butView').html(), 'btn-default')).to.be.true;
-            chai.expect(hasBootstrapClass(item.find('#butEdit').html(), 'btn-success')).to.be.true;
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting to be highlighted');
 
         });
     });
@@ -76,8 +75,8 @@ describe('JSX: AppHeader', () => {
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
-            chai.expect(hasBootstrapClass(item.find('#butView').html(), 'btn-success')).to.be.true;
-            chai.expect(hasBootstrapClass(item.find('#butEdit').html(), 'btn-default')).to.be.true;
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
         });
 
     });
@@ -175,7 +174,7 @@ describe('JSX: AppHeader', () => {
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
-            chai.expect(hasBootstrapClass(item.find('#butEdit').html(), 'btn-success')).to.be.true;
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting to be highlighted');
         })
 
     });
@@ -273,7 +272,7 @@ describe('JSX: AppHeader', () => {
             );
 
             chai.expect(item.find('#butView')).to.have.length(1);
-            chai.expect(hasBootstrapClass(item.find('#butView').html(), 'btn-success')).to.be.true;
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting to be highlighted');
 
         });
 
@@ -304,7 +303,7 @@ describe('JSX: AppHeader', () => {
             );
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
-            chai.expect(hasBootstrapClass(item.find('#butEdit').html(), 'btn-default')).to.be.true;
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting not to be highlighted');
 
         });
 

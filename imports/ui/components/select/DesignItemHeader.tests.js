@@ -6,7 +6,6 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { DesignItemHeader } from './DesignItemHeader.jsx';  // Non Redux wrapped
 
 import { DesignStatus, DesignVersionStatus, RoleType, ItemType } from '../../../constants/constants.js'
-import { getBootstrapText } from '../../../common/utils.js';
 
 import { Designs } from '../../../collections/design/designs.js'
 import { DesignVersions } from '../../../collections/design/design_versions.js'
@@ -62,7 +61,7 @@ describe('JSX: DesignItemHeader', () => {
 
             // Design Name should be visible and have the expected name and status
             chai.expect(item.find('#nameLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(currentItemName);
+            chai.assert.equal(item.find('#nameLabel').children().text(), currentItemName);
 
         });
 
@@ -86,9 +85,8 @@ describe('JSX: DesignItemHeader', () => {
                 />
             );
 
-            // Design Name should be visible and have the expected name and status
             chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(currentItemStatus);
+            chai.assert.equal(item.find('#statusLabel').children().text(), currentItemStatus);
 
         });
 
@@ -118,9 +116,8 @@ describe('JSX: DesignItemHeader', () => {
                 />
             );
 
-            // Design Name should be visible and have the expected name and status
             chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(currentItemStatus);
+            chai.assert.equal(item.find('#statusLabel').children().text(), currentItemStatus);
 
         });
 
@@ -275,7 +272,7 @@ describe('JSX: DesignItemHeader', () => {
 
             // Design Version Name should be visible and have the expected name
             chai.expect(item.find('#nameLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#nameLabel').html())).to.equal(designVersion1.designVersionName);
+            chai.assert.equal(item.find('#nameLabel').children().text(), designVersion1.designVersionName);
 
         });
 
@@ -297,7 +294,7 @@ describe('JSX: DesignItemHeader', () => {
 
             // Design Version Number should be visible and have the expected value
             chai.expect(item.find('#refLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#refLabel').html())).to.equal(designVersion1.designVersionNumber);
+            chai.assert.equal(item.find('#refLabel').children().text(), designVersion1.designVersionNumber);
 
         });
 
@@ -323,7 +320,7 @@ describe('JSX: DesignItemHeader', () => {
 
             // Design Version Name should be visible and have the expected name
             chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(designVersion1.designVersionStatus);
+            chai.assert.equal(item.find('#statusLabel').children().text(), designVersion1.designVersionStatus);
 
         });
 
@@ -345,7 +342,7 @@ describe('JSX: DesignItemHeader', () => {
 
             // Design Version Name should be visible and have the expected name
             chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#statusLabel').html())).to.equal(designVersion2.designVersionStatus);
+            chai.assert.equal(item.find('#statusLabel').children().text(), designVersion2.designVersionStatus);
 
         });
 

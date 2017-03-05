@@ -45,7 +45,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class DesignComponent extends Component{
+export class DesignComponent extends Component{
 
     constructor(...args){
         super(...args);
@@ -668,7 +668,7 @@ class DesignComponent extends Component{
 
         // Each component has a move target above it so we can reorder stuff...
         return(
-            <div className={itemStyle}>
+            <div id="designComponent" className={itemStyle}>
                 <MoveTarget
                     currentItem={currentItem}
                     displayContext={displayContext}
@@ -709,8 +709,7 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignComponent = connect(mapStateToProps)(DesignComponent);
+export default connect(mapStateToProps)(DesignComponent);
 
-export default DesignComponent;
 
 

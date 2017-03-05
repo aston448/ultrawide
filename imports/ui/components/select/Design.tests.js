@@ -7,7 +7,6 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { Design } from './Design.jsx';  // Non Redux wrapped
 
 import { DesignStatus, RoleType } from '../../../constants/constants.js'
-import { getBootstrapText } from '../../../common/utils.js';
 
 import { Designs } from '../../../collections/design/designs.js'
 
@@ -36,7 +35,7 @@ describe('JSX: Design', () => {
 
             // Remove Design button should be there
             chai.expect(item.find('#butRemove')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butRemove').html())).to.equal('Remove Design');
+            chai.assert.equal(item.find('#butRemove').children().text(), 'Remove Design');
 
         });
 

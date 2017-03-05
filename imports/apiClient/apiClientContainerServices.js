@@ -163,7 +163,7 @@ class ClientContainerServices{
         }
     }
 
-    getTestIntegrationData(userId){
+    getTestIntegrationData(userId, callback){
 
         if(Meteor.isClient) {
 
@@ -205,11 +205,19 @@ class ClientContainerServices{
                             messageText: 'Test Data loaded'
                         }));
 
+                        if(callback){
+                            callback();
+                        }
+
                         // Stop this checking once we are done or there will be random chaos
                         loader.stop();
                     }
 
                 });
+            } else {
+                if(callback){
+                    callback();
+                }
             }
         }
     }

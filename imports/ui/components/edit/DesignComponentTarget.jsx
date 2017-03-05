@@ -32,7 +32,7 @@ import { DropTarget } from 'react-dnd';
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-class DesignComponentTarget extends Component{
+export class DesignComponentTarget extends Component{
 
     constructor(...args){
         super(...args);
@@ -47,7 +47,7 @@ class DesignComponentTarget extends Component{
 
         //console.log("Rendering design component target: " + currentItem.componentName);
 
-        if(canDrop && (this.props.displayContext === DisplayContext.UPDATE_EDIT || this.props.displayContext === DisplayContext.BASE_EDIT) && this.props.mode === ViewMode.MODE_EDIT) {
+        if(!(Meteor.isTest) && canDrop && (this.props.displayContext === DisplayContext.UPDATE_EDIT || this.props.displayContext === DisplayContext.BASE_EDIT) && this.props.mode === ViewMode.MODE_EDIT) {
             // Only can be droppable if in Edit mode and if the edit section of the view
             return connectDropTarget(
                 <div>
@@ -150,21 +150,4 @@ function collect(connect, monitor){
 }
 
 // Before exporting, wrap this component to make it a drop target
-DesignComponentTarget = DropTarget(ComponentType.DRAGGABLE_ITEM, componentTarget, collect)(DesignComponentTarget);
-
-// =====================================================================================================================
-
-
-// // Redux function which maps state from the store to specific props this component is interested in.
-// function mapStateToProps(state) {
-//     return {
-//         mode: state.currentViewMode,
-//         view: state.currentAppView
-//     }
-// }
-//
-//
-// // Connect the Redux store to this component ensuring that its required state is mapped to props
-// DesignComponentTarget = connect(mapStateToProps)(DesignComponentTarget);
-
-export default DesignComponentTarget;
+export default DropTarget(ComponentType.DRAGGABLE_ITEM, componentTarget, collect)(DesignComponentTarget);

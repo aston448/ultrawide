@@ -7,26 +7,28 @@
     "test:unit:watch": "SERVER_TEST_REPORTER=\"JSON\" meteor test --driver-package dispatch:mocha",
     "test:unit:3030": "SERVER_TEST_REPORTER=\"JSON\" meteor -p 3030 test --once --driver-package dispatch:mocha",
     "test:unit:watch:3030": "SERVER_TEST_REPORTER=\"JSON\" meteor -p 3030 test --driver-package dispatch:mocha",
-
     "chimp:integration": "/Users/aston/node_modules/.bin/chimp --ddp=http://localhost:3030 --path=tests/integration  --mocha --mochaReporter \"JSON\" | tee /Users/aston/WebstormProjects/shared/test/mocha_results.json"
   },
   "dependencies": {
+    "babel-runtime": "^6.23.0",
     "bcrypt": "^0.8.7",
     "classnames": "^2.2.5",
     "draft-js": "^0.8.1",
-    "meteor-node-stubs": "^0.2.3",
+    "meteor-node-stubs": "^0.2.5",
     "node-jsdom": "^3.1.5",
-    "react": "^15.4.1",
-    "react-addons-pure-render-mixin": "^15.3.2",
+    "react": "^15.4.2",
+    "react-addons-pure-render-mixin": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
     "react-addons-transition-group": "^15.4.1",
-    "react-bootstrap": "^0.30.6",
-    "react-dnd": "^2.1.4",
-    "react-dnd-html5-backend": "^2.1.2",
-    "react-dom": "^15.4.1",
-    "react-redux": "^4.4.5",
+    "react-bootstrap": "^0.30.7",
+    "react-dnd": "^2.2.4",
+    "react-dnd-html5-backend": "^2.2.4",
+    "react-dom": "^15.4.2",
+    "react-redux": "^4.4.6",
     "react-split-container": "^1.2.0",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.1.0"
+    "redux-test-utils": "^0.1.2",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "enzyme": "^2.7.0",

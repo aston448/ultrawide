@@ -9,7 +9,6 @@ import { Validation }   from '../../constants/validation_errors.js';
 import StubCollections from 'meteor/hwillson:stub-collections';
 import { chai } from 'meteor/practicalmeteor:chai';
 
-
 beforeEach(function(){
 
     StubCollections.add([DesignVersions]);
@@ -72,9 +71,9 @@ afterEach(function(){
 
 });
 
-describe('Only a Designer can publish a Design Version', function () {
+describe('Design Version Validation Services', function () {
 
-    describe('Design Version Validation Services', function () {
+    describe('Only a Designer can publish a Design Version', function () {
 
         it('returns VALID when a Designer publishes a Design Version', function () {
 
@@ -103,11 +102,8 @@ describe('Only a Designer can publish a Design Version', function () {
 
         });
     });
-});
 
-describe('Only a New Design Version can be published', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('Only a New Design Version can be published', function () {
 
         it('returns VALID when a Designer publishes a New Design Version', function () {
 
@@ -153,13 +149,9 @@ describe('Only a New Design Version can be published', function () {
             chai.assert.notEqual(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish an Updatable Complete Design Version by a Designer returned VALID!');
 
         });
-
     });
-});
 
-describe('Only a Draft Design Version can be withdrawn', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('Only a Draft Design Version can be withdrawn', function () {
 
         it('returns VALID when a Designer withdraws a Draft Design Version', function () {
 
@@ -212,11 +204,8 @@ describe('Only a Draft Design Version can be withdrawn', function () {
         });
 
     });
-});
 
-describe('Only a Designer can withdraw a Design Version', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('Only a Designer can withdraw a Design Version', function () {
 
         it('returns VALID when a Designer withdraws a Draft Design Version', function () {
 
@@ -247,14 +236,9 @@ describe('Only a Designer can withdraw a Design Version', function () {
             chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Manager returned VALID!');
 
         });
-
     });
 
-});
-
-describe('A Design Version that has Design Updates cannot be withdrawn', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('A Design Version that has Design Updates cannot be withdrawn', function () {
 
         it('returns INVALID when a Designer withdraws a Draft Design Version with Updates', function () {
 
@@ -266,11 +250,8 @@ describe('A Design Version that has Design Updates cannot be withdrawn', functio
 
         });
     });
-});
 
-describe('Only a Designer can create a new Design Version', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('Only a Designer can create a new Design Version', function () {
 
         it('returns VALID when a Designer creates a new Design Version', function () {
 
@@ -301,14 +282,9 @@ describe('Only a Designer can create a new Design Version', function () {
             chai.assert.notEqual(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Manager returned VALID!');
 
         });
-
     });
 
-});
-
-describe('Only a Designer can edit a Design Version', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('Only a Designer can edit a Design Version', function () {
 
         it('returns VALID when a Designer edits a draft Design Version', function () {
 
@@ -336,13 +312,9 @@ describe('Only a Designer can edit a Design Version', function () {
             chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Manager returned VALID!');
 
         });
-
     });
-});
 
-describe('A Complete Design Version cannot be edited', function() {
-
-    describe('Design Version Validation Services', function () {
+    describe('A Complete Design Version cannot be edited', function() {
 
         it('returns INVALID when a Designer edits a draft complete Design Version', function () {
 
@@ -363,11 +335,8 @@ describe('A Complete Design Version cannot be edited', function() {
         });
 
     });
-});
 
-describe('An Updatable Design Version cannot be edited', function() {
-
-    describe('Design Version Validation Services', function () {
+    describe('An Updatable Design Version cannot be edited', function() {
 
         it('returns INVALID when a Designer edits an updatable Design Version', function () {
 
@@ -378,12 +347,10 @@ describe('An Updatable Design Version cannot be edited', function() {
 
         });
 
+
     });
-});
 
-describe('Only a Designer can view a New Design Version', function () {
-
-    describe('Design Version Validation Services', function () {
+    describe('Only a Designer can view a New Design Version', function () {
 
         it('returns VALID when a Designer views a new Design Version', function () {
 
@@ -413,6 +380,7 @@ describe('Only a Designer can view a New Design Version', function () {
         });
 
     });
+
 });
 
 

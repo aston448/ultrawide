@@ -82,7 +82,7 @@ class ClientTestIntegrationServices {
     // User is entering a screen where dev data is needed --------------------------------------------------------------
     loadUserDevData(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext){
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "LOAD USER DEV DATA for Screen {}. Subscribed: {}  Mash Stale: {}, TestStale: {} SummaryLoaded: {}",
+        log((msg) => console.log(msg), LogLevel.DEBUG, "LOAD USER DEV DATA for Screen {}. Subscribed: {}  Mash Stale: {}, TestStale: {} SummaryLoaded: {}",
             nextView,
             testIntegrationDataContext.testIntegrationDataLoaded,
             testIntegrationDataContext.mashDataStale,
@@ -90,7 +90,7 @@ class ClientTestIntegrationServices {
             testIntegrationDataContext.testSummaryDataLoaded
         );
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "LOAD USER DEV DATA.  View Options: Des Sum: {}  Dev Sum: {}  Upd Sum: {} Acc: {}  Int: {} Unit: {}",
+        log((msg) => console.log(msg), LogLevel.DEBUG, "LOAD USER DEV DATA.  View Options: Des Sum: {}  Dev Sum: {}  Upd Sum: {} Acc: {}  Int: {} Unit: {}",
             viewOptions.designTestSummaryVisible,
             viewOptions.devTestSummaryVisible,
             viewOptions.updateTestSummaryVisible,
@@ -98,7 +98,6 @@ class ClientTestIntegrationServices {
             viewOptions.devIntTestsVisible,
             viewOptions.devUnitTestsVisible
         );
-
 
         // Check if data needs subscribing to
         if(!testIntegrationDataContext.testIntegrationDataLoaded){
@@ -110,9 +109,19 @@ class ClientTestIntegrationServices {
                     messageText: 'Loading test data...  Please wait...'
                 }));
 
-                ClientContainerServices.getTestIntegrationData(userContext.userId);
+                // Load the data and then carry on...
+                ClientContainerServices.getTestIntegrationData(userContext.userId, () => this.loadDataCallback(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext));
             }
-        }
+        } else (
+            // Carry on to next step
+            this.loadDataCallback(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext)
+        );
+
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
+    }
+
+    loadDataCallback(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext){
 
         // Does mash need recalculation?  Only if we are in a Developer screen and mash data showing
         if(nextView === ViewType.DEVELOP_BASE_WP || nextView === ViewType.DEVELOP_UPDATE_WP) {
@@ -144,6 +153,12 @@ class ClientTestIntegrationServices {
                         updateTestSummary = true;
                     }
                     break;
+                case ViewType.DEVELOP_BASE_WP:
+                case ViewType.DEVELOP_UPDATE_WP:
+                    if(viewOptions.devTestSummaryVisible){
+                        updateTestSummary = true;
+                    }
+                    break;
             }
         }
 
@@ -155,8 +170,6 @@ class ClientTestIntegrationServices {
                 this.updateTestResults(userContext, viewOptions, testDataFlag, updateTestSummary);
             }
         }
-
-
 
         // Go to next view if specified
         if(nextView){
@@ -174,8 +187,19 @@ class ClientTestIntegrationServices {
         // Check if data needs subscribing to
         if(!testIntegrationDataContext.testIntegrationDataLoaded){
 
-            ClientContainerServices.getTestIntegrationData(userContext.userId);
+            // Load first and then continue
+            ClientContainerServices.getTestIntegrationData(userContext.userId, () => this.updateTestSummaryCallback(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext));
+        } else {
+
+            // Just continue
+            this.updateTestSummaryCallback(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext);
         }
+
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
+    };
+
+    updateTestSummaryCallback(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
 
         let summaryUpdated = false;
 
@@ -199,8 +223,7 @@ class ClientTestIntegrationServices {
 
         // Return default outcome for test purposes
         return {success: true, message: ''};
-
-    };
+    }
 
     // Update the WP test details - when user opens a Test View --------------------------------------------------------
     updateWorkPackageTestData(userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
@@ -215,8 +238,19 @@ class ClientTestIntegrationServices {
         // Check if data needs subscribing to
         if(!testIntegrationDataContext.testIntegrationDataLoaded){
 
-            ClientContainerServices.getTestIntegrationData(userContext.userId);
+            // Load data and then continue
+            ClientContainerServices.getTestIntegrationData(userContext.userId, () => this.updateWorkPackageCallback(userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext));
+        } else {
+
+            // Continue
+            this.updateWorkPackageCallback(userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext)
         }
+
+        // Return default outcome for test purposes
+        return {success: true, message: ''};
+    };
+
+    updateWorkPackageCallback(userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
 
         const firstTestView = (this.testViewsOpen(viewOptions) === 1);
 
@@ -231,10 +265,9 @@ class ClientTestIntegrationServices {
             this.updateTestResults(userContext, viewOptions, testDataFlag);
         }
 
-
         // Return default outcome for test purposes
         return {success: true, message: ''};
-    };
+    }
 
     // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
@@ -336,12 +369,6 @@ class ClientTestIntegrationServices {
 
     // Update test data when user requests it
     updateTestData(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
-
-        // Check if data needs subscribing to
-        if(!testIntegrationDataContext.testIntegrationDataLoaded){
-
-            ClientContainerServices.getTestIntegrationData(userContext.userId);
-        }
 
         let updateSummary = false;
 

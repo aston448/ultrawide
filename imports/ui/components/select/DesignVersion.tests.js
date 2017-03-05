@@ -7,7 +7,6 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { DesignVersion } from './DesignVersion.jsx';  // Non Redux wrapped
 
 import { DesignVersionStatus, RoleType } from '../../../constants/constants.js'
-import { getBootstrapText } from '../../../common/utils.js';
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 
@@ -67,7 +66,7 @@ describe('JSX: DesignVersion', () => {
 
             //
             chai.expect(item.find('#butPublish')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butPublish').html())).to.equal('Publish');
+            chai.assert.equal(item.find('#butPublish').children().text(), 'Publish');
 
         });
 
@@ -87,7 +86,7 @@ describe('JSX: DesignVersion', () => {
 
             //
             chai.expect(item.find('#butWithdraw')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butWithdraw').html())).to.equal('Withdraw');
+            chai.assert.equal(item.find('#butWithdraw').children().text(), 'Withdraw');
 
         });
 
@@ -107,7 +106,7 @@ describe('JSX: DesignVersion', () => {
 
             //
             chai.expect(item.find('#butCreateNext')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butCreateNext').html())).to.equal('Create Next');
+            chai.assert.equal(item.find('#butCreateNext').children().text(), 'Create Next');
 
         });
 
@@ -123,7 +122,7 @@ describe('JSX: DesignVersion', () => {
 
             //
             chai.expect(item.find('#butCreateNext')).to.have.length(1);
-            chai.expect(getBootstrapText(item.find('#butCreateNext').html())).to.equal('Create Next');
+            chai.assert.equal(item.find('#butCreateNext').children().text(), 'Create Next');
 
         });
 
