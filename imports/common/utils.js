@@ -236,14 +236,14 @@ export function locationMoveDropAllowed(itemType, targetType, viewType, inScope)
             return false;
             break;
         case ComponentType.SCENARIO:
-            // Scenarios can be moved to Features or Feature Aspects
+            // Scenarios can only be moved to Feature Aspects
             switch(viewType){
                 case ViewType.DESIGN_NEW_EDIT:
-                    return (targetType === ComponentType.FEATURE || targetType === ComponentType.FEATURE_ASPECT);
+                    return (targetType === ComponentType.FEATURE_ASPECT);
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
-                    // Target must be an in scope Feature / Feature Aspect
-                    return (inScope && (targetType === ComponentType.FEATURE || targetType === ComponentType.FEATURE_ASPECT));
+                    // Target must be an in scope Feature Aspect
+                    return (inScope && targetType === ComponentType.FEATURE_ASPECT);
                     break;
             }
             break;
