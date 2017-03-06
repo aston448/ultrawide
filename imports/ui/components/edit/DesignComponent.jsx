@@ -58,6 +58,8 @@ export class DesignComponent extends Component{
 
     shouldComponentUpdate(nextProps, nextState){
 
+        // Optimisation.  No need to re-render this component if stuff that changes its look not changed
+
         // Do refresh if this specific component is gaining or losing focus
         let currentItemId = this.props.currentItem._id;
 
@@ -74,7 +76,8 @@ export class DesignComponent extends Component{
             return true;
         }
 
-        // Optimisation.  No need to re-render this component if stuff that changes its look not changed
+
+
         switch (nextProps.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
@@ -157,7 +160,6 @@ export class DesignComponent extends Component{
 
     componentWillReceiveProps(newProps){
         // Change open state if REDUX state has changed for this item
-
         switch(newProps.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
@@ -699,12 +701,10 @@ function mapStateToProps(state) {
         mode:                       state.currentViewMode,
         view:                       state.currentAppView,
         userContext:                state.currentUserItemContext,
-        // viewOptions:                state.currentUserViewOptions,
         openDesignItems:            state.currentUserOpenDesignItems,
         openDesignUpdateItems:      state.currentUserOpenDesignUpdateItems,
         openWorkPackageItems:       state.currentUserOpenWorkPackageItems,
         testDataFlag:               state.testDataFlag,
-        //currentViewDataValue:       state.currentViewOptionsDataValue
     }
 }
 

@@ -78,7 +78,7 @@ class RoleAction extends Component {
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
                 ClientUserContextServices.setOpenItems(userContext, userRole);
-                ClientUserContextServices.setViewFromUserContext(userContext, userRole, testIntegrationDataContext);
+                ClientUserContextServices.setViewFromUserContext(userContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
                 break;
             case UltrawideAction.ACTION_TEST_CONFIGURE:
                 ClientAppHeaderServices.setViewConfigure();
@@ -156,7 +156,8 @@ function mapStateToProps(state) {
         testDataLoaded:     state.testIntegrationDataLoaded,
         summaryDataLoaded:  state.testSummaryDataLoaded,
         mashDataStale:      state.mashDataStale,
-        testDataStale:      state.testDataStale
+        testDataStale:      state.testDataStale,
+        testDataFlag:       state.testDataFlag
 
     }
 }

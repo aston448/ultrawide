@@ -82,12 +82,13 @@ class ClientTestIntegrationServices {
     // User is entering a screen where dev data is needed --------------------------------------------------------------
     loadUserDevData(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "LOAD USER DEV DATA for Screen {}. Subscribed: {}  Mash Stale: {}, TestStale: {} SummaryLoaded: {}",
+        log((msg) => console.log(msg), LogLevel.DEBUG, "LOAD USER DEV DATA for Screen {}. Subscribed: {}  Mash Stale: {}, TestStale: {} SummaryLoaded: {} TestDataFlag {}",
             nextView,
             testIntegrationDataContext.testIntegrationDataLoaded,
             testIntegrationDataContext.mashDataStale,
             testIntegrationDataContext.testDataStale,
-            testIntegrationDataContext.testSummaryDataLoaded
+            testIntegrationDataContext.testSummaryDataLoaded,
+            testDataFlag
         );
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "LOAD USER DEV DATA.  View Options: Des Sum: {}  Dev Sum: {}  Upd Sum: {} Acc: {}  Int: {} Unit: {}",
@@ -117,6 +118,10 @@ class ClientTestIntegrationServices {
             this.loadDataCallback(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext)
         );
 
+        // Go to next view.  This will happen before the data is loaded but looks better that way
+        store.dispatch(setCurrentView(nextView));
+
+
         // Return default outcome for test purposes
         return {success: true, message: ''};
     }
@@ -130,7 +135,7 @@ class ClientTestIntegrationServices {
 
                 if(viewOptions.devUnitTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devAccTestsVisible) {
 
-                    this.updateMashData(userContext, userRole, viewOptions, testDataFlag, nextView);
+                    testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag);
                 }
             }
         }
@@ -169,11 +174,6 @@ class ClientTestIntegrationServices {
 
                 this.updateTestResults(userContext, viewOptions, testDataFlag, updateTestSummary);
             }
-        }
-
-        // Go to next view if specified
-        if(nextView){
-            store.dispatch(setCurrentView(nextView));
         }
 
         // Return default outcome for test purposes
@@ -457,6 +457,8 @@ class ClientTestIntegrationServices {
 
         });
 
+        return testDataFlag;
+
     };
 
     // Get latest test results required for current view options
@@ -514,6 +516,7 @@ class ClientTestIntegrationServices {
                 }));
 
                 // Ensure data refreshes
+                console.log("Updating test data flag with current value " + testDataFlag);
                 store.dispatch(updateTestDataFlag(!testDataFlag));
 
                 // Mark data as loaded

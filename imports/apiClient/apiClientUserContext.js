@@ -416,7 +416,7 @@ class ClientUserContextServices {
     }
 
 
-    setViewFromUserContext(userContext, userRole, testIntegrationDataContext){
+    setViewFromUserContext(userContext, userRole, testIntegrationDataContext, testDataFlag){
 
         const userViewOptions = UserCurrentViewOptions.findOne({userId: userContext.userId});
 
@@ -445,7 +445,7 @@ class ClientUserContextServices {
 
                             // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
                             if(userContext.designComponentId != 'NONE'){
-                                ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
+                                ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, testDataFlag, testIntegrationDataContext);
                             } else {
                                 store.dispatch(setCurrentView(ViewType.SELECT));
                             }
@@ -475,7 +475,7 @@ class ClientUserContextServices {
                                         default:
                                             // Anything else, just view the update - here there could be a test summary
                                             if(userContext.designComponentId != 'NONE') {
-                                                ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId, false, testIntegrationDataContext);
+                                                ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId, testDataFlag, testIntegrationDataContext);
                                             } else {
                                                 store.dispatch(setCurrentView(ViewType.SELECT));
                                             }
@@ -496,7 +496,7 @@ class ClientUserContextServices {
 
                             // View that final design version if user had selected something in it
                             if(userContext.designComponentId != 'NONE') {
-                                ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, false, testIntegrationDataContext);
+                                ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, testDataFlag, testIntegrationDataContext);
                             } else {
                                 store.dispatch(setCurrentView(ViewType.SELECT));
                             }
@@ -527,7 +527,7 @@ class ClientUserContextServices {
 
                                 // If a Design Component is selected then we are IN the work package...
                                 if(userContext.designComponentId != 'NONE') {
-                                    ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, true, testIntegrationDataContext);
+                                    ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, testDataFlag, testIntegrationDataContext);
                                 } else {
                                     // Just go to WP selection
                                     store.dispatch(setCurrentView(ViewType.SELECT));

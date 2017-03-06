@@ -72,7 +72,6 @@ export function myApplication(state = initialState, action) {
                 currentUserItemContext: action.newUserItemContext
             });
         case Actions.SET_CURRENT_USER_TEST_OUTPUT_LOCATION:
-            console.log("SET OUTPUT LOCATION TO " + action.newUserTestOutputLocationId);
             return Object.assign({}, state, {
                 currentUserTestOutputLocationId: action.newUserTestOutputLocationId
             });
