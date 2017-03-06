@@ -301,6 +301,29 @@ input {
     margin: 0 5px 0 5px;
 }
 
+.design-summary{
+    margin: 5px 15px 2px 15px;
+    padding: 3px;
+    border: 1px solid darkgrey;
+    border-radius: 4px;
+}
+
+.summary-title{
+    margin: 0 1px 0 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: black
+}
+
+.summary-data{
+    margin: 0 5px 0 1px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    color: blue;
+}
+
 .login-screen{
     margin: 50px;
     padding: 50px;

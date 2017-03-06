@@ -105,7 +105,7 @@ class AppBody extends Component {
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 bodyHtml =
                     <EditDesignContainer params={{
-                        designVersionId: userContext.designVersionId,
+                        userContext: userContext,
                         mode: mode,
                         view: view
                     }}/>;
@@ -115,8 +115,7 @@ class AppBody extends Component {
                 // And when user chooses a new design to edit, a published design to view or to edit a design update...
                 bodyHtml =
                     <EditDesignUpdateContainer params={{
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
+                        userContext: userContext,
                         mode: mode,
                         view: view
                     }}/>;
@@ -128,9 +127,7 @@ class AppBody extends Component {
                 // When manager user decides to edit or view a work package
                 bodyHtml =
                     <EditWorkPackageContainer params={{
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
+                        userContext: userContext,
                         mode: mode,
                         view: view,
                     }}/>;
@@ -140,9 +137,7 @@ class AppBody extends Component {
                 // When a Developer decides to work on a Work Package
                 bodyHtml =
                     <EditDesignImplementationContainer params={{
-                        designVersionId: userContext.designVersionId,
-                        designUpdateId: userContext.designUpdateId,
-                        workPackageId: userContext.workPackageId,
+                        userContext: userContext,
                         mode: mode,
                         view: view,
                     }}/>;

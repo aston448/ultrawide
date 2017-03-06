@@ -7,6 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
+import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 import DesignComponentTarget            from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentAdd               from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
@@ -95,7 +96,7 @@ export class DesignApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, userContext, view, mode, viewOptions} = this.props;
+        const {baseApplications, designSummaryData, userContext, view, mode, viewOptions} = this.props;
 
         let layout = '';
 
@@ -118,6 +119,14 @@ export class DesignApplicationsList extends Component {
                 break;
         }
 
+        let designSummary =<div></div>;
+
+        if(designSummaryData && viewOptions.designTestSummaryVisible) {
+            designSummary =
+                <DesignSummary
+                    summaryData={designSummaryData}
+                />;
+        }
 
         if (mode === ViewMode.MODE_EDIT) {
             // Editing so include the Add Application control
@@ -239,6 +248,9 @@ export class DesignApplicationsList extends Component {
             layout =
                 <Grid >
                     <Row>
+                        {designSummary}
+                    </Row>
+                    <Row>
                         {col1}
                         {col2}
                         {col3}
@@ -266,7 +278,8 @@ export class DesignApplicationsList extends Component {
 
 
 DesignApplicationsList.propTypes = {
-    baseApplications: PropTypes.array.isRequired
+    baseApplications: PropTypes.array.isRequired,
+    designSummaryData: PropTypes.object
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -285,10 +298,8 @@ export default EditDesignContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the design
     return ClientContainerServices.getEditorApplicationData(
+        params.userContext,
         params.view,
-        params.designVersionId,
-        null,                       // No design update
-        null                        // No work package
     );
 
 }, connect(mapStateToProps)(DesignApplicationsList));

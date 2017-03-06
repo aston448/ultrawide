@@ -24,6 +24,7 @@ import '../imports/collections/dev/user_dev_feature_scenarios.js';
 import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
 
 import '../imports/collections/dev/user_dev_test_summary_data.js';
+import '../imports/collections/dev/user_dev_design_summary_data.js';
 
 import '../imports/collections/dev/user_work_package_mash_data.js';
 import '../imports/collections/dev/user_work_package_feature_step_data.js';

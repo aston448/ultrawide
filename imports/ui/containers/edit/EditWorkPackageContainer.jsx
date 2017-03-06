@@ -418,10 +418,8 @@ export default EditWorkPackageContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the design
     return ClientContainerServices.getEditorApplicationData(
-        params.view,
-        params.designVersionId,
-        params.designUpdateId,
-        params.workPackageId
+        params.userContext,
+        params.view
     );
 
 }, WorkPackageApplicationsList);

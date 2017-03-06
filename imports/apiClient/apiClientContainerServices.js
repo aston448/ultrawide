@@ -20,8 +20,9 @@ import { DomainDictionary }                 from '../collections/design/domain_d
 import { UserDevFeatures }                  from '../collections/dev/user_dev_features.js';
 import { UserWorkPackageMashData }          from '../collections/dev/user_work_package_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
-import { UserUnitTestMashData }              from '../collections/dev/user_unit_test_mash_data.js';
+import { UserUnitTestMashData }             from '../collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
+import { UserDevDesignSummaryData }         from '../collections/dev/user_dev_design_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
@@ -187,11 +188,12 @@ class ClientContainerServices{
                 const irHandle = Meteor.subscribe('userIntTestResults', userId);
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
                 const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
+                const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userId);
 
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready()
+                        !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() || !dsHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading dev data = {}", loading);
@@ -510,13 +512,13 @@ class ClientContainerServices{
     };
 
     // Get top level editor data (i.e Applications)
-    getEditorApplicationData(view, designVersionId, designUpdateId, workPackageId){
+    getEditorApplicationData(userContext, view){
 
         //console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
 
         const baseApplications = DesignComponents.find(
             {
-                designVersionId: designVersionId,
+                designVersionId: userContext.designVersionId,
                 componentType: ComponentType.APPLICATION
             },
             {sort: {componentIndex: 1}}
@@ -528,12 +530,12 @@ class ClientContainerServices{
         // Get Update Apps if update Id provided
         let updateApplicationsArr = [];
 
-        if(designUpdateId){
+        if(userContext.designUpdateId != 'NONE'){
 
             const updateApplications = DesignUpdateComponents.find(
                 {
-                    designVersionId: designVersionId,
-                    designUpdateId: designUpdateId,
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
                     componentType: ComponentType.APPLICATION
                 },
                 {sort: {componentIndexNew: 1}}
@@ -546,12 +548,12 @@ class ClientContainerServices{
         let wpApplicationsArr = [];
         let wpApplicationsInScopeArr = [];
 
-        if(workPackageId){
+        if(userContext.workPackageId != 'NONE'){
 
             // Which applications are in the WP?
             const wpApps = WorkPackageComponents.find(
                 {
-                    workPackageId: workPackageId,
+                    workPackageId: userContext.workPackageId,
                     componentType: ComponentType.APPLICATION,
                 },
                 {sort: {componentIndex: 1}}
@@ -564,7 +566,7 @@ class ClientContainerServices{
             // Which applications are in the WP scope?
             const inScopeWpApps = WorkPackageComponents.find(
                 {
-                    workPackageId: workPackageId,
+                    workPackageId: userContext.workPackageId,
                     componentType: ComponentType.APPLICATION,
                     $or: [{componentParent: true}, {componentActive: true}]
                 },
@@ -572,8 +574,18 @@ class ClientContainerServices{
             );
 
             wpApplicationsInScopeArr = inScopeWpApps.fetch();
-            //console.log("Found " + wpApplicationsInScopeArr.length + " WP in scope applications.");
 
+        }
+
+        // Get the design summary data
+        let designSummaryData = null;
+
+        if(userContext) {
+            designSummaryData = UserDevDesignSummaryData.findOne({
+                userId:             userContext.userId,
+                designVersionId:    userContext.designVersionId,
+                designUpdateId:     userContext.designUpdateId
+            });
         }
 
         switch(view){
@@ -582,7 +594,8 @@ class ClientContainerServices{
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 // Just need base design version applications
                 return{
-                    baseApplications:       baseApplicationsArr
+                    baseApplications:       baseApplicationsArr,
+                    designSummaryData:      designSummaryData
                 };
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:

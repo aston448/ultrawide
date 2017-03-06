@@ -338,10 +338,8 @@ export default EditDesignUpdateContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the Design Update
     return ClientContainerServices.getEditorApplicationData(
-        params.view,
-        params.designVersionId,
-        params.designUpdateId,
-        null                        // No work package
+        params.userContext,
+        params.view
     );
 
 

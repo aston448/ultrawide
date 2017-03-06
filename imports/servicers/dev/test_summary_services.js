@@ -1,6 +1,7 @@
 
 // Ultrawide Collections
 import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_test_summary_data.js';
+import { UserDevDesignSummaryData }     from '../../collections/dev/user_dev_design_summary_data.js';
 import { DesignComponents }             from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
@@ -55,6 +56,18 @@ class TestSummaryServices {
             }).fetch();
         }
 
+        const totalScenarioCount = designScenarios.length;
+        let totalUnitTestsPassing = 0;
+        let totalUnitTestsFailing = 0;
+        let totalUnitTestsPending = 0;
+        let totalIntTestsPassing = 0;
+        let totalIntTestsFailing = 0;
+        let totalIntTestsPending = 0;
+        let totalAccTestsPassing = 0;
+        let totalAccTestsFailing = 0;
+        let totalAccTestsPending = 0;
+        let totalScenariosWithoutTests = 0;
+
         // Populate the Scenario summary data
         designScenarios.forEach((designScenario) =>{
 
@@ -66,6 +79,7 @@ class TestSummaryServices {
             let integrationTestDisplay = MashTestStatus.MASH_NOT_LINKED;
             let unitTestPasses = 0;
             let unitTestFails = 0;
+            let testsFound = false;
 
             // See if we have any test results
 
@@ -78,7 +92,7 @@ class TestSummaryServices {
                 featureReferenceId = designScenario.componentFeatureReferenceIdNew;
             }
 
-
+            // TODO Acceptance Tests
 
             // Integration Tests
             integrationTestResult = UserIntTestResults.findOne(
@@ -90,6 +104,21 @@ class TestSummaryServices {
 
             if(integrationTestResult){
                 integrationTestDisplay = integrationTestResult.testResult;
+
+                switch(integrationTestResult.testResult){
+                    case MashTestStatus.MASH_PASS:
+                        totalIntTestsPassing++;
+                        testsFound = true;
+                        break;
+                    case MashTestStatus.MASH_FAIL:
+                        totalIntTestsFailing++;
+                        testsFound = true;
+                        break;
+                    case MashTestStatus.MASH_PENDING:
+                        totalIntTestsPending++;
+                }
+            } else{
+
             }
 
             // Unit Tests - tests related to a Scenario
@@ -101,11 +130,21 @@ class TestSummaryServices {
                 testResult:     MashTestStatus.MASH_PASS
             }).count();
 
+            if(unitTestPasses > 0){
+                testsFound = true;
+            }
+            totalUnitTestsPassing += unitTestPasses;
+
             unitTestFails= UserUnitTestResults.find({
                 userId:         userContext.userId,
                 testFullName:   {$regex: searchRegex},
                 testResult:     MashTestStatus.MASH_FAIL
             }).count();
+
+            if(unitTestFails > 0){
+                testsFound = true;
+            }
+            totalUnitTestsFailing += unitTestFails;
 
             UserDevTestSummaryData.insert({
                 userId:                         userContext.userId,
@@ -119,6 +158,11 @@ class TestSummaryServices {
                 unitTestFailCount:              unitTestFails,
                 featureSummaryStatus:           FeatureTestSummaryStatus.FEATURE_NO_TESTS
             });
+
+
+            if(!testsFound){
+                totalScenariosWithoutTests++;
+            }
 
         });
 
@@ -144,6 +188,8 @@ class TestSummaryServices {
                 isRemoved: false
             }).fetch();
         }
+
+        const totalFeatureCount = designFeatures.length;
 
         designFeatures.forEach((designFeature) =>{
 
@@ -222,6 +268,33 @@ class TestSummaryServices {
             });
 
         });
+
+        // And now refresh the Design Summary
+        UserDevDesignSummaryData.remove({
+            userId:             userContext.userId,
+            designVersionId:    userContext.designVersionId,
+            designUpdateId:     userContext.designUpdateId
+        });
+
+
+        UserDevDesignSummaryData.insert({
+            userId:                         userContext.userId,
+            designVersionId:                userContext.designVersionId,
+            designUpdateId:                 userContext.designUpdateId,
+            featureCount:                   totalFeatureCount,
+            scenarioCount:                  totalScenarioCount,
+            untestedScenarioCount:          totalScenariosWithoutTests,
+            unitTestPassCount:              totalUnitTestsPassing,
+            unitTestFailCount:              totalUnitTestsFailing,
+            unitTestPendingCount:           totalUnitTestsPending,
+            intTestPassCount:               totalIntTestsPassing,
+            intTestFailCount:               totalIntTestsFailing,
+            intTestPendingCount:            totalIntTestsPending,
+            accTestPassCount:               totalAccTestsPassing,
+            accTestFailCount:               totalAccTestsFailing,
+            accTestPendingCount:            totalAccTestsPending
+        });
+
 
 
     }
