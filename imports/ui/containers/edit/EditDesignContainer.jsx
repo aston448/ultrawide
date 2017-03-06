@@ -38,7 +38,8 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Design Applications Container
-class DesignApplicationsList extends Component {
+// Export this for Unit Tests
+export class DesignApplicationsList extends Component {
     constructor(props) {
         super(props);
 
@@ -94,11 +95,9 @@ class DesignApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, userContext, currentItemName, view, mode, viewOptions} = this.props;
+        const {baseApplications, userContext, view, mode, viewOptions} = this.props;
 
         let layout = '';
-
-        //console.log("Rendering applications list with view mode " + mode + " and current item name " + currentItemName);
 
         let addComponent = '';
         let designDetails = '';
@@ -126,7 +125,7 @@ class DesignApplicationsList extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td className="control-table-data-app">
+                        <td id="addApplication" className="control-table-data-app">
                             <DesignComponentAdd
                                 addText="Add Application"
                                 onClick={ () => this.onAddApplication(view, mode, userContext.designVersionId)}
@@ -212,7 +211,7 @@ class DesignApplicationsList extends Component {
 
 
             let col1 =
-                <Col md={col1width} className="scroll-col">
+                <Col id="column1" md={col1width} className="scroll-col">
                     {baseEditorComponent}
                 </Col>;
 
@@ -221,7 +220,7 @@ class DesignApplicationsList extends Component {
             let col2 = '';
             if(viewOptions.designDetailsVisible){
                 col2 =
-                    <Col md={col2width}>
+                    <Col id="column2" md={col2width}>
                         {designDetails}
                     </Col>;
             }
@@ -230,7 +229,7 @@ class DesignApplicationsList extends Component {
             let col3 = '';
             if(viewOptions.designDomainDictVisible){
                 col3 =
-                    <Col md={col3width}>
+                    <Col id="column3" md={col3width}>
                         {domainDictionary}
                     </Col>;
             }
@@ -274,7 +273,6 @@ DesignApplicationsList.propTypes = {
 function mapStateToProps(state) {
     return {
         userContext:            state.currentUserItemContext,
-        currentItemName:        state.currentDesignComponentName,
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
         viewOptions:            state.currentUserViewOptions,
@@ -282,10 +280,7 @@ function mapStateToProps(state) {
     }
 }
 
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignApplicationsList = connect(mapStateToProps)(DesignApplicationsList);
-
-
+// Export the full wrapped Redux Container as default
 export default EditDesignContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the design
@@ -296,4 +291,4 @@ export default EditDesignContainer = createContainer(({params}) => {
         null                        // No work package
     );
 
-}, DesignApplicationsList);
+}, connect(mapStateToProps)(DesignApplicationsList));

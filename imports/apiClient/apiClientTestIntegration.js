@@ -257,7 +257,7 @@ class ClientTestIntegrationServices {
         // Update the mash data if this is the first window open or it is stale
         if(firstTestView || testIntegrationDataContext.mashDataStale){
 
-            this.updateMashData(userContext, userRole, viewOptions, testDataFlag)
+            testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag)
         }
 
         // Update the test data if this is the first window open or it is stale
@@ -381,7 +381,7 @@ class ClientTestIntegrationServices {
                 // Load the WP Design Data if it needs it
                 if (testIntegrationDataContext.mashDataStale) {
 
-                    this.updateMashData(userContext, userRole, viewOptions, testDataFlag);
+                    testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag);
 
                 }
             }
@@ -448,6 +448,7 @@ class ClientTestIntegrationServices {
 
                         // Ensure data refreshes
                         store.dispatch(updateTestDataFlag(!testDataFlag));
+                        testDataFlag = !testDataFlag;
 
                         // Mash data is now up to date
                         store.dispatch(setMashDataStaleTo(false));

@@ -340,8 +340,256 @@ describe('JSX: AppHeader', () => {
             chai.expect(item.find('#butView')).to.have.length(0);
 
         });
-    })
+    });
 
+    describe('The Design Version editor has an option to show or hide the Details pane', () => {
 
+        it('is available when editing a design', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.expect(item.find('#butDetails')).to.have.length(1);
+        });
+
+        it('is available when viewing a design', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.expect(item.find('#butDetails')).to.have.length(1);
+        });
+    });
+
+    describe('The Design Version editor has an option to show or hide the Domain Dictionary', () => {
+
+        it('is available when editing a design', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.expect(item.find('#butDomainDict')).to.have.length(1);
+        });
+
+        it('is available when viewing a design', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.expect(item.find('#butDomainDict')).to.have.length(1);
+        });
+    });
+
+    describe('The Design Version editor has an option to show or hide the Test Summary', () => {
+
+        it('is available when editing a design', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.expect(item.find('#butTestSummary')).to.have.length(1);
+        });
+
+        it('is available when viewing a design', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.expect(item.find('#butTestSummary')).to.have.length(1);
+        });
+    });
+
+    describe('The Design Version editor does not have options to show or hide Developer test results', () => {
+
+        it('test results not available when editing a design', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.assert.equal(item.find('#butAccTests').length, 0, 'Acceptance Tests visible');
+            chai.assert.equal(item.find('#butIntTests').length, 0, 'Integration Tests visible');
+            chai.assert.equal(item.find('#butUnitTests').length, 0, 'Unit Tests visible');
+            chai.assert.equal(item.find('#butAccFiles').length, 0, 'Acceptance Files visible');
+        });
+
+        it('test results not available when viewing a design', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
+            const userViewOptions = {};
+            const message = 'No message';
+            const testDataFlag = false;
+            const currentViewDataValue = false;
+
+            const item = shallow(
+                <AppHeader
+                    mode={mode}
+                    view={view}
+                    userRole={userRole}
+                    userName={userName}
+                    userContext={userContext}
+                    userViewOptions={userViewOptions}
+                    message={message}
+                    testDataFlag={testDataFlag}
+                    currentViewDataValue={currentViewDataValue}
+                />
+            );
+
+            chai.assert.equal(item.find('#butAccTests').length, 0, 'Acceptance Tests visible');
+            chai.assert.equal(item.find('#butIntTests').length, 0, 'Integration Tests visible');
+            chai.assert.equal(item.find('#butUnitTests').length, 0, 'Unit Tests visible');
+            chai.assert.equal(item.find('#butAccFiles').length, 0, 'Acceptance Files visible');
+        });
+    });
 
 });

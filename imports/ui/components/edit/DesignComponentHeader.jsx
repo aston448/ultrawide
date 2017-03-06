@@ -680,7 +680,7 @@ export class DesignComponentHeader extends Component{
             <div>
                 <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem)}>
@@ -701,7 +701,7 @@ export class DesignComponentHeader extends Component{
             <div>
                 <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
                         <div className="invisible"><Glyphicon glyph="star"/></div>
@@ -722,7 +722,7 @@ export class DesignComponentHeader extends Component{
             <div>
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} >
@@ -779,7 +779,7 @@ export class DesignComponentHeader extends Component{
                 <div>
                     <InputGroup>
                         <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                            <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                            <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                         <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
@@ -813,7 +813,7 @@ export class DesignComponentHeader extends Component{
                 <div>
                     <InputGroup>
                         <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                            <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                            <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                         <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
@@ -851,7 +851,7 @@ export class DesignComponentHeader extends Component{
             <div>
                 <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>

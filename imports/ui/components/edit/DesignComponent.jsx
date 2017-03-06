@@ -358,7 +358,7 @@ export class DesignComponent extends Component{
 
         // Define the Index Item HEADER: Editable and possibly draggable component -------------------------------------
         let headerHtml =
-            <div className={highlightStyle}>
+            <div id="componentHeader" className={highlightStyle}>
                 <DesignComponentHeader
                     currentItem={currentItem}
                     designItem={designItem}
@@ -497,7 +497,7 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
-                                            <td className="control-table-data-section">
+                                            <td id="addDesignSectionToApp" className="control-table-data-section">
                                                 <DesignComponentAdd
                                                     addText="Add Design Section"
                                                     onClick={ () => this.addDesignSectionToApplication(view, mode, designItem)}
@@ -543,14 +543,14 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
-                                            <td className="control-table-data-feature">
+                                            <td id="addFeature" className="control-table-data-feature">
                                                 <DesignComponentAdd
                                                     addText="Add feature"
                                                     onClick={ () => this.addFeatureToDesignSection(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
-                                            <td>
+                                            <td id="addDesignSectionToDesignSection">
                                                 <DesignComponentAdd
                                                     addText="Add sub section"
                                                     onClick={ () => this.addSectionToDesignSection(view, mode, designItem)}
@@ -598,17 +598,10 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
-                                            <td className="control-table-data-feature-aspect">
+                                            <td id="addFeatureAspect" className="control-table-data-feature-aspect">
                                                 <DesignComponentAdd
                                                     addText="Add feature aspect"
                                                     onClick={ () => this.addFeatureAspectToFeature(view, mode, designItem)}
-                                                    toggleHighlight={ (value) => this.toggleHighlight(value)}
-                                                />
-                                            </td>
-                                            <td className="control-table-data">
-                                                <DesignComponentAdd
-                                                    addText="Add scenario"
-                                                    onClick={ () => this.addScenario(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -645,7 +638,7 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
-                                            <td className="control-table-data-scenario">
+                                            <td id="addScenario" className="control-table-data-scenario">
                                                 <DesignComponentAdd
                                                     addText="Add scenario"
                                                     onClick={ () => this.addScenario(view, mode, designItem)}
