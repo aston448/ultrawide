@@ -410,7 +410,6 @@ input {
 .wait-bar{
     margin: 100px;
     height: 40px;
-    width: 90%;
     border: 1px solid darkblue;
     border-radius: 2px;
 }
@@ -418,19 +417,20 @@ input {
 .wait-animation{
     margin: 0;
     height: 38px;
-    background-color: deepskyblue;
     animation-name: progress;
-    animation-duration: 10s;
+    animation-duration: 5s;
 }
 
 @keyframes progress {
 
     from{
         width: 0;
+        background-color: darkslateblue;
     }
 
     to{
-        width: 90%
+        width: 100%;
+        background-color: skyblue;
     }
 }
 
@@ -908,7 +908,7 @@ input {
     background-color: lightgrey;
 }
 
-.component_added{
+.component-added{
     background-color: limegreen;
 }
 

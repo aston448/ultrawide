@@ -128,20 +128,9 @@ class ClientTestIntegrationServices {
 
     loadDataCallback(userContext, userRole, viewOptions, nextView, testDataFlag, testIntegrationDataContext){
 
-        // Does mash need recalculation?  Only if we are in a Developer screen and mash data showing
-        if(nextView === ViewType.DEVELOP_BASE_WP || nextView === ViewType.DEVELOP_UPDATE_WP) {
-
-            if (testIntegrationDataContext.mashDataStale) {
-
-                if(viewOptions.devUnitTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devAccTestsVisible) {
-
-                    testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag);
-                }
-            }
-        }
-
         // Does test summary need an update?
         let updateTestSummary = false;
+
 
         if(!testIntegrationDataContext.testSummaryDataLoaded){
 
@@ -167,13 +156,35 @@ class ClientTestIntegrationServices {
             }
         }
 
-        // Do test results need a reload?  Will then update summary if required.
+        // Do test results need updating?
+        let updateTestResults = false;
+
         if(testIntegrationDataContext.testDataStale){
 
             if(this.testDataWanted(nextView, viewOptions)) {
 
+                updateTestResults = true;
+            }
+        }
+
+        // Does mash need recalculation?  Only if we are in a Developer screen and mash data showing
+        if(nextView === ViewType.DEVELOP_BASE_WP || nextView === ViewType.DEVELOP_UPDATE_WP) {
+
+            if (testIntegrationDataContext.mashDataStale) {
+
+                if(viewOptions.devUnitTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devAccTestsVisible) {
+
+                    testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag, updateTestResults, updateTestSummary);
+                }
+            }
+        } else {
+
+            // Just update the test results and summary as required
+            if(updateTestResults){
+
                 this.updateTestResults(userContext, viewOptions, testDataFlag, updateTestSummary);
             }
+
         }
 
         // Return default outcome for test purposes
@@ -254,15 +265,13 @@ class ClientTestIntegrationServices {
 
         const firstTestView = (this.testViewsOpen(viewOptions) === 1);
 
+        // Update the test data if this is the first window open or it is stale
+        const updateTestResults = (firstTestView || testIntegrationDataContext.testDataStale);
+
         // Update the mash data if this is the first window open or it is stale
         if(firstTestView || testIntegrationDataContext.mashDataStale){
 
-            testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag)
-        }
-
-        // Update the test data if this is the first window open or it is stale
-        if(firstTestView || testIntegrationDataContext.testDataStale) {
-            this.updateTestResults(userContext, viewOptions, testDataFlag, false);
+            this.updateMashData(userContext, userRole, viewOptions, testDataFlag, updateTestResults, false)
         }
 
         // Return default outcome for test purposes
@@ -375,25 +384,25 @@ class ClientTestIntegrationServices {
         // Is this a Work Package view?
         if(view === ViewType.DEVELOP_UPDATE_WP || view === ViewType.DEVELOP_BASE_WP) {
 
-            // Are we wanting to see detailed test results?
-            if(viewOptions.devUnitTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devAccTestsVisible) {
-
-                // Load the WP Design Data if it needs it
-                if (testIntegrationDataContext.mashDataStale) {
-
-                    testDataFlag = this.updateMashData(userContext, userRole, viewOptions, testDataFlag);
-
-                }
-            }
-
             // If a test summary is showing, update that data too
             if(viewOptions.devTestSummaryVisible){
                 updateSummary = true;
             }
 
-            // Have to update the test data as user has requested it
-            this.updateTestResults(userContext, viewOptions, testDataFlag, updateSummary);
+            // Are we wanting to see detailed test results?
+            if(viewOptions.devUnitTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devAccTestsVisible) {
 
+                // Load the WP Design Data if it needs it.  Then always update results an optionally the summary
+                if (testIntegrationDataContext.mashDataStale) {
+
+                    this.updateMashData(userContext, userRole, viewOptions, testDataFlag, true, updateSummary);
+
+                } else {
+
+                    // Have to update the test data anyway as user has requested it
+                    this.updateTestResults(userContext, viewOptions, testDataFlag, updateSummary);
+                }
+            }
 
         } else {
 
@@ -418,8 +427,8 @@ class ClientTestIntegrationServices {
         }
     }
 
-    // Update the design-test mash data to which test results are applied - and then apply the test results
-    updateMashData(userContext, userRole, viewOptions, testDataFlag){
+    // Update the design-test mash data to which test results are applied - and then apply the test results if required
+    updateMashData(userContext, userRole, viewOptions, testDataFlag, updateTestResults, updateTestSummary){
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
@@ -433,27 +442,25 @@ class ClientTestIntegrationServices {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
 
-                // And on success of that update the test data
-                ServerTestIntegrationApi.updateTestData(userContext, viewOptions, (err, result) => {
+                // Mash is populated to carry on with test data if needed
 
-                    if(err){
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Test mash loaded'
+                }));
 
-                        alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-                    } else {
+                if(updateTestResults){
+                    // Carry on with results update
+                    this.updateTestResults(userContext, viewOptions, testDataFlag, updateTestSummary)
+                } else {
+                    // Ensure data refreshes
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    testDataFlag = !testDataFlag;
+                }
 
-                        store.dispatch(updateUserMessage({
-                            messageType: MessageType.INFO,
-                            messageText: 'Test mash loaded'
-                        }));
+                // Mash data is now up to date
+                store.dispatch(setMashDataStaleTo(false));
 
-                        // Ensure data refreshes
-                        store.dispatch(updateTestDataFlag(!testDataFlag));
-                        testDataFlag = !testDataFlag;
-
-                        // Mash data is now up to date
-                        store.dispatch(setMashDataStaleTo(false));
-                    }
-                });
             }
 
         });

@@ -11,6 +11,8 @@ import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: DesignComponent', () => {
 
+    // Design Components -----------------------------------------------------------------------------------------------
+
     describe('A selected Design Component is highlighted', () => {
 
         it('is highlighted if selected', () => {
@@ -955,6 +957,93 @@ describe('JSX: DesignComponent', () => {
         });
     });
 
+    // Work Package Components -----------------------------------------------------------------------------------------
+
+    describe('A selected Work Package Component is highlighted', () => {
+
+        it('is highlighted if selected', () => {
+
+            const currentItem = {_id: 'componentId'};
+            const designItem = {_id: 'designComponentId'};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.WORK_PACKAGE_BASE_VIEW;
+            const displayContext = DisplayContext.WP_VIEW;
+            const userContext = {designVersionId: 'ABC', designComponentId: 'designComponentId'};  // Context has current item id
+            const testSummary = false;
+            const testSummaryData = {};
+            const testDataFlag = false;
+            const openDesignItems = [];
+            const openDesignUpdateItems = [];
+            const openWorkPackageItems = [];
+
+
+            let item = shallow(
+                <DesignComponent
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    displayContext={displayContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    mode={mode}
+                    view={view}
+                    userContext={userContext}
+                    openDesignItems={openDesignItems}
+                    openDesignUpdateItems={openDesignUpdateItems}
+                    openWorkPackageItems={openWorkPackageItems}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Component has active style
+            chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
+
+        });
+
+        it('another component is not highlighted', () => {
+
+            const currentItem = {_id: 'componentId'};
+            const designItem = {_id: 'designComponentId'};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.WORK_PACKAGE_BASE_VIEW;
+            const displayContext = DisplayContext.WP_VIEW;
+            const userContext = {designVersionId: 'ABC', designComponentId: 'anotherComponentId'};  // Context has different item id
+            const testSummary = false;
+            const testSummaryData = {};
+            const testDataFlag = false;
+            const openDesignItems = [];
+            const openDesignUpdateItems = [];
+            const openWorkPackageItems = [];
+
+            const item = shallow(
+                <DesignComponent
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    displayContext={displayContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    mode={mode}
+                    view={view}
+                    userContext={userContext}
+                    openDesignItems={openDesignItems}
+                    openDesignUpdateItems={openDesignUpdateItems}
+                    openWorkPackageItems={openWorkPackageItems}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Component has active style
+            chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
+        });
+
+    });
 
 });
 

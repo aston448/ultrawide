@@ -757,4 +757,94 @@ describe('JSX: DesignVersion', () => {
         });
 
     });
+
+    describe('An Updatable Design Version has an option to update it with the latest changes to be merged', () => {
+
+        it('option is available for a Designer', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butUpdate')).to.have.length(1);
+        });
+
+        it('option is available for a Developer', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butUpdate')).to.have.length(1);
+        });
+    });
+
+    describe('A Manager may not update an Updatable Design Version', () => {
+
+        it('option is not available for a Manager', () => {
+
+            const userContext = {designVersionId: designVersionUpdatable._id};
+            const viewOptions = {};
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butUpdate')).to.have.length(0);
+        });
+    });
+
+    describe('Only an Updatable Design Version may be updated', () => {
+
+        it('option is not available for new Design Version', () => {
+
+            const userContext = {designVersionId: designVersionNew._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butUpdate')).to.have.length(0);
+        });
+
+        it('option is not available for published Design Version', () => {
+
+            const userContext = {designVersionId: designVersionDraft._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butUpdate')).to.have.length(0);
+        });
+
+        it('option is not available for complete Design Version', () => {
+
+            const userContext = {designVersionId: designVersionDraftComplete._id};
+            const viewOptions = {};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.expect(item.find('#butUpdate')).to.have.length(0);
+        });
+
+    });
+
+
 });

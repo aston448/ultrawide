@@ -684,7 +684,7 @@ export class DesignComponentHeader extends Component{
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
                     <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem)}>
-                        <div className={scopeStatus}><Glyphicon glyph="ok"/></div>
+                        <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
                         <Editor
@@ -883,7 +883,7 @@ export class DesignComponentHeader extends Component{
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div className={updateStatusClass}></div>
+                            <div id="updateStatusIcon" className={updateStatusClass}></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.toggleOpen()}>

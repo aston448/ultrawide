@@ -132,7 +132,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Section1 in scope
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1')
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
 
         // Verify
         // Application1 is in parent scope
@@ -340,7 +340,27 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
 
 
     // Consequences
-    it('When a Design Component is added to an Initial Design Version Work Package Scope its parents are also added to the Scope');
+    it('When a Design Component is added to an Initial Design Version Work Package Scope its parents are also added to the Scope', function() {
+
+        // Setup - edit the WP
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
+
+        // Execute - toggle Scenario3 in scope
+        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
+
+        // Verify
+        // Application1 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        // Section2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        // Feature2 is in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        // Feature2 Actions in parent scope
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+
+    });
 
 });
 
@@ -766,7 +786,22 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
 
     // Consequences
-    it('When a Design Component is added to an Design Update Work Package Scope its parents are also added to the Scope');
+    it('When a Design Component is added to an Design Update Work Package Scope its parents are also added to the Scope', function(){
+
+        // Setup - edit WP
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Execute - Add  Actions New Scenario to scope
+        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'NewScenario');
+
+        // Verify
+
+        // Parents of Scoped Items
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(WpComponentVerifications.componentIsInParentScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+    });
 
 });
 
