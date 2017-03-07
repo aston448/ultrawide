@@ -780,6 +780,181 @@ describe('JSX: DesignComponent', () => {
         });
     });
 
+    describe('Valid target components for a Design Component move are highlighted', () => {
+
+        it('is highlighted when target is application', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const testDataFlag = false;
+            const openDesignItems = ['componentId'];
+            const openDesignUpdateItems = [];
+            const openWorkPackageItems = [];
+
+            let item = shallow(
+                <DesignComponent
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    displayContext={displayContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    mode={mode}
+                    view={view}
+                    userContext={userContext}
+                    openDesignItems={openDesignItems}
+                    openDesignUpdateItems={openDesignUpdateItems}
+                    openWorkPackageItems={openWorkPackageItems}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Simulate mouse over
+            item.setState({highlighted: true});
+
+            // Component has highlighted style
+            chai.assert.equal(item.find('#componentHeader').props().className, 'highlight', 'Header not highlighted');
+        });
+
+        it('is highlighted when target is design section', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const testDataFlag = false;
+            const openDesignItems = ['componentId'];
+            const openDesignUpdateItems = [];
+            const openWorkPackageItems = [];
+
+            let item = shallow(
+                <DesignComponent
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    displayContext={displayContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    mode={mode}
+                    view={view}
+                    userContext={userContext}
+                    openDesignItems={openDesignItems}
+                    openDesignUpdateItems={openDesignUpdateItems}
+                    openWorkPackageItems={openWorkPackageItems}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Simulate mouse not over
+            item.setState({highlighted: true});
+
+            // Component has highlighted style
+            chai.assert.equal(item.find('#componentHeader').props().className, 'highlight', 'Header not highlighted');
+        });
+
+        it('is highlighted when target is feature', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const testDataFlag = false;
+            const openDesignItems = ['componentId'];
+            const openDesignUpdateItems = [];
+            const openWorkPackageItems = [];
+
+            let item = shallow(
+                <DesignComponent
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    displayContext={displayContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    mode={mode}
+                    view={view}
+                    userContext={userContext}
+                    openDesignItems={openDesignItems}
+                    openDesignUpdateItems={openDesignUpdateItems}
+                    openWorkPackageItems={openWorkPackageItems}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Simulate mouse not over
+            item.setState({highlighted: true});
+
+            // Component has highlighted style
+            chai.assert.equal(item.find('#componentHeader').props().className, 'highlight', 'Header not highlighted');
+        });
+
+        it('is highlighted when target is feature aspect', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const testDataFlag = false;
+            const openDesignItems = ['componentId'];
+            const openDesignUpdateItems = [];
+            const openWorkPackageItems = [];
+
+            let item = shallow(
+                <DesignComponent
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    displayContext={displayContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    mode={mode}
+                    view={view}
+                    userContext={userContext}
+                    openDesignItems={openDesignItems}
+                    openDesignUpdateItems={openDesignUpdateItems}
+                    openWorkPackageItems={openWorkPackageItems}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Simulate mouse not over
+            item.setState({highlighted: true});
+
+            // Component has highlighted style
+            chai.assert.equal(item.find('#componentHeader').props().className, 'highlight', 'Header not highlighted');
+        });
+    });
+
 
 });
 

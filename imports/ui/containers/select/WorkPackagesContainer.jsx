@@ -12,7 +12,7 @@ import WorkPackage from '../../components/select/WorkPackage.jsx';
 import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
+import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
 import { log } from '../../../common/utils.js';
@@ -32,8 +32,8 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-// Work selection screen
-class WorkPackagesList extends Component {
+// Basic export for unit tests
+export class WorkPackagesList extends Component {
     constructor(props) {
         super(props);
 
@@ -62,7 +62,7 @@ class WorkPackagesList extends Component {
 
     render() {
 
-        const {wpType, workPackages, designVersionStatus, userRole, userContext, openWpItems} = this.props;
+        const {wpType, workPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
 
         let panelContent = <div className="design-item-note">No Work Packages</div>;
         let developerButtons = <div></div>;
@@ -71,6 +71,19 @@ class WorkPackagesList extends Component {
         if(wpType === WorkPackageType.WP_UPDATE){
             panelHeader = 'Update Work Packages';
         }
+
+        let addWorkPackage =
+            <div id="addWorkPackage" className="design-item-add">
+                <DesignComponentAdd
+                    addText="Add Work Package"
+                    onClick={ () => this.onAddWorkPackage(
+                        userRole,
+                        userContext,
+                        wpType,
+                        openWpItems
+                    )}
+                />
+            </div>;
 
         // When a design version is selected...
         if(userContext.designVersionId){
@@ -99,17 +112,7 @@ class WorkPackagesList extends Component {
                         panelContent =
                             <div>
                                 {this.renderWorkPackagesList(workPackages)}
-                                <div className="design-item-add">
-                                    <DesignComponentAdd
-                                        addText="Add Work Package"
-                                        onClick={ () => this.onAddWorkPackage(
-                                            userRole,
-                                            userContext,
-                                            wpType,
-                                            openWpItems
-                                        )}
-                                    />
-                                </div>
+                                {addWorkPackage}
                             </div>;
                     }
                     break;
@@ -118,6 +121,7 @@ class WorkPackagesList extends Component {
 
                     // An update must be selected first
                     if(userContext.designUpdateId != 'NONE') {
+
                         if (userRole != RoleType.MANAGER) {
                             // Just show the list
                             panelContent =
@@ -125,22 +129,19 @@ class WorkPackagesList extends Component {
                                     {this.renderWorkPackagesList(workPackages)}
                                 </div>;
                         } else {
-                            // Work Packages may be added by Manager
-                            panelContent =
-                                <div>
-                                    {this.renderWorkPackagesList(workPackages)}
-                                    <div className="design-item-add">
-                                        <DesignComponentAdd
-                                            addText="Add Work Package"
-                                            onClick={ () => this.onAddWorkPackage(
-                                                userRole,
-                                                userContext,
-                                                wpType,
-                                                openWpItems
-                                            )}
-                                        />
-                                    </div>
-                                </div>;
+                            // Work Packages may be added by Manager if update is published
+                            if(designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
+                                panelContent =
+                                    <div>
+                                        {this.renderWorkPackagesList(workPackages)}
+                                        {addWorkPackage}
+                                    </div>;
+                            } else {
+                                panelContent =
+                                    <div>
+                                        {this.renderWorkPackagesList(workPackages)}
+                                    </div>;
+                            }
                         }
                     } else {
 
@@ -187,7 +188,8 @@ class WorkPackagesList extends Component {
 WorkPackagesList.propTypes = {
     wpType: PropTypes.string.isRequired,
     workPackages: PropTypes.array.isRequired,
-    designVersionStatus: PropTypes.string.isRequired
+    designVersionStatus: PropTypes.string.isRequired,
+    designUpdateStatus: PropTypes.string
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -199,10 +201,7 @@ function mapStateToProps(state) {
     }
 }
 
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-WorkPackagesList = connect(mapStateToProps)(WorkPackagesList);
-
-
+// Default export with Redux
 export default WorkPackagesContainer = createContainer(({params}) => {
 
     switch(params.wpType){
@@ -218,4 +217,4 @@ export default WorkPackagesContainer = createContainer(({params}) => {
     }
 
 
-}, WorkPackagesList);
+}, connect(mapStateToProps)(WorkPackagesList));

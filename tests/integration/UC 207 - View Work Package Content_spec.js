@@ -58,10 +58,6 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
 
     });
 
-
-    // Interface
-
-
     // Actions
     it('A Manager may view a New Initial Design Version Work Package', function(){
 
@@ -113,9 +109,6 @@ describe('UC 207 - View Work Package Content - Initial Design Version', function
         expect(WorkPackageVerifications.currentDesignerWorkPackageIs('WorkPackage1'));
     });
 
-    it('Any user role may view a Complete Initial Design Version Work Package');
-
-
 });
 
 
@@ -162,12 +155,7 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
 
     });
 
-
-    // Interface
-
-
     // Actions
-
     it('A Manager may view a New Design Update Work Package', function(){
 
         // Setup - select a different WP to change the context
@@ -219,8 +207,5 @@ describe('UC 207 - View Work Package Content - Design Update', function(){
         expect(WorkPackageVerifications.currentDeveloperWorkPackageIs('UpdateWorkPackage1'));
 
     });
-
-    it('Any user role may view a Complete Design Update Work Package');
-
 
 });

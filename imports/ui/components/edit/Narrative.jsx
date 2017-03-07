@@ -332,21 +332,15 @@ export default class Narrative extends React.Component {
                                 blockStyleFn={this.blockStyles}
                                 readOnly={false}
                             />
-                            <InputGroup.Addon onClick={ () => this.saveNarrative(view, mode, designComponent._id)}>
+                            <InputGroup.Addon id="actionSaveNarrative" onClick={ () => this.saveNarrative(view, mode, designComponent._id)}>
                                 <div className="green"><Glyphicon glyph="ok"/></div>
                             </InputGroup.Addon>
-                            <InputGroup.Addon onClick={ () => this.undoNarrativeChange()}>
+                            <InputGroup.Addon id="actionUndoEditNarrative" onClick={ () => this.undoNarrativeChange()}>
                                 <div className="red"><Glyphicon glyph="arrow-left"/></div>
                             </InputGroup.Addon>
                             <InputGroup.Addon>
                                 <div className="invisible"><Glyphicon glyph="star"/></div>
                             </InputGroup.Addon>
-                            {/*<InputGroup.Addon>*/}
-                                {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                            {/*</InputGroup.Addon>*/}
-                            {/*<InputGroup.Addon>*/}
-                                {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                            {/*</InputGroup.Addon>*/}
                         </InputGroup>
                     </div>;
             } else {
@@ -361,7 +355,7 @@ export default class Narrative extends React.Component {
                                 readOnly={true}
                             />
                         </div>
-                        <InputGroup.Addon onClick={ () => this.editNarrative()}>
+                        <InputGroup.Addon id="actionEditNarrative" onClick={ () => this.editNarrative()}>
                             <div className="blue"><Glyphicon glyph="edit"/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
@@ -370,12 +364,6 @@ export default class Narrative extends React.Component {
                         <InputGroup.Addon>
                             <div className="invisible"><Glyphicon glyph="star"/></div>
                         </InputGroup.Addon>
-                        {/*<InputGroup.Addon>*/}
-                            {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                        {/*</InputGroup.Addon>*/}
-                        {/*<InputGroup.Addon>*/}
-                            {/*<div className="invisible"><Glyphicon glyph="star"/></div>*/}
-                        {/*</InputGroup.Addon>*/}
                     </InputGroup>;
 
             }

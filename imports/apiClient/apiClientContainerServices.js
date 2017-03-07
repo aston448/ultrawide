@@ -453,6 +453,8 @@ class ClientContainerServices{
 
             if (currentDesignUpdateId != 'NONE') {
 
+                const designUpdate = DesignUpdates.findOne({_id: currentDesignUpdateId});
+
                 // Get all the WPs available for the selected update
                 const currentWorkPackages = WorkPackages.find(
                     {
@@ -465,13 +467,15 @@ class ClientContainerServices{
                 return {
                     wpType: WorkPackageType.WP_UPDATE,
                     workPackages: currentWorkPackages.fetch(),
-                    designVersionStatus: designVersionStatus
+                    designVersionStatus: designVersionStatus,
+                    designUpdateStatus: designUpdate.updateStatus
                 };
             } else {
                 return {
                     wpType: WorkPackageType.WP_UPDATE,
                     workPackages: [],
-                    designVersionStatus: designVersionStatus
+                    designVersionStatus: designVersionStatus,
+                    designUpdateStatus: null
                 };
             }
 
@@ -480,7 +484,8 @@ class ClientContainerServices{
             return {
                 wpType: WorkPackageType.WP_UPDATE,
                 workPackages: [],
-                designVersionStatus: null
+                designVersionStatus: null,
+                designUpdateStatus: null
             };
         }
     };

@@ -2240,4 +2240,423 @@ describe('JSX: DesignComponentHeader', () => {
         });
     });
 
+    describe('A Design Component has an option to move that component to another position within its parent component', () => {
+
+        it('application has move option', () => {
+
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has move option
+            chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
+        });
+
+        it('design section has move option', () => {
+
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has move option
+            chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
+        });
+
+        it('feature has move option', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has move option
+            chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
+        });
+
+        it('feature aspect has move option', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has move option
+            chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
+        });
+
+        it('scenario has move option', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has move option
+            chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
+        });
+
+
+    });
+
+    describe('Design Components may only be reordered when in edit mode', () => {
+
+        it('view only application has no move option', () => {
+
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has no move option
+            chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
+        });
+
+        it('view only design section has no move option', () => {
+
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has no move option
+            chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
+        });
+
+        it('view only feature has no move option', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has no move option
+            chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
+        });
+
+        it('view only feature aspect has no move option', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has no move option
+            chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
+        });
+
+        it('view only scenario has no move option', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const designItem = {};
+            const updateItem = {};
+            const isDragDropHovering = false;
+            const onToggleOpen = () => {};
+            const onSelectItem = () => {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+            const userContext = {designVersionId: 'ABC'};
+            const testSummary = false;
+            const testSummaryData = {};
+            const isOpen = true;
+            const testDataFlag = false;
+            const viewOptions = {};
+
+            const item = shallow(
+                <DesignComponentHeader
+                    currentItem={currentItem}
+                    designItem={designItem}
+                    updateItem={updateItem}
+                    isDragDropHovering={isDragDropHovering}
+                    onToggleOpen={onToggleOpen}
+                    onSelectItem={onSelectItem}
+                    mode={mode}
+                    view={view}
+                    displayContext={displayContext}
+                    userContext={userContext}
+                    testSummary={testSummary}
+                    testSummaryData={testSummaryData}
+                    isOpen={isOpen}
+                    testDataFlag={testDataFlag}
+                />
+            );
+
+            // Has no move option
+            chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
+        });
+    });
+
+
 });

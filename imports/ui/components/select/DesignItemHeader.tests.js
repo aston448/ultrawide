@@ -5,10 +5,11 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignItemHeader } from './DesignItemHeader.jsx';  // Non Redux wrapped
 
-import { DesignStatus, DesignVersionStatus, RoleType, ItemType } from '../../../constants/constants.js'
+import { DesignStatus, DesignVersionStatus, WorkPackageType, WorkPackageStatus, RoleType, ItemType } from '../../../constants/constants.js'
 
-import { Designs } from '../../../collections/design/designs.js'
-import { DesignVersions } from '../../../collections/design/design_versions.js'
+import { Designs }          from '../../../collections/design/designs.js'
+import { DesignVersions }   from '../../../collections/design/design_versions.js'
+import { WorkPackages }     from '../../../collections/work/work_packages.js'
 
 describe('JSX: DesignItemHeader', () => {
 
@@ -31,6 +32,30 @@ describe('JSX: DesignItemHeader', () => {
         designVersionStatus:    DesignVersionStatus.VERSION_UPDATABLE
     });
     const designVersion2 = Factory.create('designVersion2');
+
+    // Base WP
+    Factory.define('workPackage1', WorkPackages, {
+        designId:               design._id,
+        designVersionId:        designVersion1._id,
+        designUpdateId:         'NONE',
+        workPackageType:        WorkPackageType.WP_BASE,
+        workPackageName:        'WorkPackage1',
+        workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+        adoptingUserId:         'NONE'
+    });
+    const workPackage1 = Factory.create('workPackage1');
+
+    // Update WP
+    Factory.define('workPackage2', WorkPackages, {
+        designId:               design._id,
+        designVersionId:        designVersion1._id,
+        designUpdateId:         'ABC',
+        workPackageType:        WorkPackageType.WP_UPDATE,
+        workPackageName:        'WorkPackage2',
+        workPackageStatus:      WorkPackageStatus.WP_AVAILABLE,
+        adoptingUserId:         'NONE'
+    });
+    const workPackage2 = Factory.create('workPackage2');
 
     const currentItemId = design._id;
     const currentItemName = design.designName;
@@ -593,5 +618,186 @@ describe('JSX: DesignItemHeader', () => {
 
     });
 
+    // WORK PACKAGES ---------------------------------------------------------------------------------------------------
 
+    describe('A Work Package has an option to edit its name', () => {
+
+        it('initial design version work package has an edit option for a Manager', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage1._id}
+                    currentItemName={workPackage1.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage1.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is visible
+            chai.expect(item.find('#edit')).to.have.length(1);
+        });
+
+        it('design update work package has an edit option for a Manager', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage2._id}
+                    currentItemName={workPackage2.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage2.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is visible
+            chai.expect(item.find('#edit')).to.have.length(1);
+        });
+
+    });
+
+    describe('When a Work Package name is being edited there is an option to save changes', () => {
+
+        it('save available for initial design work package', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage1._id}
+                    currentItemName={workPackage1.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage1.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            item.setState({nameEditable: true});
+
+            // Save Item is visible
+            chai.expect(item.find('#editOk')).to.have.length(1);
+        });
+
+        it('save available for design update work package', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage2._id}
+                    currentItemName={workPackage2.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage2.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            item.setState({nameEditable: true});
+
+            // Save Item is visible
+            chai.expect(item.find('#editOk')).to.have.length(1);
+        });
+    });
+
+    describe('When a Work Package name is being edited there is an option to undo changes', () => {
+
+        it('cancel available for initial design work package', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage1._id}
+                    currentItemName={workPackage1.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage1.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            item.setState({nameEditable: true});
+
+            // Cancel Item is visible
+            chai.expect(item.find('#editCancel')).to.have.length(1);
+        });
+
+        it('cancel available for design update work package', () => {
+
+            const userRole = RoleType.MANAGER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage2._id}
+                    currentItemName={workPackage2.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage2.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            item.setState({nameEditable: true});
+
+            // Cancel Item is visible
+            chai.expect(item.find('#editCancel')).to.have.length(1);
+        });
+    });
+
+    describe('Only a Manager may edit a Work Package name', () => {
+
+        it('edit not available for Designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage1._id}
+                    currentItemName={workPackage1.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage1.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is not visible
+            chai.expect(item.find('#edit')).to.have.length(0);
+        });
+
+        it('edit not available for Developer', () => {
+
+            const userRole = RoleType.DEVELOPER;
+
+            const item = shallow(
+                <DesignItemHeader
+                    currentItemType={ItemType.WORK_PACKAGE}
+                    currentItemId={workPackage1._id}
+                    currentItemName={workPackage1.workPackageName}
+                    currentItemRef={null}
+                    currentItemStatus={workPackage1.workPackageStatus}
+                    onSelectItem={onSelectItem}
+                    userRole={userRole}
+                />
+            );
+
+            // Edit Item is not visible
+            chai.expect(item.find('#edit')).to.have.length(0);
+        });
+    });
 });

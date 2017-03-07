@@ -192,14 +192,14 @@ class ClientTestIntegrationServices {
         } else {
 
             // Just continue
-            this.updateTestSummaryCallback(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext);
+            this.updateTestSummaryCallback(view, userContext, viewOptions, testDataFlag);
         }
 
         // Return default outcome for test purposes
         return {success: true, message: ''};
     };
 
-    updateTestSummaryCallback(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext){
+    updateTestSummaryCallback(view, userContext, viewOptions, testDataFlag){
 
         let summaryUpdated = false;
 
@@ -262,7 +262,7 @@ class ClientTestIntegrationServices {
 
         // Update the test data if this is the first window open or it is stale
         if(firstTestView || testIntegrationDataContext.testDataStale) {
-            this.updateTestResults(userContext, viewOptions, testDataFlag);
+            this.updateTestResults(userContext, viewOptions, testDataFlag, false);
         }
 
         // Return default outcome for test purposes
@@ -463,7 +463,7 @@ class ClientTestIntegrationServices {
     };
 
     // Get latest test results required for current view options
-    updateTestResults(userContext, viewOptions, testDataFlag, updateSummary = false){
+    updateTestResults(userContext, viewOptions, testDataFlag, updateSummary){
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,

@@ -84,14 +84,21 @@ describe('UC 206 - Edit Work Package Content - Initial Design', function(){
         expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage1'));
     });
 
-    it('A Manager may edit an Adopted Initial Design Version Work Package');
+    it('A Manager may edit an Adopted Initial Design Version Work Package', function(){
 
+        // Setup - developer adopts WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
 
+        // Execute
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage2');
+        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
-    // Conditions
-    it('A Complete Initial Design Version Work Package may not be edited');
-
-
+        // Verify - current WP is WP1
+        expect(WorkPackageVerifications.currentManagerWorkPackageIs('WorkPackage1'));
+    });
 
 });
 
@@ -167,11 +174,21 @@ describe('UC 206 - Edit Work Package Content - Design Update', function(){
         expect(UserContextVerifications.userContextForRole_WorkPackageIs(RoleType.MANAGER, 'UpdateWorkPackage1'))
     });
 
-    it('A Manager may edit an Adopted Design Update Work Package');
+    it('A Manager may edit an Adopted Design Update Work Package', function(){
 
+        // Setup - Developer adopts WP
+        DesignActions.developerWorksOnDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
 
-    // Conditions
-    it('A Complete Design Update Work Package may not be edited');
+        // Execute
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
+        // Verify
+        expect(UserContextVerifications.userContextForRole_WorkPackageIs(RoleType.MANAGER, 'UpdateWorkPackage1'));
+    });
 
 });

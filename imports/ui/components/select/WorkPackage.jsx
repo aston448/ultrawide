@@ -242,7 +242,7 @@ export class WorkPackage extends Component {
         }
 
         return (
-            <div className={itemStyle}>
+            <div id="workPackageItem" className={itemStyle}>
                 <DesignItemHeader
                     currentItemType={ItemType.WORK_PACKAGE}
                     currentItemId={workPackage._id}
