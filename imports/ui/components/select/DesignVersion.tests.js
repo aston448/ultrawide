@@ -52,45 +52,7 @@ describe('JSX: DesignVersion', () => {
     });
     const designVersionUpdatableComplete = Factory.create('designVersionUpdatableComplete');
 
-    describe('A Design Version in a New state has a Publish option on it', () => {
-
-        it('has a Publish option for a Designer', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
-
-            const item = shallow(
-                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
-            );
-
-            //
-            chai.expect(item.find('#butPublish')).to.have.length(1);
-            chai.assert.equal(item.find('#butPublish').children().text(), 'Publish');
-
-        });
-
-    });
-
-    describe('A Design Version in a Draft state has a Withdraw option on it', () => {
-
-        it('has a Withdraw option for a Designer', () => {
-
-            const userRole = RoleType.DESIGNER;
-            const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
-
-            const item = shallow(
-                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
-            );
-
-            //
-            chai.expect(item.find('#butWithdraw')).to.have.length(1);
-            chai.assert.equal(item.find('#butWithdraw').children().text(), 'Withdraw');
-
-        });
-
-    });
+    // Create Next Design Version --------------------------------------------------------------------------------------
 
     describe('A Design Version in a Draft or Updatable state has an option to create a new Design Version', () => {
 
@@ -173,7 +135,47 @@ describe('JSX: DesignVersion', () => {
 
     });
 
+    // Publish / Withdraw Design Version -------------------------------------------------------------------------------
 
+    describe('A Design Version in a New state has a Publish option on it', () => {
+
+        it('has a Publish option for a Designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionNew._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            //
+            chai.expect(item.find('#butPublish')).to.have.length(1);
+            chai.assert.equal(item.find('#butPublish').children().text(), 'Publish');
+
+        });
+
+    });
+
+    describe('A Design Version in a Draft state has a Withdraw option on it', () => {
+
+        it('has a Withdraw option for a Designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionNew._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            //
+            chai.expect(item.find('#butWithdraw')).to.have.length(1);
+            chai.assert.equal(item.find('#butWithdraw').children().text(), 'Withdraw');
+
+        });
+
+    });
 
     describe('The Publish option is only visible to Designers', () => {
 
@@ -410,6 +412,8 @@ describe('JSX: DesignVersion', () => {
 
     });
 
+    // Select Design Version -------------------------------------------------------------------------------------------
+
     describe('The currently selected Design Version is highlighted', () => {
 
         it('is highlighted if is the User Context Design Version', () => {
@@ -443,6 +447,8 @@ describe('JSX: DesignVersion', () => {
         });
 
     });
+
+    // Edit Design Version ---------------------------------------------------------------------------------------------
 
     describe('An editable Design Version contains an Edit option', () => {
 
@@ -555,6 +561,7 @@ describe('JSX: DesignVersion', () => {
 
     });
 
+    // View Design Version ---------------------------------------------------------------------------------------------
 
     describe('A Design Version contains a View option', () => {
 
@@ -757,6 +764,8 @@ describe('JSX: DesignVersion', () => {
         });
 
     });
+
+    // Update Design Version -------------------------------------------------------------------------------------------
 
     describe('An Updatable Design Version has an option to update it with the latest changes to be merged', () => {
 

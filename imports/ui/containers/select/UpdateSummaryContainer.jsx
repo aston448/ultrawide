@@ -31,8 +31,8 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-// Work selection screen
-class DesignUpdateSummaryList extends Component {
+// Export for unit tests
+export class DesignUpdateSummaryList extends Component {
 
     constructor(props) {
         super(props);
@@ -65,7 +65,7 @@ class DesignUpdateSummaryList extends Component {
         let additions = <div></div>;
         if(functionalAdditions.length > 0){
             additions =
-                <Panel className="panel-small panel-small-body" header="Functional Additions">
+                <Panel id="summaryAdditions" className="panel-small panel-small-body" header="Functional Additions">
                     {this.renderChanges(functionalAdditions)}
                 </Panel>;
         }
@@ -73,7 +73,7 @@ class DesignUpdateSummaryList extends Component {
         let removals = <div></div>;
         if(functionalRemovals.length > 0){
             removals =
-                <Panel className="panel-small panel-small-body" header="Functional Removals">
+                <Panel id="summaryRemovals" className="panel-small panel-small-body" header="Functional Removals">
                     {this.renderChanges(functionalRemovals)}
                 </Panel>;
         }
@@ -81,7 +81,7 @@ class DesignUpdateSummaryList extends Component {
         let changes = <div></div>;
         if(functionalChanges.length > 0){
             changes =
-                <Panel className="panel-small panel-small-body" header="Functional Changes">
+                <Panel id="summaryChanges" className="panel-small panel-small-body" header="Functional Changes">
                     {this.renderChanges(functionalChanges)}
                 </Panel>;
         }
@@ -90,7 +90,7 @@ class DesignUpdateSummaryList extends Component {
         if(userContext.designUpdateId != 'NONE') {
 
             return (
-                <Panel header={'Design Update Summary for ' + designUpdateName}>
+                <Panel id="updateSummary" header={'Design Update Summary for ' + designUpdateName}>
                     <Grid>
                         <Row>
                             <Col md={12} className="scroll-col">
@@ -114,13 +114,11 @@ class DesignUpdateSummaryList extends Component {
                             </Col>
                         </Row>
                     </Grid>
-
                 </Panel>
-
             );
         } else {
             return(
-                <Panel header="Design Update Summary">
+                <Panel id="noSummary" header="Design Update Summary">
                     <div className="design-item-note">No update selected</div>
                 </Panel>
             )
@@ -143,12 +141,9 @@ function mapStateToProps(state) {
     }
 }
 
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignUpdateSummaryList = connect(mapStateToProps)(DesignUpdateSummaryList);
-
-
+// Default export including REDUX
 export default DesignUpdateSummaryContainer = createContainer(({params}) => {
 
     return ClientDesignUpdateSummary.getDesignUpdateSummaryData(params.designUpdateId);
 
-}, DesignUpdateSummaryList);
+}, connect(mapStateToProps)(DesignUpdateSummaryList));

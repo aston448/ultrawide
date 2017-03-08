@@ -35,8 +35,8 @@ import {connect} from 'react-redux';
 // ---------------------------------------------------------------------------------------------------------------------
 
 
-// Work selection screen
-class DesignUpdatesList extends Component {
+// Unit test export
+export class DesignUpdatesList extends Component {
     constructor(props) {
         super(props);
 
@@ -60,48 +60,83 @@ class DesignUpdatesList extends Component {
         }
     }
 
-    addDesignUpdate(userRole, designVersionId){
+    onAddDesignUpdate(userRole, designVersionId){
         // Adds a new update and populates a set of design update components for editing
         ClientDesignUpdateServices.addNewDesignUpdate(userRole, designVersionId)
-    }
-
-    onDevelopDesignUpdates(){
-
     }
 
     render() {
 
         const {designUpdates, designVersionStatus, userRole, userContext} = this.props;
 
+        // Elements ----------------------------------------------------------------------------------------------------
+
         let updatesPanelContent = <div className="design-item-note">Select a Design Version</div>;
+
+        // Add Design Update
+        const addUpdate =
+            <div id="addUpdate" className="design-item-add">
+                <DesignComponentAdd
+                    addText="Add Design Update"
+                    onClick={ () => this.onAddDesignUpdate(userRole, userContext.designVersionId)}
+                />
+            </div>;
+
+        // Initial Design Work Packages List
+        const baseWorkPackages =
+            <Grid>
+                <Row>
+                    <Col md={6} className="scroll-col">
+                        <WorkPackagesContainer params={{
+                            wpType: WorkPackageType.WP_BASE,
+                            designVersionId: userContext.designVersionId,
+                            designUpdateId: userContext.designUpdateId
+                        }}/>
+                    </Col>
+                </Row>
+            </Grid>;
+
+        // Design Update Work Packages List
+        const updateWorkPackages =
+            <div id="updateWps">
+                <WorkPackagesContainer params={{
+                    wpType: WorkPackageType.WP_UPDATE,
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId
+                }}/>
+            </div>;
+
+        // Design Update Summary
+        const updateSummary =
+              <div id="updateSummary">
+                  <UpdateSummaryContainer params={{
+                      designUpdateId: userContext.designUpdateId
+                  }}/>
+              </div>;
+
+
+        // Layout ------------------------------------------------------------------------------------------------------
 
         // The content depends on what sort of Design Version has been selected
         if(designVersionStatus) {
+
             switch (designVersionStatus) {
                 case DesignVersionStatus.VERSION_NEW:
                 case DesignVersionStatus.VERSION_DRAFT:
                 case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
 
                     // No Updates.  Just show the Work Packages
-                    return (
-                        <Grid>
-                            <Row>
-                                <Col md={6} className="scroll-col">
-                                    <WorkPackagesContainer params={{
-                                        wpType: WorkPackageType.WP_BASE,
-                                        designVersionId: userContext.designVersionId,
-                                        designUpdateId: userContext.designUpdateId
-                                    }}/>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    );
+                    updatesPanelContent =
+                        <div id="baseWps">
+                            {baseWorkPackages}
+                        </div>;
                     break;
+
                 case DesignVersionStatus.VERSION_UPDATABLE:
-                case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
                     // These versions can have or have had Design Updates
                     if (userRole != RoleType.DESIGNER) {
+
                         // Developers and Managers can't add design updates
                         updatesPanelContent =
                             <div>
@@ -112,43 +147,44 @@ class DesignUpdatesList extends Component {
                         updatesPanelContent =
                             <div>
                                 {this.renderDesignUpdatesList(designUpdates)}
-                                <div className="design-item-add">
-                                    <DesignComponentAdd
-                                        addText="Add Design Update"
-                                        onClick={ () => this.addDesignUpdate(userRole, userContext.designVersionId)}
-                                    />
-                                </div>
+                                {addUpdate}
                             </div>;
                     }
+                    break;
 
-                    return (
-                        <Grid>
-                            <Row>
-                                <Col md={3} className="scroll-col">
-                                    <Panel header="Design Updates">
-                                        {updatesPanelContent}
-                                    </Panel>
-                                </Col>
-                                <Col md={3} className="scroll-col">
-                                    <WorkPackagesContainer params={{
-                                        wpType: WorkPackageType.WP_UPDATE,
-                                        designVersionId: userContext.designVersionId,
-                                        designUpdateId: userContext.designUpdateId
-                                    }}/>
-                                </Col>
-                                <Col md={6}>
-                                    <UpdateSummaryContainer params={{
-                                        designUpdateId: userContext.designUpdateId
-                                    }}/>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    );
+                case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+
+                    // Nobody can add updates - just show what there are
+                    updatesPanelContent =
+                        <div>
+                            {this.renderDesignUpdatesList(designUpdates)}
+                        </div>;
+
                     break;
                 default:
                     log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
             }
+
+            return (
+                <Grid>
+                    <Row>
+                        <Col md={3} className="scroll-col">
+                            <Panel header="Design Updates">
+                                {updatesPanelContent}
+                            </Panel>
+                        </Col>
+                        <Col md={3} className="scroll-col">
+                            {updateWorkPackages}
+                        </Col>
+                        <Col md={6}>
+                            {updateSummary}
+                        </Col>
+                    </Row>
+                </Grid>
+            );
+
         } else {
+
             // No version selected as yet
             return (
                 <Grid>
@@ -174,17 +210,14 @@ DesignUpdatesList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userRole: state.currentUserRole,
-        userContext: state.currentUserItemContext
+        userRole:       state.currentUserRole,
+        userContext:    state.currentUserItemContext
     }
 }
 
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignUpdatesList = connect(mapStateToProps)(DesignUpdatesList);
-
-
+// Default export including REDUX
 export default DesignUpdatesContainer = createContainer(({params}) => {
 
     return ClientContainerServices.getDesignUpdatesForCurrentDesignVersion(params.currentDesignVersionId);
 
-}, DesignUpdatesList);
+}, connect(mapStateToProps)(DesignUpdatesList));

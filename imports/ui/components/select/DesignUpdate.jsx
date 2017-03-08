@@ -26,7 +26,8 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class DesignUpdate extends Component {
+// Unit test export
+export class DesignUpdate extends Component {
     constructor(props) {
         super(props);
 
@@ -123,6 +124,45 @@ class DesignUpdate extends Component {
     render() {
         const {designUpdate, userRole, userContext, viewOptions} = this.props;
 
+        // Items -------------------------------------------------------------------------------------------------------
+
+        const header =
+            <DesignItemHeader
+                currentItemType={ItemType.DESIGN_UPDATE}
+                currentItemId={designUpdate._id}
+                currentItemName={designUpdate.updateName}
+                currentItemRef={designUpdate.updateReference}
+                currentItemStatus={designUpdate.updateStatus}
+                onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
+            />;
+
+        const editButton = <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>;
+        const deleteButton = <Button id="butDelete" bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>;
+        const publishButton = <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>;
+        const withdrawButton = <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>;
+        const viewButton = <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>;
+        const refreshButton = <Button id="butRefresh" bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>;
+
+        const mergeOptions =
+            <div>
+                <FormGroup id="mergeOptions">
+                    <Radio id="optionMerge" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
+                           onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
+                        {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_INCLUDE)}
+                    </Radio>
+                    <Radio id="optionRoll" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
+                           onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_ROLL)}>
+                        {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_ROLL)}
+                    </Radio>
+                    <Radio id="optionIgnore" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
+                           onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_IGNORE)}>
+                        {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
+                    </Radio>
+                </FormGroup>
+            </div>;
+
+        // Layout ------------------------------------------------------------------------------------------------------
+
         // Display as selected if this is the current DU in the user context
         let itemStyle = (designUpdate._id === userContext.designUpdateId ? 'design-item di-active' : 'design-item');
 
@@ -138,12 +178,13 @@ class DesignUpdate extends Component {
                         buttons = <div></div>;
                         break;
                     case RoleType.DESIGNER:
-                        // Designers can edit, delete or publish a new update
+                        // Designers can view, edit, delete or publish a new update
                         buttons =
                             <ButtonGroup>
-                                <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
-                                <Button bsSize="xs" onClick={ () => this.onDeleteDesignUpdate(userRole, userContext, designUpdate)}>Delete</Button>
-                                <Button bsSize="xs" onClick={ () => this.onPublishDesignUpdate(userRole, userContext, designUpdate)}>Publish</Button>
+                                {viewButton}
+                                {editButton}
+                                {deleteButton}
+                                {publishButton}
                             </ButtonGroup>;
                         break;
                 }
@@ -151,47 +192,39 @@ class DesignUpdate extends Component {
             case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
                 switch(userRole){
                     case RoleType.DEVELOPER:
-                    // Developers can view or select an update to include in the adopted design
-                    buttons =
-                        <div>
-                            <ButtonGroup className="button-group-left">
-                                <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
-                                <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
-                            </ButtonGroup>
-                        </div>;
+
+                        // Developers can view or select an update to include in the adopted design
+                        buttons =
+                            <div>
+                                <ButtonGroup className="button-group-left">
+                                    {viewButton}
+                                    {refreshButton}
+                                </ButtonGroup>
+                            </div>;
                         break;
+
                     case RoleType.DESIGNER:
-                    // Designers can view, edit or withdraw the update or specify how it is to be merged into the next Design Version
-                    buttons =
-                        <ButtonGroup>
-                            <Button bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>
-                            <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
-                            <Button bsSize="xs" onClick={ () => this.onWithdrawDesignUpdate(userRole, userContext, designUpdate)}>Withdraw</Button>
-                            <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
-                        </ButtonGroup>;
-                    options =
-                        <FormGroup>
-                            <Radio checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
-                                   onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
-                                {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_INCLUDE)}
-                            </Radio>
-                            <Radio checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
-                                   onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_ROLL)}>
-                                {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_ROLL)}
-                            </Radio>
-                            <Radio checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
-                                   onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_IGNORE)}>
-                                {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
-                            </Radio>
-                        </FormGroup>;
+
+                        // Designers can view, edit or withdraw the update or specify how it is to be merged into the next Design Version
+                        buttons =
+                            <ButtonGroup>
+                                {viewButton}
+                                {editButton}
+                                {withdrawButton}
+                                {refreshButton}
+                            </ButtonGroup>;
+
+                        options = mergeOptions;
                         break;
+
                     case RoleType.MANAGER:
+
                         // Managers can just view or refresh the summary
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
-                                    <Button bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>
+                                    {viewButton}
+                                    {refreshButton}
                                 </ButtonGroup>
                             </div>;
                         break;
@@ -201,21 +234,14 @@ class DesignUpdate extends Component {
                 // View only for everyone
                 buttons =
                     <ButtonGroup>
-                        <Button bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>View</Button>
+                        {viewButton}
                     </ButtonGroup>;
                 break;
         }
 
         return (
-            <div className={itemStyle}>
-                <DesignItemHeader
-                    currentItemType={ItemType.DESIGN_UPDATE}
-                    currentItemId={designUpdate._id}
-                    currentItemName={designUpdate.updateName}
-                    currentItemRef={designUpdate.updateReference}
-                    currentItemStatus={designUpdate.updateStatus}
-                    onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
-                />
+            <div id="designUpdate" className={itemStyle}>
+                {header}
                 {options}
                 {buttons}
             </div>
@@ -242,7 +268,5 @@ function mapStateToProps(state) {
     }
 }
 
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-DesignUpdate = connect(mapStateToProps)(DesignUpdate);
-
-export default DesignUpdate;
+// Default export including REDUX
+export default connect(mapStateToProps)(DesignUpdate);
