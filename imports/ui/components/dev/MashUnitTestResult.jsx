@@ -1,11 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component, PropTypes, ReactDOM } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
+import TestResultOverlay from '../../components/dev/TestResultOverlay.jsx';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -17,7 +17,7 @@ import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
 import {Grid, Row, Col} from 'react-bootstrap';
 import {InputGroup, Label} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Tooltip, Overlay, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -42,9 +42,21 @@ export class MashUnitTestResult extends Component {
         super(props);
 
         this.state = {
-
+            showErrorDetails: false
         };
 
+    }
+
+    showOverlay(){
+        this.setState({showErrorDetails: true});
+    }
+
+    hideOverlay(){
+        this.setState({showErrorDetails: false});
+    }
+
+    toggleOverlay(){
+        this.setState({showErrorDetails: !this.state.showErrorDetails});
     }
 
     render(){
@@ -52,40 +64,41 @@ export class MashUnitTestResult extends Component {
 
         const testStyle = testResult.testOutcome;
 
-        //TODO - Change these to nice custom overlays
-        const errorDetails = (
-            <Tooltip id="errorDeets">{testResult.testErrors}</Tooltip>
-        );
-
-        const errorStack = (
-            <Tooltip id="errorStack">{testResult.testStack}</Tooltip>
-        );
-
         // All this is is the Scenario Name plus a list of its scenarios
         return(
-            <Grid className="close-grid">
-                <Row>
-                    <Col md={3} className="close-col">
-                        <div className="unit-test-group">
-                            {testResult.testGroupName + ': '}
-                        </div>
-                    </Col>
-                    <Col md={7} className="close-col">
-                        <OverlayTrigger placement="left" overlay={errorDetails}>
-                            <div className={"unit-test " + testStyle}>
+            <div onMouseEnter={() => this.showOverlay()} onMouseLeave={() => this.hideOverlay()}>
+                <Grid className="close-grid">
+                    <Row>
+                        <Col md={3} className="close-col">
+                            <div className="unit-test-group">
+                                {testResult.testGroupName + ': '}
+                            </div>
+                        </Col>
+                        <Col md={7} className="close-col">
+                            <div className={"unit-test " + testStyle} >
                                 {testResult.testName}
                             </div>
-                        </OverlayTrigger>
-                    </Col>
-                    <Col md={2} className="close-col">
-                        <OverlayTrigger placement="left" overlay={errorStack}>
+                        </Col>
+                        <Col md={2} className="close-col">
                             <div className={"unit-test " + testStyle}>
                                 {TextLookups.mashTestStatus(testResult.testOutcome)}
                             </div>
-                        </OverlayTrigger>
-                    </Col>
-                </Row>
-            </Grid>
+                        </Col>
+                    </Row>
+                </Grid>
+                <Overlay
+                    show={this.state.showErrorDetails}
+                    onHide={() => this.setState({ showErrorDetails: false })}
+                    placement="top"
+                    container={this}
+                    rootClose={true}
+                    target={this}
+                >
+                    <TestResultOverlay
+                        testResult={testResult}
+                    />
+                </Overlay>
+            </div>
         )
     }
 

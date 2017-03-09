@@ -1443,6 +1443,46 @@ input {
     color: lightgrey;
 }
 
+.test-fail-overlay {
+    position: absolute;
+    z-index: 1;
+    background-color: #FFEEEE;
+    border: 1px solid darkred;
+    border-radius: 4px;
+}
+
+.test-pass-overlay {
+    position: absolute;
+    z-index: 1;
+    background-color: #EEFFEE;
+    border: 1px solid darkgreen;
+    border-radius: 4px;
+}
+
+.test-result-header {
+    margin: 5px;
+    font-size:  14px;
+    font-weight: bold;
+}
+
+.test-result-pass {
+    margin: 3px;
+    width: auto;
+    font-size:  14px;
+}
+.test-result-error {
+    margin: 5px 5px 10px 5px;
+    width: auto;
+    font-size:  14px;
+}
+
+.test-result-stack {
+    margin: 5px;
+    height: auto;
+    width: auto;
+    font-size:  12px;
+}
+
 /* -- Feature Files ------------------------------------------------------------------------------------------------- */
 
 .feature-file-panel{
