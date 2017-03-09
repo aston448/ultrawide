@@ -77,7 +77,7 @@ class RoleAction extends Component {
             case UltrawideAction.ACTION_LAST_DESIGNER:
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
-                ClientUserContextServices.setOpenItems(userContext, userRole);
+                ClientUserContextServices.setOpenDesignVersionItems(userContext, userRole);
                 ClientUserContextServices.setViewFromUserContext(userContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
                 break;
             case UltrawideAction.ACTION_TEST_CONFIGURE:

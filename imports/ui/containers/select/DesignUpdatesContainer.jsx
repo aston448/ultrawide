@@ -84,17 +84,13 @@ export class DesignUpdatesList extends Component {
 
         // Initial Design Work Packages List
         const baseWorkPackages =
-            <Grid>
-                <Row>
-                    <Col md={6} className="scroll-col">
-                        <WorkPackagesContainer params={{
-                            wpType: WorkPackageType.WP_BASE,
-                            designVersionId: userContext.designVersionId,
-                            designUpdateId: userContext.designUpdateId
-                        }}/>
-                    </Col>
-                </Row>
-            </Grid>;
+            <div id="baseWps">
+                <WorkPackagesContainer params={{
+                    wpType: WorkPackageType.WP_BASE,
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId
+                }}/>
+            </div>;
 
         // Design Update Work Packages List
         const updateWorkPackages =
@@ -117,6 +113,18 @@ export class DesignUpdatesList extends Component {
 
         // Layout ------------------------------------------------------------------------------------------------------
 
+        // Default layout if no data
+        let layout =
+            <Grid>
+                <Row>
+                    <Col md={6} className="col">
+                        <Panel header="Design Version Data">
+                            {updatesPanelContent}
+                        </Panel>
+                    </Col>
+                </Row>
+            </Grid>;
+
         // The content depends on what sort of Design Version has been selected
         if(designVersionStatus) {
 
@@ -126,10 +134,14 @@ export class DesignUpdatesList extends Component {
                 case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
 
                     // No Updates.  Just show the Work Packages
-                    updatesPanelContent =
-                        <div id="baseWps">
-                            {baseWorkPackages}
-                        </div>;
+                    layout =
+                        <Grid>
+                            <Row>
+                                <Col md={6} className="scroll-col">
+                                    {baseWorkPackages}
+                                </Col>
+                            </Row>
+                        </Grid>;
                     break;
 
                 case DesignVersionStatus.VERSION_UPDATABLE:
@@ -139,17 +151,33 @@ export class DesignUpdatesList extends Component {
 
                         // Developers and Managers can't add design updates
                         updatesPanelContent =
-                            <div>
+                            <Panel header="Design Updates">
                                 {this.renderDesignUpdatesList(designUpdates)}
-                            </div>;
+                            </Panel>;
                     } else {
                         // Design updates may be added
                         updatesPanelContent =
-                            <div>
+                            <Panel header="Design Updates">
                                 {this.renderDesignUpdatesList(designUpdates)}
                                 {addUpdate}
-                            </div>;
+                            </Panel>;
                     }
+
+                    layout =
+                        <Grid>
+                            <Row>
+                                <Col md={3} className="scroll-col">
+                                    {updatesPanelContent}
+                                </Col>
+                                <Col md={3} className="scroll-col">
+                                    {updateWorkPackages}
+                                </Col>
+                                <Col md={6}>
+                                    {updateSummary}
+                                </Col>
+                            </Row>
+                        </Grid>;
+
                     break;
 
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
@@ -160,45 +188,30 @@ export class DesignUpdatesList extends Component {
                             {this.renderDesignUpdatesList(designUpdates)}
                         </div>;
 
+                    layout =
+                        <Grid>
+                            <Row>
+                                <Col md={3} className="scroll-col">
+                                    {updatesPanelContent}
+                                </Col>
+                                <Col md={3} className="scroll-col">
+                                    {updateWorkPackages}
+                                </Col>
+                                <Col md={6}>
+                                    {updateSummary}
+                                </Col>
+                            </Row>
+                        </Grid>;
+
                     break;
                 default:
                     log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
             }
-
-            return (
-                <Grid>
-                    <Row>
-                        <Col md={3} className="scroll-col">
-                            <Panel header="Design Updates">
-                                {updatesPanelContent}
-                            </Panel>
-                        </Col>
-                        <Col md={3} className="scroll-col">
-                            {updateWorkPackages}
-                        </Col>
-                        <Col md={6}>
-                            {updateSummary}
-                        </Col>
-                    </Row>
-                </Grid>
-            );
-
-        } else {
-
-            // No version selected as yet
-            return (
-                <Grid>
-                    <Row>
-                        <Col md={6} className="col">
-                            <Panel header="Design Version Data">
-                                {updatesPanelContent}
-                            </Panel>
-                        </Col>
-                    </Row>
-                </Grid>
-            );
         }
 
+        return (
+            layout
+        );
     }
 }
 

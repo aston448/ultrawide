@@ -25,6 +25,7 @@ const initialState = {
     currentUserMessage:                 {messageType: MessageType.INFO, messageText: 'Please log in...' },
     testDataFlag:                       false,
     designVersionDataLoaded:            false,      // True when data for the current DV is subscribed to
+    workPackageDataLoaded:              false,      // True when data for current WP is subscribed to
     testIntegrationDataLoaded:          false,      // True when the test integration data for the current user is subscribed to
     testSummaryDataLoaded:              false,      // True when the Test Summmary data has been calculated
     testDataStale:                      true,       // True when new test data is available
@@ -110,6 +111,10 @@ export function myApplication(state = initialState, action) {
         case Actions.UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG:
             return Object.assign({}, state, {
                 designVersionDataLoaded: action.newDesignVersionDataLoadedValue
+            });
+        case Actions.UPDATE_WORK_PACKAGE_DATA_LOADED_FLAG:
+            return Object.assign({}, state, {
+                workPackageDataLoaded: action.newWorkPackageDataLoadedValue
             });
         case Actions.UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG:
             return Object.assign({}, state, {

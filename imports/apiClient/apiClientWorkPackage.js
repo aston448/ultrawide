@@ -17,7 +17,7 @@ import ClientTestIntegrationServices   from './apiClientTestIntegration';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo, setWorkPackageDataLoadedTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -360,6 +360,10 @@ class ClientWorkPackageServices {
 
             // If we are changing WP, set the Design Mash data as stale as we need to reload a new lot
             store.dispatch(setMashDataStaleTo(true));
+
+            // Subscribe to the appropriate data for the new WP if WP changing
+            store.dispatch(setWorkPackageDataLoadedTo(false));
+            ClientContainerServices.getWorkPackageData(newContext);
 
             return {userContext: newContext, mashStale: true};
         }

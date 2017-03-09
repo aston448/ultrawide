@@ -41,6 +41,9 @@ export const UPDATE_TEST_DATA_FLAG = 'UPDATE_TEST_DATA_FLAG';
 // Indication of whether DV data is loaded
 export const UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG = 'UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG';
 
+// Indication of whether WP data is loaded
+export const UPDATE_WORK_PACKAGE_DATA_LOADED_FLAG = 'UPDATE_WORK_PACKAGE_DATA_LOADED_FLAG';
+
 // Indication of whether Test Integration data is loaded
 export const UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG = 'UPDATE_TEST_INTEGRATION_DATA_LOADED_FLAG';
 
@@ -330,6 +333,14 @@ export function setDesignVersionDataLoadedTo(newValue) {
 
     return function (dispatch) {
         dispatch({type: UPDATE_DESIGN_VERSION_DATA_LOADED_FLAG, newDesignVersionDataLoadedValue: newValue});
+    };
+}
+
+// Shows when work package data has been loaded
+export function setWorkPackageDataLoadedTo(newValue) {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_WORK_PACKAGE_DATA_LOADED_FLAG, newWorkPackageDataLoadedValue: newValue});
     };
 }
 

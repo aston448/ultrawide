@@ -41,7 +41,7 @@ import { log } from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
-import { setCurrentUserItemContext, setDesignVersionDataLoadedTo, setTestIntegrationDataLoadedTo, updateUserMessage } from '../redux/actions'
+import { setDesignVersionDataLoadedTo, setWorkPackageDataLoadedTo, setTestIntegrationDataLoadedTo, updateUserMessage } from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -127,16 +127,15 @@ class ClientContainerServices{
                 let fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
                 let ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 let ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
-                let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
 
 
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() ||  !wcHandle.ready()
+                        !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready()
                     );
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading = {}", loading);
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
 
                     if (!loading) {
                         // Mark data as loaded
@@ -148,7 +147,7 @@ class ClientContainerServices{
                         }));
 
                         // Set open items now that data is loaded
-                        ClientUserContextServices.setOpenItems(userContext);
+                        ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
                         // If an action wanted after loading call it...
                         if (callback) {
@@ -161,6 +160,54 @@ class ClientContainerServices{
 
                 });
             }
+        }
+    }
+
+    getWorkPackageData(userContext, callback){
+
+        if(store.getState().workPackageDataLoaded){
+
+            if(callback){
+                callback()
+            }
+        } else {
+
+            store.dispatch(updateUserMessage({
+                messageType: MessageType.WARNING,
+                messageText: 'FETCHING WORK PACKAGE DATA FROM SERVER...'
+            }));
+
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Work Package Data for DV {}, WP {}", userContext.designVersionId, userContext.workPackageId);
+
+            let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
+
+            Tracker.autorun((loader) => {
+
+                let loading = !wcHandle.ready();
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "loading WP = {}", loading);
+
+                if (!loading) {
+                    // Mark data as loaded
+                    store.dispatch(setWorkPackageDataLoadedTo(true));
+
+                    store.dispatch(updateUserMessage({
+                        messageType: MessageType.INFO,
+                        messageText: 'Work Package data loaded'
+                    }));
+
+                    // Set open items now that data is loaded
+                    ClientUserContextServices.setOpenWorkPackageItems(userContext);
+
+                    // If an action wanted after loading call it...
+                    if (callback) {
+                        callback();
+                    }
+
+                    // Stop this checking once we are done or there will be random chaos
+                    loader.stop();
+                }
+            });
         }
     }
 

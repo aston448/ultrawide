@@ -164,40 +164,56 @@ class ClientUserContextServices {
         if(dvCount > 0){
             log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
 
-            this.onMainDataLoaded();
+            this.onAllDataLoaded();
         } else {
+
             // Need to load data
             if(userContext.designVersionId != 'NONE'){
                 log((msg) => console.log(msg), LogLevel.TRACE, "Loading data for DV {}", userContext.designVersionId);
 
+                // Show wait screen
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
-                // This should wait until data loaded to call the function
-                ClientContainerServices.getDesignVersionData(userContext, this.onMainDataLoaded);
+                // If there is a current WP, load data for that too once DV data is loaded
+                if(userContext.workPackageId != 'NONE'){
+
+                    // Load DV data and when done load WP data
+                    ClientContainerServices.getDesignVersionData(userContext, this.onDesignVersionDataLoaded(userContext));
+
+                } else {
+
+                    // Just load the DV data and continue
+                    ClientContainerServices.getDesignVersionData(userContext, this.onAllDataLoaded);
+                }
 
             } else {
+
                 log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
                 // Will have to wait for a DV to be selected to get data
-                this.onMainDataLoaded();
+                this.onAllDataLoaded();
             }
         }
 
     }
 
-    onMainDataLoaded(){
+    onDesignVersionDataLoaded(userContext){
+
+        // Load WP data and then continue
+        ClientContainerServices.getWorkPackageData(userContext, this.onAllDataLoaded)
+    }
+
+    onAllDataLoaded(){
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));
-
     }
 
-    setOpenItems(userContext){
+    setOpenDesignVersionItems(userContext){
 
         // Set default view settings for open items
 
         let dvArr = [];
         let duArr = [];
-        let wpArr = [];
 
         try {
 
@@ -230,6 +246,144 @@ class ClientUserContextServices {
             designUpdateOpenComponents.forEach((component) => {
                 duArr.push(component._id);
             });
+
+
+            // Plus for the actual open item context, open all the way down to that item
+            log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
+                userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
+
+            if (userContext.designComponentId != 'NONE') {
+
+                // There is a current component...
+                if (userContext.designUpdateId != 'NONE') {
+                    // In a Design update so open to the DU component
+
+                    let duComponent = DesignUpdateComponents.findOne({
+                        _id: userContext.designComponentId
+                    });
+
+                    if(duComponent) {
+                        if (duComponent.componentParentIdNew === 'NONE') {
+                            // No Parent, just make sure component is open
+                            if (!duArr.includes(duComponent._id)) {
+                                duArr.push(duComponent._id);
+                            }
+                        } else {
+                            // Get the parent
+                            let duParent = DesignUpdateComponents.findOne({
+                                _id: duComponent.componentParentIdNew
+                            });
+
+                            // Keep going up until the parent is already open or top of tree
+                            while (!duArr.includes(duParent._id) && duParent.componentParentIdNew != 'NONE') {
+                                duComponent = duParent;
+
+                                if (!duArr.includes(duComponent._id)) {
+                                    duArr.push(duComponent._id);
+                                }
+
+                                duParent = DesignUpdateComponents.findOne({
+                                    _id: duComponent.componentParentIdNew
+                                });
+                            }
+                        }
+                    } else {
+                        // Must be a base design component
+                        let baseComponent = DesignComponents.findOne({
+                            _id: userContext.designComponentId
+                        });
+
+                        if(baseComponent){
+                            if (baseComponent.componentParentId === 'NONE') {
+                                // No Parent, just make sure component is open
+                                if (!dvArr.includes(baseComponent._id)) {
+                                    dvArr.push(baseComponent._id);
+                                }
+                            } else {
+                                // Get the parent
+                                let dvParent = DesignComponents.findOne({
+                                    _id: baseComponent.componentParentId
+                                });
+
+                                // Keep going up until the parent is already open or top of tree
+                                while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
+                                    baseComponent = dvParent;
+
+                                    if (!dvArr.includes(baseComponent._id)) {
+                                        dvArr.push(baseComponent._id);
+                                    }
+
+                                    dvParent = DesignComponents.findOne({
+                                        _id: baseComponent.componentParentId
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                } else {
+                    if (userContext.designVersionId != 'NONE') {
+                        // Just in a DV so open that component
+
+                        let dvComponent = DesignComponents.findOne({
+                            _id: userContext.designComponentId
+                        });
+
+                        if (dvComponent.componentParentId === 'NONE') {
+                            // No Parent, just make sure component is open
+                            if (!dvArr.includes(dvComponent._id)) {
+                                dvArr.push(dvComponent._id);
+                            }
+                        } else {
+                            // Get the parent
+                            let dvParent = DesignComponents.findOne({
+                                _id: dvComponent.componentParentId
+                            });
+
+                            // Keep going up until the parent is already open or top of tree
+                            while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
+                                dvComponent = dvParent;
+
+                                if (!dvArr.includes(dvComponent._id)) {
+                                    log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Opening {}", dvComponent.componentName);
+                                    dvArr.push(dvComponent._id);
+                                }
+
+                                dvParent = DesignComponents.findOne({
+                                    _id: dvComponent.componentParentId
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch(e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open item settings: {}", e);
+        }
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            dvArr,
+            null,
+            null
+        ));
+
+        store.dispatch(setCurrentUserOpenDesignUpdateItems(
+            duArr,
+            null,
+            null
+        ));
+    }
+
+    setOpenWorkPackageItems(userContext){
+
+        // Set default view settings for open WP items
+
+        let wpArr = [];
+
+        try {
+
+            // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
 
 
             // Work Packages - open in scope items down to Feature level
@@ -286,108 +440,6 @@ class ClientUserContextServices {
                         }
                     }
 
-                } else {
-                    if (userContext.designUpdateId != 'NONE') {
-                        // Not in a WP but in a Design update so open to the DU component
-
-                        let duComponent = DesignUpdateComponents.findOne({
-                            _id: userContext.designComponentId
-                        });
-
-                        if(duComponent) {
-                            if (duComponent.componentParentIdNew === 'NONE') {
-                                // No Parent, just make sure component is open
-                                if (!duArr.includes(duComponent._id)) {
-                                    duArr.push(duComponent._id);
-                                }
-                            } else {
-                                // Get the parent
-                                let duParent = DesignUpdateComponents.findOne({
-                                    _id: duComponent.componentParentIdNew
-                                });
-
-                                // Keep going up until the parent is already open or top of tree
-                                while (!duArr.includes(duParent._id) && duParent.componentParentIdNew != 'NONE') {
-                                    duComponent = duParent;
-
-                                    if (!duArr.includes(duComponent._id)) {
-                                        duArr.push(duComponent._id);
-                                    }
-
-                                    duParent = DesignUpdateComponents.findOne({
-                                        _id: duComponent.componentParentIdNew
-                                    });
-                                }
-                            }
-                        } else {
-                            // Must be a base design component
-                            let baseComponent = DesignComponents.findOne({
-                                _id: userContext.designComponentId
-                            });
-
-                            if(baseComponent){
-                                if (baseComponent.componentParentId === 'NONE') {
-                                    // No Parent, just make sure component is open
-                                    if (!dvArr.includes(baseComponent._id)) {
-                                        dvArr.push(baseComponent._id);
-                                    }
-                                } else {
-                                    // Get the parent
-                                    let dvParent = DesignComponents.findOne({
-                                        _id: baseComponent.componentParentId
-                                    });
-
-                                    // Keep going up until the parent is already open or top of tree
-                                    while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
-                                        baseComponent = dvParent;
-
-                                        if (!dvArr.includes(baseComponent._id)) {
-                                            dvArr.push(baseComponent._id);
-                                        }
-
-                                        dvParent = DesignComponents.findOne({
-                                            _id: baseComponent.componentParentId
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                    } else {
-                        if (userContext.designVersionId != 'NONE') {
-                            // Just in a DV so open that component
-
-                            let dvComponent = DesignComponents.findOne({
-                                _id: userContext.designComponentId
-                            });
-
-                            if (dvComponent.componentParentId === 'NONE') {
-                                // No Parent, just make sure component is open
-                                if (!dvArr.includes(dvComponent._id)) {
-                                    dvArr.push(dvComponent._id);
-                                }
-                            } else {
-                                // Get the parent
-                                let dvParent = DesignComponents.findOne({
-                                    _id: dvComponent.componentParentId
-                                });
-
-                                // Keep going up until the parent is already open or top of tree
-                                while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
-                                    dvComponent = dvParent;
-
-                                    if (!dvArr.includes(dvComponent._id)) {
-                                        log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Opening {}", dvComponent.componentName);
-                                        dvArr.push(dvComponent._id);
-                                    }
-
-                                    dvParent = DesignComponents.findOne({
-                                        _id: dvComponent.componentParentId
-                                    });
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -395,24 +447,11 @@ class ClientUserContextServices {
             log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open item settings: {}", e);
         }
 
-        store.dispatch(setCurrentUserOpenDesignItems(
-            dvArr,
-            null,
-            null
-        ));
-
-        store.dispatch(setCurrentUserOpenDesignUpdateItems(
-            duArr,
-            null,
-            null
-        ));
-
         store.dispatch(setCurrentUserOpenWorkPackageItems(
             wpArr,
             null,
             null
         ));
-
     }
 
 
