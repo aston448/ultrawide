@@ -36,7 +36,8 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class UpdateApplicationsList extends Component {
+// Export for unit testing
+export class UpdateApplicationsList extends Component {
     constructor(props) {
         super(props);
 
@@ -69,30 +70,11 @@ class UpdateApplicationsList extends Component {
         });
     }
 
-    // // A depiction of the base Design Version
-    // renderBaseApplications(baseApplications, context, view, mode) {
-    //     return baseApplications.map((application) => {
-    //         return (
-    //             <DesignComponentTarget
-    //                 key={application._id}
-    //                 currentItem={application}
-    //                 designItem={application}
-    //                 displayContext={context}
-    //                 view={view}
-    //                 mode={mode}
-    //                 testSummary={false}
-    //             />
-    //         );
-    //     });
-    // }
-
     render() {
 
-        const {updateApplications, baseApplications, userContext, currentItemName, view, mode, viewOptions} = this.props;
+        const {updateApplications, userContext, view, mode, viewOptions} = this.props;
 
-        let layout = '';
-
-        //console.log("Rendering applications list with view mode " + mode + " and current item name " + currentItemName);
+        // Items -------------------------------------------------------------------------------------------------------
 
         let addComponent = '';
 
@@ -102,7 +84,7 @@ class UpdateApplicationsList extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td className="control-table-data-app">
+                        <td id="addApplication" className="control-table-data-app">
                             <DesignComponentAdd
                                 addText="Add Application"
                                 onClick={ () => this.onAddApplication(view, mode, userContext.designVersionId, userContext.designUpdateId)}
@@ -115,7 +97,7 @@ class UpdateApplicationsList extends Component {
 
         // Scope for Design Update
         let updateScopeComponent =
-            <Panel header="Update Scope" className="panel-update panel-update-body">
+            <Panel id="scopePane" header="Update Scope" className="panel-update panel-update-body">
                 <Grid>
                     <Row>
                         <Col md={12} className="scroll-col">
@@ -127,7 +109,7 @@ class UpdateApplicationsList extends Component {
 
         // Edit for Design Update
         let updateEditComponent =
-            <Panel header="Update Editor" className="panel-update panel-update-body">
+            <Panel id="editorPaneEdit" header="Update Editor" className="panel-update panel-update-body">
                 <Grid>
                     <Row>
                         <Col md={12} className="scroll-col">
@@ -140,7 +122,7 @@ class UpdateApplicationsList extends Component {
 
         // View Design Update Content
         let updateViewComponent =
-            <Panel header="Design Update" className="panel-update panel-update-body">
+            <Panel id="editorPaneView" header="Design Update" className="panel-update panel-update-body">
                 <Grid>
                     <Row>
                         <Col md={12} className="scroll-col">
@@ -152,7 +134,7 @@ class UpdateApplicationsList extends Component {
 
         // Text / Scenario Steps for Design Update - Editable
         let updateTextComponent =
-            <Panel header="New and Old Text" className="panel-update panel-update-body">
+            <Panel id="detailsPaneEdit" header="New and Old Text" className="panel-update panel-update-body">
                 <DesignComponentTextContainer params={{
                     currentContext: userContext,
                     view: view,
@@ -162,7 +144,7 @@ class UpdateApplicationsList extends Component {
 
         // Text / Scenario Steps for Design Update - Read Only
         let updateViewTextComponent =
-            <Panel header="New and Old Text" className="panel-update panel-update-body">
+            <Panel id="detailsPaneView" header="New and Old Text" className="panel-update panel-update-body">
                 <DesignComponentTextContainer params={{
                     currentContext: userContext,
                     view: view,
@@ -172,17 +154,23 @@ class UpdateApplicationsList extends Component {
 
         // Domain Dictionary
         let domainDictionary =
-            <DomainDictionaryContainer params={{
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId
-            }}/>;
+            <div id="domainDictionary">
+                <DomainDictionaryContainer params={{
+                    designId: userContext.designId,
+                    designVersionId: userContext.designVersionId
+                }}/>
+            </div>;
 
         // Design Update Summary
         let updateSummary =
-            <UpdateSummaryContainer params={{
-                designUpdateId: userContext.designUpdateId
-            }}/>;
+            <div id="updateSummary">
+                <UpdateSummaryContainer params={{
+                    designUpdateId: userContext.designUpdateId
+                }}/>
+            </div>;
 
+        // Layout ------------------------------------------------------------------------------------------------------
+        let layout = '';
 
         // Create the layout depending on the current view...
         if(updateApplications) {
@@ -203,16 +191,16 @@ class UpdateApplicationsList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col md={3}>
+                                <Col id="scopeCol" md={3}>
                                     {updateScopeComponent}
                                 </Col>
-                                <Col md={3}>
+                                <Col id="designCol" md={3}>
                                     {updateEditComponent}
                                 </Col>
-                                <Col md={3}>
+                                <Col id="detailsCol" md={3}>
                                     {updateTextComponent}
                                 </Col>
-                                <Col md={3}>
+                                <Col id="dictSummCol" md={3}>
                                     {col4component}
                                 </Col>
                             </Row>
@@ -221,13 +209,13 @@ class UpdateApplicationsList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col md={4}>
+                                <Col id="scopeCol" md={4}>
                                     {updateScopeComponent}
                                 </Col>
-                                <Col md={4}>
+                                <Col id="designCol" md={4}>
                                     {updateEditComponent}
                                 </Col>
-                                <Col md={4}>
+                                <Col id="dictSummCol" md={4}>
                                     {col4component}
                                 </Col>
                             </Row>
@@ -249,29 +237,17 @@ class UpdateApplicationsList extends Component {
 
                 // Adjust layout if Test Summary Visible
                 if(viewOptions.updateTestSummaryVisible){
-                    layout =
-                        <Grid>
-                            <Row>
-                                <Col md={6}>
-                                    {updateViewComponent}
-                                </Col>
-                                <Col md={6}>
-                                    {updateSummary}
-                                </Col>
-                            </Row>
-                        </Grid>;
-                } else {
                     if(viewOptions.updateDetailsVisible) {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col md={4}>
+                                    <Col id="designCol" md={6}>
                                         {updateViewComponent}
                                     </Col>
-                                    <Col md={4}>
+                                    <Col id="detailsCol" md={3}>
                                         {updateViewTextComponent}
                                     </Col>
-                                    <Col md={4}>
+                                    <Col id="dictSummCol" md={3}>
                                         {col3component}
                                     </Col>
                                 </Row>
@@ -280,17 +256,45 @@ class UpdateApplicationsList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col md={5}>
+                                    <Col id="designCol" md={8}>
                                         {updateViewComponent}
                                     </Col>
-                                    <Col md={7}>
+                                    <Col id="dictSummCol" md={4}>
+                                        {updateSummary}
+                                    </Col>
+                                </Row>
+                            </Grid>;
+                    }
+                } else {
+                    if(viewOptions.updateDetailsVisible) {
+                        layout =
+                            <Grid>
+                                <Row>
+                                    <Col id="designCol" md={4}>
+                                        {updateViewComponent}
+                                    </Col>
+                                    <Col id="detailsCol" md={4}>
+                                        {updateViewTextComponent}
+                                    </Col>
+                                    <Col id="dictSummCol" md={4}>
+                                        {col3component}
+                                    </Col>
+                                </Row>
+                            </Grid>;
+                    } else {
+                        layout =
+                            <Grid>
+                                <Row>
+                                    <Col id="designCol" md={6}>
+                                        {updateViewComponent}
+                                    </Col>
+                                    <Col id="dictSummCol" md={6}>
                                         {col3component}
                                     </Col>
                                 </Row>
                             </Grid>;
                     }
                 }
-
             }
 
             return (
@@ -314,15 +318,13 @@ class UpdateApplicationsList extends Component {
 
 
 UpdateApplicationsList.propTypes = {
-    updateApplications: PropTypes.array.isRequired,
-    baseApplications: PropTypes.array.isRequired
+    updateApplications: PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
         userContext:            state.currentUserItemContext,
-        currentItemName:        state.currentDesignComponentName,
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
         viewOptions:            state.currentUserViewOptions
@@ -330,10 +332,7 @@ function mapStateToProps(state) {
     }
 }
 
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-UpdateApplicationsList = connect(mapStateToProps)(UpdateApplicationsList);
-
-
+// Default export with REDUX
 export default EditDesignUpdateContainer = createContainer(({params}) => {
 
     // The editor container will start by rendering a list of Applications in the Design Update
@@ -342,5 +341,4 @@ export default EditDesignUpdateContainer = createContainer(({params}) => {
         params.view
     );
 
-
-}, UpdateApplicationsList);
+}, connect(mapStateToProps)(UpdateApplicationsList));

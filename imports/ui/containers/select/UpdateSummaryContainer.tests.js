@@ -156,7 +156,7 @@ describe('JSX: DesignUpdateSummaryList', () => {
         });
     });
 
-    describe('A Design Update summary is shown when a Design Update is selected', () => {
+    describe('A Design Update Summary is shown when a Design Update is selected', () => {
 
         it('summary if design update selected', () => {
             const additions = [

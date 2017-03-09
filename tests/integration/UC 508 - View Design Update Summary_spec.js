@@ -56,8 +56,9 @@ describe('UC 508 - View Design Update Summary', function(){
 
 
     // Actions
-    it('A Design Update summary is shown when a Design Update is selected');
+    it('A Design Update Summary is shown when a Design Update is selected');
 
+    it('A Design Update Summary is shown when a Design Update is edited or viewed');
 
     // Conditions
     it('A new Feature added in the Design Update is listed in the additions list', function(){

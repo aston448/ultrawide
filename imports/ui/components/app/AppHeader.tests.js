@@ -11,6 +11,31 @@ import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: AppHeader', () => {
 
+    function testAppHeader(mode, view, userRole, userName){
+
+        const userContext = {};
+        const userViewOptions = {};
+        const message = 'No message';
+        const testDataFlag = false;
+        const currentViewDataValue = false;
+
+        return shallow(
+            <AppHeader
+                mode={mode}
+                view={view}
+                userRole={userRole}
+                userName={userName}
+                userContext={userContext}
+                userViewOptions={userViewOptions}
+                message={message}
+                testDataFlag={testDataFlag}
+                currentViewDataValue={currentViewDataValue}
+            />
+        );
+    }
+
+    // Design Version Editor -------------------------------------------------------------------------------------------
+
     describe('The Design Version editor has an option to switch to View Only mode', () => {
 
         it('has a view button not highlighted', () => {
@@ -19,25 +44,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_NEW_EDIT;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butView')).to.have.length(1);
             chai.assert.equal(item.find('#butView').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
@@ -54,25 +62,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_NEW_EDIT;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
             chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting to be highlighted');
@@ -89,25 +80,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DEVELOPER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
 
@@ -123,25 +97,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_NEW_EDIT;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butView')).to.have.length(1);
 
@@ -154,24 +111,8 @@ describe('JSX: AppHeader', () => {
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
             const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
             chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting to be highlighted');
@@ -187,25 +128,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butView')).to.have.length(0);
 
@@ -217,25 +141,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
 
@@ -251,25 +158,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_NEW_EDIT;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butView')).to.have.length(1);
             chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting to be highlighted');
@@ -282,25 +172,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_NEW_EDIT;
             const userRole = RoleType.DESIGNER;
             const userName = 'gloria';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
             chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting not to be highlighted');
@@ -317,25 +190,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DEVELOPER;
             const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butView')).to.have.length(0);
 
@@ -348,27 +204,10 @@ describe('JSX: AppHeader', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
-            const userRole = RoleType.DEVELOPER;
-            const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butDetails')).to.have.length(1);
         });
@@ -377,27 +216,10 @@ describe('JSX: AppHeader', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const userRole = RoleType.DEVELOPER;
-            const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butDetails')).to.have.length(1);
         });
@@ -409,27 +231,10 @@ describe('JSX: AppHeader', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
-            const userRole = RoleType.DEVELOPER;
-            const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butDomainDict')).to.have.length(1);
         });
@@ -440,25 +245,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DEVELOPER;
             const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butDomainDict')).to.have.length(1);
         });
@@ -470,27 +258,10 @@ describe('JSX: AppHeader', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
-            const userRole = RoleType.DEVELOPER;
-            const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butTestSummary')).to.have.length(1);
         });
@@ -501,25 +272,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DEVELOPER;
             const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butTestSummary')).to.have.length(1);
         });
@@ -531,27 +285,10 @@ describe('JSX: AppHeader', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
-            const userRole = RoleType.DEVELOPER;
-            const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.assert.equal(item.find('#butAccTests').length, 0, 'Acceptance Tests visible');
             chai.assert.equal(item.find('#butIntTests').length, 0, 'Integration Tests visible');
@@ -565,25 +302,8 @@ describe('JSX: AppHeader', () => {
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const userRole = RoleType.DEVELOPER;
             const userName = 'hugh';
-            const userContext = {designId: 'AAA', designVersionId: 'BBB'};
-            const userViewOptions = {};
-            const message = 'No message';
-            const testDataFlag = false;
-            const currentViewDataValue = false;
 
-            const item = shallow(
-                <AppHeader
-                    mode={mode}
-                    view={view}
-                    userRole={userRole}
-                    userName={userName}
-                    userContext={userContext}
-                    userViewOptions={userViewOptions}
-                    message={message}
-                    testDataFlag={testDataFlag}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            let item = testAppHeader(mode, view, userRole, userName);
 
             chai.assert.equal(item.find('#butAccTests').length, 0, 'Acceptance Tests visible');
             chai.assert.equal(item.find('#butIntTests').length, 0, 'Integration Tests visible');
@@ -592,4 +312,166 @@ describe('JSX: AppHeader', () => {
         });
     });
 
+    // Design Update Editor --------------------------------------------------------------------------------------------
+
+    describe('The Design Update editor has an option to switch to View Only mode', () => {
+
+        it('has a view button not highlighted', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting to be highlighted');
+        });
+    });
+
+    describe('Only a Design Update being edited can be switched to View Only', () => {
+
+        it('a view only design update has no view button', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+    });
+
+    describe('The Design Update editor has an option to switch to Edit mode', () => {
+
+        it('has an edit button not highlighted when in view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butEdit')).to.have.length(1);
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
+        });
+    });
+
+    describe('A Developer viewing a Design Update cannot switch it to be editable', () => {
+
+        it('has an edit button not highlighted when in view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+    });
+
+    describe('A Manager viewing a Design Update cannot switch it to be editable', () => {
+
+        it('has an edit button not highlighted when in view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.MANAGER;
+            const userName = 'miles';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butEdit')).to.have.length(0);
+        });
+    });
+
+    describe('The Design Update editor has an option to show or hide the Details pane', () => {
+
+        it('is available when editing a design update', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butDetails')).to.have.length(1);
+        });
+
+        it('is available when viewing a design update', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butDetails')).to.have.length(1);
+        });
+    });
+
+    describe('The Design Update editor has an option to show or hide the Domain Dictionary', () => {
+
+        it('is available when editing a design update', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butDomainDict')).to.have.length(1);
+        });
+
+        it('is available when viewing a design update', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butDomainDict')).to.have.length(1);
+        });
+    });
+
+
+    describe('The Design Update editor has an option to show or hide the Test Summary when in View Only mode', () => {
+
+        it('is not available when editing a design update', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butTestSummary')).to.have.length(0);
+        });
+
+        it('is available when viewing a design update', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butTestSummary')).to.have.length(1);
+        });
+    });
 });

@@ -651,9 +651,8 @@ class ClientContainerServices{
                 };
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                // Need base design version apps and design update apps
+                // Need design update apps only
                 return{
-                    baseApplications:       baseApplicationsArr,
                     updateApplications:     updateApplicationsArr
                 };
             case ViewType.WORK_PACKAGE_BASE_EDIT:

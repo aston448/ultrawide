@@ -11,6 +11,37 @@ import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: DesignComponent', () => {
 
+    function testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext){
+
+        const updateItem = {};
+        const isDragDropHovering = false;
+        const testSummary = false;
+        const testSummaryData = {};
+        const testDataFlag = false;
+        const openDesignItems = [];
+        const openDesignUpdateItems = [];
+        const openWorkPackageItems = [];
+
+        return shallow(
+            <DesignComponent
+                currentItem={currentItem}
+                designItem={designItem}
+                updateItem={updateItem}
+                isDragDropHovering={isDragDropHovering}
+                displayContext={displayContext}
+                testSummary={testSummary}
+                testSummaryData={testSummaryData}
+                mode={mode}
+                view={view}
+                userContext={userContext}
+                openDesignItems={openDesignItems}
+                openDesignUpdateItems={openDesignUpdateItems}
+                openWorkPackageItems={openWorkPackageItems}
+                testDataFlag={testDataFlag}
+            />
+        );
+    }
+
     // Design Components -----------------------------------------------------------------------------------------------
 
     describe('A selected Design Component is highlighted', () => {
@@ -19,38 +50,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId'};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};  // Context has current item id
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
@@ -61,37 +66,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId'};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'anotherComponentId'};  // Context has different item id
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -106,56 +86,13 @@ describe('JSX: DesignComponent', () => {
             const currentItem1 = {_id: 'component1Id'};
             const currentItem2 = {_id: 'component2Id'};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
             const displayContext = DisplayContext.BASE_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'component1Id'}; // Item 1 is in user context
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item1 = shallow(
-                <DesignComponent
-                    currentItem={currentItem1}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
-
-            const item2 = shallow(
-                <DesignComponent
-                    currentItem={currentItem2}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item1 = testDesignComponent(currentItem1, designItem, mode, view, displayContext, userContext);
+            let item2 = testDesignComponent(currentItem2, designItem, mode, view, displayContext, userContext);
 
             chai.assert.equal(item1.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
             chai.assert.equal(item2.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -168,37 +105,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -214,37 +126,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -259,37 +146,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -304,37 +166,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -349,37 +186,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -394,37 +206,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -436,37 +223,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -478,37 +240,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -523,37 +260,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -565,37 +277,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Make sure item is open
             item.setState({open: true});
@@ -610,37 +297,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse over
             item.setState({highlighted: true});
@@ -653,37 +315,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: false});
@@ -699,37 +336,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse over
             item.setState({highlighted: true});
@@ -742,38 +354,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
-
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
             // Simulate mouse not over
             item.setState({highlighted: false});
 
@@ -788,37 +374,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse over
             item.setState({highlighted: true});
@@ -831,37 +392,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: true});
@@ -874,37 +410,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: true});
@@ -917,37 +428,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT};
             const designItem = {};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;
             const userContext = {designVersionId: 'ABC', designComponentId: 'componentId'};
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = ['componentId'];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Simulate mouse not over
             item.setState({highlighted: true});
@@ -965,38 +451,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId'};
             const designItem = {_id: 'designComponentId'};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'designComponentId'};  // Context has current item id
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-
-            let item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
@@ -1007,37 +467,12 @@ describe('JSX: DesignComponent', () => {
 
             const currentItem = {_id: 'componentId'};
             const designItem = {_id: 'designComponentId'};
-            const updateItem = {};
-            const isDragDropHovering = false;
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
             const userContext = {designVersionId: 'ABC', designComponentId: 'anotherComponentId'};  // Context has different item id
-            const testSummary = false;
-            const testSummaryData = {};
-            const testDataFlag = false;
-            const openDesignItems = [];
-            const openDesignUpdateItems = [];
-            const openWorkPackageItems = [];
 
-            const item = shallow(
-                <DesignComponent
-                    currentItem={currentItem}
-                    designItem={designItem}
-                    updateItem={updateItem}
-                    isDragDropHovering={isDragDropHovering}
-                    displayContext={displayContext}
-                    testSummary={testSummary}
-                    testSummaryData={testSummaryData}
-                    mode={mode}
-                    view={view}
-                    userContext={userContext}
-                    openDesignItems={openDesignItems}
-                    openDesignUpdateItems={openDesignUpdateItems}
-                    openWorkPackageItems={openWorkPackageItems}
-                    testDataFlag={testDataFlag}
-                />
-            );
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
 
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
@@ -1045,5 +480,41 @@ describe('JSX: DesignComponent', () => {
 
     });
 
+    // Design Update Components ----------------------------------------------------------------------------------------
+
+    describe('A Design Update component is highlighted when it is selected', () => {
+
+        it('is highlighted if selected', () => {
+
+            const currentItem = {_id: 'updateComponentId'};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'updateComponentId'};  // Context has current item id
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Component has active style
+            chai.assert.equal(item.find('#designComponent').props().className, 'design-component dc-active', 'Expected component to be active');
+
+        });
+
+        it('another component is not highlighted', () => {
+
+            const currentItem = {_id: 'updateComponentId'};
+            const designItem = {_id: 'designComponentId'};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.WORK_PACKAGE_BASE_VIEW;
+            const displayContext = DisplayContext.WP_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'anotherComponentId'};  // Context has different item id
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Component has active style
+            chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
+        });
+
+    });
 });
 

@@ -11,15 +11,30 @@ import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: EditDesignContainer', () => {
 
+    function testEditDesignContainer(mode, view, viewOptions){
+
+        const baseApplications = [];
+        const userContext = {};
+        const currentViewDataValue = false;
+
+        return shallow(
+            <DesignApplicationsList
+                baseApplications={baseApplications}
+                userContext={userContext}
+                mode={mode}
+                view={view}
+                viewOptions={viewOptions}
+                currentViewDataValue={currentViewDataValue}
+            />
+        );
+    }
+
     describe('The Details pane may be shown', () => {
 
         it('is shown when Details selected', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -28,16 +43,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 1, 'Details not found');
@@ -48,11 +54,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('is not shown when Details not selected', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -61,16 +64,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 0, 'Details is visible');
@@ -81,11 +75,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('is shown when Dictionary selected', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -94,16 +85,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column3').length, 1, 'Dictionary not found');
@@ -114,11 +96,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('is not shown when Dictionary not selected', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -127,16 +106,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column3').length, 0, 'Domain Dictionary is visible');
@@ -147,11 +117,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design only pane fills half the screen', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -160,16 +127,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 0, 'Details visible');
@@ -180,11 +138,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design only and Test Summary, Design+Summary fills whole screen', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // No extra stuff selected but test summary on
             const viewOptions = {
@@ -193,16 +148,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   true,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 0, 'Details visible');
@@ -213,11 +159,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design and Details each fills half the screen', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // Details selected
             const viewOptions = {
@@ -226,16 +169,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 1, 'Details not found');
@@ -247,11 +181,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design, Details and Dictionary each fills a third of the screen', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // Details and Dictionaryselected
             const viewOptions = {
@@ -260,16 +191,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 1, 'Details not found');
@@ -282,11 +204,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design, Details and Test Summary, Design+Summary is two thirds', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // Details selected, test summary showing
             const viewOptions = {
@@ -295,16 +214,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   true,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 1, 'Details not found');
@@ -316,11 +226,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design, Dictionary and Test Summary, Design+Summary is two thirds', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // Dictionary selected, test summary showing
             const viewOptions = {
@@ -329,16 +236,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   true,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 0, 'Details visible');
@@ -350,11 +248,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('when Design, Details, Dictionary and Test Summary, Design+Summary is half and others a quarter each', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_PUBLISHED_VIEW;
-            const currentViewDataValue = false;
 
             // Details, Dict and Test Summary selected
             const viewOptions = {
@@ -363,16 +258,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   true,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#column1').length, 1, 'Designs not found');
             chai.assert.equal(item.find('#column2').length, 1, 'Details not found');
@@ -388,11 +274,8 @@ describe('JSX: EditDesignContainer', () => {
 
         it('add application visible in edit mode', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -401,27 +284,15 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#addApplication').length, 1, 'Add application not found');
         });
 
         it('add application not visible in view mode', () => {
 
-            const baseApplications = [];
-            const userContext = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
-            const currentViewDataValue = false;
 
             // No extra stuff selected
             const viewOptions = {
@@ -430,16 +301,7 @@ describe('JSX: EditDesignContainer', () => {
                 designTestSummaryVisible:   false,
             };
 
-            const item = shallow(
-                <DesignApplicationsList
-                    baseApplications={baseApplications}
-                    userContext={userContext}
-                    mode={mode}
-                    view={view}
-                    viewOptions={viewOptions}
-                    currentViewDataValue={currentViewDataValue}
-                />
-            );
+            const item = testEditDesignContainer(mode, view, viewOptions);
 
             chai.assert.equal(item.find('#addApplication').length, 0, 'Add application found');
         });

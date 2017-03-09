@@ -23,8 +23,6 @@ describe('JSX: DesignComponentHeader', () => {
         const testSummaryData = {};
         const isOpen = true;
         const testDataFlag = false;
-        const viewOptions = {};
-
 
         return shallow(
             <DesignComponentHeader
