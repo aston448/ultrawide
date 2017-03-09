@@ -98,7 +98,7 @@ class WorkPackageFeatureMashList extends Component {
 
     render() {
 
-        const {designMashItemData, nonDesignScenarioData, existingFeatureFile, displayContext, userContext, userRole} = this.props;
+        const {designMashItemData, nonDesignScenarioData, existingFeatureFile, displayContext, userContext, userRole, testDataStale} = this.props;
 
         let panelHeader = '';
         let secondPanelHeader = '';
@@ -178,7 +178,7 @@ class WorkPackageFeatureMashList extends Component {
 
         let mainPanel = <div></div>;
 
-        if(designMashItemData.length > 0) {
+        if(designMashItemData.length > 0 && !testDataStale) {
             switch(userContext.designComponentType){
                 case ComponentType.APPLICATION:
                 case ComponentType.DESIGN_SECTION:
@@ -267,10 +267,21 @@ class WorkPackageFeatureMashList extends Component {
             }
         } else {
 
-            if(userContext.designComponentId === 'NONE'){
-                mainPanel = <div className="design-item-note">Select a Design item</div>;
+            if(testDataStale){
+
+                // Reloading data
+                mainPanel =
+                    <div className="design-item-note">Loading test data...</div>;
+
             } else {
-                mainPanel = <div className="design-item-note">No data for this item - try refreshing test data</div>;
+
+                // No data for some reason
+                if (userContext.designComponentId === 'NONE') {
+                    mainPanel = <div className="design-item-note">Select a Design item</div>;
+                } else {
+                    mainPanel =
+                        <div className="design-item-note">No data for this item - try refreshing test data</div>;
+                }
             }
 
         }
@@ -297,7 +308,8 @@ WorkPackageFeatureMashList.propTypes = {
 function mapStateToProps(state) {
     return {
         userContext:        state.currentUserItemContext,
-        userRole:           state.currentUserRole
+        userRole:           state.currentUserRole,
+        testDataStale:      state.testDataStale,
     }
 }
 

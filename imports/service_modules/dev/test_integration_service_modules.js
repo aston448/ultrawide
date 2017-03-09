@@ -901,8 +901,32 @@ class TestIntegrationModules{
             // Get the Module test results for current user
             log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Test Results for User {}", userContext.userId);
 
-            // Remove current module test mash
-            UserUnitTestMashData.remove({userId: userContext.userId});
+            // Set all unit tests as stale...  Anything that is not refreshed will be deleted
+            // Set everything to Pending so the screen visually refreshes
+            UserUnitTestMashData.update(
+                {
+                    userId: userContext.userId
+                },
+                {
+                    $set:{
+                        testOutcome: MashTestStatus.MASH_PENDING,
+                        isStale: true
+                    }
+                },
+                {multi: true}
+            );
+
+            UserWorkPackageMashData.update(
+                {
+                    userId: userContext.userId
+                },
+                {
+                    $set: {
+                        unitMashTestStatus: MashTestStatus.MASH_PENDING
+                    }
+                },
+                {multi: true}
+            );
 
             const unitResultsData = UserUnitTestResults.find({userId: userContext.userId}).fetch();
 
@@ -950,30 +974,58 @@ class TestIntegrationModules{
                                 {
                                     $set: {
                                         unitMashStatus: MashStatus.MASH_LINKED,
-                                        unitMashTestStatus: MashTestStatus.MASH_PENDING // Depends on the sum of all Module tests
+                                        //unitMashTestStatus: MashTestStatus.MASH_PENDING // Depends on the sum of all Module tests
                                     }
                                 }
                             );
 
-                            // Insert a child Module Test record
-                            UserUnitTestMashData.insert(
-                                {
-                                    // Identity
-                                    userId:                      userContext.userId,
-                                    suiteName:                   designScenario.designComponentName,
-                                    testGroupName:               testIdentity.subSuite,
-                                    designScenarioReferenceId:   designScenario.designScenarioReferenceId,
-                                    designAspectReferenceId:     designScenario.designFeatureAspectReferenceId,
-                                    designFeatureReferenceId:    designScenario.designFeatureReferenceId,
-                                    // Data
-                                    testName:                    testResult.testName,
-                                    // Status
-                                    mashStatus:                  MashStatus.MASH_LINKED,
-                                    testOutcome:                 testResult.testResult,
-                                    testErrors:                  testError,
-                                    testStack:                   testStack
-                                }
-                            );
+                            // Update or insert
+                            const existingUnitTest = UserUnitTestMashData.findOne({
+                                userId:                      userContext.userId,
+                                suiteName:                   designScenario.designComponentName,
+                                testGroupName:               testIdentity.subSuite,
+                                testName:                    testResult.testName
+                            });
+
+                            if(existingUnitTest){
+
+                                // Update existing module result
+                                UserUnitTestMashData.update(
+                                    {_id: existingUnitTest._id},
+                                    {
+                                        $set:{
+                                            mashStatus:         MashStatus.MASH_LINKED,
+                                            testOutcome:        testResult.testResult,
+                                            testErrors:         testError,
+                                            testStack:          testStack,
+                                            isStale:            false
+                                        }
+                                    }
+                                )
+
+                            } else {
+
+                                // Insert a new child Module Test record
+                                UserUnitTestMashData.insert(
+                                    {
+                                        // Identity
+                                        userId:                      userContext.userId,
+                                        suiteName:                   designScenario.designComponentName,
+                                        testGroupName:               testIdentity.subSuite,
+                                        designScenarioReferenceId:   designScenario.designScenarioReferenceId,
+                                        designAspectReferenceId:     designScenario.designFeatureAspectReferenceId,
+                                        designFeatureReferenceId:    designScenario.designFeatureReferenceId,
+                                        // Data
+                                        testName:                    testResult.testName,
+                                        // Status
+                                        mashStatus:                  MashStatus.MASH_LINKED,
+                                        testOutcome:                 testResult.testResult,
+                                        testErrors:                  testError,
+                                        testStack:                   testStack,
+                                        isStale:                     false
+                                    }
+                                );
+                            }
 
                             linked = true;
                         }
@@ -1002,10 +1054,13 @@ class TestIntegrationModules{
                     }
                 });
 
+                // Remove any stuff that is still stale - tests that have gone or changed
+                UserUnitTestMashData.remove({isStale: true});
+
                 // Now update the mod test status of the scenario:
                 // Any failures = FAIL
                 // Any passes and no failures = PASS
-                // Neither = PENDING
+                // Neither = NO TEST
                 mashScenarios.forEach((designScenario) => {
 
                     const modPassCount = UserUnitTestMashData.find({
@@ -1022,7 +1077,8 @@ class TestIntegrationModules{
                         testOutcome:                MashTestStatus.MASH_FAIL
                     }).count();
 
-                    let scenarioTestStatus = MashTestStatus.MASH_PENDING;
+                    let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
+
                     if(modPassCount > 0){
                         scenarioTestStatus = MashTestStatus.MASH_PASS;
                     }
@@ -1031,17 +1087,16 @@ class TestIntegrationModules{
                         scenarioTestStatus = MashTestStatus.MASH_FAIL;
                     }
 
-                    // Update the Mash if no longer pending
-                    if(scenarioTestStatus != MashTestStatus.MASH_PENDING) {
-                        UserWorkPackageMashData.update(
-                            {_id: designScenario._id},
-                            {
-                                $set: {
-                                    unitMashTestStatus: scenarioTestStatus
-                                }
+                    // Update the Mash i
+                    UserWorkPackageMashData.update(
+                        {_id: designScenario._id},
+                        {
+                            $set: {
+                                unitMashTestStatus: scenarioTestStatus
                             }
-                        );
-                    }
+                        }
+                    );
+
                 });
 
             } else {

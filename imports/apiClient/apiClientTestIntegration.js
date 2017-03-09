@@ -432,7 +432,7 @@ class ClientTestIntegrationServices {
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
-            messageText: 'Updating test mash...  Please wait...'
+            messageText: 'Synchronising server test design data...'
         }));
 
         ServerTestIntegrationApi.populateWorkPackageMashData(userContext, (err, result) => {
@@ -474,7 +474,7 @@ class ClientTestIntegrationServices {
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
-            messageText: 'Loading test results... Please wait...'
+            messageText: 'Synchronising server test results data...'
         }));
 
         ServerTestIntegrationApi.updateTestData(userContext, viewOptions, (err, result) => {
@@ -501,6 +501,7 @@ class ClientTestIntegrationServices {
                 }
             }
         });
+
     };
 
     // Update the test summary data
@@ -508,7 +509,7 @@ class ClientTestIntegrationServices {
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
-            messageText: 'Loading test summary data... Please wait...'
+            messageText: 'Synchronising server test summary data...'
         }));
 
         ServerTestIntegrationApi.updateTestSummaryData(userContext, (err, result) => {
@@ -531,6 +532,10 @@ class ClientTestIntegrationServices {
                 store.dispatch(setTestSummaryDataLoadedTo(true));
             }
         });
+
+        // Have a go at an early update in case data is there on client
+        store.dispatch(updateTestDataFlag(!testDataFlag));
+        testDataFlag = !testDataFlag;
 
     };
 
