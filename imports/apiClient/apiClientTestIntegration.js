@@ -199,7 +199,7 @@ class ClientTestIntegrationServices {
         if(!testIntegrationDataContext.testIntegrationDataLoaded){
 
             // Load first and then continue
-            ClientContainerServices.getTestIntegrationData(userContext.userId, () => this.updateTestSummaryCallback(view, userContext, userRole, viewOptions, testDataFlag, testIntegrationDataContext));
+            ClientContainerServices.getTestIntegrationData(userContext.userId, () => this.updateTestSummaryCallback(view, userContext, viewOptions, testDataFlag));
         } else {
 
             // Just continue

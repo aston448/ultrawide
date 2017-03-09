@@ -450,6 +450,33 @@ describe('JSX: AppHeader', () => {
 
     describe('The Design Update editor has an option to show or hide the Test Summary when in View Only mode', () => {
 
+        it('is available when viewing a design update', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const userRole = RoleType.DEVELOPER;
+            const userName = 'hugh';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butTestSummary')).to.have.length(1);
+        });
+
+        it('is available for design update in edit mode with view only option', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butTestSummary')).to.have.length(1);
+        });
+    });
+
+    describe('The Test Summary cannot be displayed in edit mode', () => {
+
         it('is not available when editing a design update', () => {
 
             const mode = ViewMode.MODE_EDIT;
@@ -460,18 +487,6 @@ describe('JSX: AppHeader', () => {
             let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butTestSummary')).to.have.length(0);
-        });
-
-        it('is available when viewing a design update', () => {
-
-            const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_UPDATE_VIEW;
-            const userRole = RoleType.DESIGNER;
-            const userName = 'gloria';
-
-            let item = testAppHeader(mode, view, userRole, userName);
-
-            chai.expect(item.find('#butTestSummary')).to.have.length(1);
         });
     });
 });

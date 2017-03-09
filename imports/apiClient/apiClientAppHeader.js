@@ -8,7 +8,7 @@ import { DesignUpdateComponents } from '../collections/design_update/design_upda
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewOptionType, ComponentType, RoleType, MessageType } from '../constants/constants.js';
+import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, MessageType } from '../constants/constants.js';
 import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration.js';
 
 
@@ -31,8 +31,17 @@ import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurren
 
 class ClientAppHeaderServices{
 
-    setEditorMode(newMode){
+    setEditorMode(newMode, view, viewOptions){
+
         // Sets the design editor to Edit or View mode
+
+        // If in Design Update Edit need to make sure Test Summary turned off when going back to edit mode...
+        if(view === ViewType.DESIGN_UPDATE_EDIT && newMode === ViewMode.MODE_EDIT){
+            viewOptions.updateTestSummaryVisible = false;
+
+            store.dispatch(setCurrentUserViewOptions(viewOptions, true));
+        }
+
         store.dispatch(setCurrentViewMode(newMode));
         return true;
     };

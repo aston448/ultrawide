@@ -43,9 +43,9 @@ export class AppHeader extends Component {
         super(props);
     }
 
-    onSetEditViewMode(newMode){
+    onSetEditViewMode(newMode, view, viewOptions){
         // Set editor as edit or view mode
-        ClientAppHeaderServices.setEditorMode(newMode);
+        ClientAppHeaderServices.setEditorMode(newMode, view, viewOptions);
     }
 
     onToggleViewOption(view, userContext, userRole, viewOptionType, currentOptions, currentViewDataValue, testDataFlag){
@@ -208,9 +208,9 @@ export class AppHeader extends Component {
 
         // View Mode and Zoom buttons
         let viewModeEditButton =
-            <Button id="butEdit" bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT)}>EDIT</Button>;
+            <Button id="butEdit" bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT, view, userViewOptions)}>EDIT</Button>;
         let viewModeViewButton =
-            <Button id="butView" bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW)}>VIEW</Button>;
+            <Button id="butView" bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW, view, userViewOptions)}>VIEW</Button>;
 
         let viewFeatureLevelButton =
             <Button id="butZoomFeatures" bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToFeatures(userContext)}>Go to Features</Button>;
@@ -449,15 +449,29 @@ export class AppHeader extends Component {
                             {viewSectionLevelButton}
                         </ButtonGroup>
                     </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {scopeFixedButton}
-                            {designFixedButton}
-                            {detailsButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
+                if(mode === ViewMode.MODE_VIEW){
+                    headerBottomActionsTwo =
+                        <ButtonToolbar>
+                            <ButtonGroup>
+                                {designFixedButton}
+                                {detailsButton}
+                                {domainDictionaryButton}
+                            </ButtonGroup>
+                            <ButtonGroup>
+                                {testSummaryButton}
+                            </ButtonGroup>
+                        </ButtonToolbar>;
+                } else {
+                    headerBottomActionsTwo =
+                        <ButtonToolbar>
+                            <ButtonGroup>
+                                {scopeFixedButton}
+                                {designFixedButton}
+                                {detailsButton}
+                                {domainDictionaryButton}
+                            </ButtonGroup>
+                        </ButtonToolbar>;
+                }
                 break;
             case ViewType.DESIGN_UPDATE_VIEW:
                 headerUserInfo = userData;
