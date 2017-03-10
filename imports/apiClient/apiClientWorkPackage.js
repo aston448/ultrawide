@@ -17,7 +17,7 @@ import ClientTestIntegrationServices   from './apiClientTestIntegration';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo, setWorkPackageDataLoadedTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo, setTestDataStaleTo, setWorkPackageDataLoadedTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -322,21 +322,21 @@ class ClientWorkPackageServices {
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // User clicks on a WP to select it
-    selectWorkPackage(userRole, userContext, workPackage){
+    selectWorkPackage(userRole, userContext, workPackage, testIntegrationDataContext){
 
         let newContext = userContext;
 
         if((workPackage.workPackageStatus === WorkPackageStatus.WP_NEW) && (userRole != RoleType.MANAGER)){
             // Not selectable
         } else {
-            newContext = this.setWorkPackage(userContext, workPackage._id);
+            newContext = this.setWorkPackage(userContext, workPackage._id, testIntegrationDataContext);
         }
 
         return newContext.userContext;
     }
 
     // Sets the currently selected work package as part of the global state
-    setWorkPackage(userContext, newWorkPackageId){
+    setWorkPackage(userContext, newWorkPackageId, testIntegrationDataContext){
 
         // Returns updated context so this can be passed on if needed
 
@@ -358,18 +358,21 @@ class ClientWorkPackageServices {
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
-            // If we are changing WP, set the Design Mash data as stale as we need to reload a new lot
+            // If we are changing WP, set the Design Mash and Test data as stale as we need to reload a new lot
             store.dispatch(setMashDataStaleTo(true));
+            store.dispatch(setTestDataStaleTo(true));
+            testIntegrationDataContext.mashDataStale = true;
+            testIntegrationDataContext.testDataStale = true;
 
             // Subscribe to the appropriate data for the new WP if WP changing
             store.dispatch(setWorkPackageDataLoadedTo(false));
             ClientContainerServices.getWorkPackageData(newContext);
 
-            return {userContext: newContext, mashStale: true};
+            return {userContext: newContext, testIntegrationDataContext: testIntegrationDataContext};
         }
 
         // Not an error - just indicates no update needed
-        return {userContext: userContext, mashStale: false};
+        return {userContext: userContext, testIntegrationDataContext: testIntegrationDataContext};
     };
 
     // Manager chose to edit a Work Package ----------------------------------------------------------------------------
@@ -452,7 +455,7 @@ class ClientWorkPackageServices {
         }
 
         // Set the current context
-        let updatedContext = this.setWorkPackage(userContext, wpToDevelopId);
+        let updatedContext = this.setWorkPackage(userContext, wpToDevelopId, testIntegrationDataContext);
 
         // Get new View...
         let view = ViewType.SELECT;
@@ -463,7 +466,7 @@ class ClientWorkPackageServices {
         }
 
         // Load dev data - will update test data once loaded and switch the view
-        ClientTestIntegrationServices.loadUserDevData(updatedContext.userContext, userRole, viewOptions, view, testDataFlag, testIntegrationDataContext);
+        ClientTestIntegrationServices.loadUserDevData(updatedContext.userContext, userRole, viewOptions, view, testDataFlag, updatedContext.testIntegrationDataContext);
 
         return {success: true, message: ''};
 

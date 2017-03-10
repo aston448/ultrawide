@@ -108,7 +108,8 @@ export class WorkPackage extends Component {
         ClientWorkPackageServices.selectWorkPackage(
             userRole,
             userContext,
-            wp
+            wp,
+            this.getTestIntegrationDataContext()
         );
     };
 
