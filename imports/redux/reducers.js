@@ -30,7 +30,8 @@ const initialState = {
     testSummaryDataLoaded:              false,      // True when the Test Summmary data has been calculated
     testDataStale:                      true,       // True when new test data is available
     mashDataStale:                      true,       // True when design has changed or mash needs recalculating
-    currentViewOptionsDataValue:        false
+    currentViewOptionsDataValue:        false,
+    openItemsFlag:                      false
 
 };
 
@@ -135,6 +136,10 @@ export function myApplication(state = initialState, action) {
         case Actions.UPDATE_VIEW_OPTIONS_DATA:
             return Object.assign({}, state, {
                 currentViewOptionsDataValue: action.newDataValue
+            });
+        case Actions.UPDATE_OPEN_ITEMS_FLAG:
+            return Object.assign({}, state, {
+                openItemsFlag: action.newFlagValue
             });
 
         default:

@@ -142,7 +142,7 @@ class ClientWorkPackageServices {
                 // Client actions:
 
                 // Ensure that the published WP is set in the current user context
-                this.setWorkPackage(userContext, workPackageToPublishId);
+                this.setWorkPackage(userRole, userContext, workPackageToPublishId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -180,7 +180,7 @@ class ClientWorkPackageServices {
                 // Client actions:
 
                 // Ensure that the published WP is set in the current user context
-                this.setWorkPackage(userContext, workPackageToWithdrawId);
+                this.setWorkPackage(userRole, userContext, workPackageToWithdrawId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -218,7 +218,7 @@ class ClientWorkPackageServices {
                 // Client actions:
 
                 // Ensure that the adopted WP is set in the current user context
-                this.setWorkPackage(userContext, workPackageId);
+                this.setWorkPackage(userRole, userContext, workPackageId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -329,14 +329,14 @@ class ClientWorkPackageServices {
         if((workPackage.workPackageStatus === WorkPackageStatus.WP_NEW) && (userRole != RoleType.MANAGER)){
             // Not selectable
         } else {
-            newContext = this.setWorkPackage(userContext, workPackage._id, testIntegrationDataContext);
+            newContext = this.setWorkPackage(userRole, userContext, workPackage._id, testIntegrationDataContext);
         }
 
         return newContext.userContext;
     }
 
     // Sets the currently selected work package as part of the global state
-    setWorkPackage(userContext, newWorkPackageId, testIntegrationDataContext){
+    setWorkPackage(userRole, userContext, newWorkPackageId, testIntegrationDataContext){
 
         // Returns updated context so this can be passed on if needed
 
@@ -358,11 +358,13 @@ class ClientWorkPackageServices {
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
-            // If we are changing WP, set the Design Mash and Test data as stale as we need to reload a new lot
-            store.dispatch(setMashDataStaleTo(true));
-            store.dispatch(setTestDataStaleTo(true));
-            testIntegrationDataContext.mashDataStale = true;
-            testIntegrationDataContext.testDataStale = true;
+            // If we are changing WP as DEVELOPER, set the Design Mash and Test data as stale as we need to reload a new lot
+            if(userRole == RoleType.DEVELOPER && testIntegrationDataContext) {
+                store.dispatch(setMashDataStaleTo(true));
+                store.dispatch(setTestDataStaleTo(true));
+                testIntegrationDataContext.mashDataStale = true;
+                testIntegrationDataContext.testDataStale = true;
+            }
 
             // Subscribe to the appropriate data for the new WP if WP changing
             store.dispatch(setWorkPackageDataLoadedTo(false));
@@ -389,7 +391,7 @@ class ClientWorkPackageServices {
         }
 
         // Ensure that the current WP is the WP we chose to edit
-        this.setWorkPackage(userContext, workPackageToEditId);
+        this.setWorkPackage(userRole, userContext, workPackageToEditId);
 
         // Actually in View mode as you can't change the Design
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
@@ -422,7 +424,7 @@ class ClientWorkPackageServices {
         }
 
         // Ensure that the current update is the update we chose to view
-        this.setWorkPackage(userContext, workPackageToViewId);
+        this.setWorkPackage(userRole, userContext, workPackageToViewId);
 
         // Make sure in View only mode so no Design Editing
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
@@ -455,7 +457,7 @@ class ClientWorkPackageServices {
         }
 
         // Set the current context
-        let updatedContext = this.setWorkPackage(userContext, wpToDevelopId, testIntegrationDataContext);
+        let updatedContext = this.setWorkPackage(userRole, userContext, wpToDevelopId, testIntegrationDataContext);
 
         // Get new View...
         let view = ViewType.SELECT;

@@ -333,26 +333,6 @@ class ClientDesignUpdateServices {
             return {success: false, message: result};
         }
 
-        // Open the update scope down to the Feature level
-        const designUpdateOpenComponents = DesignUpdateComponents.find(
-            {
-                designUpdateId: designUpdateToEditId,
-                componentType: {$in:[ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-            },
-            {fields: {_id: 1}}
-        );
-
-        let duArr = [];
-        designUpdateOpenComponents.forEach((component) => {
-            duArr.push(component._id);
-        });
-
-        store.dispatch(setCurrentUserOpenDesignUpdateItems(
-            duArr,
-            null,
-            null
-        ));
-
         // Ensure that the current update is the update we chose to edit
         const newContext = this.setDesignUpdate(userContext, designUpdateToEditId);
 

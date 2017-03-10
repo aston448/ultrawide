@@ -77,8 +77,29 @@ class RoleAction extends Component {
             case UltrawideAction.ACTION_LAST_DESIGNER:
             case UltrawideAction.ACTION_LAST_DEVELOPER:
             case UltrawideAction.ACTION_LAST_MANAGER:
-                ClientUserContextServices.setOpenDesignVersionItems(userContext, userRole);
-                ClientUserContextServices.setViewFromUserContext(userContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
+
+                let newContext = userContext;
+
+                if(userContext.workPackageId === 'NONE') {
+
+                    // Not going to a WP so open any Design Version items that need it...
+                    if (store.getState().designVersionDataLoaded) {
+
+                        newContext = ClientUserContextServices.setOpenDesignVersionItems(userContext);
+                    }
+
+                } else {
+
+                    // If the data is there, open the WP items that need it
+                    if (store.getState().workPackageDataLoaded) {
+
+                        newContext = ClientUserContextServices.setOpenWorkPackageItems(userContext);
+                    }
+                }
+
+                // And now go to the correct view
+                ClientUserContextServices.setViewFromUserContext(newContext, userRole, testIntegrationDataContext, this.props.testDataFlag);
+
                 break;
             case UltrawideAction.ACTION_TEST_CONFIGURE:
                 ClientAppHeaderServices.setViewConfigure();

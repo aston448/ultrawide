@@ -19,11 +19,14 @@ import { WorkPackageComponents }    from '../collections/work/work_package_compo
 import { RoleType, ViewType, ViewMode, DisplayContext, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel, WorkPackageStatus, WorkPackageType } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 
-import ClientContainerServices          from '../apiClient/apiClientContainerServices.js';
-import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
-import ClientDesignComponentServices    from '../apiClient/apiClientDesignComponent.js';
+import ClientContainerServices              from '../apiClient/apiClientContainerServices.js';
+import ClientDesignVersionServices          from '../apiClient/apiClientDesignVersion.js';
+import ClientDesignComponentServices        from '../apiClient/apiClientDesignComponent.js';
+import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUpdate.js';
+import ClientDesignUpdateComponentServices  from '../apiClient/apiClientDesignUpdateComponent.js';
+import ClientWorkPackageServices            from '../apiClient/apiClientWorkPackage.js';
+import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPackageComponent.js';
+
 
 
 // REDUX services
@@ -248,110 +251,103 @@ class ClientUserContextServices {
             });
 
 
-            // Plus for the actual open item context, open all the way down to that item
-            log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
+            // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
+            log((msg) => console.log(msg), LogLevel.INFO, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
             if (userContext.designComponentId != 'NONE') {
 
                 // There is a current component...
                 if (userContext.designUpdateId != 'NONE') {
+
                     // In a Design update so open to the DU component
 
                     let duComponent = DesignUpdateComponents.findOne({
                         _id: userContext.designComponentId
                     });
 
+                    console.log("Opening design update component " + duComponent.componentNameNew);
+
                     if(duComponent) {
-                        if (duComponent.componentParentIdNew === 'NONE') {
-                            // No Parent, just make sure component is open
-                            if (!duArr.includes(duComponent._id)) {
-                                duArr.push(duComponent._id);
-                            }
-                        } else {
-                            // Get the parent
-                            let duParent = DesignUpdateComponents.findOne({
-                                _id: duComponent.componentParentIdNew
-                            });
 
-                            // Keep going up until the parent is already open or top of tree
-                            while (!duArr.includes(duParent._id) && duParent.componentParentIdNew != 'NONE') {
-                                duComponent = duParent;
+                        switch(duComponent.componentType){
 
-                                if (!duArr.includes(duComponent._id)) {
-                                    duArr.push(duComponent._id);
-                                }
-
-                                duParent = DesignUpdateComponents.findOne({
-                                    _id: duComponent.componentParentIdNew
-                                });
-                            }
-                        }
-                    } else {
-                        // Must be a base design component
-                        let baseComponent = DesignComponents.findOne({
-                            _id: userContext.designComponentId
-                        });
-
-                        if(baseComponent){
-                            if (baseComponent.componentParentId === 'NONE') {
-                                // No Parent, just make sure component is open
-                                if (!dvArr.includes(baseComponent._id)) {
-                                    dvArr.push(baseComponent._id);
-                                }
-                            } else {
-                                // Get the parent
-                                let dvParent = DesignComponents.findOne({
-                                    _id: baseComponent.componentParentId
+                            case ComponentType.APPLICATION:
+                            case ComponentType.DESIGN_SECTION:
+                                // Already open
+                                break;
+                            case ComponentType.FEATURE:
+                                // Open it and all stuff below
+                                duArr = ClientDesignUpdateComponentServices.setOpenClosed(duComponent, duArr, true);
+                                break;
+                            default:
+                                // Anything else is below a Feature so open the Feature and select that
+                                const duFeatureComponent = DesignUpdateComponents.findOne({
+                                    designUpdateId:         duComponent.designUpdateId,
+                                    componentReferenceId:   duComponent.componentFeatureReferenceIdNew
                                 });
 
-                                // Keep going up until the parent is already open or top of tree
-                                while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
-                                    baseComponent = dvParent;
+                                if(duFeatureComponent){
+                                    // Reset user context
+                                    userContext.designComponentId = duFeatureComponent._id;
+                                    userContext.designComponentType = ComponentType.FEATURE;
+                                    userContext.featureReferenceId = duFeatureComponent.componentReferenceId;
+                                    userContext.featureAspectReferenceId = 'NONE';
+                                    userContext.scenarioReferenceId = 'NONE';
+                                    userContext.scenarioStepId = 'NONE';
 
-                                    if (!dvArr.includes(baseComponent._id)) {
-                                        dvArr.push(baseComponent._id);
-                                    }
+                                    store.dispatch(setCurrentUserItemContext(userContext, true));
 
-                                    dvParent = DesignComponents.findOne({
-                                        _id: baseComponent.componentParentId
-                                    });
+                                    // Open the feature
+                                    duArr = ClientDesignUpdateComponentServices.setOpenClosed(duFeatureComponent, duArr, true);
                                 }
-                            }
                         }
+
                     }
 
                 } else {
+
+                    // No Design Update - is a design version chosen - really should be...
+
                     if (userContext.designVersionId != 'NONE') {
-                        // Just in a DV so open that component
 
                         let dvComponent = DesignComponents.findOne({
                             _id: userContext.designComponentId
                         });
 
-                        if (dvComponent.componentParentId === 'NONE') {
-                            // No Parent, just make sure component is open
-                            if (!dvArr.includes(dvComponent._id)) {
-                                dvArr.push(dvComponent._id);
-                            }
-                        } else {
-                            // Get the parent
-                            let dvParent = DesignComponents.findOne({
-                                _id: dvComponent.componentParentId
-                            });
+                        if(dvComponent) {
 
-                            // Keep going up until the parent is already open or top of tree
-                            while (!dvArr.includes(dvParent._id) && dvParent.componentParentId != 'NONE') {
-                                dvComponent = dvParent;
+                            switch(dvComponent.componentType){
 
-                                if (!dvArr.includes(dvComponent._id)) {
-                                    log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Opening {}", dvComponent.componentName);
-                                    dvArr.push(dvComponent._id);
-                                }
+                                case ComponentType.APPLICATION:
+                                case ComponentType.DESIGN_SECTION:
+                                    // Already open
+                                    break;
+                                case ComponentType.FEATURE:
+                                    // Open it and all stuff below
+                                    dvArr = ClientDesignComponentServices.setOpenClosed(dvComponent, dvArr, true);
+                                    break;
+                                default:
+                                    // Anything else is below a Feature so open the Feature and select that
+                                    const dvFeatureComponent = DesignComponents.findOne({
+                                        designVersionId:        dvComponent.designVersionId,
+                                        componentReferenceId:   dvComponent.componentFeatureReferenceId
+                                    });
 
-                                dvParent = DesignComponents.findOne({
-                                    _id: dvComponent.componentParentId
-                                });
+                                    if(dvFeatureComponent){
+                                        // Reset user context
+                                        userContext.designComponentId = dvFeatureComponent._id;
+                                        userContext.designComponentType = ComponentType.FEATURE;
+                                        userContext.featureReferenceId = dvFeatureComponent.componentReferenceId;
+                                        userContext.featureAspectReferenceId = 'NONE';
+                                        userContext.scenarioReferenceId = 'NONE';
+                                        userContext.scenarioStepId = 'NONE';
+
+                                        store.dispatch(setCurrentUserItemContext(userContext, true));
+
+                                        // Open the feature
+                                        dvArr = ClientDesignComponentServices.setOpenClosed(dvFeatureComponent, dvArr, true);
+                                    }
                             }
                         }
                     }
@@ -368,11 +364,15 @@ class ClientUserContextServices {
             null
         ));
 
+        console.log("second update of DU on User context");
         store.dispatch(setCurrentUserOpenDesignUpdateItems(
             duArr,
             null,
             null
         ));
+
+        // Return latest user context
+        return store.getState().currentUserItemContext;
     }
 
     setOpenWorkPackageItems(userContext){
@@ -396,7 +396,6 @@ class ClientUserContextServices {
                 {fields: {_id: 1}}
             );
 
-
             workPackageOpenComponents.forEach((component) => {
                 wpArr.push(component._id);
             });
@@ -415,31 +414,41 @@ class ClientUserContextServices {
                         componentId: userContext.designComponentId
                     });
 
-                    if (wpComponent.componentParentReferenceId === 'NONE') {
-                        // No Parent, just make sure component is open
-                        if (!wpArr.includes(wpComponent._id)) {
-                            wpArr.push(wpComponent._id);
-                        }
-                    } else {
-                        // Get the parent
-                        let wpParent = WorkPackageComponents.findOne({
-                            componentReferenceId: wpComponent.componentParentReferenceId
-                        });
+                    if(wpComponent) {
 
-                        // Keep going up until the parent is already open or top of tree
-                        while (!wpArr.includes(wpParent._id) && wpParent.componentParentReferenceId != 'NONE') {
-                            wpComponent = wpParent;
+                        switch(wpComponent.componentType){
 
-                            if (!wpArr.includes(wpComponent._id)) {
-                                wpArr.push(wpComponent._id);
-                            }
+                            case ComponentType.APPLICATION:
+                            case ComponentType.DESIGN_SECTION:
+                                // Already open
+                                break;
+                            case ComponentType.FEATURE:
+                                // Open it and all stuff below
+                                wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpComponent, wpArr, true);
+                                break;
+                            default:
+                                // Anything else is below a Feature so open the Feature and select that
+                                const wpFeatureComponent = WorkPackageComponents.findOne({
+                                    workPackageId:          wpComponent.workPackageId,
+                                    componentReferenceId:   wpComponent.componentFeatureReferenceId
+                                });
 
-                            wpParent = WorkPackageComponents.findOne({
-                                componentReferenceId: wpComponent.componentParentReferenceId
-                            });
+                                if(wpFeatureComponent){
+                                    // Reset user context.  Feature id is the DESIGN component ID, not the WP component ID
+                                    userContext.designComponentId = wpFeatureComponent.componentId;
+                                    userContext.designComponentType = ComponentType.FEATURE;
+                                    userContext.featureReferenceId = wpFeatureComponent.componentReferenceId;
+                                    userContext.featureAspectReferenceId = 'NONE';
+                                    userContext.scenarioReferenceId = 'NONE';
+                                    userContext.scenarioStepId = 'NONE';
+
+                                    store.dispatch(setCurrentUserItemContext(userContext, true));
+
+                                    // Open the feature
+                                    wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpFeatureComponent, wpArr, true);
+                                }
                         }
                     }
-
                 }
             }
         }
@@ -452,6 +461,9 @@ class ClientUserContextServices {
             null,
             null
         ));
+
+        // Return latest user context
+        return store.getState().currentUserItemContext;
     }
 
 
@@ -502,6 +514,7 @@ class ClientUserContextServices {
                                 if (designUpdate) {
                                     switch (designUpdate.updateStatus) {
                                         case DesignUpdateStatus.UPDATE_NEW:
+                                        case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
 
                                             // Go to edit update in Edit Mode
                                             if(userContext.designComponentId != 'NONE') {
@@ -725,9 +738,20 @@ class ClientUserContextServices {
                         break;
                     case ComponentType.FEATURE_ASPECT:
                         if (userContext.designUpdateId === 'NONE') {
-                            contextNameData.featureAspect = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+
+                            const contextFeatureAspect = DesignComponents.findOne({_id: userContext.designComponentId});
+
+                            if(contextFeatureAspect){
+                                contextNameData.featureAspect = contextFeatureAspect.componentName;
+                            }
+
                         } else {
-                            contextNameData.featureAspect = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+
+                            const contextUpdateFeatureAspect = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+                            if(contextUpdateFeatureAspect){
+                                contextNameData.featureAspect = contextUpdateFeatureAspect.componentNameNew;
+                            }
                         }
                         contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
                         contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
@@ -735,9 +759,21 @@ class ClientUserContextServices {
                         break;
                     case ComponentType.SCENARIO:
                         if (userContext.designUpdateId === 'NONE') {
-                            contextNameData.scenario = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
+
+                            const contextScenario = DesignComponents.findOne({_id: userContext.designComponentId});
+
+                            if(contextScenario){
+                                contextNameData.scenario = contextScenario.componentName;
+                            }
+
                         } else {
-                            contextNameData.scenario = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
+
+                            const contextUpdateScenario = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+
+                            if(contextUpdateScenario){
+                                contextNameData.scenario = contextUpdateScenario.componentNameNew;
+                            }
+
                         }
                         contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
                         contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
@@ -766,39 +802,50 @@ class ClientUserContextServices {
             if (context.designUpdateId === 'NONE') {
 
                 let currentItem = DesignComponents.findOne({_id: currentItemId});
-                let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+
+                if(currentItem) {
+                    let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
 
 
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
+                    while (parentItem && (parentItem.componentType != parentType) && (currentItem.componentParentId != 'NONE')) {
+                        currentItem = parentItem;
+                        parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
 
-                while (parentItem && (parentItem.componentType != parentType) && (currentItem.componentParentId != 'NONE')) {
-                    currentItem = parentItem;
-                    parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
-
-                    if (parentItem) {
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
-                    } else {
-                        log((msg) => console.log(msg), LogLevel.TRACE, "No more parents");
+                        if (parentItem) {
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
+                        } else {
+                            log((msg) => console.log(msg), LogLevel.TRACE, "No more parents");
+                        }
                     }
-                }
 
-                if(!parentItem){
+                    if (!parentItem) {
+                        return 'NONE';
+                    }
+
+                    return parentItem.componentName;
+
+                } else {
+
                     return 'NONE';
                 }
 
-                return parentItem.componentName;
-
             } else {
                 let currentUpdateItem = DesignUpdateComponents.findOne({_id: currentItemId});
-                let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+                if(currentUpdateItem) {
+                    let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
 
-                while ((parentUpdateItem.componentType != parentType) && (currentUpdateItem.componentParentIdNew != 'NONE')) {
-                    currentUpdateItem = parentUpdateItem;
-                    parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+                    while ((parentUpdateItem.componentType != parentType) && (currentUpdateItem.componentParentIdNew != 'NONE')) {
+                        currentUpdateItem = parentUpdateItem;
+                        parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
+                    }
+
+                    return parentUpdateItem.componentName;
+                } else {
+
+                    return 'NONE';
                 }
-
-                return parentUpdateItem.componentName;
             }
         } else {
             return 'NONE';

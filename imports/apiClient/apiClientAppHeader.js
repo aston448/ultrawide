@@ -14,7 +14,7 @@ import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentRole, setCurrentUserName, setCurrentViewMode, setCurrentView, setCurrentUserViewOptions, updateViewOptionsData, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag} from '../redux/actions'
 
 
 // =====================================================================================================================
@@ -82,6 +82,8 @@ class ClientAppHeaderServices{
 
     setViewLevelFeatures(userContext){
 
+        console.log("Setting to Features for user context WP: " + userContext.workPackageId);
+
         // Open everything down to the Feature level - i.e. all Applications and Design Sections and close everything else
         let componentArray = [];
 
@@ -106,6 +108,8 @@ class ClientAppHeaderServices{
                 null
             ));
 
+            store.dispatch((updateOpenItemsFlag()));
+
             return;
         }
 
@@ -129,6 +133,8 @@ class ClientAppHeaderServices{
                 null
             ));
 
+            store.dispatch((updateOpenItemsFlag()));
+
         } else {
 
             const designUpdateOpenComponents = DesignUpdateComponents.find(
@@ -149,6 +155,8 @@ class ClientAppHeaderServices{
                 null,
                 null
             ));
+
+            store.dispatch((updateOpenItemsFlag()));
 
         }
     }
@@ -181,6 +189,8 @@ class ClientAppHeaderServices{
                 null
             ));
 
+            store.dispatch((updateOpenItemsFlag()));
+
             return;
         }
 
@@ -207,6 +217,8 @@ class ClientAppHeaderServices{
                 null
             ));
 
+            store.dispatch((updateOpenItemsFlag()));
+
         } else {
 
             const designUpdateOpenComponents = DesignUpdateComponents.find(
@@ -230,6 +242,8 @@ class ClientAppHeaderServices{
                 null,
                 null
             ));
+
+            store.dispatch((updateOpenItemsFlag()));
 
         }
     }

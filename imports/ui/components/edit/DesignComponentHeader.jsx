@@ -886,7 +886,7 @@ export class DesignComponentHeader extends Component{
                             <div id="updateStatusIcon" className={updateStatusClass}></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
-                    <InputGroup.Addon onClick={ () => this.toggleOpen()}>
+                    <InputGroup.Addon id="openClose"  onClick={ () => this.toggleOpen()}>
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>

@@ -54,6 +54,7 @@ export const UPDATE_TEST_SUMMARY_DATA_LOADED_FLAG = 'UPDATE_TEST_SUMMARY_DATA_LO
 export const UPDATE_MASH_DATA_STALE_FLAG = 'UPDATE_MASH_DATA_STALE_FLAG';
 export const UPDATE_TEST_DATA_STALE_FLAG = 'UPDATE_TEST_DATA_STALE_FLAG';
 
+export const UPDATE_OPEN_ITEMS_FLAG = "UPDATE_OPEN_ITEMS_FLAG";
 
 // Flag to trigger redraw on update of view options
 export const UPDATE_VIEW_OPTIONS_DATA = 'UPDATE_VIEW_OPTIONS_DATA';
@@ -228,14 +229,15 @@ export function setCurrentUserOpenDesignItems(existingItems, componentId, newSta
                 }
             } else {
                 // Trying to set the component as CLOSED so remove from list if present
-                if (newItems.includes(componentId)) {
-                    newItems.pop(componentId);
+                const itemIndex = newItems.indexOf(componentId);
+
+                if (itemIndex >= 0) {
+                    newItems.splice(itemIndex, 1);
                 }
             }
         }
 
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_ITEMS, newUserOpenDesignItems: newItems});
-
     };
 
 }
@@ -248,7 +250,7 @@ export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newS
         let newItems = openItems;
 
         // Only adding or subtracting if a specific component id provided.  Otherwise assume a bulk set of data in existing items
-        if(componentId) {
+        if (componentId) {
             if (newState) {
                 // Trying to set the component as OPEN so add component to list if not there
                 if (!newItems.includes(componentId)) {
@@ -256,15 +258,16 @@ export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newS
                 }
             } else {
                 // Trying to set the component as CLOSED so remove from list if present
-                if (newItems.includes(componentId)) {
-                    newItems.pop(componentId);
+                const itemIndex = newItems.indexOf(componentId);
+
+                if (itemIndex >= 0) {
+                    newItems.splice(itemIndex, 1);
                 }
             }
         }
 
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS, newUserOpenDesignUpdateItems: newItems});
-
-    };
+    }
 
 }
 
@@ -284,8 +287,10 @@ export function setCurrentUserOpenWorkPackageItems(openItems, componentId, newSt
                 }
             } else {
                 // Trying to set the component as CLOSED so remove from list if present
-                if (newItems.includes(componentId)) {
-                    newItems.pop(componentId);
+                const itemIndex = newItems.indexOf(componentId);
+
+                if (itemIndex >= 0) {
+                    newItems.splice(itemIndex, 1);
                 }
             }
         }
@@ -381,5 +386,12 @@ export function updateViewOptionsData(newValue) {
 
     return function (dispatch) {
         dispatch({type: UPDATE_VIEW_OPTIONS_DATA, newDataValue: newValue});
+    };
+}
+
+export function updateOpenItemsFlag() {
+
+    return function (dispatch) {
+        dispatch({type: UPDATE_OPEN_ITEMS_FLAG, newFlagValue: !store.getState().openItemsFlag});
     };
 }

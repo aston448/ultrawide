@@ -14,7 +14,7 @@ import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUp
 
 // REDUX services
 import store from '../redux/store'
-import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage} from '../redux/actions'
+import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage, updateOpenItemsFlag} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Update Components
@@ -568,63 +568,83 @@ class ClientDesignUpdateComponentServices{
     // LOCAL CLIENT ACTIONS ============================================================================================
 
     // User opened or closed a design component
-    setOpenClosed(designComponent, currentList, newState){
+    setOpenClosed(designComponent, currentList, setOpen){
 
         if(designComponent.componentType === ComponentType.FEATURE){
-            // Open or close the whole feature
-            const featureComponents = DesignUpdateComponents.find(
-                {
-                    designVersionId: designComponent.designVersionId,
-                    designUpdateId: designComponent.designUpdateId,
-                    componentFeatureReferenceIdNew: designComponent.componentReferenceId
-                }
-            );
 
-            featureComponents.forEach((component) => {
-                store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                    currentList,
-                    component._id,
-                    newState
-                ));
-            });
+            // Open or close the whole feature
+            if(setOpen) {
+                const featureComponents = DesignUpdateComponents.find(
+                    {
+                        designVersionId: designComponent.designVersionId,
+                        designUpdateId: designComponent.designUpdateId,
+                        componentFeatureReferenceIdNew: designComponent.componentReferenceId,
+                        componentType: {$ne:(ComponentType.SCENARIO)}
+                    }
+                );
+
+                featureComponents.forEach((component) => {
+                    console.log("Setting component " + component.componentNameNew + " open to " + setOpen);
+                    store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                        currentList,
+                        component._id,
+                        setOpen
+                    ));
+                });
+
+                store.dispatch((updateOpenItemsFlag()));
+
+            } else {
+
+                // Close - close all children
+                this.closeChildren(designComponent, currentList);
+
+                store.dispatch((updateOpenItemsFlag()));
+            }
 
         } else {
-            if(newState){
+            if(setOpen){
                 // Open - just open this item
                 store.dispatch(setCurrentUserOpenDesignUpdateItems(
                     currentList,
                     designComponent._id,
-                    newState
+                    setOpen
                 ));
+
+                store.dispatch((updateOpenItemsFlag()));
             } else {
+
                 // Close - close all children
-                this.closeChildren(designComponent, currentList)
+                this.closeChildren(designComponent, currentList);
+
+                store.dispatch((updateOpenItemsFlag()));
             }
 
         }
 
-        return true;
+        return store.getState().currentUserOpenDesignUpdateItems;
     };
 
     // Recursive function to close all children down to the bottom of the tree
     closeChildren(designComponent, currentList){
 
+        store.dispatch(setCurrentUserOpenDesignUpdateItems(
+            currentList,
+            designComponent._id,
+            false
+        ));
+
         let childComponents = DesignUpdateComponents.find(
             {
                 designVersionId: designComponent.designVersionId,
                 designUpdateId: designComponent.designUpdateId,
-                componentParentReferenceIdNew: designComponent.componentReferenceId
+                componentParentReferenceIdNew: designComponent.componentReferenceId,
+                componentType: {$ne:(ComponentType.SCENARIO)}
             }
         );
 
         if(childComponents.count() > 0){
             childComponents.forEach((child) => {
-
-                store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                    currentList,
-                    designComponent._id,
-                    false
-                ));
 
                 // Recursively call for these children
                 this.closeChildren(child, currentList)

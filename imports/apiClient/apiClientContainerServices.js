@@ -147,7 +147,7 @@ class ClientContainerServices{
                         }));
 
                         // Set open items now that data is loaded
-                        ClientUserContextServices.setOpenDesignVersionItems(userContext);
+                        // ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
                         // If an action wanted after loading call it...
                         if (callback) {
@@ -1110,18 +1110,22 @@ class ClientContainerServices{
 
                     // Want the current version plus the related DU component to give old text if text has changed
                     currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
-                    const currentUpdateComponents = DesignUpdateComponents.find({
-                        designVersionId:        currentDesignComponent.designVersionId,
-                        componentReferenceId:   currentDesignComponent.componentReferenceId,
-                        isTextChanged:          true,
-                        isNew:                  false,
-                    }).fetch();
 
-                    // Could be more than one but all should have the same OLD values so just pick first
-                    if(currentUpdateComponents.length > 0){
-                        currentUpdateComponent = currentUpdateComponents[0];
-                    } else {
-                        currentUpdateComponent = null;
+                    if(currentDesignComponent) {
+
+                        const currentUpdateComponents = DesignUpdateComponents.find({
+                            designVersionId: currentDesignComponent.designVersionId,
+                            componentReferenceId: currentDesignComponent.componentReferenceId,
+                            isTextChanged: true,
+                            isNew: false,
+                        }).fetch();
+
+                        // Could be more than one but all should have the same OLD values so just pick first
+                        if (currentUpdateComponents.length > 0) {
+                            currentUpdateComponent = currentUpdateComponents[0];
+                        } else {
+                            currentUpdateComponent = null;
+                        }
                     }
                     break;
 
@@ -1317,6 +1321,7 @@ class ClientContainerServices{
 
         // Get user context current Design Component
         let selectedDesignComponent = null;
+
         if(selectionComponentId === 'NONE'){
             return [];
 
@@ -1325,6 +1330,10 @@ class ClientContainerServices{
                 selectedDesignComponent = DesignComponents.findOne({_id: selectionComponentId})
             } else {
                 selectedDesignComponent = DesignUpdateComponents.findOne({_id: selectionComponentId})
+            }
+
+            if(!selectedDesignComponent){
+                return [];
             }
 
             log((msg) => console.log(msg), LogLevel.TRACE, "User context is USER: {}, DV: {}, DU: {}, WP: {}",

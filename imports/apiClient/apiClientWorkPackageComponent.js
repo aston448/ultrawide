@@ -15,7 +15,7 @@ import ServerWorkPackageComponentApi     from '../apiServer/apiWorkPackageCompon
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserOpenWorkPackageItems, updateUserMessage} from '../redux/actions';
+import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Components
@@ -87,57 +87,71 @@ class ClientWorkPackageComponentServices {
     }
 
     // User opened or closed a WP component
-    setOpenClosed(wpComponent, currentList, newState){
+    setOpenClosed(wpComponent, currentList, setOpen){
 
         if(wpComponent.componentType === ComponentType.FEATURE){
+
             // Open or close the whole feature
-            const featureComponents = WorkPackageComponents.find(
-                {
-                    workPackageId: wpComponent.workPackageId,
-                    componentFeatureReferenceId: wpComponent.componentReferenceId
-                }
-            );
+            if(setOpen) {
 
-            featureComponents.forEach((component) => {
-
-                if(!currentList.includes(component._id && newState))
-                {
-                    currentList.push(component._id);
-
-                } else {
-
-                    if(currentList.includes(component._id && !newState)){
-                        currentList.pop(component._id)
+                const featureComponents = WorkPackageComponents.find(
+                    {
+                        workPackageId: wpComponent.workPackageId,
+                        componentFeatureReferenceId: wpComponent.componentReferenceId,
+                        componentType: {$ne:(ComponentType.SCENARIO)}
                     }
-                }
-            });
+                );
 
-            store.dispatch(setCurrentUserOpenWorkPackageItems(
-                currentList,
-                null,
-                null
-            ));
+                featureComponents.forEach((component) => {
+
+                    store.dispatch(setCurrentUserOpenWorkPackageItems(
+                        currentList,
+                        component._id,
+                        true
+                    ));
+
+                });
+
+                store.dispatch((updateOpenItemsFlag()));
+
+            } else {
+
+                this.closeChildren(wpComponent, currentList);
+                store.dispatch((updateOpenItemsFlag()));
+            }
 
         } else {
 
-            if(newState) {
+            if(setOpen) {
+
                 // Just open or close the item
                 store.dispatch(setCurrentUserOpenWorkPackageItems(
                     currentList,
                     wpComponent._id,
-                    newState
+                    setOpen
                 ));
+
+                store.dispatch((updateOpenItemsFlag()));
+
             } else {
+
                 // Close all items below
                 this.closeChildren(wpComponent, currentList);
+                store.dispatch((updateOpenItemsFlag()));
             }
         }
 
-        return true;
+        return store.getState().currentUserOpenWorkPackageItems;
     };
 
     // Recursive function to close all children down to the bottom of the tree
     closeChildren(wpComponent, currentList){
+
+        store.dispatch(setCurrentUserOpenWorkPackageItems(
+            currentList,
+            wpComponent._id,
+            false
+        ));
 
         let childComponents = DesignUpdateComponents.find(
             {
@@ -149,15 +163,8 @@ class ClientWorkPackageComponentServices {
         if(childComponents.count() > 0){
             childComponents.forEach((child) => {
 
-                store.dispatch(setCurrentUserOpenWorkPackageItems(
-                    currentList,
-                    wpComponent._id,
-                    false
-                ));
-
                 // Recursively call for these children
                 this.closeChildren(child, currentList)
-
 
             });
 

@@ -20,7 +20,7 @@ import {log} from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage, updateOpenItemsFlag} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Components
@@ -561,43 +561,72 @@ class ClientDesignComponentServices{
     };
 
     // User opened or closed a design component ------------------------------------------------------------------------
-    setOpenClosed(designComponent, currentList, newState){
+    setOpenClosed(designComponent, currentList, setOpen){
 
         if(designComponent.componentType === ComponentType.FEATURE){
 
             // Open or close the whole feature
-            const featureComponents = DesignComponents.find(
-                {
-                    designVersionId: designComponent.designVersionId,
-                    componentFeatureReferenceId: designComponent.componentReferenceId
-                }
-            );
+            if(setOpen) {
+                const featureComponents = DesignComponents.find(
+                    {
+                        designVersionId: designComponent.designVersionId,
+                        componentFeatureReferenceId: designComponent.componentReferenceId,
+                        componentType: {$ne:(ComponentType.SCENARIO)}
+                    }
+                );
 
-            featureComponents.forEach((component) => {
+                featureComponents.forEach((component) => {
+                    store.dispatch(setCurrentUserOpenDesignItems(
+                        currentList,
+                        component._id,
+                        setOpen
+                    ));
+                });
+
+                store.dispatch((updateOpenItemsFlag()));
+            } else {
+
                 store.dispatch(setCurrentUserOpenDesignItems(
                     currentList,
-                    component._id,
-                    newState
+                    designComponent._id,
+                    false
                 ));
-            });
+
+                store.dispatch((updateOpenItemsFlag()));
+
+                this.closeChildren(designComponent, currentList);
+
+            }
 
         } else {
 
-            if(newState){
+            if(setOpen){
                 // Open - just open this item
                 store.dispatch(setCurrentUserOpenDesignItems(
                     currentList,
                     designComponent._id,
-                    newState
+                    setOpen
                 ));
+
+                store.dispatch((updateOpenItemsFlag()));
+
             } else {
                 // Close - close all children
-                this.closeChildren(designComponent, currentList)
+
+                store.dispatch(setCurrentUserOpenDesignItems(
+                    currentList,
+                    designComponent._id,
+                    false
+                ));
+
+                store.dispatch((updateOpenItemsFlag()));
+
+                this.closeChildren(designComponent, currentList);
             }
 
         }
 
-        return {success: true, message: ''};
+        return store.getState().currentUserOpenDesignItems;
     };
 
 
@@ -605,35 +634,30 @@ class ClientDesignComponentServices{
     closeChildren(designComponent, currentList){
 
         // If component is open close it and move down to children
-        if(currentList.includes(designComponent._id)) {
-
-            let childComponents = DesignComponents.find(
-                {
-                    designVersionId: designComponent.designVersionId,
-                    componentParentReferenceId: designComponent.componentReferenceId
-                }
-            );
-
-            if(childComponents.count() > 0){
-                childComponents.forEach((child) => {
-
-                        store.dispatch(setCurrentUserOpenDesignItems(
-                            currentList,
-                            designComponent._id,
-                            false
-                        ));
-
-                        // Recursively call for these children
-                        this.closeChildren(child, currentList)
-
-
-                });
-
-                return true;
-
-            } else {
-                return false;
+        let childComponents = DesignComponents.find(
+            {
+                designVersionId: designComponent.designVersionId,
+                componentParentReferenceId: designComponent.componentReferenceId,
+                componentType: {$ne:(ComponentType.SCENARIO)}
             }
+        );
+
+        if(childComponents.count() > 0){
+            childComponents.forEach((child) => {
+
+                store.dispatch(setCurrentUserOpenDesignItems(
+                    currentList,
+                    child._id,
+                    false
+                ));
+
+                // Recursively call for these children
+                this.closeChildren(child, currentList)
+
+            });
+
+            return true;
+
         } else {
             return false;
         }
