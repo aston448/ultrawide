@@ -514,7 +514,192 @@ describe('JSX: DesignComponent', () => {
             // Component has active style
             chai.assert.equal(item.find('#designComponent').props().className, 'design-component', 'Expected component NOT to be active');
         });
+    });
+
+    describe('An Application component in the Design Update editor has an Add Design Section option', () => {
+
+        it('has the option in edit mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addDesignSectionToApp').length, 1, 'Add design section not found');
+        });
 
     });
+
+    describe('A Design Section component in the Design Update editor has an Add Design Section option', () => {
+
+        it('has the option in edit mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 1, 'Add design section not found');
+        });
+    });
+
+    describe('An in scope Feature in the Design Update editor has an Add Feature Aspect option', () => {
+
+        it('has the option in edit mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeatureAspect').length, 1, 'Add feature aspect not found');
+        });
+
+        it('no option if not in scope', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: false};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect found');
+        });
+    });
+
+    describe('An organisational Design Update Component can only be added in edit mode', () => {
+
+        // NOTE - Application covered in EditDesignUpdateContainer test
+
+        it('no option for add section to application in view mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addDesignSectionToApp').length, 0, 'Add design section found');
+        });
+
+        it('no option for add section to application when viewing', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.APPLICATION};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addDesignSectionToApp').length, 0, 'Add design section found');
+        });
+
+        it('no option to add section to section in view mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 0, 'Add design section found');
+        });
+
+        it('no option to add section to section when viewing', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addDesignSectionToDesignSection').length, 0, 'Add design section found');
+        });
+
+        it('no option to add aspect to in scope feature in view mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect found');
+        });
+
+        it('no option to add aspect to in scope feature when viewing', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeatureAspect').length, 0, 'Add feature aspect found');
+        });
+    });
+
 });
 

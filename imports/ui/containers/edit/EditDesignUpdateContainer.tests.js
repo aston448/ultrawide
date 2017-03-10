@@ -567,7 +567,60 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 4 for Details');
             chai.assert.equal(item.find('#dictSummCol').props().md, 3, 'Expecting width 4 for Summary');
         });
+    });
 
-    })
+    describe('There is an option to add a new Application in the Design Update editor', () => {
+
+        it('has an add application in edit mode', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#addApplication').length, 1, 'Add Application not found');
+        });
+
+        it('has no add application in view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#addApplication').length, 0, 'Add Application found');
+        });
+
+        it('has no add application when viewing', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#addApplication').length, 0, 'Add Application found');
+        });
+    });
 });
 

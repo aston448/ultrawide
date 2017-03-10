@@ -119,6 +119,8 @@ export class DesignApplicationsList extends Component {
                 break;
         }
 
+        // Items -------------------------------------------------------------------------------------------------------
+
         let designSummary =<div></div>;
 
         if(designSummaryData && viewOptions.designTestSummaryVisible) {
@@ -207,6 +209,7 @@ export class DesignApplicationsList extends Component {
             }
         }
 
+        // Layout ------------------------------------------------------------------------------------------------------
 
         // Create the layout depending on the current view...
         if(baseApplications) {
