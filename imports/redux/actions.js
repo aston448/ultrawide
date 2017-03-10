@@ -389,9 +389,9 @@ export function updateViewOptionsData(newValue) {
     };
 }
 
-export function updateOpenItemsFlag() {
+export function updateOpenItemsFlag(itemId) {
 
     return function (dispatch) {
-        dispatch({type: UPDATE_OPEN_ITEMS_FLAG, newFlagValue: !store.getState().openItemsFlag});
+        dispatch({type: UPDATE_OPEN_ITEMS_FLAG, newFlagValue: {item: itemId, flag:!store.getState().openItemsFlag.flag}});
     };
 }

@@ -583,7 +583,7 @@ class ClientDesignComponentServices{
                     ));
                 });
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
             } else {
 
                 store.dispatch(setCurrentUserOpenDesignItems(
@@ -592,7 +592,7 @@ class ClientDesignComponentServices{
                     false
                 ));
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
 
                 this.closeChildren(designComponent, currentList);
 
@@ -608,7 +608,7 @@ class ClientDesignComponentServices{
                     setOpen
                 ));
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
 
             } else {
                 // Close - close all children
@@ -619,7 +619,7 @@ class ClientDesignComponentServices{
                     false
                 ));
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
 
                 this.closeChildren(designComponent, currentList);
             }
@@ -645,14 +645,17 @@ class ClientDesignComponentServices{
         if(childComponents.count() > 0){
             childComponents.forEach((child) => {
 
-                store.dispatch(setCurrentUserOpenDesignItems(
-                    currentList,
-                    child._id,
-                    false
-                ));
+                if(currentList.contains(child._id)) {
 
-                // Recursively call for these children
-                this.closeChildren(child, currentList)
+                    store.dispatch(setCurrentUserOpenDesignItems(
+                        currentList,
+                        child._id,
+                        false
+                    ));
+
+                    // Recursively call for these children
+                    this.closeChildren(child, currentList)
+                }
 
             });
 

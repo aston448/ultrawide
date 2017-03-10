@@ -592,14 +592,14 @@ class ClientDesignUpdateComponentServices{
                     ));
                 });
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
 
             } else {
 
                 // Close - close all children
                 this.closeChildren(designComponent, currentList);
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
             }
 
         } else {
@@ -611,13 +611,13 @@ class ClientDesignUpdateComponentServices{
                     setOpen
                 ));
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
             } else {
 
                 // Close - close all children
                 this.closeChildren(designComponent, currentList);
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(designComponent._id)));
             }
 
         }

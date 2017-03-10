@@ -76,6 +76,10 @@ export class DesignComponent extends Component{
             return true;
         }
 
+        // If this item has been opened or closed...
+        if(nextProps.openItemsFlag.item === currentItemId){
+            return true;
+        }
 
 
         switch (nextProps.view) {
@@ -166,7 +170,7 @@ export class DesignComponent extends Component{
     componentWillReceiveProps(newProps){
 
         // Change open state if REDUX state has changed for this item
-        if(newProps.openItemsFlag != this.props.openItemsFlag) {
+        if(newProps.openItemsFlag.flag != this.props.openItemsFlag.flag  || newProps.openItemsFlag.item === this.props.currentItem._id) {
 
             switch (newProps.view) {
                 case ViewType.DESIGN_NEW_EDIT:
@@ -175,7 +179,9 @@ export class DesignComponent extends Component{
 
                     if (
                         (newProps.openDesignItems.includes(this.props.currentItem._id) && !(this.props.openDesignItems.includes(this.props.currentItem._id))) ||
-                        (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id))
+                        (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id)) ||
+                        (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.state.open) ||
+                        (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.state.open)
                     ) {
                         this.setOpenState(newProps);
                     }
@@ -184,7 +190,9 @@ export class DesignComponent extends Component{
                 case ViewType.DESIGN_UPDATE_VIEW:
                     if (
                         (newProps.openDesignUpdateItems.includes(this.props.currentItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.currentItem._id))) ||
-                        (!(newProps.openDesignUpdateItems.includes(this.props.currentItem._id)) && this.props.openDesignUpdateItems.includes(this.props.currentItem._id))
+                        (!(newProps.openDesignUpdateItems.includes(this.props.currentItem._id)) && this.props.openDesignUpdateItems.includes(this.props.currentItem._id)) ||
+                        (newProps.openDesignUpdateItems.includes(this.props.currentItem._id) && !this.state.open) ||
+                        (!(newProps.openDesignUpdateItems.includes(this.props.currentItem._id)) && this.state.open)
                     ) {
                         this.setOpenState(newProps);
                     }
@@ -197,7 +205,9 @@ export class DesignComponent extends Component{
                 case ViewType.DEVELOP_UPDATE_WP:
                     if (
                         (newProps.openWorkPackageItems.includes(this.props.currentItem._id) && !(this.props.openWorkPackageItems.includes(this.props.currentItem._id))) ||
-                        (!(newProps.openWorkPackageItems.includes(this.props.currentItem._id)) && this.props.openWorkPackageItems.includes(this.props.currentItem._id))
+                        (!(newProps.openWorkPackageItems.includes(this.props.currentItem._id)) && this.props.openWorkPackageItems.includes(this.props.currentItem._id)) ||
+                        (newProps.openWorkPackageItems.includes(this.props.currentItem._id) && !this.state.open) ||
+                        (!(newProps.openWorkPackageItems.includes(this.props.currentItem._id)) && this.state.open)
                     ) {
                         this.setOpenState(newProps);
                     }
@@ -264,7 +274,7 @@ export class DesignComponent extends Component{
                 break;
         }
 
-        this.setState({open: !this.state.open});
+        //this.setState({open: !this.state.open});
     }
 
     // User selected this component - make it the current one

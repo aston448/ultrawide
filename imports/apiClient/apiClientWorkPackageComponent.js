@@ -112,12 +112,12 @@ class ClientWorkPackageComponentServices {
 
                 });
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(wpComponent._id)));
 
             } else {
 
                 this.closeChildren(wpComponent, currentList);
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(wpComponent._id)));
             }
 
         } else {
@@ -131,13 +131,13 @@ class ClientWorkPackageComponentServices {
                     setOpen
                 ));
 
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(wpComponent._id)));
 
             } else {
 
                 // Close all items below
                 this.closeChildren(wpComponent, currentList);
-                store.dispatch((updateOpenItemsFlag()));
+                store.dispatch((updateOpenItemsFlag(wpComponent._id)));
             }
         }
 

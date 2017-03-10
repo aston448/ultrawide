@@ -108,7 +108,7 @@ class ClientAppHeaderServices{
                 null
             ));
 
-            store.dispatch((updateOpenItemsFlag()));
+            store.dispatch((updateOpenItemsFlag('NONE')));
 
             return;
         }
@@ -133,7 +133,7 @@ class ClientAppHeaderServices{
                 null
             ));
 
-            store.dispatch((updateOpenItemsFlag()));
+            store.dispatch((updateOpenItemsFlag('NONE')));
 
         } else {
 
@@ -156,7 +156,7 @@ class ClientAppHeaderServices{
                 null
             ));
 
-            store.dispatch((updateOpenItemsFlag()));
+            store.dispatch((updateOpenItemsFlag('NONE')));
 
         }
     }
@@ -189,7 +189,7 @@ class ClientAppHeaderServices{
                 null
             ));
 
-            store.dispatch((updateOpenItemsFlag()));
+            store.dispatch((updateOpenItemsFlag('NONE')));
 
             return;
         }
@@ -217,7 +217,7 @@ class ClientAppHeaderServices{
                 null
             ));
 
-            store.dispatch((updateOpenItemsFlag()));
+            store.dispatch((updateOpenItemsFlag('NONE')));
 
         } else {
 
@@ -243,7 +243,7 @@ class ClientAppHeaderServices{
                 null
             ));
 
-            store.dispatch((updateOpenItemsFlag()));
+            store.dispatch((updateOpenItemsFlag('NONE')));
 
         }
     }
