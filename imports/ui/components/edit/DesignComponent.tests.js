@@ -38,6 +38,7 @@ describe('JSX: DesignComponent', () => {
                 openDesignUpdateItems={openDesignUpdateItems}
                 openWorkPackageItems={openWorkPackageItems}
                 testDataFlag={testDataFlag}
+                openItemsFlag={{flag: true, item: null}}
             />
         );
     }
@@ -701,5 +702,132 @@ describe('JSX: DesignComponent', () => {
         });
     });
 
+    describe('A Design Section component in the Design Update editor has an Add Feature option', () => {
+
+        it('has the option in edit mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeature').length, 1, 'Add feature not found');
+        });
+    });
+
+    describe('An in scope Feature Aspect in the Design Update editor has an Add Scenario option', () => {
+
+        it('has the option in edit mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addScenario').length, 1, 'Add scenario not found');
+        });
+
+        it('no option if not in scope', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: false};
+            const designItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario found');
+        });
+    });
+
+    describe('A functional Design Update Component can only be added in edit mode', () => {
+
+        it('no option for add feature to section in view mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeature').length, 0, 'Add feature found');
+        });
+
+        it('no option for add feature to section when viewing', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.DESIGN_SECTION};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addFeature').length, 0, 'Add feature found');
+        });
+
+        it('no option to add scenario to feature aspect in view mode', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario found');
+        });
+
+        it('no option to add scenario to feature aspect when viewing', () => {
+
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const designItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF', designComponentId: 'componentId'};
+
+            let item = testDesignComponent(currentItem, designItem, mode, view, displayContext, userContext);
+
+            // Make sure item is open
+            item.setState({open: true});
+
+            chai.assert.equal(item.find('#addScenario').length, 0, 'Add scenario found');
+        });
+    });
 });
 

@@ -31,7 +31,7 @@ import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPack
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, setCurrentViewMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems} from '../redux/actions'
+import {setCurrentView, setCurrentViewMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -364,12 +364,13 @@ class ClientUserContextServices {
             null
         ));
 
-        console.log("second update of DU on User context");
         store.dispatch(setCurrentUserOpenDesignUpdateItems(
             duArr,
             null,
             null
         ));
+
+        store.dispatch((updateOpenItemsFlag(null)));
 
         // Return latest user context
         return store.getState().currentUserItemContext;
@@ -461,6 +462,8 @@ class ClientUserContextServices {
             null,
             null
         ));
+
+        store.dispatch((updateOpenItemsFlag(null)));
 
         // Return latest user context
         return store.getState().currentUserItemContext;
