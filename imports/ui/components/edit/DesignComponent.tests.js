@@ -201,7 +201,7 @@ describe('JSX: DesignComponent', () => {
         });
     });
 
-    describe('Organisational components may not be added in View Only mode', () => {
+    describe('There is no option to add organisational Design Components in View Only mode', () => {
 
         it('no option to add design section to application', () => {
 
@@ -255,7 +255,7 @@ describe('JSX: DesignComponent', () => {
         });
     });
 
-    describe('Functional Design Components may not be added in View Only mode', () => {
+    describe('There is no option to add functional Design Components in View Only mode', () => {
 
         it('no option to add feature to design section', () => {
 
