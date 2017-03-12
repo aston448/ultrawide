@@ -798,7 +798,7 @@ export class DesignComponentHeader extends Component{
                             </OverlayTrigger>
                         </InputGroup.Addon>
                         <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
-                            <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
+                            <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
                             <div id="actionMove" className="lgrey">
@@ -832,7 +832,7 @@ export class DesignComponentHeader extends Component{
                             </OverlayTrigger>
                         </InputGroup.Addon>
                         <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
-                            <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
+                            <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
                             {connectDragSource(
@@ -870,7 +870,7 @@ export class DesignComponentHeader extends Component{
                         </OverlayTrigger>
                     </InputGroup.Addon>
                     <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
-                        <div className={deleteStyle}><Glyphicon glyph={deleteGlyph}/></div>
+                        <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
                         <div className="invisible"><Glyphicon glyph="star"/></div>
