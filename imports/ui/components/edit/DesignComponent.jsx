@@ -462,6 +462,13 @@ export class DesignComponent extends Component{
             // Use the original design item for narrative data in Work Package editing
             let narrativeItem = workPackageItem ? designItem : currentItem;
 
+            let currentItemText = '';
+            if(userContext.designUpdateId === 'NONE'){
+                currentItemText = currentItem.componentName;
+            } else {
+                currentItemText = currentItem.componentNameNew;
+            }
+
             let narrative =
                 <Narrative
                     designComponent={narrativeItem}
@@ -523,6 +530,9 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
+                                            <td className="add-item-context-section">
+                                                {currentItemText + ':'}
+                                            </td>
                                             <td id="addDesignSectionToApp" className="control-table-data-section">
                                                 <DesignComponentAdd
                                                     addText="Add Design Section"
@@ -569,9 +579,12 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
+                                            <td className="add-item-context-section">
+                                                {currentItemText + ':'}
+                                            </td>
                                             <td id="addFeature" className="control-table-data-feature">
                                                 <DesignComponentAdd
-                                                    addText="Add feature"
+                                                    addText='Add Feature'
                                                     onClick={ () => this.addFeatureToDesignSection(view, mode, designItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
@@ -624,6 +637,9 @@ export class DesignComponent extends Component{
                                     <table>
                                         <tbody>
                                         <tr>
+                                            <td className="add-item-context-section">
+                                                {currentItemText + ':'}
+                                            </td>
                                             <td id="addFeatureAspect" className="control-table-data-feature-aspect">
                                                 <DesignComponentAdd
                                                     addText="Add feature aspect"

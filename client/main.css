@@ -804,23 +804,30 @@ input {
 }
 
 .control-table-data-app{
-    padding: 0 10px 0 20px;
+    padding: 0 10px 0 10px;
 }
 
 .control-table-data-section{
-    padding: 0 10px 0 25px;
+    padding: 0 10px 0 10px;
 }
 
 .control-table-data-feature{
-    padding: 0 10px 0 35px;
+    padding: 0 10px 0 10px;
 }
 
 .control-table-data-feature-aspect{
-    padding: 0 10px 0 45px;
+    padding: 0 10px 0 10px;
 }
 
 .control-table-data-scenario{
     padding: 0 10px 0 55px;
+}
+
+.add-item-context-section{
+    padding: 0 0px 0 35px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  11px;
+    color: darkgrey;
 }
 
 .feature {
