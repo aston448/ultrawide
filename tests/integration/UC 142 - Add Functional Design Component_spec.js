@@ -40,23 +40,6 @@ describe('UC 142 - Add Functional Design Component', function(){
     });
 
 
-    // Actions
-    it('An Application may be added to a Design Version', function() {
-
-        // Setup
-        // Edit the default Design Version
-        DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
-
-        // Execute
-        // Add an Application
-        DesignComponentActions.designerAddsApplication();
-
-        // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 'NONE'));
-    });
-
     it('A Feature may be added to a Design Section', function(){
 
         // Setup
@@ -70,21 +53,6 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 'Design1', 'DesignVersion1', 'Section1'));
-    });
-
-    it('A Scenario may be added to a Feature', function(){
-
-        // Setup
-        DesignActions.designerWorksOnDesign('Design1');
-        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
-
-        // Execute
-        // Add a Scenario
-        DesignComponentActions.designerAddsScenarioToFeature('Feature1');
-
-        // Verify
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 'Design1', 'DesignVersion1', 'Feature1'));
     });
 
 

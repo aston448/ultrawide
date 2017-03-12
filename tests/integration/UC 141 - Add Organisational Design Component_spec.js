@@ -41,6 +41,24 @@ describe('UC 141 - Add Organisational Design Component', function(){
 
 
     // Actions
+    // Actions
+    it('An Application may be added to a Design Version', function() {
+
+        // Setup
+        // Edit the default Design Version
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
+
+        // Execute
+        // Add an Application
+        DesignComponentActions.designerAddsApplication();
+
+        // Verify
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 'Design1', 'DesignVersion1', 'NONE'));
+    });
+
+
     it('A Design Section may be added to an Application', function(){
 
         // Setup
