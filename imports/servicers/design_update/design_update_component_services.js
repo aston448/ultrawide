@@ -318,6 +318,9 @@ class DesignUpdateComponentServices{
 
                 // Make sure this component is also moved in any work packages
                 DesignUpdateComponentModules.updateWorkPackageLocation(componentId, false);
+
+                // Design Update Summary is now stale
+                DesignUpdates.update({_id: movingComponent.designUpdateId}, {$set:{summaryDataStale: true}});
             }
         }
     };

@@ -508,6 +508,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Move Component Actions:
+                    this.refreshDesignUpdateSummary(movingComponent);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
