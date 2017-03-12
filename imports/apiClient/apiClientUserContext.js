@@ -214,9 +214,7 @@ class ClientUserContextServices {
     setOpenDesignVersionItems(userContext){
 
         // Set default view settings for open items
-
         let dvArr = [];
-        let duArr = [];
 
         try {
 
@@ -225,6 +223,7 @@ class ClientUserContextServices {
             // All Design Versions
             const designVersionOpenComponents = DesignComponents.find(
                 {
+                    designVersionId: userContext.designVersionId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
 
                 },
@@ -236,10 +235,87 @@ class ClientUserContextServices {
                 dvArr.push(component._id);
             });
 
+            // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
+            log((msg) => console.log(msg), LogLevel.INFO, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
+                userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
-            // All Design Updates
+            if (userContext.designComponentId != 'NONE') {
+
+                // There is a current component...
+                if (userContext.designVersionId != 'NONE') {
+
+                    let dvComponent = DesignComponents.findOne({
+                        _id: userContext.designComponentId
+                    });
+
+                    if(dvComponent) {
+
+                        switch(dvComponent.componentType){
+
+                            case ComponentType.APPLICATION:
+                            case ComponentType.DESIGN_SECTION:
+                                // Already open
+                                break;
+                            case ComponentType.FEATURE:
+                                // Open it and all stuff below
+                                dvArr = ClientDesignComponentServices.setOpenClosed(dvComponent, dvArr, true);
+                                break;
+                            default:
+                                // Anything else is below a Feature so open the Feature and select that
+                                const dvFeatureComponent = DesignComponents.findOne({
+                                    designVersionId:        dvComponent.designVersionId,
+                                    componentReferenceId:   dvComponent.componentFeatureReferenceId
+                                });
+
+                                if(dvFeatureComponent){
+                                    // Reset user context
+                                    userContext.designComponentId = dvFeatureComponent._id;
+                                    userContext.designComponentType = ComponentType.FEATURE;
+                                    userContext.featureReferenceId = dvFeatureComponent.componentReferenceId;
+                                    userContext.featureAspectReferenceId = 'NONE';
+                                    userContext.scenarioReferenceId = 'NONE';
+                                    userContext.scenarioStepId = 'NONE';
+
+                                    store.dispatch(setCurrentUserItemContext(userContext, true));
+
+                                    // Open the feature
+                                    dvArr = ClientDesignComponentServices.setOpenClosed(dvFeatureComponent, dvArr, true);
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        catch(e){
+            log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open DV item settings: {}", e);
+        }
+
+        store.dispatch(setCurrentUserOpenDesignItems(
+            dvArr,
+            null,
+            null
+        ));
+
+        store.dispatch((updateOpenItemsFlag(null)));
+
+        // Return latest user context
+        return store.getState().currentUserItemContext;
+    }
+
+    setOpenDesignUpdateItems(userContext){
+
+        // Set default view settings for open items
+        let duArr = [];
+
+        try {
+
+            // Set all Applications and Design Sections to be open
+
+            // All Design Updates in current design version and update
             const designUpdateOpenComponents = DesignUpdateComponents.find(
                 {
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
                 },
                 {fields: {_id: 1}}
@@ -305,64 +381,12 @@ class ClientUserContextServices {
 
                     }
 
-                } else {
-
-                    // No Design Update - is a design version chosen - really should be...
-
-                    if (userContext.designVersionId != 'NONE') {
-
-                        let dvComponent = DesignComponents.findOne({
-                            _id: userContext.designComponentId
-                        });
-
-                        if(dvComponent) {
-
-                            switch(dvComponent.componentType){
-
-                                case ComponentType.APPLICATION:
-                                case ComponentType.DESIGN_SECTION:
-                                    // Already open
-                                    break;
-                                case ComponentType.FEATURE:
-                                    // Open it and all stuff below
-                                    dvArr = ClientDesignComponentServices.setOpenClosed(dvComponent, dvArr, true);
-                                    break;
-                                default:
-                                    // Anything else is below a Feature so open the Feature and select that
-                                    const dvFeatureComponent = DesignComponents.findOne({
-                                        designVersionId:        dvComponent.designVersionId,
-                                        componentReferenceId:   dvComponent.componentFeatureReferenceId
-                                    });
-
-                                    if(dvFeatureComponent){
-                                        // Reset user context
-                                        userContext.designComponentId = dvFeatureComponent._id;
-                                        userContext.designComponentType = ComponentType.FEATURE;
-                                        userContext.featureReferenceId = dvFeatureComponent.componentReferenceId;
-                                        userContext.featureAspectReferenceId = 'NONE';
-                                        userContext.scenarioReferenceId = 'NONE';
-                                        userContext.scenarioStepId = 'NONE';
-
-                                        store.dispatch(setCurrentUserItemContext(userContext, true));
-
-                                        // Open the feature
-                                        dvArr = ClientDesignComponentServices.setOpenClosed(dvFeatureComponent, dvArr, true);
-                                    }
-                            }
-                        }
-                    }
                 }
             }
         }
         catch(e){
-            log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open item settings: {}", e);
+            log((msg) => console.log(msg), LogLevel.ERROR, "ERROR Loading open DU item settings: {}", e);
         }
-
-        store.dispatch(setCurrentUserOpenDesignItems(
-            dvArr,
-            null,
-            null
-        ));
 
         store.dispatch(setCurrentUserOpenDesignUpdateItems(
             duArr,

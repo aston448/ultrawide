@@ -13,6 +13,7 @@ import DesignUpdateValidationApi        from '../apiValidation/apiDesignUpdateVa
 import ServerDesignUpdateApi            from '../apiServer/apiDesignUpdate.js';
 import ClientDesignUpdateSummary        from '../apiClient/apiClientDesignUpdateSummary.js';
 import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
+import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -311,6 +312,9 @@ class ClientDesignUpdateServices {
             };
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
+
+            // Open default items
+            newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
 
         }
 

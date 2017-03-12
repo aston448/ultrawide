@@ -2,11 +2,12 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import {DesignVersions} from '../collections/design/design_versions.js';
+import {DesignVersions}         from '../collections/design/design_versions.js';
+import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -15,10 +16,11 @@ import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegrat
 import ClientContainerServices          from '../apiClient/apiClientContainerServices.js';
 import DesignVersionValidationApi       from '../apiValidation/apiDesignVersionValidation.js';
 import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
+import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, updateOpenItemsFlag} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -304,7 +306,7 @@ class ClientDesignVersionServices{
             // Subscribe to the appropriate data for the new DV if DV changing
             if(newDesignVersionId != userContext.designVersionId) {
                 store.dispatch(setDesignVersionDataLoadedTo(false));
-                ClientContainerServices.getDesignVersionData(newContext);
+                ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 
         }
@@ -312,6 +314,25 @@ class ClientDesignVersionServices{
         return newContext;
 
     };
+
+    postDataLoadActions(){
+
+        const userContext = store.getState().currentUserItemContext;
+
+        // Open default items
+        ClientUserContextServices.setOpenDesignVersionItems(userContext);
+
+        // Force a re-render of each App to trigger opening
+        const designVersionApplications = DesignComponents.find({
+            designVersionId: userContext.designVersionId,
+            componentType: ComponentType.APPLICATION
+        }).fetch();
+
+        designVersionApplications.forEach((app) => {
+            store.dispatch((updateOpenItemsFlag(app._id)));
+        });
+
+    }
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
     editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag, testIntegrationDataContext){

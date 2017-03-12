@@ -82,10 +82,15 @@ class RoleAction extends Component {
 
                 if(userContext.workPackageId === 'NONE') {
 
-                    // Not going to a WP so open any Design Version items that need it...
+                    // Not going to a WP so open any Design Version or Design Update items that need it...
                     if (store.getState().designVersionDataLoaded) {
 
                         newContext = ClientUserContextServices.setOpenDesignVersionItems(userContext);
+
+                        if(newContext.designUpdateId != 'NONE'){
+
+                            newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
+                        }
                     }
 
                 } else {
