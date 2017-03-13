@@ -124,18 +124,13 @@ class DesignUpdateValidationServices{
         return Validation.VALID;
     }
 
-    validateRemoveDesignUpdate(userRole, designUpdate){
+    validateRemoveDesignUpdate(userRole, designUpdateStatus){
 
-        // To remove a design:
-        // The Design Update must exist
         // The user must be a Designer
-        // The Design Update must be removable - i.e. new TODO - add remove empty updates
-
-        if(!designUpdate){ return DesignUpdateValidationErrors.DESIGN_UPDATE_NOT_EXIST }
-
         if(userRole != RoleType.DESIGNER){ return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_REMOVE }
 
-        if(designUpdate.updateStatus != DesignUpdateStatus.UPDATE_NEW){ return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_REMOVE }
+        // The Design Update must be removable - i.e. new
+        if(designUpdateStatus != DesignUpdateStatus.UPDATE_NEW){ return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_REMOVE }
 
         return Validation.VALID;
 

@@ -70,9 +70,9 @@ describe('UC 505 - Publish New Design Update', function(){
 
 
     // Conditions
-    it('A Developer cannot publish a Design Update', function(){
+    it('Only a Designer can publish a Design Update', function(){
 
-        // Setup
+        // Setup - Developer
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.developerSelectsUpdate('DesignUpdate2');
@@ -84,18 +84,14 @@ describe('UC 505 - Publish New Design Update', function(){
 
         // Verify
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDeveloperIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-    });
 
-    it('A Manager cannot publish a Design Update', function(){
-
-        // Setup
+        // Setup - Manager
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate2');
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForManagerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_PUBLISH};
         DesignUpdateActions.managerPublishesUpdate('DesignUpdate2', expectation);
 
         // Verify

@@ -4,7 +4,7 @@ import {DesignUpdates} from '../../collections/design_update/design_updates.js';
 import DesignVersionValidationServices from '../../service_modules/validation/design_version_validation_services.js';
 
 import { RoleType, DesignVersionStatus }     from '../../constants/constants.js';
-import { Validation }   from '../../constants/validation_errors.js';
+import { Validation, DesignVersionValidationErrors }   from '../../constants/validation_errors.js';
 
 import StubCollections from 'meteor/hwillson:stub-collections';
 import { chai } from 'meteor/practicalmeteor:chai';
@@ -71,59 +71,69 @@ afterEach(function(){
 
 });
 
-describe('Design Version Validation Services', function () {
+describe('VAL: Design Version', function () {
 
     describe('Only a Designer can publish a Design Version', function () {
 
-        it('returns VALID when a Designer publishes a Design Version', function () {
+        it('returns VALID for a Designer', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish a New Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Developer publishes a Design Version', function () {
+        it('returns INVALID for a Developer', function () {
 
             const role = RoleType.DEVELOPER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_PUBLISH;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish a Design Version by a Developer returned VALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Manager publishes a Design Version', function () {
+        it('returns INVALID for a Manager', function () {
 
             const role = RoleType.MANAGER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_PUBLISH;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish a Design Version by a Developer returned VALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
     });
 
     describe('Only a New Design Version can be published', function () {
 
-        it('returns VALID when a Designer publishes a New Design Version', function () {
+        it('returns VALID for New Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish a New Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer publishes a Draft Design Version', function () {
+        it('returns INVALID for Draft Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_PUBLISH;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish a Draft Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer publishes a Complete Design Version', function () {
+        it('returns INVALID for Complete Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
@@ -132,109 +142,129 @@ describe('Design Version Validation Services', function () {
 
         });
 
-        it('returns INVALID when a Designer publishes an Updatable Design Version', function () {
+        it('returns INVALID for Updatable Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_PUBLISH;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish an Updatable Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer publishes an Updatable Complete Design Version', function () {
+        it('returns INVALID for Updatable Complete Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_PUBLISH;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion), Validation.VALID, 'Attempt to publish an Updatable Complete Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validatePublishDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
     });
 
     describe('Only a Draft Design Version can be withdrawn', function () {
 
-        it('returns VALID when a Designer withdraws a Draft Design Version', function () {
+        it('returns VALID for Draft Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer withdraws a New Design Version', function () {
+        it('returns INVALID for New Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a New Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer withdraws a Complete Design Version', function () {
+        it('returns INVALID for Complete Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Complete Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer withdraws an Updatable Design Version', function () {
+        it('returns INVALID for Updatable Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Complete Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Designer withdraws an Updatable Complete Design Version', function () {
+        it('returns INVALID for Updatable Complete Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Complete Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
     });
 
     describe('Only a Designer can withdraw a Design Version', function () {
 
-        it('returns VALID when a Designer withdraws a Draft Design Version', function () {
+        it('returns VALID for a Designer', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Developer withdraws a Draft Design Version', function () {
+        it('returns INVALID for a Developer', function () {
 
             const role = RoleType.DEVELOPER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Developer returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Manager withdraws a Draft Design Version', function () {
+        it('returns INVALID for a Manager', function () {
 
             const role = RoleType.MANAGER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Manager returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
     });
 
@@ -245,140 +275,261 @@ describe('Design Version Validation Services', function () {
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
             const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_UPDATES_WITHDRAW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates), Validation.VALID, 'Attempt to withdraw a Draft Design Version with Updates by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
 
+            chai.assert.equal(result, expectation);
         });
     });
 
     describe('Only a Designer can create a new Design Version', function () {
 
-        it('returns VALID when a Designer creates a new Design Version', function () {
+        it('returns VALID for a Designer', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Developer creates a new Design Version', function () {
+        it('returns INVALID for a Developer', function () {
 
             const role = RoleType.DEVELOPER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_NEXT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Developer returned VALID!');
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Manager creates a new Design Version', function () {
+        it('returns INVALID for a Manager', function () {
 
             const role = RoleType.MANAGER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_NEXT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1), Validation.VALID, 'Attempt to withdraw a Draft Design Version by a Manager returned VALID!');
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
 
+            chai.assert.equal(result, expectation);
         });
     });
 
     describe('Only a Designer can edit a Design Version', function () {
 
-        it('returns VALID when a Designer edits a draft Design Version', function () {
+        it('returns VALID for a Designer', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validateEditDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Developer edits a draft Design Version', function () {
+        it('returns INVALID for a Developer', function () {
 
             const role = RoleType.DEVELOPER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_EDIT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Developer returned VALID!');
+            const result = DesignVersionValidationServices.validateEditDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Manager edits a draft Design Version', function () {
+        it('returns INVALID for a Manager', function () {
 
             const role = RoleType.MANAGER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_EDIT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Design Version by a Manager returned VALID!');
+            const result = DesignVersionValidationServices.validateEditDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
     });
 
     describe('A Complete Design Version cannot be edited', function() {
 
-        it('returns INVALID when a Designer edits a draft complete Design Version', function () {
+        it('returns INVALID for a draft complete Design Version', function () {
 
-            const role = RoleType.DEVELOPER;
+            const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a Draft Complete Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateEditDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Manager edits an updatable complete Design Version', function () {
+        it('returns INVALID for an updatable complete Design Version', function () {
 
-            const role = RoleType.MANAGER;
+            const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit an Updatable Complete Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateEditDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
-
     });
 
     describe('An Updatable Design Version cannot be edited', function() {
 
-        it('returns INVALID when a Designer edits an updatable Design Version', function () {
+        it('returns INVALID for updatable Design Version', function () {
 
             const role = RoleType.DEVELOPER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateEditDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit an Updatable Design Version by a Designer returned VALID!');
+            const result = DesignVersionValidationServices.validateEditDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
-
-
     });
 
     describe('Only a Designer can view a New Design Version', function () {
 
-        it('returns VALID when a Designer views a new Design Version', function () {
+        it('returns VALID for a Designer', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = Validation.VALID;
 
-            chai.assert.equal(DesignVersionValidationServices.validateViewDesignVersion(role, designVersion), Validation.VALID, 'Attempt to view a New Design Version by a Designer returned INVALID!');
+            const result = DesignVersionValidationServices.validateViewDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Developer views a new Design Version', function () {
+        it('returns INVALID for a Developer', function () {
 
             const role = RoleType.DEVELOPER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_VIEW_NEW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateViewDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a New Design Version by a Developer returned VALID!');
+            const result = DesignVersionValidationServices.validateViewDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
         });
 
-        it('returns INVALID when a Manager views a new Design Version', function () {
+        it('returns INVALID for a Manager', function () {
 
             const role = RoleType.MANAGER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_VIEW_NEW;
 
-            chai.assert.notEqual(DesignVersionValidationServices.validateViewDesignVersion(role, designVersion), Validation.VALID, 'Attempt to edit a New Design Version by a Manager returned VALID!');
+            const result = DesignVersionValidationServices.validateViewDesignVersion(role, designVersion);
 
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A Manager may not update an Updatable Design Version', function() {
+
+        it('returns VALID for a Designer', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const updatesToMerge = 1;
+            const expectation = Validation.VALID;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
         });
 
+        it('returns VALID for a Developer', function () {
+
+            const role = RoleType.DEVELOPER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const updatesToMerge = 1;
+            const expectation = Validation.VALID;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for a Manager', function () {
+
+            const role = RoleType.MANAGER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const updatesToMerge = 1;
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE_WORKING;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('Only an Updatable Design Version may be updated', function() {
+
+        it('returns VALID for Updatable', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
+            const updatesToMerge = 1;
+            const expectation = Validation.VALID;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for New', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const updatesToMerge = 1;
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for Draft', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
+            const updatesToMerge = 1;
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for Complete', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
+            const updatesToMerge = 1;
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for Updatable Complete', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
+            const updatesToMerge = 1;
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING;
+
+            const result = DesignVersionValidationServices.validateUpdateWorkingDesignVersion(role, designVersion, updatesToMerge);
+
+            chai.assert.equal(result, expectation);
+        });
     });
 
 });

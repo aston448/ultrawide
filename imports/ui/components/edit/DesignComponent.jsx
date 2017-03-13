@@ -464,9 +464,17 @@ export class DesignComponent extends Component{
 
             let currentItemText = '';
             if(userContext.designUpdateId === 'NONE'){
-                currentItemText = currentItem.componentName;
+                if(userContext.workPackageId === 'NONE'){
+                    currentItemText = currentItem.componentName;
+                } else {
+                    currentItemText = designItem.componentName;
+                }
             } else {
-                currentItemText = currentItem.componentNameNew;
+                if(userContext.workPackageId === 'NONE'){
+                    currentItemText = currentItem.componentNameNew;
+                } else {
+                    currentItemText = designItem.componentNameNew;
+                }
             }
 
             let narrative =

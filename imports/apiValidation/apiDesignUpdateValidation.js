@@ -77,7 +77,7 @@ class DesignUpdateValidationApi{
 
         const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
 
-        return DesignUpdateValidationServices.validateRemoveDesignUpdate(userRole, designUpdate);
+        return DesignUpdateValidationServices.validateRemoveDesignUpdate(userRole, designUpdate.updateStatus);
 
     };
 

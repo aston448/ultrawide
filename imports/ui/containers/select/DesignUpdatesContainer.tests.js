@@ -191,7 +191,7 @@ describe('JSX: DesignUpdatesList', () => {
         });
     });
 
-    describe('Only a Designer may add Design Updates', () => {
+    describe('The add Design Update option is only visible to Designers', () => {
 
         it('no add option for Developer', () => {
 
@@ -216,7 +216,7 @@ describe('JSX: DesignUpdatesList', () => {
         });
     });
 
-    describe('A Design Update can only be added to an Updatable Design Version', () =>{
+    describe('The add Design Update option is only visible for an Updatable Design Version', () =>{
 
         it('no add option for new initial design version', () => {
 

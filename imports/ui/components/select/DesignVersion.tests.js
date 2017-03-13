@@ -796,7 +796,7 @@ describe('JSX: DesignVersion', () => {
         });
     });
 
-    describe('A Manager may not update an Updatable Design Version', () => {
+    describe('The option to update an Updatable Design Version is not visible to the Manager role', () => {
 
         it('option is not available for a Manager', () => {
 
@@ -812,7 +812,7 @@ describe('JSX: DesignVersion', () => {
         });
     });
 
-    describe('Only an Updatable Design Version may be updated', () => {
+    describe('The option to update is not visible if the Design Version is not Updatable', () => {
 
         it('option is not available for new Design Version', () => {
 

@@ -106,9 +106,9 @@ describe('UC 503 - View Design Update Content', function(){
 
 
     // Conditions
-    it('A Developer cannot view a New Design Update', function(){
+    it('Only a Designer can view a New Design Update', function(){
 
-        // Setup
+        // Setup - Developer
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
 
@@ -116,19 +116,13 @@ describe('UC 503 - View Design Update Content', function(){
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW};
         DesignUpdateActions.developerViewsUpdate('DesignUpdate2', expectation);
 
-    });
-
-    it('A Manager cannot view a New Design Update', function(){
-
-        // Setup
+        // Setup - Manager
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_VIEW_NEW};
         DesignUpdateActions.managerViewsUpdate('DesignUpdate2', expectation);
 
     });
-
 
 });

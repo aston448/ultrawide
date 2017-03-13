@@ -185,7 +185,7 @@ describe('JSX: DesignUpdate', () => {
         });
     });
 
-    describe('A Developer cannot view a New Design Update', () => {
+    describe('The view option is only visible to a Designer for a New Design Update', () => {
 
         it('has no view option for developer', () => {
 
@@ -196,9 +196,6 @@ describe('JSX: DesignUpdate', () => {
 
             chai.assert.equal(item.find('#butView').length, 0, 'View option was found')
         });
-    });
-
-    describe('A Manager cannot view a New Design Update', () => {
 
         it('has no view option for manager', () => {
 
@@ -236,7 +233,7 @@ describe('JSX: DesignUpdate', () => {
         });
     });
 
-    describe('A Designer cannot edit a Complete Design Update', () => {
+    describe('The edit option on a Complete Design Update is not visible for a Designer', () => {
 
         it('has no edit option for designer', () => {
 
@@ -249,9 +246,9 @@ describe('JSX: DesignUpdate', () => {
         });
     });
 
-    describe('A Developer cannot edit a Design Update', () => {
+    describe('The edit option on a Design Update is only visible for a Designer', () => {
 
-        it('has no edit option for new design update', () => {
+        it('developer has no edit option for new design update', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -261,7 +258,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butEdit').length, 0, 'Edit option was found')
         });
 
-        it('has no edit option for published design update', () => {
+        it('developer has no edit option for published design update', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
@@ -271,7 +268,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butEdit').length, 0, 'Edit option was found')
         });
 
-        it('has no edit option for merged design update', () => {
+        it('developer has no edit option for merged design update', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -280,11 +277,8 @@ describe('JSX: DesignUpdate', () => {
 
             chai.assert.equal(item.find('#butEdit').length, 0, 'Edit option was found')
         });
-    });
 
-    describe('A Manager cannot edit a Design Update', () => {
-
-        it('has no edit option for new design update', () => {
+        it('manager has no edit option for new design update', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -294,7 +288,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butEdit').length, 0, 'Edit option was found')
         });
 
-        it('has no edit option for published design update', () => {
+        it('manager has no edit option for published design update', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
@@ -304,7 +298,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butEdit').length, 0, 'Edit option was found')
         });
 
-        it('has no edit option for merged design update', () => {
+        it('manager has no edit option for merged design update', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -332,9 +326,29 @@ describe('JSX: DesignUpdate', () => {
 
     });
 
-    describe('A Developer cannot publish a Design Update', () => {
+    describe('The publish option is only visible to Designers for New Design Updates', () => {
 
-        it('has no publish option for new update', () => {
+        it('designer has no publish option for published design update', () => {
+
+            const userRole = RoleType.MANAGER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
+
+            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+
+            chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
+        });
+
+        it('designer has no publish option for merged design update', () => {
+
+            const userRole = RoleType.MANAGER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
+
+            let item = testDesignUpdate(designUpdateMerged, userRole, userContext);
+
+            chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
+        });
+
+        it('developer has no publish option for new update', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -344,7 +358,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
         });
 
-        it('has no publish option for published update', () => {
+        it('developer has no publish option for published update', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
@@ -354,7 +368,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
         });
 
-        it('has no publish option for merged update', () => {
+        it('developer has no publish option for merged update', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -363,11 +377,8 @@ describe('JSX: DesignUpdate', () => {
 
             chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
         });
-    });
 
-    describe('A Manager cannot publish a Design Update', () => {
-
-        it('has no publish option for new design update', () => {
+        it('manager has no publish option for new design update', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -377,7 +388,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
         });
 
-        it('has no publish option for published design update', () => {
+        it('manager has no publish option for published design update', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
@@ -387,34 +398,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
         });
 
-        it('has no publish option for merged design update', () => {
-
-            const userRole = RoleType.MANAGER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
-
-            let item = testDesignUpdate(designUpdateMerged, userRole, userContext);
-
-            chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
-        });
-    });
-
-    describe('A Designer cannot publish a Draft Design Update', () => {
-
-        it('has no publish option for published design update', () => {
-
-            const userRole = RoleType.MANAGER;
-            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
-
-            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
-
-            chai.assert.equal(item.find('#butPublish').length, 0, 'Publish option was found')
-        });
-
-    });
-
-    describe('A Designer cannot publish a Complete Design Update', () => {
-
-        it('has no publish option for merged design update', () => {
+        it('manager has no publish option for merged design update', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -440,9 +424,9 @@ describe('JSX: DesignUpdate', () => {
 
     });
 
-    describe('A New Design Update cannot be withdrawn', () => {
+    describe('The withdraw option is only visible to Designers for Draft Design Updates', () => {
 
-        it('has no withdraw option for designer', () => {
+        it('new has no withdraw option for designer', () => {
 
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -452,7 +436,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
 
-        it('has no withdraw option for developer', () => {
+        it('new has no withdraw option for developer', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -462,7 +446,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
 
-        it('has no withdraw option for manager', () => {
+        it('new has no withdraw option for manager', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
@@ -471,11 +455,8 @@ describe('JSX: DesignUpdate', () => {
 
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
-    });
 
-    describe('A Complete Design Update cannot be withdrawn', () => {
-
-        it('has no withdraw option for designer', () => {
+        it('complete has no withdraw option for designer', () => {
 
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -485,7 +466,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
 
-        it('has no withdraw option for developer', () => {
+        it('complete has no withdraw option for developer', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -495,7 +476,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
 
-        it('has no withdraw option for manager', () => {
+        it('complete has no withdraw option for manager', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
@@ -504,11 +485,8 @@ describe('JSX: DesignUpdate', () => {
 
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
-    });
 
-    describe('Only a Designer can withdraw a Draft Design Update', () => {
-
-        it('has no withdraw option for developer', () => {
+        it('draft has no withdraw option for developer', () => {
 
             const userRole = RoleType.DEVELOPER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
@@ -518,7 +496,7 @@ describe('JSX: DesignUpdate', () => {
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
 
-        it('has no withdraw option for manager', () => {
+        it('draft has no withdraw option for manager', () => {
 
             const userRole = RoleType.MANAGER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
@@ -527,7 +505,6 @@ describe('JSX: DesignUpdate', () => {
 
             chai.assert.equal(item.find('#butWithdraw').length, 0, 'Withdraw option was found')
         });
-
     });
 
     // Remove Update ---------------------------------------------------------------------------------------------------

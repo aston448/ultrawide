@@ -45,7 +45,7 @@ export const DesignVersionValidationErrors = {
     DESIGN_VERSION_INVALID_STATE_EDIT:          'Only new or draft Design Versions can be edited',
     DESIGN_VERSION_INVALID_STATE_PUBLISH:       'Only new Design Versions can be published',
     DESIGN_VERSION_INVALID_STATE_WITHDRAW:      'Only draft Design Versions can be withdrawn',
-    DESIGN_VERSION_UPDATES_UNPUBLISH:           'A Design Version with Design Updates cannot be un-published',
+    DESIGN_VERSION_UPDATES_WITHDRAW:            'A Design Version with Design Updates cannot be withdrawn',
     DESIGN_VERSION_INVALID_ROLE_NEXT:           'Only a Designer can create a new Design Version',
     DESIGN_VERSION_INVALID_STATE_NEXT:          'Only a draft Design Version can be used to create a new Design Version',
     DESIGN_VERSION_INVALID_UPDATE_NEXT:         'You must include at least one Design Update as Merge to create a new Design Version',

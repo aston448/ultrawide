@@ -113,7 +113,7 @@ class DesignVersionValidationServices{
 
         // Design Version must have no updates
         if(dvUpdates.length > 0){
-            return DesignVersionValidationErrors.DESIGN_VERSION_UPDATES_UNPUBLISH;
+            return DesignVersionValidationErrors.DESIGN_VERSION_UPDATES_WITHDRAW;
         }
 
         // TODO - Add adoption validation

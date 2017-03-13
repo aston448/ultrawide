@@ -88,8 +88,9 @@ describe('UC 506 - Remove New Design Update', function(){
 
     it('A Designer cannot remove a Complete Design Update');
 
-    it('A Developer cannot remove a Design Update', function(){
-        // Setup
+    it('Only a Designer can remove a Design Update', function(){
+
+        // Setup - Developer
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.developerSelectsUpdate('DesignUpdate2');
@@ -101,18 +102,14 @@ describe('UC 506 - Remove New Design Update', function(){
 
         // Verify
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDeveloperIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
-    });
 
-    it('A Manager cannot remove a Design Update', function(){
-
-        // Setup
+        // Setup - Manager
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate2');
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForManagerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_NEW));
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_REMOVE};
         DesignUpdateActions.managerRemovesUpdate('DesignUpdate2', expectation);
 
         // Verify

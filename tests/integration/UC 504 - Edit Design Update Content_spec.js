@@ -84,9 +84,9 @@ describe('UC 504 - Edit Design Update Content', function(){
     // Conditions
     it('A Designer cannot edit a Complete Design Update');
 
-    it('A Developer cannot edit a Design Update', function(){
+    it('Only a Designer can edit a Design Update', function(){
 
-        // Setup
+        // Setup - Developer
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
 
@@ -94,16 +94,11 @@ describe('UC 504 - Edit Design Update Content', function(){
         const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT};
         DesignUpdateActions.developerEditsUpdate('DesignUpdate1', expectation);
 
-    });
-
-    it('A Manager cannot edit a Design Update', function(){
-
-        // Setup
+        // Setup - Manager
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
 
         // Execute
-        const expectation = {success: false, message: DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT};
         DesignUpdateActions.managerEditsUpdate('DesignUpdate1', expectation);
 
     });

@@ -932,7 +932,7 @@ describe('JSX: DesignItemHeader', () => {
         });
     });
 
-    describe('Only a Designer may edit a Design Update name', () => {
+    describe('The edit option for a Design Update name is only visible for a Designer', () => {
 
         it('no option for Developer on new update', () => {
 
@@ -1001,7 +1001,7 @@ describe('JSX: DesignItemHeader', () => {
         });
     });
 
-    describe('Only a Designer may edit a Design Update reference', () => {
+    describe('The edit option for a Design Update reference is only visible for a Designer', () => {
 
         it('no option for Developer on new update', () => {
 
