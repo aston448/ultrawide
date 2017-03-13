@@ -622,5 +622,60 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#addApplication').length, 0, 'Add Application found');
         });
     });
+
+    describe('A Design Update Summary is shown when a Design Update is edited or viewed', () => {
+
+        it('is visible in edit mode when no dictionary', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update Summary not found');
+        });
+
+        it('is visible in view mode when no dictionary', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update Summary not found');
+        });
+
+        it('is visible when viewing with no dictionary', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update Summary not found');
+        });
+    })
+
 });
 

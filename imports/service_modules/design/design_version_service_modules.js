@@ -371,6 +371,23 @@ class DesignVersionModules{
 
     }
 
+    mergeStepIgnoreUpdates(oldDesignVersionId, newDesignVersionId){
+
+        // Just mark them all as IGNORED
+        DesignUpdates.update(
+            {
+                designVersionId: oldDesignVersionId,
+                updateMergeAction: DesignUpdateMergeAction.MERGE_IGNORE
+            },
+            {
+                $set:{
+                    updateStatus: DesignUpdateStatus.UPDATE_IGNORED
+                }
+            },
+            {multi: true}
+        );
+    }
+
     rollForwardDomainDictionary(oldDesignVersionId, newDesignVersionId){
 
         // We want to copy ALL dictionary entries to the new DV.

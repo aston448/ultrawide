@@ -147,6 +147,7 @@ export const DesignUpdateStatus = {
     UPDATE_NEW:             'NEW',              // Designer can edit this update.  Cannot be adopted yet
     UPDATE_PUBLISHED_DRAFT: 'DRAFT',            // Can be adopted.  Can still be edited...
     UPDATE_MERGED:          'MERGED',           // Merged into a new design version
+    UPDATE_IGNORED:         'IGNORED'           // Neither merged nor carried forward in a change to the next design version
 };
 
 export const WorkPackageStatus = {

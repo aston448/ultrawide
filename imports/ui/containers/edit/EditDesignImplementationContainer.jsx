@@ -224,7 +224,7 @@ class DevApplicationsList extends Component {
         if(viewOptions.devIntTestsVisible){
 
             intTests =
-                <Panel header="Integration Test Implementation" className="panel-update panel-update-body">
+                <Panel header="Integration Test Implementation - click test result for details" className="panel-update panel-update-body">
                     <Grid>
                         <Row>
                             <Col md={12} className="scroll-col">
@@ -276,7 +276,7 @@ class DevApplicationsList extends Component {
         if(viewOptions.devUnitTestsVisible){
 
             unitTests =
-                <Panel header="Unit Test Implementation" className="panel-update panel-update-body">
+                <Panel header="Unit Test Implementation - click test result for details" className="panel-update panel-update-body">
                     <Grid>
                         <Row>
                             <Col md={12} className="scroll-col">

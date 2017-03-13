@@ -231,6 +231,7 @@ export class DesignUpdate extends Component {
                 }
                 break;
             case DesignUpdateStatus.UPDATE_MERGED:
+            case DesignUpdateStatus.UPDATE_IGNORED:
                 // View only for everyone
                 buttons =
                     <ButtonGroup>

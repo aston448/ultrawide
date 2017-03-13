@@ -204,7 +204,7 @@ describe('VAL: Design Update', function () {
 
         it('returns INVALID for a used name', () => {
 
-            const userRole = RoleType.DEVELOPER;
+            const userRole = RoleType.DESIGNER;
             const newName = 'Update2';
             const otherDesignUpdates = [
                 {_id: 'DU1', updateName: 'Update1'},
@@ -236,7 +236,7 @@ describe('VAL: Design Update', function () {
 
             const userRole = RoleType.DEVELOPER;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_MERGED;
-            const expectation = DesignUpdateValidationErrors.Validation.VALID;
+            const expectation = Validation.VALID;
 
             const result = DesignUpdateValidationServices.validateViewDesignUpdate(userRole, designUpdateStatus);
 
@@ -361,10 +361,24 @@ describe('VAL: Design Update', function () {
 
     describe('A Designer cannot edit a Complete Design Update', () => {
 
-        it('returns VALID for draft', () => {
+        it('returns INVALID for complete', () => {
 
             const userRole = RoleType.DESIGNER;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_MERGED;
+            const expectation = DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_EDIT;
+
+            const result = DesignUpdateValidationServices.validateEditDesignUpdate(userRole, designUpdateStatus);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A Designer cannot edit a Design Update at status Ignore', () => {
+
+        it('returns INVALID for ignored', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const designUpdateStatus = DesignUpdateStatus.UPDATE_IGNORED;
             const expectation = DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_EDIT;
 
             const result = DesignUpdateValidationServices.validateEditDesignUpdate(userRole, designUpdateStatus);

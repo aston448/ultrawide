@@ -151,6 +151,9 @@ class DesignVersionServices{
                 // Process the updates to be Rolled Forward
                 DesignVersionModules.mergeStepRollForwardUpdates(previousDesignVersionId, newDesignVersionId);
 
+                // Put to bed the ignored updates
+                DesignVersionModules.mergeStepIgnoreUpdates(previousDesignVersionId, newDesignVersionId);
+
                 // Carry forward the Domain Dictionary
                 DesignVersionModules.rollForwardDomainDictionary(previousDesignVersionId, newDesignVersionId);
 

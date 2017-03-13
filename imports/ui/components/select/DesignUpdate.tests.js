@@ -312,7 +312,7 @@ describe('JSX: DesignUpdate', () => {
     // Publish / Withdraw Update ---------------------------------------------------------------------------------------
 
     // Publish
-    describe('A Design Update item has an option to publish it', () => {
+    describe('A New Design Update item has an option to publish it', () => {
 
         it('has a publish option for new update for designer', () => {
 
@@ -523,6 +523,30 @@ describe('JSX: DesignUpdate', () => {
 
     });
 
+    describe('The remove option is only visible to Designers for New Design Updates', () => {
+
+        it('has no remove option for published update for designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
+
+            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
+
+            chai.assert.equal(item.find('#butDelete').length, 0, 'Remove option found')
+        });
+
+        it('has no remove option for completed update for designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
+
+            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
+
+            chai.assert.equal(item.find('#butDelete').length, 0, 'Remove option found')
+        });
+
+    });
+
     describe('A Designer cannot remove a Draft Design Update', () => {
 
         it('has no remove option for designer', () => {
@@ -656,6 +680,38 @@ describe('JSX: DesignUpdate', () => {
         });
     });
 
+    describe('Design Update merge actions are not visible for New Design Updates', () => {
+
+        it('no merge option', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
+
+            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+
+            chai.assert.equal(item.find('#optionMerge').length, 0, 'Merge option found')
+        });
+
+        it('no carry forward option', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
+
+            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+
+            chai.assert.equal(item.find('#optionRoll').length, 0, 'Carry Forward option found')
+        });
+
+        it('no ignore option', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
+
+            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+
+            chai.assert.equal(item.find('#optionIgnore').length, 0, 'Ignore option found')
+        });
+    });
 
     describe('A Designer cannot set Design Update actions for a New Design Update', () => {
 

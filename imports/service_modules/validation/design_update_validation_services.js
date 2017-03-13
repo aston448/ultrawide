@@ -71,8 +71,8 @@ class DesignUpdateValidationServices{
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_ROLE_EDIT;
         }
 
-        // Completed Design Updates cannot be edited
-        if(designUpdateStatus === DesignUpdateStatus.UPDATE_MERGED){
+        // Completed or Ignored Design Updates cannot be edited
+        if(designUpdateStatus === DesignUpdateStatus.UPDATE_MERGED || designUpdateStatus === DesignUpdateStatus.UPDATE_IGNORED){
             return DesignUpdateValidationErrors.DESIGN_UPDATE_INVALID_STATE_EDIT;
         }
 

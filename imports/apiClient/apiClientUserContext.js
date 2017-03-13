@@ -236,7 +236,7 @@ class ClientUserContextServices {
             });
 
             // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
-            log((msg) => console.log(msg), LogLevel.INFO, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
+            log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
             if (userContext.designComponentId != 'NONE') {
@@ -328,7 +328,7 @@ class ClientUserContextServices {
 
 
             // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
-            log((msg) => console.log(msg), LogLevel.INFO, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
+            log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
             if (userContext.designComponentId != 'NONE') {

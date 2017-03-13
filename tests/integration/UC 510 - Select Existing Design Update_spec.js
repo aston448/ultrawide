@@ -18,11 +18,12 @@ import WpComponentVerifications     from '../../test_framework/test_wrappers/wor
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignUpdateValidationErrors} from '../../imports/constants/validation_errors.js';
 
-describe('UC 501 - Add New Design Update', function(){
+describe('UC 510 - Select Existing Design Update', function(){
 
     before(function(){
-        TestFixtures.logTestSuite('UC 501 - Add New Design Update');
+        TestFixtures.logTestSuite('UC 510 - Select Existing Design Update');
 
         TestFixtures.clearAllData();
 
@@ -32,8 +33,7 @@ describe('UC 501 - Add New Design Update', function(){
         // Complete the Design Version and create the next
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
-        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
     });
 
     after(function(){
@@ -42,8 +42,14 @@ describe('UC 501 - Add New Design Update', function(){
 
     beforeEach(function(){
 
-        // Remove any Design Updates before each test
+        TestFixtures.clearWorkPackages();
         TestFixtures.clearDesignUpdates();
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1'); // Published
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2'); // Published
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
     });
 
     afterEach(function(){
@@ -52,40 +58,18 @@ describe('UC 501 - Add New Design Update', function(){
 
 
     // Actions
-    it('A Designer may add a Design Update to an Updatable Design Version', function(){
+    it('An existing Design Update can be selected as the current working Design Update', function(){
 
-        // Setup
+        // Setup - Designer Select Update1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        expect(UserContextVerifications.userContextForRole_DesignUpdateIs(RoleType.DESIGNER, 'DesignUpdate1'));
 
         // Execute
-        DesignUpdateActions.designerAddsAnUpdate();
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate2');
 
         // Verify
-        expect(DesignUpdateVerifications.updateExistsForDesignerCalled(DefaultItemNames.NEW_DESIGN_UPDATE_NAME));
-    });
-
-
-    // Consequences
-    it('When a new Design Update is added any removals made in other Design Updates for the Design Version are visible', function(){
-
-        // Setup
-        // Add an update with a removal in it
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
-
-        // Execute
-        // Add a second update
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-
-        // Verify - removed stuff is marked as removed elsewhere
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UserContextVerifications.userContextForRole_DesignUpdateIs(RoleType.DESIGNER, 'DesignUpdate2'));
     });
 
 });

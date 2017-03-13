@@ -66,7 +66,7 @@ export class MashUnitTestResult extends Component {
 
         // All this is is the Scenario Name plus a list of its scenarios
         return(
-            <div onMouseEnter={() => this.showOverlay()} onMouseLeave={() => this.hideOverlay()}>
+            <div onClick={() => this.toggleOverlay()}>
                 <Grid className="close-grid">
                     <Row>
                         <Col md={3} className="close-col">

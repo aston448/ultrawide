@@ -384,7 +384,7 @@ describe('VAL: Design Version', function () {
 
         it('returns INVALID for updatable Design Version', function () {
 
-            const role = RoleType.DEVELOPER;
+            const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
 

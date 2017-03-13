@@ -365,7 +365,7 @@ describe('JSX: AppHeader', () => {
 
     describe('A Developer viewing a Design Update cannot switch it to be editable', () => {
 
-        it('has an edit button not highlighted when in view mode', () => {
+        it('no edit button for developer when in view mode', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
@@ -380,7 +380,7 @@ describe('JSX: AppHeader', () => {
 
     describe('A Manager viewing a Design Update cannot switch it to be editable', () => {
 
-        it('has an edit button not highlighted when in view mode', () => {
+        it('no edit button for manager when in view mode', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;

@@ -66,8 +66,12 @@ class DesignVersionValidationServices{
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_EDIT ;
         }
 
-        // Design Version must not be Final
-        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_DRAFT_COMPLETE){
+        // Design Version must not be updatable or complete
+        if(
+            designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE ||
+            designVersion.designVersionStatus === DesignVersionStatus.VERSION_DRAFT_COMPLETE ||
+            designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE
+        ){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_EDIT;
         }
 
