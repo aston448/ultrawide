@@ -218,16 +218,16 @@ class TestIntegrationModules{
             isIntLocation:  true
         }).fetch();
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} user integration test locations", userLocations.length);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test locations", userLocations.length);
 
         userLocations.forEach((userLocation) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Processing user location {} of type {}", userLocation.locationName, userLocation.locationType);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing user location {} of type {}", userLocation.locationName, userLocation.locationType);
 
             // Get the actual location data
             const outputLocation = TestOutputLocations.findOne({_id: userLocation.locationId});
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Processing location {} of type {}", outputLocation.locationName, outputLocation.locationType);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing location {} of type {}", outputLocation.locationName, outputLocation.locationType);
 
             if(outputLocation.locationType === TestLocationType.LOCAL){
 
@@ -237,18 +237,18 @@ class TestIntegrationModules{
                     fileType:   TestLocationFileType.INTEGRATION
                 }).fetch();
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} user integration test files", testOutputFiles.length);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} user integration test files", testOutputFiles.length);
 
                 testOutputFiles.forEach((file) => {
 
                     const testFile = outputLocation.locationPath + file.fileName;
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Results from {}", testFile);
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Results from {}", testFile);
 
                     // Call the appropriate file parser
                     switch (file.testRunner) {
                         case TestRunner.CHIMP_MOCHA:
-                            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting CHIMP_MOCHA Results Data");
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting CHIMP_MOCHA Results Data");
 
                             ChimpMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.INTEGRATION);
                             break;
@@ -297,12 +297,12 @@ class TestIntegrationModules{
 
                     const testFile = outputLocation.locationPath + file.fileName;
 
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Results from {}", testFile);
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Getting Unit Results from {}", testFile);
 
                     // Call the appropriate file parser
                     switch (file.testRunner) {
                         case TestRunner.METEOR_MOCHA:
-                            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting METEOR_MOCHA Results Data");
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Getting METEOR_MOCHA Results Data");
 
                             MeteorMochaTestServices.getJsonTestResults(testFile, userContext.userId, TestType.UNIT);
                             break;
@@ -362,7 +362,7 @@ class TestIntegrationModules{
             // Get the Design Sections in order for each Application
             wpApplications.forEach((application) => {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data for application {}", application.componentReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Mash Data for application {}", application.componentReferenceId);
 
                 // Recursively look for features in design sections under this Application
                 featureIndex = this.getDesignSubSectionFeatures(userContext, application, featureIndex);
@@ -375,7 +375,7 @@ class TestIntegrationModules{
 
     getDesignSubSectionFeatures(userContext, parentComponent, featureIndex){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "GET DESIGN SUB SECTION FEATURES.  Index {}", featureIndex);
+        log((msg) => console.log(msg), LogLevel.TRACE, "GET DESIGN SUB SECTION FEATURES.  Index {}", featureIndex);
 
         let currentFeatureIndex = featureIndex;
         let subsections = [];
@@ -398,7 +398,7 @@ class TestIntegrationModules{
 
             subsections.forEach((subsection) => {
                 // Get the Features
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration Mash Data Features for section {}", subsection.componentReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Mash Data Features for section {}", subsection.componentReferenceId);
 
                 features = WorkPackageComponents.find(
                     {
@@ -421,7 +421,7 @@ class TestIntegrationModules{
             });
             return currentFeatureIndex;
         } else{
-            log((msg) => console.log(msg), LogLevel.DEBUG, "No subsections");
+            log((msg) => console.log(msg), LogLevel.TRACE, "No subsections");
             return currentFeatureIndex;
         }
 
@@ -433,7 +433,7 @@ class TestIntegrationModules{
 
         features.forEach((feature) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Processing Mash Data for Feature {} with index {}", feature.componentReferenceId, currentFeatureIndex);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Processing Mash Data for Feature {} with index {}", feature.componentReferenceId, currentFeatureIndex);
 
             // Get Aspects and Scenarios in the Feature
             let wpDesignItems = WorkPackageComponents.find({
@@ -444,7 +444,7 @@ class TestIntegrationModules{
                 $or: [{componentActive: true}, {componentParent: true}]
             }).fetch();
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Got {} design items", wpDesignItems.length);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Got {} design items", wpDesignItems.length);
 
             let designItemList = [];
 
@@ -597,7 +597,7 @@ class TestIntegrationModules{
             });
 
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Inserted Int Test FEATURE {} with index {}", featureName, currentFeatureIndex);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Inserted Int Test FEATURE {} with index {}", featureName, currentFeatureIndex);
 
             // Increment the feature index
             currentFeatureIndex++;
@@ -679,7 +679,7 @@ class TestIntegrationModules{
 
             });
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Mash data inserted");
+            log((msg) => console.log(msg), LogLevel.TRACE, "Mash data inserted");
 
         });
 
@@ -694,7 +694,7 @@ class TestIntegrationModules{
         if(viewOptions.devAccTestsVisible){
 
             // Get the Acceptance test SCENARIO results for current user - STEP results are in separate data mash
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Acc Test Results for User {}", userContext.userId);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Getting Acc Test Results for User {}", userContext.userId);
 
             const accResultsData = UserAccTestResults.find({userId: userContext.userId, componentType: ComponentType.SCENARIO}).fetch();
 
@@ -743,7 +743,7 @@ class TestIntegrationModules{
                         if(designFeature){
 
                             // Add a new Mash entry for this scenario under the feature as "Not in Design"
-                            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding unknown Scenario {} for Feature {}", testResult.scenarioName, testResult.featureName);
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Adding unknown Scenario {} for Feature {}", testResult.scenarioName, testResult.featureName);
 
                             UserWorkPackageMashData.insert(
                                 {

@@ -206,7 +206,7 @@ class TestOutputLocationServices {
 
     updateUserConfiguration(userId){
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Updating user config for user {}", userId);
+        log((msg) => console.log(msg), LogLevel.TRACE, "Updating user config for user {}", userId);
 
         // Make sure config contains all the possible locations for this user
         // Either is is Shared or it belongs to the current user...
@@ -218,7 +218,7 @@ class TestOutputLocationServices {
 
         testOutputLocations.forEach((location) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Checking location {}", location.locationName);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Checking location {}", location.locationName);
 
             userLocation = UserTestTypeLocations.findOne({
                 locationId: location._id,
@@ -228,7 +228,7 @@ class TestOutputLocationServices {
             // If not found add it in for the current user / role
             if(!userLocation){
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding user location {}", location.locationName);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding user location {}", location.locationName);
 
                 UserTestTypeLocations.insert({
                     locationId:             location._id,
@@ -272,7 +272,7 @@ class TestOutputLocationServices {
             });
 
             if(!testLocation){
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Removing user location {}", userLocation._id);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Removing user location {}", userLocation._id);
                 locationsToRemove.push(userLocation._id)
             }
         });
