@@ -56,35 +56,27 @@ class ClientContainerServices{
 
     getApplicationData(){
 
-        // Subscribing to these here makes them available to the whole app...
-        const urHandle = Meteor.subscribe('userRoles');
-        const ucHandle = Meteor.subscribe('userCurrentEditContext');
-        const uvHandle = Meteor.subscribe('userCurrentViewOptions');
-        const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
-        const tlHandle = Meteor.subscribe('testOutputLocations');
-        const tfHandle = Meteor.subscribe('testOutputLocationFiles');
-        const utHandle = Meteor.subscribe('userTestTypeLocations');
-        const dHandle = Meteor.subscribe('designs');
-        const dvHandle = Meteor.subscribe('designVersions');
-        const duHandle = Meteor.subscribe('designUpdates');
-        const wpHandle = Meteor.subscribe('workPackages');
+        if(Meteor.isClient) {
 
-        const loading = (
-            !urHandle.ready()   ||
-            !ucHandle.ready()   ||
-            !uvHandle.ready()   ||
-            !uuHandle.ready()   ||
-            !tlHandle.ready()   ||
-            !tfHandle.ready()   ||
-            !utHandle.ready()   ||
-            !dHandle.ready()    ||
-            !dvHandle.ready()   ||
-            !duHandle.ready()   ||
-            !wpHandle.ready()
-        );
+            // Subscribing to these here makes them available to the whole app...
+            const urHandle = Meteor.subscribe('userRoles');
+            const ucHandle = Meteor.subscribe('userCurrentEditContext');
+            const uvHandle = Meteor.subscribe('userCurrentViewOptions');
+            const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
+            const tlHandle = Meteor.subscribe('testOutputLocations');
+            const tfHandle = Meteor.subscribe('testOutputLocationFiles');
+            const utHandle = Meteor.subscribe('userTestTypeLocations');
+            const dHandle = Meteor.subscribe('designs');
+            const dvHandle = Meteor.subscribe('designVersions');
+            const duHandle = Meteor.subscribe('designUpdates');
+            const wpHandle = Meteor.subscribe('workPackages');
 
-        return {isLoading: loading};
+            const loading = (
+                !urHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !uuHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
+            );
 
+            return {isLoading: loading};
+        }
     }
 
     getUserData(userContext){
@@ -165,49 +157,52 @@ class ClientContainerServices{
 
     getWorkPackageData(userContext, callback){
 
-        if(store.getState().workPackageDataLoaded){
+        if(Meteor.isClient) {
 
-            if(callback){
-                callback()
-            }
-        } else {
+            if (store.getState().workPackageDataLoaded) {
 
-            store.dispatch(updateUserMessage({
-                messageType: MessageType.WARNING,
-                messageText: 'FETCHING WORK PACKAGE DATA FROM SERVER...'
-            }));
-
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Work Package Data for DV {}, WP {}", userContext.designVersionId, userContext.workPackageId);
-
-            let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
-
-            Tracker.autorun((loader) => {
-
-                let loading = !wcHandle.ready();
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "loading WP = {}", loading);
-
-                if (!loading) {
-                    // Mark data as loaded
-                    store.dispatch(setWorkPackageDataLoadedTo(true));
-
-                    store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
-                        messageText: 'Work Package data loaded'
-                    }));
-
-                    // Set open items now that data is loaded
-                    ClientUserContextServices.setOpenWorkPackageItems(userContext);
-
-                    // If an action wanted after loading call it...
-                    if (callback) {
-                        callback();
-                    }
-
-                    // Stop this checking once we are done or there will be random chaos
-                    loader.stop();
+                if (callback) {
+                    callback()
                 }
-            });
+            } else {
+
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.WARNING,
+                    messageText: 'FETCHING WORK PACKAGE DATA FROM SERVER...'
+                }));
+
+                log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Work Package Data for DV {}, WP {}", userContext.designVersionId, userContext.workPackageId);
+
+                let wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
+
+                Tracker.autorun((loader) => {
+
+                    let loading = !wcHandle.ready();
+
+                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading WP = {}", loading);
+
+                    if (!loading) {
+                        // Mark data as loaded
+                        store.dispatch(setWorkPackageDataLoadedTo(true));
+
+                        store.dispatch(updateUserMessage({
+                            messageType: MessageType.INFO,
+                            messageText: 'Work Package data loaded'
+                        }));
+
+                        // Set open items now that data is loaded
+                        ClientUserContextServices.setOpenWorkPackageItems(userContext);
+
+                        // If an action wanted after loading call it...
+                        if (callback) {
+                            callback();
+                        }
+
+                        // Stop this checking once we are done or there will be random chaos
+                        loader.stop();
+                    }
+                });
+            }
         }
     }
 
