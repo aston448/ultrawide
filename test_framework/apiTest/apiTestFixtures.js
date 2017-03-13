@@ -32,7 +32,7 @@ import TestDataHelpers                  from '../test_modules/test_data_helpers.
 Meteor.methods({
 
     'testFixtures.logTestSuite'(suiteName){
-        log((msg) => console.log(msg), LogLevel.DEBUG, "----- {} -----", suiteName);
+        log((msg) => console.log(msg), LogLevel.INFO, "----- {} -----", suiteName);
     },
 
     'testFixtures.removeMeteorUsers'(){

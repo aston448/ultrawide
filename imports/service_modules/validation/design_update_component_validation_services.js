@@ -15,9 +15,9 @@ import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js
 
 class DesignUpdateComponentValidationServices{
 
-    validateAddDesignUpdateComponent(view, mode, componentType, parentComponent, parentInOtherUpdates){
+    validateAddDesignUpdateComponent(view, mode, componentType, parentComponent){
 
-        // Additions only allowed in update edit or WO develop when in edit mode
+        // Additions only allowed in update edit or WP develop when in edit mode
         if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_ADD;
         }
@@ -59,24 +59,6 @@ class DesignUpdateComponentValidationServices{
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE;
             }
         }
-
-        // TODO Remove if not needed - think that will always be removed in current update if removed in other update
-        // // Check that the target parent has not been removed in another update
-        // if(parentInOtherUpdates) {
-        //
-        //     let isRemoved = false;
-        //
-        //     parentInOtherUpdates.forEach((instance) => {
-        //
-        //         if (instance.isRemoved) {
-        //             isRemoved = true;
-        //         }
-        //     });
-        //
-        //     if (isRemoved) {
-        //         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER;
-        //     }
-        // }
 
         return Validation.VALID;
     };

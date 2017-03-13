@@ -46,6 +46,17 @@ describe('JSX: DesignUpdate', () => {
     });
     const designUpdateMerged = Factory.create('designUpdateMerged');
 
+    Factory.define('designUpdateIgnored', DesignUpdates, {
+        designId:                   'DDD',
+        designVersionId:            'VVV',
+        updateName:                 'IgnoredUpdate',
+        updateReference:            'RefIgnored',
+        updateStatus:               DesignUpdateStatus.UPDATE_IGNORED,
+        updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
+        summaryDataStale:           false
+    });
+    const designUpdateIgnored = Factory.create('designUpdateIgnored');
+
     function testDesignUpdate(designUpdate, userRole, userContext){
 
         const viewOptions = {
@@ -530,7 +541,7 @@ describe('JSX: DesignUpdate', () => {
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdatePublished._id};
 
-            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
+            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
 
             chai.assert.equal(item.find('#butDelete').length, 0, 'Remove option found')
         });
@@ -540,7 +551,7 @@ describe('JSX: DesignUpdate', () => {
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
 
-            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
+            let item = testDesignUpdate(designUpdateMerged, userRole, userContext);
 
             chai.assert.equal(item.find('#butDelete').length, 0, 'Remove option found')
         });
@@ -687,7 +698,7 @@ describe('JSX: DesignUpdate', () => {
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
 
-            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
 
             chai.assert.equal(item.find('#optionMerge').length, 0, 'Merge option found')
         });
@@ -697,7 +708,7 @@ describe('JSX: DesignUpdate', () => {
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
 
-            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
 
             chai.assert.equal(item.find('#optionRoll').length, 0, 'Carry Forward option found')
         });
@@ -707,7 +718,7 @@ describe('JSX: DesignUpdate', () => {
             const userRole = RoleType.DESIGNER;
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateNew._id};
 
-            let item = testDesignUpdate(designUpdatePublished, userRole, userContext);
+            let item = testDesignUpdate(designUpdateNew, userRole, userContext);
 
             chai.assert.equal(item.find('#optionIgnore').length, 0, 'Ignore option found')
         });
@@ -774,6 +785,39 @@ describe('JSX: DesignUpdate', () => {
             const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateMerged._id};
 
             let item = testDesignUpdate(designUpdateMerged, userRole, userContext);
+
+            chai.assert.equal(item.find('#optionIgnore').length, 0, 'Ignore option was found')
+        });
+    });
+
+    describe('A Designer cannot set Design Update actions for an Ignore Design Update', () => {
+
+        it('has no merge option for designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateIgnored._id};
+
+            let item = testDesignUpdate(designUpdateIgnored, userRole, userContext);
+
+            chai.assert.equal(item.find('#optionMerge').length, 0, 'Merge option was found')
+        });
+
+        it('has no carry forward option for designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateIgnored._id};
+
+            let item = testDesignUpdate(designUpdateIgnored, userRole, userContext);
+
+            chai.assert.equal(item.find('#optionRoll').length, 0, 'Carry Forward option was found')
+        });
+
+        it('has no ignore option for designer', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const userContext = {designId: 'DDD', designVersionId: 'VVV', designUpdateId: designUpdateIgnored._id};
+
+            let item = testDesignUpdate(designUpdateIgnored, userRole, userContext);
 
             chai.assert.equal(item.find('#optionIgnore').length, 0, 'Ignore option was found')
         });

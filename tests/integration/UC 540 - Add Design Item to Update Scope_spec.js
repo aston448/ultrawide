@@ -161,6 +161,31 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
     });
 
+    it('A Feature cannot be added to Design Update Scope if it has been changed in another Design Update for the current Design Version', function(){
+
+        // Setup
+        // And another update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Put Feature1 in scope for DU1 and then edit it
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Feature Name');
+
+        // Now edit DU2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+
+        // Execute - Try to add Feature1 to scope
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED};
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1', expectation);
+
+        // Verify - not in scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+    });
+
     it('A Feature cannot be added to Design Update Scope if it has been removed in another Design Update for the current Design Version', function(){
 
         // Setup

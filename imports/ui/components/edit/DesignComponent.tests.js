@@ -595,7 +595,7 @@ describe('JSX: DesignComponent', () => {
         });
     });
 
-    describe('An organisational Design Update Component can only be added in edit mode', () => {
+    describe('There are no options to add organisational Design Update Components in View Only mode', () => {
 
         // NOTE - Application covered in EditDesignUpdateContainer test
 

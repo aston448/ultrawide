@@ -1530,5 +1530,87 @@ describe('JSX: DesignComponentHeader', () => {
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
     });
+
+    describe('When a Feature is added to Design Update Scope it becomes editable in the Design Update editor', () => {
+
+        it('is not editable when not in scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
+        });
+
+        it('is editable when in scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
+        });
+    });
+
+    describe('When a Feature As[ect is added to Design Update Scope it becomes editable in the Design Update editor', () => {
+
+        it('is not editable when not in scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
+        });
+
+        it('is editable when in scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
+        });
+    });
+
+    describe('When a Scenario is added to Design Update Scope it becomes editable in the Design Update editor', () => {
+
+        it('is not editable when not in scope', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
+        });
+
+        it('is editable when in scope', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
+        });
+    });
+
 });
 

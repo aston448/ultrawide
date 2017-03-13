@@ -677,7 +677,7 @@ export class DesignComponentHeader extends Component{
         // Header components -------------------------------------------------------------------------------------------
 
         let headerWithCheckbox =
-            <div>
+            <div id="scopeHeaderItem">
                 <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -698,7 +698,7 @@ export class DesignComponentHeader extends Component{
             </div>;
 
         let viewOnlyScopeHeader =
-            <div>
+            <div id="scopeHeaderItem">
                 <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -719,7 +719,7 @@ export class DesignComponentHeader extends Component{
             </div>;
 
         let viewOnlyHeader =
-            <div>
+            <div id="editorHeaderItem">
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -737,7 +737,7 @@ export class DesignComponentHeader extends Component{
             </div>;
 
         let editingHeader =
-            <div>
+            <div id="editorHeaderItem">
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon>
                         <div className="invisible"><Glyphicon glyph="star"/></div>
@@ -776,7 +776,7 @@ export class DesignComponentHeader extends Component{
         let draggableHeader = '';
         if(Meteor.isTest){
             draggableHeader =
-                <div>
+                <div id="editorHeaderItem">
                     <InputGroup>
                         <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                             <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -810,7 +810,7 @@ export class DesignComponentHeader extends Component{
         } else {
             draggableHeader =
             connectDragPreview(
-                <div>
+                <div id="editorHeaderItem">
                     <InputGroup>
                         <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                             <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -848,7 +848,7 @@ export class DesignComponentHeader extends Component{
 
 
         let nonDraggableHeader =
-            <div>
+            <div id="editorHeaderItem">
                 <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
@@ -879,7 +879,7 @@ export class DesignComponentHeader extends Component{
             </div>;
 
         let viewOnlyVersionProgressHeader =
-            <div>
+            <div id="editorHeaderItem">
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
@@ -1023,7 +1023,9 @@ export class DesignComponentHeader extends Component{
                         <Grid>
                             <Row className={featureRowClass}>
                                 <Col md={7} className="close-col">
-                                    {designComponentElement}
+                                    <div id="headerItem">
+                                        {designComponentElement}
+                                    </div>
                                 </Col>
                                 <Col md={5} className="close-col">
                                     <FeatureTestSummary
@@ -1056,7 +1058,9 @@ export class DesignComponentHeader extends Component{
                         <Grid>
                             <Row className={rowClass}>
                                 <Col md={7} className="close-col">
-                                    {designComponentElement}
+                                    <div id="headerItem">
+                                        {designComponentElement}
+                                    </div>
                                 </Col>
                                 <Col md={5} className="close-col">
                                     <TestSummary
@@ -1072,7 +1076,9 @@ export class DesignComponentHeader extends Component{
                         <Grid>
                             <Row className="non-summary-row">
                                 <Col md={7} className="close-col">
-                                    {designComponentElement}
+                                    <div id="headerItem">
+                                        {designComponentElement}
+                                    </div>
                                 </Col>
                                 <Col md={5} className="close-col">
                                 </Col>
@@ -1081,7 +1087,11 @@ export class DesignComponentHeader extends Component{
                     );
             }
         } else {
-            return(designComponentElement);
+            return(
+                <div id="headerItem">
+                    {designComponentElement}
+                </div>
+            );
         }
 
     }
