@@ -153,6 +153,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE:                     'A Design Update Component that is not removed is not restorable',
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE_PARENT:              'A Design Update Component whose parent is removed is not restorable',
     DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE:              'This Scenario is already in scope for another Design Update so cannot be added here',
+    DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED:               'This Feature cannot be put in scope here as its text is being modified in another update',
     DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED:               'This component cannot be scoped as it has been removed by another update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW:                 'This component cannot be removed from scope as it is new in this update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN:        'This component cannot be removed from scope as it has new children in this update',

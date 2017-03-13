@@ -352,6 +352,23 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
+        // A Feature cannot be put in scope if it has been changed in another update
+        if(newScope && component.componentType === ComponentType.FEATURE){
+
+            let alreadyChanged = false;
+
+            componentInOtherUpdates.forEach((instance) => {
+                if(instance.isChanged){
+                    alreadyChanged = true;
+                }
+            });
+
+            if(alreadyChanged){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED;
+            }
+
+        }
+
         // A Scenario cannot be put in scope if it is in scope for another update
         if(newScope && component.componentType === ComponentType.SCENARIO){
 
