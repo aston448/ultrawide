@@ -307,7 +307,8 @@ class DesignVersionModules{
                     isNew: false,
                     isChanged: false,
                     isTextChanged: false,
-                    isRemoved: false
+                    isRemoved: false,
+                    isRemovedElsewhere: false  // Or not anything that is removed in another update
                 }
             );
 
@@ -316,23 +317,28 @@ class DesignVersionModules{
                 // Update the details to that of the same component in the new DV
                 currentDesignVersionComponent = DesignComponents.findOne({designVersionId: newDesignVersionId, componentReferenceId: updateComponent.componentReferenceId});
 
-                DesignUpdateComponents.update(
-                    {_id: updateComponent._id},
-                    {
-                        $set:{
-                            componentNameOld:               currentDesignVersionComponent.componentName,
-                            componentNameNew:               currentDesignVersionComponent.componentName,
-                            componentNameRawOld:            currentDesignVersionComponent.componentNameRaw,
-                            componentNameRawNew:            currentDesignVersionComponent.componentNameRaw,
-                            componentNarrativeOld:          currentDesignVersionComponent.componentNarrative,
-                            componentNarrativeNew:          currentDesignVersionComponent.componentNarrative,
-                            componentNarrativeRawOld:       currentDesignVersionComponent.componentNarrativeRaw,
-                            componentNarrativeRawNew:       currentDesignVersionComponent.componentNarrativeRaw,
-                            componentTextRaw:               currentDesignVersionComponent.componentTextRaw,
-                            componentTextRawNew:            currentDesignVersionComponent.componentTextRaw
+                if(currentDesignVersionComponent) {
+
+                    DesignUpdateComponents.update(
+                        {_id: updateComponent._id},
+                        {
+                            $set: {
+                                componentNameOld: currentDesignVersionComponent.componentName,
+                                componentNameNew: currentDesignVersionComponent.componentName,
+                                componentNameRawOld: currentDesignVersionComponent.componentNameRaw,
+                                componentNameRawNew: currentDesignVersionComponent.componentNameRaw,
+                                componentNarrativeOld: currentDesignVersionComponent.componentNarrative,
+                                componentNarrativeNew: currentDesignVersionComponent.componentNarrative,
+                                componentNarrativeRawOld: currentDesignVersionComponent.componentNarrativeRaw,
+                                componentNarrativeRawNew: currentDesignVersionComponent.componentNarrativeRaw,
+                                componentTextRaw: currentDesignVersionComponent.componentTextRaw,
+                                componentTextRawNew: currentDesignVersionComponent.componentTextRaw
+                            }
                         }
-                    }
-                );
+                    );
+                } else {
+                    console.log("Component with ref " + updateComponent.componentReferenceId + " not found in DV " + newDesignVersionId);
+                }
             });
 
             // Move all components to new design version

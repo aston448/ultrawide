@@ -109,7 +109,7 @@ export function getComponentClass(currentItem, view, context, isNarrative){
                 if(!currentItem.isInScope && context != DisplayContext.BASE_VIEW){
                     modifier = ' greyed-out';
                 }
-                if(currentItem.isRemoved){
+                if(currentItem.isRemoved || currentItem.isRemovedElsewhere){
                     deleted = ' removed-item';
                 }
                 break;

@@ -599,7 +599,7 @@ export class DesignComponentHeader extends Component{
             inScope = (currentItem.isInScope || !currentItem.isScopable);
             isDeleted = currentItem.isRemoved;
 
-            // For logically deleted items, show the undo icon...
+            // For logically deleted items in the same update, show the undo icon...
             if(isDeleted){
                 deleteGlyph = 'arrow-left';
             }

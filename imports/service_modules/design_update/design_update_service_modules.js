@@ -30,6 +30,9 @@ class DesignUpdateModules{
 
         versionComponents.forEach((component) => {
 
+            // If the component is already removed in another update, mark it as such
+            const isRemovedElsewhere = this.componentIsRemovedInOtherUpdate(component);
+
             DesignUpdateComponents.insert(
                 {
                     componentReferenceId:           component.componentReferenceId,                     // Keeps the same reference from original design
@@ -63,6 +66,7 @@ class DesignUpdateModules{
                     isTextChanged:                  false,
                     isMoved:                        false,
                     isRemoved:                      false,
+                    isRemovedElsewhere:             isRemovedElsewhere,
 
                     isInScope:                      false,
                     isParentScope:                  false,
@@ -75,9 +79,6 @@ class DesignUpdateModules{
         this.fixParentIds(designVersionId, designUpdateId);
 
         // NOTE: All items populated here remain REMOVABLE as they are logically deleted when removed and we allow bulk deletes
-
-        // Set only items with no children as removable
-        // this.setRemovable(designVersionId, designUpdateId);
 
     };
 
@@ -114,8 +115,19 @@ class DesignUpdateModules{
                     }
                 }
             );
-
         });
+    };
+
+    componentIsRemovedInOtherUpdate(component){
+
+        // Is there a parallel update where the same component is removed
+        const componentRemovedInOtherUpdates = DesignUpdateComponents.find({
+            designVersionId:        component.designVersionId,
+            componentReferenceId:   component.componentReferenceId,
+            isRemoved:              true
+        }).fetch();
+
+        return (componentRemovedInOtherUpdates.length > 0);
     };
 
 
