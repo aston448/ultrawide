@@ -14,7 +14,7 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
-    'testContainerServices.getAndValidateChildComponentsForParent'(componentType, parentParentName, parentName, componentName, userName, view, displayContext, testCase, expectedComponentName = 'NONE'){
+    'testContainerServices.getAndValidateChildComponentsForParent'(parentType, parentParentName, parentName, componentType, componentName, userName, view, displayContext, testCase, expectedComponentName = 'NONE'){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         let component = null;
@@ -23,7 +23,7 @@ Meteor.methods({
         if(userContext.designUpdateId === 'NONE'){
             component = TestDataHelpers.getDesignComponentWithParent(
                 userContext.designVersionId,
-                componentType,
+                parentType,
                 parentParentName,
                 parentName
             );
@@ -31,7 +31,7 @@ Meteor.methods({
             component = TestDataHelpers.getDesignUpdateComponentWithParent(
                 userContext.designVersionId,
                 userContext.designUpdateId,
-                componentType,
+                parentType,
                 parentParentName,
                 parentName
             );
