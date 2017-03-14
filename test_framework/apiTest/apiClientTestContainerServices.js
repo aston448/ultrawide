@@ -14,25 +14,26 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
-    'testContainerServices.getAndValidateChildComponentsForParent'(componentType, parentName, componentName, userName, view, displayContext, testCase, expectedComponentName = 'NONE'){
+    'testContainerServices.getAndValidateChildComponentsForParent'(componentType, parentParentName, parentName, componentName, userName, view, displayContext, testCase, expectedComponentName = 'NONE'){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         let component = null;
 
+        // Get parent component
         if(userContext.designUpdateId === 'NONE'){
             component = TestDataHelpers.getDesignComponentWithParent(
                 userContext.designVersionId,
                 componentType,
-                parentName,
-                componentName
+                parentParentName,
+                parentName
             );
         } else {
             component = TestDataHelpers.getDesignUpdateComponentWithParent(
                 userContext.designVersionId,
                 userContext.designUpdateId,
                 componentType,
-                parentName,
-                componentName
+                parentParentName,
+                parentName
             );
         }
 

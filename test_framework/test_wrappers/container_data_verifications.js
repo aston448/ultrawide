@@ -5,10 +5,10 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class ContainerDataVerifications {
 
-    featureIsSeenInUpdateEditorForDesigner(featureParent, featureName) {
+    featureIsSeenInUpdateEditorForDesigner(featureGrandparent, featureParent, featureName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.FEATURE, featureParent, featureName,
+            ComponentType.FEATURE, featureGrandparent, featureParent, featureName,
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
@@ -19,10 +19,10 @@ class ContainerDataVerifications {
         );
     }
 
-    featureNotSeenInUpdateEditorForDesigner(featureParent, featureName) {
+    featureNotSeenInUpdateEditorForDesigner(featureGrandparent, featureParent, featureName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.FEATURE, featureParent, featureName,
+            ComponentType.FEATURE, featureGrandparent, featureParent, featureName,
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_NO_COMPONENT_RETURNED',
@@ -33,10 +33,10 @@ class ContainerDataVerifications {
         );
     }
 
-    featureAspectIsSeenInUpdateEditorForDesigner(featureName, aspectName) {
+    featureAspectIsSeenInUpdateEditorForDesigner(aspectGrandparent, featureName, aspectName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.FEATURE_ASPECT, featureName, aspectName,
+            ComponentType.FEATURE_ASPECT, aspectGrandparent, featureName, aspectName,
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
@@ -47,10 +47,10 @@ class ContainerDataVerifications {
         );
     }
 
-    featureAspectNotSeenInUpdateEditorForDesigner(featureName, aspectName) {
+    featureAspectNotSeenInUpdateEditorForDesigner(aspectGrandparent, featureName, aspectName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.FEATURE_ASPECT, featureName, aspectName,
+            ComponentType.FEATURE_ASPECT, aspectGrandparent, featureName, aspectName,
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_NO_COMPONENT_RETURNED',
@@ -61,10 +61,10 @@ class ContainerDataVerifications {
         );
     }
 
-    scenarioIsSeenInUpdateEditorForDesigner(aspectName, scenarioName) {
+    scenarioIsSeenInUpdateEditorForDesigner(featureName, aspectName, scenarioName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.SCENARIO, aspectName, scenarioName,
+            ComponentType.SCENARIO, featureName, aspectName, scenarioName,
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
@@ -75,10 +75,10 @@ class ContainerDataVerifications {
         );
     }
 
-    scenarioNotSeenInUpdateEditorForDesigner(aspectName, scenarioName) {
+    scenarioNotSeenInUpdateEditorForDesigner(featureName, aspectName, scenarioName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.SCENARIO, aspectName, scenarioName,
+            ComponentType.SCENARIO, featureName, aspectName, scenarioName,
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_NO_COMPONENT_RETURNED',

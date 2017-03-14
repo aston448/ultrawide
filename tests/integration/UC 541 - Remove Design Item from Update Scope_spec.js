@@ -188,38 +188,38 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         // Confirm that feature is now included in editor data
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Section1', 'Feature1'));
+        expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
 
         // Execute
         UpdateComponentActions.designerRemovesFeatureFromCurrentUpdateScope('Section1', 'Feature1');
 
         // Verify
-        expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Section1', 'Feature1'));
+        expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
 
         // FEATURE ASPECT
         // Setup - Add Feature1 Actions to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         // Confirm that feature aspect is now included in editor data
-        expect(ContainerDataVerifications.featureAspectIsSeenInUpdateEditorForDesigner('Feature1', 'Actions'));
+        expect(ContainerDataVerifications.featureAspectIsSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
 
         // Execute
         UpdateComponentActions.designerRemovesFeatureAspectFromCurrentUpdateScope('Feature1', 'Actions');
 
         // Verify
-        expect(ContainerDataVerifications.featureAspectNotSeenInUpdateEditorForDesigner('Feature1', 'Actions'));
+        expect(ContainerDataVerifications.featureAspectNotSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
 
         // SCENARIO
         // Setup - Add Feature1 Actions Scenario1 to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         // Confirm that scenario is now included in editor data
-        expect(ContainerDataVerifications.scenarioIsSeenInUpdateEditorForDesigner('Actions', 'Scenario1'));
+        expect(ContainerDataVerifications.scenarioIsSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
 
         // Execute
         UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
 
         // Verify
-        expect(ContainerDataVerifications.scenarioNotSeenInUpdateEditorForDesigner('Actions', 'Scenario1'));
+        expect(ContainerDataVerifications.scenarioNotSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
     })
 });
