@@ -250,17 +250,16 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         // Setup - Add Feature1 to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
-        // Confirm Section1 and Application1 are seen as well
+        // Confirm Section1 is seen as well
         expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
         expect(ContainerDataVerifications.designSectionIsSeenInUpdateEditorForDesigner('Application1', 'Section1'));
-        expect(ContainerDataVerifications.applicationIsSeenInUpdateEditorForDesigner('Application1'));
 
         // Execute
         UpdateComponentActions.designerRemovesFeatureFromCurrentUpdateScope('Section1', 'Feature1');
 
-        // Verify - feature gone but section and app remain
+        // Verify - feature gone but section remains
         expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
         expect(ContainerDataVerifications.designSectionIsSeenInUpdateEditorForDesigner('Application1', 'Section1'));
-        expect(ContainerDataVerifications.applicationIsSeenInUpdateEditorForDesigner('Application1'));
+
     });
 });
