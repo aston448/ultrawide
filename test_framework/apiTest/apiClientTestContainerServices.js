@@ -32,7 +32,7 @@ Meteor.methods({
             case 'VALIDATE_NO_COMPONENT_RETURNED':
 
                 if(data.components.length > 0){
-                    throw new Meteor.Error("FAIL", "Expecting no components to be returned");
+                    throw new Meteor.Error("FAIL", "Expecting no " + componentType + " components to be returned");
                 }
                 break;
 
@@ -58,7 +58,7 @@ Meteor.methods({
                     }
 
                 } else {
-                    throw new Meteor.Error("FAIL", "No components were returned");
+                    throw new Meteor.Error("FAIL", "No " + componentType + " components were returned");
                 }
                 break;
             default:

@@ -673,7 +673,7 @@ class ClientContainerServices{
     getComponentDataForParentComponent(componentType, view, designVersionId, updateId, workPackageId, parentId, displayContext){
         let currentComponents = null;
 
-        //console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
+        console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
 
         switch(view)
         {
@@ -704,7 +704,7 @@ class ClientContainerServices{
             case ViewType.DESIGN_UPDATE_VIEW:
                 // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
 
-                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
+                console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
