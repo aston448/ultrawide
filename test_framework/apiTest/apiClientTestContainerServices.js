@@ -14,13 +14,13 @@ import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../..
 
 Meteor.methods({
 
-    'testContainerServices.getAndValidateChildComponentsForParent'(parentType, parentParentName, parentName, componentType, componentName, userName, view, displayContext, testCase, expectedComponentName = 'NONE'){
+    'testContainerServices.getAndValidateChildComponentsForParent'(parentType, parentParentName, parentName, componentType, componentName, userName, view, displayContext, testCase){
 
         const userContext = TestDataHelpers.getUserContext(userName);
         let component = null;
 
         // Get parent component
-        if(userContext.designUpdateId === 'NONE'){
+        if (userContext.designUpdateId === 'NONE') {
             component = TestDataHelpers.getDesignComponentWithParent(
                 userContext.designVersionId,
                 parentType,
@@ -36,6 +36,7 @@ Meteor.methods({
                 parentName
             );
         }
+
 
         const data = ClientContainerServices.getComponentDataForParentComponent(componentType, view, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId, component._id, displayContext);
 
@@ -55,18 +56,18 @@ Meteor.methods({
                     data.components.forEach((component) => {
 
                         if(userContext.designUpdateId === 'NONE'){
-                            if(component.componentName === expectedComponentName){
+                            if(component.componentName === componentName){
                                 found = true;
                             }
                         } else {
-                            if(component.componentNameNew === expectedComponentName){
+                            if(component.componentNameNew === componentName){
                                 found = true;
                             }
                         }
                     });
 
                     if(!found){
-                        throw new Meteor.Error("FAIL", "Component " + expectedComponentName + " was not returned");
+                        throw new Meteor.Error("FAIL", "Component " + componentName + " was not returned");
                     }
 
                 } else {

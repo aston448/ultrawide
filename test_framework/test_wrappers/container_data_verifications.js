@@ -5,20 +5,6 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class ContainerDataVerifications {
 
-    applicationIsSeenInUpdateEditorForDesigner(applicationName) {
-
-        server.call('testContainerServices.getAndValidateChildComponentsForParent',
-            ComponentType.APPLICATION, 'NONE', 'NONE',
-            ComponentType.APPLICATION, applicationName,
-            'gloria',
-            ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
-            'VALIDATE_COMPONENT_RETURNED',
-            applicationName,
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
 
     designSectionIsSeenInUpdateEditorForDesigner(parentName, sectionName) {
 
@@ -30,7 +16,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
-            sectionName,
             (function (error, result) {
                 return (error === null);
             })
@@ -45,7 +30,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
-            featureName,
             (function (error, result) {
                 return (error === null);
             })
@@ -60,7 +44,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_NO_COMPONENT_RETURNED',
-            'NONE',
             (function (error, result) {
                 return (error === null);
             })
@@ -75,7 +58,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
-            aspectName,
             (function (error, result) {
                 return (error === null);
             })
@@ -90,7 +72,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_NO_COMPONENT_RETURNED',
-            'NONE',
             (function (error, result) {
                 return (error === null);
             })
@@ -105,7 +86,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_COMPONENT_RETURNED',
-            scenarioName,
             (function (error, result) {
                 return (error === null);
             })
@@ -120,7 +100,6 @@ class ContainerDataVerifications {
             'gloria',
             ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
             'VALIDATE_NO_COMPONENT_RETURNED',
-            'NONE',
             (function (error, result) {
                 return (error === null);
             })
