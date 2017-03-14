@@ -187,6 +187,7 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         // Confirm that feature is now included in editor data
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
         expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Section1', 'Feature1'));
 
         // Execute

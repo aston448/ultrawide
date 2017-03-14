@@ -17,13 +17,24 @@ Meteor.methods({
     'testContainerServices.getAndValidateChildComponentsForParent'(componentType, parentName, componentName, userName, view, displayContext, testCase, expectedComponentName = 'NONE'){
 
         const userContext = TestDataHelpers.getUserContext(userName);
+        let component = null;
 
-        const component = TestDataHelpers.getDesignComponentWithParent(
-            userContext.designVersionId,
-            componentType,
-            parentName,
-            componentName
-        );
+        if(userContext.designUpdateId === 'NONE'){
+            component = TestDataHelpers.getDesignComponentWithParent(
+                userContext.designVersionId,
+                componentType,
+                parentName,
+                componentName
+            );
+        } else {
+            component = TestDataHelpers.getDesignUpdateComponentWithParent(
+                userContext.designVersionId,
+                userContext.designUpdateId,
+                componentType,
+                parentName,
+                componentName
+            );
+        }
 
         const data = ClientContainerServices.getComponentDataForParentComponent(componentType, view, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId, component._id, displayContext);
 
