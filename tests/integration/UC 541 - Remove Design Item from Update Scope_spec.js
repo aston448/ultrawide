@@ -221,5 +221,46 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
 
         // Verify
         expect(ContainerDataVerifications.scenarioNotSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
-    })
+    });
+
+    it('When a scopable Design Component is removed from Design Update any scopable parents it has that are not themselves in scope also disappear from the Design Update editor', function(){
+
+        // Setup - add Scenario1 to scope...
+        // Setup - Add Feature1 Actions Scenario1 to the scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        // Confirm that scenario is now included in editor data
+        expect(ContainerDataVerifications.scenarioIsSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
+        // And Aspect Actions
+        expect(ContainerDataVerifications.featureAspectIsSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
+        // And Feature1
+        expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
+
+        // Execute - remove Scenario1 from scope
+        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
+
+        // Verify - all 3 components gone
+        expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
+        expect(ContainerDataVerifications.featureAspectNotSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
+        expect(ContainerDataVerifications.scenarioNotSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
+    });
+
+    it('Non scopable Design Components always remain in the Design Update editor even when scopable children are removed', function() {
+
+        // Setup - Add Feature1 to the scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        // Confirm Section1 and Application1 are seen as well
+        expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
+        expect(ContainerDataVerifications.designSectionIsSeenInUpdateEditorForDesigner('Application1', 'Section1'));
+        expect(ContainerDataVerifications.applicationIsSeenInUpdateEditorForDesigner('Application1'));
+
+        // Execute
+        UpdateComponentActions.designerRemovesFeatureFromCurrentUpdateScope('Section1', 'Feature1');
+
+        // Verify - feature gone but section and app remain
+        expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
+        expect(ContainerDataVerifications.designSectionIsSeenInUpdateEditorForDesigner('Application1', 'Section1'));
+        expect(ContainerDataVerifications.applicationIsSeenInUpdateEditorForDesigner('Application1'));
+    });
 });

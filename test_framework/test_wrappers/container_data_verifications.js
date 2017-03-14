@@ -5,6 +5,38 @@ import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/d
 
 class ContainerDataVerifications {
 
+    applicationIsSeenInUpdateEditorForDesigner(applicationName) {
+
+        server.call('testContainerServices.getAndValidateChildComponentsForParent',
+            ComponentType.APPLICATION, 'NONE', 'NONE',
+            ComponentType.APPLICATION, applicationName,
+            'gloria',
+            ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
+            'VALIDATE_COMPONENT_RETURNED',
+            applicationName,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    }
+
+    designSectionIsSeenInUpdateEditorForDesigner(parentName, sectionName) {
+
+        // When using this always use a section that is under an Application
+
+        server.call('testContainerServices.getAndValidateChildComponentsForParent',
+            ComponentType.APPLICATION, 'NONE', parentName,
+            ComponentType.DESIGN_SECTION, sectionName,
+            'gloria',
+            ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
+            'VALIDATE_COMPONENT_RETURNED',
+            sectionName,
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    }
+
     featureIsSeenInUpdateEditorForDesigner(featureGrandparent, featureParent, featureName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',
