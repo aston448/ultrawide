@@ -244,6 +244,7 @@ class DesignVersionModules{
                         componentLevel:             newComponent.componentLevel,                        // TODO - allow level to change??
                         componentParentId:          newComponent.componentParentIdNew,                  // This will be wrong but updated afterwards
                         componentParentReferenceId: newComponent.componentParentReferenceIdNew,
+                        componentFeatureReferenceId:newComponent.componentFeatureReferenceIdNew,
                         componentIndex:             newComponent.componentIndexNew,
 
                         // Data

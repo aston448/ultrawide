@@ -246,8 +246,6 @@ export class DesignComponent extends Component{
     // Design component open or closed (i.e. is body of it visible)
     toggleOpen(){
 
-
-
         // Store for persistence
         switch(this.props.view){
             case ViewType.DESIGN_NEW_EDIT:

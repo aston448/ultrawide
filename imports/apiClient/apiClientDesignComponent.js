@@ -638,14 +638,14 @@ class ClientDesignComponentServices{
             {
                 designVersionId: designComponent.designVersionId,
                 componentParentReferenceId: designComponent.componentReferenceId,
-                componentType: {$ne:(ComponentType.SCENARIO)}
+                componentType: {$ne: (ComponentType.SCENARIO)}
             }
         );
 
-        if(childComponents.count() > 0){
+        if (childComponents.count() > 0) {
             childComponents.forEach((child) => {
 
-                if(currentList.contains(child._id)) {
+                if (currentList.includes(child._id)) {
 
                     store.dispatch(setCurrentUserOpenDesignItems(
                         currentList,
@@ -664,7 +664,6 @@ class ClientDesignComponentServices{
         } else {
             return false;
         }
-
     };
 
     // User chose to refresh implementation progress data --------------------------------------------------------------

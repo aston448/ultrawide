@@ -409,6 +409,7 @@ class ClientDesignVersionServices{
                         view = ViewType.DESIGN_UPDATABLE_VIEW;
                         break;
                     case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+                    case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
                         // For final design versions view is all you can do
                         view = ViewType.DESIGN_PUBLISHED_VIEW;
                         break;

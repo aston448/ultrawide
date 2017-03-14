@@ -566,7 +566,8 @@ class ClientContainerServices{
         const baseApplications = DesignComponents.find(
             {
                 designVersionId: userContext.designVersionId,
-                componentType: ComponentType.APPLICATION
+                componentType: ComponentType.APPLICATION,
+                isRemoved: false
             },
             {sort: {componentIndex: 1}}
         );
@@ -673,15 +674,32 @@ class ClientContainerServices{
     getComponentDataForParentComponent(componentType, view, designVersionId, updateId, workPackageId, parentId, displayContext){
         let currentComponents = null;
 
-        console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
+        //console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
 
         switch(view)
         {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-                // DESIGN:  Just provide data for Design Version
 
+                // Don't show removed components in these views
+                currentComponents = DesignComponents.find(
+                    {
+                        designVersionId: designVersionId,
+                        componentType: componentType,
+                        componentParentId: parentId,
+                        isRemoved: false
+                    },
+                    {sort:{componentIndex: 1}}
+                );
+
+                return {
+                    components: currentComponents.fetch(),
+                    displayContext: displayContext
+                };
+                break;
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+
+                // Do include removed components in the current updates view
                 currentComponents = DesignComponents.find(
                     {
                         designVersionId: designVersionId,
@@ -690,8 +708,6 @@ class ClientContainerServices{
                     },
                     {sort:{componentIndex: 1}}
                 );
-
-                //console.log("Components found: " + currentComponents.count());
 
                 return {
                     components: currentComponents.fetch(),
@@ -704,7 +720,7 @@ class ClientContainerServices{
             case ViewType.DESIGN_UPDATE_VIEW:
                 // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
 
-                console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
+                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
