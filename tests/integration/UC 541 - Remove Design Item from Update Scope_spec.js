@@ -15,6 +15,7 @@ import WorkPackageVerifications     from '../../test_framework/test_wrappers/wor
 import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+import ContainerDataVerifications   from '../../test_framework/test_wrappers/container_data_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -178,4 +179,46 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
     });
 
+    // Consequences
+    it('When a scopable Design Component is removed from Design Update Scope it disappears from the Design Update editor', function(){
+
+        // FEATURE
+        // Setup - Add Feature1 to the scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        // Confirm that feature is now included in editor data
+        expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Section1', 'Feature1'));
+
+        // Execute
+        UpdateComponentActions.designerRemovesFeatureFromCurrentUpdateScope('Section1', 'Feature1');
+
+        // Verify
+        expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Section1', 'Feature1'));
+
+        // FEATURE ASPECT
+        // Setup - Add Feature1 Actions to the scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        // Confirm that feature aspect is now included in editor data
+        expect(ContainerDataVerifications.featureAspectIsSeenInUpdateEditorForDesigner('Feature1', 'Actions'));
+
+        // Execute
+        UpdateComponentActions.designerRemovesFeatureAspectFromCurrentUpdateScope('Feature1', 'Actions');
+
+        // Verify
+        expect(ContainerDataVerifications.featureAspectNotSeenInUpdateEditorForDesigner('Feature1', 'Actions'));
+
+        // SCENARIO
+        // Setup - Add Feature1 Actions Scenario1 to the scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        // Confirm that scenario is now included in editor data
+        expect(ContainerDataVerifications.scenarioIsSeenInUpdateEditorForDesigner('Actions', 'Scenario1'));
+
+        // Execute
+        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
+
+        // Verify
+        expect(ContainerDataVerifications.scenarioNotSeenInUpdateEditorForDesigner('Actions', 'Scenario1'));
+    })
 });

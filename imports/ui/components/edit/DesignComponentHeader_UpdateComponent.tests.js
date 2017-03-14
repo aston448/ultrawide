@@ -1558,7 +1558,7 @@ describe('JSX: DesignComponentHeader', () => {
         });
     });
 
-    describe('When a Feature As[ect is added to Design Update Scope it becomes editable in the Design Update editor', () => {
+    describe('When a Feature Aspect is added to Design Update Scope it becomes editable in the Design Update editor', () => {
 
         it('is not editable when not in scope', () => {
 
@@ -1609,6 +1609,69 @@ describe('JSX: DesignComponentHeader', () => {
             let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
+        });
+    });
+
+    describe('When a Design Component is removed from Design Update Scope it disappears from the Design Update editor', () => {
+
+        it('application is always in scope', () => {
+
+            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isScopable: false, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#editorHeaderItem').length === 1, 'Application not found');
+        });
+
+        it('design section is always in scope', () => {
+
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isScopable: false, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#editorHeaderItem').length === 1, 'Section not found');
+        });
+
+        it('feature is not present if not in scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#editorHeaderItem').length === 0, 'Feature was found');
+        });
+
+        it('feature aspect is not present if not in scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#editorHeaderItem').length === 0, 'Feature aspect was found');
+        });
+
+        it('scenario is not present if not in scope', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+
+            chai.assert(item.find('#editorHeaderItem').length === 0, 'Scenario was found');
         });
     });
 
