@@ -223,6 +223,7 @@ describe('UC 109 - View Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature1');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);

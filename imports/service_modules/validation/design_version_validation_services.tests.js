@@ -50,19 +50,6 @@ beforeEach(function(){
         designVersionStatus:    DesignVersionStatus.VERSION_UPDATABLE_COMPLETE
     });
 
-    const dv006 = DesignVersions.insert({
-        designId:               '001',
-        designVersionName:      'Draft Updates',
-        designVersionNumber:    '0.1',
-        designVersionStatus:    DesignVersionStatus.VERSION_DRAFT
-    });
-
-    DesignUpdates.insert({
-        designVersionId:            dv006,
-        updateName:                 'Update1',
-        updateReference:            'CR001'
-    });
-
 });
 
 afterEach(function(){
@@ -339,10 +326,9 @@ describe('VAL: Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
             const expectation = Validation.VALID;
 
-            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion);
 
             chai.assert.equal(result, expectation);
         });
@@ -351,10 +337,9 @@ describe('VAL: Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'New'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion);
 
             chai.assert.equal(result, expectation);
         });
@@ -363,10 +348,9 @@ describe('VAL: Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion);
 
             chai.assert.equal(result, expectation);
         });
@@ -375,10 +359,9 @@ describe('VAL: Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion);
 
             chai.assert.equal(result, expectation);
         });
@@ -387,10 +370,9 @@ describe('VAL: Design Version', function () {
 
             const role = RoleType.DESIGNER;
             const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
 
-            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
+            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion);
 
             chai.assert.equal(result, expectation);
         });
@@ -436,21 +418,6 @@ describe('VAL: Design Version', function () {
         });
     });
 
-    describe('A Design Version that has Design Updates cannot be withdrawn', function () {
-
-        it('returns INVALID when a Designer withdraws a Draft Design Version with Updates', function () {
-
-            const role = RoleType.DESIGNER;
-            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
-            const designUpdates = DesignUpdates.find({designVersionId: designVersion._id}).fetch();
-            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_UPDATES_WITHDRAW;
-
-            const result = DesignVersionValidationServices.validateWithdrawDesignVersion(role, designVersion, designUpdates);
-
-            chai.assert.equal(result, expectation);
-        });
-    });
-
     // Create Next -----------------------------------------------------------------------------------------------------
 
     describe('Only a Designer can create a new Design Version', function () {
@@ -458,7 +425,7 @@ describe('VAL: Design Version', function () {
         it('returns VALID for a Designer', function () {
 
             const role = RoleType.DESIGNER;
-            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const expectation = Validation.VALID;
 
             const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
@@ -469,7 +436,7 @@ describe('VAL: Design Version', function () {
         it('returns INVALID for a Developer', function () {
 
             const role = RoleType.DEVELOPER;
-            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_NEXT;
 
             const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
@@ -480,7 +447,7 @@ describe('VAL: Design Version', function () {
         it('returns INVALID for a Manager', function () {
 
             const role = RoleType.MANAGER;
-            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft'});
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_NEXT;
 
             const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
@@ -533,7 +500,7 @@ describe('VAL: Design Version', function () {
         it('returns INVALID for a Designer if no updates selected', function () {
 
             const role = RoleType.DESIGNER;
-            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable'});
             const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_NEXT;
 
             const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 0);

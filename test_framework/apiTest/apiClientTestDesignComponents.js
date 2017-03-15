@@ -342,7 +342,7 @@ Meteor.methods({
         })
     },
 
-    'testDesignComponents.openSelectedComponentAndVerify'(userName){
+    'testDesignComponents.closeSelectedComponentAndVerify'(userName){
 
         // This does not have a validation expectation - the function returns a list of open items
         // which we will verify in the action

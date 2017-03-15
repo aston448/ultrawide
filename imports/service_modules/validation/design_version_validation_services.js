@@ -103,7 +103,7 @@ class DesignVersionValidationServices{
         return Validation.VALID;
     };
 
-    validateWithdrawDesignVersion(userRole, designVersion, dvUpdates){
+    validateWithdrawDesignVersion(userRole, designVersion){
 
         // User must be Designer
         if(userRole != RoleType.DESIGNER){
@@ -114,13 +114,6 @@ class DesignVersionValidationServices{
         if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_DRAFT){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
         }
-
-        // Design Version must have no updates
-        if(dvUpdates.length > 0){
-            return DesignVersionValidationErrors.DESIGN_VERSION_UPDATES_WITHDRAW;
-        }
-
-        // TODO - Add adoption validation
 
         return Validation.VALID;
     };
@@ -138,7 +131,7 @@ class DesignVersionValidationServices{
         }
 
         // There must be at least one Design Update to Merge to create the updated version
-        if(mergeIncludeCount === 0){
+        if(mergeIncludeCount < 1){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_WORKING;
         }
 
@@ -157,9 +150,12 @@ class DesignVersionValidationServices{
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT;
         }
 
-        // For an updatable version there must be at lease one update to merge
-        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE && mergeIncludeCount === 0){
-            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_NEXT;
+        // For an updatable version there must be at least one update to merge
+        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE)
+        {
+            if(mergeIncludeCount < 1){
+                return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_NEXT;
+            }
         }
 
         return Validation.VALID;

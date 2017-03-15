@@ -364,7 +364,6 @@ describe('UC 106 - Create New Design Version', function(){
 
         // Verification
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        DesignVersionActions.designerEditsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
         expect(DomainDictionaryVerifications.termExistsForDesignerCalled('Term1'));
         expect(DomainDictionaryVerifications.termDefinitionForTerm_ForDesignerIs('Term1', 'Term1 Definition'));
         expect(DomainDictionaryVerifications.termExistsForDesignerCalled('Term2'));

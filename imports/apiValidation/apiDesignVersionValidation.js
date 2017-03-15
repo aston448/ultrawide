@@ -55,9 +55,8 @@ class DesignVersionValidationApi{
     validateWithdrawDesignVersion(userRole, designVersionId){
 
         const thisVersion = DesignVersions.findOne({_id: designVersionId});
-        const dvUpdates = DesignUpdates.find({designVersionId: designVersionId}).fetch();
 
-        return DesignVersionValidationServices.validateWithdrawDesignVersion(userRole, thisVersion, dvUpdates);
+        return DesignVersionValidationServices.validateWithdrawDesignVersion(userRole, thisVersion);
     };
 
     validateUpdateWorkingDesignVersion(userRole, designVersionId){
