@@ -48,10 +48,10 @@ export const DesignVersionValidationErrors = {
     DESIGN_VERSION_UPDATES_WITHDRAW:            'A Design Version with Design Updates cannot be withdrawn',
     DESIGN_VERSION_INVALID_ROLE_NEXT:           'Only a Designer can create a new Design Version',
     DESIGN_VERSION_INVALID_STATE_NEXT:          'Only a draft Design Version can be used to create a new Design Version',
-    DESIGN_VERSION_INVALID_UPDATE_NEXT:         'You must include at least one Design Update as Merge to create a new Design Version',
+    DESIGN_VERSION_INVALID_UPDATE_NEXT:         'You must include at least one Design Update to create a new Design Version',
     DESIGN_VERSION_INVALID_ROLE_UPDATE_WORKING: 'Only a Designer or Developer can update the working Design Version',
     DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING:'Only an Updatable Design Version can be updated with the latest Design Updates',
-    DESIGN_VERSION_INVALID_UPDATE_WORKING:      'There must be at least one Design Update at Merge to update the working Design Version'
+    DESIGN_VERSION_INVALID_UPDATE_WORKING:      'There must be at least one Design Update set for inclusion to update the working Design Version'
 };
 
 export const DesignUpdateValidationErrors = {

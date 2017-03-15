@@ -45,7 +45,8 @@ class DesignVersionServices{
                     designVersionNumber: designVersion.designVersionNumber,
                     designVersionRawText: designVersion.designVersionRawText,
                     designVersionStatus: designVersion.designVersionStatus,
-                    baseDesignVersionId: designVersion.baseDesignVersionId
+                    baseDesignVersionId: designVersion.baseDesignVersionId,
+                    designVersionIndex: designVersion.designVersionIndex
                 }
             );
 
@@ -133,7 +134,8 @@ class DesignVersionServices{
                     designVersionName: DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
                     designVersionNumber: DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
                     designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE,
-                    baseDesignVersionId: previousDesignVersionId // Based on the previous DV
+                    baseDesignVersionId: previousDesignVersionId,                   // Based on the previous DV
+                    designVersionIndex: oldDesignVersion.designVersionIndex + 1     // Increment index to create correct ordering
                 }
 
             );

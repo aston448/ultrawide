@@ -47,6 +47,20 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignComponents.componentDoesNotExistInDesignVersionCalled'(designName, designVersionName, componentType, componentName){
+
+        const design = TestDataHelpers.getDesign(designName);
+        const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
+
+        const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+
+        if(designComponent){
+            throw new Meteor.Error("FAIL", "Design Component of type " + componentType + " does exist with name " + componentName + " in Design Version " + designVersionName + " for Design " + designName);
+        } else {
+            return true;
+        }
+    },
+
     'verifyDesignComponents.componentCountCalledIs'(componentType, componentName, designName, designVersionName, componentCount){
 
         const design = TestDataHelpers.getDesign(designName);

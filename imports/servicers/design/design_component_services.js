@@ -99,7 +99,7 @@ class DesignComponentServices{
                     DesignServices.setRemovable(designId);
 
                     // Update the WP before adding the Feature Aspects
-                    DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
+                    DesignComponentModules.updateWorkPackages(designVersionId, designComponentId);
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!

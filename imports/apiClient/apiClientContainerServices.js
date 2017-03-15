@@ -422,9 +422,7 @@ class ClientContainerServices{
     getUltrawideDesigns(){
 
         // Get all the designs available
-        const currentDesigns = Designs.find({});
-
-        //console.log("Designs found: " + currentDesigns.count());
+        const currentDesigns = Designs.find({}, {sort: {designName: 1}});
 
         return {
             designs: currentDesigns.fetch(),
@@ -438,9 +436,10 @@ class ClientContainerServices{
         // No action if design not yet set
         if (currentDesignId != 'NONE') {
             // Get all the designs versions available
-            const currentDesignVersions = DesignVersions.find({designId: currentDesignId});
-
-            //console.log("Design Versions found: " + currentDesignVersions.count());
+            const currentDesignVersions = DesignVersions.find(
+                {designId: currentDesignId},
+                {sort: {designVersionIndex: 1}}
+            );
 
             return {
                 designVersions: currentDesignVersions.fetch(),
@@ -461,7 +460,8 @@ class ClientContainerServices{
                 {
                     designVersionId: currentDesignVersionId,
                     workPackageType: WorkPackageType.WP_BASE
-                }
+                },
+                {sort: {workPackageName: 1}}
             );
 
             // Get the status of the current design version
@@ -503,7 +503,8 @@ class ClientContainerServices{
                         designVersionId: currentDesignVersionId,
                         designUpdateId: currentDesignUpdateId,
                         workPackageType: WorkPackageType.WP_UPDATE
-                    }
+                    },
+                    {sort: {workPackageName: 1}}
                 );
 
                 return {
@@ -538,7 +539,10 @@ class ClientContainerServices{
         // No action if design version not yet set
         if (currentDesignVersionId != 'NONE') {
             // Get all the design updates available for the selected version
-            const currentDesignUpdates = DesignUpdates.find({designVersionId: currentDesignVersionId});
+            const currentDesignUpdates = DesignUpdates.find(
+                {designVersionId: currentDesignVersionId},
+                {sort: {updateName: 1}}
+            );
 
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;

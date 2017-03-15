@@ -21,6 +21,14 @@ class DesignComponentVerifications{
         );
     }
 
+    componentOfType_Called_DoesNotExistInDesign_Version_(type, name, designName, designVersionName){
+        server.call('verifyDesignComponents.componentDoesNotExistInDesignVersionCalled', designName, designVersionName, type, name,
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     componentOfType_Called_InDesign_Version_ParentIs_(type, name, designName, designVersionName, parentName){
         server.call('verifyDesignComponents.componentInDesignVersionParentIs', designName, designVersionName, type, name, parentName,
           (function(error, result){

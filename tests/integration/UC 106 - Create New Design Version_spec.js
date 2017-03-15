@@ -10,6 +10,8 @@ import DesignUpdateVerifications    from '../../test_framework/test_wrappers/des
 import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
+import DomainDictionaryActions      from '../../test_framework/test_wrappers/domain_dictionary_actions.js';
+import DomainDictionaryVerifications from '../../test_framework/test_wrappers/domain_dictionary_verifications.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -343,4 +345,140 @@ describe('UC 106 - Create New Design Version', function(){
 
     });
 
+    it('When a new Design Version is created all Domain Dictionary entries from the previous Design Version are carried forward', function(){
+
+        // Setup
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        // Add Dictionary entries
+        DomainDictionaryActions.designerAddsNewTerm();
+        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term1');
+        DomainDictionaryActions.designerEditsTerm_DefinitionTo_('Term1', 'Term1 Definition');
+        DomainDictionaryActions.designerAddsNewTerm();
+        DomainDictionaryActions.designerEditsTermNameFrom_To_(DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME, 'Term2');
+        DomainDictionaryActions.designerEditsTerm_DefinitionTo_('Term2', 'Term2 Definition');
+
+        // Execute
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+
+        // Verification
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerEditsDesignVersion(DefaultItemNames.NEW_DESIGN_VERSION_NAME);
+        expect(DomainDictionaryVerifications.termExistsForDesignerCalled('Term1'));
+        expect(DomainDictionaryVerifications.termDefinitionForTerm_ForDesignerIs('Term1', 'Term1 Definition'));
+        expect(DomainDictionaryVerifications.termExistsForDesignerCalled('Term2'));
+        expect(DomainDictionaryVerifications.termDefinitionForTerm_ForDesignerIs('Term2', 'Term2 Definition'));
+    });
+
+    it('When a new Design Version is created Design Updates selected as Ignore are neither merged nor carried forward', function(){
+
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+
+        // Add a Design Update so it can be completed
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+
+        // Add new functionality to the first update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // New section - Section4
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
+        // New Feature - Feature4
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature4');
+        // Set update to INCLUDE
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+        // Check
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
+
+        // Add another Design Update to IGNORE
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add new functionality to the second update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        // New section - Section5
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section5');
+        // New Feature - Feature5
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section5', 'Feature5');
+        // Set update to IGNORE
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
+        // Check
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_IGNORE));
+
+        // Execute - create another new DV from DesignVersion2
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+
+        // Verify - new DV created with default name
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
+
+        // Select the new DV
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+
+        // Verify that DU2 does not exist for new DV
+        expect(DesignUpdateVerifications.updateDoesNotExistForDesignerCalled('DesignUpdate2'));
+
+        // And that its components are not merged into it - no Feature5 should exist
+        DesignVersionActions.designerViewsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature5', 'Design1', 'DesignVersion2'));
+    });
+
+    it('An ignored Design Update remains at state Ignore in the previous Design Version', function(){
+
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+
+        // Add a Design Update so it can be completed
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+
+        // Add new functionality to the first update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // New section - Section4
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
+        // New Feature - Feature4
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature4');
+        // Set update to INCLUDE
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+        // Check
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
+
+        // Add another Design Update to IGNORE
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add new functionality to the second update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        // New section - Section5
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section5');
+        // New Feature - Feature5
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section5', 'Feature5');
+        // Set update to IGNORE
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
+        // Check
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_IGNORE));
+
+        // Execute - create another new DV from DesignVersion2
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+
+        // Verify
+        // Select old DV
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        // DU still exists but at state IGNORED
+        expect(DesignUpdateVerifications.updateExistsForDesignerCalled('DesignUpdate2'));
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateStatus.UPDATE_IGNORED));
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_IGNORE));
+    });
 });

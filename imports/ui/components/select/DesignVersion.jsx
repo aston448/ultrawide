@@ -138,8 +138,14 @@ export class DesignVersion extends Component {
         });
     }
 
-    onShowModal(){
-        this.setState({ showModal: true });
+    onShowModal(userRole, dv){
+
+        // Only show the dialog if its going to be valid to proceed anyway...
+        const valid = ClientDesignVersionServices.validateCreateNextDesignVersion(userRole, dv._id);
+
+        if (valid) {
+            this.setState({showModal: true});
+        }
     }
 
     onCloseModal() {
@@ -171,7 +177,7 @@ export class DesignVersion extends Component {
             <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update</Button>;
 
         const createNextButton =
-            <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onShowModal()}>Create Next</Button>;
+            <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onShowModal(userRole, designVersion)}>Create Next</Button>;
 
         const modalOkButton =
             <Button onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;

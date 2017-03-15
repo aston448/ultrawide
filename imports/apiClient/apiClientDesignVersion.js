@@ -256,6 +256,21 @@ class ClientDesignVersionServices{
         return {success: true, message: ''};
     }
 
+    // Pre-validation to decide if we should even show the modal dialog
+    validateCreateNextDesignVersion(userRole, baseDesignVersionId){
+
+        let result = DesignVersionValidationApi.validateCreateNextDesignVersion(userRole, baseDesignVersionId);
+
+        if(result != Validation.VALID){
+
+            // Business validation failed - show error on screen
+            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
+            return false;
+        }
+
+        return true;
+    }
+
     // TODO
     // Developer user chose to adopt this design version as their working design
     adoptDesignVersion(){
