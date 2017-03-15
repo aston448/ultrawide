@@ -302,4 +302,44 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Reorder Component');
     },
 
+    'testDesignComponents.openSelectedComponentAndVerify'(userName, expectedOpenNames){
+
+        // This does not have a validation expectation - the function returns a list of open items
+        // which we will verify in the action
+
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // Assume nothing open before the test
+        const currentOpenComponentIds = [];
+
+        // Get the ids related to our expectation
+        let expectedOpenComponentIds = [];
+
+        expectedOpenNames.forEach((component) => {
+
+            let expectedDesignComponent =  TestDataHelpers.getDesignComponentWithParent(
+                userContext.designVersionId,
+                component.componentType,
+                component.parentName,
+                component.componentName
+            );
+
+            expectedOpenComponentIds.push(expectedDesignComponent._id);
+        });
+
+        const designComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+
+        const newOpenComponentIds = ClientDesignComponentServices.setOpenClosed(designComponent, currentOpenComponentIds, true);
+
+        // Verify expectation
+        expectedOpenComponentIds.forEach((expectedComponentId) => {
+            let expectedComponent = DesignComponents.findOne({_id : expectedComponentId});
+
+            if(!(newOpenComponentIds.includes(expectedComponentId))){
+                throw new Meteor.Error("FAIL", "Component " + expectedComponent.componentName + " was not found to be open");
+            }
+        })
+    },
+
 });

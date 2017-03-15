@@ -32,9 +32,9 @@ afterEach(function(){
 
 });
 
-describe('A new Design can only be added by a Designer', function () {
+describe('VAL: Design', function () {
 
-    describe('Design Validation Services', function () {
+    describe('A new Design can only be added by a Designer', function () {
 
         it('returns VALID when a Designer adds a Design', function () {
 
@@ -50,7 +50,6 @@ describe('A new Design can only be added by a Designer', function () {
 
         });
 
-
         it('returns INVALID when a Manager adds a Design', function () {
 
             const role = RoleType.MANAGER;
@@ -58,11 +57,8 @@ describe('A new Design can only be added by a Designer', function () {
 
         });
     });
-});
 
-describe('Only a Designer can update a Design name', function () {
-
-    describe('Design Validation Services', function () {
+    describe('Only a Designer can update a Design name', function () {
 
         it('returns VALID when a Designer updates a Design name', function () {
 
@@ -84,13 +80,9 @@ describe('Only a Designer can update a Design name', function () {
             const role = RoleType.MANAGER;
             chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), Validation.VALID, 'Attempt to add a design by a Manager returned VALID!');
         });
-
     });
-});
 
-describe('A Design cannot be given the same name as another existing Design', function () {
-
-    describe('Design Validation Services', function () {
+    describe('A Design cannot be given the same name as another existing Design', function () {
 
         it('returns VALID when a Designer updates a Design name to a new name', function () {
 
@@ -105,13 +97,9 @@ describe('A Design cannot be given the same name as another existing Design', fu
             const role = RoleType.DESIGNER;
             chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'Active Design', otherDesigns), Validation.VALID, 'Attempt to update name to existing name returned VALID!');
         });
-
     });
-});
 
-describe('A Designer can remove a Design that is removable', function () {
-
-    describe('Design Validation Services', function () {
+    describe('A Designer can remove a Design that is removable', function () {
 
         it('returns VALID for a Designer if the Design is removable', function () {
 
@@ -129,11 +117,8 @@ describe('A Designer can remove a Design that is removable', function () {
 
         });
     });
-});
 
-describe('A Design can only be removed by a Designer', function () {
-
-    describe('Design Validation Services', function () {
+    describe('A Design can only be removed by a Designer', function () {
 
         it('returns INVALID for a Manager if the Design is removable', function () {
 
@@ -151,6 +136,7 @@ describe('A Design can only be removed by a Designer', function () {
 
         });
     });
+
 });
 
 

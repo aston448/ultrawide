@@ -12,6 +12,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 
 import {RoleType, DesignVersionStatus, ComponentType} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
+import {DesignVersionValidationErrors} from '../../imports/constants/validation_errors.js';
 
 describe('UC 105 - Withdraw Design Version', function(){
 
@@ -52,10 +53,5 @@ describe('UC 105 - Withdraw Design Version', function(){
         expect(DesignVersionVerifications.designVersion_StatusForDesignerIs(DefaultItemNames.NEW_DESIGN_VERSION_NAME, DesignVersionStatus.VERSION_NEW));
 
     });
-
-
-    // Conditions
-
-    it('A Design Version that has Design Updates cannot be withdrawn');
 
 });

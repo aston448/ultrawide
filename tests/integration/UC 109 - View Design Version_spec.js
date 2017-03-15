@@ -207,10 +207,43 @@ describe('UC 109 - View Design Version', function(){
 
     });
 
-
     // Consequences
-    it('When a non-editable Design Version is viewed it is opened View Only with no option to edit');
+    it('When a completed Updatable Design Version is viewed any Design Components removed in that version are not shown', function(){
 
-    it('When an editable Design Version is opened by a Designer it is opened View Only with an option to edit');
+        // Setup - create updatable design version
+        DesignActions.designerSelectsDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        // Make the update remove Feature1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature1');
+
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion3');
+
+        // Verify - Design Version 2 no longer has Feature1 or its children
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion2');
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion2'));
+        // Nor do they exist in the latest design version
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion3');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion3');
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion3'));
+        // But still exist in the original version
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1'));
+    });
+
 
 });

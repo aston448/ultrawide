@@ -38,7 +38,7 @@ describe('JSX: AppHeader', () => {
 
     describe('The Design Version editor has an option to switch to View Only mode', () => {
 
-        it('has a view button not highlighted', () => {
+        it('has a view button not highlighted when editing', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_NEW_EDIT;
@@ -48,15 +48,30 @@ describe('JSX: AppHeader', () => {
             let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butView')).to.have.length(1);
-            chai.assert.equal(item.find('#butView').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
-            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting to be highlighted');
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'default', 'Expecting View NOT to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting Edit to be highlighted');
+
+        });
+
+        it('has a view button highlighted when view only', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting View to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting Edit NOT to be highlighted');
 
         });
     });
 
     describe('The Design Version editor has an option to switch to normal editing mode', () => {
 
-        it('has an edit button not highlighted', () => {
+        it('has an edit button not highlighted when view only', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_NEW_EDIT;
@@ -66,13 +81,27 @@ describe('JSX: AppHeader', () => {
             let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(1);
-            chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting to be highlighted');
-            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting NOT to be highlighted');
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'success', 'Expecting View to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'default', 'Expecting Edit NOT to be highlighted');
+        });
+
+        it('has an edit button highlighted when editing', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const userRole = RoleType.DESIGNER;
+            const userName = 'gloria';
+
+            let item = testAppHeader(mode, view, userRole, userName);
+
+            chai.expect(item.find('#butView')).to.have.length(1);
+            chai.assert.equal(item.find('#butView').props().bsStyle, 'default', 'Expecting View NOT to be highlighted');
+            chai.assert.equal(item.find('#butEdit').props().bsStyle, 'success', 'Expecting Edit to be highlighted');
         });
 
     });
 
-    describe('Only a Design Version being edited and in View Only mode may be switched back to edit mode', () => {
+    describe('There is no option to switch to editing mode when a Design Version is being viewed', () => {
 
         it('a view only design has no edit button', () => {
 
@@ -84,7 +113,6 @@ describe('JSX: AppHeader', () => {
             let item = testAppHeader(mode, view, userRole, userName);
 
             chai.expect(item.find('#butEdit')).to.have.length(0);
-
         });
     });
 
@@ -182,7 +210,7 @@ describe('JSX: AppHeader', () => {
 
     });
 
-    describe('Only a Design Version being edited can be switched to View Only', () => {
+    describe('There is no option to switch to View Only when a Design Version is being viewed', () => {
 
         it('View Only design has no edit button', () => {
 

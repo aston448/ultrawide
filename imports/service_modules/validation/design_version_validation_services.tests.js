@@ -73,6 +73,172 @@ afterEach(function(){
 
 describe('VAL: Design Version', function () {
 
+    // Edit Details ----------------------------------------------------------------------------------------------------
+
+    describe('A Designer may update the name of a Design Version', () => {
+
+        it('returns VALID for a designer with a valid name', () => {
+
+            const role = RoleType.DESIGNER;
+            const newName = 'New Name';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = Validation.VALID;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionName(role, newName, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A Designer may update the number of a Design Version', () => {
+
+        it('returns VALID for a designer with a valid number', () => {
+
+            const role = RoleType.DESIGNER;
+            const newNumber = '0.2';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = Validation.VALID;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionNumber(role, newNumber, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('Only a Designer may update a Design Version name', () => {
+
+        it('returns INVALID for a developer', () => {
+
+            const role = RoleType.DEVELOPER;
+            const newName = 'New Name';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionName(role, newName, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for a manager', () => {
+
+            const role = RoleType.MANAGER;
+            const newName = 'New Name';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionName(role, newName, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('Only a Designer may update a Design Version number', () => {
+
+        it('returns INVALID for a developer', () => {
+
+            const role = RoleType.DEVELOPER;
+            const newNumber = '0.2';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionNumber(role, newNumber, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID for a manager', () => {
+
+            const role = RoleType.MANAGER;
+            const newNumber = '0.2';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionNumber(role, newNumber, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A Design Version may not be renamed to the same name as another version in the Design', () => {
+
+        it('returns VALID for a designer with a valid name', () => {
+
+            const role = RoleType.DESIGNER;
+            const newName = 'DesignVersion1';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_NAME_DUPLICATE;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionName(role, newName, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A Design Version may not be renumbered to the same number as another version in the Design', () => {
+
+        it('returns VALID for a designer with a valid number', () => {
+
+            const role = RoleType.DESIGNER;
+            const newNumber = '0.1';
+            const otherVersions = [
+                {
+                    _id: 'DV001',
+                    designVersionName: 'DesignVersion1',
+                    designVersionNumber: '0.1'
+                }
+            ];
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_NUMBER_DUPLICATE;
+
+            const result = DesignVersionValidationServices.validateUpdateDesignVersionNumber(role, newNumber, otherVersions);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    // Publish ---------------------------------------------------------------------------------------------------------
+
     describe('Only a Designer can publish a Design Version', function () {
 
         it('returns VALID for a Designer', function () {
@@ -164,6 +330,8 @@ describe('VAL: Design Version', function () {
             chai.assert.equal(result, expectation);
         });
     });
+
+    // Withdraw --------------------------------------------------------------------------------------------------------
 
     describe('Only a Draft Design Version can be withdrawn', function () {
 
@@ -283,6 +451,8 @@ describe('VAL: Design Version', function () {
         });
     });
 
+    // Create Next -----------------------------------------------------------------------------------------------------
+
     describe('Only a Designer can create a new Design Version', function () {
 
         it('returns VALID for a Designer', function () {
@@ -318,6 +488,61 @@ describe('VAL: Design Version', function () {
             chai.assert.equal(result, expectation);
         });
     });
+
+    describe('A new Design Version may not be created from a New Design Version', () => {
+
+        it('returns INVALID if designer tries with new version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'New'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT;
+
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A new Design Version may not be created from a Complete Design Version', () => {
+
+        it('returns INVALID if designer tries with draft complete version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Complete'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT;
+
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
+
+            chai.assert.equal(result, expectation);
+        });
+
+        it('returns INVALID if designer tries with updatable complete version', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Updatable Complete'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_NEXT;
+
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 1);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    describe('A new Design Version may not be created from an Updatable Design Version if no Design Updates are selected for inclusion', function () {
+
+        it('returns INVALID for a Designer if no updates selected', function () {
+
+            const role = RoleType.DESIGNER;
+            const designVersion = DesignVersions.findOne({designVersionName: 'Draft Updates'});
+            const expectation = DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_NEXT;
+
+            const result = DesignVersionValidationServices.validateCreateNextDesignVersion(role, designVersion, 0);
+
+            chai.assert.equal(result, expectation);
+        });
+    });
+
+    // Edit ------------------------------------------------------------------------------------------------------------
 
     describe('Only a Designer can edit a Design Version', function () {
 
@@ -394,6 +619,8 @@ describe('VAL: Design Version', function () {
         });
     });
 
+    // View ------------------------------------------------------------------------------------------------------------
+
     describe('Only a Designer can view a New Design Version', function () {
 
         it('returns VALID for a Designer', function () {
@@ -429,6 +656,8 @@ describe('VAL: Design Version', function () {
             chai.assert.equal(result, expectation);
         });
     });
+
+    // Update ----------------------------------------------------------------------------------------------------------
 
     describe('A Manager may not update an Updatable Design Version', function() {
 

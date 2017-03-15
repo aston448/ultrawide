@@ -47,7 +47,7 @@ describe('JSX: DesignComponentHeader', () => {
 
     describe('Editing Features are not available when in View Only mode', () => {
 
-        it('does not have an edit, delete or move option', () => {
+        it('does not have an edit option', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_VIEW;
@@ -58,9 +58,29 @@ describe('JSX: DesignComponentHeader', () => {
 
             // No edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
+        });
+
+        it('does not have delete option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No delete option
             chai.assert(item.find('#actionDelete').length === 0, 'Delete option found!');
+        });
+
+        it('does not have move option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // No move option
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
@@ -70,7 +90,7 @@ describe('JSX: DesignComponentHeader', () => {
 
     describe('All editing features are restored when View Only mode is cancelled', () => {
 
-        it('has edit, delete and move options', () => {
+        it('has edit option', () => {
 
             const currentItem = {};
             const mode = ViewMode.MODE_EDIT;
@@ -81,9 +101,29 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has edit option
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found');
+        });
+
+        it('has delete option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has delete option
             chai.assert(item.find('#actionDelete').length === 1, 'Delete option not found');
+        });
+
+        it('has move option', () => {
+
+            const currentItem = {};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
 
             // Has move option
             chai.assert(item.find('#actionMove').length === 1, 'Move option not found');
@@ -91,7 +131,7 @@ describe('JSX: DesignComponentHeader', () => {
     });
 
 
-    describe('Each Design Component has a toggle to open or close it', () => {
+    describe('Each parent Design Component has a toggle to open or close it', () => {
 
         it('an application has open-close option in edit mode', () => {
 
