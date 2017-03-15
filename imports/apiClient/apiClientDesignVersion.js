@@ -3,11 +3,12 @@
 
 // Ultrawide Collections
 import {DesignVersions}         from '../collections/design/design_versions.js';
+import {DesignUpdates}          from '../collections/design_update/design_updates.js';
 import {DesignComponents}       from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, MessageType, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, MessageType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -471,6 +472,16 @@ class ClientDesignVersionServices{
             return null;
         }
 
+    }
+
+    // Get a list of updates to INCLUDE / CARRY FORWARD / IGNORE for the next Design Version ---------------------------
+    getDesignUpdatesForVersion(designVersionId, updateMergeAction){
+
+        return DesignUpdates.find({
+            designVersionId:    designVersionId,
+            updateStatus:       DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+            updateMergeAction:  updateMergeAction
+        }).fetch();
     }
 
 }

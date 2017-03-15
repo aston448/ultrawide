@@ -405,6 +405,72 @@ input {
     color: indianred;
     background-color: pink;
 }
+
+/* -- Design Version Modal ------------------------------------------------------------------------------------------ */
+
+.merge-alert{
+    margin: 6px;
+    padding: 4px;
+    color: indianred;
+    border-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+}
+
+.merge-normal{
+    margin: 6px;
+    padding: 4px;
+    color: black;
+    background-color: transparent;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+}
+
+.merge-header{
+    margin: 10px 6px 0px 6px;
+    padding: 4px;
+    color: black;
+    background-color: transparent;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+}
+
+.merge-include{
+    margin: 2px 6px 2px 6px;
+    padding: 4px;
+    border: 1px solid darkgreen;
+    background-color: #EEFFEE;
+    border-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+}
+
+.merge-roll{
+    margin: 2px 6px 2px 6px;
+    padding: 4px;
+    border: 1px solid darkblue;
+    background-color: #EEEEFF;
+    border-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+}
+
+.merge-ignore{
+    margin: 2px 6px 2px 6px;
+    padding: 4px;
+    border: 1px solid darkred;
+    background-color: #FFEEEE;
+    border-radius: 4px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+}
+
 /* -- Wait Screen --------------------------------------------------------------------------------------------------- */
 
 .wait-bar{

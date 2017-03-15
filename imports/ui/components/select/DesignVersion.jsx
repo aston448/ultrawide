@@ -7,14 +7,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignItemHeader from './DesignItemHeader.jsx';
+import UpdateMergeItem from './UpdateMergeItem.jsx';
 
 // Ultrawide Services
 import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js';
-import {RoleType, DesignVersionStatus, ItemType, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
+import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js'
 
 // Bootstrap
-import {Button, ButtonGroup} from 'react-bootstrap';
+import {Button, ButtonGroup, Modal} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -30,6 +31,10 @@ import {connect} from 'react-redux';
 export class DesignVersion extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            showModal: false,
+        };
     }
 
     getTestIntegrationDataContext(){
@@ -67,10 +72,6 @@ export class DesignVersion extends Component {
         );
     }
 
-    onAdoptDesignVersion(userContext, dv){
-
-    }
-
     onPublishDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.publishDesignVersion(
@@ -100,12 +101,15 @@ export class DesignVersion extends Component {
 
     onCreateNextDesignVersion(userRole, userContext, dv){
 
+        this.setState({ showModal: false });
+
         ClientDesignVersionServices.createNextDesignVersion(
             userRole,
             userContext,
             dv._id
         );
     }
+
 
     setNewDesignVersionActive(userRole, userContext, dv){
 
@@ -119,16 +123,123 @@ export class DesignVersion extends Component {
 
     }
 
+    getUpdates(designVersionId, updateMergeStatus){
+
+        const updatesToMerge = ClientDesignVersionServices.getDesignUpdatesForVersion(designVersionId, updateMergeStatus);
+
+        return updatesToMerge.map((update) => {
+            // All applications are shown even in update edit view even if not in scope so that new items can be added to them
+            return (
+               <UpdateMergeItem
+                   key={update._id}
+                   updateItem={update}
+               />
+            );
+        });
+    }
+
+    onShowModal(){
+        this.setState({ showModal: true });
+    }
+
+    onCloseModal() {
+        this.setState({ showModal: false });
+    }
+
+
     render() {
         const {designVersion, userRole, viewOptions, userContext, testDataFlag} = this.props;
 
         let itemStyle = (designVersion._id === userContext.designVersionId ? 'design-item di-active' : 'design-item');
 
-        // What choices are available depend on the current stste of the design version
+        // Items -------------------------------------------------------------------------------------------------------
         let buttons = '';
 
+        const editButton =
+            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>Edit</Button>;
 
-        // Designers can add / edit stuff
+        const viewButton =
+            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>;
+
+        const publishButton =
+            <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>;
+
+        const withdrawButton =
+            <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignVersion(userRole, userContext, designVersion)}>Withdraw</Button>;
+
+        const updateButton =
+            <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update</Button>;
+
+        const createNextButton =
+            <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onShowModal()}>Create Next</Button>;
+
+        const modalOkButton =
+            <Button onClick={() => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>OK</Button>;
+
+        const modalCancelButton =
+            <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
+
+        // Popup shown when user wants to create next Design Version
+
+        let confirmNextModal = '';
+
+        switch(designVersion.designVersionStatus){
+            case DesignVersionStatus.VERSION_DRAFT:
+
+                confirmNextModal =
+                    <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Create Next Design Version</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p className="merge-alert">You are about to complete the Initial Design Version</p>
+                            <p className="merge-normal">You are leaving Freedom City.</p>
+                            <p className="merge-normal">You are now entering formal Design Control.  From now on all changes to the Design must be in the form of Design Updates</p>
+                            <p className="merge-alert">This action cannot be undone.  Are you sure you want to proceed?</p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {modalOkButton}
+                            {modalCancelButton}
+                        </Modal.Footer>
+                    </Modal>;
+
+                break;
+            case DesignVersionStatus.VERSION_UPDATABLE:
+
+                confirmNextModal =
+                    <Modal show={this.state.showModal} onHide={() => this.onCloseModal()}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Create Next Design Version</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <p className="merge-alert">You are about to complete this Design Version and create a new one</p>
+                            <p className="merge-normal">The new Design Version will include Design Updates as follows:</p>
+                            <p className="merge-header">These updates will be merged into the new Design Version:</p>
+                            <div>
+                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_INCLUDE)}
+                            </div>
+                            <p className="merge-header">These updates will be carried forward as Updates to the new Design Version:</p>
+                            <div>
+                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_ROLL)}
+                            </div>
+                            <p className="merge-header">These updates will be ignored and lost forever:</p>
+                            <div>
+                                {this.getUpdates(designVersion._id, DesignUpdateMergeAction.MERGE_IGNORE)}
+                            </div>
+                            <p className="merge-alert">This action cannot be undone.  Are you sure you want to proceed?</p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {modalOkButton}
+                            {modalCancelButton}
+                        </Modal.Footer>
+                    </Modal>;
+
+                break;
+        }
+
+
+        // Layout ------------------------------------------------------------------------------------------------------
+
         switch (designVersion.designVersionStatus) {
             case DesignVersionStatus.VERSION_NEW:
 
@@ -136,9 +247,9 @@ export class DesignVersion extends Component {
                     // Designers can Edit View or Publish
                     buttons =
                         <ButtonGroup>
-                            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>Edit</Button>
-                            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
-                            <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>
+                            {viewButton}
+                            {editButton}
+                            {publishButton}
                         </ButtonGroup>;
 
                 } else {
@@ -153,10 +264,10 @@ export class DesignVersion extends Component {
                         // Designers can view it, withdraw it if not adopted or create the next version from updates...
                         buttons =
                             <ButtonGroup>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
-                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>Edit</Button>
-                                <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignVersion(userRole, userContext, designVersion)}>Withdraw</Button>
-                                <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next</Button>
+                                {viewButton}
+                                {editButton}
+                                {withdrawButton}
+                                {createNextButton}
                             </ButtonGroup>;
                         break;
                     case  RoleType.DEVELOPER:
@@ -165,7 +276,7 @@ export class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
+                                    {viewButton}
                                 </ButtonGroup>
                             </div>;
                             break;
@@ -174,7 +285,7 @@ export class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup className="button-group-left">
-                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
+                                    {viewButton}
                                 </ButtonGroup>
                             </div>;
                         break;
@@ -190,13 +301,13 @@ export class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup>
-                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
+                                    {viewButton}
                                 </ButtonGroup>
                                 <ButtonGroup>
-                                    <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update</Button>
-                                </ButtonGroup>
+                                    {updateButton}
+                                 </ButtonGroup>
                                 <ButtonGroup>
-                                    <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onCreateNextDesignVersion(userRole, userContext, designVersion)}>Create Next</Button>
+                                    {createNextButton}
                                 </ButtonGroup>
                             </div>;
                         break;
@@ -204,17 +315,17 @@ export class DesignVersion extends Component {
                         buttons =
                             <div>
                                 <ButtonGroup>
-                                    <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>
+                                    {viewButton}
                                 </ButtonGroup>
                                 <ButtonGroup>
-                                    <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update</Button>
+                                    {updateButton}
                                 </ButtonGroup>
                             </div>;
                         break;
                     case RoleType.MANAGER:
                         buttons =
                             <ButtonGroup>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
+                                {viewButton}
                             </ButtonGroup>;
                         break;
                 }
@@ -224,7 +335,7 @@ export class DesignVersion extends Component {
                 // View only
                 buttons =
                     <ButtonGroup>
-                        <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion)}>View</Button>
+                        {viewButton}
                     </ButtonGroup>;
                 break;
 
@@ -232,7 +343,6 @@ export class DesignVersion extends Component {
                 log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersion.designVersionStatus);
 
         }
-
 
         return (
             <div className={itemStyle}>
@@ -245,6 +355,7 @@ export class DesignVersion extends Component {
                     onSelectItem={ () => this.setNewDesignVersionActive(userRole, userContext, designVersion)}
                 />
                 {buttons}
+                {confirmNextModal}
             </div>
         )
     }
