@@ -29,7 +29,7 @@ describe('JSX: EditDesignContainer', () => {
         );
     }
 
-    describe('The Details pane may be shown', () => {
+    describe('The Details pane may be shown for a Design Version', () => {
 
         it('is shown when Details selected', () => {
 
@@ -50,7 +50,7 @@ describe('JSX: EditDesignContainer', () => {
         });
     });
 
-    describe('The Details pane may be hidden', () => {
+    describe('The Details pane may be hidden for a Design Version', () => {
 
         it('is not shown when Details not selected', () => {
 
@@ -71,7 +71,7 @@ describe('JSX: EditDesignContainer', () => {
         });
     });
 
-    describe('The Domain Dictionary may be shown', () => {
+    describe('The Domain Dictionary may be shown for a Design Version', () => {
 
         it('is shown when Dictionary selected', () => {
 
@@ -92,7 +92,7 @@ describe('JSX: EditDesignContainer', () => {
         });
     });
 
-    describe('The Domain Dictionary may be hidden', () => {
+    describe('The Domain Dictionary may be hidden for a Design Version', () => {
 
         it('is not shown when Dictionary not selected', () => {
 

@@ -9,3 +9,7 @@ mocha-unit-output.json
 
 !/imports/collections/backup/
 !/imports/servicers/backup/
+imports/service_modules/context/
+imports/servicers/audit/
+npm-debug.log
+tests/mocha-mod-output.json

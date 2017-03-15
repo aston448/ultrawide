@@ -1020,7 +1020,7 @@ export class DesignComponentHeader extends Component{
                     }
 
                     return(
-                        <Grid>
+                        <Grid id="featureTestSummary">
                             <Row className={featureRowClass}>
                                 <Col md={7} className="close-col">
                                     <div id="headerItem">
@@ -1055,7 +1055,7 @@ export class DesignComponentHeader extends Component{
                     }
 
                     return(
-                        <Grid>
+                        <Grid id="scenarioTestSummary">
                             <Row className={rowClass}>
                                 <Col md={7} className="close-col">
                                     <div id="headerItem">

@@ -43,12 +43,40 @@ describe('UC 124 - Open or Close Design Component', function(){
 
     });
 
-
     // Actions
-    it('A closed Design Component may be opened');
+    it('A closed Design Component may be opened', function(){
 
-    it('An open Design Component may be closed');
+        // Setup
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
 
+        // Execute and Verify
+        const expectedOpenComponents = [
+            {
+                componentType:  ComponentType.FEATURE_ASPECT,
+                parentName:     'Feature1',
+                componentName:  'Actions'
+            }
+        ];
+
+        DesignComponentActions.designerOpensSelectedComponentWithExpectation(expectedOpenComponents);
+    });
+
+    it('An open Design Component may be closed', function(){
+
+        // Setup - open it and confirm open
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
+        const expectedOpenComponents = [
+            {
+                componentType:  ComponentType.FEATURE_ASPECT,
+                parentName:     'Feature1',
+                componentName:  'Actions'
+            }
+        ];
+        DesignComponentActions.designerOpensSelectedComponentWithExpectation(expectedOpenComponents);
+
+        // Execute and Verify - this call also checks that the specified component is closed
+        DesignComponentActions.designerClosesSelectedComponent();
+    });
 
     // Consequences
     it('Opening a Feature opens all Design Components in that Feature', function(){

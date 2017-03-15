@@ -11,7 +11,7 @@ describe('JSX: DesignComponentHeader', () => {
 
     // Design Components -----------------------------------------------------------------------------------------------
 
-    function designComponentHeaderTest(currentItem, mode, view, displayContext){
+    function designComponentHeaderTest(currentItem, mode, view, displayContext, testSummary = false){
 
         const designItem = {};
         const updateItem = {};
@@ -19,7 +19,6 @@ describe('JSX: DesignComponentHeader', () => {
         const onToggleOpen = () => {};
         const onSelectItem = () => {};
         const userContext = {designVersionId: 'ABC'};
-        const testSummary = false;
         const testSummaryData = {};
         const isOpen = true;
         const testDataFlag = false;
@@ -989,6 +988,165 @@ describe('JSX: DesignComponentHeader', () => {
 
             // Has no move option
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
+        });
+    });
+
+    // Test Summary ----------------------------------------------------------------------------------------------------
+    describe('The Test Summary may be shown for a Design Version', () => {
+
+        it('shows a feature test summary for a feature in edit mode', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
+
+
+            chai.assert(item.find('#featureTestSummary').length === 1, 'Feature test summary not found!');
+        });
+
+        it('shows a feature test summary for a feature in view only mode', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
+
+
+            chai.assert(item.find('#featureTestSummary').length === 1, 'Feature test summary not found!');
+        });
+
+        it('shows a feature test summary for a feature when viewing', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
+
+            chai.assert(item.find('#featureTestSummary').length === 1, 'Feature test summary not found!');
+        });
+
+        it('shows a scenario test summary for a scenario in edit mode', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
+
+
+            chai.assert(item.find('#scenarioTestSummary').length === 1, 'Scenario test summary not found!');
+        });
+
+        it('shows a scenario test summary for a scenario in view only mode', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
+
+
+            chai.assert(item.find('#scenarioTestSummary').length === 1, 'Scenario test summary not found!');
+        });
+
+        it('shows a scenario test summary for a scenario when viewing', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, true);
+
+            chai.assert(item.find('#scenarioTestSummary').length === 1, 'Scenario test summary not found!');
+        });
+    });
+
+    describe('The Test Summary may be hidden for a Design Version', () => {
+
+        it('no feature test summary for a feature in edit mode', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
+
+
+            chai.assert(item.find('#featureTestSummary').length === 0, 'Feature test summary found!');
+        });
+
+        it('no feature test summary for a feature in view only mode', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
+
+
+            chai.assert(item.find('#featureTestSummary').length === 0, 'Feature test summary found!');
+        });
+
+        it('no feature test summary for a feature when viewing', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
+
+            chai.assert(item.find('#featureTestSummary').length === 0, 'Feature test summary found!');
+        });
+
+        it('no scenario test summary for a scenario in edit mode', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
+
+
+            chai.assert(item.find('#scenarioTestSummary').length === 0, 'Scenario test summary found!');
+        });
+
+        it('no scenario test summary for a scenario in view only mode', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+            const displayContext = DisplayContext.BASE_EDIT;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
+
+
+            chai.assert(item.find('#scenarioTestSummary').length === 0, 'Scenario test summary found!');
+        });
+
+        it('no scenario test summary for a scenario when viewing', () => {
+
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+            const displayContext = DisplayContext.BASE_VIEW;
+
+            let item = designComponentHeaderTest(currentItem, mode, view, displayContext, false);
+
+            chai.assert(item.find('#scenarioTestSummary').length === 0, 'Scenario test summary found!');
         });
     });
 

@@ -118,9 +118,13 @@ class DesignComponentActions{
         server.call('testDesignComponents.reorderSelectedComponent', targetType, targetParentName, targetComponentName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
 
-    // Open
+    // Open - Close
     designerOpensSelectedComponentWithExpectation(expectedOpenComponents){
         server.call('testDesignComponents.openSelectedComponentAndVerify', 'gloria', expectedOpenComponents);
+    }
+
+    designerClosesSelectedComponent(){
+        server.call('testDesignComponents.closeSelectedComponentAndVerify', 'gloria');
     }
 
 }

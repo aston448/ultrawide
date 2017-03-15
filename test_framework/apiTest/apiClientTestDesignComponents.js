@@ -342,4 +342,26 @@ Meteor.methods({
         })
     },
 
+    'testDesignComponents.openSelectedComponentAndVerify'(userName){
+
+        // This does not have a validation expectation - the function returns a list of open items
+        // which we will verify in the action
+
+        // Component MUST be selected first
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // Assume nothing open before the test
+        const currentOpenComponentIds = [];
+
+
+        const designComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+
+        const newOpenComponentIds = ClientDesignComponentServices.setOpenClosed(designComponent, currentOpenComponentIds, true);
+
+        // Verify the closed component is not in the list of open
+        if(newOpenComponentIds.includes(userContext.designComponentId)){
+            throw new Meteor.Error("FAIL", "Component " + designComponent.componentName + " was found to be open");
+        }
+
+    },
 });
