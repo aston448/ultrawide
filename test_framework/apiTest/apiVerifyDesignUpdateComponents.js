@@ -262,6 +262,30 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateComponents.componentIsNotRemovedElsewhere'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isRemovedElsewhere){
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " NOT to be removed elsewhere");
+
+        } else {
+            if(designUpdateComponent.isRemoved){
+                throw new Meteor.Error("FAIL", "Expecting component " + componentName + " NOT to be removed");
+            } else {
+                return true;
+            }
+        }
+    },
+
     'verifyDesignUpdateComponents.componentIsNew'(componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

@@ -77,6 +77,14 @@ class UpdateComponentVerifications{
         );
     }
 
+    componentIsNotRemovedElsewhereForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.componentIsNotRemovedElsewhere', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(componentType, componentName, count){
         server.call('verifyDesignUpdateComponents.componentCountWithNameIs', componentType, componentName, count, 'gloria',
             (function(error, result){
