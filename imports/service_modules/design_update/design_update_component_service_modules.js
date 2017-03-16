@@ -411,7 +411,10 @@ class DesignUpdateComponentModules{
         const thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
         // Get all components that are this component in any Update for the current Design Version
-        const componentInstances = DesignUpdateComponents.find({designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId});
+        const componentInstances = DesignUpdateComponents.find({
+            designVersionId:        thisComponent.designVersionId,
+            componentReferenceId:   thisComponent.componentReferenceId
+        });
 
         componentInstances.forEach((instance) => {
             this.logicallyRestoreChildren(instance._id);
@@ -430,8 +433,11 @@ class DesignUpdateComponentModules{
 
             childComponents.forEach((child) => {
 
-                // The scope is updated if you are the Update actually doing the delete
+
                 if(child.designUpdateId === masterDesignUpdateId) {
+
+                    // The scope is updated if you are the Update actually doing the delete
+
                     switch (child.componentType) {
                         case ComponentType.FEATURE:
                         case ComponentType.FEATURE_ASPECT:
@@ -444,18 +450,31 @@ class DesignUpdateComponentModules{
                             parentScope = true;
                             break;
                     }
-                }
 
-                DesignUpdateComponents.update(
-                    {_id: child._id},
-                    {
-                        $set:{
-                            isRemoved: true,
-                            isInScope: inScope,     // Any Feature, Feature Aspect, Scenario removed is automatically in scope
-                            isParentScope: parentScope
+                    // And the component is logically removed
+                    DesignUpdateComponents.update(
+                        {_id: child._id},
+                        {
+                            $set:{
+                                isRemoved: true,
+                                isInScope: inScope,     // Any Feature, Feature Aspect, Scenario removed is automatically in scope
+                                isParentScope: parentScope
+                            }
                         }
-                    }
-                );
+                    );
+
+                } else {
+
+                    // For other updates we just mark as removed elsewhere
+                    DesignUpdateComponents.update(
+                        {_id: child._id},
+                        {
+                            $set:{
+                                isRemovedElsewhere: true,
+                            }
+                        }
+                    );
+                }
 
                 // Recursively call for these children - if not a Scenario which is the bottom of the tree
                 if(child.componentType != ComponentType.SCENARIO) {
@@ -484,6 +503,7 @@ class DesignUpdateComponentModules{
                     {
                         $set:{
                             isRemoved: false,
+                            idRemovedElsewhere: false,  // Covers updates other than that being restored
                             isInScope: false,
                             isParentScope: false
                         }

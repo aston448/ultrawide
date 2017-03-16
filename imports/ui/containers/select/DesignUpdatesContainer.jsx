@@ -184,9 +184,9 @@ export class DesignUpdatesList extends Component {
 
                     // Nobody can add updates - just show what there are
                     updatesPanelContent =
-                        <div>
+                        <Panel header="Design Updates">
                             {this.renderDesignUpdatesList(designUpdates)}
-                        </div>;
+                        </Panel>;
 
                     layout =
                         <Grid>

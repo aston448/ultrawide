@@ -356,7 +356,7 @@ Meteor.methods({
 
         const designComponent = DesignComponents.findOne({_id: userContext.designComponentId});
 
-        const newOpenComponentIds = ClientDesignComponentServices.setOpenClosed(designComponent, currentOpenComponentIds, true);
+        const newOpenComponentIds = ClientDesignComponentServices.setOpenClosed(designComponent, currentOpenComponentIds, false);
 
         // Verify the closed component is not in the list of open
         if(newOpenComponentIds.includes(userContext.designComponentId)){

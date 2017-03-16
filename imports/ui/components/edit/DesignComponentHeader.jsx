@@ -494,10 +494,6 @@ export class DesignComponentHeader extends Component{
                 // Updates to a design update
                 result = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item, plainText, rawText);
                 break;
-
-
-                break;
-
         }
 
         if(result.success){
@@ -530,7 +526,7 @@ export class DesignComponentHeader extends Component{
     };
 
     // In scope view only, sets an item as in or out of scope for a Design Update or Work Package
-    toggleScope(view, mode, context, userItemContext, currentItem){
+    toggleScope(view, mode, displayContext, currentItem){
 
         //TODO: warning box if descoping changed item - do you want to revert to base view?
 
@@ -539,16 +535,27 @@ export class DesignComponentHeader extends Component{
         switch(view){
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                // Update the WP components
-                if (ClientWorkPackageComponentServices.toggleInScope(view, context, currentItem._id, newScope)){
+
+                // Update the WP component(s)
+                const wpResult = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, currentItem._id, newScope);
+
+                if (wpResult.success){
                     this.setState({inScope: newScope});
+                } else {
+                    this.setState({inScope: false});
                 }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
-                // Update the Design Update components
-                if (ClientDesignUpdateComponentServices.toggleInScope(view, mode, context, currentItem, newScope)){
+
+                // Update the Design Update component
+                const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, newScope);
+
+                if(duResult.success){
                     this.setState({inScope: newScope});
+                } else {
+                    this.setState({inScope: false});
                 }
+
         }
 
     };
@@ -602,6 +609,8 @@ export class DesignComponentHeader extends Component{
             // For logically deleted items in the same update, show the undo icon...
             if(isDeleted){
                 deleteGlyph = 'arrow-left';
+            } else {
+                deleteStyle = (currentItem.isRemovable && !currentItem.isRemovedElsewhere) ? 'red' : 'lgrey';
             }
         }
 
@@ -683,7 +692,7 @@ export class DesignComponentHeader extends Component{
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem)}>
+                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, currentItem)}>
                         <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>

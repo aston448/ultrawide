@@ -1,5 +1,6 @@
 
 // Ultrawide Collections
+import { DesignVersions }           from '../../collections/design/design_versions.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
@@ -33,9 +34,14 @@ class DesignUpdateServices{
                 }
             );
 
-            if (designUpdateId) {
+            // Next get the base design version to create the update from
+            const designVersion = DesignVersions.findOne({
+                _id: designVersionId
+            });
+
+            if (designUpdateId && designVersion) {
                 if (populateUpdate) {
-                    DesignUpdateModules.populateDesignUpdate(designVersionId, designUpdateId);
+                    DesignUpdateModules.populateDesignUpdate(designVersion.baseDesignVersionId, designVersionId, designUpdateId);
                 }
             }
 

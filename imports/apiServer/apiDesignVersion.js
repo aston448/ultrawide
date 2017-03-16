@@ -107,20 +107,3 @@ class ServerDesignVersionApi {
 }
 
 export default new ServerDesignVersionApi();
-
-
-
-
-
-
-Meteor.methods({
-
-
-    'designVersion.mergeUpdatesToNewDraftVersion'(designVersionId){
-        //console.log("Merging design version updates to new version for "  + designVersionId);
-
-        DesignVersionServices.createNextDesignVersion(designVersionId);
-
-    }
-
-});

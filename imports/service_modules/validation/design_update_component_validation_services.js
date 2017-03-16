@@ -82,6 +82,11 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
+        // Component must not be removed elsewhere
+        if(designUpdateComponent.isRemovedElsewhere){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_REMOVED_ELSEWHERE;
+        }
+
         // Component must be removable - i.e. not have children
         if(!designUpdateComponent.isRemovable){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE;
@@ -118,7 +123,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateDesignUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingUpdateComponents, componentParentId){
+    validateUpdateDesignUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingUpdateComponents, componentParentReferenceId){
 
         // Updates only allowed in update edit or WP Develop when in edit mode
         if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
@@ -153,7 +158,7 @@ class DesignUpdateComponentValidationServices{
 
             existingUpdateComponents.forEach((component) => {
 
-                if(component.componentNameNew === newName  && component.componentParentIdNew === componentParentId){
+                if(component.componentNameNew === newName  && component.componentParentReferenceIdNew === componentParentReferenceId){
                     duplicate = true;
                 }
             });

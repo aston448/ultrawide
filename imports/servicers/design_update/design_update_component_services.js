@@ -551,15 +551,33 @@ class DesignUpdateComponentServices{
 
             } else {
 
-                // An existing component so Logically delete it for this and all updates
+                // An existing component so Logically delete it for this update ad mark as removed elswhere for other updates
                 let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
+                // Set removed component removed
                 let deletedComponents = DesignUpdateComponents.update(
-                    {designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId},
+                    {
+                        _id: designUpdateComponentId
+                    },
                     {
                         $set: {
                             isRemoved: true
                             // Keep isRemovable as is so that restore can work
+                        }
+                    }
+                );
+
+                // Set other Update component instances as removed elsewhere
+                DesignUpdateComponents.update(
+                    {
+                        _id:                    {$ne: designUpdateComponentId},
+                        designUpdateId:         {$ne: thisComponent.designUpdateId},
+                        designVersionId:        thisComponent.designVersionId,
+                        componentReferenceId:   thisComponent.componentReferenceId
+                    },
+                    {
+                        $set: {
+                            isRemovedElsewhere: true
                         }
                     },
                     {multi: true}
@@ -592,7 +610,7 @@ class DesignUpdateComponentServices{
                     // We would not allow it if any new Components are under the component being deleted
                     // in this or any other Update.  This logic happens in Validation.
 
-                    // And we logically delete the components in all parallel updates to prevent contradictory instructions
+                    // And we logically delete 'elsewhere' the components in all parallel updates to prevent contradictory instructions
                     DesignUpdateComponentModules.logicallyDeleteChildrenForAllUpdates(designUpdateComponentId);
 
                     // This is a real change to functionality so set DU Summary as stale

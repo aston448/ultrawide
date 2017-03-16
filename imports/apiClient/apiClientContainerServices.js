@@ -497,22 +497,34 @@ class ClientContainerServices{
 
                 const designUpdate = DesignUpdates.findOne({_id: currentDesignUpdateId});
 
-                // Get all the WPs available for the selected update
-                const currentWorkPackages = WorkPackages.find(
-                    {
-                        designVersionId: currentDesignVersionId,
-                        designUpdateId: currentDesignUpdateId,
-                        workPackageType: WorkPackageType.WP_UPDATE
-                    },
-                    {sort: {workPackageName: 1}}
-                );
+                if(designUpdate) {
 
-                return {
-                    wpType: WorkPackageType.WP_UPDATE,
-                    workPackages: currentWorkPackages.fetch(),
-                    designVersionStatus: designVersionStatus,
-                    designUpdateStatus: designUpdate.updateStatus
-                };
+                    // Get all the WPs available for the selected update
+                    const currentWorkPackages = WorkPackages.find(
+                        {
+                            designVersionId: currentDesignVersionId,
+                            designUpdateId: currentDesignUpdateId,
+                            workPackageType: WorkPackageType.WP_UPDATE
+                        },
+                        {sort: {workPackageName: 1}}
+                    );
+
+                    return {
+                        wpType: WorkPackageType.WP_UPDATE,
+                        workPackages: currentWorkPackages.fetch(),
+                        designVersionStatus: designVersionStatus,
+                        designUpdateStatus: designUpdate.updateStatus
+                    };
+                } else {
+
+                    return {
+                        wpType: WorkPackageType.WP_UPDATE,
+                        workPackages: [],
+                        designVersionStatus: designVersionStatus,
+                        designUpdateStatus: null
+                    };
+                }
+
             } else {
                 return {
                     wpType: WorkPackageType.WP_UPDATE,

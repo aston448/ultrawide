@@ -112,61 +112,69 @@ class DesignVersionServices{
         }
     };
 
-    createNextDesignVersion(previousDesignVersionId){
+    createNextDesignVersion(currentDesignVersionId){
 
         if(Meteor.isServer) {
-            // Overall the steps are:
-            // 1. Insert a new Design Version as PUBLISHED UPDATABLE
-            // 2. Create new design components for the new version as a copy of the old
-            // 3. Update the parent ids for the new design components
-            // 4. Merge in the updates from the old DV that are for merging
-            // 5. Carry forward the updates from the old DV that are for carrying forward
-            // 6. Carry forward Domain Dictionary terms
-            // 7. Set the old DV to Published Final
+
+            // The steps are:
+            // 1. If an Updatable Version, merge in the updates set for merge
+            // 2. Create a new unmarked Design Version from the old version
+            // 3. Roll forward any updates that have been marked as Carry Forward
+            // 4. Close down any Ignore Updates
+            // 5. Complete the old version
 
             // Get the current design version details
-            const oldDesignVersion = DesignVersions.findOne({_id: previousDesignVersionId});
+            const currentDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
+            const previousDesignVersionId = currentDesignVersion.baseDesignVersionId;
 
-            // Create a new design version - note: this is the only way a new version can be created...
+            if(previousDesignVersionId != 'NONE'){
+                // The current DV is updatable so make a final version of its components based on the final Design Update configuration
+                DesignVersionModules.finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
+            }
+
+            // Now add a new Design Version to become our new working version
             let newDesignVersionId = DesignVersions.insert(
                 {
-                    designId: oldDesignVersion.designId,
+                    designId: currentDesignVersion.designId,
                     designVersionName: DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
                     designVersionNumber: DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
                     designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE,
-                    baseDesignVersionId: previousDesignVersionId,                   // Based on the previous DV
-                    designVersionIndex: oldDesignVersion.designVersionIndex + 1     // Increment index to create correct ordering
+                    baseDesignVersionId: currentDesignVersionId,                        // Based on the previous DV
+                    designVersionIndex: currentDesignVersion.designVersionIndex + 1     // Increment index to create correct ordering
                 }
-
             );
 
-            if(newDesignVersionId){
-                // Copy previous design to new version
-                DesignVersionModules.mergeStepCreateNewDesignComponents(previousDesignVersionId, newDesignVersionId);
+            // If that was successful do the real work...
+            if(newDesignVersionId) {
 
-                // Fix the parent ids in the new set
-                DesignVersionModules.fixParentIds(newDesignVersionId);
+                try {
+                    // Populate new DV with a copy of the updated current version
+                    DesignVersionModules.populateNextDesignVersion(currentDesignVersionId, newDesignVersionId);
 
-                // Merge in the Updates set for Merge
-                DesignVersionModules.mergeStepMergeUpdates(previousDesignVersionId, newDesignVersionId);
+                    // Process the updates to be Rolled Forward
+                    DesignVersionModules.rollForwardUpdates(currentDesignVersionId, newDesignVersionId);
 
-                // Process the updates to be Rolled Forward
-                DesignVersionModules.mergeStepRollForwardUpdates(previousDesignVersionId, newDesignVersionId);
+                    // Put to bed the ignored updates
+                    DesignVersionModules.closeDownIgnoreUpdates(currentDesignVersionId, newDesignVersionId);
 
-                // Put to bed the ignored updates
-                DesignVersionModules.mergeStepIgnoreUpdates(previousDesignVersionId, newDesignVersionId);
+                    // Carry forward the Domain Dictionary
+                    DesignVersionModules.rollForwardDomainDictionary(currentDesignVersionId, newDesignVersionId);
 
-                // Carry forward the Domain Dictionary
-                DesignVersionModules.rollForwardDomainDictionary(previousDesignVersionId, newDesignVersionId);
+                } catch(e) {
+
+                    // If anything went wrong roll back to where we were
+                    //DesignVersionModules.rollBackNewDesignVersion(currentDesignVersionId, newDesignVersionId);
+                    console.log(e);
+                    throw new Meteor.Error(e.error, e.message);
+                }
 
                 // And finally update the old design version to complete
-                DesignVersionModules.mergeStepUpdateOldVersion(previousDesignVersionId);
+                DesignVersionModules.completeCurrentDesignVersion(currentDesignVersionId);
             }
         }
-
     };
 
-    updateWorkingDesignVersion(workingDesignVersionId){
+    updateWorkingDesignVersion(currentDesignVersionId){
 
         if(Meteor.isServer){
             // Here we are creating a temporary preview of what the working DV will look like.  To do this
@@ -176,33 +184,22 @@ class DesignVersionServices{
             // This applies only to updatable design versions.
 
             // Get the Design Version the working one is based on
-            const workingDesignVersion = DesignVersions.findOne({_id: workingDesignVersionId});
-            let baseDesignVersionId = 'NONE';
+            const workingDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
+            let previousDesignVersionId = 'NONE';
 
             if(workingDesignVersion){
-                baseDesignVersionId = workingDesignVersion.baseDesignVersionId;
+                previousDesignVersionId = workingDesignVersion.baseDesignVersionId;
             } else {
                 return;
             }
 
-            // Delete all existing data for the working version
-            DesignComponents.remove({
-                designVersionId: workingDesignVersionId
-            });
-
-            // Copy previous design to new version
-            DesignVersionModules.mergeStepCreateNewDesignComponents(baseDesignVersionId, workingDesignVersionId);
-
-            // Fix the parent ids in the new set
-            DesignVersionModules.fixParentIds(workingDesignVersionId);
-
-            // Merge in the latest Updates set for Merge - in this case the updates are for the current version
-            DesignVersionModules.mergeStepMergeUpdates(workingDesignVersionId, workingDesignVersionId);
+            if(previousDesignVersionId != 'NONE'){
+                // Recreate the current DV as the previous DV plus current updates
+                DesignVersionModules.updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
+            }
 
         }
     }
-
-
 }
 
 export default new DesignVersionServices();

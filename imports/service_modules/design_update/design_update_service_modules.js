@@ -20,18 +20,20 @@ import DesignUpdateComponentModules from '../../service_modules/design_update/de
 class DesignUpdateModules{
 
     // Copy the current base design version to a new update.  Initially the "new" values are the same as the current ones.
-    populateDesignUpdate(designVersionId, designUpdateId){
+    populateDesignUpdate(baseDesignVersionId, designVersionId, designUpdateId){
 
-        // Here we want to copy the design version components to this update
-        let versionComponents = DesignComponents.find({designVersionId: designVersionId});
-        let designId = DesignVersions.findOne({_id: designVersionId}).designId;
+        // Here we want to copy the BASE, not the CURRENT design version components to this update.  This means that parallel updates
+        // are NOT included so all updates start from the same base. This is a good thing as otherwise updates get mingled as they are created.
+        // Validation is in place to prevent contradictory changes.
 
-        //console.log("Inserting " + versionComponents.count() + " into Design Update Components");
+        let versionComponents = DesignComponents.find({designVersionId: baseDesignVersionId});
+        let designId = DesignVersions.findOne({_id: baseDesignVersionId}).designId;
 
         versionComponents.forEach((component) => {
 
-            // If the component is already removed in another update, mark it as such
-            const isRemovedElsewhere = this.componentIsRemovedInOtherUpdate(component);
+            // Updates are not mingled BUT where a component has been removed in another update we will mark it as removed
+            // (though not actually set it as removed in this update) so that it is clear as to why this component is not accessible to further updates
+            const isRemovedElsewhere = this.componentIsRemovedInOtherUpdate(component, designVersionId);
 
             DesignUpdateComponents.insert(
                 {
@@ -118,11 +120,11 @@ class DesignUpdateModules{
         });
     };
 
-    componentIsRemovedInOtherUpdate(component){
+    componentIsRemovedInOtherUpdate(component, currentDesignVersionId){
 
         // Is there a parallel update where the same component is removed
         const componentRemovedInOtherUpdates = DesignUpdateComponents.find({
-            designVersionId:        component.designVersionId,
+            designVersionId:        currentDesignVersionId,
             componentReferenceId:   component.componentReferenceId,
             isRemoved:              true
         }).fetch();
@@ -131,27 +133,27 @@ class DesignUpdateModules{
     };
 
 
-    // Set any component that has a child as non-removable
-    setRemovable(designVersionId, designUpdateId){
-
-        let updateComponents = DesignUpdateComponents.find({designVersionId: designVersionId, designUpdateId: designUpdateId});
-
-        updateComponents.forEach((component) => {
-
-            // Get the id of the new component that has the parent reference id as its unchanging reference id
-            let removable = DesignUpdateComponentModules.hasNoChildren(component._id);
-
-            DesignUpdateComponents.update(
-                { _id: component._id},
-                {
-                    $set:{
-                        isRemovable: removable
-                    }
-                }
-            );
-
-        });
-    };
+    // // Set any component that has a child as non-removable
+    // setRemovable(designVersionId, designUpdateId){
+    //
+    //     let updateComponents = DesignUpdateComponents.find({designVersionId: designVersionId, designUpdateId: designUpdateId});
+    //
+    //     updateComponents.forEach((component) => {
+    //
+    //         // Get the id of the new component that has the parent reference id as its unchanging reference id
+    //         let removable = DesignUpdateComponentModules.hasNoChildren(component._id);
+    //
+    //         DesignUpdateComponents.update(
+    //             { _id: component._id},
+    //             {
+    //                 $set:{
+    //                     isRemovable: removable
+    //                 }
+    //             }
+    //         );
+    //
+    //     });
+    // };
 
     // This function defines which item types are scopable - i.e. we can base changes on them
     isScopable(itemType){

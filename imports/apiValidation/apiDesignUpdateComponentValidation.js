@@ -36,8 +36,6 @@ class DesignUpdateComponentValidationApi{
 
     validateRemoveDesignUpdateComponent(view, mode, designUpdateComponentId){
 
-        // TODO - allow more drastic logical deleting?
-
         let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
         if(designUpdateComponent.isNew){
@@ -90,14 +88,14 @@ class DesignUpdateComponentValidationApi{
         // Get other components of the same type that should not have the same name
         const thisUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
+        // This is components in any update for the current design version
         const existingUpdateComponents = DesignUpdateComponents.find({
             _id:                {$ne: designUpdateComponentId},
             designVersionId:    thisUpdateComponent.designVersionId,
-            designUpdateId:     thisUpdateComponent.designUpdateId,
             componentType:      thisUpdateComponent.componentType
         }).fetch();
 
-        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent.componentType, thisUpdateComponent.isDevAdded, newName, existingUpdateComponents, thisUpdateComponent.componentParentIdNew);
+        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent.componentType, thisUpdateComponent.isDevAdded, newName, existingUpdateComponents, thisUpdateComponent.componentParentReferenceIdNew);
     };
 
     validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId){
