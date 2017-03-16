@@ -523,7 +523,7 @@ export class DesignComponent extends Component{
                         // VIEW or SCOPE
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {designSectionsContainer}
                                 </Panel>
                             </div>
@@ -531,7 +531,7 @@ export class DesignComponent extends Component{
                         // EDIT mode
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {designSectionsContainer}
                                     <table>
                                         <tbody>
@@ -565,7 +565,7 @@ export class DesignComponent extends Component{
                         // - List of sub sections in this section
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {featuresContainer}
                                     {designSectionsContainer}
                                 </Panel>
@@ -579,7 +579,7 @@ export class DesignComponent extends Component{
                         // - Add new Section option
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {featuresContainer}
                                     {designSectionsContainer}
                                     <table>
@@ -620,7 +620,7 @@ export class DesignComponent extends Component{
                         // - List of Feature Aspect headings for this Feature
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {narrative}
                                     {scenariosContainer}
                                     {featureAspectsContainer}
@@ -636,7 +636,7 @@ export class DesignComponent extends Component{
                         // - Add new Feature Aspect option
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {narrative}
                                     {scenariosContainer}
                                     {featureAspectsContainer}
@@ -669,7 +669,7 @@ export class DesignComponent extends Component{
                         // - A list of Scenarios
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {scenariosContainer}
                                 </Panel>
                             </div>
@@ -681,7 +681,7 @@ export class DesignComponent extends Component{
                         // - Add new Scenario option
                         bodyHtml =
                             <div className="activeStyle">
-                                <Panel collapsible expanded={this.state.open}>
+                                <Panel className="panel-design" collapsible expanded={this.state.open}>
                                     {scenariosContainer}
                                     <table>
                                         <tbody>

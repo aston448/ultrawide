@@ -66,7 +66,7 @@ export class DesignVersionsList extends Component {
             <Grid>
                 <Row>
                     <Col md={2} className="scroll-col">
-                        <Panel header="Design Versions">
+                        <Panel className="panel-item" header="Design Versions">
                             {this.renderDesignVersionsList(designVersions)}
                         </Panel>
                     </Col>

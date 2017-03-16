@@ -626,12 +626,31 @@ class DesignUpdateComponentServices{
             // Undo a logical delete
             let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
+            // Restore the actual deleted component
             let restoredComponents = DesignUpdateComponents.update(
-                {designVersionId: thisComponent.designVersionId, componentReferenceId: thisComponent.componentReferenceId, isRemoved: true},
+                {
+                    _id: designUpdateComponentId
+                },
                 {
                     $set: {
                         isRemoved: false,
                         isRemovable: true   // It can't have any children or it would not have been deletable
+                    }
+                },
+                {multi: true}
+            );
+
+            // Restore other Update component instances removed elsewhere
+            DesignUpdateComponents.update(
+                {
+                    _id:                    {$ne: designUpdateComponentId},
+                    designUpdateId:         {$ne: thisComponent.designUpdateId},
+                    designVersionId:        thisComponent.designVersionId,
+                    componentReferenceId:   thisComponent.componentReferenceId
+                },
+                {
+                    $set: {
+                        isRemovedElsewhere: false
                     }
                 },
                 {multi: true}

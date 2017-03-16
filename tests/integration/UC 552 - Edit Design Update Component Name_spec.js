@@ -47,9 +47,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdate();
-        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
-        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
     });
 
     afterEach(function(){
@@ -96,6 +94,29 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, DefaultComponentNames.NEW_APPLICATION_NAME, 1));
     });
 
+    it('An Application name may not be changed to the same name as another Application added in another Design Update for the Design Version', function(){
+
+        // Setup
+        // Add another Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add an application to it
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsApplicationCalled('New Application');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, 'New Application', 1));
+
+        // Meanwhile in Update1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
+
+        // Execute - try to rename as 'New Application'
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Application', expectation);
+
+        // Verify not changed
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.APPLICATION, 'New Application', 0));
+    });
+
     it('A Feature name may not be changed to the same name as another Feature in the Design Update or Base Design Version', function(){
 
         // Setup
@@ -113,6 +134,30 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         // Verify - still 1 of each
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'Feature1', 1));
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME, 1));
+    });
+
+    it('A Feature name may not be changed to the same name as another Feature added in another Design Update for the Design Version', function(){
+
+        // Setup
+        // Add another Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add new feature
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Section2', 'New Feature');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'New Feature', 1));
+
+        // Meanwhile in Update1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+
+        // Execute - try to rename as 'New Feature'
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Feature', expectation);
+
+        // Verify not changed
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'New Feature', 0));
     });
 
     it('A Scenario name may not be changed to the same name as another Scenario in the Design Update or Base Design Version', function(){
@@ -135,6 +180,31 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
     });
 
+    it('A Scenario name may not be changed to the same name as another Scenario added in another Design Update for the Design Version', function() {
+
+        // Setup
+        // Add another Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add new scenario
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'New Scenario');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'New Scenario', 1));
+
+        // Meanwhile in Update1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+
+        // Execute - try to rename as 'New Scenario'
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario', expectation);
+
+        // Verify not changed
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, 'New Scenario', 0));
+    });
+
     it('A Design Section name may not be changed to the same name as another Design Section under the same parent section in the Design Update', function(){
 
         // Setup
@@ -152,6 +222,30 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         // Verify - still 1 of each
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'Section1', 1));
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME, 1));
+    });
+
+    it('A Design Section name may not be changed to the same name as another Design Section added under the same parent section in another Design Update for the Design Version', function(){
+
+        // Setup
+        // Add another Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add new scenario
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section1', 'New Section');
+
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'New Section', 1));
+
+        // Meanwhile in Update1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection1');
+
+        // Execute - try to rename as 'New Section'
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Section', expectation);
+
+        // Verify not changed
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.DESIGN_SECTION, 'New Section', 0));
     });
 
     it('A Feature Aspect name may not be changed to the same name as another Feature Aspect in the same Feature in the Design Update', function(){
@@ -172,6 +266,31 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         // Verify - still same numbers as before
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'Actions', 3));  // There are several in default data
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME, 1));
+    });
+
+    it('A Feature Aspect name may not be changed to the same name as another Feature Aspect added in the same Feature in another Design Update for the Design Version', function(){
+
+        // Setup
+        // Add another Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        // Add new scenario
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'New Aspect');
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'New Aspect', 1));
+
+        // Meanwhile in Update1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+
+        // Execute - try to rename as 'New Aspect'
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT};
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Aspect', expectation);
+
+        // Verify not changed
+        expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE_ASPECT, 'New Aspect', 0));
     });
 
     it('A Design Section name may be changed to the same name as a Design Section in a different parent in the Design Update', function(){
