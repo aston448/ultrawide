@@ -393,41 +393,41 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
 
-        // Verify - all stuff removed in DU2
+        // Verify - all stuff removed elsewhere in DU2
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute - Restore in DU1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerRestoresDeletedUpdateApplication('Application1');
 
-        // Verify - no longer removed in DU2
+        // Verify - no longer removed elsewhere in DU2
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsNotRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
     });
 

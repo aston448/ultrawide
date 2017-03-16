@@ -597,24 +597,24 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
 
-        // And in DesignUpdate2 same stuff is removed but not in scope
+        // And in DesignUpdate2 same stuff is removed elsewhere but not in scope
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
 
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
         // Feature1 Actions
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Scenario1
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         // Feature1 Conditions
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         // Scenario2
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
-        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
 
     });
 

@@ -163,12 +163,13 @@ class DesignUpdateComponentValidationServices{
 
         // Name must be unique for component type - for functional components only
         if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
+
             // For non-functional components must be unique under the same parent only
             let duplicate = false;
 
             existingUpdateComponents.forEach((existingComponent) => {
 
-                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === component.componentParentReferenceId){
+                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === component.componentParentReferenceIdNew){
                     duplicate = true;
                 }
             });

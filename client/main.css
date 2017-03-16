@@ -373,7 +373,7 @@ input {
 .design-item{
     border: 1px solid lightgrey;
     border-radius: 2px;
-    margin: 8px 10px 8px 10px;
+    margin: 12px 10px 12px 10px;
     padding: 0px;
 }
 
@@ -381,6 +381,7 @@ input {
     border: 1px solid lightgrey;
     border-radius: 2px;
     background-color: aliceblue;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
 }
 
 .design-item-note{
