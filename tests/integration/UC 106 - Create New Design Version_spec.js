@@ -513,7 +513,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the update - actually a removal
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
-        // Remove Section2.  Will also Remove Feature2 and its Scenarios and SubSection1
+        // Remove Section2.  Will also Remove Feature2 and its Scenarios and SubSection2
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
         // Set update to INCLUDE
@@ -545,8 +545,8 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion3'));
 
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion3'));
@@ -611,7 +611,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Remove Functionality in the Update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate3');
 
-        // Remove Section2.  Will also Remove Feature2 and its Scenarios and SubSection1
+        // Remove Section2.  Will also Remove Feature2 and its Scenarios and SubSection2
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
         // Set update to INCLUDE
@@ -648,6 +648,9 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion3'));
 
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion3'));
+
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion3'));
 
@@ -683,8 +686,8 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion3'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion3'));
 
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion3'));
@@ -708,6 +711,9 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
 
         DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
+
+        DesignComponentActions.designerSelectsDesignSection('Section1', 'SubSection1');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
 
         DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');

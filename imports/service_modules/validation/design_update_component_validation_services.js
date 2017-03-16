@@ -38,13 +38,13 @@ class DesignUpdateComponentValidationServices{
                         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
                     }
                     // And not removed
-                    if(parentComponent.isRemoved){
+                    if(parentComponent.isRemoved|| parentComponent.isRemovedElsewhere){
                         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
                     }
                     break;
                 default:
                     // Others must not be removed
-                    if(parentComponent.isRemoved){
+                    if(parentComponent.isRemoved || parentComponent.isRemovedElsewhere){
                         return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
                     }
             }
@@ -108,14 +108,19 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_RESTORE;
         }
 
-        // Component must be restorable
+        // Component must not be removed elsewhere
+        if(designUpdateComponent.isRemovedElsewhere){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE;
+        }
+
+        // Component must be restorable - i.e. removed HERE
         if(!designUpdateComponent.isRemoved){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE;
         }
 
         // Parent must not be removed - if there is one
         if(parentComponent){
-            if(parentComponent.isRemoved){
+            if(parentComponent.isRemoved || parentComponent.isRemovedElsewhere){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE_PARENT;
             }
         }
@@ -123,7 +128,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateDesignUpdateComponentName(view, mode, componentType, isDevAdded, newName, existingUpdateComponents, componentParentReferenceId){
+    validateUpdateDesignUpdateComponentName(view, mode, component, newName, existingUpdateComponents){
 
         // Updates only allowed in update edit or WP Develop when in edit mode
         if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
@@ -135,30 +140,35 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT;
         }
 
+        // Component must not be removed elsewhere
+        if(component.isRemovedElsewhere){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED;
+        }
+
         // For Update WPs, updates only allowed for Scenarios and Added Feature Aspects
         if(view === ViewType.DEVELOP_UPDATE_WP){
 
             // Fail bad Feature Aspects
-            if(componentType === ComponentType.FEATURE_ASPECT && !isDevAdded){
+            if(component.componentType === ComponentType.FEATURE_ASPECT && !component.isDevAdded){
                 // FAIL - cant update non dev added Feature Aspects
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE;
             }
 
             // Anything else that's not a Scenario or Feature aspect is no good
-            if((componentType != ComponentType.SCENARIO) && (componentType != ComponentType.FEATURE_ASPECT)){
+            if((component.componentType != ComponentType.SCENARIO) && (component.componentType != ComponentType.FEATURE_ASPECT)){
                 // FAIL can't update any other components
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE;
             }
         }
 
         // Name must be unique for component type - for functional components only
-        if(componentType === ComponentType.DESIGN_SECTION || componentType === ComponentType.FEATURE_ASPECT){
+        if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
             // For non-functional components must be unique under the same parent only
             let duplicate = false;
 
-            existingUpdateComponents.forEach((component) => {
+            existingUpdateComponents.forEach((existingComponent) => {
 
-                if(component.componentNameNew === newName  && component.componentParentReferenceIdNew === componentParentReferenceId){
+                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === component.componentParentReferenceId){
                     duplicate = true;
                 }
             });
@@ -170,9 +180,9 @@ class DesignUpdateComponentValidationServices{
 
             let duplicate = false;
 
-            existingUpdateComponents.forEach((component) => {
+            existingUpdateComponents.forEach((existingComponent) => {
 
-                if(component.componentNameNew === newName){
+                if(existingComponent.componentNameNew === newName){
                     duplicate = true;
                 }
             });
@@ -183,18 +193,18 @@ class DesignUpdateComponentValidationServices{
         }
 
         // A Scenario name must not be the subset or superset of another Scenario name
-        if(componentType === ComponentType.SCENARIO){
+        if(component.componentType === ComponentType.SCENARIO){
 
             let subset = false;
             let superset = false;
 
-            existingUpdateComponents.forEach((component) => {
+            existingUpdateComponents.forEach((existingComponent) => {
 
-                if(component.componentNameNew.includes(newName)){
+                if(existingComponent.componentNameNew.includes(newName)){
                     subset = true;
                 }
 
-                if(newName.includes(component.componentNameNew)){
+                if(newName.includes(existingComponent.componentNameNew)){
                     superset = true;
                 }
             });
@@ -325,16 +335,7 @@ class DesignUpdateComponentValidationServices{
         // No component can be put in scope if it's already removed in another update
         if(newScope){
 
-            let isRemoved = false;
-
-            componentInOtherUpdates.forEach((instance) => {
-
-                if(instance.isRemoved){
-                    isRemoved = true;
-                }
-            });
-
-            if(isRemoved){
+            if(component.isRemovedElsewhere){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED;
             }
         }
@@ -372,8 +373,6 @@ class DesignUpdateComponentValidationServices{
             }
 
         }
-
-
 
         return Validation.VALID;
     }
