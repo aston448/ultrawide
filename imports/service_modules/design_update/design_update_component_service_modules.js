@@ -503,7 +503,7 @@ class DesignUpdateComponentModules{
                     {
                         $set:{
                             isRemoved: false,
-                            idRemovedElsewhere: false,  // Covers updates other than that being restored
+                            isRemovedElsewhere: false,  // Covers updates other than that being restored
                             isInScope: false,
                             isParentScope: false
                         }

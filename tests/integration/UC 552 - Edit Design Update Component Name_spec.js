@@ -144,7 +144,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
         // Add new feature
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Section2', 'New Feature');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'New Feature');
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.FEATURE, 'New Feature', 1));
 
         // Meanwhile in Update1
