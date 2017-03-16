@@ -1,10 +1,26 @@
-import {ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus} from '../constants/constants.js';
+import {DesignVersionStatus, ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
 // Could be changed to source from stored data ...
 
 class TextLookups {
+
+    designVersionStatus(status){
+
+        switch(status){
+            case DesignVersionStatus.VERSION_NEW:
+                return 'NEW';
+            case DesignVersionStatus.VERSION_DRAFT:
+                return 'DRAFT';
+            case DesignVersionStatus.VERSION_UPDATABLE:
+                return 'UPDATABLE';
+            case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+                return 'INITIAL VERSION COMPLETED';
+            case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+                return 'UPDATABLE VERSION COMPLETED';
+        }
+    }
 
     viewText(view){
 

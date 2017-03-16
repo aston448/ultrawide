@@ -133,7 +133,7 @@ export class DesignUpdate extends Component {
                 currentItemName={designUpdate.updateName}
                 currentItemRef={designUpdate.updateReference}
                 currentItemStatus={designUpdate.updateStatus}
-                onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
+                //onSelectItem={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }
             />;
 
         const editButton = <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignUpdate(userRole, userContext, viewOptions, designUpdate)}>Edit</Button>;
@@ -144,7 +144,7 @@ export class DesignUpdate extends Component {
         const refreshButton = <Button id="butRefresh" bsSize="xs" onClick={ () => this.onRefreshSummary(designUpdate)}>Refresh Summary</Button>;
 
         const mergeOptions =
-            <div>
+            <div className="merge-options">
                 <FormGroup id="mergeOptions">
                     <Radio id="optionMerge" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
@@ -168,6 +168,25 @@ export class DesignUpdate extends Component {
 
         let buttons = '';
         let options = '';
+        let statusClass = 'design-item-status';
+
+        switch(designUpdate.updateStatus){
+            case DesignUpdateStatus.UPDATE_NEW:
+                statusClass = 'design-item-status item-status-new';
+                break;
+            case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
+                statusClass = 'design-item-status item-status-draft';
+                break;
+            case DesignUpdateStatus.UPDATE_MERGED:
+                statusClass = 'design-item-status item-status-complete';
+                break;
+            case DesignUpdateStatus.UPDATE_IGNORED:
+                statusClass = 'design-item-status item-status-ignored';
+                break;
+        }
+
+        let status =
+            <div className={statusClass}>{designUpdate.updateStatus}</div>;
 
         switch(designUpdate.updateStatus){
             case DesignUpdateStatus.UPDATE_NEW:
@@ -180,7 +199,7 @@ export class DesignUpdate extends Component {
                     case RoleType.DESIGNER:
                         // Designers can view, edit, delete or publish a new update
                         buttons =
-                            <ButtonGroup>
+                            <ButtonGroup className="button-group-left">
                                 {viewButton}
                                 {editButton}
                                 {deleteButton}
@@ -207,7 +226,7 @@ export class DesignUpdate extends Component {
 
                         // Designers can view, edit or withdraw the update or specify how it is to be merged into the next Design Version
                         buttons =
-                            <ButtonGroup>
+                            <ButtonGroup className="button-group-left">
                                 {viewButton}
                                 {editButton}
                                 {withdrawButton}
@@ -234,14 +253,15 @@ export class DesignUpdate extends Component {
             case DesignUpdateStatus.UPDATE_IGNORED:
                 // View only for everyone
                 buttons =
-                    <ButtonGroup>
+                    <ButtonGroup className="button-group-left">
                         {viewButton}
                     </ButtonGroup>;
                 break;
         }
 
         return (
-            <div id="designUpdate" className={itemStyle}>
+            <div id="designUpdate" className={itemStyle} onClick={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }>
+                {status}
                 {header}
                 {options}
                 {buttons}

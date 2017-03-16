@@ -368,9 +368,77 @@ input {
     background-color: lightgrey;
 }
 
-.design-item-header{
-    margin: 0 0 10px 0;
+/* DESIGN ITEMS ----------------------------------------------------------------------------------------------------- */
+
+.design-item{
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    margin: 5px 10px 5px 10px;
     padding: 0px;
+}
+
+.di-active{
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    background-color: aliceblue;
+}
+
+.design-item-note{
+    margin: 0 10px 10px 10px;
+    padding: 5px 10px 10px 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: black;
+}
+
+.design-item-button{
+    margin: 0 10px 10px 10px;
+    padding: 0px;
+}
+
+.design-item-status{
+    margin: 0;
+    padding: 3px 3px 3px 10px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: bold;
+    border-bottom: 1px solid lightgrey;
+    color: darkgrey;
+    width: 100%;
+}
+
+.item-status-new{
+    background-color: #FFFFDD;
+}
+
+.item-status-draft{
+    background-color: #EEEEFF;
+}
+
+.item-status-complete{
+    background-color: #EEEEEE;
+}
+
+.item-status-updatable{
+    background-color: #EEFFEE;
+}
+
+.item-status-available{
+    background-color: #EEFFEE;
+}
+
+.item-status-ignored{
+    background-color: #FFEEEE;
+}
+
+.item-status-adopted{
+    background-color: #FFEEDD;
+}
+
+
+.design-item-header{
+    margin: 0;
+    padding: 10px 10px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  16px;
     font-weight: normal;
@@ -392,8 +460,12 @@ input {
 
 .button-group-left{
     margin: 0 5px 0 0;
+    padding: 10px;
 }
 
+.merge-options{
+    padding: 10px;
+}
 .adopter{
     margin: 3px 0 3px 0;
     padding: 2px 0 2px 5px;
@@ -786,29 +858,7 @@ input {
     margin: 0;
 }
 
-.design-item{
-    margin: 0 10px 10px 10px;
-    padding: 10px;
-}
 
-.di-active{
-    border: 0px solid lightgrey;
-    border-radius: 2px;
-    background-color: aliceblue;
-}
-
-.design-item-note{
-    margin: 0 10px 10px 10px;
-    padding: 10px;
-    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
-    color: black;
-}
-
-.design-item-button{
-    margin: 0 10px 10px 10px;
-    padding: 0px;
-}
 
 .design-component{
     margin: 0;

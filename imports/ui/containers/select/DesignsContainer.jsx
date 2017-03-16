@@ -78,7 +78,7 @@ export class DesignsList extends Component {
             return (
                 <Grid>
                     <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                             <Panel header="Designs">
                                 {this.renderDesignList(designs)}
                                 {addDesign}
@@ -91,7 +91,7 @@ export class DesignsList extends Component {
             return(
                 <Grid>
                     <Row>
-                        <Col md={6}>
+                        <Col md={4}>
                             <Panel header="Designs">
                                 {addDesign}
                             </Panel>

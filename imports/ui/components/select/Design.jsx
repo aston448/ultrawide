@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignItemHeader from './DesignItemHeader.jsx';
 
 // Ultrawide Services
-import { ItemType, RoleType } from '../../../constants/constants.js';
+import { ItemType, RoleType, DesignStatus } from '../../../constants/constants.js';
 import ClientDesignServices from '../../../apiClient/apiClientDesign.js';
 import ClientBackupServices from '../../../apiClient/apiClientBackup.js';
 
@@ -60,63 +60,88 @@ export class Design extends Component {
     render() {
         const {design, userContext, userRole} = this.props;
 
+        // Items -------------------------------------------------------------------------------------------------------
+
+        let buttons = '';
+
+        const workButton =
+            <Button id="butWork" bsSize="xs" onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>;
+
+        const removeButton =
+            <Button id="butRemove" bsSize="xs" onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove Design</Button>;
+
+        // TODO - Remove this
+        const forceRemoveButton =
+            <Button id="butBackup" bsSize="xs" onClick={ () => this.onForceRemoveDesign(userRole, design._id)}>Force Remove Design</Button>
+
+        const backupButton =
+            <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
+
+        let statusClass = 'design-item-status';
+
+        switch(design.designStatus){
+            case DesignStatus.DESIGN_LIVE:
+                statusClass = 'design-item-status item-status-available';
+                break;
+            case DesignStatus.DESIGN_ARCHIVED:
+                statusClass = 'design-item-status item-status-complete';
+                break;
+        }
+
+        const status =
+            <div className={statusClass}>{design.designStatus}</div>;
+
+        const header =
+            <DesignItemHeader
+                currentItemType={ItemType.DESIGN}
+                currentItemId={design._id}
+                currentItemName={design.designName}
+                currentItemStatus=''
+                //onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
+            />;
+
+        // Layout ------------------------------------------------------------------------------------------------------
+
         if(userContext && userRole) {
-            //console.log("Rendering design " + design._id + "  Current design is " + userContext.designId);
 
             // Active if this design is the current context design
             let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
 
-            let buttons = '';
             if(userRole === RoleType.DESIGNER) {
                 // Designer has various options
                 if (design.isRemovable) {
-                    buttons = <ButtonGroup>
-                        <Button id="butWork" bsSize="xs"
-                                onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
-                            Design</Button>
-                        <Button id="butRemove" bsSize="xs"
-                                onClick={ () => this.onRemoveDesign(userContext, userRole, design._id)}>Remove
-                            Design</Button>
-                    </ButtonGroup>
+                    buttons =
+                        <ButtonGroup className="button-group-left">
+                            {workButton}
+                            {removeButton}
+                        </ButtonGroup>
                 } else {
                     if(design.designName != 'Ultrawide Project'){
-                        buttons = <ButtonGroup>
-                            <Button id="butWork" bsSize="xs"
-                                    onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
-                                Design</Button>
-                            <Button id="butBackup" bsSize="xs"
-                                    onClick={ () => this.onForceRemoveDesign(userRole, design._id)}>Force Remove
-                                Design</Button>
-                        </ButtonGroup>
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {workButton}
+                                {forceRemoveButton}
+                            </ButtonGroup>
                     } else {
-                        buttons = <ButtonGroup>
-                            <Button id="butWork" bsSize="xs"
-                                    onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this
-                                Design</Button>
-                            <Button id="butBackup" bsSize="xs"
-                                    onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup
-                                Design</Button>
-                        </ButtonGroup>
+                        buttons =
+                            <ButtonGroup className="button-group-left">
+                                {workButton}
+                                {backupButton}
+                            </ButtonGroup>
                     }
                 }
             } else {
                 // Other users can just work on a Design
                 buttons =
-                    <ButtonGroup>
-                        <Button id="butWork" bsSize="xs"
-                                onClick={ () => this.onWorkDesign(userContext, userRole, design._id)}>Work on this Design</Button>
+                    <ButtonGroup className="button-group-left">
+                        {workButton}
                     </ButtonGroup>
             }
 
             return (
-                <div className={itemStyle}>
-                    <DesignItemHeader
-                        currentItemType={ItemType.DESIGN}
-                        currentItemId={design._id}
-                        currentItemName={design.designName}
-                        currentItemStatus=''
-                        onSelectItem={ () => this.onSelectDesign(userContext, design._id)}
-                    />
+                <div className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
+                    {status}
+                    {header}
                     {buttons}
                 </div>
             )

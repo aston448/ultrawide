@@ -12,7 +12,8 @@ import UpdateMergeItem from './UpdateMergeItem.jsx';
 // Ultrawide Services
 import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js';
 import {RoleType, DesignVersionStatus, ItemType, DesignUpdateMergeAction, ViewType, ViewMode, LogLevel} from '../../../constants/constants.js';
-import { log } from '../../../common/utils.js'
+import { log } from '../../../common/utils.js';
+import TextLookups from '../../../common/lookups.js';
 
 // Bootstrap
 import {Button, ButtonGroup, Modal} from 'react-bootstrap';
@@ -159,6 +160,27 @@ export class DesignVersion extends Component {
         let itemStyle = (designVersion._id === userContext.designVersionId ? 'design-item di-active' : 'design-item');
 
         // Items -------------------------------------------------------------------------------------------------------
+        let statusClass = 'design-item-status';
+
+        switch(designVersion.designVersionStatus){
+            case DesignVersionStatus.VERSION_NEW:
+                statusClass = 'design-item-status item-status-new';
+                break;
+            case DesignVersionStatus.VERSION_DRAFT:
+                statusClass = 'design-item-status item-status-draft';
+                break;
+            case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+            case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+                statusClass = 'design-item-status item-status-complete';
+                break;
+            case DesignVersionStatus.VERSION_UPDATABLE:
+                statusClass = 'design-item-status item-status-updatable';
+                break;
+        }
+
+        let status =
+            <div className={statusClass}>{TextLookups.designVersionStatus(designVersion.designVersionStatus)}</div>;
+
         let buttons = '';
 
         const editButton =
@@ -185,8 +207,18 @@ export class DesignVersion extends Component {
         const modalCancelButton =
             <Button onClick={() => this.onCloseModal()}>Cancel</Button>;
 
-        // Popup shown when user wants to create next Design Version
+        const header =
+            <DesignItemHeader
+                currentItemType={ItemType.DESIGN_VERSION}
+                currentItemId={designVersion._id}
+                currentItemName={designVersion.designVersionName}
+                currentItemRef={designVersion.designVersionNumber}
+                currentItemStatus={designVersion.designVersionStatus}
+                //onSelectItem={ () => this.setNewDesignVersionActive(userRole, userContext, designVersion)}
+            />;
 
+
+        // Popup shown when user wants to create next Design Version
         let confirmNextModal = '';
 
         switch(designVersion.designVersionStatus){
@@ -252,7 +284,7 @@ export class DesignVersion extends Component {
                 if(userRole === RoleType.DESIGNER){
                     // Designers can Edit View or Publish
                     buttons =
-                        <ButtonGroup>
+                        <ButtonGroup className="button-group-left">
                             {viewButton}
                             {editButton}
                             {publishButton}
@@ -269,7 +301,7 @@ export class DesignVersion extends Component {
                     case RoleType.DESIGNER:
                         // Designers can view it, withdraw it if not adopted or create the next version from updates...
                         buttons =
-                            <ButtonGroup>
+                            <ButtonGroup className="button-group-left">
                                 {viewButton}
                                 {editButton}
                                 {withdrawButton}
@@ -306,13 +338,13 @@ export class DesignVersion extends Component {
                     case RoleType.DESIGNER:
                         buttons =
                             <div>
-                                <ButtonGroup>
+                                <ButtonGroup className="button-group-left">
                                     {viewButton}
                                 </ButtonGroup>
-                                <ButtonGroup>
+                                <ButtonGroup className="button-group-left">
                                     {updateButton}
                                  </ButtonGroup>
-                                <ButtonGroup>
+                                <ButtonGroup className="button-group-left">
                                     {createNextButton}
                                 </ButtonGroup>
                             </div>;
@@ -320,17 +352,17 @@ export class DesignVersion extends Component {
                     case RoleType.DEVELOPER:
                         buttons =
                             <div>
-                                <ButtonGroup>
+                                <ButtonGroup className="button-group-left">
                                     {viewButton}
                                 </ButtonGroup>
-                                <ButtonGroup>
+                                <ButtonGroup className="button-group-left">
                                     {updateButton}
                                 </ButtonGroup>
                             </div>;
                         break;
                     case RoleType.MANAGER:
                         buttons =
-                            <ButtonGroup>
+                            <ButtonGroup className="button-group-left">
                                 {viewButton}
                             </ButtonGroup>;
                         break;
@@ -340,7 +372,7 @@ export class DesignVersion extends Component {
             case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
                 // View only
                 buttons =
-                    <ButtonGroup>
+                    <ButtonGroup className="button-group-left">
                         {viewButton}
                     </ButtonGroup>;
                 break;
@@ -351,15 +383,9 @@ export class DesignVersion extends Component {
         }
 
         return (
-            <div className={itemStyle}>
-                <DesignItemHeader
-                    currentItemType={ItemType.DESIGN_VERSION}
-                    currentItemId={designVersion._id}
-                    currentItemName={designVersion.designVersionName}
-                    currentItemRef={designVersion.designVersionNumber}
-                    currentItemStatus={designVersion.designVersionStatus}
-                    onSelectItem={ () => this.setNewDesignVersionActive(userRole, userContext, designVersion)}
-                />
+            <div className={itemStyle} onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
+                {status}
+                {header}
                 {buttons}
                 {confirmNextModal}
             </div>

@@ -52,21 +52,21 @@ export class DesignItemHeader extends Component{
 
     }
 
-    // TODO - if we want to have an item body
-    toggleOpen(){
-        this.props.toggleOpen();
-        this.setState({open: !this.state.open});
-        this.setCurrentComponent();
-    }
+    // // TODO - if we want to have an item body
+    // toggleOpen(){
+    //     this.props.toggleOpen();
+    //     this.setState({open: !this.state.open});
+    //     //this.setCurrentComponent();
+    // }
 
     // Passes back the click to the parent component to get it selected as the current one
-    setCurrentItem(){
-        //console.log("SELECT " + this.props.currentItemType);
-
-        if (typeof this.props.onSelectItem === 'function') {
-            this.props.onSelectItem();
-        }
-    }
+    // setCurrentItem(){
+    //     //console.log("SELECT " + this.props.currentItemType);
+    //
+    //     if (typeof this.props.onSelectItem === 'function') {
+    //         this.props.onSelectItem();
+    //     }
+    // }
 
     // Allow editing of name
     editItemName(){
@@ -191,7 +191,7 @@ export class DesignItemHeader extends Component{
                 </div>;
 
             refEditorNotEditing =
-                <div onClick={ () => this.setCurrentItem()}>
+                <div>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
                             <ControlLabel id="refLabel">{currentItemRef}</ControlLabel>
@@ -203,7 +203,7 @@ export class DesignItemHeader extends Component{
                 </div>;
 
             refReadOnly =
-                <div onClick={ () => this.setCurrentItem()}>
+                <div>
                     <InputGroup>
                         <div className={"readOnlyItem"}>
                             <ControlLabel id="refLabel">{currentItemRef}</ControlLabel>
@@ -234,14 +234,11 @@ export class DesignItemHeader extends Component{
             </div>;
 
         let nameEditorNotEditing =
-            <div onClick={ () => this.setCurrentItem()}>
+            <div>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
                         <ControlLabel id="nameLabel">{currentItemName}</ControlLabel>
                     </div>
-                    <InputGroup.Addon>
-                        <ControlLabel id="statusLabel">{currentItemStatus}</ControlLabel>
-                    </InputGroup.Addon>
                     <InputGroup.Addon onClick={ () => this.editItemName()}>
                         <div id="edit" className="blue"><Glyphicon glyph="edit"/></div>
                     </InputGroup.Addon>
@@ -250,14 +247,11 @@ export class DesignItemHeader extends Component{
 
 
         let nameReadOnly =
-            <div onClick={ () => this.setCurrentItem()}>
+            <div>
                 <InputGroup>
                     <div className={"readOnlyItem"}>
                         <ControlLabel id="nameLabel">{currentItemName}</ControlLabel>
                     </div>
-                    <InputGroup.Addon>
-                        <ControlLabel id="statusLabel">{currentItemStatus}</ControlLabel>
-                    </InputGroup.Addon>
                 </InputGroup>
             </div>;
 
@@ -330,7 +324,7 @@ DesignItemHeader.propTypes = {
     currentItemName: PropTypes.string.isRequired,
     currentItemRef: PropTypes.string,
     currentItemStatus: PropTypes.string.isRequired,
-    onSelectItem: PropTypes.func.isRequired
+    //onSelectItem: PropTypes.func.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

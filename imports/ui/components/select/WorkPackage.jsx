@@ -141,26 +141,86 @@ export class WorkPackage extends Component {
     }
 
     render() {
+
         const {workPackage, userRole, viewOptions, userContext} = this.props;
 
-        // Display as selected if this is the current WP in the user context
-        //console.log("Rendering WP " + workPackage._id + " Current WP is " + userContext.workPackageId);
+        // Items -------------------------------------------------------------------------------------------------------
+
         let itemStyle = (workPackage._id === userContext.workPackageId ? 'design-item di-active' : 'design-item');
 
         let buttons = '';
         let options = '';
-        let adopter = <div></div>;
+        let adopter = '';
+
+        let statusClass = 'design-item-status';
+
+        switch(workPackage.workPackageStatus){
+            case WorkPackageStatus.WP_NEW:
+                statusClass = 'design-item-status item-status-new';
+                break;
+            case WorkPackageStatus.WP_AVAILABLE:
+                statusClass = 'design-item-status item-status-available';
+                break;
+            case WorkPackageStatus.WP_COMPLETE:
+                statusClass = 'design-item-status item-status-complete';
+                break;
+            case WorkPackageStatus.WP_ADOPTED:
+                statusClass = 'design-item-status item-status-adopted';
+                // Set up label to show who has adopted
+                adopter = ' by ' + this.getAdopterName(workPackage.adoptingUserId);
+                break;
+        }
+
+        const status =
+            <div className={statusClass}>{workPackage.workPackageStatus + adopter}</div>;
+
+        const header =
+            <DesignItemHeader
+                currentItemType={ItemType.WORK_PACKAGE}
+                currentItemId={workPackage._id}
+                currentItemName={workPackage.workPackageName}
+                currentItemRef=''
+                currentItemStatus={workPackage.workPackageStatus}
+                //onSelectItem={ () => this.onSelectWorkPackage(userRole, userContext, workPackage) }
+            />;
+
+        const buttonEdit =
+            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>;
+
+        const buttonView =
+            <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>;
+
+        const buttonRemove =
+            <Button id="butRemove" bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Remove</Button>;
+
+        const buttonPublish =
+            <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>;
+
+        const buttonWithdraw =
+            <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>;
+
+        const buttonAdopt =
+            <Button id="butAdopt" bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>;
+
+        const buttonRelease =
+            <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>;
+
+        const buttonDevelop =
+            <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>;
+
+
+        // Layout ------------------------------------------------------------------------------------------------------
 
         switch(workPackage.workPackageStatus){
             case WorkPackageStatus.WP_NEW:
                 if(userRole === RoleType.MANAGER){
                     // Managers can edit, delete or publish a new WP
                     buttons =
-                        <ButtonGroup>
-                            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
-                            <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
-                            <Button id="butRemove" bsSize="xs" onClick={ () => this.onDeleteWorkPackage(userRole, userContext, workPackage)}>Remove</Button>
-                            <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishWorkPackage(userRole, userContext, workPackage)}>Publish</Button>
+                        <ButtonGroup className="button-group-left">
+                            {buttonEdit}
+                            {buttonView}
+                            {buttonRemove}
+                            {buttonPublish}
                         </ButtonGroup>;
                 } else {
                     // Developers and Designers can't do anything with WPs until published
@@ -174,8 +234,8 @@ export class WorkPackage extends Component {
                         // Developers can view or adopt a WP
                         buttons =
                             <ButtonGroup className="button-group-left">
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
-                                <Button id="butAdopt" bsSize="xs" onClick={ () => this.onAdoptWorkPackage(userRole, userContext, workPackage)}>Adopt</Button>
+                                {buttonView}
+                                {buttonAdopt}
                             </ButtonGroup>;
 
                         break;
@@ -183,17 +243,17 @@ export class WorkPackage extends Component {
 
                         // Managers can view, edit or withdraw the WP
                         buttons =
-                            <ButtonGroup>
-                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
-                                <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawWorkPackage(userRole, userContext, workPackage)}>Withdraw</Button>
+                            <ButtonGroup className="button-group-left">
+                                {buttonEdit}
+                                {buttonView}
+                                {buttonWithdraw}
                             </ButtonGroup>;
 
                         break;
                     case RoleType.DESIGNER:
                         buttons =
                             <ButtonGroup className="button-group-left">
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                                {buttonView}
                             </ButtonGroup>;
                         break;
                 }
@@ -205,9 +265,9 @@ export class WorkPackage extends Component {
                         // Developers can view or develop / release  a WP if adopted by them
                         buttons =
                             <ButtonGroup className="button-group-left">
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
-                                <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>
-                                <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>
+                                {buttonView}
+                                {buttonDevelop}
+                                {buttonRelease}
                             </ButtonGroup>;
 
                         break;
@@ -215,44 +275,35 @@ export class WorkPackage extends Component {
 
                         // Managers can view or edit or release the WP
                         buttons =
-                            <ButtonGroup>
-                                <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditWorkPackage(userRole, userContext, workPackage)}>Edit</Button>
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
-                                <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>
+                            <ButtonGroup className="button-group-left">
+                                {buttonEdit}
+                                {buttonView}
+                                {buttonRelease}
                             </ButtonGroup>;
 
                         break;
                     case RoleType.DESIGNER:
                         buttons =
                             <ButtonGroup className="button-group-left">
-                                <Button id="butView" bsSize="xs" onClick={ () => this.onViewWorkPackage(userRole, userContext, workPackage)}>View</Button>
+                                {buttonView}
                             </ButtonGroup>;
                         break;
                 }
-                // Set up label to show who has adopted
-                adopter = <div className="adopter">{'Adopted by ' + this.getAdopterName(workPackage.adoptingUserId)}</div>;
 
                 break;
             case WorkPackageStatus.WP_COMPLETE:
                 // View only for everyone
                 buttons =
-                    <ButtonGroup>
-                        <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignUpdate(userRole, userContext, designUpdate)}>View</Button>
+                    <ButtonGroup className="button-group-left">
+                        {buttonView}
                     </ButtonGroup>;
                 break;
         }
 
         return (
-            <div id="workPackageItem" className={itemStyle}>
-                <DesignItemHeader
-                    currentItemType={ItemType.WORK_PACKAGE}
-                    currentItemId={workPackage._id}
-                    currentItemName={workPackage.workPackageName}
-                    currentItemRef=''
-                    currentItemStatus={workPackage.workPackageStatus}
-                    onSelectItem={ () => this.onSelectWorkPackage(userRole, userContext, workPackage) }
-                />
-                {adopter}
+            <div id="workPackageItem" className={itemStyle}  onClick={() => this.onSelectWorkPackage(userRole, userContext, workPackage)}>
+                {status}
+                {header}
                 {buttons}
             </div>
         );

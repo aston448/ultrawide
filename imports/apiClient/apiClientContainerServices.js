@@ -32,7 +32,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 
 
 // Ultrawide Services
-import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, StepContext, WorkPackageType, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction, MessageType } from '../constants/constants.js';
+import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, DesignUpdateStatus, StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction, MessageType } from '../constants/constants.js';
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -455,14 +455,36 @@ class ClientContainerServices{
 
         // No action if design version not yet set
         if (currentDesignVersionId != 'NONE') {
-            // Get all the design updates available for the selected version
-            const currentWorkPackages = WorkPackages.find(
+
+            // Get New WPS
+            const newWorkPackages = WorkPackages.find(
                 {
                     designVersionId: currentDesignVersionId,
-                    workPackageType: WorkPackageType.WP_BASE
+                    workPackageType: WorkPackageType.WP_BASE,
+                    workPackageStatus: WorkPackageStatus.WP_NEW
                 },
                 {sort: {workPackageName: 1}}
-            );
+            ).fetch();
+
+            // Get Available WPS
+            const availableWorkPackages = WorkPackages.find(
+                {
+                    designVersionId: currentDesignVersionId,
+                    workPackageType: WorkPackageType.WP_BASE,
+                    workPackageStatus: WorkPackageStatus.WP_AVAILABLE
+                },
+                {sort: {workPackageName: 1}}
+            ).fetch();
+
+            // Get Adopted WPS
+            const adoptedWorkPackages = WorkPackages.find(
+                {
+                    designVersionId: currentDesignVersionId,
+                    workPackageType: WorkPackageType.WP_BASE,
+                    workPackageStatus: WorkPackageStatus.WP_ADOPTED
+                },
+                {sort: {workPackageName: 1}}
+            ).fetch();
 
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
@@ -471,14 +493,18 @@ class ClientContainerServices{
 
             return {
                 wpType: WorkPackageType.WP_BASE,
-                workPackages: currentWorkPackages.fetch(),
+                newWorkPackages: newWorkPackages,
+                availableWorkPackages: availableWorkPackages,
+                adoptedWorkPackages: adoptedWorkPackages,
                 designVersionStatus: designVersionStatus
             };
 
         } else {
             return {
                 wpType: WorkPackageType.WP_BASE,
-                workPackages: [],
+                newWorkPackages: [],
+                availableWorkPackages: [],
+                adoptedWorkPackages: [],
                 designVersionStatus: null
             };
         }
@@ -499,19 +525,44 @@ class ClientContainerServices{
 
                 if(designUpdate) {
 
-                    // Get all the WPs available for the selected update
-                    const currentWorkPackages = WorkPackages.find(
+                    // Get New WPS
+                    const newWorkPackages = WorkPackages.find(
                         {
                             designVersionId: currentDesignVersionId,
                             designUpdateId: currentDesignUpdateId,
-                            workPackageType: WorkPackageType.WP_UPDATE
+                            workPackageType: WorkPackageType.WP_UPDATE,
+                            workPackageStatus: WorkPackageStatus.WP_NEW
                         },
                         {sort: {workPackageName: 1}}
-                    );
+                    ).fetch();
+
+                    // Get Available WPS
+                    const availableWorkPackages = WorkPackages.find(
+                        {
+                            designVersionId: currentDesignVersionId,
+                            designUpdateId: currentDesignUpdateId,
+                            workPackageType: WorkPackageType.WP_UPDATE,
+                            workPackageStatus: WorkPackageStatus.WP_AVAILABLE
+                        },
+                        {sort: {workPackageName: 1}}
+                    ).fetch();
+
+                    // Get Adopted WPS
+                    const adoptedWorkPackages = WorkPackages.find(
+                        {
+                            designVersionId: currentDesignVersionId,
+                            designUpdateId: currentDesignUpdateId,
+                            workPackageType: WorkPackageType.WP_UPDATE,
+                            workPackageStatus: WorkPackageStatus.WP_ADOPTED
+                        },
+                        {sort: {workPackageName: 1}}
+                    ).fetch();
 
                     return {
                         wpType: WorkPackageType.WP_UPDATE,
-                        workPackages: currentWorkPackages.fetch(),
+                        newWorkPackages: newWorkPackages,
+                        availableWorkPackages: availableWorkPackages,
+                        adoptedWorkPackages: adoptedWorkPackages,
                         designVersionStatus: designVersionStatus,
                         designUpdateStatus: designUpdate.updateStatus
                     };
@@ -519,7 +570,9 @@ class ClientContainerServices{
 
                     return {
                         wpType: WorkPackageType.WP_UPDATE,
-                        workPackages: [],
+                        newWorkPackages: [],
+                        availableWorkPackages: [],
+                        adoptedWorkPackages: [],
                         designVersionStatus: designVersionStatus,
                         designUpdateStatus: null
                     };
@@ -528,7 +581,9 @@ class ClientContainerServices{
             } else {
                 return {
                     wpType: WorkPackageType.WP_UPDATE,
-                    workPackages: [],
+                    newWorkPackages: [],
+                    availableWorkPackages: [],
+                    adoptedWorkPackages: [],
                     designVersionStatus: designVersionStatus,
                     designUpdateStatus: null
                 };
@@ -538,7 +593,9 @@ class ClientContainerServices{
 
             return {
                 wpType: WorkPackageType.WP_UPDATE,
-                workPackages: [],
+                newWorkPackages: [],
+                availableWorkPackages: [],
+                adoptedWorkPackages: [],
                 designVersionStatus: null,
                 designUpdateStatus: null
             };
@@ -550,11 +607,40 @@ class ClientContainerServices{
 
         // No action if design version not yet set
         if (currentDesignVersionId != 'NONE') {
-            // Get all the design updates available for the selected version
-            const currentDesignUpdates = DesignUpdates.find(
-                {designVersionId: currentDesignVersionId},
+
+            // Get all the design updates available for the selected version sorted by type and name
+
+            const newUpdates = DesignUpdates.find(
+                {
+                    designVersionId: currentDesignVersionId,
+                    updateStatus: DesignUpdateStatus.UPDATE_NEW
+                },
                 {sort: {updateName: 1}}
-            );
+            ).fetch();
+
+            const draftUpdates = DesignUpdates.find(
+                {
+                    designVersionId: currentDesignVersionId,
+                    updateStatus: DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT
+                },
+                {sort: {updateName: 1}}
+            ).fetch();
+
+            const mergedUpdates = DesignUpdates.find(
+                {
+                    designVersionId: currentDesignVersionId,
+                    updateStatus: DesignUpdateStatus.UPDATE_MERGED
+                },
+                {sort: {updateName: 1}}
+            ).fetch();
+
+            const ignoredUpdates = DesignUpdates.find(
+                {
+                    designVersionId: currentDesignVersionId,
+                    updateStatus: DesignUpdateStatus.UPDATE_IGNORED
+                },
+                {sort: {updateName: 1}}
+            ).fetch();
 
             // Get the status of the current design version
             const designVersionStatus = DesignVersions.findOne({_id: currentDesignVersionId}).designVersionStatus;
@@ -562,13 +648,19 @@ class ClientContainerServices{
             //console.log("Design Updates found: " + currentDesignUpdates.count());
 
             return {
-                designUpdates: currentDesignUpdates.fetch(),
+                newUpdates: newUpdates,
+                draftUpdates: draftUpdates,
+                mergedUpdates: mergedUpdates,
+                ignoredUpdates: ignoredUpdates,
                 designVersionStatus: designVersionStatus
             };
 
         } else {
             return {
-                designUpdates: [],
+                newUpdates: [],
+                draftUpdates: [],
+                mergedUpdates: [],
+                ignoredUpdates: [],
                 designVersionStatus: ''
             };
         }

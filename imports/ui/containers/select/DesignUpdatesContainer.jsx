@@ -53,10 +53,6 @@ export class DesignUpdatesList extends Component {
                     />
                 );
             });
-        } else {
-            return(
-                <div className="design-item-note">No Design Updates</div>
-            )
         }
     }
 
@@ -67,7 +63,7 @@ export class DesignUpdatesList extends Component {
 
     render() {
 
-        const {designUpdates, designVersionStatus, userRole, userContext} = this.props;
+        const {newUpdates, draftUpdates, mergedUpdates, ignoredUpdates, designVersionStatus, userRole, userContext} = this.props;
 
         // Elements ----------------------------------------------------------------------------------------------------
 
@@ -146,21 +142,45 @@ export class DesignUpdatesList extends Component {
 
                 case DesignVersionStatus.VERSION_UPDATABLE:
 
-                    // These versions can have or have had Design Updates
-                    if (userRole != RoleType.DESIGNER) {
+                    if(newUpdates.length === 0 && draftUpdates.length === 0 && mergedUpdates.length === 0 && ignoredUpdates.length === 0){
 
-                        // Developers and Managers can't add design updates
-                        updatesPanelContent =
-                            <Panel header="Design Updates">
-                                {this.renderDesignUpdatesList(designUpdates)}
-                            </Panel>;
+                        if (userRole === RoleType.DESIGNER) {
+                            updatesPanelContent =
+                                <Panel header="Design Updates">
+                                    <div className="design-item-note">No Design Updates</div>;
+                                    {addUpdate}
+                                </Panel>
+                        } else {
+                            updatesPanelContent =
+                                <Panel header="Design Updates">
+                                    <div className="design-item-note">No Design Updates</div>;
+                                </Panel>
+                        }
                     } else {
-                        // Design updates may be added
-                        updatesPanelContent =
-                            <Panel header="Design Updates">
-                                {this.renderDesignUpdatesList(designUpdates)}
-                                {addUpdate}
-                            </Panel>;
+
+                        // These versions can have or have had Design Updates
+                        if (userRole === RoleType.DESIGNER) {
+
+                            // Developers and Managers can't add design updates
+                            updatesPanelContent =
+                                <Panel header="Design Updates">
+                                    {this.renderDesignUpdatesList(newUpdates)}
+                                    {this.renderDesignUpdatesList(draftUpdates)}
+                                    {this.renderDesignUpdatesList(mergedUpdates)}
+                                    {this.renderDesignUpdatesList(ignoredUpdates)}
+                                    {addUpdate}
+                                </Panel>;
+                        } else {
+                            // Design updates may be added
+                            updatesPanelContent =
+                                <Panel header="Design Updates">
+                                    {this.renderDesignUpdatesList(newUpdates)}
+                                    {this.renderDesignUpdatesList(draftUpdates)}
+                                    {this.renderDesignUpdatesList(mergedUpdates)}
+                                    {this.renderDesignUpdatesList(ignoredUpdates)}
+                                </Panel>;
+                        }
+
                     }
 
                     layout =
@@ -183,11 +203,23 @@ export class DesignUpdatesList extends Component {
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
                     // Nobody can add updates - just show what there are
-                    updatesPanelContent =
-                        <Panel header="Design Updates">
-                            {this.renderDesignUpdatesList(designUpdates)}
-                        </Panel>;
+                    if(newUpdates.length === 0 && draftUpdates.length === 0 && mergedUpdates.length === 0 && ignoredUpdates.length === 0){
 
+                        updatesPanelContent =
+                            <Panel header="Design Updates">
+                                <div className="design-item-note">No Design Updates</div>;
+                            </Panel>
+
+                    } else {
+
+                        updatesPanelContent =
+                            <Panel header="Design Updates">
+                                {this.renderDesignUpdatesList(newUpdates)}
+                                {this.renderDesignUpdatesList(draftUpdates)}
+                                {this.renderDesignUpdatesList(mergedUpdates)}
+                                {this.renderDesignUpdatesList(ignoredUpdates)}
+                            </Panel>;
+                    }
                     layout =
                         <Grid>
                             <Row>
@@ -216,8 +248,11 @@ export class DesignUpdatesList extends Component {
 }
 
 DesignUpdatesList.propTypes = {
-    designUpdates: PropTypes.array.isRequired,
-    designVersionStatus: PropTypes.string.isRequired
+    newUpdates:             PropTypes.array.isRequired,
+    draftUpdates:           PropTypes.array.isRequired,
+    mergedUpdates:          PropTypes.array.isRequired,
+    ignoredUpdates:         PropTypes.array.isRequired,
+    designVersionStatus:    PropTypes.string.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

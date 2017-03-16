@@ -257,10 +257,10 @@ export class AppHeader extends Component {
             <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
 
         let refreshTestDataButton =
-            <Button id="butRefreshTestData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions)}>Refresh Test Data</Button>;
+            <Button id="butRefreshTestData" bsSize="xs" bsStyle="success" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions)}>Refresh Test Data</Button>;
 
         let refreshDesignDataButton =
-            <Button id="butRefreshDesignData" bsSize="xs" bsStyle="info" onClick={ () => this.onRefreshDesignData(view, userContext, userRole, userViewOptions)}>Refresh Design Data</Button>;
+            <Button id="butRefreshDesignData" bsSize="xs" bsStyle="success" onClick={ () => this.onRefreshDesignData(view, userContext, userRole, userViewOptions)}>Refresh Design Data</Button>;
 
 
         // The message display depends on the type of message being displayed
