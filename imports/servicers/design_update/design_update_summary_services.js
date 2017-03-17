@@ -57,6 +57,12 @@ class DesignUpdateSummaryServices {
         if (Meteor.isServer) {
 
             const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+
+            // If a DU has just been deleted there is nothing to refresh
+            if(!designUpdate){
+                return;
+            }
+
             const designVersionId = designUpdate.designVersionId;
 
             // No action unless data is stale

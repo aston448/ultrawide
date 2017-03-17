@@ -41,7 +41,7 @@ class ClientDesignUpdateSummary{
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 1: ' + err.reason + '.  Contact support if persists!');
 
             }
         });

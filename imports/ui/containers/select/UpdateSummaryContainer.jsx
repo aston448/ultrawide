@@ -65,62 +65,59 @@ export class DesignUpdateSummaryList extends Component {
         let additions = <div></div>;
         if(functionalAdditions.length > 0){
             additions =
-                <Panel id="summaryAdditions" className="panel-small panel-small-body" header="Functional Additions">
-                    {this.renderChanges(functionalAdditions)}
-                </Panel>;
+                <div id="summaryAdditions" className="update-summary-change-container">
+                    <div className="update-summary-change-header change-add">Functional Additions</div>
+                    <div className="scroll-col">
+                        {this.renderChanges(functionalAdditions)}
+                    </div>
+                </div>;
         }
 
         let removals = <div></div>;
         if(functionalRemovals.length > 0){
             removals =
-                <Panel id="summaryRemovals" className="panel-small panel-small-body" header="Functional Removals">
-                    {this.renderChanges(functionalRemovals)}
-                </Panel>;
+                <div id="summaryRemovals" className="update-summary-change-container">
+                    <div className="update-summary-change-header change-remove">Functional Removals</div>
+                    <div className="scroll-col">
+                        {this.renderChanges(functionalRemovals)}
+                    </div>
+                </div>;
         }
 
         let changes = <div></div>;
         if(functionalChanges.length > 0){
             changes =
-                <Panel id="summaryChanges" className="panel-small panel-small-body" header="Functional Changes">
-                    {this.renderChanges(functionalChanges)}
-                </Panel>;
+                <div id="summaryChanges" className="update-summary-change-container">
+                    <div className="update-summary-change-header change-modify">Functional Changes</div>
+                    <div className="scroll-col">
+                        {this.renderChanges(functionalChanges)}
+                    </div>
+                </div>;
         }
 
 
         if(userContext.designUpdateId != 'NONE') {
 
             return (
-                <Panel id="updateSummary" header={'Design Update Summary for ' + designUpdateName}>
-                    <Grid>
-                        <Row>
-                            <Col md={12} className="scroll-col">
-                                <Grid className="close-grid">
-                                    <Row>
-                                        <Col md={12} className="col">
-                                            {additions}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md={12} className="col">
-                                            {removals}
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md={12} className="col">
-                                            {changes}
-                                        </Col>
-                                    </Row>
-                                </Grid>
-                            </Col>
-                        </Row>
-                    </Grid>
-                </Panel>
+                <div id="updateSummary" className="update-summary-container">
+                    <div className="update-summary-header">{'Design Update Summary for ' + designUpdateName}</div>
+                    <div className="scroll-col">
+                        {additions}
+                        {removals}
+                        {changes}
+                    </div>
+                </div>
             );
+
         } else {
+
             return(
-                <Panel id="noSummary" header="Design Update Summary">
-                    <div className="design-item-note">No update selected</div>
-                </Panel>
+                <div id="noSummary" className="update-summary-container">
+                    <div className="update-summary-header">Design Update Summary</div>
+                    <div className="scroll-col">
+                        <div className="design-item-note">No update selected</div>
+                    </div>
+                </div>
             )
         }
     }

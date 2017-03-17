@@ -6,19 +6,18 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-import WorkPackage from '../../components/select/WorkPackage.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
+import WorkPackage                  from '../../components/select/WorkPackage.jsx';
+import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, RoleType, LogLevel} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+import {DesignVersionStatus, DesignUpdateStatus, WorkPackageType, WorkPackageStatus, RoleType, LogLevel} from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js';
 
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageServices    from '../../../apiClient/apiClientWorkPackage.js';
+
 // Bootstrap
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -52,6 +51,19 @@ export class WorkPackagesList extends Component {
         }
     }
 
+    renderAllWorkPackageLists(){
+
+        return [
+            this.renderWorkPackagesList(this.props.newWorkPackages),
+            this.renderWorkPackagesList(this.props.adoptedWorkPackages),
+            this.renderWorkPackagesList(this.props.availableWorkPackages)
+        ]
+    }
+
+    displayNote(noteText){
+        return <div className="design-item-note">{noteText}</div>;
+    }
+
     onAddWorkPackage(userRole, userContext, wpType, openWpItems){
 
         ClientWorkPackageServices.addNewWorkPackage(userRole, userContext, wpType, openWpItems);
@@ -62,178 +74,127 @@ export class WorkPackagesList extends Component {
 
         const {wpType, newWorkPackages, availableWorkPackages, adoptedWorkPackages, designVersionStatus, designUpdateStatus, userRole, userContext, openWpItems} = this.props;
 
-        let panelContent = <div className="design-item-note">No Work Packages</div>;
-        let developerButtons = <div></div>;
+        // Header ------------------------------------------------------------------------------------------------------
 
-        let panelHeader = 'Work Packages';
+        let headerText = 'Work Packages';
+
         if(wpType === WorkPackageType.WP_UPDATE){
-            panelHeader = 'Update Work Packages';
+            headerText = 'Update Work Packages';
         }
 
-        let addWorkPackage =
-            <div id="addWorkPackage" className="design-item-add">
-                <DesignComponentAdd
-                    addText="Add Work Package"
-                    onClick={ () => this.onAddWorkPackage(
+        // Footer ------------------------------------------------------------------------------------------------------
+
+        let footerActionFunction = null;
+        let hasFooterAction = false;
+        const footerAction = 'Add Work Package';
+
+        // Add WP available to Managers
+        if(userRole === RoleType.MANAGER) {
+
+
+            if(userContext.designUpdateId != 'NONE'){
+
+                // But for Design Updates only if they are Draft
+                if(designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT){
+                    hasFooterAction = true;
+
+                    footerActionFunction = () => this.onAddWorkPackage(
                         userRole,
                         userContext,
                         wpType,
                         openWpItems
-                    )}
-                />
-            </div>;
+                    );
+                }
+            } else {
+
+                // And for Design Versions only of they are Draft
+                if(designVersionStatus === DesignVersionStatus.VERSION_DRAFT) {
+                    hasFooterAction = true;
+
+                    footerActionFunction = () => this.onAddWorkPackage(
+                        userRole,
+                        userContext,
+                        wpType,
+                        openWpItems
+                    );
+                }
+            }
+        }
+
+        // Body Content ------------------------------------------------------------------------------------------------
+
+        let bodyDataFunction = null;
+
+        const wpsNotAppropriate = 'Work Packages may only be added to a Draft design version...';
+        const noWorkPackages = 'No Work Packages';
+        const selectDesignUpdate = 'Select a Design Update';
 
         // When a design version is selected...
         if(userContext.designVersionId){
 
             switch(designVersionStatus){
+
                 case DesignVersionStatus.VERSION_NEW:
+
                     // No work packages available and none can be added...
-                    if(userRole != RoleType.MANAGER){
-                        panelContent =
-                            <div className="design-item-note">No Work Packages</div>;
+
+                    if(userRole === RoleType.MANAGER){
+                        bodyDataFunction = () => this.displayNote(wpsNotAppropriate);
                     } else {
-                        panelContent =
-                            <div className="design-item-note">Work Packages may only be added to a Draft design version...</div>;
+                        bodyDataFunction = () => this.displayNote(noWorkPackages);
                     }
                     break;
+
                 case DesignVersionStatus.VERSION_DRAFT:
+                case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
 
                     if(newWorkPackages.length === 0 && availableWorkPackages.length === 0 && adoptedWorkPackages.length === 0){
-                        if (userRole === RoleType.MANAGER) {
-                            panelContent =
-                                <div>
-                                    <div className="design-item-note">No Work Packages</div>
-                                    {addWorkPackage}
-                                </div>;
-                        } else {
-                            panelContent =
-                                <div className="design-item-note">No Work Packages</div>;
-                        }
+
+                        bodyDataFunction = () => this.displayNote(noWorkPackages);
+
                     } else {
-                        if (userRole === RoleType.MANAGER) {
-                            // Work Packages may be added by Manager
-                            panelContent =
-                                <div>
-                                    {this.renderWorkPackagesList(newWorkPackages)}
-                                    {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                    {this.renderWorkPackagesList(availableWorkPackages)}
-                                    {addWorkPackage}
-                                </div>;
-                        } else {
-                            // Just show the list
-                            panelContent =
-                                <div>
-                                    {this.renderWorkPackagesList(newWorkPackages)}
-                                    {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                    {this.renderWorkPackagesList(availableWorkPackages)}
-                                </div>;
-                        }
+
+                        bodyDataFunction = () => this.renderAllWorkPackageLists();
+
                     }
                     break;
 
                 case DesignVersionStatus.VERSION_UPDATABLE:
-
-                    // An update must be selected first
-                    if(userContext.designUpdateId != 'NONE') {
-
-                        if(newWorkPackages.length === 0 && availableWorkPackages.length === 0 && adoptedWorkPackages.length === 0){
-                            if (userRole === RoleType.MANAGER && designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
-                                panelContent =
-                                    <div>
-                                        <div className="design-item-note">No Work Packages</div>
-                                        {addWorkPackage}
-                                    </div>;
-                            } else {
-                                panelContent =
-                                    <div className="design-item-note">No Work Packages</div>;
-                            }
-                        } else {
-                            if (userRole != RoleType.MANAGER) {
-                                // Just show the list
-                                panelContent =
-                                    <div>
-                                        {this.renderWorkPackagesList(newWorkPackages)}
-                                        {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                        {this.renderWorkPackagesList(availableWorkPackages)}
-                                    </div>;
-                            } else {
-                                // Work Packages may be added by Manager if update is published
-                                if (designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT) {
-                                    panelContent =
-                                        <div>
-                                            {this.renderWorkPackagesList(newWorkPackages)}
-                                            {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                            {this.renderWorkPackagesList(availableWorkPackages)}
-                                            {addWorkPackage}
-                                        </div>;
-                                } else {
-                                    panelContent =
-                                        <div>
-                                            {this.renderWorkPackagesList(newWorkPackages)}
-                                            {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                            {this.renderWorkPackagesList(availableWorkPackages)}
-                                        </div>;
-                                }
-                            }
-                        }
-                    } else {
-                        panelContent =
-                            <div className="design-item-note">Select a Design Update</div>;
-                    }
-                    break;
-
-                case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
-                    // Work Packages may be viewed only
-                    if(newWorkPackages.length === 0 && availableWorkPackages.length === 0 && adoptedWorkPackages.length === 0){
-
-                        panelContent =
-                            <div className="design-item-note">No Work Packages</div>;
-
-                    } else {
-
-                        panelContent =
-                            <div>
-                                {this.renderWorkPackagesList(newWorkPackages)}
-                                {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                {this.renderWorkPackagesList(availableWorkPackages)}
-                            </div>;
-                    }
-                    break;
-
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
-                    // Work Packages may be viewed only
+
                     // An update must be selected first
                     if(userContext.designUpdateId != 'NONE') {
+
                         if(newWorkPackages.length === 0 && availableWorkPackages.length === 0 && adoptedWorkPackages.length === 0){
 
-                            panelContent =
-                                <div className="design-item-note">No Work Packages</div>;
+                            bodyDataFunction = () => this.displayNote(noWorkPackages);
 
                         } else {
 
-                            panelContent =
-                                <div>
-                                    {this.renderWorkPackagesList(newWorkPackages)}
-                                    {this.renderWorkPackagesList(adoptedWorkPackages)}
-                                    {this.renderWorkPackagesList(availableWorkPackages)}
-                                </div>;
+                            bodyDataFunction = () => this.renderAllWorkPackageLists();
                         }
                     } else {
-                        panelContent =
-                            <div className="design-item-note">Select a Design Update</div>;
+
+                        bodyDataFunction = () => this.displayNote(selectDesignUpdate);
                     }
                     break;
 
                 default:
                     log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
             }
+        } else {
+            bodyDataFunction = () => this.displayNote(noWorkPackages);
         }
 
+        // Display as an item container --------------------------------------------------------------------------------
         return (
-            <Panel header={panelHeader}>
-                {panelContent}
-            </Panel>
+            <ItemContainer
+                headerText={headerText}
+                bodyDataFunction={bodyDataFunction}
+                hasFooterAction={hasFooterAction}
+                footerAction={footerAction}
+                footerActionFunction={footerActionFunction}
+            />
         );
     }
 }

@@ -43,7 +43,7 @@ class ClientDesignUpdateComponentServices{
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 1: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Update Component Name Actions:
 
@@ -83,7 +83,7 @@ class ClientDesignUpdateComponentServices{
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 2: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Update Feature Narrative Actions:
 
@@ -121,7 +121,7 @@ class ClientDesignUpdateComponentServices{
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 3: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Add Application Actions:
 
@@ -162,7 +162,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
 
@@ -208,7 +208,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
 
@@ -250,7 +250,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 6: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Actions:
                     this.refreshDesignUpdateSummary(parentComponent);
@@ -292,7 +292,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Aspect Actions:
 
@@ -333,7 +333,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 8: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Scenario Actions:
                     this.refreshDesignUpdateSummary(parentComponent);
@@ -375,7 +375,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 9: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
                     this.refreshDesignUpdateSummary(designUpdateComponent);
@@ -419,7 +419,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 10: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
                     this.refreshDesignUpdateSummary(designUpdateComponent);
@@ -458,7 +458,7 @@ class ClientDesignUpdateComponentServices{
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 11: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Toggle Scope Actions:
 
@@ -505,7 +505,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 12: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Move Component Actions:
                     this.refreshDesignUpdateSummary(movingComponent);
@@ -548,7 +548,7 @@ class ClientDesignUpdateComponentServices{
                 if(err){
                     // Unexpected error as all expected errors already handled - show alert.
                     // Can't update screen here because of error
-                    alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                    alert('Unexpected error 13: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Reorder Component Actions:
 

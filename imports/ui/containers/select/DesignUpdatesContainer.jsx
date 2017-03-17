@@ -8,10 +8,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignUpdate from '../../components/select/DesignUpdate.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
-import UpdateSummaryContainer from './UpdateSummaryContainer.jsx';
-import WorkPackagesContainer from './WorkPackagesContainer.jsx';
+import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
+import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
+import UpdateSummaryContainer       from './UpdateSummaryContainer.jsx';
+import WorkPackagesContainer        from './WorkPackagesContainer.jsx';
+import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
 import {DesignVersionStatus, RoleType, WorkPackageType, LogLevel} from '../../../constants/constants.js';
@@ -56,6 +57,20 @@ export class DesignUpdatesList extends Component {
         }
     }
 
+    renderAllDesignUpdateLists(){
+
+        return [
+            this.renderDesignUpdatesList(this.props.newUpdates),
+            this.renderDesignUpdatesList(this.props.draftUpdates),
+            this.renderDesignUpdatesList(this.props.mergedUpdates),
+            this.renderDesignUpdatesList(this.props.ignoredUpdates)
+        ]
+    }
+
+    displayNote(noteText){
+        return <div className="design-item-note">{noteText}</div>;
+    }
+
     onAddDesignUpdate(userRole, designVersionId){
         // Adds a new update and populates a set of design update components for editing
         ClientDesignUpdateServices.addNewDesignUpdate(userRole, designVersionId)
@@ -66,17 +81,6 @@ export class DesignUpdatesList extends Component {
         const {newUpdates, draftUpdates, mergedUpdates, ignoredUpdates, designVersionStatus, userRole, userContext} = this.props;
 
         // Elements ----------------------------------------------------------------------------------------------------
-
-        let updatesPanelContent = <div className="design-item-note">Select a Design Version</div>;
-
-        // Add Design Update
-        const addUpdate =
-            <div id="addUpdate" className="design-item-add">
-                <DesignComponentAdd
-                    addText="Add Design Update"
-                    onClick={ () => this.onAddDesignUpdate(userRole, userContext.designVersionId)}
-                />
-            </div>;
 
         // Initial Design Work Packages List
         const baseWorkPackages =
@@ -106,6 +110,30 @@ export class DesignUpdatesList extends Component {
                   }}/>
               </div>;
 
+        // DU List Header ----------------------------------------------------------------------------------------------
+
+        // A default value...
+        let headerText = 'Design Version Data';
+
+        // DU List Footer ----------------------------------------------------------------------------------------------
+
+        let footerActionFunction = null;
+        let hasFooterAction = false;
+        const footerAction = 'Add Design Update';
+
+        if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE && userRole === RoleType.DESIGNER){
+
+            hasFooterAction = true;
+            footerActionFunction = () => this.onAddDesignUpdate(userRole, userContext.designVersionId);
+        }
+
+
+        // DU List Body ------------------------------------------------------------------------------------------------
+
+        const NO_DESIGN_UPDATES = 'No Design Updates';
+        const SELECT_DESIGN_VERSION = 'Select a Design Version';
+
+        let bodyDataFunction = () => this.displayNote(SELECT_DESIGN_VERSION);
 
         // Layout ------------------------------------------------------------------------------------------------------
 
@@ -113,10 +141,14 @@ export class DesignUpdatesList extends Component {
         let layout =
             <Grid>
                 <Row>
-                    <Col md={6} className="col">
-                        <Panel header="Design Version Data">
-                            {updatesPanelContent}
-                        </Panel>
+                    <Col md={6}>
+                        <ItemContainer
+                            headerText={headerText}
+                            bodyDataFunction={bodyDataFunction}
+                            hasFooterAction={hasFooterAction}
+                            footerAction={footerAction}
+                            footerActionFunction={footerActionFunction}
+                        />
                     </Col>
                 </Row>
             </Grid>;
@@ -133,7 +165,7 @@ export class DesignUpdatesList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col md={6} className="scroll-col">
+                                <Col md={6}>
                                     {baseWorkPackages}
                                 </Col>
                             </Row>
@@ -141,92 +173,32 @@ export class DesignUpdatesList extends Component {
                     break;
 
                 case DesignVersionStatus.VERSION_UPDATABLE:
-
-                    if(newUpdates.length === 0 && draftUpdates.length === 0 && mergedUpdates.length === 0 && ignoredUpdates.length === 0){
-
-                        if (userRole === RoleType.DESIGNER) {
-                            updatesPanelContent =
-                                <Panel header="Design Updates">
-                                    <div className="design-item-note">No Design Updates</div>;
-                                    {addUpdate}
-                                </Panel>
-                        } else {
-                            updatesPanelContent =
-                                <Panel header="Design Updates">
-                                    <div className="design-item-note">No Design Updates</div>;
-                                </Panel>
-                        }
-                    } else {
-
-                        // These versions can have or have had Design Updates
-                        if (userRole === RoleType.DESIGNER) {
-
-                            // Developers and Managers can't add design updates
-                            updatesPanelContent =
-                                <Panel header="Design Updates">
-                                    {this.renderDesignUpdatesList(newUpdates)}
-                                    {this.renderDesignUpdatesList(draftUpdates)}
-                                    {this.renderDesignUpdatesList(mergedUpdates)}
-                                    {this.renderDesignUpdatesList(ignoredUpdates)}
-                                    {addUpdate}
-                                </Panel>;
-                        } else {
-                            // Design updates may be added
-                            updatesPanelContent =
-                                <Panel header="Design Updates">
-                                    {this.renderDesignUpdatesList(newUpdates)}
-                                    {this.renderDesignUpdatesList(draftUpdates)}
-                                    {this.renderDesignUpdatesList(mergedUpdates)}
-                                    {this.renderDesignUpdatesList(ignoredUpdates)}
-                                </Panel>;
-                        }
-
-                    }
-
-                    layout =
-                        <Grid>
-                            <Row>
-                                <Col md={3} className="scroll-col">
-                                    {updatesPanelContent}
-                                </Col>
-                                <Col md={3} className="scroll-col">
-                                    {updateWorkPackages}
-                                </Col>
-                                <Col md={6}>
-                                    {updateSummary}
-                                </Col>
-                            </Row>
-                        </Grid>;
-
-                    break;
-
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
-                    // Nobody can add updates - just show what there are
                     if(newUpdates.length === 0 && draftUpdates.length === 0 && mergedUpdates.length === 0 && ignoredUpdates.length === 0){
 
-                        updatesPanelContent =
-                            <Panel header="Design Updates">
-                                <div className="design-item-note">No Design Updates</div>;
-                            </Panel>
+                        bodyDataFunction = () => this.displayNote(NO_DESIGN_UPDATES);
 
                     } else {
 
-                        updatesPanelContent =
-                            <Panel header="Design Updates">
-                                {this.renderDesignUpdatesList(newUpdates)}
-                                {this.renderDesignUpdatesList(draftUpdates)}
-                                {this.renderDesignUpdatesList(mergedUpdates)}
-                                {this.renderDesignUpdatesList(ignoredUpdates)}
-                            </Panel>;
+                        headerText = 'Design Updates';
+                        bodyDataFunction = () => this.renderAllDesignUpdateLists()
+
                     }
+
                     layout =
                         <Grid>
                             <Row>
-                                <Col md={3} className="scroll-col">
-                                    {updatesPanelContent}
+                                <Col md={3}>
+                                    <ItemContainer
+                                        headerText={headerText}
+                                        bodyDataFunction={bodyDataFunction}
+                                        hasFooterAction={hasFooterAction}
+                                        footerAction={footerAction}
+                                        footerActionFunction={footerActionFunction}
+                                    />
                                 </Col>
-                                <Col md={3} className="scroll-col">
+                                <Col md={3}>
                                     {updateWorkPackages}
                                 </Col>
                                 <Col md={6}>
@@ -236,6 +208,7 @@ export class DesignUpdatesList extends Component {
                         </Grid>;
 
                     break;
+
                 default:
                     log((msg) => console.log(msg), LogLevel.ERROR, "Unknown Design Version Status: {}", designVersionStatus);
             }

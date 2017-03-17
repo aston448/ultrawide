@@ -46,7 +46,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 1: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
 
@@ -80,7 +80,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 2: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
 
@@ -114,7 +114,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 3: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
 
@@ -148,7 +148,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
                 // Ensure that the current update is the update we chose to publish
@@ -184,7 +184,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
                 // Ensure that the current update is the update we chose to withdraw
@@ -220,7 +220,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 6: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
                 // Clear DU from user context
@@ -270,7 +270,7 @@ class ClientDesignUpdateServices {
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
                 // Can't update screen here because of error
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
 

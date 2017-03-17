@@ -16,10 +16,12 @@ import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
 import DesignDevUnitMashContainer           from '../dev/DesignDevUnitMashContainer.jsx';
 import WorkPackageFeatureMashContainer      from '../dev/WorkPackageFeatureMashContainer.jsx';
 import DomainDictionaryContainer            from './DomainDictionaryContainer.jsx';
+import DesignEditorHeader                   from '../../components/common/DesignEditorHeader.jsx';
+import DesignEditorFooter                   from '../../components/common/DesignEditorFooter.jsx';
 
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
+import { ItemType, ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 
@@ -113,15 +115,21 @@ class DevApplicationsList extends Component {
 
         // Working Design
         let design =
-            <Panel header="Design Functionality in this Work Package" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="scroll-col">
-                            {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+            <div className="design-editor-container">
+                <DesignEditorHeader
+                    view={view}
+                    mode={mode}
+                    userContext={userContext}
+                />
+                <div className="design-editor">
+                    {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
+                </div>
+                <DesignEditorFooter
+                    view={view}
+                    mode={mode}
+                    userContext={userContext}
+                />
+            </div>;
 
         // Details
         if(viewOptions.devDetailsVisible){

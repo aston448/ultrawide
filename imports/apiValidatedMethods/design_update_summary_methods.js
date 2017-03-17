@@ -18,7 +18,7 @@ export const refreshDesignUpdateSummary = new ValidatedMethod({
         designUpdateId:     {type: String}
     }).validator(),
 
-    run({designVersionId, designUpdateId}){
+    run({designUpdateId}){
 
         try {
             DesignUpdateSummaryServices.refreshDesignUpdateSummary(designUpdateId);

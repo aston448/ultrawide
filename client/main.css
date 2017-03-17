@@ -73,12 +73,12 @@ input {
 }
 
 .col{
-    margin: 0px;
+    margin: 0;
     padding: 0px;
 }
 
 .panel {
-    margin: 10px 10px 0 10px;
+    margin: 0;
     padding: 0;
     background-color: transparent;
     border: 0px solid transparent;
@@ -93,7 +93,7 @@ input {
 }
 
 .panel-design > .panel {
-    margin: 10px 10px 0 10px;
+    margin: 0;
     padding: 0;
     background-color: transparent;
     border: 0px solid transparent;
@@ -104,7 +104,7 @@ input {
 .panel-default > .panel-heading {
     color: darkslategrey;
     background-color: #DDEEEE;
-    margin: 10px 0px 0 0px;
+    margin: 0;
     border: 1px solid darkslategrey;
     /*box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);*/
 }
@@ -386,10 +386,45 @@ input {
 
 /* DESIGN ITEMS ----------------------------------------------------------------------------------------------------- */
 
+.item-col{
+    margin: 0;
+    padding: 0 0 0 10px;
+    background-color: transparent;
+}
+
+.item-container{
+    margin: 20px 0 0 0;
+    padding: 0 1px 1px 1px;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+    border-radius: 4px;
+}
+
+.item-container-header{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  20px;
+    color: darkslategrey;
+    background-color: #CCEEEE;
+    margin: 0;
+    padding: 5px 10px 5px 20px;
+    border: 1px solid ghostwhite;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.item-container-footer{
+    border-top: 1px solid ghostwhite;
+    min-height: 30px
+}
+
+.scroll-col{
+    max-height: 1000px;
+    overflow-y: auto;
+}
+
 .design-item{
     border: 1px solid lightgrey;
     border-radius: 2px;
-    margin: 12px 0px 12px 0px;
+    margin: 20px;
     padding: 0px;
 }
 
@@ -794,16 +829,61 @@ input {
 
 /* -- Design Update Summary ----------------------------------------------------------------------------------------- */
 
+.update-summary-container{
+    margin: 20px 0 0 0;
+    padding: 0 1px 1px 1px;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
+    border-radius: 0px;
+}
+
+.update-summary-header{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  18px;
+    color: white;
+    background-color: indianred;
+    margin: 0;
+    padding: 5px 10px 5px 20px;
+    border: 1px solid ghostwhite;
+}
+
+.update-summary-change-container{
+    margin: 10px 0 0 0;
+    padding: 0 1px 1px 1px;
+    border: 1px solid ghostwhite;
+}
+
+.update-summary-change-header{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: darkgrey;
+    margin: 0;
+    padding: 2px 10px 2px 10px;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+.change-add{
+    background-color: #EEFFEE;
+}
+
+.change-remove{
+    background-color: #FFEEEE;
+}
+
+.change-modify{
+    background-color: #FFEEDD;
+}
+
 .summary-header{
-    margin: 3px 10px 3px 0;
+    margin: 3px 1px 3px 1px;
     padding: 2px;
-    border: 1px solid lightgrey;
-    border-radius: 2px;
+    border: 0px solid lightgrey;
+    border-radius: 0px;
     background-color: ghostwhite;
 }
 
 .summary-modify{
-    margin: 0 5px 0 0;
+    margin: 0 5px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: normal;
@@ -811,7 +891,7 @@ input {
 }
 
 .summary-add{
-    margin: 0 5px 0 0;
+    margin: 0 5px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: normal;
@@ -819,7 +899,7 @@ input {
 }
 
 .summary-remove{
-    margin: 0 5px 0 0;
+    margin: 0 5px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: normal;
@@ -827,7 +907,7 @@ input {
 }
 
 .summary-to-from{
-    margin: 0 5px 0 0;
+    margin: 0 5px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: normal;
@@ -835,7 +915,7 @@ input {
 }
 
 .summary-item{
-    margin: 3px 5px 0 0;
+    margin: 3px 5px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: normal;
@@ -843,6 +923,7 @@ input {
 }
 
 .summary-icon{
+    margin: 0 0 0 10px;
     font-size:  12px;
     font-weight: normal;
     color: darkslategray;
@@ -858,15 +939,42 @@ input {
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */
 
-.design-editor{
-    margin: 15px 0 0 0px;
-    padding: 0 25px 5px 0px;
-    border-right: 1px solid lightgrey;
+.design-editor-container{
+    margin: 3px 0 0 0;
+    padding: 0 1px 1px 1px;
+    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
 }
 
-.scroll-col{
-    height: 1000px;
-    overflow-y: scroll;
+.design-editor-header{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: darkslategrey;
+    background-color: #CCEEEE;
+    margin: 0;
+    padding: 5px 10px 5px 10px;
+    border: 1px solid ghostwhite;
+}
+
+.header-action{
+    color: blue;
+    margin: 0 20px 0 0;
+    font-weight: bold;
+}
+
+.header-description{
+    color: darkslategrey;
+}
+
+.design-editor-footer{
+    border-top: 1px solid ghostwhite;
+    min-height: 30px
+}
+
+.design-editor{
+    margin: 0;
+    padding: 3px;
+    max-height: 1000px;
+    overflow-y: auto;
 }
 
 .design-component-panel{
@@ -874,8 +982,6 @@ input {
     padding: 0;
     margin: 0;
 }
-
-
 
 .design-component{
     margin: 0;

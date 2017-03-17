@@ -11,8 +11,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 
-import Design from '../../components/select/Design.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
+import Design               from '../../components/select/Design.jsx';
+import DesignComponentAdd   from '../../components/common/DesignComponentAdd.jsx';
+import ItemContainer        from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
 import {RoleType} from '../../../constants/constants.js';
@@ -55,51 +56,45 @@ export class DesignsList extends Component {
         });
     }
 
+    noDesign(){
+        return <div className="design-item-note">No Designs</div>;
+    }
+
     render() {
 
         const {designs, userRole, userContext} = this.props;
 
+
+        let hasFooterAction = false;
+        let footerActionFunction = null;
+        let bodyDataFunction = null;
+
         // Designs only addable by a Designer
-        let addDesign = <div></div>;
-
         if(userRole === RoleType.DESIGNER){
-            addDesign =
-                <div className="design-item-add">
-                    <DesignComponentAdd
-                        addText="Add Design"
-                        onClick={ () => this.addNewDesign(userRole)}
-                    />
-                </div>
+            hasFooterAction = true;
+            footerActionFunction = () => this.addNewDesign(userRole)
         }
-
-        // A list of available Designs and a container to hold Design Versions for the selected Design
 
         if(designs && designs.length > 0) {
-            return (
-                <Grid>
-                    <Row>
-                        <Col md={4}>
-                            <Panel header="Designs">
-                                {this.renderDesignList(designs)}
-                                {addDesign}
-                            </Panel>
-                        </Col>
-                    </Row>
-                </Grid>
-            );
-        } else {
-            return(
-                <Grid>
-                    <Row>
-                        <Col md={4}>
-                            <Panel header="Designs">
-                                {addDesign}
-                            </Panel>
-                        </Col>
-                    </Row>
-                </Grid>
-            )
+            bodyDataFunction = () => this.renderDesignList(designs)
         }
+
+        return (
+            <Grid>
+                <Row>
+                    <Col md={4}>
+                        <ItemContainer
+                            headerText={'Designs'}
+                            bodyDataFunction={bodyDataFunction}
+                            hasFooterAction={hasFooterAction}
+                            footerAction={'Add Design'}
+                            footerActionFunction={footerActionFunction}
+                        />
+                    </Col>
+                </Row>
+            </Grid>
+        );
+
     }
 }
 

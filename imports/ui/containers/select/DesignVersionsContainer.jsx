@@ -4,21 +4,18 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
-// Ultrawide Collections
-
-
 // Ultrawide GUI Components
-import DesignVersion from '../../components/select/DesignVersion.jsx';
-import DesignUpdatesContainer from './DesignUpdatesContainer.jsx';
-import WorkPackagesContainer from './WorkPackagesContainer.jsx';
+import DesignVersion                from '../../components/select/DesignVersion.jsx';
+import DesignUpdatesContainer       from './DesignUpdatesContainer.jsx';
+import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
-import {RoleType, WorkPackageType} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+import {DesignVersionStatus}        from '../../../constants/constants.js';
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientDesignVersionServices  from '../../../apiClient/apiClientDesignVersion.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -52,7 +49,10 @@ export class DesignVersionsList extends Component {
                 );
             });
         }
+    }
 
+    getCurrentVersionStatus(designVersionId){
+        return ClientDesignVersionServices.getDesignVersionStatus(designVersionId);
     }
 
     render() {
@@ -61,16 +61,40 @@ export class DesignVersionsList extends Component {
 
         const {designVersions, userRole, userContext} = this.props;
 
+        // Column layout -----------------------------------------------------------------------------------------------
+        let col1Size = 4;
+        let col2Size = 8;
+
+        if(userContext.designVersionId != 'NONE'){
+            const dvStatus = this.getCurrentVersionStatus(userContext.designVersionId);
+            if( dvStatus === DesignVersionStatus.VERSION_UPDATABLE || dvStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
+                col1Size = 3;
+                col2Size = 9;
+            }
+        }
+
+        // Design Versions Container -----------------------------------------------------------------------------------
+        const headerText = 'Design Versions';
+        const bodyDataFunction = () => this.renderDesignVersionsList(designVersions);
+        const hasFooterAction = false;
+        const footerAction = '';
+        const footerActionFunction = null;
+
         // The Updates container contains either the Updates for an Updatable Design Version or just the WPs for an initial version
+
         return (
             <Grid>
                 <Row>
-                    <Col md={2} className="scroll-col">
-                        <Panel className="panel-item" header="Design Versions">
-                            {this.renderDesignVersionsList(designVersions)}
-                        </Panel>
+                    <Col md={col1Size} className="item-col">
+                        <ItemContainer
+                            headerText={headerText}
+                            bodyDataFunction={bodyDataFunction}
+                            hasFooterAction={hasFooterAction}
+                            footerAction={footerAction}
+                            footerActionFunction={footerActionFunction}
+                        />
                     </Col>
-                    <Col md={10} className="col">
+                    <Col md={col2Size} className="item-col">
                         <DesignUpdatesContainer params={{
                             currentDesignVersionId: userContext.designVersionId
                         }}/>

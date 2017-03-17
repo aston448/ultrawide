@@ -645,10 +645,10 @@ export class AppHeader extends Component {
                     </Row>
                     <Row className="header-row-bottom">
                         <Col md={6}>
-                            {appData}
+                            {/*{appData}*/}
                         </Col>
                         <Col md={2}>
-                            {headerBottomActionsOne}
+                            {/*{headerBottomActionsOne}*/}
                         </Col>
                         <Col md={4}>
                             {headerBottomActionsTwo}
