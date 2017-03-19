@@ -262,12 +262,67 @@ input {
 
 /* ULTRAWIDE */
 
+.ultrawide-header{
+    float: left;
+    width: 100%;
+    color: white;
+    padding: 5px 20px 5px 20px
+}
+
 .ultrawide-logo{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  18px;
     font-weight: normal;
     letter-spacing: 8px;
+    margin: 0;
+    float: left;
 }
+
+.header-message{
+    float: left;
+    margin: 0 10px 0 40px;
+}
+
+.top-menu-bar{
+    float: right;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    margin: 0;
+}
+
+.top-menu-item{
+    float: left;
+    margin: 0;
+    padding: 0 10px 0 10px;
+    border: 0 solid transparent;
+    background-color: transparent;
+    color: darkgrey;
+    border-left: 1px solid darkgrey
+}
+
+.dropdown-menu-item{
+    color: darkgrey;
+    padding: 0 5px 0 5px;
+}
+
+.menu-highlight{
+    color: black;
+}
+
+/*.top-menu-dropdown{*/
+    /*float: left;*/
+    /*margin: 0 5px 0 5px;*/
+    /*border: 0 solid transparent;*/
+    /*background-color: transparent;*/
+    /*font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;*/
+    /*font-size:  14px;*/
+    /*font-weight: normal;*/
+    /*letter-spacing: 4px;*/
+    /*box-sizing: unset;*/
+/*}*/
+
 
 .top-header-buttons{
     padding: 2px 0 0 0;
@@ -300,6 +355,7 @@ input {
 
 .no-role{
     color: darkgrey;
+    background: ghostwhite;
 }
 
 .header-title{
@@ -347,7 +403,7 @@ input {
 }
 
 .main-grid{
-    margin: 10px 0 0 0;
+    margin: 0;
     padding: 0px;
     width: auto;
 }

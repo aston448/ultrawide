@@ -9,6 +9,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import AppHeaderDataContainer from '../../containers/app/AppHeaderDataContainer.jsx';
+import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
+import UltrawideMenuDropdown from '../common/UltrawideMenuDropdown.jsx';
+
 
 // Ultrawide Services
 import {ViewType, ViewMode, ViewOptionType, RoleType, MessageType, LogLevel} from '../../../constants/constants.js'
@@ -21,7 +24,7 @@ import TextLookups                      from '../../../common/lookups.js';
 // Bootstrap
 import {Alert} from 'react-bootstrap';
 import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
-import {Grid, Col, Row} from 'react-bootstrap';
+import {Dropdown, MenuItem} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -41,6 +44,16 @@ import {connect} from 'react-redux';
 export class AppHeader extends Component {
     constructor(props) {
         super(props);
+    }
+
+    handleSelect(eventKey){
+        event.preventDefault();
+
+        switch(eventKey){
+            case 'KEY_LOGOUT':
+                ClientAppHeaderServices.setViewLogin(this.props.userContext);
+                break;
+        }
     }
 
     onSetEditViewMode(newMode, view, viewOptions){
@@ -134,16 +147,9 @@ export class AppHeader extends Component {
 
     render() {
 
-        const {mode, view, userRole, userName, userContext, userViewOptions, message, domainDictionaryVisible, testDataFlag, currentViewDataValue, mashStale} = this.props;
+        const {mode, view, userRole, userName, userContext, userViewOptions, message, testDataFlag, currentViewDataValue} = this.props;
 
-        let appName = ClientIdentityServices.getApplicationName();
-
-        // The header display depends on the current application View
-        let headerTitleActions = '';
-        let headerTopActions = '';
-        let headerBottomActionsOne = '';
-        let headerBottomActionsTwo = '';
-        let headerUserInfo = '';
+        let logo = ClientIdentityServices.getApplicationName();
 
         let detailsOption= '';
         let testSummaryOption = '';
@@ -189,110 +195,100 @@ export class AppHeader extends Component {
                 break;
         }
 
-        let bsStyleEdit = (mode === ViewMode.MODE_EDIT ? 'success': 'default');
-        let bsStyleView = (mode === ViewMode.MODE_VIEW ? 'success': 'default');
+        let appHeaderMenuContent = <div>Loading</div>;
 
-        let logoutButton =
-            <ButtonToolbar className="top-header-buttons">
-                <Button id="butLogout" bsSize="xs" bsStyle="warning" onClick={ () => this.onLogOut(userContext)}>Log Out</Button>
-            </ButtonToolbar>;
+        // Main Logo
+        const mainLogo = <div className="ultrawide-logo">{logo}</div>
 
-        // let toggleHeaderButton =
-        //     <Button bsSize="xs" bsStyle="info" onClick={ () => this.onToggleHeader()}>...</Button>;
+        // Menu Items
 
-        let designsButton =
-            <Button id="butDesigns" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToDesigns()}>Designs Menu</Button>;
+        const homeItem = <UltrawideMenuItem itemName="HOME" actionFunction={() => this.onGoToHome()}/>;
+        const logoutItem = <UltrawideMenuItem itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
 
-        let testOutputButton =
-            <Button id="butTestOutput" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToTestOutput()}>Configure Test Outputs</Button>;
+        let gotoDropdownItems = [];
+        let viewDropdownItems = [];
+        let refreshDropdownItems = [];
 
-        // View Mode and Zoom buttons
-        let viewModeEditButton =
-            <Button id="butEdit" bsSize="xs" bsStyle={bsStyleEdit} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT, view, userViewOptions)}>EDIT</Button>;
-        let viewModeViewButton =
-            <Button id="butView" bsSize="xs" bsStyle={bsStyleView} onClick={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW, view, userViewOptions)}>VIEW</Button>;
+        // Dropdown Items - Goto
+        const gotoDesigns = {key: 'DES', itemName: 'Designs', actionFunction: () => this.onGoToDesigns(), hasCheckbox: false};
+        const gotoConfig = {key: 'CFG', itemName: 'Configuration', actionFunction: () => this.onGoToConfigure(), hasCheckbox: false};
+        const gotoSelection = {key: 'SEL', itemName: 'Item Selection', actionFunction: () => this.onGoToSelection(), hasCheckbox: false};
+        const gotoTestConfig = {key: 'TOC', itemName: 'Test Output Config', actionFunction: () => this.onGoToTestOutput(), hasCheckbox: false};
 
-        let viewFeatureLevelButton =
-            <Button id="butZoomFeatures" bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToFeatures(userContext)}>Go to Features</Button>;
-        let viewSectionLevelButton =
-            <Button id="butZoomSections" bsSize="xs" bsStyle="info" onClick={ () => this.onZoomToSections(userContext)}>Go to Sections</Button>;
+        // Dropdown Items - View
+        const viewDetails = {
+            key: 'DET',
+            itemName: 'Details',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
-        // View Options Buttons
-        let scopeFixedButton =
-            <Button id="butScope" bsSize="xs" bsStyle={'info'}>Scope</Button>;
-        let designFixedButton =
-            <Button id="butDesign" bsSize="xs" bsStyle={'info'}>Design</Button>;
-        let detailsFixedButton =
-            <Button id="butDetailsFixed" bsSize="xs" bsStyle={'info'}>Details</Button>;
-        let detailsButton =
-            <Button id="butDetails" bsSize="xs" bsStyle={this.getOptionButtonStyle(detailsOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, testDataFlag)}>Details</Button>;
-        let testSummaryButton =
-            <Button id="butTestSummary" bsSize="xs" bsStyle={this.getOptionButtonStyle(testSummaryOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, testDataFlag)}>Test Summary</Button>;
-        let accTestsButton =
-            <Button id="butAccTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(accTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, testDataFlag)}>Acc Tests</Button>;
-        let intTestsButton =
-            <Button id="butIntTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(intTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, testDataFlag)}>Int Tests</Button>;
-        let unitTestsButton =
-            <Button id="butUnitTests" bsSize="xs" bsStyle={this.getOptionButtonStyle(unitTestOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, testDataFlag)}>Unit Tests</Button>;
-        let accFilesButton =
-            <Button id="butAccFiles" bsSize="xs" bsStyle={this.getOptionButtonStyle(ViewOptionType.DEV_FILES, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, testDataFlag)}>Acc Files</Button>;
-        let domainDictionaryButton =
-            <Button id="butDomainDict" bsSize="xs" bsStyle={this.getOptionButtonStyle(dictOption, userViewOptions)}
-                    onClick={ () => this.onToggleViewOption(view, userContext, userRole, dictOption, userViewOptions, currentViewDataValue, testDataFlag)}>Domain Dict</Button>;
+        const viewTestSummary = {
+            key: 'TSM',
+            itemName: 'Test Summary',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
+        const viewAccTests = {
+            key: 'ACC',
+            itemName: 'Acceptance Tests',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
-        let homeScreenButton =
-            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToHome()}>HOME</Button>;
+        const viewIntTests = {
+            key: 'INT',
+            itemName: 'Integration Tests',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
-        let configScreenButton =
-            <Button id="butChangeRole" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToConfigure()}>Local Settings</Button>;
+        const viewUnitTests = {
+            key: 'UNT',
+            itemName: 'Unit Tests',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
-        let selectionScreenButton =
-            <Button id="butSelection" bsSize="xs" bsStyle="info" onClick={ () => this.onGoToSelection()}>Selection Menu</Button>;
+        const viewAccFiles = {
+            key: 'ACF',
+            itemName: 'Feature Files',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
-        let refreshTestDataButton =
-            <Button id="butRefreshTestData" bsSize="xs" bsStyle="success" onClick={ () => this.onRefreshTestData(view, userContext, userRole, userViewOptions)}>Refresh Test Data</Button>;
+        const viewDomainDict = {
+            key: 'DOM',
+            itemName: 'Domain Dictionary',
+            actionFunction: () => this.onToggleViewOption(view, userContext, userRole, dictOption, userViewOptions, currentViewDataValue, testDataFlag),
+            hasCheckbox: true
+        };
 
-        let refreshDesignDataButton =
-            <Button id="butRefreshDesignData" bsSize="xs" bsStyle="success" onClick={ () => this.onRefreshDesignData(view, userContext, userRole, userViewOptions)}>Refresh Design Data</Button>;
+        // Dropdown Items - Refresh
+        const refreshTestData = {
+            key: 'RTD',
+            itemName: 'Test Data',
+            actionFunction: () => this.onRefreshTestData(view, userContext, userRole, userViewOptions),
+            hasCheckbox: false
+        };
 
+        const refreshDesignData = {
+            key: 'RDD',
+            itemName: 'Design and Test Data',
+            actionFunction: () => this.onRefreshDesignData(view, userContext, userRole, userViewOptions),
+            hasCheckbox: false
+        }
 
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
 
-        let domStyle = (domainDictionaryVisible ? 'success' : 'default');
-
-        let userData = <div></div>;
-        switch(view){
-            case ViewType.AUTHORISE:
-                // No header
-                break;
-            case ViewType.ADMIN:
-                userData =
-                    <div>
-                        <span className="header-data">ADMIN</span>
-                        <span className="header-title">(USER MANAGEMENT)</span>
-                    </div>;
-                break;
-            default:
-                // Everything else:
-                userData =
-                    <div>
-                        <span className="header-data">{userName}</span>
-                        <span className="header-title">({userRole})</span>
-                    </div>;
-        }
-
         let headerMessage =
-            <Alert bsStyle={headerInfoStyle}>
-                {message.messageText}
-            </Alert>;
+            <div className="header-message">
+                <Alert bsStyle={headerInfoStyle}>
+                    {message.messageText}
+                </Alert>
+            </div>;
 
         let roleClass = '';
         let viewText = TextLookups.viewText(view);
@@ -300,362 +296,267 @@ export class AppHeader extends Component {
         switch(userRole){
             case RoleType.DESIGNER:
                 roleClass = 'designer';
-                appName = appName + ' - DESIGNER - ' + viewText;
+                logo = logo + ' - DESIGNER - ' + viewText;
                 break;
             case RoleType.DEVELOPER:
                 roleClass = 'developer';
-                appName = appName + '  - DEVELOPER - ' + viewText;
+                logo = logo + '  - DEVELOPER - ' + viewText;
                 break;
             case RoleType.MANAGER:
                 roleClass = 'manager';
-                appName = appName + '  - MANAGER - ' + viewText;
+                logo = logo + '  - MANAGER - ' + viewText;
                 break;
             default:
                 roleClass = 'no-role';
         }
 
-        // Display the required buttons for the current view
+        // Display the required header for the view
         switch(view){
             case ViewType.AUTHORISE:
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                    </div>;
                 break;
+
             case ViewType.ADMIN:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
+
+                gotoDropdownItems = [
+                    gotoDesigns
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        {logoutItem}
+                    </div>;
                 break;
+
             case ViewType.HOME:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {logoutItem}
+                    </div>;
                 break;
+
             case ViewType.CONFIGURE:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {testOutputButton}
-                    </ButtonToolbar>;
+
+                gotoDropdownItems = [
+                    gotoTestConfig,
+                    gotoDesigns
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        {logoutItem}
+                    </div>;
                 break;
+
             case ViewType.TEST_OUTPUTS:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                    </ButtonToolbar>;
-                    break;
+
+                gotoDropdownItems = [
+                    gotoConfig,
+                    gotoDesigns
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        {logoutItem}
+                    </div>;
+                break;
+
             case ViewType.DESIGNS:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                    </ButtonToolbar>;
+
+                gotoDropdownItems = [
+                    gotoConfig
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        {logoutItem}
+                    </div>;
                 break;
+
             case ViewType.SELECT:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                    </ButtonToolbar>;
+
+                gotoDropdownItems = [
+                    gotoConfig,
+                    gotoDesigns
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        {logoutItem}
+                    </div>;
                 break;
+
             case ViewType.DESIGN_NEW_EDIT:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                        {refreshTestDataButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewModeEditButton}
-                            {viewModeViewButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {designFixedButton}
-                            {detailsButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {testSummaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                break;
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                        {refreshTestDataButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {designFixedButton}
-                            {detailsButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {testSummaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewModeEditButton}
-                            {viewModeViewButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                if(mode === ViewMode.MODE_VIEW){
-                    headerBottomActionsTwo =
-                        <ButtonToolbar>
-                            <ButtonGroup>
-                                {designFixedButton}
-                                {detailsButton}
-                                {domainDictionaryButton}
-                            </ButtonGroup>
-                            <ButtonGroup>
-                                {testSummaryButton}
-                            </ButtonGroup>
-                        </ButtonToolbar>;
-                } else {
-                    headerBottomActionsTwo =
-                        <ButtonToolbar>
-                            <ButtonGroup>
-                                {scopeFixedButton}
-                                {designFixedButton}
-                                {detailsButton}
-                                {domainDictionaryButton}
-                            </ButtonGroup>
-                        </ButtonToolbar>;
-                }
-                break;
-            case ViewType.DESIGN_UPDATE_VIEW:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                        {refreshTestDataButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {designFixedButton}
-                            {detailsButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {testSummaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                break;
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {scopeFixedButton}
-                            {designFixedButton}
-                            {detailsButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                        {refreshTestDataButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {designFixedButton}
-                            {detailsFixedButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {testSummaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
+            case ViewType.DESIGN_UPDATE_VIEW:
+
+                gotoDropdownItems = [
+                    gotoSelection,
+                    gotoConfig,
+                    gotoDesigns
+                ];
+
+                viewDropdownItems = [
+                    viewDetails,
+                    viewDomainDict,
+                    viewTestSummary
+                ];
+
+                refreshDropdownItems = [
+                    refreshTestData,
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        <UltrawideMenuDropdown itemName="View" itemsList={viewDropdownItems}/>
+                        <UltrawideMenuDropdown itemName="Refresh" itemsList={refreshDropdownItems}/>
+                        {logoutItem}
+                    </div>;
                 break;
+
+            case ViewType.DESIGN_UPDATE_EDIT:
+
+                gotoDropdownItems = [
+                    gotoSelection,
+                    gotoConfig,
+                    gotoDesigns
+                ];
+
+                if(mode === ViewMode.MODE_VIEW){
+                    viewDropdownItems = [
+                        viewDetails,
+                        viewDomainDict,
+                        viewTestSummary
+                    ];
+
+                    refreshDropdownItems = [
+                        refreshTestData,
+                    ];
+
+                    appHeaderMenuContent =
+                        <div className="top-menu-bar">
+                            {homeItem}
+                            <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                            <UltrawideMenuDropdown itemName="View" itemsList={viewDropdownItems}/>
+                            <UltrawideMenuDropdown itemName="Refresh" itemsList={refreshDropdownItems}/>
+                            {logoutItem}
+                        </div>;
+
+                } else {
+                    viewDropdownItems = [
+                        viewDetails,
+                        viewDomainDict
+                    ];
+
+                    appHeaderMenuContent =
+                        <div className="top-menu-bar">
+                            {homeItem}
+                            <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                            <UltrawideMenuDropdown itemName="View" itemsList={viewDropdownItems}/>
+                            {logoutItem}
+                        </div>;
+                }
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+
+                gotoDropdownItems = [
+                    gotoSelection,
+                    gotoConfig,
+                    gotoDesigns
+                ];
+
+                viewDropdownItems = [
+                    viewDetails,
+                    viewDomainDict
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        <UltrawideMenuDropdown itemName="View" itemsList={viewDropdownItems}/>
+                        {logoutItem}
+                    </div>;
+                break;
+
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
-                headerTopActions =
-                    <ButtonToolbar>
-                        {homeScreenButton}
-                        {configScreenButton}
-                        {designsButton}
-                        {selectionScreenButton}
-                        {refreshTestDataButton}
-                        {refreshDesignDataButton}
-                    </ButtonToolbar>;
-                headerBottomActionsOne =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {viewModeEditButton}
-                            {viewModeViewButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {viewFeatureLevelButton}
-                            {viewSectionLevelButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
-                headerBottomActionsTwo =
-                    <ButtonToolbar>
-                        <ButtonGroup>
-                            {designFixedButton}
-                            {detailsButton}
-                            {accTestsButton}
-                            {accFilesButton}
-                            {intTestsButton}
-                            {unitTestsButton}
-                            {domainDictionaryButton}
-                        </ButtonGroup>
-                        <ButtonGroup>
-                            {testSummaryButton}
-                        </ButtonGroup>
-                    </ButtonToolbar>;
+
+
+                gotoDropdownItems = [
+                    gotoSelection,
+                    gotoConfig,
+                    gotoDesigns
+                ];
+
+                viewDropdownItems = [
+                    viewDetails,
+                    viewDomainDict,
+                    viewAccTests,
+                    viewAccFiles,
+                    viewIntTests,
+                    viewUnitTests,
+                    viewTestSummary
+                ];
+
+                refreshDropdownItems = [
+                    refreshTestData,
+                    refreshDesignData
+                ];
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {homeItem}
+                        <UltrawideMenuDropdown itemName="Go To" itemsList={gotoDropdownItems}/>
+                        <UltrawideMenuDropdown itemName="View" itemsList={viewDropdownItems}/>
+                        <UltrawideMenuDropdown itemName="Refresh" itemsList={refreshDropdownItems}/>
+                        {logoutItem}
+                    </div>;
                 break;
+
             case ViewType.WAIT:
-                headerUserInfo = userData;
-                headerTitleActions = logoutButton;
+
+                appHeaderMenuContent =
+                    <div className="top-menu-bar">
+                        {logoutItem}
+                    </div>;
                 break;
+
             default:
                 log((msg) => console.log(msg), LogLevel.ERROR, "Invalid view type: {}", view);
         }
 
         if (view) {
-            // Only show data once context is established
-            let appData = <div></div>;
 
-            if(userContext){
-                appData = <AppHeaderDataContainer params={{
-                    view: view,
-                    userContext: userContext
-                }}/>;
-            }
+            {appHeaderMenuContent}
 
             return (
-
-                <Grid>
-                    <Row className={roleClass}>
-                        <Col md={11}>
-                            <div className="ultrawide-logo">{appName}</div>
-                        </Col>
-                        <Col md={1}>
-                            {headerTitleActions}
-                        </Col>
-                    </Row>
-                    <Row className="header-row-top">
-                        <Col md={3}>
-                            {headerUserInfo}
-                        </Col>
-                        <Col md={5}>
-                            {headerMessage}
-                        </Col>
-                        <Col md={4}>
-                            {headerTopActions}
-                        </Col>
-                    </Row>
-                    <Row className="header-row-bottom">
-                        <Col md={6}>
-                            {/*{appData}*/}
-                        </Col>
-                        <Col md={2}>
-                            {/*{headerBottomActionsOne}*/}
-                        </Col>
-                        <Col md={4}>
-                            {headerBottomActionsTwo}
-                        </Col>
-                    </Row>
-                </Grid>
-
+                <div className={'ultrawide-header ' + roleClass}>
+                    <div className="ultrawide-logo">{logo}</div>
+                    {headerMessage}
+                    {appHeaderMenuContent}
+                </div>
             );
         } else {
             return(
