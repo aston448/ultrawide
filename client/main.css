@@ -1148,6 +1148,13 @@ input {
     overflow-y: auto;
 }
 
+.int-tests-editor{
+    margin: 0;
+    padding: 3px;
+    max-height: 900px;
+    overflow-y: auto;
+}
+
 .design-component-panel{
     border: 0px;
     padding: 0;

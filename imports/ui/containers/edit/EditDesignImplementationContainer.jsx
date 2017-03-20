@@ -120,6 +120,7 @@ class DevApplicationsList extends Component {
                     view={view}
                     mode={mode}
                     userContext={userContext}
+                    userViewOptions={viewOptions}
                 />
                 <div className="design-editor">
                     {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
@@ -128,6 +129,7 @@ class DevApplicationsList extends Component {
                     view={view}
                     mode={mode}
                     userContext={userContext}
+                    designSummaryData={null}
                 />
             </div>;
 
@@ -149,7 +151,7 @@ class DevApplicationsList extends Component {
                 <Panel header="Acceptance Test Implementation" className="panel-update panel-update-body">
                     <Grid>
                         <Row>
-                            <Col md={12} className="scroll-col">
+                            <Col md={12} className="close-col">
                                 <WorkPackageFeatureMashContainer params={{
                                     userContext: userContext,
                                     displayContext: DisplayContext.MASH_ACC_TESTS
@@ -193,7 +195,7 @@ class DevApplicationsList extends Component {
                 <Panel header="Build Feature Files" className="panel-update panel-update-body">
                     <Grid>
                         <Row>
-                            <Col md={12} className="scroll-col">
+                            <Col md={12} className="close-col">
                                 <DevFilesContainer params={{
                                     userContext: userContext
                                 }}/>
@@ -232,18 +234,10 @@ class DevApplicationsList extends Component {
         if(viewOptions.devIntTestsVisible){
 
             intTests =
-                <Panel header="Integration Test Implementation - click test result for details" className="panel-update panel-update-body">
-                    <Grid>
-                        <Row>
-                            <Col md={12} className="scroll-col">
-                                <WorkPackageFeatureMashContainer params={{
-                                    userContext: userContext,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>
-                            </Col>
-                        </Row>
-                    </Grid>
-                </Panel>;
+                <WorkPackageFeatureMashContainer params={{
+                    userContext: userContext,
+                    displayContext: DisplayContext.MASH_INT_TESTS
+                }}/>;
 
             switch(displayedItems){
                 case 2:
@@ -478,14 +472,14 @@ class DevApplicationsList extends Component {
         if(wpApplications) {
 
             let col1 =
-                <Col md={col1width}>
+                <Col md={col1width} className="close-col">
                     {design}
                 </Col>;
 
             let col2 = '';
             if(viewOptions.devDetailsVisible){
                 col2 =
-                    <Col md={col2width} >
+                    <Col md={col2width} className="close-col">
                         {designDetails}
                     </Col>;
             }
@@ -493,7 +487,7 @@ class DevApplicationsList extends Component {
             let col3 = '';
             if(viewOptions.devAccTestsVisible){
                 col3 =
-                    <Col md={col3width}>
+                    <Col md={col3width} className="close-col">
                         {featureTests}
                     </Col>;
             }
@@ -501,7 +495,7 @@ class DevApplicationsList extends Component {
             let col4 = '';
             if(viewOptions.devFeatureFilesVisible){
                 col4 =
-                    <Col md={col4width}>
+                    <Col md={col4width} className="close-col">
                         {devFiles}
                     </Col>;
             }
@@ -509,7 +503,7 @@ class DevApplicationsList extends Component {
             let col5 = '';
             if(viewOptions.devIntTestsVisible){
                 col5 =
-                    <Col md={col5width}>
+                    <Col md={col5width} className="close-col">
                         {intTests}
                     </Col>;
             }
@@ -517,7 +511,7 @@ class DevApplicationsList extends Component {
             let col6 = '';
             if(viewOptions.devUnitTestsVisible){
                 col6 =
-                    <Col md={col6width}>
+                    <Col md={col6width} className="close-col">
                         {unitTests}
                     </Col>;
             }
@@ -525,7 +519,7 @@ class DevApplicationsList extends Component {
             let col7 = '';
             if(viewOptions.devDomainDictVisible){
                 col7 =
-                    <Col md={col7width}>
+                    <Col md={col7width} className="close-col">
                         {domainDictionary}
                     </Col>;
             }

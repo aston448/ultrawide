@@ -64,7 +64,8 @@ export default class DetailsViewHeader extends Component {
                         break;
                 }
                 break;
-
+            case DetailsViewType.VIEW_INT_TESTS:
+                break;
         }
 
         ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, userViewOptions, currentViewDataValue, false, null)
@@ -138,7 +139,7 @@ DetailsViewHeader.propTypes = {
     mode:                   PropTypes.string.isRequired,
     userContext:            PropTypes.object.isRequired,
     userRole:               PropTypes.string.isRequired,
-    userViewOptions:        PropTypes.object.isRequired,
-    currentViewDataValue:   PropTypes.bool.isRequired
+    userViewOptions:        PropTypes.object,
+    currentViewDataValue:   PropTypes.bool
 
 };
