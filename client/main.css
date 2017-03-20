@@ -342,6 +342,15 @@ input {
     margin: 3px 0 3px 0;
 }
 
+.details-menu-bar{
+    float: right;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    margin: 3px 0 3px 0;
+}
+
 .top-menu-item{
     float: left;
     margin: 0;
@@ -350,6 +359,17 @@ input {
     background-color: transparent;
     color: lightgrey;
     border-left: 1px solid lightgrey;
+}
+
+.editor-menu-item{
+    float: left;
+    margin: 0;
+    padding: 0 10px 0 10px;
+    border: 0 solid transparent;
+    background-color: transparent;
+    font-size:  13px;
+    color: darkgrey;
+    border-left: 1px solid darkgrey;
 }
 
 /* Bootstrap override */
@@ -372,6 +392,19 @@ input {
 
 .menu-highlight{
     color: white;
+}
+
+.editor-menu-highlight{
+    color: indianred;
+}
+
+.view-toggle-active{
+    float: left;
+    background-color: ghostwhite;
+}
+
+.view-toggle-inactive{
+    float: left;
 }
 
 .dropdown-item-name{
@@ -441,10 +474,8 @@ input {
 }
 
 .design-summary{
-    margin: 5px 15px 2px 15px;
-    padding: 3px;
-    border: 1px solid darkgrey;
-    border-radius: 4px;
+    margin: 0;
+    padding: 0;
 }
 
 .summary-title{
@@ -493,7 +524,7 @@ input {
 
 .close-col{
     margin: 0;
-    padding: 0;
+    padding: 0 5px 0 5px;
     background-color: transparent;
 }
 
@@ -1074,29 +1105,46 @@ input {
     color: darkslategrey;
     background-color: #CCEEEE;
     margin: 0;
-    padding: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 5px;
     border: 1px solid ghostwhite;
 }
 
-.header-action{
-    color: blue;
-    margin: 0 20px 0 0;
-    font-weight: bold;
-}
-
 .header-description{
+    float: left;
     color: darkslategrey;
 }
 
 .design-editor-footer{
     border-top: 1px solid ghostwhite;
-    min-height: 30px
+    padding: 5px;
+    min-height: 35px
+}
+
+.details-editor-footer{
+    border-top: 1px solid ghostwhite;
+    padding: 0;
+    min-height: 5px
+}
+
+.details-footer-note{
+    margin: 0;
+    padding: 5px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    color: black;
 }
 
 .design-editor{
     margin: 0;
     padding: 3px;
-    max-height: 1000px;
+    max-height: 900px;
+    overflow-y: auto;
+}
+
+.details-editor{
+    margin: 0;
+    padding: 3px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -1108,7 +1156,8 @@ input {
 
 .design-component{
     margin: 0;
-    /*padding: 0 0 0 0px;*/
+    border: 1px solid transparent;
+    padding: 0 0 0 0px;
 }
 .dc-active{
     /*background-color: aliceblue;*/
@@ -1349,14 +1398,25 @@ input {
 }
 
 .domain-item{
-    margin: 5px 20px 0 0;
+    margin: 5px 5px 0 0;
     padding: 0 0 5px 0;
     border-bottom: 1px solid lightgrey;
 }
 
 .domain-term{
-    color: darkred;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    padding: 3px 0 0 5px;
+    font-size:  14px;
+    color: darkblue;
     font-weight: bold;
+}
+
+.domain-definition{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    padding: 3px 10px 0 5px;
+    font-size:  13px;
+    color: black;
+    font-weight: normal;
 }
 
 .dragging-item{
@@ -1500,6 +1560,16 @@ input {
 
 
 .editor-panel-large{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    padding: 15px;
+    margin: 0;
+    color: black;
+    background-color: lightyellow;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid ghostwhite;
+    border-bottom: 1px solid ghostwhite;
+    border-left: 1px solid lightgrey;
     min-height: 300px;
 }
 
@@ -1508,8 +1578,13 @@ input {
 }
 
 .editor-panel-edit{
-    padding: 2px 0 0 3px;
-    border: 0px solid lightgrey;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    padding: 15px;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid ghostwhite;
+    border-bottom: 1px solid ghostwhite;
+    border-left: 1px solid lightgrey;
     background-color: papayawhip;
 }
 

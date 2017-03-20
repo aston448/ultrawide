@@ -8,6 +8,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
+import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 
 // Ultrawide Services
 import {RoleType} from '../../../constants/constants.js';
@@ -37,18 +38,29 @@ export default class DesignEditorFooter extends Component {
 
     render() {
 
-        const {view, mode, userContext} = this.props;
+        const {view, mode, userContext, designSummaryData} = this.props;
 
-        return(
-            <div className="design-editor-footer">
-                Design Editor Footer
-            </div>
-        );
+        if(designSummaryData) {
+            return (
+                <div className="design-editor-footer">
+                    <DesignSummary
+                        summaryData={designSummaryData}
+                    />
+                </div>
+            );
+        } else {
+            return (
+                <div className="design-editor-footer">
+                    <div className="details-footer-note">Show Test Summary to see Design Summary</div>
+                </div>
+            );
+        }
     }
 }
 
 DesignEditorFooter.propTypes = {
-    view:           PropTypes.string.isRequired,
-    mode:           PropTypes.string.isRequired,
-    userContext:    PropTypes.object.isRequired
+    view:               PropTypes.string.isRequired,
+    mode:               PropTypes.string.isRequired,
+    userContext:        PropTypes.object.isRequired,
+    designSummaryData:  PropTypes.object
 };

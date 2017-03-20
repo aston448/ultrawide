@@ -8,6 +8,7 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {MenuType} from '../../../constants/constants.js'
 
 // Bootstrap
 
@@ -46,9 +47,17 @@ export default class UltrawideMenuItem extends Component {
 
     render() {
 
-        const {itemName, actionFunction} = this.props;
+        const {menuType, itemName, actionFunction} = this.props;
 
-        const className = this.state.isHighlighted ? 'top-menu-item menu-highlight' : 'top-menu-item';
+        let className = '';
+
+        switch(menuType){
+            case MenuType.MENU_TOP:
+                className = this.state.isHighlighted ? 'top-menu-item menu-highlight' : 'top-menu-item';
+                break;
+            case MenuType.MENU_EDITOR:
+                className = this.state.isHighlighted ? 'editor-menu-item editor-menu-highlight' : 'editor-menu-item';
+        }
 
         return(
             <div className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}>{itemName}</div>
@@ -57,6 +66,7 @@ export default class UltrawideMenuItem extends Component {
 }
 
 UltrawideMenuItem.propTypes = {
+    menuType: PropTypes.string.isRequired,
     itemName: PropTypes.string.isRequired,
     actionFunction: PropTypes.func.isRequired,
 };

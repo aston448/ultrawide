@@ -10,14 +10,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
 import DomainDictionaryTerm from '../../components/edit/DomainDictionaryTerm.jsx';
+import DetailsViewHeader    from '../../components/common/DetailsViewHeader.jsx';
+import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
-import { DisplayContext, ViewMode} from '../../../constants/constants.js';
+import { DetailsViewType, ViewMode} from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
 
 // Bootstrap
-import { Panel } from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -40,9 +41,9 @@ class DomainDictionary extends Component {
 
     }
 
-    onAddDictionaryTerm(userRole, view, mode, designId, designVersionId){
-        ClientDomainDictionaryServices.addNewDictionaryTerm(userRole, view, mode, designId, designVersionId);
-    }
+    // onAddDictionaryTerm(userRole, view, mode, designId, designVersionId){
+    //     ClientDomainDictionaryServices.addNewDictionaryTerm(userRole, view, mode, designId, designVersionId);
+    // }
 
     // A list of Scenarios in a Feature or Feature Aspect
     renderDictionaryTerms(dictionaryTerms) {
@@ -58,35 +59,32 @@ class DomainDictionary extends Component {
     }
 
     render() {
-        const {dictionaryTerms, userRole, view, mode, userItemContext} = this.props;
+        const {dictionaryTerms, userRole, view, mode, userContext, userViewOptions, viewDataValue} = this.props;
 
         let addDictionaryTerm = <div></div>;
 
-        if( mode === ViewMode.MODE_EDIT){
-            // Adding new terms is allowed
-            addDictionaryTerm =
-                <table>
-                    <tbody>
-                    <tr>
-                        <td className="control-table-data">
-                            <DesignComponentAdd
-                                addText="Add new Domain Term"
-                                onClick={ () => this.onAddDictionaryTerm(userRole, view, mode, userItemContext.designId, userItemContext.designVersionId)}
-                            />
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-        }
-
         return (
-            <div>
-                <Panel className="panel-steps panel-steps-body" header="Domain Dictionary">
-                    <div className="scroll-col">
-                        {this.renderDictionaryTerms(dictionaryTerms)}
-                        {addDictionaryTerm}
-                    </div>
-                </Panel>
+            <div className="design-editor-container">
+                <DetailsViewHeader
+                    detailsType={DetailsViewType.VIEW_DOM_DICT}
+                    titleText={'Domain Dictionary'}
+                    view={view}
+                    mode={mode}
+                    userContext={userContext}
+                    userRole={userRole}
+                    userViewOptions={userViewOptions}
+                    currentViewDataValue={viewDataValue}
+                />
+                <div className="design-editor">
+                    {this.renderDictionaryTerms(dictionaryTerms)}
+                </div>
+                <DetailsViewFooter
+                    detailsType={DetailsViewType.VIEW_DOM_DICT}
+                    view={view}
+                    mode={mode}
+                    userRole={userRole}
+                    userContext={userContext}
+                />
             </div>
         );
     }
@@ -102,7 +100,9 @@ function mapStateToProps(state) {
         userRole: state.currentUserRole,
         view: state.currentAppView,
         mode: state.currentViewMode,
-        userItemContext: state.currentUserItemContext
+        userContext: state.currentUserItemContext,
+        userViewOptions: state.currentUserViewOptions,
+        viewDataValue: state.currentViewOptionsDataValue
     }
 }
 

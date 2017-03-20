@@ -9,9 +9,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import TextEditor from '../../components/edit/TextEditor.jsx';
 import ScenarioStepsContainer from './ScenarioStepsContainer.jsx';
+import DetailsViewHeader    from '../../components/common/DetailsViewHeader.jsx';
+import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
-import { ViewType, ComponentType, DisplayContext, StepContext, LogLevel } from '../../../constants/constants.js';
+import { ViewType, ComponentType, DetailsViewType, DisplayContext, StepContext, LogLevel } from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import { log } from '../../../common/utils.js'
@@ -42,7 +44,7 @@ class DesignComponentText extends Component {
 
     render(){
 
-        const {currentDesignComponent, currentUpdateComponent, displayContext, view, mode, userContext, userRole} = this.props;
+        const {currentDesignComponent, currentUpdateComponent, displayContext, view, mode, userContext, userRole, userViewOptions, viewDataValue} = this.props;
 
 
         let panel1 = <div></div>;
@@ -134,23 +136,48 @@ class DesignComponentText extends Component {
 
             // Panel 1 is always the main component text
             panel1 =
-                <div>
-                    <Panel className="panel-text panel-text-body" header={textTitle}>
-                        <div>
-                            <TextEditor
-                                designComponent={mainComponent}
-                                displayContext={displayContext}
-                            />
-                        </div>
-                    </Panel>
+                <div className="design-editor-container">
+                    <DetailsViewHeader
+                        detailsType={DetailsViewType.VIEW_DETAILS_NEW}
+                        titleText={textTitle}
+                        view={view}
+                        mode={mode}
+                        userContext={userContext}
+                        userRole={userRole}
+                        userViewOptions={userViewOptions}
+                        currentViewDataValue={viewDataValue}
+                    />
+                    <div className="details-editor">
+                        <TextEditor
+                            designComponent={mainComponent}
+                            displayContext={displayContext}
+                        />
+                    </div>
+                    <DetailsViewFooter
+                        detailsType={DetailsViewType.VIEW_DETAILS_NEW}
+                        view={view}
+                        mode={mode}
+                        userRole={userRole}
+                        userContext={userContext}
+                    />
                 </div>;
 
             // Define panel 2 for Feature background steps if a Feature (could be for an update or base version)
             //console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
             if(mainComponent && mainComponent.componentType === ComponentType.FEATURE) {
                 panel2 =
-                    <div>
-                        <Panel className="panel-steps panel-steps-body" header="Feature Background Steps">
+                    <div className="design-editor-container">
+                        <DetailsViewHeader
+                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                            titleText={'Feature Background Steps'}
+                            view={view}
+                            mode={mode}
+                            userContext={userContext}
+                            userRole={userRole}
+                            userViewOptions={userViewOptions}
+                            currentViewDataValue={viewDataValue}
+                        />
+                        <div className="details-editor">
                             <ScenarioStepsContainer params={{
                                 view: view,
                                 displayContext: displayContext,
@@ -160,24 +187,32 @@ class DesignComponentText extends Component {
                                 updateId: mainComponent.designUpdateId,
                                 parentReferenceId: mainComponentFeatureReference
                             }}/>
-                        </Panel>
+                        </div>
+                        <DetailsViewFooter
+                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                            view={view}
+                            mode={mode}
+                            userRole={userRole}
+                            userContext={userContext}
+                        />
                     </div>;
             }
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
             if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && (mainComponentFeatureReference != 'NONE')) {
                 panel2 =
-                    <div>
-                        <Panel className="panel-steps panel-steps-body" header={'Scenario Steps: ' + titleName}>
-                            <ScenarioStepsContainer params={{
-                                view: view,
-                                displayContext: displayContext,
-                                stepContext: StepContext.STEP_FEATURE_SCENARIO,
-                                designId: mainComponent.designId,
-                                designVersionId: mainComponent.designVersionId,
-                                updateId: mainComponent.designUpdateId,
-                                parentReferenceId: mainComponentFeatureReference
-                            }}/>
+                    <div className="design-editor-container">
+                        <DetailsViewHeader
+                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                            titleText={'Scenario Steps: ' + titleName}
+                            view={view}
+                            mode={mode}
+                            userContext={userContext}
+                            userRole={userRole}
+                            userViewOptions={userViewOptions}
+                            currentViewDataValue={viewDataValue}
+                        />
+                        <div className="details-editor">
                             <ScenarioStepsContainer params={{
                                 view: view,
                                 displayContext: displayContext,
@@ -187,10 +222,14 @@ class DesignComponentText extends Component {
                                 updateId: mainComponent.designUpdateId,
                                 parentReferenceId: mainComponent.componentReferenceId
                             }}/>
-                        </Panel>
-                        {/*<Panel className="panel-steps panel-steps-body" header="Scenario Steps">*/}
-
-                        {/*</Panel>*/}
+                        </div>
+                        <DetailsViewFooter
+                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                            view={view}
+                            mode={mode}
+                            userRole={userRole}
+                            userContext={userContext}
+                        />
                     </div>;
             }
 
@@ -198,22 +237,48 @@ class DesignComponentText extends Component {
             if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW || view === ViewType.DESIGN_UPDATABLE_VIEW) && baseComponent){
                 let baseTextTitle = 'OLD: ' + TextLookups.componentTypeName(baseComponent.componentType) + ' - ' + titleNameOld;
                 panel3 =
-                    <div>
-                        <Panel className="panel-text panel-text-body" header={baseTextTitle}>
-                            <div>
-                                <TextEditor
-                                    designComponent={baseComponent}
-                                    displayContext={DisplayContext.BASE_VIEW}
-                                />
-                            </div>
-                        </Panel>
+                    <div className="design-editor-container">
+                        <DetailsViewHeader
+                            detailsType={DetailsViewType.VIEW_DETAILS_OLD}
+                            titleText={baseTextTitle}
+                            view={view}
+                            mode={mode}
+                            userContext={userContext}
+                            userRole={userRole}
+                            userViewOptions={userViewOptions}
+                            currentViewDataValue={viewDataValue}
+                        />
+                        <div className="details-editor">
+                            <TextEditor
+                                designComponent={baseComponent}
+                                displayContext={DisplayContext.BASE_VIEW}
+                            />
+                        </div>
+                        <DetailsViewFooter
+                            detailsType={DetailsViewType.VIEW_DETAILS_OLD}
+                            view={view}
+                            mode={mode}
+                            userRole={userRole}
+                            userContext={userContext}
+                        />
                     </div>;
+
 
                 // And define panel 4 for Base version scenario steps if a Scenario in an update
                 if(baseComponent && baseComponent.componentType === ComponentType.SCENARIO) {
                     panel4 =
-                        <div>
-                            <Panel className="panel-steps panel-steps-body" header={'OLD Scenario Steps: ' + titleNameOld}>
+                        <div className="design-editor-container">
+                            <DetailsViewHeader
+                                detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                                titleText={'OLD Scenario Steps: ' + titleNameOld}
+                                view={view}
+                                mode={mode}
+                                userContext={userContext}
+                                userRole={userRole}
+                                userViewOptions={userViewOptions}
+                                currentViewDataValue={viewDataValue}
+                            />
+                            <div className="details-editor">
                                 <ScenarioStepsContainer params={{
                                     view: view,
                                     displayContext: DisplayContext.BASE_VIEW,
@@ -233,8 +298,14 @@ class DesignComponentText extends Component {
                                     scenarioReferenceId: baseComponent.componentReferenceId,
                                     parentReferenceId: baseComponentFeatureReference
                                 }}/>
-
-                            </Panel>
+                            </div>
+                            <DetailsViewFooter
+                                detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                                view={view}
+                                mode={mode}
+                                userRole={userRole}
+                                userContext={userContext}
+                            />
                         </div>;
                 }
             }
@@ -270,8 +341,28 @@ class DesignComponentText extends Component {
 
         } else {
             return (
-                <Panel header="">
-                </Panel>
+                <div>
+                    <DetailsViewHeader
+                        detailsType={DetailsViewType.VIEW_DETAILS_NEW}
+                        titleText={'Feature Aspect'}
+                        view={view}
+                        mode={mode}
+                        userContext={userContext}
+                        userRole={userRole}
+                        userViewOptions={userViewOptions}
+                        currentViewDataValue={viewDataValue}
+                    />
+                    <div className="details-editor">
+                        <div className="design-item-note">No details for Feature Aspects</div>
+                    </div>
+                    <DetailsViewFooter
+                        detailsType={DetailsViewType.VIEW_DETAILS_NEW}
+                        view={view}
+                        mode={mode}
+                        userRole={userRole}
+                        userContext={userContext}
+                    />
+                </div>
             )
         }
 
@@ -290,7 +381,9 @@ function mapStateToProps(state) {
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
         userContext:            state.currentUserItemContext,
-        userRole:               state.currentUserRole
+        userRole:               state.currentUserRole,
+        userViewOptions:        state.currentUserViewOptions,
+        viewDataValue:          state.currentViewOptionsDataValue
     }
 }
 

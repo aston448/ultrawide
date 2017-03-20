@@ -7,6 +7,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
+import DesignEditorHeader               from '../../components/common/DesignEditorHeader.jsx';
+import DesignEditorFooter               from '../../components/common/DesignEditorFooter.jsx';
 import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 import DesignComponentTarget            from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentAdd               from '../../components/common/DesignComponentAdd.jsx';
@@ -119,16 +121,7 @@ export class DesignApplicationsList extends Component {
                 break;
         }
 
-        // Items -------------------------------------------------------------------------------------------------------
-
-        let designSummary =<div></div>;
-
-        if(designSummaryData && viewOptions.designTestSummaryVisible) {
-            designSummary =
-                <DesignSummary
-                    summaryData={designSummaryData}
-                />;
-        }
+        // Items ------------------------------------------------------------------------------------------------------
 
         if (mode === ViewMode.MODE_EDIT) {
             // Editing so include the Add Application control
@@ -146,6 +139,26 @@ export class DesignApplicationsList extends Component {
                     </tbody>
                 </table>
         }
+
+        let designEditor =
+            <div className="design-editor-container">
+                <DesignEditorHeader
+                    view={view}
+                    mode={mode}
+                    userContext={userContext}
+                    userViewOptions={viewOptions}
+                />
+                <div className="design-editor">
+                    {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
+                    {addComponent}
+                </div>
+                <DesignEditorFooter
+                    view={view}
+                    mode={mode}
+                    userContext={userContext}
+                    designSummaryData={designSummaryData}
+                />
+            </div>;
 
         // WHAT COMPONENTS ARE VISIBLE (Besides Design)
 
@@ -215,16 +228,16 @@ export class DesignApplicationsList extends Component {
         if(baseApplications) {
 
             // Root of New Design Editor
-            let baseEditorComponent =
-                <div className="design-editor">
-                    {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
-                    {addComponent}
-                </div>;
+            // let baseEditorComponent =
+            //     <div className="design-editor">
+            //         {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
+            //         {addComponent}
+            //     </div>;
 
 
             let col1 =
-                <Col id="column1" md={col1width} className="scroll-col">
-                    {baseEditorComponent}
+                <Col id="column1" md={col1width} className="close-col">
+                    {designEditor}
                 </Col>;
 
 
@@ -232,7 +245,7 @@ export class DesignApplicationsList extends Component {
             let col2 = '';
             if(viewOptions.designDetailsVisible){
                 col2 =
-                    <Col id="column2" md={col2width}>
+                    <Col id="column2" md={col2width} className="close-col">
                         {designDetails}
                     </Col>;
             }
@@ -241,7 +254,7 @@ export class DesignApplicationsList extends Component {
             let col3 = '';
             if(viewOptions.designDomainDictVisible){
                 col3 =
-                    <Col id="column3" md={col3width}>
+                    <Col id="column3" md={col3width} className="close-col">
                         {domainDictionary}
                     </Col>;
             }
@@ -250,9 +263,9 @@ export class DesignApplicationsList extends Component {
             // Make up the layout based on the view options
             layout =
                 <Grid >
-                    <Row>
-                        {designSummary}
-                    </Row>
+                    {/*<Row>*/}
+                        {/*{designSummary}*/}
+                    {/*</Row>*/}
                     <Row>
                         {col1}
                         {col2}

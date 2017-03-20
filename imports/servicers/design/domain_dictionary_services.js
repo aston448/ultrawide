@@ -29,7 +29,7 @@ class DomainDictionaryServices{
                     domainTermOld: DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME,
                     domainTermNew: DefaultComponentNames.NEW_DICTIONARY_ENTRY_NAME,
                     domainTextRaw: DesignComponentServices.getRawTextFor(DefaultDetailsText.NEW_DICTIONARY_ENTRY_TEXT),
-                    sortingName: 'ZZZZZ' + now,       // Will appear at end of list.  If more than one new added, in order
+                    sortingName: 'AAAAA' + now,       // Will appear at start of list.  If more than one new added, in order
                     markInDesign: true,
                     isNew: true,
                     isChanged: false

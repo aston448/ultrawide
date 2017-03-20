@@ -258,7 +258,7 @@ class DomainDictionaryTerm extends Component {
         let nameEditorEditing =
             <div>
                 <InputGroup>
-                    <div className="editableItem">
+                    <div className="editableItem domain-term">
                         <FormControl
                             type="text"
                             value={this.state.termNameValue}
@@ -279,7 +279,7 @@ class DomainDictionaryTerm extends Component {
         let nameEditorNotEditing =
             <div onClick={ () => this.setCurrentTerm()}>
                 <InputGroup>
-                    <div className={"readOnlyItem"}>
+                    <div className={"readOnlyItem domain-term"}>
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
                     </div>
                     <InputGroup.Addon onClick={ () => this.editTermName()}>
@@ -295,7 +295,7 @@ class DomainDictionaryTerm extends Component {
         let definitionEditorEditing =
             <div>
                 <InputGroup>
-                    <div className="editableItem">
+                    <div className="editableItem domain-definition">
                         <Editor
                             editorState={this.state.editorState}
                             handleKeyCommand={this.handleKeyCommand}
@@ -318,7 +318,7 @@ class DomainDictionaryTerm extends Component {
 
         let definitionEditorNotEditing =
 
-                <div className={"readOnlyItem"}>
+                <div className={"readOnlyItem  domain-definition"}>
                     <InputGroup>
 
                         <div  onClick={ () => this.setCurrentTerm()}>
@@ -343,14 +343,14 @@ class DomainDictionaryTerm extends Component {
         let viewOnlyTerm =
             <div onClick={ () => this.setCurrentTerm()}>
                 <InputGroup>
-                    <div className={"readOnlyItem"}>
+                    <div className={"readOnlyItem  domain-term"}>
                         <ControlLabel>{this.state.termNameValue}</ControlLabel>
                     </div>
                 </InputGroup>
             </div>;
 
         let viewOnlyDefinition =
-            <div className={"readOnlyItem"}>
+            <div className={"readOnlyItem domain-definition"}>
                 <InputGroup>
                     <div  onClick={ () => this.setCurrentStep()}>
 

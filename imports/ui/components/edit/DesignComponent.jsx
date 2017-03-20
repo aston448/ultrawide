@@ -710,17 +710,28 @@ export class DesignComponent extends Component{
         }
 
         // Each component has a move target above it so we can reorder stuff...
-        return(
-            <div id="designComponent" className={itemStyle}>
-                <MoveTarget
-                    currentItem={currentItem}
-                    displayContext={displayContext}
-                    mode={mode}
-                />
-                {headerHtml}
-                {bodyHtml}
-            </div>
-        )
+        if(mode === ViewMode.MODE_VIEW){
+            return (
+                <div id="designComponent" className={itemStyle}>
+                    {headerHtml}
+                    {bodyHtml}
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <MoveTarget
+                        currentItem={currentItem}
+                        displayContext={displayContext}
+                        mode={mode}
+                    />
+                    <div id="designComponent" className={itemStyle}>
+                        {headerHtml}
+                        {bodyHtml}
+                    </div>
+                </div>
+            )
+        }
     }
 
 }

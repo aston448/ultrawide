@@ -41,6 +41,23 @@ export const ViewType = {
 
 };
 
+export const DetailsViewType = {
+    VIEW_DETAILS_NEW:           'VIEW_DETAILS_NEW',
+    VIEW_STEPS_NEW:             'VIEW_STEPS_NEW',
+    VIEW_DETAILS_OLD:           'VIEW_DETAILS_OLD',
+    VIEW_STEPS_OLD:             'VIEW_STEPS_OLD',
+    VIEW_ACC_TESTS:             'VIEW_ACC_TESTS',
+    VIEW_INT_TESTS:             'VIEW_INT_TESTS',
+    VIEW_UNIT_TESTS:            'VIEW_UNIT_TESTS',
+    VIEW_ACC_FILES:             'VIEW_ACC_FILES',
+    VIEW_DOM_DICT:              'VIEW_DOM_DICT'
+};
+
+export const MenuType = {
+    MENU_TOP:                   'MENU_TOP',
+    MENU_EDITOR:                'MENU_EDITOR'
+};
+
 // In some views there is an option of seeing everything read-only (no controls visible)
 export const ViewMode = {
     MODE_EDIT: 'MODE_EDIT',

@@ -63,9 +63,9 @@ class RolesScreen extends Component {
             <Grid>
                 <Row>
                     <Col md={6} className="col">
-                        <Panel header="Available Roles">
+                        <div>
                             {this.renderRolesList(userRoles)}
-                        </Panel>
+                        </div>
                     </Col>
                 </Row>
             </Grid>

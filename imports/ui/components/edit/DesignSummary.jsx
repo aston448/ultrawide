@@ -53,18 +53,18 @@ export class DesignSummary extends Component {
                     <span className="summary-data">{summaryData.scenarioCount - summaryData.untestedScenarioCount}</span>
                     <span className="summary-title">Scenarios Untested: </span>
                     <span className="summary-data">{summaryData.untestedScenarioCount}</span>
-                    <span className="summary-title">Int Tests Passing: </span>
-                    <span className="summary-data">{summaryData.intTestPassCount}</span>
-                    <span className="summary-title">Int Tests Failing: </span>
-                    <span className="summary-data">{summaryData.intTestFailCount}</span>
-                    <span className="summary-title">Int Tests Pending: </span>
-                    <span className="summary-data">{summaryData.intTestPendingCount}</span>
-                    <span className="summary-title">Unit Tests Passing: </span>
-                    <span className="summary-data">{summaryData.unitTestPassCount}</span>
-                    <span className="summary-title">Unit Tests Failing: </span>
-                    <span className="summary-data">{summaryData.unitTestFailCount}</span>
-                    <span className="summary-title">Unit Tests Pending: </span>
-                    <span className="summary-data">{summaryData.unitTestPendingCount}</span>
+                    {/*<span className="summary-title">Int Tests Passing: </span>*/}
+                    {/*<span className="summary-data">{summaryData.intTestPassCount}</span>*/}
+                    {/*<span className="summary-title">Int Tests Failing: </span>*/}
+                    {/*<span className="summary-data">{summaryData.intTestFailCount}</span>*/}
+                    {/*<span className="summary-title">Int Tests Pending: </span>*/}
+                    {/*<span className="summary-data">{summaryData.intTestPendingCount}</span>*/}
+                    {/*<span className="summary-title">Unit Tests Passing: </span>*/}
+                    {/*<span className="summary-data">{summaryData.unitTestPassCount}</span>*/}
+                    {/*<span className="summary-title">Unit Tests Failing: </span>*/}
+                    {/*<span className="summary-data">{summaryData.unitTestFailCount}</span>*/}
+                    {/*<span className="summary-title">Unit Tests Pending: </span>*/}
+                    {/*<span className="summary-data">{summaryData.unitTestPendingCount}</span>*/}
                 </div>
             )
         } else {

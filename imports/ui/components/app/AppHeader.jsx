@@ -14,7 +14,7 @@ import UltrawideMenuDropdown from '../common/UltrawideMenuDropdown.jsx';
 
 
 // Ultrawide Services
-import {ViewType, ViewMode, ViewOptionType, RoleType, MessageType, LogLevel} from '../../../constants/constants.js'
+import {MenuType, ViewType, ViewMode, ViewOptionType, RoleType, MessageType, LogLevel} from '../../../constants/constants.js'
 
 import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
@@ -227,8 +227,8 @@ export class AppHeader extends Component {
 
         // Menu Items
 
-        const homeItem = <UltrawideMenuItem itemName="HOME" actionFunction={() => this.onGoToHome()}/>;
-        const logoutItem = <UltrawideMenuItem itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
+        const homeItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="HOME" actionFunction={() => this.onGoToHome()}/>;
+        const logoutItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
 
         let gotoDropdownItems = [];
         let viewDropdownItems = [];
