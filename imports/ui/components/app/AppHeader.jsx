@@ -152,11 +152,19 @@ export class AppHeader extends Component {
         let logo = ClientIdentityServices.getApplicationName();
 
         let detailsOption= '';
+        let detailsValue = false;
         let testSummaryOption = '';
+        let testSummaryValue = false;
         let accTestOption = '';
+        let accTestValue = false;
+        let accFilesOption = '';
+        let accFilesValue = false;
         let intTestOption = '';
+        let intTestValue = false;
         let unitTestOption = '';
+        let unitTestValue = false;
         let dictOption = '';
+        let dictValue = false;
 
         // Get the correct user view options for the view context
         switch(view){
@@ -164,41 +172,58 @@ export class AppHeader extends Component {
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
+                detailsValue = userViewOptions.designDetailsVisible;
                 dictOption = ViewOptionType.DESIGN_DICT;
+                dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.designTestSummaryVisible;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
                 detailsOption = ViewOptionType.UPDATE_DETAILS;
+                detailsValue = userViewOptions.updateDetailsVisible;
                 dictOption = ViewOptionType.UPDATE_DICT;
+                dictValue = userViewOptions.updateDomainDictVisible;
                 testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.updateTestSummaryVisible;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 detailsOption = ViewOptionType.WP_DETAILS;
+                detailsValue = userViewOptions.wpDetailsVisible;
                 dictOption = ViewOptionType.WP_DICT;
+                dictValue = userViewOptions.wpDomainDictVisible;
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 detailsOption = ViewOptionType.WP_DETAILS;
+                detailsValue = userViewOptions.wpDetailsVisible;
                 dictOption = ViewOptionType.WP_DICT;
+                dictValue = userViewOptions.wpDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.devTestSummaryVisible;
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 detailsOption = ViewOptionType.DEV_DETAILS;
+                detailsValue = userViewOptions.devDetailsVisible;
                 accTestOption = ViewOptionType.DEV_ACC_TESTS;
+                accTestValue = userViewOptions.devAccTestsVisible;
+                accFilesOption = ViewOptionType.DEV_FILES;
+                accFilesValue = userViewOptions.devFeatureFilesVisible;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
+                intTestValue = userViewOptions.devIntTestsVisible;
                 unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
+                unitTestValue = userViewOptions.devUnitTestsVisible;
                 dictOption = ViewOptionType.DEV_DICT;
+                dictValue = userViewOptions.devDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.devTestSummaryVisible;
                 break;
         }
 
         let appHeaderMenuContent = <div>Loading</div>;
 
-        // Main Logo
-        const mainLogo = <div className="ultrawide-logo">{logo}</div>
 
         // Menu Items
 
@@ -210,59 +235,66 @@ export class AppHeader extends Component {
         let refreshDropdownItems = [];
 
         // Dropdown Items - Goto
-        const gotoDesigns = {key: 'DES', itemName: 'Designs', actionFunction: () => this.onGoToDesigns(), hasCheckbox: false};
-        const gotoConfig = {key: 'CFG', itemName: 'Configuration', actionFunction: () => this.onGoToConfigure(), hasCheckbox: false};
-        const gotoSelection = {key: 'SEL', itemName: 'Item Selection', actionFunction: () => this.onGoToSelection(), hasCheckbox: false};
-        const gotoTestConfig = {key: 'TOC', itemName: 'Test Output Config', actionFunction: () => this.onGoToTestOutput(), hasCheckbox: false};
+        const gotoDesigns = {key: 'DES', itemName: 'Designs', actionFunction: () => this.onGoToDesigns(), hasCheckbox: false, checkboxValue: false};
+        const gotoConfig = {key: 'CFG', itemName: 'Configuration', actionFunction: () => this.onGoToConfigure(), hasCheckbox: false, checkboxValue: false};
+        const gotoSelection = {key: 'SEL', itemName: 'Item Selection', actionFunction: () => this.onGoToSelection(), hasCheckbox: false, checkboxValue: false};
+        const gotoTestConfig = {key: 'TOC', itemName: 'Test Output Config', actionFunction: () => this.onGoToTestOutput(), hasCheckbox: false, checkboxValue: false};
 
         // Dropdown Items - View
         const viewDetails = {
             key: 'DET',
             itemName: 'Details',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, detailsOption, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: detailsValue
         };
 
         const viewTestSummary = {
             key: 'TSM',
             itemName: 'Test Summary',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, testSummaryOption, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: testSummaryValue
         };
 
         const viewAccTests = {
             key: 'ACC',
             itemName: 'Acceptance Tests',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, accTestOption, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: accTestValue
         };
 
         const viewIntTests = {
             key: 'INT',
             itemName: 'Integration Tests',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, intTestOption, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: intTestValue
         };
 
         const viewUnitTests = {
             key: 'UNT',
             itemName: 'Unit Tests',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, unitTestOption, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: unitTestValue
         };
 
         const viewAccFiles = {
             key: 'ACF',
             itemName: 'Feature Files',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, ViewOptionType.DEV_FILES, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: accFilesValue
         };
 
         const viewDomainDict = {
             key: 'DOM',
             itemName: 'Domain Dictionary',
             actionFunction: () => this.onToggleViewOption(view, userContext, userRole, dictOption, userViewOptions, currentViewDataValue, testDataFlag),
-            hasCheckbox: true
+            hasCheckbox: true,
+            checkboxValue: dictValue
         };
 
         // Dropdown Items - Refresh
@@ -278,33 +310,37 @@ export class AppHeader extends Component {
             itemName: 'Design and Test Data',
             actionFunction: () => this.onRefreshDesignData(view, userContext, userRole, userViewOptions),
             hasCheckbox: false
-        }
+        };
 
         // The message display depends on the type of message being displayed
         let headerInfoStyle = message.messageType;
 
         let headerMessage =
-            <div className="header-message">
-                <Alert bsStyle={headerInfoStyle}>
-                    {message.messageText}
-                </Alert>
+            <div>
+                {message.messageText}
             </div>;
 
         let roleClass = '';
+        let roleStatusClass = '';
         let viewText = TextLookups.viewText(view);
 
+        // Get current status
+        let status = '';
         switch(userRole){
             case RoleType.DESIGNER:
                 roleClass = 'designer';
-                logo = logo + ' - DESIGNER - ' + viewText;
+                roleStatusClass = 'status-designer';
+                status = 'DESIGNER - ' + viewText;
                 break;
             case RoleType.DEVELOPER:
                 roleClass = 'developer';
-                logo = logo + '  - DEVELOPER - ' + viewText;
+                roleStatusClass = 'status-developer';
+                status = 'DEVELOPER - ' + viewText;
                 break;
             case RoleType.MANAGER:
                 roleClass = 'manager';
-                logo = logo + '  - MANAGER - ' + viewText;
+                roleStatusClass = 'status-manager';
+                status = 'MANAGER - ' + viewText;
                 break;
             default:
                 roleClass = 'no-role';
@@ -554,7 +590,10 @@ export class AppHeader extends Component {
             return (
                 <div className={'ultrawide-header ' + roleClass}>
                     <div className="ultrawide-logo">{logo}</div>
-                    {headerMessage}
+                    <div className={'ultrawide-status ' + roleStatusClass}>{status}</div>
+                    <div className={'header-message ' + headerInfoStyle}>
+                        {headerMessage}
+                    </div>
                     {appHeaderMenuContent}
                 </div>
             );

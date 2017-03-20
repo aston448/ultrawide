@@ -37,7 +37,13 @@ export default class UltrawideMenuDropdown extends Component {
     renderListItems(listItems){
         return listItems.map((item) => {
             return (
-                <UltrawideMenuDropdownItem key={item.key} itemName={item.itemName} actionFunction={item.actionFunction} hasCheckbox={item.hasCheckbox} clickAction={() => this.unhighlightMe()}/>
+                <UltrawideMenuDropdownItem
+                    key={item.key}
+                    itemName={item.itemName}
+                    actionFunction={item.actionFunction}
+                    hasCheckbox={item.hasCheckbox}
+                    checkboxValue={item.checkboxValue}
+                    clickAction={() => this.unhighlightMe()}/>
             );
         });
     }

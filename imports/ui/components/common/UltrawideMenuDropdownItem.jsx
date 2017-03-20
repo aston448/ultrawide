@@ -10,6 +10,7 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide Services
 
 // Bootstrap
+import {InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 
@@ -27,7 +28,8 @@ export default class UltrawideMenuDropdownItem extends Component {
         super(props);
 
         this.state = {
-            isHighlighted: false
+            isHighlighted: false,
+            checkboxChecked: this.props.checkboxValue
         }
 
     }
@@ -41,26 +43,42 @@ export default class UltrawideMenuDropdownItem extends Component {
     }
 
     action(){
-        //event.preventDefault();
+        event.preventDefault();
+        if(this.props.hasCheckbox) {
+            this.setState({checkboxChecked: !this.state.checkboxChecked})
+        }
         this.props.clickAction();
         this.props.actionFunction();
     }
 
     render() {
 
-        const {itemName, actionFunction} = this.props;
+        const {itemName, actionFunction, hasCheckbox, checkboxValue} = this.props;
 
-        const className = this.state.isHighlighted ? 'dropdown-menu-item menu-highlight' : 'dropdown-menu-item';
+        const className = this.state.isHighlighted ? 'dropdown-item-name menu-highlight' : 'dropdown-item-name';
+        const checkedStatus = this.state.checkboxChecked ? 'in-scope' : 'out-scope';
 
-        console.log("Render " + className);
-
-        return(
-            <li id={itemName}>
-                <div className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.action()}>
-                    {itemName}
-                </div>
-            </li>
-        )
+        if(hasCheckbox) {
+            return (
+                <li id={itemName}>
+                    <InputGroup onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.action()}>
+                        <InputGroup.Addon>
+                            <div className={checkedStatus}><Glyphicon glyph="ok"/></div>
+                        </InputGroup.Addon>
+                        <div className={className}>{itemName}</div>
+                    </InputGroup>
+                </li>
+            )
+        } else {
+            return (
+                <li id={itemName}>
+                    <div className={className} onMouseEnter={() => this.highlightMe()}
+                         onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.action()}>
+                        {itemName}
+                    </div>
+                </li>
+            )
+        }
     }
 }
 
@@ -68,5 +86,6 @@ UltrawideMenuDropdownItem.propTypes = {
     itemName: PropTypes.string.isRequired,
     actionFunction: PropTypes.func.isRequired,
     hasCheckbox: PropTypes.bool.isRequired,
+    checkboxValue: PropTypes.bool.isRequired,
     clickAction: PropTypes.func.isRequired,
 };
