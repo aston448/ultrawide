@@ -8,10 +8,11 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentAdd                    from '../../components/common/DesignComponentAdd.jsx';
+import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
+import UltrawideMenuItem            from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {ViewType, ViewMode, DetailsViewType} from '../../../constants/constants.js';
+import {ViewType, ViewMode, DetailsViewType, MenuType} from '../../../constants/constants.js';
 
 import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
 
@@ -30,7 +31,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class DetailsViewFooter extends Component {
+export class DetailsViewFooter extends Component {
     constructor(props) {
         super(props);
 
@@ -42,15 +43,33 @@ export default class DetailsViewFooter extends Component {
 
     render() {
 
-        const {detailsType, view, mode, userRole, userContext} = this.props;
+        const {detailsType, actionsVisible, view, mode, userRole, userContext} = this.props;
 
         let footerContent = <div></div>;
         let footerClass = 'design-editor-footer';
-        
+
+
+        let menuOptions = '';
+
+        const exportIntOption =
+            <UltrawideMenuItem
+                menuType={MenuType.MENU_EDITOR}
+                itemName="Export"
+                actionFunction={ () => this.onExportIntTests()}
+            />;
+
+        // Which menu options should be visible
         switch(detailsType){
             case DetailsViewType.VIEW_INT_TESTS:
             case DetailsViewType.VIEW_UNIT_TESTS:
-                footerClass = 'details-editor-footer';
+                if(actionsVisible){
+                    menuOptions =
+                        <div>
+                            {exportIntOption}
+                        </div>;
+                } else {
+                    footerClass = 'details-editor-footer';
+                }
                 break;
             case DetailsViewType.VIEW_DOM_DICT:
 
@@ -76,6 +95,7 @@ export default class DetailsViewFooter extends Component {
         return(
             <div className={footerClass}>
                 {footerContent}
+                {menuOptions}
             </div>
         );
     }
@@ -83,8 +103,18 @@ export default class DetailsViewFooter extends Component {
 
 DetailsViewFooter.propTypes = {
     detailsType:        PropTypes.string.isRequired,
-    view:               PropTypes.string.isRequired,
-    mode:               PropTypes.string.isRequired,
-    userRole:           PropTypes.string.isRequired,
-    userContext:        PropTypes.object.isRequired
+    actionsVisible:     PropTypes.bool.isRequired,
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userContext:            state.currentUserItemContext,
+        userRole:               state.currentUserRole,
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(DetailsViewFooter);

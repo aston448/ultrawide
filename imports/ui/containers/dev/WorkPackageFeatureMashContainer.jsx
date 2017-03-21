@@ -274,14 +274,8 @@ class WorkPackageFeatureMashList extends Component {
             <div className="design-editor-container">
                 <DetailsViewHeader
                     detailsType={detailsType}
-                    actionsVisible={menuVisible}
+                    isClosable={true}
                     titleText={panelHeader}
-                    view={view}
-                    mode={mode}
-                    userContext={userContext}
-                    userRole={userRole}
-                    userViewOptions={userViewOptions}
-                    currentViewDataValue={false}
                 />
                 <div className="int-tests-editor">
                     {mainPanel}
@@ -289,10 +283,7 @@ class WorkPackageFeatureMashList extends Component {
                 </div>
                 <DetailsViewFooter
                     detailsType={detailsType}
-                    view={view}
-                    mode={mode}
-                    userRole={userRole}
-                    userContext={userContext}
+                    actionsVisible={menuVisible}
                 />
             </div>
 

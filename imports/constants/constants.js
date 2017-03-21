@@ -54,8 +54,30 @@ export const DetailsViewType = {
 };
 
 export const MenuType = {
-    MENU_TOP:                   'MENU_TOP',
-    MENU_EDITOR:                'MENU_EDITOR'
+    MENU_TOP:                       'MENU_TOP',
+    MENU_EDITOR:                    'MENU_EDITOR'
+};
+
+export const MenuDropdown = {
+    MENU_DROPDOWN_GOTO:             'MENU_DROPDOWN_GOTO',
+    MENU_DROPDOWN_VIEW:             'MENU_DROPDOWN_VIEW',
+    MENU_DROPDOWN_REFRESH:          'MENU_DROPDOWN_REFRESH'
+};
+
+export const MenuAction = {
+    MENU_ACTION_GOTO_SELECTION:     'MENU_ACTION_GOTO_SELECTION',
+    MENU_ACTION_GOTO_DESIGNS:       'MENU_ACTION_GOTO_DESIGNS',
+    MENU_ACTION_GOTO_CONFIG:        'MENU_ACTION_GOTO_CONFIG',
+    MENU_ACTION_GOTO_TEST_CONFIG:   'MENU_ACTION_GOTO_TEST_CONFIG',
+    MENU_ACTION_VIEW_DETAILS:       'MENU_ACTION_VIEW_DETAILS',
+    MENU_ACTION_VIEW_DICT:          'MENU_ACTION_VIEW_DICT',
+    MENU_ACTION_VIEW_ACC_TESTS:     'MENU_ACTION_VIEW_ACC_TESTS',
+    MENU_ACTION_VIEW_INT_TESTS:     'MENU_ACTION_VIEW_INT_TESTS',
+    MENU_ACTION_VIEW_UNIT_TESTS:    'MENU_ACTION_VIEW_UNIT_TESTS',
+    MENU_ACTION_VIEW_ACC_FILES:     'MENU_ACTION_VIEW_ACC_FILES',
+    MENU_ACTION_VIEW_TEST_SUMM:     'MENU_ACTION_VIEW_TEST_SUMM',
+    MENU_ACTION_REFRESH_TESTS:      'MENU_ACTION_REFRESH_TESTS',
+    MENU_ACTION_REFRESH_DATA:       'MENU_ACTION_REFRESH_DATA',
 };
 
 // In some views there is an option of seeing everything read-only (no controls visible)
@@ -80,6 +102,7 @@ export const ViewOptionType = {
     DEV_FILES:          'devFeatureFilesVisible',
     DEV_DICT:           'devDomainDictVisible',
     DEV_TEST_SUMMARY:   'devTestSummaryVisible',
+    NONE:               ''
 };
 
 // Context specifies how and what information is displayed in common components

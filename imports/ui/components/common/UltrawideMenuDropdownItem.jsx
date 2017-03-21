@@ -8,11 +8,16 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
+import {MenuAction, ViewOptionType} from '../../../constants/constants.js';
+
+import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
+import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
 
 // Bootstrap
 import {InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
+import {connect} from 'react-redux';
 
 // =====================================================================================================================
 
@@ -22,16 +27,21 @@ import {InputGroup, Glyphicon} from 'react-bootstrap';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class UltrawideMenuDropdownItem extends Component {
+export class UltrawideMenuDropdownItem extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             isHighlighted: false,
-            checkboxChecked: this.props.checkboxValue
+            checkboxChecked: this.props.checkboxIsChecked
         }
 
+    }
+
+    componentWillReceiveProps(newProps){
+
+        this.setState({checkboxChecked: newProps.checkboxIsChecked})
     }
 
     highlightMe(){
@@ -42,26 +52,76 @@ export default class UltrawideMenuDropdownItem extends Component {
         this.setState({isHighlighted: false})
     }
 
-    action(){
+    action(action, viewOptionType, view, userContext, userRole, userViewOptions, currentViewDataValue, testDataFlag){
         event.preventDefault();
+
+        console.log("Dropdown item action " + action + " with dev int tests set to " + userViewOptions.devIntTestsVisible);
+
         if(this.props.hasCheckbox) {
             this.setState({checkboxChecked: !this.state.checkboxChecked})
         }
-        this.props.clickAction();
-        this.props.actionFunction();
+
+        this.props.clickAction(false);
+
+        switch(action){
+            case MenuAction.MENU_ACTION_GOTO_TEST_CONFIG:
+                ClientAppHeaderServices.setViewTestOutput();
+                break;
+            case MenuAction.MENU_ACTION_GOTO_SELECTION:
+                ClientAppHeaderServices.setViewSelection();
+                break;
+            case MenuAction.MENU_ACTION_GOTO_CONFIG:
+                ClientAppHeaderServices.setViewConfigure();
+                break;
+            case MenuAction.MENU_ACTION_GOTO_DESIGNS:
+                ClientAppHeaderServices.setViewDesigns();
+                break;
+            case MenuAction.MENU_ACTION_VIEW_DICT:
+            case MenuAction.MENU_ACTION_VIEW_ACC_FILES:
+            case MenuAction.MENU_ACTION_VIEW_UNIT_TESTS:
+            case MenuAction.MENU_ACTION_VIEW_INT_TESTS:
+            case MenuAction.MENU_ACTION_VIEW_ACC_TESTS:
+            case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:
+            case MenuAction.MENU_ACTION_VIEW_DETAILS:
+                ClientAppHeaderServices.toggleViewOption(
+                    view, userContext, userRole, viewOptionType, userViewOptions,
+                    currentViewDataValue, testDataFlag, this.getTestIntegrationDataContext()
+                );
+                break;
+            case MenuAction.MENU_ACTION_REFRESH_TESTS:
+                ClientTestIntegrationServices.refreshTestData(view, userContext, userRole, userViewOptions, testDataFlag, this.getTestIntegrationDataContext());
+                break;
+            case MenuAction.MENU_ACTION_REFRESH_DATA:
+                ClientTestIntegrationServices.refreshDesignMashData(view, userContext, userRole, userViewOptions, testDataFlag, this.getTestIntegrationDataContext());
+                break;
+        }
+
+    }
+
+    getTestIntegrationDataContext(){
+
+        return {
+            designVersionDataLoaded:        this.props.dvDataLoaded,
+            testIntegrationDataLoaded:      this.props.testDataLoaded,
+            testSummaryDataLoaded:          this.props.summaryDataLoaded,
+            mashDataStale:                  this.props.mashDataStale,
+            testDataStale:                  this.props.testDataStale
+        };
     }
 
     render() {
 
-        const {itemName, actionFunction, hasCheckbox, checkboxValue} = this.props;
+        const {itemName, action, hasCheckbox, viewOptionType, view, mode, userContext, userRole, userViewOptions, testDataFlag, currentViewDataValue} = this.props;
 
         const className = this.state.isHighlighted ? 'dropdown-item-name menu-highlight' : 'dropdown-item-name';
-        const checkedStatus = this.state.checkboxChecked ? 'in-scope' : 'out-scope';
+
+        let checkedStatus = ((this.state.checkboxChecked) ? 'in-scope' : 'out-scope');
 
         if(hasCheckbox) {
             return (
                 <li id={itemName}>
-                    <InputGroup onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.action()}>
+                    <InputGroup onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()}
+                                onMouseUp={() => this.action(action, viewOptionType, view, userContext, userRole, userViewOptions, currentViewDataValue, testDataFlag)}>
                         <InputGroup.Addon>
                             <div className={checkedStatus}><Glyphicon glyph="ok"/></div>
                         </InputGroup.Addon>
@@ -73,7 +133,7 @@ export default class UltrawideMenuDropdownItem extends Component {
             return (
                 <li id={itemName}>
                     <div className={className} onMouseEnter={() => this.highlightMe()}
-                         onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.action()}>
+                         onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.action(action, viewOptionType, view, userContext, userRole, userViewOptions, currentViewDataValue, testDataFlag)}>
                         {itemName}
                     </div>
                 </li>
@@ -84,8 +144,31 @@ export default class UltrawideMenuDropdownItem extends Component {
 
 UltrawideMenuDropdownItem.propTypes = {
     itemName: PropTypes.string.isRequired,
-    actionFunction: PropTypes.func.isRequired,
+    action: PropTypes.string.isRequired,
     hasCheckbox: PropTypes.bool.isRequired,
-    checkboxValue: PropTypes.bool.isRequired,
-    clickAction: PropTypes.func.isRequired,
+    checkboxIsChecked: PropTypes.bool.isRequired,
+    viewOptionType: PropTypes.string.isRequired,
+    clickAction: PropTypes.func.isRequired
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                       state.currentAppView,
+        mode:                       state.currentViewMode,
+        userContext:                state.currentUserItemContext,
+        userRole:                   state.currentUserRole,
+        userViewOptions:            state.currentUserViewOptions,
+        testDataFlag:               state.testDataFlag,
+        currentViewDataValue:       state.currentViewOptionsDataValue,
+        designVersionDataLoaded:    state.designVersionDataLoaded,
+        workPackageDataLoaded:      state.workPackageDataLoaded,
+        testIntegrationDataLoaded:  state.testIntegrationDataLoaded,
+        testSummaryDataLoaded:      state.testSummaryDataLoaded,
+        testDataStale:              state.testDataStale,
+        mashDataStale:              state.mashDataStale
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(UltrawideMenuDropdownItem);

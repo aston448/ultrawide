@@ -139,14 +139,8 @@ class DesignComponentText extends Component {
                 <div className="design-editor-container">
                     <DetailsViewHeader
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
-                        actionsVisible={true}
+                        isClosable={true}
                         titleText={textTitle}
-                        view={view}
-                        mode={mode}
-                        userContext={userContext}
-                        userRole={userRole}
-                        userViewOptions={userViewOptions}
-                        currentViewDataValue={viewDataValue}
                     />
                     <div className="details-editor">
                         <TextEditor
@@ -156,10 +150,7 @@ class DesignComponentText extends Component {
                     </div>
                     <DetailsViewFooter
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
-                        view={view}
-                        mode={mode}
-                        userRole={userRole}
-                        userContext={userContext}
+                        actionsVisible={true}
                     />
                 </div>;
 
@@ -170,14 +161,8 @@ class DesignComponentText extends Component {
                     <div className="design-editor-container">
                         <DetailsViewHeader
                             detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            actionsVisible={true}
+                            isClosable={false}
                             titleText={'Feature Background Steps'}
-                            view={view}
-                            mode={mode}
-                            userContext={userContext}
-                            userRole={userRole}
-                            userViewOptions={userViewOptions}
-                            currentViewDataValue={viewDataValue}
                         />
                         <div className="details-editor">
                             <ScenarioStepsContainer params={{
@@ -192,10 +177,7 @@ class DesignComponentText extends Component {
                         </div>
                         <DetailsViewFooter
                             detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            view={view}
-                            mode={mode}
-                            userRole={userRole}
-                            userContext={userContext}
+                            actionsVisible={true}
                         />
                     </div>;
             }
@@ -206,14 +188,8 @@ class DesignComponentText extends Component {
                     <div className="design-editor-container">
                         <DetailsViewHeader
                             detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            actionsVisible={true}
+                            isClosable={false}
                             titleText={'Scenario Steps: ' + titleName}
-                            view={view}
-                            mode={mode}
-                            userContext={userContext}
-                            userRole={userRole}
-                            userViewOptions={userViewOptions}
-                            currentViewDataValue={viewDataValue}
                         />
                         <div className="details-editor">
                             <ScenarioStepsContainer params={{
@@ -228,10 +204,7 @@ class DesignComponentText extends Component {
                         </div>
                         <DetailsViewFooter
                             detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            view={view}
-                            mode={mode}
-                            userRole={userRole}
-                            userContext={userContext}
+                            actionsVisible={true}
                         />
                     </div>;
             }
@@ -243,14 +216,8 @@ class DesignComponentText extends Component {
                     <div className="design-editor-container">
                         <DetailsViewHeader
                             detailsType={DetailsViewType.VIEW_DETAILS_OLD}
-                            actionsVisible={true}
+                            isClosable={false}
                             titleText={baseTextTitle}
-                            view={view}
-                            mode={mode}
-                            userContext={userContext}
-                            userRole={userRole}
-                            userViewOptions={userViewOptions}
-                            currentViewDataValue={viewDataValue}
                         />
                         <div className="details-editor">
                             <TextEditor
@@ -260,10 +227,7 @@ class DesignComponentText extends Component {
                         </div>
                         <DetailsViewFooter
                             detailsType={DetailsViewType.VIEW_DETAILS_OLD}
-                            view={view}
-                            mode={mode}
-                            userRole={userRole}
-                            userContext={userContext}
+                            actionsVisible={true}
                         />
                     </div>;
 
@@ -274,14 +238,8 @@ class DesignComponentText extends Component {
                         <div className="design-editor-container">
                             <DetailsViewHeader
                                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                                actionsVisible={true}
+                                isClosable={false}
                                 titleText={'OLD Scenario Steps: ' + titleNameOld}
-                                view={view}
-                                mode={mode}
-                                userContext={userContext}
-                                userRole={userRole}
-                                userViewOptions={userViewOptions}
-                                currentViewDataValue={viewDataValue}
                             />
                             <div className="details-editor">
                                 <ScenarioStepsContainer params={{
@@ -306,10 +264,7 @@ class DesignComponentText extends Component {
                             </div>
                             <DetailsViewFooter
                                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                                view={view}
-                                mode={mode}
-                                userRole={userRole}
-                                userContext={userContext}
+                                actionsVisible={true}
                             />
                         </div>;
                 }
@@ -350,22 +305,14 @@ class DesignComponentText extends Component {
                     <DetailsViewHeader
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
                         titleText={'Feature Aspect'}
-                        view={view}
-                        mode={mode}
-                        userContext={userContext}
-                        userRole={userRole}
-                        userViewOptions={userViewOptions}
-                        currentViewDataValue={viewDataValue}
+                        isClosable={true}
                     />
                     <div className="details-editor">
                         <div className="design-item-note">No details for Feature Aspects</div>
                     </div>
                     <DetailsViewFooter
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
-                        view={view}
-                        mode={mode}
-                        userRole={userRole}
-                        userContext={userContext}
+                        actionsVisible={false}
                     />
                 </div>
             )

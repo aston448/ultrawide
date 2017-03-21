@@ -8,7 +8,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
 import {MenuType, ViewOptionType, ViewType, ViewMode, DetailsViewType} from '../../../constants/constants.js';
@@ -18,7 +17,7 @@ import ClientUserContextServices    from '../../../apiClient/apiClientUserContex
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';
-import {Button, ButtonGroup} from 'react-bootstrap';
+import {Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -31,7 +30,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class DetailsViewHeader extends Component {
+export class DetailsViewHeader extends Component {
     constructor(props) {
         super(props);
 
@@ -55,6 +54,7 @@ export default class DetailsViewHeader extends Component {
                         break;
                 }
                 break;
+
             case DetailsViewType.VIEW_DETAILS_NEW:
                 switch(view){
                     case ViewType.DESIGN_NEW_EDIT:
@@ -64,11 +64,22 @@ export default class DetailsViewHeader extends Component {
                         break;
                 }
                 break;
+
             case DetailsViewType.VIEW_INT_TESTS:
+                viewOptionType = ViewOptionType.DEV_INT_TESTS;
+                break;
+
+            case DetailsViewType.VIEW_UNIT_TESTS:
+                viewOptionType = ViewOptionType.DEV_UNIT_TESTS;
                 break;
         }
 
-        ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, userViewOptions, currentViewDataValue, false, null)
+        console.log("Closing " + viewOptionType);
+
+        if(userViewOptions[viewOptionType]) {
+            console.log("Really Closing " + viewOptionType);
+            ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, userViewOptions, currentViewDataValue, false, null)
+        }
     }
 
     getNameData(userContext){
@@ -78,56 +89,22 @@ export default class DetailsViewHeader extends Component {
 
     render() {
 
-        const {detailsType, actionsVisible, titleText, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
+        const {detailsType, isClosable, titleText, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
-        let menuOptions = '';
-
-        const closeOption =
-            <UltrawideMenuItem
-                menuType={MenuType.MENU_EDITOR}
-                itemName="Close"
-                actionFunction={() => this.onClose(detailsType, view, userContext, userRole, userViewOptions, currentViewDataValue)}
-            />;
-
-        const exportIntOption =
-            <UltrawideMenuItem
-                menuType={MenuType.MENU_EDITOR}
-                itemName="Export"
-                actionFunction={ () => this.onExportIntTests()}
-            />;
-
-
-        // Which menu options should be visible
-        switch(detailsType){
-            case DetailsViewType.VIEW_INT_TESTS:
-                if(actionsVisible) {
-                    menuOptions =
-                        <div>
-                            {exportIntOption}
-                        </div>;
-                }
-                break;
-            case DetailsViewType.VIEW_DOM_DICT:
-            case DetailsViewType.VIEW_DETAILS_NEW:
-                menuOptions =
-                    <div>
-                        {closeOption}
-                    </div>;
-                    break;
-        }
-
-        if(actionsVisible){
+        if(isClosable){
             return(
                 <div className="design-editor-header">
                     <Grid>
                         <Row>
-                            <Col md={8}>
+                            <Col md={11} className="close-col">
                                 <div className="header-description">{titleText}</div>
                             </Col>
-                            <Col md={4}>
-                                <div className="details-menu-bar">{menuOptions}</div>
+                            <Col md={1} className="close-col">
+                                <div className="details-close" onClick={() => this.onClose(detailsType, view, userContext, userRole, userViewOptions, currentViewDataValue)}>
+                                    <Glyphicon glyph="remove"/>
+                                </div>
                             </Col>
                         </Row>
                     </Grid>
@@ -138,7 +115,7 @@ export default class DetailsViewHeader extends Component {
                 <div className="design-editor-header">
                     <Grid>
                         <Row>
-                            <Col md={12}>
+                            <Col md={12} className="close-col">
                                 <div className="header-description">{titleText}</div>
                             </Col>
                         </Row>
@@ -152,13 +129,22 @@ export default class DetailsViewHeader extends Component {
 
 DetailsViewHeader.propTypes = {
     detailsType:            PropTypes.string.isRequired,
-    actionsVisible:         PropTypes.bool.isRequired,
+    isClosable:             PropTypes.bool.isRequired,
     titleText:              PropTypes.string.isRequired,
-    view:                   PropTypes.string.isRequired,
-    mode:                   PropTypes.string.isRequired,
-    userContext:            PropTypes.object.isRequired,
-    userRole:               PropTypes.string.isRequired,
-    userViewOptions:        PropTypes.object,
-    currentViewDataValue:   PropTypes.bool
-
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userContext:            state.currentUserItemContext,
+        userRole:               state.currentUserRole,
+        userViewOptions:        state.currentUserViewOptions,
+        currentViewDataValue:   state.currentViewOptionsDataValue
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(DetailsViewHeader);
+

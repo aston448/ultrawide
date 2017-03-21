@@ -67,24 +67,15 @@ class DomainDictionary extends Component {
             <div className="design-editor-container">
                 <DetailsViewHeader
                     detailsType={DetailsViewType.VIEW_DOM_DICT}
-                    actionsVisible={false}
+                    isClosable={true}
                     titleText={'Domain Dictionary'}
-                    view={view}
-                    mode={mode}
-                    userContext={userContext}
-                    userRole={userRole}
-                    userViewOptions={userViewOptions}
-                    currentViewDataValue={viewDataValue}
                 />
                 <div className="design-editor">
                     {this.renderDictionaryTerms(dictionaryTerms)}
                 </div>
                 <DetailsViewFooter
                     detailsType={DetailsViewType.VIEW_DOM_DICT}
-                    view={view}
-                    mode={mode}
-                    userRole={userRole}
-                    userContext={userContext}
+                    actionsVisible={true}
                 />
             </div>
         );

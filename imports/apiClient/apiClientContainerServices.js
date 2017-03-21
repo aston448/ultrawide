@@ -32,7 +32,9 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 
 
 // Ultrawide Services
-import { RoleType, ComponentType, ViewType, ViewMode, DisplayContext, DesignUpdateStatus, StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel, TestLocationType, UltrawideAction, MessageType } from '../constants/constants.js';
+import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignUpdateStatus,
+    StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
+    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction } from '../constants/constants.js';
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -1875,6 +1877,360 @@ class ClientContainerServices{
     getTestSummaryFeatureData(feature){
 
         return UserDevTestSummaryData.findOne({scenarioReferenceId: 'NONE', featureReferenceId: feature.componentReferenceId});
+
+    }
+
+    getDropdownMenuItems(menuType, view, mode){
+
+        const userViewOptions = store.getState().currentUserViewOptions;
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Getting menu items for menu {} in view {} with int tests visible {} ", menuType, view, userViewOptions.devIntTestsVisible);
+
+        let detailsOption= '';
+        let detailsValue = false;
+        let testSummaryOption = '';
+        let testSummaryValue = false;
+        let accTestOption = '';
+        let accTestValue = false;
+        let accFilesOption = '';
+        let accFilesValue = false;
+        let intTestOption = '';
+        let intTestValue = false;
+        let unitTestOption = '';
+        let unitTestValue = false;
+        let dictOption = '';
+        let dictValue = false;
+
+        // Get the correct user view options for the view context
+        switch(view){
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                detailsOption = ViewOptionType.DESIGN_DETAILS;
+                detailsValue = userViewOptions.designDetailsVisible;
+                dictOption = ViewOptionType.DESIGN_DICT;
+                dictValue = userViewOptions.designDomainDictVisible;
+                testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.designTestSummaryVisible;
+                break;
+            case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
+                detailsOption = ViewOptionType.UPDATE_DETAILS;
+                detailsValue = userViewOptions.updateDetailsVisible;
+                dictOption = ViewOptionType.UPDATE_DICT;
+                dictValue = userViewOptions.updateDomainDictVisible;
+                testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.updateTestSummaryVisible;
+                break;
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                detailsOption = ViewOptionType.WP_DETAILS;
+                detailsValue = userViewOptions.wpDetailsVisible;
+                dictOption = ViewOptionType.WP_DICT;
+                dictValue = userViewOptions.wpDomainDictVisible;
+                break;
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                detailsOption = ViewOptionType.WP_DETAILS;
+                detailsValue = userViewOptions.wpDetailsVisible;
+                dictOption = ViewOptionType.WP_DICT;
+                dictValue = userViewOptions.wpDomainDictVisible;
+                testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.devTestSummaryVisible;
+                break;
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+                detailsOption = ViewOptionType.DEV_DETAILS;
+                detailsValue = userViewOptions.devDetailsVisible;
+                accTestOption = ViewOptionType.DEV_ACC_TESTS;
+                accTestValue = userViewOptions.devAccTestsVisible;
+                accFilesOption = ViewOptionType.DEV_FILES;
+                accFilesValue = userViewOptions.devFeatureFilesVisible;
+                intTestOption = ViewOptionType.DEV_INT_TESTS;
+                intTestValue = userViewOptions.devIntTestsVisible;
+                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
+                unitTestValue = userViewOptions.devUnitTestsVisible;
+                dictOption = ViewOptionType.DEV_DICT;
+                dictValue = userViewOptions.devDomainDictVisible;
+                testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.devTestSummaryVisible;
+                break;
+        }
+
+        // Dropdown Items - Go To
+        const gotoDesigns = {
+            key: 'DES',
+            itemName: 'Designs',
+            action: MenuAction.MENU_ACTION_GOTO_DESIGNS,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
+        const gotoConfig = {
+            key: 'CFG',
+            itemName: 'Configuration',
+            action: MenuAction.MENU_ACTION_GOTO_CONFIG,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
+        const gotoSelection = {
+            key: 'SEL',
+            itemName: 'Item Selection',
+            action: MenuAction.MENU_ACTION_GOTO_SELECTION,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
+        const gotoTestConfig = {
+            key: 'TOC',
+            itemName: 'Test Output Config',
+            action: MenuAction.MENU_ACTION_GOTO_TEST_CONFIG,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
+        // Dropdown Items - View
+        const viewDetails = {
+            key: 'DET',
+            itemName: 'Details',
+            action: MenuAction.MENU_ACTION_VIEW_DETAILS,
+            hasCheckbox: true,
+            checkboxValue: detailsValue,
+            viewOptionType: detailsOption
+        };
+
+        const viewTestSummary = {
+            key: 'TSM',
+            itemName: 'Test Summary',
+            action: MenuAction.MENU_ACTION_VIEW_TEST_SUMM,
+            hasCheckbox: true,
+            checkboxValue: testSummaryValue,
+            viewOptionType: testSummaryOption
+        };
+
+        const viewAccTests = {
+            key: 'ACC',
+            itemName: 'Acceptance Tests',
+            action: MenuAction.MENU_ACTION_VIEW_ACC_TESTS,
+            hasCheckbox: true,
+            checkboxValue: accTestValue,
+            viewOptionType: accTestOption
+        };
+
+        const viewIntTests = {
+            key: 'INT',
+            itemName: 'Integration Tests',
+            action: MenuAction.MENU_ACTION_VIEW_INT_TESTS,
+            hasCheckbox: true,
+            checkboxValue: intTestValue,
+            viewOptionType: intTestOption
+        };
+
+        const viewUnitTests = {
+            key: 'UNT',
+            itemName: 'Unit Tests',
+            action: MenuAction.MENU_ACTION_VIEW_UNIT_TESTS,
+            hasCheckbox: true,
+            checkboxValue: unitTestValue,
+            viewOptionType: unitTestOption
+        };
+
+        const viewAccFiles = {
+            key: 'ACF',
+            itemName: 'Feature Files',
+            action: MenuAction.MENU_ACTION_VIEW_ACC_FILES,
+            hasCheckbox: true,
+            checkboxValue: accFilesValue,
+            viewOptionType: accFilesOption
+        };
+
+        const viewDomainDict = {
+            key: 'DOM',
+            itemName: 'Domain Dictionary',
+            action: MenuAction.MENU_ACTION_VIEW_DICT,
+            hasCheckbox: true,
+            checkboxValue: dictValue,
+            viewOptionType: dictOption
+        };
+
+        // Dropdown Items - Refresh
+        const refreshTestData = {
+            key: 'RTD',
+            itemName: 'Test Data',
+            action: MenuAction.MENU_ACTION_REFRESH_TESTS,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
+        const refreshDesignData = {
+            key: 'RDD',
+            itemName: 'Design and Test Data',
+            action: MenuAction.MENU_ACTION_REFRESH_DATA,
+            hasCheckbox: false,
+            checkboxValue: false,
+            viewOptionType: ViewOptionType.NONE
+        };
+
+        switch(view) {
+
+            case ViewType.ADMIN:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [gotoDesigns];
+
+                }
+                break;
+
+            case ViewType.CONFIGURE:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [gotoTestConfig, gotoDesigns];
+                }
+                break;
+
+            case ViewType.TEST_OUTPUTS:
+            case ViewType.SELECT:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [gotoConfig, gotoDesigns];
+
+                }
+                break;
+
+            case ViewType.DESIGNS:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [gotoTestConfig];
+                }
+                break;
+
+            case ViewType.DESIGN_NEW_EDIT:
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DESIGN_UPDATE_VIEW:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return  [
+                                gotoSelection,
+                                gotoConfig,
+                                gotoDesigns
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+                        return [
+                                viewDetails,
+                                viewDomainDict,
+                                viewTestSummary
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+                        return [
+                                refreshTestData
+                            ];
+                }
+                break;
+
+            case ViewType.DESIGN_UPDATE_EDIT:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [
+                                gotoSelection,
+                                gotoConfig,
+                                gotoDesigns
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+
+                        if (mode === ViewMode.MODE_VIEW) {
+                            return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewTestSummary
+                                ];
+                        } else {
+                            return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                ];
+                        }
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+
+                        if (mode === ViewMode.MODE_VIEW) {
+                            return [
+                                    refreshTestData
+                                ];
+                        }
+                }
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [
+                                gotoSelection,
+                                gotoConfig,
+                                gotoDesigns
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+                        return [
+                                viewDetails,
+                                viewDomainDict,
+                            ];
+
+                }
+                break;
+
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [
+                                gotoSelection,
+                                gotoConfig,
+                                gotoDesigns
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+                        return [
+                                viewDetails,
+                                viewDomainDict,
+                                viewAccTests,
+                                viewAccFiles,
+                                viewIntTests,
+                                viewUnitTests,
+                                viewTestSummary
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+                        return [
+                                refreshTestData,
+                                refreshDesignData
+                            ];
+                }
+                break;
+
+            default:
+                return  [];
+        }
 
     }
 

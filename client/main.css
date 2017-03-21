@@ -342,15 +342,6 @@ input {
     margin: 3px 0 3px 0;
 }
 
-.details-menu-bar{
-    float: right;
-    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  13px;
-    font-weight: normal;
-    letter-spacing: 2px;
-    margin: 3px 0 3px 0;
-}
-
 .top-menu-item{
     float: left;
     margin: 0;
@@ -1132,6 +1123,24 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     color: black;
+}
+
+.details-close{
+    float: right;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  12px;
+    font-weight: normal;
+    color: red;
+    margin: 3px 0 3px 0;
+}
+
+.details-menu-bar{
+    float: right;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    margin: 3px 0 3px 0;
 }
 
 .design-editor{

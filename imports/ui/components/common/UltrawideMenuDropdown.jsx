@@ -6,13 +6,14 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UltrawideMenuDropdownItem from '../common/UltrawideMenuDropdownItem.jsx';
+import UltrawideMenuDropdownItemsContainer from '../../containers/common/UltrawideMenuDropdownItemsContainer.jsx';
 
 // Ultrawide Services
 
 // Bootstrap
 
 // REDUX services
+import {connect} from 'react-redux';
 
 // =====================================================================================================================
 
@@ -22,7 +23,7 @@ import UltrawideMenuDropdownItem from '../common/UltrawideMenuDropdownItem.jsx';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class UltrawideMenuDropdown extends Component {
+export class UltrawideMenuDropdown extends Component {
 
     constructor(props) {
         super(props);
@@ -34,19 +35,6 @@ export default class UltrawideMenuDropdown extends Component {
 
     }
 
-    renderListItems(listItems){
-        return listItems.map((item) => {
-            return (
-                <UltrawideMenuDropdownItem
-                    key={item.key}
-                    itemName={item.itemName}
-                    actionFunction={item.actionFunction}
-                    hasCheckbox={item.hasCheckbox}
-                    checkboxValue={item.checkboxValue}
-                    clickAction={() => this.unhighlightMe()}/>
-            );
-        });
-    }
 
     highlightMe(){
         this.setState({isHighlighted: true});
@@ -65,7 +53,6 @@ export default class UltrawideMenuDropdown extends Component {
         }
     }
 
-
     action(){
         console.log("CLICKED");
         this.props.actionFunction();
@@ -73,38 +60,52 @@ export default class UltrawideMenuDropdown extends Component {
 
     render() {
 
-        const {itemName, itemsList} = this.props;
+        const {itemName, menuType, view, mode} = this.props;
 
         const className = this.state.isHighlighted ? 'menu-highlight' : '';
 
         console.log("Render " + className);
 
 
+        if(this.state.shouldDisplayItems){
+            return(
+                <div className="dropdown top-menu-item" onMouseEnter={() => this.highlightMe()}>
+                    <div data-toggle="dropdown" className={'dropdown-toggle ' + className} onMouseLeave={() => this.unhighlightMe()}>{itemName} <b className="caret"></b></div>
+                    <UltrawideMenuDropdownItemsContainer params={{
+                        menuType: menuType,
+                        view: view,
+                        mode: mode,
+                        clickAction: (newState) => this.setDisplayItems(newState)
+                    }}
+                    />
+                </div>
+            )
 
-            if(itemsList.length > 0 && this.state.shouldDisplayItems){
-                return(
-                    <div className="dropdown top-menu-item" onMouseEnter={() => this.highlightMe()}>
-                        <div data-toggle="dropdown" className={'dropdown-toggle ' + className} onMouseLeave={() => this.unhighlightMe()}>{itemName} <b className="caret"></b></div>
-                        <ul className="dropdown-menu" onMouseLeave={() => this.unhighlightMe()} onMouseUp={() => this.setDisplayItems(false)}>
-                            {this.renderListItems(itemsList)}
-                        </ul>
-                    </div>
-                )
-
-            } else {
-                return(
-                    <div className="dropdown top-menu-item" onMouseEnter={() => this.highlightMe()}>
-                        <div data-target="#" data-toggle="dropdown" className={'dropdown-toggle ' + className} onMouseLeave={() => this.unhighlightMe()}>{itemName} <b className="caret"></b></div>
-                    </div>
-                )
-            }
-
-
+        } else {
+            return(
+                <div className="dropdown top-menu-item" onMouseEnter={() => this.highlightMe()}>
+                    <div data-target="#" data-toggle="dropdown" className={'dropdown-toggle ' + className} onMouseLeave={() => this.unhighlightMe()}>{itemName} <b className="caret"></b></div>
+                </div>
+            )
+        }
 
     }
 }
 
 UltrawideMenuDropdown.propTypes = {
     itemName: PropTypes.string.isRequired,
-    itemsList: PropTypes.array.isRequired,
+    menuType: PropTypes.string.isRequired,
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userViewOptions:        state.currentUserViewOptions,
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(UltrawideMenuDropdown);
+
