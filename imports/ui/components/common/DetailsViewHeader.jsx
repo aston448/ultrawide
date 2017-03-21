@@ -14,6 +14,7 @@ import {MenuType, ViewOptionType, ViewType, ViewMode, DetailsViewType} from '../
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';
@@ -44,41 +45,14 @@ export class DetailsViewHeader extends Component {
 
         let viewOptionType = '';
 
-        switch(detailsType){
-            case DetailsViewType.VIEW_DOM_DICT:
-                switch(view){
-                    case ViewType.DESIGN_NEW_EDIT:
-                    case ViewType.DESIGN_PUBLISHED_VIEW:
-                    case ViewType.DESIGN_UPDATABLE_VIEW:
-                        viewOptionType = ViewOptionType.DESIGN_DICT;
-                        break;
-                }
-                break;
+        const currentOption = ClientContainerServices.getCurrentOptionForDetailsView(view, userViewOptions, detailsType);
 
-            case DetailsViewType.VIEW_DETAILS_NEW:
-                switch(view){
-                    case ViewType.DESIGN_NEW_EDIT:
-                    case ViewType.DESIGN_PUBLISHED_VIEW:
-                    case ViewType.DESIGN_UPDATABLE_VIEW:
-                        viewOptionType = ViewOptionType.DESIGN_DETAILS;
-                        break;
-                }
-                break;
+        console.log("Closing " + currentOption.option);
 
-            case DetailsViewType.VIEW_INT_TESTS:
-                viewOptionType = ViewOptionType.DEV_INT_TESTS;
-                break;
-
-            case DetailsViewType.VIEW_UNIT_TESTS:
-                viewOptionType = ViewOptionType.DEV_UNIT_TESTS;
-                break;
-        }
-
-        console.log("Closing " + viewOptionType);
-
-        if(userViewOptions[viewOptionType]) {
-            console.log("Really Closing " + viewOptionType);
-            ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, viewOptionType, userViewOptions, currentViewDataValue, false, null)
+        // Only close if really open
+        if(currentOption.value) {
+            console.log("Really Closing " + currentOption.option);
+            ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, currentOption.option, userViewOptions, currentViewDataValue, false, null)
         }
     }
 

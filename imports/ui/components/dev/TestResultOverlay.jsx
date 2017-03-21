@@ -51,7 +51,7 @@ export default class TestResultOverlay extends Component {
         switch(testType){
             case TestType.UNIT:
                 testOutcome = testResult.testOutcome;
-                testError = testResult.testError;
+                testError = testResult.testErrors;
                 testStack = testResult.testStack;
                 testDuration = testResult.testDuration;
                 break;

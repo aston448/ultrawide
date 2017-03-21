@@ -34,7 +34,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignUpdateStatus,
     StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
-    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction } from '../constants/constants.js';
+    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType } from '../constants/constants.js';
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -1880,11 +1880,8 @@ class ClientContainerServices{
 
     }
 
-    getDropdownMenuItems(menuType, view, mode){
-
-        const userViewOptions = store.getState().currentUserViewOptions;
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Getting menu items for menu {} in view {} with int tests visible {} ", menuType, view, userViewOptions.devIntTestsVisible);
+    // Call this common function whenever the current user options for the view and their values are needed
+    getCurrentViewOptions(view, userViewOptions){
 
         let detailsOption= '';
         let detailsValue = false;
@@ -1957,6 +1954,50 @@ class ClientContainerServices{
                 break;
         }
 
+        return{
+            details:        {option: detailsOption, value: detailsValue},
+            testSummary:    {option: testSummaryOption, value: testSummaryValue},
+            dictionary:     {option: dictOption, value: dictValue},
+            accTests:       {option: accTestOption, value: accTestValue},
+            accFiles:       {option: accFilesOption, value: accFilesValue},
+            intTests:       {option: intTestOption, value: intTestValue},
+            unitTests:      {option: unitTestOption, value: unitTestValue}
+        }
+
+    }
+
+    getCurrentOptionForDetailsView(view, userViewOptions, detailsView){
+
+        const currentOptions = this.getCurrentViewOptions(view, userViewOptions);
+
+        switch(detailsView){
+            case DetailsViewType.VIEW_DOM_DICT:
+                return currentOptions.dictionary;
+
+            case DetailsViewType.VIEW_DETAILS_NEW:
+                return currentOptions.details;
+
+            case DetailsViewType.VIEW_INT_TESTS:
+               return currentOptions.intTests;
+
+            case DetailsViewType.VIEW_UNIT_TESTS:
+               return currentOptions.unitTests;
+
+            case DetailsViewType.VIEW_ACC_TESTS:
+                return currentOptions.accTests;
+
+            case DetailsViewType.VIEW_ACC_FILES:
+                return currentOptions.accFiles;
+        }
+    }
+    getDropdownMenuItems(menuType, view, mode){
+
+        const userViewOptions = store.getState().currentUserViewOptions;
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Getting menu items for menu {} in view {}", menuType, view);
+
+        const currentOptions = this.getCurrentViewOptions(view, userViewOptions);
+
         // Dropdown Items - Go To
         const gotoDesigns = {
             key: 'DES',
@@ -2000,8 +2041,8 @@ class ClientContainerServices{
             itemName: 'Details',
             action: MenuAction.MENU_ACTION_VIEW_DETAILS,
             hasCheckbox: true,
-            checkboxValue: detailsValue,
-            viewOptionType: detailsOption
+            checkboxValue: currentOptions.details.value,
+            viewOptionType: currentOptions.details.option
         };
 
         const viewTestSummary = {
@@ -2009,8 +2050,8 @@ class ClientContainerServices{
             itemName: 'Test Summary',
             action: MenuAction.MENU_ACTION_VIEW_TEST_SUMM,
             hasCheckbox: true,
-            checkboxValue: testSummaryValue,
-            viewOptionType: testSummaryOption
+            checkboxValue: currentOptions.testSummary.value,
+            viewOptionType: currentOptions.testSummary.option
         };
 
         const viewAccTests = {
@@ -2018,8 +2059,8 @@ class ClientContainerServices{
             itemName: 'Acceptance Tests',
             action: MenuAction.MENU_ACTION_VIEW_ACC_TESTS,
             hasCheckbox: true,
-            checkboxValue: accTestValue,
-            viewOptionType: accTestOption
+            checkboxValue: currentOptions.accTests.value,
+            viewOptionType: currentOptions.accTests.option
         };
 
         const viewIntTests = {
@@ -2027,8 +2068,8 @@ class ClientContainerServices{
             itemName: 'Integration Tests',
             action: MenuAction.MENU_ACTION_VIEW_INT_TESTS,
             hasCheckbox: true,
-            checkboxValue: intTestValue,
-            viewOptionType: intTestOption
+            checkboxValue: currentOptions.intTests.value,
+            viewOptionType: currentOptions.intTests.option
         };
 
         const viewUnitTests = {
@@ -2036,8 +2077,8 @@ class ClientContainerServices{
             itemName: 'Unit Tests',
             action: MenuAction.MENU_ACTION_VIEW_UNIT_TESTS,
             hasCheckbox: true,
-            checkboxValue: unitTestValue,
-            viewOptionType: unitTestOption
+            checkboxValue: currentOptions.unitTests.value,
+            viewOptionType: currentOptions.unitTests.option
         };
 
         const viewAccFiles = {
@@ -2045,8 +2086,8 @@ class ClientContainerServices{
             itemName: 'Feature Files',
             action: MenuAction.MENU_ACTION_VIEW_ACC_FILES,
             hasCheckbox: true,
-            checkboxValue: accFilesValue,
-            viewOptionType: accFilesOption
+            checkboxValue: currentOptions.accFiles.value,
+            viewOptionType: currentOptions.accFiles.option
         };
 
         const viewDomainDict = {
@@ -2054,8 +2095,8 @@ class ClientContainerServices{
             itemName: 'Domain Dictionary',
             action: MenuAction.MENU_ACTION_VIEW_DICT,
             hasCheckbox: true,
-            checkboxValue: dictValue,
-            viewOptionType: dictOption
+            checkboxValue: currentOptions.dictionary.value,
+            viewOptionType: currentOptions.dictionary.option
         };
 
         // Dropdown Items - Refresh
