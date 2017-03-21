@@ -57,24 +57,24 @@ export class UnitTestScenarioMashItem extends Component {
         }
 
         return(
-            <div>
+            <div className="mash-unit-scenario">
                 <Grid>
-                    <Row className={"mash-unit-scenario " + resultStyle}>
-                        <Col md={10} className="close-col">
+                    <Row>
+                        <Col md={12} className="close-col">
                             <InputGroup>
                                 <InputGroup.Addon>
-                                    <div className="mash-unit-scenario-glyph"><Glyphicon glyph='th'/></div>
+                                    <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
                                 </InputGroup.Addon>
-                                <div className={'mash-scenario '  + testStyle}>
+                                <div className="mash-scenario">
                                     {mashItem.designComponentName}
                                 </div>
                             </InputGroup>
                         </Col>
-                        <Col md={2}>
-                            <div className={'mash-scenario-result ' + testStyle}>
-                                {TextLookups.mashTestStatus(mashItem.unitMashTestStatus)}
-                            </div>
-                        </Col>
+                        {/*<Col md={2}>*/}
+                            {/*<div className={'mash-scenario-result ' + testStyle}>*/}
+                                {/*{TextLookups.mashTestStatus(mashItem.unitMashTestStatus)}*/}
+                            {/*</div>*/}
+                        {/*</Col>*/}
                     </Row>
                 </Grid>
 

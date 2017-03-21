@@ -883,6 +883,7 @@ class TestIntegrationModules{
                                     intMashStatus: MashStatus.MASH_LINKED,
                                     intMashTestStatus: testResult.testResult,
                                     intErrorMessage: testResult.testError,
+                                    intStackTrace: testResult.stackTrace,
                                     intDuration: testResult.testDuration
                                 }
                             }
@@ -950,11 +951,15 @@ class TestIntegrationModules{
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Unit Test Result: {}", testResult.testFullName);
 
-                    let testError = 'Pass in ' + testResult.testDuration + 'ms';
-                    let testStack = 'Pass in ' + testResult.testDuration + 'ms';
+                    let testError = '';
+                    let testStack = '';
+                    let testDuration = 0;
                     if(testResult.testResult === MashTestStatus.MASH_FAIL){
                         testError = testResult.testError;
                         testStack = testResult.stackTrace;
+                    }
+                    if(testResult.testResult === MashTestStatus.MASH_PASS){
+                        testDuration = testResult.testDuration;
                     }
 
                     let linked = false;
@@ -998,6 +1003,7 @@ class TestIntegrationModules{
                                             testOutcome:        testResult.testResult,
                                             testErrors:         testError,
                                             testStack:          testStack,
+                                            testDuration:       testDuration,
                                             isStale:            false
                                         }
                                     }
@@ -1022,6 +1028,7 @@ class TestIntegrationModules{
                                         testOutcome:                 testResult.testResult,
                                         testErrors:                  testError,
                                         testStack:                   testStack,
+                                        testDuration:                testDuration,
                                         isStale:                     false
                                     }
                                 );
@@ -1048,7 +1055,8 @@ class TestIntegrationModules{
                                 mashStatus:                  MashStatus.MASH_NOT_DESIGNED,
                                 testOutcome:                 testResult.testResult,
                                 testErrors:                  testError,
-                                testStack:                   testStack
+                                testStack:                   testStack,
+                                testDuration:                testDuration,
                             }
                         );
                     }

@@ -139,6 +139,7 @@ class DesignComponentText extends Component {
                 <div className="design-editor-container">
                     <DetailsViewHeader
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
+                        actionsVisible={true}
                         titleText={textTitle}
                         view={view}
                         mode={mode}
@@ -169,6 +170,7 @@ class DesignComponentText extends Component {
                     <div className="design-editor-container">
                         <DetailsViewHeader
                             detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                            actionsVisible={true}
                             titleText={'Feature Background Steps'}
                             view={view}
                             mode={mode}
@@ -204,6 +206,7 @@ class DesignComponentText extends Component {
                     <div className="design-editor-container">
                         <DetailsViewHeader
                             detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                            actionsVisible={true}
                             titleText={'Scenario Steps: ' + titleName}
                             view={view}
                             mode={mode}
@@ -240,6 +243,7 @@ class DesignComponentText extends Component {
                     <div className="design-editor-container">
                         <DetailsViewHeader
                             detailsType={DetailsViewType.VIEW_DETAILS_OLD}
+                            actionsVisible={true}
                             titleText={baseTextTitle}
                             view={view}
                             mode={mode}
@@ -270,6 +274,7 @@ class DesignComponentText extends Component {
                         <div className="design-editor-container">
                             <DetailsViewHeader
                                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                                actionsVisible={true}
                                 titleText={'OLD Scenario Steps: ' + titleNameOld}
                                 view={view}
                                 mode={mode}

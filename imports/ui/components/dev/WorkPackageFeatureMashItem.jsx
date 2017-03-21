@@ -52,41 +52,25 @@ class WorkPackageFeatureMashItem extends Component {
         return true;
     }
 
-    hasFeatureAspects(userContext, featureId){
-        // TODO - implement properly
-        return true;
-    }
 
 
     render(){
         const { mashItem, displayContext, userContext } = this.props;
 
         if(mashItem.hasChildren) {
-            let container = '';
-            if (this.hasFeatureAspects(userContext, mashItem.designComponentId)) {
-                container =
-                    <WorkPackageFeatureAspectMashContainer params={{
-                        userContext: userContext,
-                        featureMash: mashItem,
-                        displayContext: displayContext
-                    }}/>;
-            } else {
-                container =
-                    <WorkPackageScenarioMashContainer params={{
-                        userContext: userContext,
-                        parentMash: mashItem,
-                        displayContext: displayContext
-                    }}/>;
-            }
 
             return (
-                <div>
+                <div className="mash-feature-group">
                     <InputGroup>
                         <div className={"mash-feature"}>
                             {mashItem.designComponentName}
                         </div>
                     </InputGroup>
-                    {container}
+                    <WorkPackageFeatureAspectMashContainer params={{
+                        userContext: userContext,
+                        featureMash: mashItem,
+                        displayContext: displayContext
+                    }}/>
                 </div>
             )
         } else {

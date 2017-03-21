@@ -8,25 +8,17 @@ import { createContainer } from 'meteor/react-meteor-data';
 import TestResultOverlay from '../../components/dev/TestResultOverlay.jsx';
 
 // Ultrawide Services
-import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
+import {TestType} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
-import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
-import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
-import {InputGroup, Label} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
-import {Tooltip, Overlay, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
-import {connect} from 'react-redux';
 
 // React DnD - Component is draggable
 
-
 // Draft JS
-
 
 // =====================================================================================================================
 
@@ -36,84 +28,84 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export class MashUnitTestResult extends Component {
+export default class MashUnitTestResult extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            showErrorDetails: false
+            showResultDetails: false
         };
-
-    }
-
-    showOverlay(){
-        this.setState({showErrorDetails: true});
-    }
-
-    hideOverlay(){
-        this.setState({showErrorDetails: false});
     }
 
     toggleOverlay(){
-        this.setState({showErrorDetails: !this.state.showErrorDetails});
+        this.setState({showResultDetails: !this.state.showResultDetails});
     }
 
     render(){
-        const { testResult, userContext } = this.props;
+        const { testResult } = this.props;
 
         const testStyle = testResult.testOutcome;
 
-        // All this is is the Scenario Name plus a list of its scenarios
-        return(
-            <div onClick={() => this.toggleOverlay()}>
-                <Grid className="close-grid">
-                    <Row>
-                        <Col md={3} className="close-col">
-                            <div className="unit-test-group">
-                                {testResult.testGroupName + ': '}
-                            </div>
-                        </Col>
-                        <Col md={7} className="close-col">
-                            <div className={"unit-test " + testStyle} >
-                                {testResult.testName}
-                            </div>
-                        </Col>
-                        <Col md={2} className="close-col">
-                            <div className={"unit-test " + testStyle}>
-                                {TextLookups.mashTestStatus(testResult.testOutcome)}
-                            </div>
-                        </Col>
-                    </Row>
-                </Grid>
-                <Overlay
-                    show={this.state.showErrorDetails}
-                    onHide={() => this.setState({ showErrorDetails: false })}
-                    placement="top"
-                    container={this}
-                    rootClose={true}
-                    target={this}
-                >
-                    <TestResultOverlay
-                        testResult={testResult}
-                    />
-                </Overlay>
-            </div>
-        )
+        // Show the full result details if user has toggled them on by clicking
+        if(this.state.showResultDetails) {
+            return (
+                <div onClick={() => this.toggleOverlay()}>
+                    <Grid className="close-grid">
+                        <Row className="unit-test-result">
+                            <Col md={4} className="close-col">
+                                <div className="unit-test-group">
+                                    {testResult.testGroupName + ': '}
+                                </div>
+                            </Col>
+                            <Col md={7} className="close-col">
+                                <div className={"unit-test " + testStyle}>
+                                    {testResult.testName}
+                                </div>
+                            </Col>
+                            <Col md={1} className="close-col">
+                                <div className={"unit-test " + testStyle}>
+                                    {TextLookups.mashTestStatus(testResult.testOutcome)}
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <TestResultOverlay
+                                testType={TestType.UNIT}
+                                testResult={testResult}
+                            />
+                        </Row>
+                    </Grid>
+                </div>
+            )
+        } else {
+            return (
+                <div onClick={() => this.toggleOverlay()}>
+                    <Grid className="close-grid">
+                        <Row className="unit-test-result">
+                            <Col md={4} className="close-col">
+                                <div className="unit-test-group">
+                                    {testResult.testGroupName + ': '}
+                                </div>
+                            </Col>
+                            <Col md={7} className="close-col">
+                                <div className={"unit-test " + testStyle}>
+                                    {testResult.testName}
+                                </div>
+                            </Col>
+                            <Col md={1} className="close-col">
+                                <div className={"unit-test " + testStyle}>
+                                    {TextLookups.mashTestStatus(testResult.testOutcome)}
+                                </div>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </div>
+            )
+        }
     }
-
 }
 
 MashUnitTestResult.propTypes = {
     testResult: PropTypes.object.isRequired
 };
-
-// Redux function which maps state from the store to specific props this component is interested in.
-function mapStateToProps(state) {
-    return {
-        userContext: state.currentUserItemContext
-    }
-}
-
-// Connect the Redux store to this component ensuring that its required state is mapped to props
-export default connect(mapStateToProps)(MashUnitTestResult);

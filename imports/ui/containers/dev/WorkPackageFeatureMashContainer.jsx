@@ -105,6 +105,7 @@ class WorkPackageFeatureMashList extends Component {
         let panelHeader = '';
         let secondPanelHeader = '';
         let detailsType = '';
+        let menuVisible = false;
 
         let itemHeader = '';
         let secondPanel = <div></div>;
@@ -115,7 +116,9 @@ class WorkPackageFeatureMashList extends Component {
             case DisplayContext.MASH_INT_TESTS:
                 detailsType = DetailsViewType.VIEW_INT_TESTS;
                 break;
-
+            case DisplayContext.MASH_UNIT_TESTS:
+                detailsType = DetailsViewType.VIEW_UNIT_TESTS;
+                break;
         }
 
         switch(userContext.designComponentType){
@@ -155,8 +158,9 @@ class WorkPackageFeatureMashList extends Component {
                         }
                         break;
                     case DisplayContext.MASH_INT_TESTS:
-                        // Allow feature export to int test file
                         panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                        // Allow feature export to int test file
+                        menuVisible = true;
                         break;
                     case DisplayContext.MASH_UNIT_TESTS:
                         panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
@@ -186,24 +190,14 @@ class WorkPackageFeatureMashList extends Component {
                         </div>;
                     break;
                 case ComponentType.FEATURE:
-                    // Render Aspects or Scenarios (if any)
-                    if(ClientMashDataServices.featureHasAspects(userContext, userContext.designComponentId)){
-                        mainPanel =
-                           <WorkPackageFeatureAspectMashContainer params={{
-                               userContext:     userContext,
-                               featureMash:     null,
-                               displayContext:  displayContext
-                            }}/>
 
-                    } else {
-                        // Just render the scenarios
-                        mainPanel =
-                            <WorkPackageScenarioMashContainer params={{
-                                userContext:    userContext,
-                                parentMash:     null,
-                                displayContext:  displayContext
-                            }}/>
-                    }
+                    mainPanel =
+                       <WorkPackageFeatureAspectMashContainer params={{
+                           userContext:     userContext,
+                           featureMash:     null,
+                           displayContext:  displayContext
+                        }}/>;
+
 
                     // For Acceptance tests we also show non-designed Scenarios
                     if(displayContext === DisplayContext.MASH_ACC_TESTS && nonDesignScenarioData.length > 0){
@@ -220,7 +214,7 @@ class WorkPackageFeatureMashList extends Component {
                             userContext:    userContext,
                             parentMash:     null,
                             displayContext:  displayContext
-                        }}/>
+                        }}/>;
                     break;
                 case ComponentType.SCENARIO:
                     switch(displayContext){
@@ -244,13 +238,11 @@ class WorkPackageFeatureMashList extends Component {
                         case DisplayContext.MASH_UNIT_TESTS:
                             // Show the module tests for the Scenario
                             mainPanel =
-                                <Panel className="panel-text panel-text-body" header={panelHeader}>
-                                    <WorkPackageScenarioMashContainer params={{
-                                        userContext:    userContext,
-                                        parentMash:     null,
-                                        displayContext:  displayContext
-                                    }}/>
-                                </Panel>;
+                                <WorkPackageScenarioMashContainer params={{
+                                    userContext:    userContext,
+                                    parentMash:     null,
+                                    displayContext:  displayContext
+                                }}/>;
                             break;
                     }
 
@@ -282,6 +274,7 @@ class WorkPackageFeatureMashList extends Component {
             <div className="design-editor-container">
                 <DetailsViewHeader
                     detailsType={detailsType}
+                    actionsVisible={menuVisible}
                     titleText={panelHeader}
                     view={view}
                     mode={mode}

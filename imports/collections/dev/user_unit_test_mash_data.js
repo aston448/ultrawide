@@ -1,6 +1,3 @@
-/**
- * User Features Data Store.  This represents all features in feature files added to the actual application in development
- */
 
 import { Mongo } from 'meteor/mongo';
 
@@ -21,6 +18,7 @@ let Schema = new SimpleSchema({
     testOutcome:                {type: String},                         // Pending / Pass  Fail
     testErrors:                 {type: String, optional: true},         // Error if Failure
     testStack:                  {type: String, optional: true},         // Stack if Failure
+    testDuration:               {type: Number, optional: true},         // Duration if test run successfullt
     isStale:                    {type: Boolean, defaultValue: false}    // Indicates a refresh of data - anything that remains stale is deleted
 });
 

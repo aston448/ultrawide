@@ -8,22 +8,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
-import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
-import TextLookups from '../../../common/lookups.js';
-import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
-import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
+import {MashTestStatus, TestType} from '../../../constants/constants.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
-import {InputGroup, Label} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
-import {connect} from 'react-redux';
 
 // React DnD - Component is draggable
-
 
 // Draft JS
 
@@ -48,25 +39,63 @@ export default class TestResultOverlay extends Component {
     }
 
     render(){
-        const { testResult } = this.props;
+        const { testType, testResult } = this.props;
 
         let resultDisplay = '';
 
-        if(testResult.testOutcome === MashTestStatus.MASH_FAIL){
+        let testOutcome = '';
+        let testError = '';
+        let testStack = '';
+        let testDuration = '';
 
-            resultDisplay =
-                <div className="test-fail-overlay">
-                    <div className="test-result-header">Error</div>
-                    <div className="test-result-error">{testResult.testErrors}</div>
-                    <div className="test-result-header">Stack</div>
-                    <div className="test-result-stack">{testResult.testStack}</div>
-                </div>
-        } else {
+        switch(testType){
+            case TestType.UNIT:
+                testOutcome = testResult.testOutcome;
+                testError = testResult.testError;
+                testStack = testResult.testStack;
+                testDuration = testResult.testDuration;
+                break;
+            case TestType.INTEGRATION:
+                testOutcome = testResult.intMashTestStatus;
+                testError = testResult.intErrorMessage;
+                testStack = testResult.intStackTrace;
+                testDuration = testResult.intDuration;
+                break;
+            case TestType.ACCEPTANCE:
+                testOutcome = testResult.accMashTestStatus;
+                testError = testResult.accErrorMessage;
+                testStack = 'NONE';
+                testDuration = testResult.accDuration;
+                break;
+        }
 
-            resultDisplay =
-                <div className="test-pass-overlay">
-                    <div className="test-result-pass">{testResult.testErrors}</div>
-                </div>
+        switch(testOutcome){
+            case  MashTestStatus.MASH_FAIL:
+
+                resultDisplay =
+                    <div className="test-fail-overlay">
+                        <div className="test-result-header">Error</div>
+                        <div className="test-result-error">{testError}</div>
+                        <div className="test-result-header">Stack</div>
+                        <div className="test-result-stack">{testStack}</div>
+                    </div>;
+                break;
+
+            case MashTestStatus.MASH_PASS:
+
+                resultDisplay =
+                    <div className="test-pass-overlay">
+                        <div className="test-result-pass">{'Passed in ' + testDuration + 'ms'}</div>
+                    </div>;
+                break;
+
+            default:
+
+                resultDisplay =
+                    <div className="test-none-overlay">
+                        <div className="test-result-none">No test completed yet.  Check that Scenario names match exactly</div>
+                    </div>;
+                break;
         }
 
         return(
@@ -77,5 +106,6 @@ export default class TestResultOverlay extends Component {
 }
 
 TestResultOverlay.propTypes = {
+    testType: PropTypes.string.isRequired,
     testResult: PropTypes.object.isRequired
 };

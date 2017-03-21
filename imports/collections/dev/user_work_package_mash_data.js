@@ -37,6 +37,8 @@ let Schema = new SimpleSchema({
     unitMashTestStatus:             {type: String, optional: true},                     // If linked, latest test results status - Module Tests
     accErrorMessage:                {type: String, optional: true},
     intErrorMessage:                {type: String, optional: true},
+    accStackTrace:                  {type: String, optional: true},
+    intStackTrace:                  {type: String, optional: true},
     accDuration:                    {type: Number, optional: true},
     intDuration:                    {type: Number, optional: true},
 });

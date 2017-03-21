@@ -78,7 +78,7 @@ export default class DetailsViewHeader extends Component {
 
     render() {
 
-        const {detailsType, titleText, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
+        const {detailsType, actionsVisible, titleText, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -99,12 +99,15 @@ export default class DetailsViewHeader extends Component {
             />;
 
 
+        // Which menu options should be visible
         switch(detailsType){
             case DetailsViewType.VIEW_INT_TESTS:
-                menuOptions =
-                    <div>
-                        {exportIntOption}
-                    </div>;
+                if(actionsVisible) {
+                    menuOptions =
+                        <div>
+                            {exportIntOption}
+                        </div>;
+                }
                 break;
             case DetailsViewType.VIEW_DOM_DICT:
             case DetailsViewType.VIEW_DETAILS_NEW:
@@ -115,25 +118,41 @@ export default class DetailsViewHeader extends Component {
                     break;
         }
 
-        return(
-            <div className="design-editor-header">
-                <Grid>
-                    <Row>
-                        <Col md={8}>
-                            <div className="header-description">{titleText}</div>
-                        </Col>
-                        <Col md={4}>
-                            <div className="details-menu-bar">{menuOptions}</div>
-                        </Col>
-                    </Row>
-                </Grid>
-            </div>
-        );
+        if(actionsVisible){
+            return(
+                <div className="design-editor-header">
+                    <Grid>
+                        <Row>
+                            <Col md={8}>
+                                <div className="header-description">{titleText}</div>
+                            </Col>
+                            <Col md={4}>
+                                <div className="details-menu-bar">{menuOptions}</div>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </div>
+            );
+        } else {
+            return(
+                <div className="design-editor-header">
+                    <Grid>
+                        <Row>
+                            <Col md={12}>
+                                <div className="header-description">{titleText}</div>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </div>
+            );
+        }
+
     }
 }
 
 DetailsViewHeader.propTypes = {
     detailsType:            PropTypes.string.isRequired,
+    actionsVisible:         PropTypes.bool.isRequired,
     titleText:              PropTypes.string.isRequired,
     view:                   PropTypes.string.isRequired,
     mode:                   PropTypes.string.isRequired,

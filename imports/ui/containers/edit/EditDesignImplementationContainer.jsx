@@ -11,7 +11,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentTextContainer         from '../edit/DesignComponentTextContainer.jsx';
-import DesignDevFeatureMashContainer        from '../dev/DesignDevFeatureMashContainer.jsx';
 import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
 import DesignDevUnitMashContainer           from '../dev/DesignDevUnitMashContainer.jsx';
 import WorkPackageFeatureMashContainer      from '../dev/WorkPackageFeatureMashContainer.jsx';
@@ -278,18 +277,10 @@ class DevApplicationsList extends Component {
         if(viewOptions.devUnitTestsVisible){
 
             unitTests =
-                <Panel header="Unit Test Implementation - click test result for details" className="panel-update panel-update-body">
-                    <Grid>
-                        <Row>
-                            <Col md={12} className="scroll-col">
-                                <WorkPackageFeatureMashContainer params={{
-                                    userContext: userContext,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>
-                            </Col>
-                        </Row>
-                    </Grid>
-                </Panel>;
+                <WorkPackageFeatureMashContainer params={{
+                    userContext: userContext,
+                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                }}/>;
 
             switch(displayedItems){
                 case 2:

@@ -61,7 +61,7 @@ class MashUnitTestList extends Component {
 
         if(testResults.length > 0) {
             return (
-                <div>
+                <div className="mash-unit-scenario-results">
                     {this.renderTestResults(testResults)}
                 </div>
             )
