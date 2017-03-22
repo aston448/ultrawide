@@ -106,29 +106,17 @@ class DevApplicationsList extends Component {
         let col6width = 7;
         let col7width = 7;
 
-        // console.log("View Options Dev Details: " + viewOptions.devDetailsVisible);
-        // console.log("View Options Dev Acc: " + viewOptions.devAccTestsVisible);
-        // console.log("View Options Dev Int: " + viewOptions.devIntTestsVisible);
-        // console.log("View Options Dev Mod: " + viewOptions.devUnitTestsVisible);
-        // console.log("View Options Dev Dict: " + viewOptions.devDomainDictVisible);
-
         // Working Design
         let design =
             <div className="design-editor-container">
                 <DesignEditorHeader
-                    view={view}
-                    mode={mode}
-                    userContext={userContext}
-                    userViewOptions={viewOptions}
+                    displayContext={DisplayContext.DEV_DESIGN}
                 />
                 <div className="design-editor">
                     {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
-                    view={view}
-                    mode={mode}
-                    userContext={userContext}
-                    designSummaryData={null}
+                    hasDesignSummary={false}
                 />
             </div>;
 

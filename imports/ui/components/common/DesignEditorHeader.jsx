@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {MenuType, RoleType, ViewType, ViewMode} from '../../../constants/constants.js';
+import {MenuType, RoleType, ViewType, ViewMode, DisplayContext} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
@@ -31,7 +31,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class DesignEditorHeader extends Component {
+export class DesignEditorHeader extends Component {
     constructor(props) {
         super(props);
 
@@ -57,7 +57,7 @@ export default class DesignEditorHeader extends Component {
 
     render() {
 
-        const {view, mode, userContext, userViewOptions} = this.props;
+        const {displayContext, view, mode, userContext, userViewOptions} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -84,21 +84,32 @@ export default class DesignEditorHeader extends Component {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
+
                 description = nameData.designVersion;
                 break;
+
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                description = nameData.designVersion + ' - ' + nameData.designUpdate;
+
+                description = nameData.designUpdate;
                 break;
+
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-                description = nameData.designVersion + ' - ' + nameData.workPackage;
-                break;
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-            case ViewType.DEVELOP_UPDATE_WP:
+
+                if(displayContext === DisplayContext.WP_VIEW){
+                    description = nameData.workPackage + ' (CONTENT)';
+                } else {
+                    description = nameData.workPackage + ' (SCOPE)';
+                }
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                description = nameData.designUpdate + ' - ' + nameData.workPackage;
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+
+                description = nameData.workPackage;
         }
 
         let options = '';
@@ -106,8 +117,6 @@ export default class DesignEditorHeader extends Component {
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 options =
@@ -123,6 +132,18 @@ export default class DesignEditorHeader extends Component {
                     </div>;
 
                 break;
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                if(displayContext === DisplayContext.WP_VIEW){
+                    options =
+                        <div>
+                            {zoomFeaturesOption}
+                            {zoomSectionsOption}
+                        </div>;
+                }
+                break;
             default:
                 options =
                     <div>
@@ -135,10 +156,10 @@ export default class DesignEditorHeader extends Component {
             <div className="design-editor-header">
                 <Grid>
                     <Row>
-                        <Col md={6}>
+                        <Col md={7}>
                             <div className="header-description">{description}</div>
                         </Col>
-                        <Col md={6}>
+                        <Col md={5}>
                             <div className="details-menu-bar">{options}</div>
                         </Col>
                     </Row>
@@ -149,8 +170,19 @@ export default class DesignEditorHeader extends Component {
 }
 
 DesignEditorHeader.propTypes = {
-    view:               PropTypes.string.isRequired,
-    mode:               PropTypes.string.isRequired,
-    userContext:        PropTypes.object.isRequired,
-    userViewOptions:    PropTypes.object.isRequired
+    displayContext:     PropTypes.string.isRequired
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        view:                   state.currentAppView,
+        mode:                   state.currentViewMode,
+        userContext:            state.currentUserItemContext,
+        userRole:               state.currentUserRole,
+        userViewOptions:        state.currentUserViewOptions,
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(DesignEditorHeader);

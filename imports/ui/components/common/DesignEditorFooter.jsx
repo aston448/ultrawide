@@ -11,13 +11,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 
 // Ultrawide Services
-import {RoleType} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientDesignServices from  '../../../apiClient/apiClientDesign.js';
+import {} from '../../../constants/constants.js';
+import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
-import {Grid, Col, Row} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -30,17 +27,41 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-export default class DesignEditorFooter extends Component {
+export class DesignEditorFooter extends Component {
     constructor(props) {
         super(props);
 
     }
 
+    getNameData(userContext){
+        return ClientUserContextServices.getContextNameData(userContext);
+    }
+
+    getFooterText(userContext){
+
+        const nameData = this.getNameData(userContext);
+
+        if(userContext.workPackageId != 'NONE'){
+            if(userContext.designUpdateId != 'NONE'){
+                return nameData.design + ' - ' + nameData.designVersion + ' - ' + nameData.designUpdate;
+            } else {
+                return nameData.design + ' - ' + nameData.designVersion
+            }
+        } else {
+            if(userContext.designUpdateId != 'NONE'){
+                return nameData.design + ' - ' + nameData.designVersion;
+            } else {
+                return nameData.design
+            }
+        }
+
+    }
+
     render() {
 
-        const {view, mode, userContext, designSummaryData} = this.props;
+        const {hasDesignSummary, designSummaryData, userContext} = this.props;
 
-        if(designSummaryData) {
+        if(hasDesignSummary) {
             return (
                 <div className="design-editor-footer">
                     <DesignSummary
@@ -51,7 +72,7 @@ export default class DesignEditorFooter extends Component {
         } else {
             return (
                 <div className="design-editor-footer">
-                    <div className="details-footer-note">Show Test Summary to see Design Summary</div>
+                    <div className="details-footer-note">{this.getFooterText(userContext)}</div>
                 </div>
             );
         }
@@ -59,8 +80,17 @@ export default class DesignEditorFooter extends Component {
 }
 
 DesignEditorFooter.propTypes = {
-    view:               PropTypes.string.isRequired,
-    mode:               PropTypes.string.isRequired,
-    userContext:        PropTypes.object.isRequired,
+    hasDesignSummary: PropTypes.bool.isRequired,
     designSummaryData:  PropTypes.object
 };
+
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        userContext:            state.currentUserItemContext,
+
+    }
+}
+
+// Connect the Redux store to this component ensuring that its required state is mapped to props
+export default connect(mapStateToProps)(DesignEditorFooter);

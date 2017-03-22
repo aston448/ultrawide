@@ -60,6 +60,7 @@ class DesignComponentText extends Component {
         let textTitle = '';
         let titleName = '';
         let titleNameOld = '';
+        let detailsClosable = true;
 
         switch(view)
         {
@@ -82,6 +83,9 @@ class DesignComponentText extends Component {
                 if(baseComponent){
                     baseComponentFeatureReference = baseComponent.componentFeatureReferenceId;
                 }
+                if(view === ViewType.WORK_PACKAGE_UPDATE_VIEW){
+                    detailsClosable = false;
+                }
                 break;
 
             case ViewType.DESIGN_NEW_EDIT:
@@ -95,7 +99,11 @@ class DesignComponentText extends Component {
                     titleName = mainComponent.componentName;
                     textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
+                if(view === ViewType.WORK_PACKAGE_BASE_VIEW){
+                    detailsClosable = false;
+                }
                 break;
+
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 // Possible New and Old Details here where Design Update has been merged
                 mainComponent = currentDesignComponent;
@@ -129,17 +137,12 @@ class DesignComponentText extends Component {
         // No item text for Feature Aspects as they are purely for organisation of Scenarios
         if(mainComponent && mainComponent.componentType != ComponentType.FEATURE_ASPECT) {
 
-            let itemStyle = '';
-
-            // Determine the look of the title
-            //itemStyle = 'text-title'    //getComponentClass(mainComponent.componentType, mainComponent.componentLevel);
-
             // Panel 1 is always the main component text
             panel1 =
                 <div className="design-editor-container">
                     <DetailsViewHeader
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
-                        isClosable={true}
+                        isClosable={detailsClosable}
                         titleText={textTitle}
                     />
                     <div className="details-editor">
@@ -305,7 +308,7 @@ class DesignComponentText extends Component {
                     <DetailsViewHeader
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
                         titleText={'Feature Aspect'}
-                        isClosable={true}
+                        isClosable={detailsClosable}
                     />
                     <div className="details-editor">
                         <div className="design-item-note">No details for Feature Aspects</div>

@@ -7,18 +7,19 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
-import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
-import DomainDictionaryContainer from './DomainDictionaryContainer.jsx';
+import DesignEditorHeader               from '../../components/common/DesignEditorHeader.jsx';
+import DesignEditorFooter               from '../../components/common/DesignEditorFooter.jsx';
+import DesignComponentTarget            from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
+import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { log } from '../../../common/utils.js'
+
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
@@ -86,40 +87,42 @@ class WorkPackageApplicationsList extends Component {
 
         const {wpScopeApplications, wpViewApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
 
-        //console.log("WP Container. View = " + view + ". Test Summary =  " + viewOptions.devTestSummaryVisible);
-
         let layout = '';
 
         // Scope for Work Package
         let wpScopeComponent =
-            <Panel header="Work Package Scope" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="scroll-col">
-                            {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+            <div className="design-editor-container">
+                <DesignEditorHeader
+                    displayContext={DisplayContext.WP_SCOPE}
+                />
+                <div className="design-editor">
+                    {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
+                </div>
+                <DesignEditorFooter
+                    hasDesignSummary={false}
+                />
+            </div>;
 
         // Actual View of the WP
         let wpViewComponent =
-            <Panel header="Work Package Content" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="scroll-col">
-                            {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
-                        </Col>
-                    </Row>
-                </Grid>
-
-            </Panel>;
+            <div className="design-editor-container">
+                <DesignEditorHeader
+                    displayContext={DisplayContext.WP_VIEW}
+                />
+                <div className="design-editor">
+                    {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
+                </div>
+                <DesignEditorFooter
+                    hasDesignSummary={false}
+                />
+            </div>;
 
         // Initial assumption is only 2 cols showing
 
         let col1width = 6;
         let col2width = 6;
         let col3width = 6;
+        let col4width = 6;
 
         let wpTextComponent = '';
         let domainDictionary = '';
@@ -150,21 +153,12 @@ class WorkPackageApplicationsList extends Component {
                         break;
                 }
 
-                if(userContext.designComponentId === 'NONE'){
-                    wpTextComponent =
-                        <Panel header="Design Component Details" className="panel-update panel-update-body">
-                            <div className="design-item-note">Select a Design Component</div>
-                        </Panel>
-                } else {
-                    wpTextComponent =
-                        <Panel header={wpTextHeader} className="panel-update panel-update-body">
-                            <DesignComponentTextContainer params={{
-                                currentContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.WP_VIEW
-                            }}/>
-                        </Panel>;
-                }
+                wpTextComponent =
+                    <DesignComponentTextContainer params={{
+                        currentContext: userContext,
+                        view: view,
+                        displayContext: DisplayContext.WP_VIEW
+                    }}/>;
 
 
                 // Domain Dictionary
@@ -209,13 +203,13 @@ class WorkPackageApplicationsList extends Component {
 
                 // Col 1 - Content
                 let col1 =
-                    <Col md={col1width}>
+                    <Col md={col1width} className="close-col">
                         {wpViewComponent}
                     </Col>;
 
                 // Col 2 - Details
                 let col2 =
-                    <Col md={col2width} className="scroll-col">
+                    <Col md={col2width} className="close-col">
                         {wpTextComponent}
                     </Col>;
 
@@ -277,21 +271,13 @@ class WorkPackageApplicationsList extends Component {
                                 break;
                         }
 
-                        if(userContext.designComponentId === 'NONE'){
-                            wpTextComponent =
-                                <Panel header="Design Component Details" className="panel-update panel-update-body">
-                                    <div className="design-item-note">Select a Design Component</div>
-                                </Panel>
-                        } else {
-                            wpTextComponent =
-                                <Panel header={wpTextHeader} className="panel-update panel-update-body">
-                                    <DesignComponentTextContainer params={{
-                                        currentContext: userContext,
-                                        view: view,
-                                        displayContext: DisplayContext.WP_VIEW
-                                    }}/>
-                                </Panel>;
-                        }
+                        wpTextComponent =
+                            <DesignComponentTextContainer params={{
+                                currentContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.WP_VIEW
+                            }}/>;
+
                         // Now 3 cols
                         col1width = 4;
                         col2width = 4;
@@ -331,13 +317,13 @@ class WorkPackageApplicationsList extends Component {
 
                     // Col 1 - Scope
                     let col1 =
-                        <Col md={col1width}>
+                        <Col md={col1width} className="close-col">
                             {wpScopeComponent}
                         </Col>;
 
                     // Col 2 - Content
                     let col2 =
-                        <Col md={col2width}>
+                        <Col md={col2width} className="close-col">
                             {wpViewComponent}
                         </Col>;
 
@@ -345,7 +331,7 @@ class WorkPackageApplicationsList extends Component {
                     let col3 = '';
                     if(viewOptions.wpDetailsVisible){
                         col3 =
-                            <Col md={col3width} className="scroll-col">
+                            <Col md={col3width}  className="close-col">
                                 {wpTextComponent}
                             </Col>;
                     }
@@ -354,7 +340,7 @@ class WorkPackageApplicationsList extends Component {
                     let col4 = '';
                     if(viewOptions.wpDomainDictVisible){
                         col4 =
-                            <Col md={col4width}>
+                            <Col md={col4width} className="close-col">
                                 {domainDictionary}
                             </Col>;
                     }

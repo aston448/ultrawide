@@ -1130,8 +1130,8 @@ input {
     margin: 0;
     padding: 5px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
-    color: black;
+    font-size:  12px;
+    color: darkgrey;
 }
 
 .details-close{

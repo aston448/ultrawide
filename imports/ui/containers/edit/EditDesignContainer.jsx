@@ -9,7 +9,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignEditorHeader               from '../../components/common/DesignEditorHeader.jsx';
 import DesignEditorFooter               from '../../components/common/DesignEditorFooter.jsx';
-import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 import DesignComponentTarget            from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentAdd               from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
@@ -140,19 +139,14 @@ export class DesignApplicationsList extends Component {
         let designEditor =
             <div className="design-editor-container">
                 <DesignEditorHeader
-                    view={view}
-                    mode={mode}
-                    userContext={userContext}
-                    userViewOptions={viewOptions}
+                    displayContext={displayContext}
                 />
                 <div className="design-editor">
                     {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
                     {addComponent}
                 </div>
                 <DesignEditorFooter
-                    view={view}
-                    mode={mode}
-                    userContext={userContext}
+                    hasDesignSummary={true}
                     designSummaryData={designSummaryData}
                 />
             </div>;

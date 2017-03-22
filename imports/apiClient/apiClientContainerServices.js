@@ -1928,8 +1928,6 @@ class ClientContainerServices{
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                detailsOption = ViewOptionType.WP_DETAILS;
-                detailsValue = userViewOptions.wpDetailsVisible;
                 dictOption = ViewOptionType.WP_DICT;
                 dictValue = userViewOptions.wpDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
@@ -2158,8 +2156,6 @@ class ClientContainerServices{
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DESIGN_UPDATE_VIEW:
 
                 switch (menuType) {
@@ -2181,6 +2177,30 @@ class ClientContainerServices{
                         return [
                                 refreshTestData
                             ];
+                }
+                break;
+
+            case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return  [
+                            gotoSelection,
+                            gotoConfig,
+                            gotoDesigns
+                        ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+                        return [
+                            viewDomainDict,
+                            viewTestSummary
+                        ];
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+                        return [
+                            refreshTestData
+                        ];
                 }
                 break;
 
