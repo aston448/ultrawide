@@ -10,9 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-
 import Design               from '../../components/select/Design.jsx';
-import DesignComponentAdd   from '../../components/common/DesignComponentAdd.jsx';
 import ItemContainer        from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
@@ -57,7 +55,9 @@ export class DesignsList extends Component {
     }
 
     noDesign(){
-        return <div className="design-item-note">No Designs</div>;
+        return (
+            <div className="design-item-note">No Designs</div>
+        );
     }
 
     render() {
@@ -77,6 +77,8 @@ export class DesignsList extends Component {
 
         if(designs && designs.length > 0) {
             bodyDataFunction = () => this.renderDesignList(designs)
+        } else {
+            bodyDataFunction = () => this.noDesign()
         }
 
         return (

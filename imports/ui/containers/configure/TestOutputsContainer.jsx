@@ -8,10 +8,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import DesignComponentAdd       from '../../components/common/DesignComponentAdd.jsx';
 import TestOutputLocation       from '../../components/configure/TestOutputLocation.jsx';
 import TestOutputFilesContainer from '../../containers/configure/TestOutputFilesContainer.jsx';
-
+import ItemContainer            from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
 import {ViewType}                           from '../../../constants/constants.js'
@@ -34,7 +33,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class TestOutputsScreen extends Component {
+export class TestOutputsScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -55,55 +54,45 @@ class TestOutputsScreen extends Component {
         });
     };
 
+    noLocations(){
+        return(
+            <div className="design-item-note">No Locations Set</div>
+        )
+    }
+
     render() {
 
         const {locationData, userRole, userContext, locationId} = this.props;
 
-        const addLocation =
-            <div className="design-item-add">
-                <DesignComponentAdd
-                    addText="Add Location"
-                    onClick={ () => this.addNewLocation(userRole, userContext)}
-                />
-            </div>;
-
+        let bodyDataFunction = null;
 
         if(locationData && locationData.length > 0) {
-            return (
-                <Grid>
-                    <Row>
-                        <Col md={6} className="col">
-                            <Panel header="Test Output Locations">
-                                {this.renderLocationsList(locationData)}
-                                {addLocation}
-                            </Panel>
-                        </Col>
-                        <Col md={6} className="col">
-                            <TestOutputFilesContainer params={{
-                                locationId: locationId
-                            }}/>
-                        </Col>
-                    </Row>
-                </Grid>
-            );
+            bodyDataFunction = () => this.renderLocationsList(locationData);
         } else {
-            return(
-                <Grid>
-                    <Row>
-                        <Col md={6} className="col">
-                            <Panel header="Test Output Locations">
-                                {addLocation}
-                            </Panel>
-                        </Col>
-                        <Col md={6} className="col">
-                            <TestOutputFilesContainer params={{
-                                locationId: locationId
-                            }}/>
-                        </Col>
-                    </Row>
-                </Grid>
-            )
+            bodyDataFunction = () => this.noLocations();
         }
+
+        return (
+            <Grid>
+                <Row>
+                    <Col md={6} className="close-col">
+                        <ItemContainer
+                            headerText={'Test Output Locations'}
+                            bodyDataFunction={bodyDataFunction}
+                            hasFooterAction={true}
+                            footerAction={'Add Location'}
+                            footerActionFunction={() => this.addNewLocation(userRole, userContext)}
+                        />
+                    </Col>
+                    <Col md={6} className="col">
+                        <TestOutputFilesContainer params={{
+                            locationId: locationId
+                        }}/>
+                    </Col>
+                </Row>
+            </Grid>
+        );
+
 
     };
 }
@@ -122,13 +111,9 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-TestOutputsScreen = connect(mapStateToProps)(TestOutputsScreen);
-
-
-
 export default TestOutputsContainer = createContainer(({params}) => {
 
     const locationData =  ClientContainerServices.getTestOutputLocationData(params.userContext.userId);
     return {locationData: locationData};
 
-}, TestOutputsScreen);
+}, connect(mapStateToProps)(TestOutputsScreen));

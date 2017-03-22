@@ -10,14 +10,14 @@ import { UserRoles }            from '../../../collections/users/user_roles.js';
 
 // Ultrawide GUI Components
 import UserTestLocationConfiguration        from '../../components/configure/UserTestLocationConfiguration.jsx';
-
+import ItemContainer                        from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
 import {ViewType}               from '../../../constants/constants.js'
 import ClientContainerServices  from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
-import {Grid, Row, Col, Panel} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -31,7 +31,7 @@ import {connect} from 'react-redux';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class LocalSettingsScreen extends Component {
+export class LocalSettingsScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -54,32 +54,45 @@ class LocalSettingsScreen extends Component {
         }
     };
 
+    renderOtherFunctions(){
+        return (
+            <div className="design-item-note">
+                Other user settings to go here
+            </div>
+        )
+    }
+
     render(){
 
         const {userLocations, userRole} = this.props;
 
         const headerText = 'Test Output Configuration for ' + userRole;
+
         return (
             <Grid>
                 <Row>
-                    <Col md={6} className="col">
-                        <Panel header={headerText}>
-                            {this.renderTestLocationsList(userLocations)}
-                        </Panel>
+                    <Col md={6} className="close-col">
+                        <ItemContainer
+                            headerText={headerText}
+                            bodyDataFunction={() => this.renderTestLocationsList(userLocations)}
+                            hasFooterAction={false}
+                            footerAction={'NONE'}
+                            footerActionFunction={null}
+                        />
                     </Col>
-                    <Col md={6} className="col">
-                        <Panel header="Other configuration settings">
-                            <div className="design-item-note">
-                                Other user settings to go here
-                            </div>
-                        </Panel>
+                    <Col md={6} className="close-col">
+                        <ItemContainer
+                            headerText={'Other configuration settings'}
+                            bodyDataFunction={() => this.renderOtherFunctions()}
+                            hasFooterAction={false}
+                            footerAction={'NONE'}
+                            footerActionFunction={null}
+                        />
                     </Col>
                 </Row>
             </Grid>
         );
-
     }
-
 }
 
 LocalSettingsScreen.propTypes = {
@@ -95,12 +108,8 @@ function mapStateToProps(state) {
 }
 
 // Connect the Redux store to this component ensuring that its required state is mapped to props
-LocalSettingsScreen = connect(mapStateToProps)(LocalSettingsScreen);
-
-
-
 export default LocalSettingsContainer = createContainer(({params}) => {
 
     return {userLocations: ClientContainerServices.getUserTestOutputLocationData(params.userContext)};
 
-}, LocalSettingsScreen);
+}, connect(mapStateToProps)(LocalSettingsScreen));

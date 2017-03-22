@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignComponentAdd       from '../../components/common/DesignComponentAdd.jsx';
 import TestOutputFile           from '../../components/configure/TestOutputFile.jsx';
-
+import ItemContainer            from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
 import {ViewType}                           from '../../../constants/constants.js'
@@ -57,50 +57,59 @@ class TestOutputFilesScreen extends Component {
         });
     };
 
+    noFiles() {
+        return (
+            <div className="design-item-note">No Files Defined</div>
+        )
+    }
+    selectALocation(){
+        return (
+            <div className="design-item-note">Select a location...</div>
+        )
+    }
+
+
     render() {
 
         const {locationFiles, userRole, locationId} = this.props;
 
-        const addFile =
-            <div className="design-item-add">
-                <DesignComponentAdd
-                    addText="Add File"
-                    onClick={ () => this.addNewLocationFile(userRole, locationId)}
-                />
-            </div>;
+        let bodyDataFunction = null;
+        let hasFooterAction = true;
+        let footerActionFunction = null;
+        let footerAction = 'Add File';
 
-        // Display appropriate header for files
         const locationName = this.getLocationName(locationId);
+
         let headerText = 'Test Output Files';
+
         if(locationName != 'NONE'){
             headerText = 'Test Output Files for ' + locationName;
         }
 
         if(locationFiles && locationFiles.length > 0) {
-            return (
-                <Panel header={headerText}>
-                    {this.renderFilesList(locationFiles)}
-                    {addFile}
-                </Panel>
-
-            );
+            bodyDataFunction = () => this.renderFilesList(locationFiles);
+            footerActionFunction = () => this.addNewLocationFile(userRole, locationId);
         } else {
             if(locationId != 'NONE'){
-                // Can add files if location set
-                return(
-                    <Panel header={headerText}>
-                        {addFile}
-                    </Panel>
-                )
+                bodyDataFunction = () => this.noFiles();
+                footerActionFunction = () => this.addNewLocationFile(userRole, locationId);
             } else {
-                return(
-                    <Panel header={headerText}>
-                        <div className="design-item-note">Select a location...</div>
-                    </Panel>
-                )
+                bodyDataFunction = () => this.selectALocation();
+                hasFooterAction = false;
+                footerAction = '';
             }
-
         }
+
+        return(
+            <ItemContainer
+                headerText={headerText}
+                bodyDataFunction={bodyDataFunction}
+                hasFooterAction={hasFooterAction}
+                footerAction={footerAction}
+                footerActionFunction={footerActionFunction}
+            />
+        );
+
     };
 }
 
