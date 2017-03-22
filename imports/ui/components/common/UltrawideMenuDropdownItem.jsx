@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {MenuAction, ViewOptionType} from '../../../constants/constants.js';
+import {MenuAction, RoleType} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices          from '../../../apiClient/apiClientAppHeader.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
@@ -113,7 +113,21 @@ export class UltrawideMenuDropdownItem extends Component {
 
         const {itemName, action, hasCheckbox, viewOptionType, view, mode, userContext, userRole, userViewOptions, testDataFlag, currentViewDataValue} = this.props;
 
-        const className = this.state.isHighlighted ? 'dropdown-item-name menu-highlight' : 'dropdown-item-name';
+        let highlight = '';
+
+        switch(userRole){
+            case RoleType.DESIGNER:
+                highlight = 'menu-highlight-designer';
+                break;
+            case RoleType.DEVELOPER:
+                highlight = 'menu-highlight-developer';
+                break;
+            case RoleType.MANAGER:
+                highlight = 'menu-highlight-manager';
+                break;
+        }
+
+        const className = this.state.isHighlighted ? 'dropdown-item-name ' + highlight : 'dropdown-item-name';
 
         let checkedStatus = ((this.state.checkboxChecked) ? 'in-scope' : 'out-scope');
 

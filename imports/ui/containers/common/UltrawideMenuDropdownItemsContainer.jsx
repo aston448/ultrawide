@@ -11,9 +11,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import UltrawideMenuDropdownItem from '../../components/common/UltrawideMenuDropdownItem.jsx';
 
 // Ultrawide Services
-import { DetailsViewType, ViewMode} from '../../../constants/constants.js';
+import { RoleType } from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
 
 // Bootstrap
 
@@ -59,14 +58,24 @@ export class DropdownItems extends Component {
 
     render() {
 
-        const {itemsList, clickAction} = this.props;
+        const {itemsList, clickAction, userRole} = this.props;
 
+        let background = '';
 
-        console.log("Render Dropdown List with list of length " + itemsList.length);
-
+        switch(userRole){
+            case RoleType.DESIGNER:
+                background = 'menu-designer';
+                break;
+            case RoleType.DEVELOPER:
+                background = 'menu-developer';
+                break;
+            case RoleType.MANAGER:
+                background = 'menu-manager';
+                break;
+        }
 
         return (
-            <ul className="dropdown-menu">
+            <ul className={'dropdown-menu ' + background}>
                 {this.renderListItems(itemsList, clickAction)}
             </ul>
         )

@@ -296,7 +296,7 @@ input {
 }
 
 .status-manager{
-    color: turquoise;
+    color: paleturquoise;
 }
 
 .header-message{
@@ -367,7 +367,18 @@ input {
 .dropdown-menu {
     white-space: nowrap;
     min-width: 50px;
-    background-color: darkgrey;
+}
+
+.menu-designer{
+    background-color: mediumseagreen;
+}
+
+.menu-developer{
+    background-color: indianred;
+}
+
+.menu-manager{
+    background-color: steelblue;
 }
 
 .dropdown-menu-item{
@@ -381,8 +392,16 @@ input {
     padding: 2px 10px 0 0;
 }
 
-.menu-highlight{
-    color: white;
+.menu-highlight-designer{
+    color: lime;
+}
+
+.menu-highlight-developer{
+    color: lightpink;
+}
+
+.menu-highlight-manager{
+    color: paleturquoise;
 }
 
 .editor-menu-highlight{
@@ -401,19 +420,6 @@ input {
 .dropdown-item-name{
     letter-spacing: 0;
 }
-
-/*.top-menu-dropdown{*/
-    /*float: left;*/
-    /*margin: 0 5px 0 5px;*/
-    /*border: 0 solid transparent;*/
-    /*background-color: transparent;*/
-    /*font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;*/
-    /*font-size:  14px;*/
-    /*font-weight: normal;*/
-    /*letter-spacing: 4px;*/
-    /*box-sizing: unset;*/
-/*}*/
-
 
 .top-header-buttons{
     padding: 2px 0 0 0;
@@ -890,7 +896,7 @@ input {
 
 .well-designer{
     margin: 20px;
-    color: lightgreen;
+    color: lime;
     background-color: mediumseagreen;
 }
 

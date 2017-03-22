@@ -9,6 +9,7 @@ import React, { Component, PropTypes } from 'react';
 import UltrawideMenuDropdownItemsContainer from '../../containers/common/UltrawideMenuDropdownItemsContainer.jsx';
 
 // Ultrawide Services
+import {RoleType} from '../../../constants/constants.js'
 
 // Bootstrap
 
@@ -35,7 +36,6 @@ export class UltrawideMenuDropdown extends Component {
 
     }
 
-
     highlightMe(){
         this.setState({isHighlighted: true});
         this.setDisplayItems(true);
@@ -60,12 +60,23 @@ export class UltrawideMenuDropdown extends Component {
 
     render() {
 
-        const {itemName, menuType, view, mode} = this.props;
+        const {itemName, menuType, view, mode, userRole} = this.props;
 
-        const className = this.state.isHighlighted ? 'menu-highlight' : '';
+        let highlight = '';
 
-        console.log("Render " + className);
+        switch(userRole){
+            case RoleType.DESIGNER:
+                highlight = 'menu-highlight-designer';
+                break;
+            case RoleType.DEVELOPER:
+                highlight = 'menu-highlight-developer';
+                break;
+            case RoleType.MANAGER:
+                highlight = 'menu-highlight-manager';
+                break;
+        }
 
+        const className = this.state.isHighlighted ? highlight : '';
 
         if(this.state.shouldDisplayItems){
             return(
@@ -103,6 +114,7 @@ function mapStateToProps(state) {
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
         userViewOptions:        state.currentUserViewOptions,
+        userRole:               state.currentUserRole
     }
 }
 
