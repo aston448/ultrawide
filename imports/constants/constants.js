@@ -132,7 +132,8 @@ export const DisplayContext = {
     MASH_UNIT_TESTS:        'MASH_UNIT_TESTS',
     INT_TEST_FEATURE:       'INT_TEST_FEATURE',
     INT_TEST_FEATURE_ASPECT:'INT_TEST_FEATURE_ASPECT',
-    INT_TEST_SCENARIO:      'INT_TEST_SCENARIO'
+    INT_TEST_SCENARIO:      'INT_TEST_SCENARIO',
+    UPDATE_SUMMARY:         'UPDATE_SUMMARY'
 };
 
 export const StepContext = {

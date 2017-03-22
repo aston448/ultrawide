@@ -81,6 +81,15 @@ export class DesignEditorHeader extends Component {
         let description = '';
 
         switch(view){
+            case ViewType.SELECT:
+                if(displayContext === DisplayContext.UPDATE_SUMMARY){
+                    description = 'Design Update Summary';
+                    if(nameData.designUpdate != 'NONE'){
+                        description += ' for ' + nameData.designUpdate
+                    }
+                }
+                break;
+
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
@@ -91,16 +100,36 @@ export class DesignEditorHeader extends Component {
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
 
-                description = nameData.designUpdate;
+                switch(displayContext){
+                    case DisplayContext.UPDATE_SCOPE:
+                        description = nameData.designUpdate + ' (SCOPE)';
+                        break;
+                    case DisplayContext.UPDATE_EDIT:
+                        description = nameData.designUpdate + ' (CONTENT)';
+                        break;
+                    case DisplayContext.UPDATE_SUMMARY:
+                        description = 'Design Update Summary';
+                        if(nameData.designUpdate != 'NONE'){
+                            description += ' for ' + nameData.designUpdate
+                        }
+                        break;
+                    default:
+                        description = nameData.designUpdate;
+                }
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
 
-                if(displayContext === DisplayContext.WP_VIEW){
-                    description = nameData.workPackage + ' (CONTENT)';
-                } else {
-                    description = nameData.workPackage + ' (SCOPE)';
+                switch(displayContext){
+                    case DisplayContext.WP_SCOPE:
+                        description = nameData.workPackage + ' (SCOPE)';
+                        break;
+                    case  DisplayContext.WP_VIEW:
+                        description = nameData.workPackage + ' (CONTENT)';
+                        break;
+                    default:
+                        description = nameData.workPackage;
                 }
                 break;
 
@@ -110,15 +139,19 @@ export class DesignEditorHeader extends Component {
             case ViewType.DEVELOP_UPDATE_WP:
 
                 description = nameData.workPackage;
+                break;
         }
 
         let options = '';
 
         switch(view){
+            case ViewType.SELECT:
+
+                options = '';
+                break;
+
             case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
+
                 options =
                     <div>
                         {zoomFeaturesOption}
@@ -130,12 +163,84 @@ export class DesignEditorHeader extends Component {
                             {viewModeEditOption}
                         </div>
                     </div>;
-
                 break;
+
+            case ViewType.DESIGN_UPDATE_EDIT:
+
+                switch(displayContext) {
+                    case DisplayContext.UPDATE_EDIT:
+                        options =
+                            <div>
+                                <div className={viewView}>
+                                    {viewModeViewOption}
+                                </div>
+                                <div className={viewEdit}>
+                                    {viewModeEditOption}
+                                </div>
+                            </div>;
+                        break;
+
+                    case DisplayContext.UPDATE_SUMMARY:
+                        options = '';
+                        break;
+
+                    default:
+                        if(mode === ViewMode.MODE_VIEW){
+                            options =
+                                <div>
+                                    {zoomFeaturesOption}
+                                    {zoomSectionsOption}
+                                    <div className={viewView}>
+                                        {viewModeViewOption}
+                                    </div>
+                                    <div className={viewEdit}>
+                                        {viewModeEditOption}
+                                    </div>
+                                </div>;
+                        } else {
+                            options =
+                                <div>
+                                    {zoomFeaturesOption}
+                                    {zoomSectionsOption}
+                                </div>;
+                        }
+                }
+                break;
+
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+            case ViewType.DESIGN_UPDATE_VIEW:
+
+                if(displayContext != DisplayContext.UPDATE_SUMMARY) {
+                    options =
+                        <div>
+                            {zoomFeaturesOption}
+                            {zoomSectionsOption}
+                        </div>;
+                }
+                break;
+
+            case ViewType.DEVELOP_BASE_WP:
+            case ViewType.DEVELOP_UPDATE_WP:
+
+                options =
+                    <div>
+                        {zoomFeaturesOption}
+                        {zoomSectionsOption}
+                        <div className={viewView}>
+                            {viewModeViewOption}
+                        </div>
+                        <div className={viewEdit}>
+                            {viewModeEditOption}
+                        </div>
+                    </div>;
+                break;
+
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+
                 if(displayContext === DisplayContext.WP_VIEW){
                     options =
                         <div>
@@ -145,27 +250,37 @@ export class DesignEditorHeader extends Component {
                 }
                 break;
             default:
-                options =
-                    <div>
-                        {zoomFeaturesOption}
-                        {zoomSectionsOption}
-                    </div>;
+                options = '';
         }
 
-        return(
-            <div className="design-editor-header">
-                <Grid>
-                    <Row>
-                        <Col md={7}>
-                            <div className="header-description">{description}</div>
-                        </Col>
-                        <Col md={5}>
-                            <div className="details-menu-bar">{options}</div>
-                        </Col>
-                    </Row>
-                </Grid>
-            </div>
-        );
+        if(options === ''){
+            return (
+                <div className="design-editor-header">
+                    <Grid>
+                        <Row>
+                            <Col md={12}>
+                                <div className="header-description">{description}</div>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </div>
+            );
+        } else {
+            return (
+                <div className="design-editor-header">
+                    <Grid>
+                        <Row>
+                            <Col md={7}>
+                                <div className="header-description">{description}</div>
+                            </Col>
+                            <Col md={5}>
+                                <div className="details-menu-bar">{options}</div>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </div>
+            );
+        }
     }
 }
 

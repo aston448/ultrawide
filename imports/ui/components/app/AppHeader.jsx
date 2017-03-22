@@ -9,6 +9,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 import UltrawideMenuDropdown from '../common/UltrawideMenuDropdown.jsx';
+import HeaderMessage from '../app/HeaderMessage.jsx';
 
 // Ultrawide Services
 import {MenuType, MenuDropdown, ViewType, ViewMode, RoleType, LogLevel} from '../../../constants/constants.js';
@@ -61,8 +62,6 @@ export class AppHeader extends Component {
 
     render() {
 
-        console.log("App header render");
-
         const {mode, view, userRole, userContext, message} = this.props;
 
         let logo = ClientIdentityServices.getApplicationName();
@@ -72,14 +71,6 @@ export class AppHeader extends Component {
         // Menu Items
         const homeItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="HOME" actionFunction={() => this.onGoToHome()}/>;
         const logoutItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
-
-        // The message display depends on the type of message being displayed
-        let headerInfoStyle = message.messageType;
-
-        let headerMessage =
-            <div>
-                {message.messageText}
-            </div>;
 
         let roleClass = '';
         let roleStatusClass = '';
@@ -259,9 +250,7 @@ export class AppHeader extends Component {
                 <div className={'ultrawide-header ' + roleClass}>
                     <div className="ultrawide-logo">{logo}</div>
                     <div className={'ultrawide-status ' + roleStatusClass}>{status}</div>
-                    <div className={'header-message ' + headerInfoStyle}>
-                        {headerMessage}
-                    </div>
+                    <HeaderMessage/>
                     {appHeaderMenuContent}
                 </div>
             );

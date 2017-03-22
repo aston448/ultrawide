@@ -59,7 +59,7 @@ class ClientDesignComponentServices{
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
+                    messageType: MessageType.SUCCESS,
                     messageText: DesignComponentMessages.MSG_COMPONENT_NAME_UPDATED
                 }));
             }
@@ -93,7 +93,7 @@ class ClientDesignComponentServices{
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
+                    messageType: MessageType.SUCCESS,
                     messageText: DesignComponentMessages.MSG_FEATURE_NARRATIVE_UPDATED
                 }));
             }
@@ -127,7 +127,7 @@ class ClientDesignComponentServices{
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
+                    messageType: MessageType.SUCCESS,
                     messageText: DesignComponentMessages.MSG_NEW_APPLICATION_ADDED
                 }));
             }
@@ -166,7 +166,7 @@ class ClientDesignComponentServices{
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
+                        messageType: MessageType.SUCCESS,
                         messageText: DesignComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
                     }));
                 }
@@ -207,7 +207,7 @@ class ClientDesignComponentServices{
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
+                        messageType: MessageType.SUCCESS,
                         messageText: DesignComponentMessages.MSG_NEW_DESIGN_SECTION_ADDED
                     }));
                 }
@@ -247,7 +247,7 @@ class ClientDesignComponentServices{
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
+                        messageType: MessageType.SUCCESS,
                         messageText: DesignComponentMessages.MSG_NEW_FEATURE_ADDED
                     }));
                 }
@@ -287,7 +287,7 @@ class ClientDesignComponentServices{
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
+                        messageType: MessageType.SUCCESS,
                         messageText: DesignComponentMessages.MSG_NEW_FEATURE_ASPECT_ADDED
                     }));
                 }
@@ -328,7 +328,7 @@ class ClientDesignComponentServices{
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
-                        messageType: MessageType.INFO,
+                        messageType: MessageType.SUCCESS,
                         messageText: DesignComponentMessages.MSG_NEW_SCENARIO_ADDED
                     }));
                 }

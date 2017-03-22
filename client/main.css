@@ -301,37 +301,122 @@ input {
 
 .header-message{
     float: left;
-    margin: 3px 10px 3px 20px;
-    padding: 0 5px 0 5px;
+    margin: 3px 10px 3px 10px;
+    padding: 0 5px 0 25px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  15px;
+    font-size:  16px;
     font-weight: normal;
-    border-top: 1px solid darkgrey;
-    border-right: 1px solid lightgrey;
-    border-bottom: 1px solid lightgrey;
-    border-left: 1px solid darkgrey;
-    min-width: 500px;
+    /*border-top: 1px solid darkgrey;*/
+    /*border-right: 1px solid lightgrey;*/
+    /*border-bottom: 1px solid lightgrey;*/
+    border-left: 1px solid lightgrey;
+    /*min-width: 500px;*/
 }
 
-.info{
-    background-color: darkblue;
-    color: turquoise;
+.info1{
+    color: transparent;
+    background-color: transparent;
+    animation-name: info-animation1;
+    animation-duration: 4s;
 }
 
-.success{
-    background-color: darkgreen;
-    color: palegreen;
+.info2{
+    color: transparent;
+    background-color: transparent;
+    animation-name: info-animation2;
+    animation-duration: 4s;
 }
 
-.warning{
-    background-color: darkgoldenrod;
-    color: yellow;
+.success1{
+    color: transparent;
+    background-color: transparent;
+    animation-name: success-animation1;
+    animation-duration: 4s;
 }
 
-.danger{
-    background-color: darkred;
-    color: red;
+.success2{
+    color: transparent;
+    background-color: transparent;
+    animation-name: success-animation2;
+    animation-duration: 4s;
 }
+
+.warning1{
+    color: transparent;
+    background-color: transparent;
+    animation-name: warning-animation1;
+    animation-duration: 10s;
+}
+
+.warning2{
+    color: transparent;
+    background-color: transparent;
+    animation-name: warning-animation2;
+    animation-duration: 10s;
+}
+
+.danger1{
+    color: transparent;
+    background-color: transparent;
+    animation-name: danger-animation1;
+    animation-duration: 10s;
+}
+
+.danger2{
+    color: transparent;
+    background-color: transparent;
+    animation-name: danger-animation2;
+    animation-duration: 10s;
+}
+
+@keyframes info-animation1 {
+    0%   {color: darkslategray}
+    75%  {color: darkslategray}
+    100% {color: transparent}
+}
+
+@keyframes info-animation2 {
+    0%   {color: darkslategray}
+    75%  {color: darkslategray}
+    100% {color: transparent}
+}
+
+@keyframes success-animation1 {
+    0%   {color: darkslategray}
+    75%  {color: darkslategray}
+    100% {color: transparent}
+}
+
+@keyframes success-animation2 {
+    0%   {color: darkslategray}
+    75%  {color: darkslategray}
+    100% {color: transparent}
+}
+
+@keyframes warning-animation1 {
+    0%   {color: yellow; background-color: darkgoldenrod}
+    75%  {color: yellow; background-color: darkgoldenrod}
+    100% {color: transparent; background-color: transparent}
+}
+
+@keyframes warning-animation2 {
+    0%   {color: yellow; background-color: darkgoldenrod}
+    75%  {color: yellow; background-color: darkgoldenrod}
+    100% {color: transparent; background-color: transparent}
+}
+
+@keyframes danger-animation1 {
+    0%   {color: pink; background-color: darkred}
+    75%  {color: pink; background-color: darkred}
+    100% {color: transparent; background-color: transparent}
+}
+
+@keyframes danger-animation2 {
+    0%   {color: pink; background-color: darkred}
+    75%  {color: pink; background-color: darkred}
+    100% {color: transparent; background-color: transparent}
+}
+
 
 .top-menu-bar{
     float: right;
@@ -980,22 +1065,22 @@ input {
 
 /* -- Design Update Summary ----------------------------------------------------------------------------------------- */
 
-.update-summary-container{
-    margin: 20px 0 0 0;
-    padding: 0 1px 1px 1px;
-    box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);
-    border-radius: 0px;
-}
+/*.update-summary-container{*/
+    /*margin: 20px 0 0 0;*/
+    /*padding: 0 1px 1px 1px;*/
+    /*box-shadow: 2px 2px 5px rgba(100, 100, 100, .5);*/
+    /*border-radius: 0px;*/
+/*}*/
 
-.update-summary-header{
-    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  18px;
-    color: white;
-    background-color: indianred;
-    margin: 0;
-    padding: 5px 10px 5px 20px;
-    border: 1px solid ghostwhite;
-}
+/*.update-summary-header{*/
+    /*font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;*/
+    /*font-size:  18px;*/
+    /*color: white;*/
+    /*background-color: indianred;*/
+    /*margin: 0;*/
+    /*padding: 5px 10px 5px 20px;*/
+    /*border: 1px solid ghostwhite;*/
+/*}*/
 
 .update-summary-change-container{
     margin: 10px 0 0 0;
@@ -1098,7 +1183,7 @@ input {
 
 .design-editor-header{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  14px;
+    font-size:  15px;
     color: darkslategrey;
     background-color: #CCEEEE;
     margin: 0;
@@ -1190,16 +1275,19 @@ input {
 }
 
 .editableItem{
-    padding: 2px 0 0 5px;
-    background-color: papayawhip;
-    border: 0px solid lightgrey;
+    padding: 0 0 0 5px;
+    background-color: lightyellow;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid ghostwhite;
+    border-bottom: 1px solid ghostwhite;
+    border-left: 1px solid lightgrey;
     min-height: 24px;
 }
 
 .readOnlyItem{
-    padding: 0px 0 0 0;
+    padding: 0 0 0 0;
     background-color: transparent;
-    border: 0px solid transparent;
+    border: 1px solid transparent;
     min-height: 24px;
 }
 
@@ -1570,8 +1658,11 @@ input {
     padding: 2px;
     margin: 0 0 10px 0;
     color: black;
-    background-color: papayawhip;
-    border: 0px solid lightgrey;
+    background-color: lightyellow;
+    border-top: 1px solid lightgrey;
+    border-right: 1px solid ghostwhite;
+    border-bottom: 1px solid ghostwhite;
+    border-left: 1px solid lightgrey;
 }
 
 .item-text{
@@ -1590,27 +1681,29 @@ input {
     padding: 15px;
     margin: 0;
     color: black;
-    background-color: lightyellow;
-    border-top: 1px solid lightgrey;
-    border-right: 1px solid ghostwhite;
-    border-bottom: 1px solid ghostwhite;
-    border-left: 1px solid lightgrey;
+    background-color: white;
     min-height: 300px;
 }
 
 .editor-panel-small{
-    min-height: 100px;
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    padding: 15px;
+    margin: 0;
+    color: black;
+    background-color: white;
+    min-height: 200px;
 }
 
 .editor-panel-edit{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     padding: 15px;
+    background-color: lightyellow;
     border-top: 1px solid lightgrey;
     border-right: 1px solid ghostwhite;
     border-bottom: 1px solid ghostwhite;
     border-left: 1px solid lightgrey;
-    background-color: papayawhip;
 }
 
 .editor-toolbar{

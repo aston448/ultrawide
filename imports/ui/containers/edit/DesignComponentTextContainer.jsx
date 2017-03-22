@@ -304,14 +304,14 @@ class DesignComponentText extends Component {
 
         } else {
             return (
-                <div>
+                <div className="design-editor-container">
                     <DetailsViewHeader
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}
-                        titleText={'Feature Aspect'}
+                        titleText={'No Details'}
                         isClosable={detailsClosable}
                     />
                     <div className="details-editor">
-                        <div className="design-item-note">No details for Feature Aspects</div>
+                        <div className="design-item-note">Select a component</div>
                     </div>
                     <DetailsViewFooter
                         detailsType={DetailsViewType.VIEW_DETAILS_NEW}

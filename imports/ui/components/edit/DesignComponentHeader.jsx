@@ -772,12 +772,6 @@ export class DesignComponentHeader extends Component{
                     <InputGroup.Addon>
                         <div className="invisible"><Glyphicon glyph="star"/></div>
                     </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
                 </InputGroup>
             </div>;
 

@@ -178,7 +178,7 @@ export class DesignApplicationsList extends Component {
                     designVersionId: userContext.designVersionId
                 }}/>;
 
-            if(displayedItems == 2){
+            if(displayedItems === 2){
                 // There are now 3 cols so change widths
                 col1width = 4;
                 col2width = 4;
@@ -217,13 +217,6 @@ export class DesignApplicationsList extends Component {
 
         // Create the layout depending on the current view...
         if(baseApplications) {
-
-            // Root of New Design Editor
-            // let baseEditorComponent =
-            //     <div className="design-editor">
-            //         {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
-            //         {addComponent}
-            //     </div>;
 
 
             let col1 =

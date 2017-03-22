@@ -61,7 +61,7 @@ export class DesignEditorFooter extends Component {
 
         const {hasDesignSummary, designSummaryData, userContext} = this.props;
 
-        if(hasDesignSummary) {
+        if(hasDesignSummary && designSummaryData) {
             return (
                 <div className="design-editor-footer">
                     <DesignSummary

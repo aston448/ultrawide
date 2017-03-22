@@ -9,6 +9,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
+import DesignEditorHeader           from '../../components/common/DesignEditorHeader.jsx';
+import DesignEditorFooter           from '../../components/common/DesignEditorFooter.jsx';
 import DesignComponentTarget        from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
@@ -97,60 +99,66 @@ export class UpdateApplicationsList extends Component {
 
         // Scope for Design Update
         let updateScopeComponent =
-            <Panel id="scopePane" header="Update Scope" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="scroll-col">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+            <div id="scopePane" className="design-editor-container">
+                <DesignEditorHeader
+                    displayContext={DisplayContext.UPDATE_SCOPE}
+                />
+                <div className="design-editor">
+                    {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
+                </div>
+                <DesignEditorFooter
+                    hasDesignSummary={false}
+                />
+            </div>;
 
         // Edit for Design Update
         let updateEditComponent =
-            <Panel id="editorPaneEdit" header="Update Editor" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="scroll-col">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode, false)}
-                            {addComponent}
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+            <div id="editPane" className="design-editor-container">
+                <DesignEditorHeader
+                    displayContext={DisplayContext.UPDATE_EDIT}
+                />
+                <div className="design-editor">
+                    {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode, false)}
+                    {addComponent}
+                </div>
+                <DesignEditorFooter
+                    hasDesignSummary={false}
+                />
+            </div>;
 
         // View Design Update Content
         let updateViewComponent =
-            <Panel id="editorPaneView" header="Design Update" className="panel-update panel-update-body">
-                <Grid>
-                    <Row>
-                        <Col md={12} className="scroll-col">
-                            {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
-                        </Col>
-                    </Row>
-                </Grid>
-            </Panel>;
+            <div id="editPane" className="design-editor-container">
+                <DesignEditorHeader
+                    displayContext={DisplayContext.UPDATE_VIEW}
+                />
+                <div className="design-editor">
+                    {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
+                </div>
+                <DesignEditorFooter
+                    hasDesignSummary={false}
+                />
+            </div>;
 
         // Text / Scenario Steps for Design Update - Editable
         let updateTextComponent =
-            <Panel id="detailsPaneEdit" header="New and Old Text" className="panel-update panel-update-body">
+            <div id="detailsPaneEdit">
                 <DesignComponentTextContainer params={{
                     currentContext: userContext,
                     view: view,
                     displayContext: DisplayContext.UPDATE_EDIT
                 }}/>
-            </Panel>;
+            </div>;
 
         // Text / Scenario Steps for Design Update - Read Only
         let updateViewTextComponent =
-            <Panel id="detailsPaneView" header="New and Old Text" className="panel-update panel-update-body">
+            <div id="detailsPaneView" >
                 <DesignComponentTextContainer params={{
                     currentContext: userContext,
                     view: view,
                     displayContext: DisplayContext.UPDATE_VIEW
                 }}/>
-            </Panel>;
+            </div>;
 
         // Domain Dictionary
         let domainDictionary =
@@ -191,16 +199,16 @@ export class UpdateApplicationsList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col id="scopeCol" md={3}>
+                                <Col id="scopeCol" md={3} className="close-col">
                                     {updateScopeComponent}
                                 </Col>
-                                <Col id="designCol" md={3}>
+                                <Col id="designCol" md={3} className="close-col">
                                     {updateEditComponent}
                                 </Col>
-                                <Col id="detailsCol" md={3}>
+                                <Col id="detailsCol" md={3} className="close-col">
                                     {updateTextComponent}
                                 </Col>
-                                <Col id="dictSummCol" md={3}>
+                                <Col id="dictSummCol" md={3} className="close-col">
                                     {col4component}
                                 </Col>
                             </Row>
@@ -209,13 +217,13 @@ export class UpdateApplicationsList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col id="scopeCol" md={4}>
+                                <Col id="scopeCol" md={4} className="close-col">
                                     {updateScopeComponent}
                                 </Col>
-                                <Col id="designCol" md={4}>
+                                <Col id="designCol" md={4} className="close-col">
                                     {updateEditComponent}
                                 </Col>
-                                <Col id="dictSummCol" md={4}>
+                                <Col id="dictSummCol" md={4} className="close-col">
                                     {col4component}
                                 </Col>
                             </Row>
@@ -241,13 +249,13 @@ export class UpdateApplicationsList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col id="designCol" md={6}>
+                                    <Col id="designCol" md={6} className="close-col">
                                         {updateViewComponent}
                                     </Col>
-                                    <Col id="detailsCol" md={3}>
+                                    <Col id="detailsCol" md={3} className="close-col">
                                         {updateViewTextComponent}
                                     </Col>
-                                    <Col id="dictSummCol" md={3}>
+                                    <Col id="dictSummCol" md={3} className="close-col">
                                         {col3component}
                                     </Col>
                                 </Row>
@@ -256,10 +264,10 @@ export class UpdateApplicationsList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col id="designCol" md={8}>
+                                    <Col id="designCol" md={8} className="close-col">
                                         {updateViewComponent}
                                     </Col>
-                                    <Col id="dictSummCol" md={4}>
+                                    <Col id="dictSummCol" md={4} className="close-col">
                                         {updateSummary}
                                     </Col>
                                 </Row>
@@ -270,13 +278,13 @@ export class UpdateApplicationsList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col id="designCol" md={4}>
+                                    <Col id="designCol" md={4} className="close-col">
                                         {updateViewComponent}
                                     </Col>
-                                    <Col id="detailsCol" md={4}>
+                                    <Col id="detailsCol" md={4} className="close-col">
                                         {updateViewTextComponent}
                                     </Col>
-                                    <Col id="dictSummCol" md={4}>
+                                    <Col id="dictSummCol" md={4} className="close-col">
                                         {col3component}
                                     </Col>
                                 </Row>
@@ -285,10 +293,10 @@ export class UpdateApplicationsList extends Component {
                         layout =
                             <Grid>
                                 <Row>
-                                    <Col id="designCol" md={6}>
+                                    <Col id="designCol" md={6} className="close-col">
                                         {updateViewComponent}
                                     </Col>
-                                    <Col id="dictSummCol" md={6}>
+                                    <Col id="dictSummCol" md={6} className="close-col">
                                         {col3component}
                                     </Col>
                                 </Row>

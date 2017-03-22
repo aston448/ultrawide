@@ -8,10 +8,12 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import UpdateSummaryItem from '../../components/select/UpdateSummaryItem.jsx';
+import UpdateSummaryItem            from '../../components/select/UpdateSummaryItem.jsx';
+import DesignEditorHeader           from '../../components/common/DesignEditorHeader.jsx';
+import DesignEditorFooter           from '../../components/common/DesignEditorFooter.jsx';
 
 // Ultrawide Services
-import {DesignVersionStatus} from '../../../constants/constants.js';
+import {DisplayContext} from '../../../constants/constants.js';
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientDesignUpdateSummary from '../../../apiClient/apiClientDesignUpdateSummary.js';
 
@@ -99,24 +101,34 @@ export class DesignUpdateSummaryList extends Component {
         if(userContext.designUpdateId != 'NONE') {
 
             return (
-                <div id="updateSummary" className="update-summary-container">
-                    <div className="update-summary-header">{'Design Update Summary for ' + designUpdateName}</div>
-                    <div className="scroll-col">
+                <div className="design-editor-container">
+                    <DesignEditorHeader
+                        displayContext={DisplayContext.UPDATE_SUMMARY}
+                    />
+                    <div className="design-editor">
                         {additions}
                         {removals}
                         {changes}
                     </div>
+                    <DesignEditorFooter
+                        hasDesignSummary={false}
+                    />
                 </div>
             );
 
         } else {
 
             return(
-                <div id="noSummary" className="update-summary-container">
-                    <div className="update-summary-header">Design Update Summary</div>
-                    <div className="scroll-col">
+                <div className="design-editor-container">
+                    <DesignEditorHeader
+                        displayContext={DisplayContext.UPDATE_SUMMARY}
+                    />
+                    <div className="design-editor">
                         <div className="design-item-note">No update selected</div>
                     </div>
+                    <DesignEditorFooter
+                        hasDesignSummary={false}
+                    />
                 </div>
             )
         }
