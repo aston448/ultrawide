@@ -1,12 +1,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
 import { UserCurrentViewOptions }   from '../collections/context/user_current_view_options.js';
-import { UserRoles }                from '../collections/users/user_roles.js';
 import { Designs }                  from '../collections/design/designs.js';
 import { DesignVersions }           from '../collections/design/design_versions.js';
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
@@ -16,7 +14,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, ViewMode, DisplayContext, DesignVersionStatus, DesignUpdateStatus, ComponentType, LocationType, LogLevel, WorkPackageStatus, WorkPackageType } from '../constants/constants.js';
+import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 
 import ClientContainerServices              from '../apiClient/apiClientContainerServices.js';
@@ -27,11 +25,9 @@ import ClientDesignUpdateComponentServices  from '../apiClient/apiClientDesignUp
 import ClientWorkPackageServices            from '../apiClient/apiClientWorkPackage.js';
 import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPackageComponent.js';
 
-
-
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, setCurrentViewMode, setCurrentRole, setCurrentUserName, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
+import {setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -931,6 +927,18 @@ class ClientUserContextServices {
         })
     };
 
+    getWindowSizeClass(){
+
+        const windowSize = store.getState().currentWindowSize;
+
+        switch(windowSize){
+            case WindowSize.WINDOW_SMALL:
+                return 'design-editor-small';
+            case WindowSize.WINDOW_LARGE:
+                return 'design-editor-large';
+
+        }
+    }
 }
 
 export default new ClientUserContextServices();

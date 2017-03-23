@@ -16,6 +16,7 @@ import DesignComponentAdd           from '../../components/common/DesignComponen
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
 import UpdateSummaryContainer       from '../../containers/select/UpdateSummaryContainer.jsx';
+import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -52,6 +53,9 @@ export class UpdateApplicationsList extends Component {
 
     }
 
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
+    }
 
     // A list of top level applications in the design update
     renderUpdateApplications(updateApplications, context, view, mode, testSummary) {
@@ -80,6 +84,9 @@ export class UpdateApplicationsList extends Component {
 
         let addComponent = '';
 
+        // Get correct window height
+        const editorClass = this.getEditorClass();
+
         if (mode === ViewMode.MODE_EDIT) {
             // Editing so include the Add Application
             addComponent =
@@ -103,7 +110,7 @@ export class UpdateApplicationsList extends Component {
                 <DesignEditorHeader
                     displayContext={DisplayContext.UPDATE_SCOPE}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
                 </div>
                 <DesignEditorFooter
@@ -117,7 +124,7 @@ export class UpdateApplicationsList extends Component {
                 <DesignEditorHeader
                     displayContext={DisplayContext.UPDATE_EDIT}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_EDIT, view, mode, false)}
                     {addComponent}
                 </div>
@@ -132,7 +139,7 @@ export class UpdateApplicationsList extends Component {
                 <DesignEditorHeader
                     displayContext={DisplayContext.UPDATE_VIEW}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter

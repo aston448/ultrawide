@@ -15,8 +15,8 @@ import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx'
 
 // Ultrawide Services
 import { DetailsViewType, ViewMode} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
 
@@ -41,9 +41,9 @@ class DomainDictionary extends Component {
 
     }
 
-    // onAddDictionaryTerm(userRole, view, mode, designId, designVersionId){
-    //     ClientDomainDictionaryServices.addNewDictionaryTerm(userRole, view, mode, designId, designVersionId);
-    // }
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
+    }
 
     // A list of Scenarios in a Feature or Feature Aspect
     renderDictionaryTerms(dictionaryTerms) {
@@ -61,7 +61,8 @@ class DomainDictionary extends Component {
     render() {
         const {dictionaryTerms, userRole, view, mode, userContext, userViewOptions, viewDataValue} = this.props;
 
-        let addDictionaryTerm = <div></div>;
+        // Get correct window height
+        const editorClass = this.getEditorClass();
 
         return (
             <div className="design-editor-container">
@@ -70,7 +71,7 @@ class DomainDictionary extends Component {
                     isClosable={true}
                     titleText={'Domain Dictionary'}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderDictionaryTerms(dictionaryTerms)}
                 </div>
                 <DetailsViewFooter

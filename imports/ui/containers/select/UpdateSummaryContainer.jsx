@@ -6,7 +6,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
 import UpdateSummaryItem            from '../../components/select/UpdateSummaryItem.jsx';
 import DesignEditorHeader           from '../../components/common/DesignEditorHeader.jsx';
@@ -14,12 +13,11 @@ import DesignEditorFooter           from '../../components/common/DesignEditorFo
 
 // Ultrawide Services
 import {DisplayContext} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientDesignUpdateSummary from '../../../apiClient/apiClientDesignUpdateSummary.js';
+
+import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
+import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -39,6 +37,10 @@ export class DesignUpdateSummaryList extends Component {
     constructor(props) {
         super(props);
 
+    }
+
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
     }
 
     // A list of Feature Aspects in a Feature
@@ -63,6 +65,9 @@ export class DesignUpdateSummaryList extends Component {
     render() {
 
         const {functionalAdditions, functionalRemovals, functionalChanges, designUpdateName, userContext} = this.props;
+
+        // Get correct window height
+        const editorClass = this.getEditorClass();
 
         let additions = <div></div>;
         if(functionalAdditions.length > 0){
@@ -105,7 +110,7 @@ export class DesignUpdateSummaryList extends Component {
                     <DesignEditorHeader
                         displayContext={DisplayContext.UPDATE_SUMMARY}
                     />
-                    <div className="design-editor">
+                    <div className={editorClass}>
                         {additions}
                         {removals}
                         {changes}
@@ -123,7 +128,7 @@ export class DesignUpdateSummaryList extends Component {
                     <DesignEditorHeader
                         displayContext={DisplayContext.UPDATE_SUMMARY}
                     />
-                    <div className="design-editor">
+                    <div className={editorClass}>
                         <div className="design-item-note">No update selected</div>
                     </div>
                     <DesignEditorFooter

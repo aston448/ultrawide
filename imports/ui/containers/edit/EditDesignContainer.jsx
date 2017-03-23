@@ -20,10 +20,11 @@ import { ViewType, ViewMode, DisplayContext } from '../../../constants/constants
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
+import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
-import {Grid, Row, Col, Panel} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -66,6 +67,10 @@ export class DesignApplicationsList extends Component {
         } else {
             return null;
         }
+    }
+
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
     }
 
     // A list of top level applications in the design / design update
@@ -136,12 +141,15 @@ export class DesignApplicationsList extends Component {
                 </table>
         }
 
+        // Get correct window height
+        const editorClass = this.getEditorClass();
+
         let designEditor =
             <div className="design-editor-container">
                 <DesignEditorHeader
                     displayContext={displayContext}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
                     {addComponent}
                 </div>

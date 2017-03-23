@@ -105,6 +105,11 @@ export const ViewOptionType = {
     NONE:               ''
 };
 
+export const WindowSize = {
+    WINDOW_LARGE:       'WINDOW_LARGE',
+    WINDOW_SMALL:       'WINDOW_SMALL'
+};
+
 // Context specifies how and what information is displayed in common components
 export const DisplayContext = {
     BASE_EDIT:              'BASE_EDIT',            // Editable new design

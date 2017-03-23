@@ -23,7 +23,7 @@ import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
 import ClientContainerServices          from '../../../apiClient/apiClientContainerServices.js';
-import UserContextServices              from '../../../apiClient/apiClientUserContext.js';
+import ClientUserContextServices        from '../../../apiClient/apiClientUserContext.js';
 import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
 import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
 
@@ -64,6 +64,10 @@ class WorkPackageFeatureMashList extends Component {
 
     onExportIntegrationTests(userContext, userRole){
         ClientTestIntegrationServices.exportIntegrationTestFile(userContext, userRole);
+    }
+
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
     }
 
     renderFeatures(mashData, displayContext){
@@ -110,7 +114,7 @@ class WorkPackageFeatureMashList extends Component {
         let itemHeader = '';
         let secondPanel = <div></div>;
 
-        const nameData = UserContextServices.getContextNameData(userContext);
+        const nameData = ClientUserContextServices.getContextNameData(userContext);
 
         switch(displayContext){
             case DisplayContext.MASH_INT_TESTS:
@@ -269,6 +273,9 @@ class WorkPackageFeatureMashList extends Component {
 
         }
 
+        // Get correct window height
+        const editorClass = this.getEditorClass();
+
         return(
 
             <div className="design-editor-container">
@@ -277,7 +284,7 @@ class WorkPackageFeatureMashList extends Component {
                     isClosable={true}
                     titleText={panelHeader}
                 />
-                <div className="int-tests-editor">
+                <div className={editorClass}>
                     {mainPanel}
                     {secondPanel}
                 </div>
@@ -286,11 +293,6 @@ class WorkPackageFeatureMashList extends Component {
                     actionsVisible={menuVisible}
                 />
             </div>
-
-            // <div>
-            //     {mainPanel}
-            //     {secondPanel}
-            // </div>
         );
 
     }
@@ -333,7 +335,7 @@ export default WorkPackageFeatureMashContainer = createContainer(({params}) => {
         designMashItemData: designMashItemData,
         nonDesignScenarioData: nonDesignScenarioData,
         existingFeatureFile: existingFeatureFile,
-        displayContext: params.displayContext
+        displayContext: params.displayContext,
     }
 
 

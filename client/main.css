@@ -1237,7 +1237,14 @@ input {
     margin: 3px 0 3px 0;
 }
 
-.design-editor{
+.design-editor-large{
+    margin: 0;
+    padding: 3px;
+    max-height: 1200px;
+    overflow-y: auto;
+}
+
+.design-editor-small{
     margin: 0;
     padding: 3px;
     max-height: 900px;

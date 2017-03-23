@@ -21,9 +21,10 @@ import DesignEditorFooter                   from '../../components/common/Design
 
 // Ultrawide Services
 import { ItemType, ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
@@ -47,6 +48,10 @@ class DevApplicationsList extends Component {
 
     getDesignItem(application){
         return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
+    }
+
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
     }
 
     // A list of top level applications in the work package(s)
@@ -106,13 +111,16 @@ class DevApplicationsList extends Component {
         let col6width = 7;
         let col7width = 7;
 
+        // Get correct window height
+        const editorClass = this.getEditorClass();
+
         // Working Design
         let design =
             <div className="design-editor-container">
                 <DesignEditorHeader
                     displayContext={DisplayContext.DEV_DESIGN}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter

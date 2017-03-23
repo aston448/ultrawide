@@ -3,7 +3,7 @@
  */
 
 import * as Actions from './actions'
-import {RoleType, ViewType, ViewMode, MessageType} from '../constants/constants.js'
+import {RoleType, ViewType, ViewMode, MessageType, WindowSize} from '../constants/constants.js'
 
 // Creates the initial state container for your application - the same as getInitialState
 const initialState = {
@@ -12,6 +12,7 @@ const initialState = {
     currentUserId:                      'NONE',                  // Note this is only the currently selected user in the ADMIN screen
     currentAppView:                     ViewType.AUTHORISE,
     currentViewMode:                    ViewMode.MODE_VIEW,
+    currentWindowSize:                  WindowSize.WINDOW_LARGE,
     domainDictionaryVisible:            false,
     currentUserViewOptions:             null,
     currentUserItemContext:             null,
@@ -65,6 +66,10 @@ export function myApplication(state = initialState, action) {
                 domainDictionaryVisible: action.isVisible
             });
         case Actions.SET_CURRENT_USER_VIEW_OPTIONS:
+            return Object.assign({}, state, {
+                currentUserViewOptions: action.newUserViewOptions
+            });
+        case Actions.SET_WINDOW_SIZE:
             return Object.assign({}, state, {
                 currentUserViewOptions: action.newUserViewOptions
             });

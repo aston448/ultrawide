@@ -13,6 +13,7 @@ export const SET_CURRENT_VIEW_MODE = 'SET_CURRENT_VIEW_MODE';
 export const TOGGLE_DOMAIN_DICTIONARY = 'TOGGLE_DOMAIN_DICTIONARY';
 
 export const SET_CURRENT_USER_VIEW_OPTIONS = 'SET_CURRENT_USER_VIEW_OPTIONS';
+export const SET_WINDOW_SIZE = 'SET_WINDOW_SIZE';
 
 // the currently selected user in the User Management screen - NOT the currently logged in user
 export const SET_CURRENT_USER_ID = 'SET_CURRENT_USER_ID';
@@ -176,6 +177,12 @@ export function setCurrentUserViewOptions(viewOptions, saveToDb){
         if(saveToDb) {
             Meteor.call('userContext.setCurrentUserViewOptions', viewOptions);
         }
+    };
+}
+
+export function setWindowSize(newSize) {
+    return function (dispatch) {
+        dispatch({type: SET_WINDOW_SIZE, newSize: newSize});
     };
 }
 

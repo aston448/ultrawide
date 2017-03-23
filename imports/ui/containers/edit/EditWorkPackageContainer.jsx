@@ -16,13 +16,14 @@ import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
 import { log } from '../../../common/utils.js'
+
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -46,6 +47,9 @@ class WorkPackageApplicationsList extends Component {
         return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
     }
 
+    getEditorClass(){
+        return ClientUserContextServices.getWindowSizeClass();
+    }
 
     // A list of top level applications in the work package potential scope
     renderScopeApplications(wpScopeApplications, context, view, mode) {
@@ -89,13 +93,16 @@ class WorkPackageApplicationsList extends Component {
 
         let layout = '';
 
+        // Get correct window height
+        const editorClass = this.getEditorClass();
+
         // Scope for Work Package
         let wpScopeComponent =
             <div className="design-editor-container">
                 <DesignEditorHeader
                     displayContext={DisplayContext.WP_SCOPE}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
                 </div>
                 <DesignEditorFooter
@@ -109,7 +116,7 @@ class WorkPackageApplicationsList extends Component {
                 <DesignEditorHeader
                     displayContext={DisplayContext.WP_VIEW}
                 />
-                <div className="design-editor">
+                <div className={editorClass}>
                     {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
