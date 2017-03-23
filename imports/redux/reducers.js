@@ -71,7 +71,7 @@ export function myApplication(state = initialState, action) {
             });
         case Actions.SET_WINDOW_SIZE:
             return Object.assign({}, state, {
-                currentUserViewOptions: action.newUserViewOptions
+                currentWindowSize: action.newSize
             });
         case Actions.SET_CURRENT_USER_ITEM_CONTEXT:
             //console.log("Updated User Item Context: " + action.newUserItemContext);

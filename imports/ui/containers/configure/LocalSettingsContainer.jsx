@@ -11,6 +11,7 @@ import { UserRoles }            from '../../../collections/users/user_roles.js';
 // Ultrawide GUI Components
 import UserTestLocationConfiguration        from '../../components/configure/UserTestLocationConfiguration.jsx';
 import ItemContainer                        from '../../components/common/ItemContainer.jsx';
+import ConfigurationSettings                from '../../components/configure/ConfigurationSettings.jsx';
 
 // Ultrawide Services
 import {ViewType}               from '../../../constants/constants.js'
@@ -54,11 +55,9 @@ export class LocalSettingsScreen extends Component {
         }
     };
 
-    renderOtherFunctions(){
+    renderOtherConfigSettings(){
         return (
-            <div className="design-item-note">
-                Other user settings to go here
-            </div>
+            <ConfigurationSettings/>
         )
     }
 
@@ -83,7 +82,7 @@ export class LocalSettingsScreen extends Component {
                     <Col md={6} className="close-col">
                         <ItemContainer
                             headerText={'Other configuration settings'}
-                            bodyDataFunction={() => this.renderOtherFunctions()}
+                            bodyDataFunction={() => this.renderOtherConfigSettings()}
                             hasFooterAction={false}
                             footerAction={'NONE'}
                             footerActionFunction={null}

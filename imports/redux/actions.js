@@ -180,7 +180,7 @@ export function setCurrentUserViewOptions(viewOptions, saveToDb){
     };
 }
 
-export function setWindowSize(newSize) {
+export function setCurrentWindowSize(newSize) {
     return function (dispatch) {
         dispatch({type: SET_WINDOW_SIZE, newSize: newSize});
     };

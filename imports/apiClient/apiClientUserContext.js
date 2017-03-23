@@ -27,7 +27,7 @@ import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPack
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
+import {setCurrentView, setCurrentRole, setCurrentUserItemContext, setCurrentUserViewOptions, setCurrentWindowSize, setCurrentUserOpenDesignItems, setCurrentUserOpenDesignUpdateItems, setCurrentUserOpenWorkPackageItems, updateOpenItemsFlag} from '../redux/actions'
 
 // =====================================================================================================================
 
@@ -938,6 +938,10 @@ class ClientUserContextServices {
                 return 'design-editor-large';
 
         }
+    }
+
+    setWindowSize(newSize){
+        store.dispatch(setCurrentWindowSize(newSize));
     }
 }
 
