@@ -13,34 +13,8 @@ import store from '../redux/store'
 import {updateUserMessage} from '../redux/actions'
 
 
-export function getBootstrapText(html){
-
-    // Returns the actual text for a React Bootstrap control given the html
-    // <ControlLabel>My Label</ControlLabel>
-    // Calling item.find(...).text() returns "<ControlLabel/>"
-    // So call item.find(...).html and pass that to this function...
-
-    const textStart = html.indexOf('>');
-    const remaining = html.substring(textStart + 1);
-    const textEnd = remaining.indexOf('<');
-
-    return remaining.substring(0, textEnd);
-}
-
-
-export function hasBootstrapClass(html, className){
-
-    const classIndex = html.indexOf('class="');
-    const classStart = classIndex + 7;
-    const classEnd = html.indexOf('\"', classStart);
-    const classString = html.substring(classStart, classEnd);
-
-    //console.log("Searching " + classString + " for " + className);
-
-    const propIndex = classString.indexOf(className);
-
-    return (propIndex != -1);
-
+export function padDigits(number, digits) {
+    return new Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
 }
 
 export function createSelectionList(typesArray){

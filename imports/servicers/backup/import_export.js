@@ -22,7 +22,7 @@ import { DesignBackups }                from '../../collections/backup/design_ba
 import { AppGlobalData }                from '../../collections/app/app_global_data.js';
 
 // Ultrawide Services
-import {getIdFromMap, log}              from '../../common/utils.js';
+import {getIdFromMap, padDigits, log}              from '../../common/utils.js';
 import { DesignStatus, WorkPackageType, LogLevel} from '../../constants/constants.js';
 
 import TestOutputLocationServices       from '../configure/test_output_location_services.js';
@@ -212,7 +212,7 @@ class ImpExServices{
         }
     };
 
-    restoreDesignBackup(backupId){
+    restoreDesignBackup(backupId, currentDesignId){
 
         if(Meteor.isServer){
 
@@ -292,14 +292,17 @@ class ImpExServices{
             this.restoreDomainDictionaryData(newDomainDictionaryData, designsMapping, designVersionsMapping);
 
             // Remove the current data - it has different IDs
-            this.removeDesignData(backupData.designs);
+            this.removeCurrentDesignData(backupData.designs);
 
         }
     };
 
-    removeDesignData(designs){
+    // Remove unwanted duplicate Design Data after a restore
+    removeCurrentDesignData(currentDesignId){
 
-        designs.forEach((design) => {
+        const design = Designs.findOne({_id: currentDesignId});
+
+        if(design) {
 
             const designVersions = DesignVersions.find({designId: design._id}).fetch();
 
@@ -342,9 +345,9 @@ class ImpExServices{
             DesignVersions.remove({designId: design._id});
 
             // And the design
-            Designs.remove({_id: design._id});
+            Designs.remove({_id: currentDesignId});
 
-        });
+        }
     };
 
     migrateTestOutputLocationData(testOutputLocationData, backupVersion, currentVersion){
@@ -584,6 +587,8 @@ class ImpExServices{
 
     restoreTestOutputLocationData(newTestOutputLocationData, userMapping){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Test Output Locations...");
+
         let locationsMapping = [];
 
         newTestOutputLocationData.forEach((location) => {
@@ -604,6 +609,8 @@ class ImpExServices{
 
     restoreTestOutputLocationFileData(newTestOutputLocationFileData, locationsMapping){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Test Output Location Files...");
+
         newTestOutputLocationFileData.forEach((locationFile) => {
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Test Output Location File: {}", locationFile.fileAlias);
@@ -617,6 +624,8 @@ class ImpExServices{
     };
 
     restoreUserTestTypeLocationsData(newTestOutputLocationData, userMapping, locationsMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring User Test Output Location Settings...");
 
         newTestOutputLocationData.forEach((userLocation) => {
 
@@ -636,7 +645,7 @@ class ImpExServices{
 
         newDesignData.forEach((design) => {
 
-            log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design: {}", design.designName);
+            log((msg) => console.log(msg), LogLevel.INFO, "Adding Design: {}", design.designName);
 
             let designId = DesignServices.importDesign(design);
             if (designId) {
@@ -657,7 +666,7 @@ class ImpExServices{
             let designId = getIdFromMap(designsMapping, designVersion.designId);
             if (designId) {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
+                log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Version: {} to Design {}", designVersion.designVersionName, designId);
 
                 let designVersionId = DesignVersionServices.importDesignVersion(
                     designId,
@@ -682,7 +691,7 @@ class ImpExServices{
             let designVersionId = getIdFromMap(designVersionsMapping, designUpdate.designVersionId);
             if (designVersionId) {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update: {} to Design Version {}", designUpdate.updateName, designVersionId);
+                log((msg) => console.log(msg), LogLevel.INFO, "Adding Design Update: {} to Design Version {}", designUpdate.updateName, designVersionId);
 
                 let designUpdateId = DesignUpdateServices.importDesignUpdate(
                     designVersionId,
@@ -700,6 +709,8 @@ class ImpExServices{
     };
 
     restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Summaries...");
 
         newDesignUpdateSummaryData.forEach((designUpdateSummary) => {
             let designVersionId = getIdFromMap(designVersionsMapping, designUpdateSummary.designVersionId);
@@ -730,7 +741,7 @@ class ImpExServices{
 
             if (designVersionId) {
 
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Work Package: {} of type {} to Design Version {}",
+                log((msg) => console.log(msg), LogLevel.INFO, "Adding Work Package: {} of type {} to Design Version {}",
                     workPackage.workPackageName, workPackage.workPackageType, designVersionId);
 
                 if((workPackage.workPackageType === WorkPackageType.WP_UPDATE) && !hasDesignUpdates){
@@ -762,6 +773,8 @@ class ImpExServices{
 
     restoreDomainDictionaryData(newDictionaryData, designsMapping, designVersionsMapping){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Domain Dictionary...");
+
         let componentCount = 0;
 
         newDictionaryData.forEach((term) => {
@@ -781,10 +794,12 @@ class ImpExServices{
             componentCount++;
         });
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Dictionary Terms", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
     };
 
     restoreDesignComponentData(newDesignComponentData, designsMapping, designVersionsMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Components...");
 
         let designComponentsMapping = [];
         let componentCount = 0;
@@ -820,12 +835,14 @@ class ImpExServices{
             DesignServices.setRemovable(designMap.newId);
         });
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Design Components", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Components", componentCount);
 
         return designComponentsMapping;
     };
 
     restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Components...");
 
         let designUpdateComponentsMapping = [];
         let componentCount = 0;
@@ -872,12 +889,14 @@ class ImpExServices{
             log((msg) => console.log(msg), LogLevel.ERROR, "Mapping not available to restore Design Update Components: DE: {} DV: {} DU: {}", designsMapping, designVersionsMapping, designUpdatesMapping);
         }
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Design Update Components", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Update Components", componentCount);
 
         return designUpdateComponentsMapping;
     };
 
     restoreWorkPackageComponentData(newWorkPackageComponentData, workPackagesMapping, designComponentsMapping, designUpdateComponentsMapping, hasDesignComponents, hasDesignUpdateComponents){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Work Package Components...");
 
         let workPackageComponentsMapping = [];
         let wpDesignComponentId = null;
@@ -900,7 +919,7 @@ class ImpExServices{
                     if(hasDesignComponents) {
                         wpDesignComponentId = getIdFromMap(designComponentsMapping, wpComponent.componentId);
                     } else {
-                        log((msg) => console.log(msg), LogLevel.INFO, "Skipping WP component because no design components...");
+                        log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design components...");
                         skip = true;
                     }
                     break;
@@ -908,7 +927,7 @@ class ImpExServices{
                     if(hasDesignUpdateComponents) {
                         wpDesignComponentId = getIdFromMap(designUpdateComponentsMapping, wpComponent.componentId);
                     } else {
-                        log((msg) => console.log(msg), LogLevel.INFO, "Skipping WP component because no design update components...");
+                        log((msg) => console.log(msg), LogLevel.DEBUG, "Skipping WP component because no design update components...");
                         skip = true;
                     }
                     break;
@@ -932,12 +951,14 @@ class ImpExServices{
 
         });
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Work Package Components", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Work Package Components", componentCount);
 
         return workPackageComponentsMapping;
     };
 
     restoreFeatureBackgroundStepData(newFeatureBackgroundStepsData, designsMapping, designVersionsMapping, designUpdatesMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Feature Background Steps...");
 
         let componentCount = 0;
 
@@ -961,10 +982,12 @@ class ImpExServices{
 
         });
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Feature Background Steps", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Feature Background Steps", componentCount);
     };
 
     restoreScenarioStepData(newScenarioStepsData, designsMapping, designVersionsMapping, designUpdatesMapping){
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Scenario Steps...");
 
         let componentCount = 0;
 
@@ -988,65 +1011,83 @@ class ImpExServices{
 
         });
 
-        log((msg) => console.log(msg), LogLevel.DEBUG, "Added {} Scenario Steps", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Scenario Steps", componentCount);
     }
 
 
     exportUltrawideData(){
         // Export all the essential data to a file
 
+        // TODO - make backup location a setting
+        let path = '/Users/aston/UltrawideBackups/backup/';
+        if(fs.existsSync(path) === false) {
+            fs.mkdirSync(path);
+        }
+
+        // Create the double backup folder
+        let date = new Date();
+        let dateDir = date.getFullYear() + '_' + padDigits((date.getMonth() + 1), 2) + '_' + padDigits(date.getDate(), 2) + '_' + padDigits(date.getHours(), 2) + padDigits(date.getMinutes(), 2) + padDigits(date.getSeconds(), 2);
+        let doubleBackupPath = '/Users/aston/UltrawideBackups/backup/' + dateDir + '/';
+        if(fs.existsSync(doubleBackupPath) === false) {
+            fs.mkdirSync(doubleBackupPath);
+        }
+
         // User Data
-        this.produceExportFile(UserRoles, 'USERS');
+        this.produceExportFile(UserRoles, path, doubleBackupPath, 'USERS');
 
         // User Context
-        this.produceExportFile(UserCurrentEditContext, 'USER_CONTEXT');
+        this.produceExportFile(UserCurrentEditContext, path, doubleBackupPath, 'USER_CONTEXT');
 
         // Test Output Locations
-        this.produceExportFile(TestOutputLocations, 'TEST_OUTPUT_LOCATIONS');
-        this.produceExportFile(TestOutputLocationFiles, 'TEST_OUTPUT_LOCATION_FILES');
-        this.produceExportFile(UserTestTypeLocations, 'USER_TEST_TYPE_LOCATIONS');
+        this.produceExportFile(TestOutputLocations, path, doubleBackupPath, 'TEST_OUTPUT_LOCATIONS');
+        this.produceExportFile(TestOutputLocationFiles, path, doubleBackupPath, 'TEST_OUTPUT_LOCATION_FILES');
+        this.produceExportFile(UserTestTypeLocations, path, doubleBackupPath, 'USER_TEST_TYPE_LOCATIONS');
 
         // Designs
-        this.produceExportFile(Designs, 'DESIGNS');
+        this.produceExportFile(Designs, path, doubleBackupPath, 'DESIGNS');
 
         // Design Versions
-        this.produceExportFile(DesignVersions, 'DESIGN_VERSIONS');
+        this.produceExportFile(DesignVersions, path, doubleBackupPath, 'DESIGN_VERSIONS');
 
         // Design Updates
-        this.produceExportFile(DesignUpdates, 'DESIGN_UPDATES');
+        this.produceExportFile(DesignUpdates, path, doubleBackupPath, 'DESIGN_UPDATES');
 
         // Design Update Summaries
-        this.produceExportFile(DesignUpdateSummaries, 'DESIGN_UPDATE_SUMMARIES');
+        this.produceExportFile(DesignUpdateSummaries, path, doubleBackupPath, 'DESIGN_UPDATE_SUMMARIES');
 
         // Work Packages
-        this.produceExportFile(WorkPackages, 'WORK_PACKAGES');
+        this.produceExportFile(WorkPackages, path, doubleBackupPath, 'WORK_PACKAGES');
 
         // Domain Dictionary
-        this.produceExportFile(DomainDictionary, 'DOMAIN_DICTIONARY');
+        this.produceExportFile(DomainDictionary, path, doubleBackupPath, 'DOMAIN_DICTIONARY');
 
         // Design Components
-        this.produceExportFile(DesignComponents, 'DESIGN_COMPONENTS');
+        this.produceExportFile(DesignComponents, path, doubleBackupPath, 'DESIGN_COMPONENTS');
 
         // Design Update Components
-        this.produceExportFile(DesignUpdateComponents, 'DESIGN_UPDATE_COMPONENTS');
+        this.produceExportFile(DesignUpdateComponents, path, doubleBackupPath, 'DESIGN_UPDATE_COMPONENTS');
 
         // Work Package Components
-        this.produceExportFile(WorkPackageComponents, 'WORK_PACKAGE_COMPONENTS');
+        this.produceExportFile(WorkPackageComponents, path, doubleBackupPath, 'WORK_PACKAGE_COMPONENTS');
 
         // Feature Background Steps
-        this.produceExportFile(FeatureBackgroundSteps, 'FEATURE_BACKGROUND_STEPS');
+        this.produceExportFile(FeatureBackgroundSteps, path, doubleBackupPath, 'FEATURE_BACKGROUND_STEPS');
 
         // Scenario Steps
-        this.produceExportFile(ScenarioSteps, 'SCENARIO_STEPS');
+        this.produceExportFile(ScenarioSteps, path, doubleBackupPath, 'SCENARIO_STEPS');
     };
 
-    produceExportFile(collection, fileName){
-        let path = process.env["PWD"] + '/backup/';
+    produceExportFile(collection, path, doubleBackupPath, fileName){
+
+        // Backup to the backup folder for restore from there.
+        // Also take a timed backup so that files could be retrieved from earlier version if last backup was bad for some reason
 
         const data = collection.find({});
         const jsonData = JSON.stringify(data.fetch());
 
         fs.writeFile(path + fileName +'.EXP', jsonData);
+
+        fs.writeFile(doubleBackupPath + fileName +'.EXP', jsonData);
 
     }
 
@@ -1077,7 +1118,7 @@ class ImpExServices{
     importUltrawideData(){
         // Recreate the data using the latest code so that it is compatible...
 
-        let path = process.env["PWD"] + '/backup/';
+        let path = '/Users/aston/UltrawideBackups/backup/';
 
         let usersMapping = [];
         let testOutputLocationsMapping = [];
