@@ -52,6 +52,80 @@ describe('JSX: DesignVersion', () => {
     });
     const designVersionUpdatableComplete = Factory.create('designVersionUpdatableComplete');
 
+    // State -----------------------------------------------------------------------------------------------------------
+    describe('The state of each Design Version is shown', () => {
+
+        it('status visible for New', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionNew._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionNew} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_NEW);
+        });
+
+        it('status visible for Published', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionDraft._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_DRAFT);
+        });
+
+        it('status visible for Initial Complete', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionDraftComplete._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_DRAFT_COMPLETE);
+        });
+
+        it('status visible for Updatable', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionUpdatable._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_UPDATABLE);
+        });
+
+        it('status visible for Updatable Complete', () => {
+
+            const userRole = RoleType.DESIGNER;
+            const viewOptions = {};
+            const userContext = {designVersionId: designVersionUpdatableComplete._id};
+
+            const item = shallow(
+                <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
+            );
+
+            chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_UPDATABLE_COMPLETE);
+        });
+    });
+
     // Create Next Design Version --------------------------------------------------------------------------------------
 
     describe('A Design Version in a Draft or Updatable state has an option to create a new Design Version', () => {
@@ -60,7 +134,7 @@ describe('JSX: DesignVersion', () => {
 
             const userRole = RoleType.DESIGNER;
             const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
+            const userContext = {designVersionId: designVersionDraft._id};
 
             const item = shallow(
                 <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
@@ -76,7 +150,7 @@ describe('JSX: DesignVersion', () => {
 
             const userRole = RoleType.DESIGNER;
             const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
+            const userContext = {designVersionId: designVersionUpdatable._id};
 
             const item = shallow(
                 <DesignVersion designVersion={designVersionUpdatable} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
@@ -107,7 +181,7 @@ describe('JSX: DesignVersion', () => {
 
             const userRole = RoleType.DESIGNER;
             const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
+            const userContext = {designVersionId: designVersionDraftComplete._id};
 
             const item = shallow(
                 <DesignVersion designVersion={designVersionDraftComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>
@@ -122,7 +196,7 @@ describe('JSX: DesignVersion', () => {
 
             const userRole = RoleType.DESIGNER;
             const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
+            const userContext = {designVersionId: designVersionUpdatableComplete._id};
 
             const item = shallow(
                 <DesignVersion designVersion={designVersionUpdatableComplete} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>

@@ -256,32 +256,6 @@ describe('JSX: DesignItemHeader', () => {
         });
     });
 
-    describe('Each Design in the list has its current status visible', () => {
-
-        it('has status LIVE if live', () => {
-
-            const itemType = ItemType.DESIGN;
-            const itemStatus = DesignStatus.DESIGN_LIVE;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), currentItemStatus);
-        });
-
-        it('has status ARCHIVED if archived', () => {
-
-            const itemType = ItemType.DESIGN;
-            const itemStatus = DesignStatus.DESIGN_ARCHIVED;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), currentItemStatus);
-        });
-    });
 
     describe('Each Design in the Designs list has an Edit option against the Design name', () => {
 
@@ -395,73 +369,6 @@ describe('JSX: DesignItemHeader', () => {
         });
     });
 
-    describe('The state of each Design Version is shown', () => {
-
-        it('status visible for New', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_NEW;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            // Design Version Name should be visible and have the expected name
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), newDesignVersion.designVersionStatus);
-        });
-
-        it('status visible for Published', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_DRAFT;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            // Design Version Name should be visible and have the expected name
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), publishedDesignVersion.designVersionStatus);
-        });
-
-        it('status visible for Initial Complete', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            // Design Version Name should be visible and have the expected name
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), completeDesignVersion.designVersionStatus);
-        });
-
-        it('status visible for Updatable', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            // Design Version Name should be visible and have the expected name
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), updatableDesignVersion.designVersionStatus);
-        });
-
-        it('status visible for Updatable Complete', () => {
-
-            const itemType = ItemType.DESIGN_VERSION;
-            const itemStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            // Design Version Name should be visible and have the expected name
-            chai.expect(item.find('#statusLabel')).to.have.length(1);
-            chai.assert.equal(item.find('#statusLabel').children().text(), updatableCompleteDesignVersion.designVersionStatus);
-        });
-    });
 
     describe('Each Design Version has a edit option against its name', () => {
 

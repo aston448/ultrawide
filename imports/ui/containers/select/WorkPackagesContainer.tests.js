@@ -11,29 +11,39 @@ import { DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType } fr
 
 describe('JSX: WorkPackagesList', () => {
 
+    function testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole){
+
+        const workPackages = [];
+        const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
+        const openWpItems = [];
+
+        return shallow(
+            <WorkPackagesList
+                wpType={wpType}
+                newWorkPackages={workPackages}
+                availableWorkPackages={workPackages}
+                adoptedWorkPackages={workPackages}
+                designVersionStatus={designVersionStatus}
+                designUpdateStatus={designUpdateStatus}
+                userRole={userRole}
+                userContext={userContext}
+                openWpItems={openWpItems}
+            />
+        );
+    }
+
+    // Add Initial Design WP -------------------------------------------------------------------------------------------
+
     describe('The Work Package list for an Initial Design Version has an option to add a new Work Package', () => {
 
         it('has an add option for a manager on a published design version', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 1, 'Add option not found!');
         });
@@ -44,24 +54,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for Designer', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
             const designUpdateStatus = null;
             const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -69,24 +66,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for Developer', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
             const designUpdateStatus = null;
             const userRole = RoleType.DEVELOPER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -97,24 +81,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for new design version', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_NEW;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -125,24 +96,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for initial complete design version', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -150,24 +108,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for updatable complete design version', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -178,54 +123,28 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for updatable design version', () => {
 
             const wpType = WorkPackageType.WP_BASE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
     });
 
-    // Design update WPs -----------------------------------------------------------------------------------------------
+    // Add Design Update WPs -------------------------------------------------------------------------------------------
 
     describe('The Work Package list for a Design Update has an option to add a new Work Package', () => {
 
         it('has an add option for a manager on an updatable design version', () => {
 
             const wpType = WorkPackageType.WP_UPDATE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 1, 'Add option not found!');
         });
@@ -236,24 +155,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for Designer', () => {
 
             const wpType = WorkPackageType.WP_UPDATE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -261,24 +167,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for Developer', () => {
 
             const wpType = WorkPackageType.WP_UPDATE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DEVELOPER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -289,24 +182,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for new design update', () => {
 
             const wpType = WorkPackageType.WP_UPDATE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });
@@ -317,24 +197,11 @@ describe('JSX: WorkPackagesList', () => {
         it('is not available for a merged design update', () => {
 
             const wpType = WorkPackageType.WP_UPDATE;
-            const workPackages = [];
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.MANAGER;
-            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
-            const openWpItems = [];
 
-            const item = shallow(
-                <WorkPackagesList
-                    wpType={wpType}
-                    workPackages={workPackages}
-                    designVersionStatus={designVersionStatus}
-                    designUpdateStatus={designUpdateStatus}
-                    userRole={userRole}
-                    userContext={userContext}
-                    openWpItems={openWpItems}
-                />
-            );
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
 
             chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
         });

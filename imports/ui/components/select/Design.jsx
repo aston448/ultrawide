@@ -89,7 +89,7 @@ export class Design extends Component {
         }
 
         const status =
-            <div className={statusClass}>{design.designStatus}</div>;
+            <div id="designStatus" className={statusClass}>{design.designStatus}</div>;
 
         const header =
             <DesignItemHeader

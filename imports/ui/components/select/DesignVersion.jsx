@@ -179,7 +179,7 @@ export class DesignVersion extends Component {
         }
 
         let status =
-            <div className={statusClass}>{TextLookups.designVersionStatus(designVersion.designVersionStatus)}</div>;
+            <div id="designVersionStatus" className={statusClass}>{TextLookups.designVersionStatus(designVersion.designVersionStatus)}</div>;
 
         let buttons = '';
 

@@ -13,7 +13,7 @@ import { Designs } from '../../../collections/design/designs.js'
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 
-describe('JSX: DesignsList', () => {
+describe('JSX: DesignVersionsList', () => {
 
     Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
     const design = Factory.create('design');
@@ -43,50 +43,6 @@ describe('JSX: DesignsList', () => {
 
      describe('A list of Design Versions is visible for the current Design', () => {
 
-        it('one Design Version - one list item', () => {
-
-            let designVersions = [];
-            designVersions.push(designVersionUpdatable);
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: design._id,
-                designVersionId: designVersionUpdatable._id
-            };
-
-
-            const item = shallow(
-                <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
-            );
-
-            // Should be One Design Version
-            // Note: Must use the redux wrapped name here
-            chai.expect(item.find('Connect(DesignVersion)')).to.have.length(1);
-
-        });
-
-        it('two Design Versions - two list items', () => {
-
-            let designVersions = [];
-            designVersions.push(designVersionUpdatable);
-            designVersions.push(designVersionDraftComplete);
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: design._id,
-                designVersionId: designVersionUpdatable._id
-            };
-
-            const item = shallow(
-                <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
-            );
-
-            // Should be Two Design Versions
-            // Note: Must use the redux wrapped name here
-            chai.expect(item.find('Connect(DesignVersion)')).to.have.length(2);
-
-        });
-
         it('is also visible to Manager', () => {
 
             let designVersions = [];
@@ -98,14 +54,11 @@ describe('JSX: DesignsList', () => {
                 designVersionId: designVersionUpdatable._id
             };
 
-
             const item = shallow(
                 <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
             );
 
-            // Should be One Design Version
-            // Note: Must use the redux wrapped name here
-            chai.expect(item.find('Connect(DesignVersion)')).to.have.length(1);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
 
         });
 
@@ -120,14 +73,11 @@ describe('JSX: DesignsList', () => {
                 designVersionId: designVersionUpdatable._id
             };
 
-
             const item = shallow(
                 <DesignVersionsList designVersions={designVersions} userRole={userRole} userContext={userContext}/>
             );
 
-            // Should be One Design Version
-            // Note: Must use the redux wrapped name here
-            chai.expect(item.find('Connect(DesignVersion)')).to.have.length(1);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
 
         });
 

@@ -18,7 +18,13 @@ describe('JSX: DesignUpdatesList', () => {
 
     function testDesignUpdatesContainer(designVersionStatus, userRole, userContext){
 
-        const designUpdatesDv1 = [
+
+        // Design Version 1 --------------------------------------------------------------------------------------------
+
+        const dv1newUpdates = [];
+        const dv1draftUpdates = [];
+
+        const dv1mergedUpdates = [
             {
                 _id:                        '1',
                 designVersionId:            'DV1',
@@ -39,47 +45,92 @@ describe('JSX: DesignUpdatesList', () => {
             },
         ];
 
-        const designUpdatesDv2 = [
+        const dv1ignoredUpdates = [
             {
                 _id:                        '3',
-                designVersionId:            'DV2',
-                updateName:                 'NewUpdate',
+                designVersionId:            'DV1',
+                updateName:                 'IgnoredUpdate',
                 updateReference:            'Ref3',
-                updateStatus:               DesignUpdateStatus.UPDATE_NEW,
+                updateStatus:               DesignUpdateStatus.UPDATE_IGNORED,
                 updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
                 summaryDataStale:           false
-            },
+            }
+        ];
+
+        // Design Version 2 --------------------------------------------------------------------------------------------
+
+        const dv2newUpdates = [
             {
                 _id:                        '4',
                 designVersionId:            'DV2',
-                updateName:                 'PublishedUpdate1',
+                updateName:                 'NewUpdate',
                 updateReference:            'Ref4',
-                updateStatus:               DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                updateStatus:               DesignUpdateStatus.UPDATE_NEW,
                 updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
                 summaryDataStale:           false
             },
             {
                 _id:                        '5',
                 designVersionId:            'DV2',
-                updateName:                 'PublishedUpdate2',
+                updateName:                 'NewUpdate',
                 updateReference:            'Ref5',
+                updateStatus:               DesignUpdateStatus.UPDATE_NEW,
+                updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
+                summaryDataStale:           false
+            }
+        ];
+
+        const dv2draftUpdates = [
+
+            {
+                _id:                        '6',
+                designVersionId:            'DV2',
+                updateName:                 'PublishedUpdate1',
+                updateReference:            'Ref6',
+                updateStatus:               DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
+                updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
+                summaryDataStale:           false
+            },
+            {
+                _id:                        '7',
+                designVersionId:            'DV2',
+                updateName:                 'PublishedUpdate2',
+                updateReference:            'Ref7',
                 updateStatus:               DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT,
                 updateMergeAction:          DesignUpdateMergeAction.MERGE_IGNORE,
                 summaryDataStale:           false
             }
         ];
 
-        let designUpdates = [];
+        const dv2mergedUpdates = [];
+        const dv2ignoredUpdates = [];
+
+
+        let newUpdates = [];
+        let draftUpdates = [];
+        let mergedUpdates = [];
+        let ignoredUpdates = [];
+
         if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
-            designUpdates = designUpdatesDv1;
+            newUpdates = dv1newUpdates;
+            draftUpdates = dv1draftUpdates;
+            mergedUpdates = dv1mergedUpdates;
+            ignoredUpdates = dv1ignoredUpdates;
+
         }
         if(designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE){
-            designUpdates = designUpdatesDv2;
+            newUpdates = dv2newUpdates;
+            draftUpdates = dv2draftUpdates;
+            mergedUpdates = dv2mergedUpdates;
+            ignoredUpdates = dv2ignoredUpdates;
         }
 
         return shallow(
             <DesignUpdatesList
-                designUpdates={designUpdates}
+                newUpdates={newUpdates}
+                draftUpdates={draftUpdates}
+                mergedUpdates={mergedUpdates}
+                ignoredUpdates={ignoredUpdates}
                 designVersionStatus={designVersionStatus}
                 userRole={userRole}
                 userContext={userContext}/>
@@ -98,7 +149,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 2, 'Expected 2 updates in Complete DV');
+            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
         });
 
         it('design version with three updates has three in list', () => {
@@ -109,7 +160,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
+            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 4, 'Expected 4 updates in Complete DV');
         });
 
         it('also visible to Developer', () => {
@@ -120,7 +171,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 2, 'Expected 2 updates in Complete DV');
+            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
         });
 
         it('also visible to Manager', () => {
@@ -131,7 +182,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 2, 'Expected 2 updates in Complete DV');
+            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
         });
 
     });

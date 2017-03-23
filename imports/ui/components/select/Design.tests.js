@@ -22,6 +22,35 @@ describe('JSX: Design', () => {
     const designArchived = Factory.create('designArchived');
 
 
+    describe('Each Design in the list has its current status visible', () => {
+
+        it('has status LIVE if live', () => {
+
+            const userContext = {designId: 'AAA'};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <Design design={design} userContext={userContext} userRole={userRole}/>
+            );
+
+            chai.assert.equal(item.find('#designStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designStatus').text(), DesignStatus.DESIGN_LIVE);
+        });
+
+        it('has status ARCHIVED if archived', () => {
+
+            const userContext = {designId: 'AAA'};
+            const userRole = RoleType.DESIGNER;
+
+            const item = shallow(
+                <Design design={designArchived} userContext={userContext} userRole={userRole}/>
+            );
+
+            chai.assert.equal(item.find('#designStatus').length, 1, 'Status not found');
+            chai.assert.equal(item.find('#designStatus').text(), DesignStatus.DESIGN_ARCHIVED);
+        });
+    });
+
     describe('If a Design is removable, the Design has an option to remove the Design', () => {
 
         it('has a Remove button if the Design is removable', () => {

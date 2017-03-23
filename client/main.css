@@ -448,6 +448,10 @@ input {
     border-left: 1px solid darkgrey;
 }
 
+.editor-menu-item-holder{
+    float: left;
+}
+
 /* Bootstrap override */
 .dropdown-menu {
     white-space: nowrap;

@@ -673,7 +673,7 @@ class ClientUserContextServices {
                                         return;
 
                                     case WorkPackageType.WP_UPDATE:
-                                        if(userContext.designComponentId != 'NONE') {
+                                        if(userContext.designComponentId !== 'NONE') {
                                             ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
                                         } else {
                                             store.dispatch(setCurrentView(ViewType.SELECT));
@@ -714,26 +714,46 @@ class ClientUserContextServices {
             scenario:           'NONE'
         };
 
-        if(userContext.designId != 'NONE'){
-            contextNameData.design = Designs.findOne({_id: userContext.designId}).designName;
+        if(userContext.designId !== 'NONE'){
+
+            const design = Designs.findOne({_id: userContext.designId});
+
+            if(design){
+                contextNameData.design = design.designName;
+            }
         }
 
-        if(userContext.designVersionId != 'NONE'){
-            contextNameData.designVersion = DesignVersions.findOne({_id: userContext.designVersionId}).designVersionName;
+        if(userContext.designVersionId !== 'NONE'){
+
+            const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
+
+            if(designVersion) {
+                contextNameData.designVersion = designVersion.designVersionName;
+            }
         }
 
-        if(userContext.designUpdateId != 'NONE'){
-            contextNameData.designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId}).updateName;
+        if(userContext.designUpdateId !== 'NONE'){
+
+            const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
+
+            if(designUpdate) {
+                contextNameData.designUpdate = designUpdate.updateName;
+            }
         }
 
-        if(userContext.workPackageId != 'NONE'){
-            contextNameData.workPackage = WorkPackages.findOne({_id: userContext.workPackageId}).workPackageName;
+        if(userContext.workPackageId !== 'NONE'){
+
+            const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+            if(workPackage) {
+                contextNameData.workPackage = workPackage.workPackageName;
+            }
         }
 
         // After here is is possible that the data is not yet subscribed to so skip if not
         if(store.getState().designVersionDataLoaded) {
 
-            if (userContext.designComponentId != 'NONE') {
+            if (userContext.designComponentId !== 'NONE') {
                 switch (userContext.designComponentType) {
                     case ComponentType.APPLICATION:
                         if (userContext.designUpdateId === 'NONE') {

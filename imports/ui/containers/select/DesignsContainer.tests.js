@@ -32,8 +32,9 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            // Add item should be there
-            chai.expect(item.find('DesignComponentAdd')).to.have.length(1);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
 
         });
 
@@ -54,8 +55,9 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            // Add item should be there
-            chai.expect(item.find('DesignComponentAdd')).to.have.length(1);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Design', 'Expecting Add Design footer action');
 
         });
 
@@ -76,8 +78,8 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            // Add item should be there
-            chai.expect(item.find('DesignComponentAdd')).to.have.length(0);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
 
         });
 
@@ -94,8 +96,8 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            // Add item should be there
-            chai.expect(item.find('DesignComponentAdd')).to.have.length(0);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
 
         });
 
@@ -103,71 +105,6 @@ describe('JSX: DesignsList', () => {
 
     describe('A list of all Designs is visible to all users', () => {
 
-        it('no Designs - no list', () => {
-
-            let designs = [];
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: 'NONE'
-            };
-
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
-
-            // Add item should be there
-            chai.expect(item.find('Connect(Design)')).to.have.length(0);
-
-        });
-
-        it('one Design - one list item', () => {
-
-            Factory.define('design', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design = Factory.create('design');
-            let designs = [];
-            designs.push(design);
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: design._id
-            };
-
-
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
-
-            // Should be One Design
-            // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
-            chai.expect(item.find('Connect(Design)')).to.have.length(1);
-
-        });
-
-        it('two Designs - two list items', () => {
-
-            Factory.define('design1', Designs, { designName: 'Design1', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            Factory.define('design2', Designs, { designName: 'Design2', isRemovable: false, designStatus: DesignStatus.DESIGN_LIVE});
-            const design1 = Factory.create('design1');
-            const design2 = Factory.create('design2');
-            let designs = [];
-            designs.push(design1);
-            designs.push(design2);
-
-            const userRole = RoleType.DESIGNER;
-            const userContext = {
-                designId: design1._id
-            };
-
-            const item = shallow(
-                <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
-            );
-
-            // Should be Two Designs
-            // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
-            chai.expect(item.find('Connect(Design)')).to.have.length(2);
-
-        });
 
         it('is also visible to Manager', () => {
 
@@ -186,9 +123,7 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            // Should be One Design
-            // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
-            chai.expect(item.find('Connect(Design)')).to.have.length(1);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
 
         });
 
@@ -209,9 +144,7 @@ describe('JSX: DesignsList', () => {
                 <DesignsList designs={designs} userRole={userRole} userContext={userContext}/>
             );
 
-            // Should be One Design
-            // Note: Must use the redux wrapped name here - is this in the docs??? Don't think so!
-            chai.expect(item.find('Connect(Design)')).to.have.length(1);
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
 
         });
 

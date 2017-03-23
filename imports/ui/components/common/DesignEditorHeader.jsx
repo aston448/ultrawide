@@ -61,20 +61,28 @@ export class DesignEditorHeader extends Component {
 
         // Items -------------------------------------------------------------------------------------------------------
 
-        let viewView = (mode === ViewMode.MODE_VIEW ? 'view-toggle-active': 'view-toggle-inactive');
-        let viewEdit = (mode === ViewMode.MODE_EDIT ? 'view-toggle-active': 'view-toggle-inactive');
+        const viewView = (mode === ViewMode.MODE_VIEW) ? 'view-toggle-active' : 'view-toggle-inactive';
+        const viewEdit = (mode === ViewMode.MODE_EDIT) ? 'view-toggle-active' : 'view-toggle-inactive';
 
-        let viewModeViewOption =
-            <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="VIEW" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW, view, userViewOptions)}/>;
+        const viewModeViewOption =
+            <div id="optionView" className={viewView}>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="VIEW" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_VIEW, view, userViewOptions)}/>
+            </div>;
 
-        let viewModeEditOption =
-            <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="EDIT" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT, view, userViewOptions)}/>;
+        const viewModeEditOption =
+            <div id="optionEdit" className={viewEdit}>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="EDIT" actionFunction={ () => this.onSetEditViewMode(ViewMode.MODE_EDIT, view, userViewOptions)}/>
+            </div>;
 
-        let zoomFeaturesOption =
-            <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="Features" actionFunction={ () => this.onZoomToFeatures(userContext)}/>;
+        const zoomFeaturesOption =
+            <div id="optionZoomFeatures" className="editor-menu-item-holder">
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="Features" actionFunction={ () => this.onZoomToFeatures(userContext)}/>
+            </div>;
 
-        let zoomSectionsOption =
-            <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="Sections" actionFunction={ () => this.onZoomToSections(userContext)}/>;
+        const zoomSectionsOption =
+            <div id="optionZoomSections" className="editor-menu-item-holder">
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="Sections" actionFunction={ () => this.onZoomToSections(userContext)}/>
+            </div>;
 
         const nameData = this.getNameData(userContext);
 
@@ -84,7 +92,7 @@ export class DesignEditorHeader extends Component {
             case ViewType.SELECT:
                 if(displayContext === DisplayContext.UPDATE_SUMMARY){
                     description = 'Design Update Summary';
-                    if(nameData.designUpdate != 'NONE'){
+                    if(nameData.designUpdate !== 'NONE'){
                         description += ' for ' + nameData.designUpdate
                     }
                 }
@@ -109,7 +117,7 @@ export class DesignEditorHeader extends Component {
                         break;
                     case DisplayContext.UPDATE_SUMMARY:
                         description = 'Design Update Summary';
-                        if(nameData.designUpdate != 'NONE'){
+                        if(nameData.designUpdate !== 'NONE'){
                             description += ' for ' + nameData.designUpdate
                         }
                         break;
@@ -153,15 +161,11 @@ export class DesignEditorHeader extends Component {
             case ViewType.DESIGN_NEW_EDIT:
 
                 options =
-                    <div>
+                    <div className="details-menu-bar">
                         {zoomFeaturesOption}
                         {zoomSectionsOption}
-                        <div className={viewView}>
-                            {viewModeViewOption}
-                        </div>
-                        <div className={viewEdit}>
-                            {viewModeEditOption}
-                        </div>
+                        {viewModeViewOption}
+                        {viewModeEditOption}
                     </div>;
                 break;
 
@@ -170,13 +174,9 @@ export class DesignEditorHeader extends Component {
                 switch(displayContext) {
                     case DisplayContext.UPDATE_EDIT:
                         options =
-                            <div>
-                                <div className={viewView}>
-                                    {viewModeViewOption}
-                                </div>
-                                <div className={viewEdit}>
-                                    {viewModeEditOption}
-                                </div>
+                            <div className="details-menu-bar">
+                                {viewModeViewOption}
+                                {viewModeEditOption}
                             </div>;
                         break;
 
@@ -187,19 +187,15 @@ export class DesignEditorHeader extends Component {
                     default:
                         if(mode === ViewMode.MODE_VIEW){
                             options =
-                                <div>
+                                <div className="details-menu-bar">
                                     {zoomFeaturesOption}
                                     {zoomSectionsOption}
-                                    <div className={viewView}>
-                                        {viewModeViewOption}
-                                    </div>
-                                    <div className={viewEdit}>
-                                        {viewModeEditOption}
-                                    </div>
+                                    {viewModeViewOption}
+                                    {viewModeEditOption}
                                 </div>;
                         } else {
                             options =
-                                <div>
+                                <div className="details-menu-bar">
                                     {zoomFeaturesOption}
                                     {zoomSectionsOption}
                                 </div>;
@@ -211,9 +207,9 @@ export class DesignEditorHeader extends Component {
             case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.DESIGN_UPDATE_VIEW:
 
-                if(displayContext != DisplayContext.UPDATE_SUMMARY) {
+                if(displayContext !== DisplayContext.UPDATE_SUMMARY) {
                     options =
-                        <div>
+                        <div className="details-menu-bar">
                             {zoomFeaturesOption}
                             {zoomSectionsOption}
                         </div>;
@@ -224,15 +220,11 @@ export class DesignEditorHeader extends Component {
             case ViewType.DEVELOP_UPDATE_WP:
 
                 options =
-                    <div>
+                    <div className="details-menu-bar">
                         {zoomFeaturesOption}
                         {zoomSectionsOption}
-                        <div className={viewView}>
-                            {viewModeViewOption}
-                        </div>
-                        <div className={viewEdit}>
-                            {viewModeEditOption}
-                        </div>
+                        {viewModeViewOption}
+                        {viewModeEditOption}
                     </div>;
                 break;
 
@@ -243,7 +235,7 @@ export class DesignEditorHeader extends Component {
 
                 if(displayContext === DisplayContext.WP_VIEW){
                     options =
-                        <div>
+                        <div className="details-menu-bar">
                             {zoomFeaturesOption}
                             {zoomSectionsOption}
                         </div>;
@@ -274,7 +266,7 @@ export class DesignEditorHeader extends Component {
                                 <div className="header-description">{description}</div>
                             </Col>
                             <Col md={5}>
-                                <div className="details-menu-bar">{options}</div>
+                                {options}
                             </Col>
                         </Row>
                     </Grid>

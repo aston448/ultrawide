@@ -52,22 +52,6 @@ export class DesignItemHeader extends Component{
 
     }
 
-    // // TODO - if we want to have an item body
-    // toggleOpen(){
-    //     this.props.toggleOpen();
-    //     this.setState({open: !this.state.open});
-    //     //this.setCurrentComponent();
-    // }
-
-    // Passes back the click to the parent component to get it selected as the current one
-    // setCurrentItem(){
-    //     //console.log("SELECT " + this.props.currentItemType);
-    //
-    //     if (typeof this.props.onSelectItem === 'function') {
-    //         this.props.onSelectItem();
-    //     }
-    // }
-
     // Allow editing of name
     editItemName(){
         event.preventDefault();
@@ -168,7 +152,7 @@ export class DesignItemHeader extends Component{
         let refReadOnly = <div></div>;
 
         // Versions and updates have a version component
-        if(currentItemType == ItemType.DESIGN_VERSION || currentItemType === ItemType.DESIGN_UPDATE){
+        if(currentItemType === ItemType.DESIGN_VERSION || currentItemType === ItemType.DESIGN_UPDATE){
             refEditorEditing =
                 <div>
                     <InputGroup>
