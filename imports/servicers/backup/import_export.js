@@ -23,7 +23,7 @@ import { AppGlobalData }                from '../../collections/app/app_global_d
 
 // Ultrawide Services
 import {getIdFromMap, padDigits, log}              from '../../common/utils.js';
-import { DesignStatus, WorkPackageType, LogLevel} from '../../constants/constants.js';
+import { DesignStatus, WorkPackageType, UpdateMergeStatus, LogLevel} from '../../constants/constants.js';
 
 import TestOutputLocationServices       from '../configure/test_output_location_services.js';
 import DesignServices                   from '../design/design_services.js';
@@ -491,14 +491,21 @@ class ImpExServices{
 
     migrateDesignComponentData(designComponentData, backupVersion, currentVersion){
         // Add to this function for each release
-        let newDesignComponentData = designComponentData;
+        let newDesignComponentData = [];
 
         switch(backupVersion){
             case 1:
                 switch(currentVersion){
                     case 2:
-                        // No changes
-                        newDesignComponentData = designComponentData
+                        // Fix broken merge status in v1
+                        designComponentData.forEach((component) => {
+                            if(component.updateMergeStatus === 'BASE'){
+                                component.updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
+                                newDesignComponentData.push(component);
+                            } else {
+                                newDesignComponentData.push(component);
+                            }
+                        });
                 }
         }
 
