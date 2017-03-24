@@ -138,7 +138,10 @@ export const DisplayContext = {
     INT_TEST_FEATURE:       'INT_TEST_FEATURE',
     INT_TEST_FEATURE_ASPECT:'INT_TEST_FEATURE_ASPECT',
     INT_TEST_SCENARIO:      'INT_TEST_SCENARIO',
-    UPDATE_SUMMARY:         'UPDATE_SUMMARY'
+    UPDATE_SUMMARY:         'UPDATE_SUMMARY',
+    EDITOR_FOOTER:          'EDITOR_FOOTER',
+    EDITOR_HEADER:          'EDITOR_HEADER',
+    DETAILS_HEADER:         'DETAILS_HEADER'
 };
 
 export const StepContext = {

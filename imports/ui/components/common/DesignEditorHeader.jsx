@@ -42,16 +42,16 @@ export class DesignEditorHeader extends Component {
         ClientAppHeaderServices.setEditorMode(newMode, view, viewOptions);
     }
 
-    onZoomToFeatures(userContext){
-        ClientAppHeaderServices.setViewLevelFeatures(userContext);
+    onZoomToFeatures(userContext, displayContext){
+        ClientAppHeaderServices.setViewLevelFeatures(userContext, displayContext);
     }
 
-    onZoomToSections(userContext){
-        ClientAppHeaderServices.setViewLevelSections(userContext);
+    onZoomToSections(userContext, displayContext){
+        ClientAppHeaderServices.setViewLevelSections(userContext, displayContext);
     }
 
-    getNameData(userContext){
-        return ClientUserContextServices.getContextNameData(userContext);
+    getNameData(userContext, displayContext){
+        return ClientUserContextServices.getContextNameData(userContext, displayContext);
     }
 
 
@@ -76,15 +76,15 @@ export class DesignEditorHeader extends Component {
 
         const zoomFeaturesOption =
             <div id="optionZoomFeatures" className="editor-menu-item-holder">
-                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="Features" actionFunction={ () => this.onZoomToFeatures(userContext)}/>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="FFF" actionFunction={ () => this.onZoomToFeatures(userContext, displayContext)}/>
             </div>;
 
         const zoomSectionsOption =
             <div id="optionZoomSections" className="editor-menu-item-holder">
-                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="Sections" actionFunction={ () => this.onZoomToSections(userContext)}/>
+                <UltrawideMenuItem menuType={MenuType.MENU_EDITOR} itemName="SSS" actionFunction={ () => this.onZoomToSections(userContext, displayContext)}/>
             </div>;
 
-        const nameData = this.getNameData(userContext);
+        const nameData = this.getNameData(userContext, displayContext);
 
         let description = '';
 
@@ -175,6 +175,8 @@ export class DesignEditorHeader extends Component {
                     case DisplayContext.UPDATE_EDIT:
                         options =
                             <div className="details-menu-bar">
+                                {zoomFeaturesOption}
+                                {zoomSectionsOption}
                                 {viewModeViewOption}
                                 {viewModeEditOption}
                             </div>;

@@ -491,14 +491,14 @@ class ClientDesignComponentServices{
     setDesignComponent(newDesignComponentId, userContext, displayContext){
         //console.log("Selected component with id " + newDesignComponentId);
 
-        if(newDesignComponentId != userContext.designComponentId) {
+        if(newDesignComponentId !== userContext.designComponentId) {
 
             // See if any of the feature specific fields need setting
             let component = null;
             let componentFeatureRef = '';
             let componentParentRef = '';
 
-            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.BASE_VIEW){
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
                 component = DesignComponents.findOne({_id: newDesignComponentId});
                 componentFeatureRef = component.componentFeatureReferenceId;
                 componentParentRef = component.componentParentReferenceId;
@@ -523,7 +523,7 @@ class ClientDesignComponentServices{
                 case ComponentType.SCENARIO:
                     featureReferenceId = componentFeatureRef;
                     // If this Scenario is not directly under its feature then the parent is the Feature Aspect
-                    if(componentParentRef != componentFeatureRef){
+                    if(componentParentRef !== componentFeatureRef){
                         featureAspectReferenceId = componentParentRef;
                     }
                     scenarioReferenceId = component.componentReferenceId;

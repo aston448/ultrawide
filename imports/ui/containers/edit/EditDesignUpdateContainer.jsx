@@ -22,6 +22,7 @@ import ClientUserContextServices    from '../../../apiClient/apiClientUserContex
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
 import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js'
 import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
@@ -57,6 +58,37 @@ export class UpdateApplicationsList extends Component {
         return ClientUserContextServices.getWindowSizeClass();
     }
 
+    getDesignUpdateItem(application, displayContext, designUpdateId){
+        switch(displayContext){
+            case  DisplayContext.UPDATABLE_VIEW:
+                return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(application);
+            case DisplayContext.UPDATE_SCOPE:
+                // See if this item is in scope - i.e. in the DU
+                return ClientDesignVersionServices.getDesignUpdateItemForUpdate(application, designUpdateId);
+            default:
+                return application;
+        }
+    }
+
+    // A list of top level applications in the design version for the scope
+    renderScopeApplications(baseApplications, displayContext, view, mode, userContext, testSummary) {
+        return baseApplications.map((application) => {
+            // All applications are shown
+            return (
+                <DesignComponentTarget
+                    key={application._id}
+                    currentItem={application}
+                    designItem={application}
+                    updateItem={this.getDesignUpdateItem(application, displayContext, userContext.designUpdateId)}
+                    displayContext={displayContext}
+                    view={view}
+                    mode={mode}
+                    testSummary={testSummary}
+                />
+            );
+        });
+    }
+
     // A list of top level applications in the design update
     renderUpdateApplications(updateApplications, context, view, mode, testSummary) {
         return updateApplications.map((application) => {
@@ -66,6 +98,7 @@ export class UpdateApplicationsList extends Component {
                     key={application._id}
                     currentItem={application}
                     designItem={application}
+                    updateItem={application}
                     displayContext={context}
                     view={view}
                     mode={mode}
@@ -78,7 +111,7 @@ export class UpdateApplicationsList extends Component {
 
     render() {
 
-        const {updateApplications, userContext, view, mode, viewOptions} = this.props;
+        const {baseApplications, updateApplications, userContext, view, mode, viewOptions} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -111,7 +144,7 @@ export class UpdateApplicationsList extends Component {
                     displayContext={DisplayContext.UPDATE_SCOPE}
                 />
                 <div className={editorClass}>
-                    {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_SCOPE, view, mode, false)}
+                    {this.renderScopeApplications(baseApplications, DisplayContext.UPDATE_SCOPE, view, mode, userContext, false)}
                 </div>
                 <DesignEditorFooter
                     hasDesignSummary={false}
@@ -333,6 +366,7 @@ export class UpdateApplicationsList extends Component {
 
 
 UpdateApplicationsList.propTypes = {
+    baseApplications:   PropTypes.array.isRequired,
     updateApplications: PropTypes.array.isRequired
 };
 
@@ -342,7 +376,8 @@ function mapStateToProps(state) {
         userContext:            state.currentUserItemContext,
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
-        viewOptions:            state.currentUserViewOptions
+        viewOptions:            state.currentUserViewOptions,
+        testDataFlag:           state.testDataFlag
 
     }
 }

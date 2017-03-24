@@ -1,5 +1,6 @@
 
 // Ultrawide Collections
+import { DesignComponents }         from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
@@ -8,6 +9,8 @@ import { WorkPackageComponents }    from '../../collections/work/work_package_co
 import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType }      from '../../constants/constants.js';
 import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
 import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
+import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
+
 import { log }                          from '../../common/utils.js'
 //======================================================================================================================
 //
@@ -190,6 +193,152 @@ class DesignUpdateComponentModules{
             );
         }
     };
+
+    insertComponentToUpdateScope(baseComponent, designUpdateId){
+
+        const isScopable = DesignUpdateModules.isScopable(baseComponent.componentType);
+
+        DesignUpdateComponents.insert({
+            componentReferenceId:           baseComponent.componentReferenceId,
+            designId:                       baseComponent.designId,
+            designVersionId:                baseComponent.designVersionId,
+            designUpdateId:                 designUpdateId,
+            componentType:                  baseComponent.componentType,
+            componentLevel:                 baseComponent.componentLevel,
+            componentParentIdOld:           'NONE',                                             // To be corrected after
+            componentParentIdNew:           'NONE',                                             // To be corrected after
+            componentParentReferenceIdOld:  baseComponent.componentParentReferenceId,
+            componentParentReferenceIdNew:  baseComponent.componentParentReferenceId,
+            componentFeatureReferenceIdOld: baseComponent.componentFeatureReferenceId,
+            componentFeatureReferenceIdNew: baseComponent.componentFeatureReferenceId,
+            componentIndexOld:              baseComponent.componentIndex,
+            componentIndexNew:              baseComponent.componentIndex,
+
+            // Data
+            componentNameOld:               baseComponent.componentName,
+            componentNameNew:               baseComponent.componentName,
+            componentNameRawOld:            baseComponent.componentNameRaw,
+            componentNameRawNew:            baseComponent.componentNameRaw,
+            componentNarrativeOld:          baseComponent.componentNarrative,
+            componentNarrativeNew:          baseComponent.componentNarrative,
+            componentNarrativeRawOld:       baseComponent.componentNarrativeRaw,
+            componentNarrativeRawNew:       baseComponent.componentNarrativeRaw,
+            componentTextRawOld:            baseComponent.componentTextRaw,
+            componentTextRawNew:            baseComponent.componentTextRaw,
+
+            // Update State
+            isNew:                          false,
+            isChanged:                      false,
+            isTextChanged:                  false,
+            isMoved:                        false,
+            isRemoved:                      false,
+            isRemovedElsewhere:             false,
+            isDevUpdated:                   false,
+            isDevAdded:                     false,
+
+            // Editing state (shared and persistent)
+            isRemovable:                    true,
+            isScopable:                     isScopable,
+            isInScope:                      isScopable,
+            isParentScope:                  !isScopable
+        });
+    }
+
+    removeComponentFromUpdateScope(designUpdateComponentId){
+
+        DesignUpdateComponents.remove({_id: designUpdateComponentId});
+
+    }
+
+    addParentsToScope(childComponent, designUpdateId){
+
+        // Setting this component in scope
+        // Set all parents to be in Parent Scope (unless already in scope themselves)
+
+        let parentId = DesignComponents.findOne({_id: childComponent._id}).componentParentId;
+
+        if(parentId !== 'NONE'){
+
+            let parentComponent = DesignComponents.findOne({_id: parentId});
+
+            if(parentComponent) {
+
+                let currentUpdateComponent = DesignUpdateComponents.findOne({
+                    designUpdateId: designUpdateId,
+                    componentReferenceId: parentComponent.componentReferenceId
+                });
+
+                if(!currentUpdateComponent){
+                    // No DU Component for the parent so add it to scope
+                    this.insertComponentToUpdateScope(parentComponent, designUpdateId);
+
+                    // And carry on up the tree
+                    this.addParentsToScope(parentComponent, designUpdateId);
+                }
+            }
+        }
+    }
+
+    removeChildrenFromScope(parentComponent, designUpdateId){
+
+        let dvChildren = DesignComponents.find({
+            designVersionId: parentComponent.designVersionId,
+            componentParentId: parentComponent._id
+        });
+
+        dvChildren.forEach((child) => {
+
+            let currentUpdateComponent = DesignUpdateComponents.findOne({
+                designUpdateId: designUpdateId,
+                componentReferenceId: child.componentReferenceId
+            });
+
+            if(currentUpdateComponent){
+                this.removeComponentFromUpdateScope(currentUpdateComponent._id);
+            }
+
+            // And remove any children of this child
+            this.removeChildrenFromScope(child, designUpdateId);
+        });
+    }
+
+    removeChildlessParentsFromScope(childComponent, designUpdateId){
+
+        // Removing this component from scope
+        // Remove all parents from scope unless they have other children still in scope
+
+        let parentId = DesignComponents.findOne({_id: childComponent._id}).componentParentId;
+
+        if(parentId !== 'NONE'){
+
+            let parentComponent = DesignComponents.findOne({_id: parentId});
+
+            if(parentComponent) {
+
+                let currentUpdateComponent = DesignUpdateComponents.findOne({
+                    designUpdateId: designUpdateId,
+                    componentReferenceId: parentComponent.componentReferenceId
+                });
+
+                if(currentUpdateComponent){
+
+                    // Only remove components that are not in scope themselves
+                    if(!currentUpdateComponent.isInScope) {
+                        if (this.hasNoChildren(currentUpdateComponent._id)) {
+
+                            // OK to remove the DU component
+                            this.removeComponentFromUpdateScope(currentUpdateComponent._id);
+
+                            // And move on up
+                            this.removeChildlessParentsFromScope(parentComponent, designUpdateId);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
 
     updateParentScope(designUpdateComponentId, newScope){
 

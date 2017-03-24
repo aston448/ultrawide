@@ -672,7 +672,7 @@ class ClientContainerServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(userContext, view){
 
-        //console.log("Getting Application data for " + view + " and DV: " + designVersionId + " DU: " + designUpdateId + " WP: " + workPackageId);
+        console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
         const baseApplications = DesignComponents.find(
             {
@@ -684,12 +684,12 @@ class ClientContainerServices{
         );
 
         let baseApplicationsArr = baseApplications.fetch();
-        log((msg) => console.log(msg), LogLevel.TRACE, "Found {} base applications.", baseApplicationsArr.length);
+        log((msg) => console.log(msg), LogLevel.INFO, "Found {} base applications.", baseApplicationsArr.length);
 
         // Get Update Apps if update Id provided
         let updateApplicationsArr = [];
 
-        if(userContext.designUpdateId != 'NONE'){
+        if(userContext.designUpdateId !== 'NONE'){
 
             const updateApplications = DesignUpdateComponents.find(
                 {
@@ -707,7 +707,7 @@ class ClientContainerServices{
         let wpApplicationsArr = [];
         let wpApplicationsInScopeArr = [];
 
-        if(userContext.workPackageId != 'NONE'){
+        if(userContext.workPackageId !== 'NONE'){
 
             // Which applications are in the WP?
             const wpApps = WorkPackageComponents.find(
@@ -757,6 +757,11 @@ class ClientContainerServices{
                     designSummaryData:      designSummaryData
                 };
             case ViewType.DESIGN_UPDATE_EDIT:
+                // Need base and update apps
+                return{
+                    baseApplications:       baseApplicationsArr,
+                    updateApplications:     updateApplicationsArr
+                };
             case ViewType.DESIGN_UPDATE_VIEW:
                 // Need design update apps only
                 return{
@@ -889,15 +894,14 @@ class ClientContainerServices{
                         break;
 
                     case DisplayContext.UPDATE_SCOPE:
-                        // Display all design update components so scope can be chosen
-                        currentComponents = DesignUpdateComponents.find(
+                        // Display all design components in the base design so scope can be chosen
+                        currentComponents = DesignComponents.find(
                             {
                                 designVersionId: designVersionId,
-                                designUpdateId: updateId,
                                 componentType: componentType,
-                                componentParentIdNew: parentId
+                                componentParentId: parentId
                             },
-                            {sort:{componentIndexNew: 1}}
+                            {sort:{componentIndex: 1}}
                         );
                         break;
 

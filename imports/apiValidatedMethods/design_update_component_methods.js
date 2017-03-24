@@ -29,7 +29,7 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, null, ComponentType.APPLICATION);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addApplicationToDesignVersion.failValidation', result)
         }
 
@@ -71,7 +71,7 @@ export const addDesignSectionToApplication = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentId, ComponentType.DESIGN_SECTION);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addDesignSectionToApplication.failValidation', result)
         }
 
@@ -114,7 +114,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentId, ComponentType.DESIGN_SECTION);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addDesignSectionToDesignSection.failValidation', result)
         }
 
@@ -156,7 +156,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentId, ComponentType.FEATURE);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addFeatureToDesignSection.failValidation', result)
         }
 
@@ -198,7 +198,7 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentId, ComponentType.FEATURE_ASPECT);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addFeatureAspectToFeature.failValidation', result)
         }
 
@@ -242,7 +242,7 @@ export const addScenario = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentId, ComponentType.SCENARIO);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.addScenario.failValidation', result)
         }
 
@@ -285,7 +285,7 @@ export const updateComponentName = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponentId, newPlainText);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.updateComponentName.failValidation', result)
         }
 
@@ -317,7 +317,7 @@ export const updateFeatureNarrative = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.updateFeatureNarrative.failValidation', result)
         }
 
@@ -348,7 +348,7 @@ export const removeDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.removeDesignComponent.failValidation', result)
         }
 
@@ -379,7 +379,7 @@ export const restoreDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateRestoreDesignUpdateComponent(view, mode, designUpdateComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.restoreDesignComponent.failValidation', result)
         }
 
@@ -411,7 +411,7 @@ export const moveDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponentId, targetComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.moveDesignComponent.failValidation', result)
         }
 
@@ -442,7 +442,7 @@ export const reorderDesignComponent = new ValidatedMethod({
         // Server validation
         const result = DesignUpdateComponentValidationApi.validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponentId, targetComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.reorderDesignComponent.failValidation', result)
         }
 
@@ -464,22 +464,24 @@ export const toggleScope = new ValidatedMethod({
         view:                       {type: String},
         mode:                       {type: String},
         displayContext:             {type: String},
-        designUpdateComponentId:    {type: String},
+        baseComponentId:            {type: String},
+        designUpdateId:             {type: String},
+        updateComponent:            {type: Object, blackbox: true, optional: true},
         newScope:                   {type: Boolean}
     }).validator(),
 
-    run({view, mode, displayContext, designUpdateComponentId, newScope}){
+    run({view, mode, displayContext, baseComponentId, designUpdateId, updateComponent, newScope}){
 
         // Server validation
-        const result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponentId, newScope);
+        const result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, baseComponentId, designUpdateId, updateComponent, newScope);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdateComponent.toggleScope.failValidation', result)
         }
 
         // Server action
         try {
-            DesignUpdateComponentServices.toggleScope(designUpdateComponentId, newScope);
+            DesignUpdateComponentServices.toggleScope(baseComponentId, designUpdateId, newScope);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)

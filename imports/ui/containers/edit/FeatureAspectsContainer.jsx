@@ -49,17 +49,21 @@ class FeatureAspectsList extends Component {
         }
     };
 
-    getDesignUpdateItem(featureAspect, displayContext){
-        if(displayContext === DisplayContext.UPDATABLE_VIEW){
-            return ClientDesignVersionServices.getDesignUpdateItem(featureAspect);
-        } else {
-            return null;
+    getDesignUpdateItem(featureAspect, displayContext, designUpdateId){
+        switch(displayContext){
+            case  DisplayContext.UPDATABLE_VIEW:
+                return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(featureAspect);
+            case DisplayContext.UPDATE_SCOPE:
+                // See if this item is in scope - i.e. in the DU
+                return ClientDesignVersionServices.getDesignUpdateItemForUpdate(featureAspect, designUpdateId);
+            default:
+                return featureAspect;
         }
     };
 
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
-        const {components, displayContext, view, mode, viewOptions} = this.props;
+        const {components, displayContext, view, mode, userContext, viewOptions} = this.props;
 
         if (components) {
 
@@ -91,7 +95,7 @@ class FeatureAspectsList extends Component {
                         key={featureAspect._id}
                         currentItem={featureAspect}
                         designItem={this.getDesignItem(featureAspect, displayContext)}
-                        updateItem={this.getDesignUpdateItem(featureAspect, displayContext)}
+                        updateItem={this.getDesignUpdateItem(featureAspect, displayContext, userContext.designUpdateId)}
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
@@ -121,9 +125,10 @@ FeatureAspectsList.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        view: state.currentAppView,
-        mode: state.currentViewMode,
-        viewOptions: state.currentUserViewOptions
+        view:           state.currentAppView,
+        mode:           state.currentViewMode,
+        userContext:    state.currentUserItemContext,
+        viewOptions:    state.currentUserViewOptions
     }
 }
 

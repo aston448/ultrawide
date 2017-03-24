@@ -458,8 +458,26 @@ class ClientDesignVersionServices{
         return {success: true, message: ''};
     };
 
+    // Get Design Update item for a Design Update Scope - if there is one.  If not then the item is not in scope
+    getDesignUpdateItemForUpdate(currentComponent, designUpdateId){
+
+        const updateComponent = DesignUpdateComponents.findOne({
+            designVersionId:        currentComponent.designVersionId,
+            designUpdateId:         designUpdateId,
+            componentReferenceId:   currentComponent.componentReferenceId,
+        });
+
+        console.log("getting update component returning " + updateComponent);
+
+        if(updateComponent){
+            return updateComponent;
+        } else {
+            return null;
+        }
+    }
+
     // Get the Design Update item that relates to an Updatable Design Version
-    getDesignUpdateItem(designComponent){
+    getDesignUpdateItemForUpdatableVersion(designComponent){
 
         // There may be several Design Updates for the Design Version.
         // We will look for the one that has changed.  It should not be possible to change the same component in more than one update.

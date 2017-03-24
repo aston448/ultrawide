@@ -89,9 +89,20 @@ export class DesignComponentHeader extends Component{
         this.focus = () => {if(this.refs.editor){this.refs.editor.focus()}};
 
         this.updateTitleText(this.props);
+
     }
 
     shouldComponentUpdate(nextProps, nextState){
+
+        // Item is going into update scope
+        if(nextProps.updateComponent !== null && this.props.updateComponent === null){
+            return true;
+        }
+
+        // Item is going out of update scope
+        if(nextProps.updateComponent === null && this.props.updateComponent !== null){
+            return true;
+        }
 
         // Optimisation.  No need to re-render this component if no change to what is seen
         switch (this.props.view) {
@@ -169,9 +180,15 @@ export class DesignComponentHeader extends Component{
                 this.setState({parentScope: this.props.currentItem.componentParent});
                 break;
             case DisplayContext.UPDATE_SCOPE:
+                if(this.props.updateItem){
+                    if(this.props.updateItem.isScopable) {
+                        this.setState({inScope: true});
+                    } else {
+                        this.setState({parentScope: true});
+                    }
+                }
+                break;
             case DisplayContext.UPDATE_EDIT:
-                this.setState({inScope: this.props.currentItem.isInScope});
-                this.setState({parentScope: this.props.currentItem.isParentScope});
                 break;
         }
 
@@ -201,7 +218,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
-                if (newProps.currentItem.componentName != this.props.currentItem.componentName) {
+                if (newProps.currentItem.componentName !== this.props.currentItem.componentName) {
                     this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
                 }
 
@@ -212,23 +229,26 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case ViewType.DESIGN_UPDATE_EDIT:
-                if(this.props.displayContext === DisplayContext.BASE_VIEW){
+                if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
                     // Base view.  Should not be updating
-                    if (newProps.currentItem.componentName != this.props.currentItem.componentName) {
+                    if (newProps.currentItem.componentName !== this.props.currentItem.componentName) {
                         this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
                     }
+
+                    // Reflect any changes in scope
+                    this.setState({inScope: (newProps.updateItem !== null)});
+
                 } else {
                     // For updates we use the new name.  Also update if scope changes so decoration is redone.
                     if(
-                        newProps.currentItem.componentNameNew != this.props.currentItem.componentNameNew ||
-                        newProps.currentItem.isInScope != this.props.currentItem.isInScope
+                        newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew ||
+                        newProps.currentItem.isInScope !== this.props.currentItem.isInScope
                     ){
                         this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                     }
 
-                    // Reflect any changes in scope
-                    this.setState({inScope: newProps.currentItem.isInScope});
-                    this.setState({parentScope: newProps.currentItem.isParentScope});
+
+                    //this.setState({parentScope: newProps.currentItem.isParentScope});
 
                 }
                 break;
@@ -336,7 +356,7 @@ export class DesignComponentHeader extends Component{
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     // If there is an item whose name has changed then create a new editor entry showing both
                     if(props.updateItem){
-                        if(props.updateItem.componentNameOld != item.componentName) {
+                        if(props.updateItem.componentNameOld !== item.componentName) {
                             existingRawText = this.getNewAndOldRawText(item.componentName, props.updateItem.componentNameOld);
                         } else {
                             existingRawText = props.currentItem.componentNameRaw;
@@ -348,12 +368,18 @@ export class DesignComponentHeader extends Component{
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.DESIGN_UPDATE_VIEW:
 
-                    if(props.displayContext === DisplayContext.BASE_VIEW){
-                        // Base view
-                        existingRawText = props.currentItem.componentNameRaw;
-                    } else {
-                        // For updates and work packages make sure we are always using the new name...
-                        existingRawText = props.currentItem.componentNameRawNew
+                    switch(props.displayContext){
+                        case  DisplayContext.UPDATE_SCOPE:
+                            // Scope uses the base DV components
+                            existingRawText = props.currentItem.componentNameRaw;
+                            break;
+                        case DisplayContext.UPDATE_VIEW:
+                        case DisplayContext.UPDATE_EDIT:
+                            // The editor shows what's in the actual DU
+                            if(props.updateItem) {
+                                existingRawText = props.updateItem.componentNameRawNew;
+                            }
+                            break;
                     }
                     break;
 
@@ -526,7 +552,7 @@ export class DesignComponentHeader extends Component{
     };
 
     // In scope view only, sets an item as in or out of scope for a Design Update or Work Package
-    toggleScope(view, mode, displayContext, currentItem){
+    toggleScope(view, mode, displayContext, currentItem, designUpdateId, updateItem){
 
         //TODO: warning box if descoping changed item - do you want to revert to base view?
 
@@ -548,7 +574,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_UPDATE_EDIT:
 
                 // Update the Design Update component
-                const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, newScope);
+                const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, designUpdateId, updateItem, newScope);
 
                 if(duResult.success){
                     this.setState({inScope: newScope});
@@ -600,10 +626,9 @@ export class DesignComponentHeader extends Component{
         let isDeleted = false;
         let deleteGlyph = 'remove'; // Normal glyph for delete button
 
-        // Unless editing an update where scope is set
+        // Unless editing an update where scope is equal to items in the update
         if(view === ViewType.DESIGN_UPDATE_EDIT){
-            // The update scope is anything that is not scopable or anything that is and is in scope....
-            inScope = (currentItem.isInScope || !currentItem.isScopable);
+            inScope = (updateItem !== null);
             isDeleted = currentItem.isRemoved;
 
             // For logically deleted items in the same update, show the undo icon...
@@ -692,7 +717,7 @@ export class DesignComponentHeader extends Component{
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, currentItem)}>
+                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, currentItem, userContext.designUpdateId, updateItem)}>
                         <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
@@ -925,13 +950,13 @@ export class DesignComponentHeader extends Component{
                 break;
             case DisplayContext.UPDATE_SCOPE:
                 // Component displayed as part of Scope Selection
-                if(currentItem.isScopable) {
+                // if(currentItem.isScopable) {
                     // Scope selectable Item
                     designComponentElement = headerWithCheckbox;
-                } else {
-                    // Scope non selectable Item
-                    designComponentElement = viewOnlyScopeHeader;
-                }
+                // } else {
+                //     // Scope non selectable Item
+                //     designComponentElement = viewOnlyScopeHeader;
+                // }
                 break;
             case DisplayContext.BASE_VIEW:
             case DisplayContext.UPDATE_VIEW:

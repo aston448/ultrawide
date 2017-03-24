@@ -14,7 +14,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize } from '../constants/constants.js';
+import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize, DisplayContext } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 
 import ClientContainerServices              from '../apiClient/apiClientContainerServices.js';
@@ -698,7 +698,7 @@ class ClientUserContextServices {
 
 
     // Get readable details of the current user context
-    getContextNameData(userContext){
+    getContextNameData(userContext, displayContext){
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Getting context name data...");
 
@@ -753,34 +753,37 @@ class ClientUserContextServices {
         // After here is is possible that the data is not yet subscribed to so skip if not
         if(store.getState().designVersionDataLoaded) {
 
+            // TODO - rethink how this works
+            return contextNameData;
+
             if (userContext.designComponentId !== 'NONE') {
                 switch (userContext.designComponentType) {
                     case ComponentType.APPLICATION:
-                        if (userContext.designUpdateId === 'NONE') {
+                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
                             contextNameData.application = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
                         } else {
                             contextNameData.application = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
                         }
                         break;
                     case ComponentType.DESIGN_SECTION:
-                        if (userContext.designUpdateId === 'NONE') {
+                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
                             contextNameData.designSection = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
                         } else {
                             contextNameData.designSection = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
                         }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
                         break;
                     case ComponentType.FEATURE:
-                        if (userContext.designUpdateId === 'NONE') {
+                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
                             contextNameData.feature = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
                         } else {
                             contextNameData.feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
                         }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
                         break;
                     case ComponentType.FEATURE_ASPECT:
-                        if (userContext.designUpdateId === 'NONE') {
+                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
 
                             const contextFeatureAspect = DesignComponents.findOne({_id: userContext.designComponentId});
 
@@ -796,12 +799,12 @@ class ClientUserContextServices {
                                 contextNameData.featureAspect = contextUpdateFeatureAspect.componentNameNew;
                             }
                         }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
-                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
+                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext, displayContext);
                         break;
                     case ComponentType.SCENARIO:
-                        if (userContext.designUpdateId === 'NONE') {
+                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
 
                             const contextScenario = DesignComponents.findOne({_id: userContext.designComponentId});
 
@@ -818,10 +821,10 @@ class ClientUserContextServices {
                             }
 
                         }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext);
-                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext);
-                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext);
-                        contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext);
+                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
+                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext, displayContext);
+                        contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext, displayContext);
                         break;
                 }
             }
@@ -833,16 +836,16 @@ class ClientUserContextServices {
 
     };
 
-    getParent(parentType, context){
+    getParent(parentType, userContext, displayContext){
 
-        if(context.designComponentId != 'NONE') {
+        if(userContext.designComponentId !== 'NONE') {
 
-            let currentItemType = context.designComponentType;
-            let currentItemId = context.designComponentId;
+            let currentItemType = userContext.designComponentType;
+            let currentItemId = userContext.designComponentId;
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Looking for parent of type {} for component {} ", parentType, currentItemId);
 
-            if (context.designUpdateId === 'NONE') {
+            if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
 
                 let currentItem = DesignComponents.findOne({_id: currentItemId});
 
@@ -852,7 +855,7 @@ class ClientUserContextServices {
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
 
-                    while (parentItem && (parentItem.componentType != parentType) && (currentItem.componentParentId != 'NONE')) {
+                    while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentId !== 'NONE')) {
                         currentItem = parentItem;
                         parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
 
@@ -879,7 +882,7 @@ class ClientUserContextServices {
                 if(currentUpdateItem) {
                     let parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
 
-                    while ((parentUpdateItem.componentType != parentType) && (currentUpdateItem.componentParentIdNew != 'NONE')) {
+                    while ((parentUpdateItem.componentType !== parentType) && (currentUpdateItem.componentParentIdNew !== 'NONE')) {
                         currentUpdateItem = parentUpdateItem;
                         parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
                     }

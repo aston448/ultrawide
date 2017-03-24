@@ -54,7 +54,7 @@ class DesignItemUnitMashList extends Component {
         let unitTestsPanel = <div></div>;
         let unlinkedUnitTestsPanel = <div></div>;
 
-        const nameData = UserContextServices.getContextNameData(userContext);
+        const nameData = UserContextServices.getContextNameData(userContext, DisplayContext.VIEW_UNIT_MASH);
 
         switch(userContext.designComponentType){
             case ComponentType.APPLICATION:

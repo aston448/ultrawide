@@ -68,19 +68,28 @@ export class DesignComponent extends Component{
             currentItemId = this.props.designItem._id;
         }
 
-        if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId != currentItemId)){
+        if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId !== currentItemId)){
             return true;
         }
 
-        if((nextProps.userContext.designComponentId != currentItemId) && (this.props.userContext.designComponentId === currentItemId)){
+        if((nextProps.userContext.designComponentId !== currentItemId) && (this.props.userContext.designComponentId === currentItemId)){
             return true;
         }
 
-        // If this item has been opened or closed...
+        // If this item has been opened or closed... scoped or descoped
         if(nextProps.openItemsFlag.item === currentItemId){
             return true;
         }
 
+        // Item is going into update scope
+        if(nextProps.updateComponent !== null && this.props.updateComponent === null){
+            return true;
+        }
+
+        // Item is going out of update scope
+        if(nextProps.updateComponent === null && this.props.updateComponent !== null){
+            return true;
+        }
 
         switch (nextProps.view) {
             case ViewType.DESIGN_NEW_EDIT:
@@ -155,9 +164,9 @@ export class DesignComponent extends Component{
                 }
                 break;
             case DisplayContext.UPDATE_EDIT:
-                if(this.props.currentItem.isNew && !this.props.currentItem.isChanged){
-                    console.log("Opening DU item on mount" + this.props.currentItem.componentNameNew);
-                    ClientDesignUpdateComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignUpdateItems, true);
+                if(this.props.updateItem.isNew && !this.props.updateItem.isChanged){
+                    console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
+                    ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, true);
                 }
                 break;
         }
@@ -170,7 +179,7 @@ export class DesignComponent extends Component{
     componentWillReceiveProps(newProps){
 
         // Change open state if REDUX state has changed for this item
-        if(newProps.openItemsFlag.flag != this.props.openItemsFlag.flag  || newProps.openItemsFlag.item === this.props.currentItem._id) {
+        if(newProps.openItemsFlag.flag !== this.props.openItemsFlag.flag  || newProps.openItemsFlag.item === this.props.currentItem._id) {
 
             switch (newProps.view) {
                 case ViewType.DESIGN_NEW_EDIT:
@@ -188,13 +197,27 @@ export class DesignComponent extends Component{
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.DESIGN_UPDATE_VIEW:
-                    if (
-                        (newProps.openDesignUpdateItems.includes(this.props.currentItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.currentItem._id))) ||
-                        (!(newProps.openDesignUpdateItems.includes(this.props.currentItem._id)) && this.props.openDesignUpdateItems.includes(this.props.currentItem._id)) ||
-                        (newProps.openDesignUpdateItems.includes(this.props.currentItem._id) && !this.state.open) ||
-                        (!(newProps.openDesignUpdateItems.includes(this.props.currentItem._id)) && this.state.open)
-                    ) {
-                        this.setOpenState(newProps);
+                    if(newProps.displayContext === DisplayContext.UPDATE_SCOPE){
+                        if (
+                            (newProps.openDesignItems.includes(this.props.currentItem._id) && !(this.props.openDesignItems.includes(this.props.currentItem._id))) ||
+                            (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id)) ||
+                            (newProps.openDesignItems.includes(this.props.currentItem._id) && !this.state.open) ||
+                            (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.state.open)
+                        ) {
+                            this.setOpenState(newProps);
+                        }
+
+                    } else {
+                        if(newProps.updateItem) {
+                            if (
+                                (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
+                                (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
+                                (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !this.state.open) ||
+                                (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.state.open)
+                            ) {
+                                this.setOpenState(newProps);
+                            }
+                        }
                     }
                     break;
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -226,7 +249,13 @@ export class DesignComponent extends Component{
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                this.setState({open: openUpdateItems.includes(props.currentItem._id)});
+                if(props.displayContext === DisplayContext.UPDATE_SCOPE) {
+                    this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
+                } else {
+                    if(props.updateItem) {
+                        this.setState({open: openUpdateItems.includes(props.updateItem._id)});
+                    }
+                }
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -257,8 +286,11 @@ export class DesignComponent extends Component{
 
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-
-                ClientDesignUpdateComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignUpdateItems, !this.state.open);
+                if(this.props.displayContext === DisplayContext.UPDATE_SCOPE) {
+                    ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
+                } else {
+                    ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
+                }
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -360,7 +392,10 @@ export class DesignComponent extends Component{
     // Render generic design component
     render() {
 
+
         const {currentItem, designItem, updateItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, testDataFlag, currentViewDataValue} = this.props;
+
+        console.log("Render " + view + "  DC in context " + displayContext + "with current item " + currentItem.componentName +  " and updateItem " + updateItem);
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 

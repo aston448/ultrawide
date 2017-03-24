@@ -23,7 +23,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // Additions not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD;
         }
 
@@ -71,7 +71,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_REMOVE;
         }
 
@@ -99,12 +99,12 @@ class DesignUpdateComponentValidationServices{
     validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent, parentComponent){
 
         // Updates only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        if(view !== ViewType.DESIGN_UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_RESTORE;
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_RESTORE;
         }
 
@@ -136,7 +136,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT;
         }
 
@@ -155,7 +155,7 @@ class DesignUpdateComponentValidationServices{
             }
 
             // Anything else that's not a Scenario or Feature aspect is no good
-            if((component.componentType != ComponentType.SCENARIO) && (component.componentType != ComponentType.FEATURE_ASPECT)){
+            if((component.componentType !== ComponentType.SCENARIO) && (component.componentType !== ComponentType.FEATURE_ASPECT)){
                 // FAIL can't update any other components
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE;
             }
@@ -225,12 +225,12 @@ class DesignUpdateComponentValidationServices{
     validateUpdateDesignUpdateFeatureNarrative(view, mode, updateComponent){
 
         // Updates only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        if(view !== ViewType.DESIGN_UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_EDIT;
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT;
         }
 
@@ -246,17 +246,17 @@ class DesignUpdateComponentValidationServices{
     validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponent, targetComponent){
 
         // Moves only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        if(view !== ViewType.DESIGN_UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_MOVE;
         }
 
         // Moves not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_MOVE;
         }
 
         // Moves not allowed outside the Design Update Editor
-        if(displayContext != DisplayContext.UPDATE_EDIT){
+        if(displayContext !== DisplayContext.UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_MOVE;
         }
 
@@ -277,17 +277,17 @@ class DesignUpdateComponentValidationServices{
     validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponent, targetComponent){
 
         // Moves only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        if(view !== ViewType.DESIGN_UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_MOVE;
         }
 
         // Moves not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_MOVE;
         }
 
         // Moves not allowed outside the Update Editor
-        if(displayContext != DisplayContext.UPDATE_EDIT){
+        if(displayContext !== DisplayContext.UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_MOVE;
         }
 
@@ -304,26 +304,26 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateToggleDesignUpdateComponentScope(view, mode, displayContext, component, componentInOtherUpdates, hasNoNewChildren, newScope){
+    validateToggleDesignUpdateComponentScope(view, mode, displayContext, updateComponent, componentInOtherUpdates, hasNoNewChildren, newScope){
 
         // Updates only allowed in update edit when in edit mode
-        if(view != ViewType.DESIGN_UPDATE_EDIT){
+        if(view !== ViewType.DESIGN_UPDATE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_VIEW_SCOPE;
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_SCOPE;
         }
 
         // Context must be scoping
-        if(displayContext != DisplayContext.UPDATE_SCOPE){
+        if(displayContext !== DisplayContext.UPDATE_SCOPE){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_SCOPE;
         }
 
         // A new item added to the Design Update cannot be de-scoped from it
-        if(!newScope){
-            if(component.isNew){
+        if(!newScope && updateComponent){
+            if(updateComponent.isNew){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW;
             }
         }
@@ -336,43 +336,57 @@ class DesignUpdateComponentValidationServices{
         // No component can be put in scope if it's already removed in another update
         if(newScope){
 
-            if(component.isRemovedElsewhere){
+            let alreadyRemoved = false;
+
+            componentInOtherUpdates.forEach((instance) => {
+                if(instance.isRemoved){
+                    alreadyRemoved = true;
+                }
+            });
+
+            if(alreadyRemoved){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED;
             }
         }
 
         // A Feature cannot be put in scope if it has been changed in another update
-        if(newScope && component.componentType === ComponentType.FEATURE){
+        if(newScope && updateComponent){
 
-            let alreadyChanged = false;
+            if(updateComponent.componentType === ComponentType.FEATURE){
 
-            componentInOtherUpdates.forEach((instance) => {
-                if(instance.isChanged){
-                    alreadyChanged = true;
+                let alreadyChanged = false;
+
+                componentInOtherUpdates.forEach((instance) => {
+                    if(instance.isChanged){
+                        alreadyChanged = true;
+                    }
+                });
+
+                if(alreadyChanged){
+                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED;
                 }
-            });
 
-            if(alreadyChanged){
-                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED;
             }
-
         }
 
         // A Scenario cannot be put in scope if it is in scope for another update
-        if(newScope && component.componentType === ComponentType.SCENARIO){
+        if(newScope && updateComponent) {
 
-            let alreadyInScope = false;
+            if (updateComponent.componentType === ComponentType.SCENARIO) {
 
-            componentInOtherUpdates.forEach((instance) => {
-                if(instance.isInScope){
-                    alreadyInScope = true;
+                let alreadyInScope = false;
+
+                componentInOtherUpdates.forEach((instance) => {
+                    if (instance.isInScope) {
+                        alreadyInScope = true;
+                    }
+                });
+
+                if (alreadyInScope) {
+                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
                 }
-            });
 
-            if(alreadyInScope){
-                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
             }
-
         }
 
         return Validation.VALID;

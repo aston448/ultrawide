@@ -174,7 +174,7 @@ export default class Narrative extends React.Component {
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
-                if(props.displayContext == DisplayContext.BASE_VIEW){
+                if(props.displayContext === DisplayContext.UPDATE_SCOPE){
                     //console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
                     rawNarrative = props.designComponent.componentNarrativeRaw;
 

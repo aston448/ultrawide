@@ -8,7 +8,7 @@ import { DesignUpdateComponents } from '../collections/design_update/design_upda
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, MessageType } from '../constants/constants.js';
+import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, DisplayContext } from '../constants/constants.js';
 import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration.js';
 
 
@@ -82,14 +82,14 @@ class ClientAppHeaderServices{
         return {success: true, message: ''};
     }
 
-    setViewLevelFeatures(userContext){
+    setViewLevelFeatures(userContext, displayContext){
 
         console.log("Setting to Features for user context WP: " + userContext.workPackageId);
 
         // Open everything down to the Feature level - i.e. all Applications and Design Sections and close everything else
         let componentArray = [];
 
-        if(userContext.workPackageId != 'NONE'){
+        if(userContext.workPackageId !== 'NONE'){
 
             const wpOpenComponents = WorkPackageComponents.find(
                 {
@@ -115,7 +115,7 @@ class ClientAppHeaderServices{
             return;
         }
 
-        if(userContext.designUpdateId === 'NONE'){
+        if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
 
             const designVersionOpenComponents = DesignComponents.find(
                 {
@@ -163,12 +163,12 @@ class ClientAppHeaderServices{
         }
     }
 
-    setViewLevelSections(userContext){
+    setViewLevelSections(userContext, displayContext){
 
         // Open everything down to the Section level - i.e. all Applications open and any sections that contain only other sections
         let componentArray = [];
 
-        if(userContext.workPackageId != 'NONE'){
+        if(userContext.workPackageId !== 'NONE'){
 
             const wpOpenComponents = WorkPackageComponents.find(
                 {
@@ -196,7 +196,7 @@ class ClientAppHeaderServices{
             return;
         }
 
-        if(userContext.designUpdateId === 'NONE'){
+        if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
 
             const designVersionOpenComponents = DesignComponents.find(
                 {

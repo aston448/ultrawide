@@ -63,7 +63,7 @@ export class DesignApplicationsList extends Component {
 
     getDesignUpdateItem(application, displayContext){
         if(displayContext === DisplayContext.UPDATABLE_VIEW){
-            return ClientDesignVersionServices.getDesignUpdateItem(application);
+            return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(application);
         } else {
             return null;
         }

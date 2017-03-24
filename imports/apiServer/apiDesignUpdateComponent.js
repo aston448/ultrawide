@@ -215,14 +215,16 @@ class ServerDesignUpdateComponentApi {
         );
     };
 
-    toggleScope(view, mode, displayContext, designUpdateComponentId, newScope, callback){
+    toggleScope(view, mode, displayContext, baseComponentId, designUpdateId, updateComponent, newScope, callback){
 
         toggleScope.call(
             {
                 view: view,
                 mode: mode,
                 displayContext: displayContext,
-                designUpdateComponentId: designUpdateComponentId,
+                baseComponentId: baseComponentId,
+                designUpdateId: designUpdateId,
+                updateComponent: updateComponent,
                 newScope: newScope,
             },
             (err, result) => {

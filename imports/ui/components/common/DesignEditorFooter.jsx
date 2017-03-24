@@ -11,7 +11,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignSummary                    from '../../components/edit/DesignSummary.jsx';
 
 // Ultrawide Services
-import {} from '../../../constants/constants.js';
+import {DisplayContext} from '../../../constants/constants.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
@@ -34,7 +34,7 @@ export class DesignEditorFooter extends Component {
     }
 
     getNameData(userContext){
-        return ClientUserContextServices.getContextNameData(userContext);
+        return ClientUserContextServices.getContextNameData(userContext, DisplayContext.EDITOR_FOOTER);
     }
 
     getFooterText(userContext){

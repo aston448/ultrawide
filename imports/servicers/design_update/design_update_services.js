@@ -39,11 +39,11 @@ class DesignUpdateServices{
                 _id: designVersionId
             });
 
-            if (designUpdateId && designVersion) {
-                if (populateUpdate) {
-                    DesignUpdateModules.populateDesignUpdate(designVersion.baseDesignVersionId, designVersionId, designUpdateId);
-                }
-            }
+            // if (designUpdateId && designVersion) {
+            //     if (populateUpdate) {
+            //         DesignUpdateModules.populateDesignUpdate(designVersion.baseDesignVersionId, designVersionId, designUpdateId);
+            //     }
+            // }
 
             return designUpdateId;
         }

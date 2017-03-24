@@ -114,7 +114,7 @@ class WorkPackageFeatureMashList extends Component {
         let itemHeader = '';
         let secondPanel = <div></div>;
 
-        const nameData = ClientUserContextServices.getContextNameData(userContext);
+        const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
 
         switch(displayContext){
             case DisplayContext.MASH_INT_TESTS:

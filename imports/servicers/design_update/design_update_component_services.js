@@ -2,6 +2,7 @@
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
+import { DesignComponents }         from '../../collections/design/design_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide services
@@ -98,7 +99,7 @@ class DesignUpdateComponentServices{
                 DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
 
                 // Ensure that all parents of the component are now in ParentScope
-                DesignUpdateComponentModules.updateParentScope(newUpdateComponentId, true);
+                //DesignUpdateComponentModules.updateParentScope(newUpdateComponentId, true);
 
                 // If a Feature also update the Feature Ref Id to the new ID + add the default narrative
                 if (componentType === ComponentType.FEATURE) {
@@ -418,43 +419,51 @@ class DesignUpdateComponentServices{
         }
     };
 
-
-
-    // Store the scope state of a design update component
-    toggleScope(designUpdateComponentId, newScope){
+    // Change the scope state of a design update component
+    toggleScope(baseComponentId, designUpdateId, newScope){
 
         if(Meteor.isServer) {
 
-            let updatedComponents = DesignUpdateComponents.update(
-                {_id: designUpdateComponentId},
-                {
-                    $set: {
-                        isInScope: newScope
+            const baseComponent = DesignComponents.findOne({_id: baseComponentId});
+
+            if (baseComponent) {
+
+                const currentUpdateComponent = DesignUpdateComponents.findOne({
+                    designUpdateId: designUpdateId,
+                    componentReferenceId: baseComponent.componentReferenceId
+                });
+
+                // Adding to scope means adding to the current DU
+                if(newScope) {
+
+                        // Just check that it doesn't already exist
+                        if (!currentUpdateComponent) {
+
+                            // Add the new component
+                            DesignUpdateComponentModules.insertComponentToUpdateScope(baseComponent, designUpdateId);
+
+                            // Add all parents not already added
+                            DesignUpdateComponentModules.addParentsToScope(baseComponent, designUpdateId);
+
+                            // And fix the parent ids for all the items added
+                            DesignUpdateModules.fixParentIds(baseComponent.designVersionId, designUpdateId);
+                        }
+
+                } else {
+
+                    // Removing from scope means removing from the update
+                    if(currentUpdateComponent){
+
+                        // Remove it
+                        DesignUpdateComponentModules.removeComponentFromUpdateScope(currentUpdateComponent._id);
+
+                        // And remove anything under it
+                        DesignUpdateComponentModules.removeChildrenFromScope(baseComponent, designUpdateId)
                     }
                 }
-            );
-
-            if(!newScope){
-                // If taking out of scope remove any parent scope
-                updatedComponents = updatedComponents + DesignUpdateComponents.update(
-                        {_id: designUpdateComponentId},
-                        {
-                            $set: {
-                                isParentScope: false
-                            }
-                        }
-                    );
-            }
-
-            if(updatedComponents > 0){
-                // If setting in scope. make sure all parents have parent scope
-                // If setting out of scope, remove parent scope from any parents that do not have in scope children
-                DesignUpdateComponentModules.updateParentScope(designUpdateComponentId, newScope);
             }
         }
     }
-
-
 
 
     // Save text for a design update component
@@ -466,7 +475,7 @@ class DesignUpdateComponentServices{
 
             let duComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-            let changed = (componentNewName != duComponent.componentNameOld);
+            let changed = (componentNewName !== duComponent.componentNameOld);
 
             // Update the new names for the update
             DesignUpdateComponents.update(
@@ -496,7 +505,7 @@ class DesignUpdateComponentServices{
 
             //console.log("old narrative: " + componentOldNarrative + " New narrative: " + newNarrative);
 
-            let changed = (newNarrative != componentOldNarrative);
+            let changed = (newNarrative !== componentOldNarrative);
 
             DesignUpdateComponents.update(
                 {_id: featureId},

@@ -1,6 +1,7 @@
 
 // Ultrawide Collections
-import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
+import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
+import { DesignComponents }         from '../collections/design/design_components.js';
 
 // Ultrawide Services
 import { DesignUpdateComponentValidationErrors } from '../constants/validation_errors.js';
@@ -121,20 +122,25 @@ class DesignUpdateComponentValidationApi{
         return DesignUpdateComponentValidationServices.validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponent, targetComponent)
     };
 
-    validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponentId, newScope){
+    validateToggleDesignUpdateComponentScope(view, mode, displayContext, baseComponentId, designUpdateId, updateComponent, newScope){
 
-        const designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        const designComponent = DesignComponents.findOne({_id: baseComponentId});
 
-        const hasNoNewChildren = DesignUpdateComponentModules.hasNoNewChildren(designUpdateComponentId, false);
+        let hasNoNewChildren = true;
+
+        if(updateComponent && !newScope){
+            // Component exists and de-scoping
+            hasNoNewChildren = DesignUpdateComponentModules.hasNoNewChildren(updateComponent._id, false);
+        }
 
         // A list of this component in other updates for the same design version.  Used to stop a Scenario being changed in two parallel updates at once
         const componentInOtherDesignUpdates = DesignUpdateComponents.find({
-            componentReferenceId:   designUpdateComponent.componentReferenceId,
-            designVersionId:        designUpdateComponent.designVersionId,
-            designUpdateId:         {$ne: designUpdateComponent.designUpdateId},
+            componentReferenceId:   designComponent.componentReferenceId,
+            designVersionId:        designComponent.designVersionId,
+            designUpdateId:         {$ne: designUpdateId},
         }).fetch();
 
-        return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent, componentInOtherDesignUpdates, hasNoNewChildren, newScope);
+        return DesignUpdateComponentValidationServices.validateToggleDesignUpdateComponentScope(view, mode, displayContext, updateComponent, componentInOtherDesignUpdates, hasNoNewChildren, newScope);
     }
 
 }

@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {MenuType, ViewOptionType, ViewType, ViewMode, DetailsViewType} from '../../../constants/constants.js';
+import {DisplayContext} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
@@ -57,7 +57,7 @@ export class DetailsViewHeader extends Component {
     }
 
     getNameData(userContext){
-        return ClientUserContextServices.getContextNameData(userContext);
+        return ClientUserContextServices.getContextNameData(userContext, DisplayContext.DETAILS_HEADER);
     }
 
 

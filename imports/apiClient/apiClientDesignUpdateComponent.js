@@ -14,7 +14,7 @@ import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUp
 
 // REDUX services
 import store from '../redux/store'
-import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage, updateOpenItemsFlag} from '../redux/actions'
+import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage, updateOpenItemsFlag, updateTestDataFlag} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Update Components
@@ -441,19 +441,19 @@ class ClientDesignUpdateComponentServices{
     };
 
     // User put a scopable item in the scope view in or out of scope for a Design Update -------------------------------
-    toggleInScope(view, mode, displayContext, designUpdateComponent, newScope){
+    toggleInScope(view, mode, displayContext, baseComponent, designUpdateId, updateComponent, newScope){
 
         // Client validation
-        let result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, designUpdateComponent._id, newScope);
+        let result = DesignUpdateComponentValidationApi.validateToggleDesignUpdateComponentScope(view, mode, displayContext, baseComponent._id, designUpdateId, updateComponent, newScope);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
         }
 
         // Real action call
-        ServerDesignUpdateComponentApi.toggleScope(view, mode, displayContext, designUpdateComponent._id, newScope, (err, result) => {
+        ServerDesignUpdateComponentApi.toggleScope(view, mode, displayContext, baseComponent._id, designUpdateId, updateComponent, newScope, (err, result) => {
 
             if(err){
                 // Unexpected error as all expected errors already handled - show alert.
@@ -461,7 +461,8 @@ class ClientDesignUpdateComponentServices{
                 alert('Unexpected error 11: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Toggle Scope Actions:
-
+                const testDataFlag = store.getState().testDataFlag;
+                store.dispatch(updateTestDataFlag(!testDataFlag));
                 // Show action success on screen
                 if(newScope) {
                     store.dispatch(updateUserMessage({
@@ -487,7 +488,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateMoveDesignUpdateComponent(view, mode, displayContext, movingComponent._id, newParentComponent._id);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
