@@ -120,7 +120,7 @@ export class UpdateApplicationsList extends Component {
 
         // Edit for Design Update
         let updateEditComponent =
-            <div id="editPane" className="design-editor-container">
+            <div id="editorPaneEdit" className="design-editor-container">
                 <DesignEditorHeader
                     displayContext={DisplayContext.UPDATE_EDIT}
                 />
@@ -135,7 +135,7 @@ export class UpdateApplicationsList extends Component {
 
         // View Design Update Content
         let updateViewComponent =
-            <div id="editPane" className="design-editor-container">
+            <div id="editorPaneView" className="design-editor-container">
                 <DesignEditorHeader
                     displayContext={DisplayContext.UPDATE_VIEW}
                 />

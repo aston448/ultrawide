@@ -40,7 +40,7 @@ export class DropdownItems extends Component {
 
     renderListItems(listItems, clickAction){
         return listItems.map((item) => {
-            console.log('Adding dropdown item ' + item.itemName + ' with action ' + item.action);
+
             return (
                 <UltrawideMenuDropdownItem
                     key={item.key}
@@ -104,7 +104,9 @@ export default DropdownItemsContainer = createContainer(({params}) => {
     const itemsList = ClientContainerServices.getDropdownMenuItems(
         params.menuType,
         params.view,
-        params.mode);
+        params.mode,
+        params.userViewOptions
+    );
 
     return {
         itemsList: itemsList,

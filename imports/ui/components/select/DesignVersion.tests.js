@@ -7,6 +7,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import { DesignVersion } from './DesignVersion.jsx';  // Non Redux wrapped
 
 import { DesignVersionStatus, RoleType } from '../../../constants/constants.js'
+import TextLookups from '../../../common/lookups.js';
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 
@@ -66,7 +67,7 @@ describe('JSX: DesignVersion', () => {
             );
 
             chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_NEW);
+            chai.assert.equal(item.find('#designVersionStatus').text(), TextLookups.designVersionStatus(DesignVersionStatus.VERSION_NEW), 'Unexpected status');
         });
 
         it('status visible for Published', () => {
@@ -80,7 +81,7 @@ describe('JSX: DesignVersion', () => {
             );
 
             chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_DRAFT);
+            chai.assert.equal(item.find('#designVersionStatus').text(), TextLookups.designVersionStatus(DesignVersionStatus.VERSION_DRAFT), 'Unexpected status');
         });
 
         it('status visible for Initial Complete', () => {
@@ -94,7 +95,7 @@ describe('JSX: DesignVersion', () => {
             );
 
             chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_DRAFT_COMPLETE);
+            chai.assert.equal(item.find('#designVersionStatus').text(), TextLookups.designVersionStatus(DesignVersionStatus.VERSION_DRAFT_COMPLETE), 'Unexpected status');
         });
 
         it('status visible for Updatable', () => {
@@ -108,7 +109,7 @@ describe('JSX: DesignVersion', () => {
             );
 
             chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_UPDATABLE);
+            chai.assert.equal(item.find('#designVersionStatus').text(), TextLookups.designVersionStatus(DesignVersionStatus.VERSION_UPDATABLE), 'Unexpected status');
         });
 
         it('status visible for Updatable Complete', () => {
@@ -122,7 +123,7 @@ describe('JSX: DesignVersion', () => {
             );
 
             chai.assert.equal(item.find('#designVersionStatus').length, 1, 'Status not found');
-            chai.assert.equal(item.find('#designVersionStatus').text(), DesignVersionStatus.VERSION_UPDATABLE_COMPLETE);
+            chai.assert.equal(item.find('#designVersionStatus').text(), TextLookups.designVersionStatus(DesignVersionStatus.VERSION_UPDATABLE_COMPLETE), 'Unexpected status');
         });
     });
 

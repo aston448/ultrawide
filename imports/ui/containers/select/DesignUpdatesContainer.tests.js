@@ -138,30 +138,7 @@ describe('JSX: DesignUpdatesList', () => {
     }
 
     // Design Update Selection -----------------------------------------------------------------------------------------
-
     describe('A list of Design Updates is visible for the current Design Version', () => {
-
-        it('design version with two updates has two in list', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV1'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
-        });
-
-        it('design version with three updates has three in list', () => {
-
-            const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
-            const userRole = RoleType.DESIGNER;
-            const userContext = {designVersionId: 'DV2'};
-
-            let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
-
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 4, 'Expected 4 updates in Complete DV');
-        });
 
         it('also visible to Developer', () => {
 
@@ -171,7 +148,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
         });
 
         it('also visible to Manager', () => {
@@ -182,7 +159,7 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('Connect(DesignUpdate)').length, 3, 'Expected 3 updates in Complete DV');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
         });
 
     });
@@ -238,7 +215,9 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 1, 'Add update not found');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isTrue(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Design Update', 'Expecting Add Design Update footer action');
         });
     });
 
@@ -252,7 +231,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 0, 'Add update found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
 
         it('no add option for Manager', () => {
@@ -263,7 +243,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 0, 'Add update found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -277,7 +258,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 0, 'Add update found!');
+            // There are no Design Updates at all here!
+            chai.assert.equal(item.find('ItemContainer').length, 0, 'Item Container was found');
         });
 
         it('no add option for published initial design version', () => {
@@ -288,7 +270,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 0, 'Add update found!');
+            // There are no Design Updates at all here!
+            chai.assert.equal(item.find('ItemContainer').length, 0, 'Item Container was found');
         });
 
         it('no add option for complete initial design version', () => {
@@ -299,7 +282,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 0, 'Add update found!');
+            // There are no Design Updates at all here!
+            chai.assert.equal(item.find('ItemContainer').length, 0, 'Item Container was found');
         });
 
         it('no add option for complete updatable design version', () => {
@@ -310,7 +294,8 @@ describe('JSX: DesignUpdatesList', () => {
 
             let item = testDesignUpdatesContainer(designVersionStatus, userRole, userContext);
 
-            chai.assert.equal(item.find('#addUpdate').length, 0, 'Add update found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     })
 

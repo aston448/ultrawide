@@ -106,7 +106,7 @@ export class DesignUpdateSummaryList extends Component {
         if(userContext.designUpdateId != 'NONE') {
 
             return (
-                <div className="design-editor-container">
+                <div id="updateSummary" className="design-editor-container">
                     <DesignEditorHeader
                         displayContext={DisplayContext.UPDATE_SUMMARY}
                     />
@@ -124,7 +124,7 @@ export class DesignUpdateSummaryList extends Component {
         } else {
 
             return(
-                <div className="design-editor-container">
+                <div id="noSummary" className="design-editor-container">
                     <DesignEditorHeader
                         displayContext={DisplayContext.UPDATE_SUMMARY}
                     />

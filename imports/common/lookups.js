@@ -1,4 +1,4 @@
-import {DesignVersionStatus, ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus} from '../constants/constants.js';
+import {DesignVersionStatus, ViewType, ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, DisplayContext, DesignUpdateMergeAction, UpdateMergeStatus, MenuAction} from '../constants/constants.js';
 
 
 // In this class we can change what is displayed without buggering up the existing data.
@@ -163,6 +163,38 @@ class TextLookups {
                 return 'Moved in this Version';
             case UpdateMergeStatus.COMPONENT_REMOVED:
                 return 'Removed in this version';
+        }
+    }
+
+    menuItems(menuAction){
+
+        switch(menuAction){
+            case MenuAction.MENU_ACTION_GOTO_DESIGNS:
+                return 'Designs';
+            case MenuAction.MENU_ACTION_GOTO_CONFIG:
+                return 'Configuration';
+            case MenuAction.MENU_ACTION_GOTO_SELECTION:
+                return 'Item Selection';
+            case MenuAction.MENU_ACTION_GOTO_TEST_CONFIG:
+                return 'Test Output Config';
+            case MenuAction.MENU_ACTION_VIEW_DETAILS:
+                return 'Details';
+            case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:
+                return 'Test Summary';
+            case MenuAction.MENU_ACTION_VIEW_ACC_TESTS:
+                return 'Acceptance Tests';
+            case MenuAction.MENU_ACTION_VIEW_INT_TESTS:
+                return 'Integration Tests';
+            case MenuAction.MENU_ACTION_VIEW_UNIT_TESTS:
+                return 'Unit Tests';
+            case MenuAction.MENU_ACTION_VIEW_ACC_FILES:
+                return 'Feature Files';
+            case MenuAction.MENU_ACTION_VIEW_DICT:
+                return 'Domain Dictionary';
+            case MenuAction.MENU_ACTION_REFRESH_TESTS:
+                return 'Test Data';
+            case MenuAction.MENU_ACTION_REFRESH_DATA:
+                return 'Design and Test Data';
         }
     }
 

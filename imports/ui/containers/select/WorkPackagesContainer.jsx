@@ -92,7 +92,7 @@ export class WorkPackagesList extends Component {
         if(userRole === RoleType.MANAGER) {
 
 
-            if(userContext.designUpdateId != 'NONE'){
+            if(userContext.designUpdateId !== 'NONE'){
 
                 // But for Design Updates only if they are Draft
                 if(designUpdateStatus === DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT){
@@ -163,7 +163,7 @@ export class WorkPackagesList extends Component {
                 case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
                     // An update must be selected first
-                    if(userContext.designUpdateId != 'NONE') {
+                    if(userContext.designUpdateId !== 'NONE') {
 
                         if(newWorkPackages.length === 0 && availableWorkPackages.length === 0 && adoptedWorkPackages.length === 0){
 

@@ -34,6 +34,7 @@ describe('JSX: DesignEditorHeader', () => {
     }
 
     // Design Version Editing ------------------------------------------------------------------------------------------
+
     describe('The Design Version editor has an option to switch to View Only mode', () => {
 
         it('has a view button not highlighted when editing', () => {
@@ -220,4 +221,84 @@ describe('JSX: DesignEditorHeader', () => {
             chai.assert.equal(item.find('#optionView').length, 0, 'View Option was found');
         });
     });
+
+    // Design Update Editing -------------------------------------------------------------------------------------------
+
+    describe('The Design Update editor has an option to switch to View Only mode', () => {
+
+        it('has a view button not highlighted', () => {
+
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const mode = ViewMode.MODE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+
+            let item = testDesignEditorHeader(view, mode, displayContext, userRole);
+
+            chai.assert.equal(item.find('#optionView').length, 1, 'View Option not found');
+            chai.assert.equal(item.find('#optionView').props().className, 'view-toggle-inactive', 'Expecting View NOT to be highlighted');
+        });
+    });
+
+    describe('Only a Design Update being edited can be switched to View Only', () => {
+
+        it('a view only design update has no view button', () => {
+
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userRole = RoleType.DESIGNER;
+
+            let item = testDesignEditorHeader(view, mode, displayContext, userRole);
+
+            chai.assert.equal(item.find('#optionView').length, 0, 'View Option was found');
+        });
+    });
+
+    describe('The Design Update editor has an option to switch to Edit mode', () => {
+
+        it('has an edit button not highlighted when in view mode', () => {
+
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const mode = ViewMode.MODE_VIEW;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+            const userRole = RoleType.DESIGNER;
+
+            let item = testDesignEditorHeader(view, mode, displayContext, userRole);
+
+            chai.assert.equal(item.find('#optionEdit').length, 1, 'Edit Option not found');
+            chai.assert.equal(item.find('#optionEdit').props().className, 'view-toggle-inactive', 'Expecting Edit NOT to be highlighted');
+        });
+    });
+
+    describe('A Developer viewing a Design Update cannot switch it to be editable', () => {
+
+        it('no edit button for developer when in view mode', () => {
+
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userRole = RoleType.DEVELOPER;
+
+            let item = testDesignEditorHeader(view, mode, displayContext, userRole);
+
+            chai.assert.equal(item.find('#optionEdit').length, 0, 'Edit Option was found');
+        });
+    });
+
+    describe('A Manager viewing a Design Update cannot switch it to be editable', () => {
+
+        it('no edit button for manager when in view mode', () => {
+
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const displayContext = DisplayContext.UPDATE_VIEW;
+            const userRole = RoleType.MANAGER;
+
+            let item = testDesignEditorHeader(view, mode, displayContext, userRole);
+
+            chai.assert.equal(item.find('#optionEdit').length, 0, 'Edit Option was found');
+        });
+    });
+
 });

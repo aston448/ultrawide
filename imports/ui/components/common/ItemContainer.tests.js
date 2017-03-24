@@ -7,6 +7,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 import ItemContainer            from '../../components/common/ItemContainer.jsx'
 import { Design }               from '../../components/select/Design.jsx';          // Non Redux
 import { DesignVersion }        from '../../components/select/DesignVersion.jsx';   // Non Redux
+import { DesignUpdate }         from '../../components/select/DesignUpdate.jsx';    // Non Redux
 
 import { DesignStatus, RoleType, ItemType} from '../../../constants/constants.js'
 
@@ -16,7 +17,8 @@ import { Designs } from '../../../collections/design/designs.js'
 
 describe('JSX: ItemContainer', () => {
 
-    function  renderDesignList(designs){
+    function  renderDesignsList(designs){
+
         return designs.map((design) => {
             return (
                 <Design
@@ -28,6 +30,7 @@ describe('JSX: ItemContainer', () => {
     }
 
     function renderDesignVersionsList(designVersions){
+
         return designVersions.map((designVersion) => {
             return (
                 <DesignVersion
@@ -39,17 +42,32 @@ describe('JSX: ItemContainer', () => {
 
     }
 
-    function testItemContainer(itemType, itemlist,  headerText, hasFooterAction, footerAction){
+    function renderDesignUpdatesList(designUpdates){
 
-        let bodyDataFunction = () => renderDesignList(designs);
+        return designUpdates.map((designUpdate) => {
+            return (
+                <DesignUpdate
+                    key={designUpdate._id}
+                    designUpdate={designUpdate}
+                />
+            );
+        });
+    }
+
+    function testItemContainer(itemType, itemList,  headerText, hasFooterAction, footerAction){
+
+        let bodyDataFunction = null;
         let footerActionFunction = null;
 
         switch(itemType){
             case ItemType.DESIGN:
-                bodyDataFunction = () => renderDesignList(itemlist);
+                bodyDataFunction = () => renderDesignsList(itemList);
                 break;
             case ItemType.DESIGN_VERSION:
-                bodyDataFunction = () => renderDesignVersionsList(itemlist);
+                bodyDataFunction = () => renderDesignVersionsList(itemList);
+                break;
+            case ItemType.DESIGN_UPDATE:
+                bodyDataFunction = () => renderDesignUpdatesList(itemList);
                 break;
         }
 
@@ -146,6 +164,51 @@ describe('JSX: ItemContainer', () => {
             const item = testItemContainer(ItemType.DESIGN_VERSION, designVersions, 'Design Versions', false, '');
 
             chai.assert.equal(item.find('DesignVersion').length, 2, 'Expecting 2 Design Versions');
+        });
+    });
+
+    // Design Updates --------------------------------------------------------------------------------------------------
+
+    describe('A list of Design Updates is visible for the current Design Version', () => {
+
+        it('design version with two updates has two in list', () => {
+
+            const designUpdates = [
+                {
+                    _id: '1',
+                    updateName: 'DesignUpdate1'
+                },
+                {
+                    _id: '2',
+                    updateName: 'DesignUpdate2'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
+
+            chai.assert.equal(item.find('DesignUpdate').length, 2, 'Expecting 2 Design Updates');
+        });
+
+        it('design version with three updates has three in list', () => {
+
+            const designUpdates = [
+                {
+                    _id: '1',
+                    updateName: 'DesignUpdate1'
+                },
+                {
+                    _id: '2',
+                    updateName: 'DesignUpdate2'
+                },
+                {
+                    _id: '3',
+                    updateName: 'DesignUpdate3'
+                }
+            ];
+
+            const item = testItemContainer(ItemType.DESIGN_UPDATE, designUpdates, 'Design Updates', false, '');
+
+            chai.assert.equal(item.find('DesignUpdate').length, 3, 'Expecting 3 Design Updates');
         });
     });
 

@@ -40,6 +40,7 @@ import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLo
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 import { log } from '../common/utils.js';
+import TextLookups from '../common/lookups.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -1988,9 +1989,8 @@ class ClientContainerServices{
                 return currentOptions.accFiles;
         }
     }
-    getDropdownMenuItems(menuType, view, mode){
+    getDropdownMenuItems(menuType, view, mode, userViewOptions){
 
-        const userViewOptions = store.getState().currentUserViewOptions;
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Getting menu items for menu {} in view {}", menuType, view);
 
@@ -1998,8 +1998,8 @@ class ClientContainerServices{
 
         // Dropdown Items - Go To
         const gotoDesigns = {
-            key: 'DES',
-            itemName: 'Designs',
+            key: MenuAction.MENU_ACTION_GOTO_DESIGNS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_DESIGNS),
             action: MenuAction.MENU_ACTION_GOTO_DESIGNS,
             hasCheckbox: false,
             checkboxValue: false,
@@ -2007,8 +2007,8 @@ class ClientContainerServices{
         };
 
         const gotoConfig = {
-            key: 'CFG',
-            itemName: 'Configuration',
+            key: MenuAction.MENU_ACTION_GOTO_CONFIG,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_CONFIG),
             action: MenuAction.MENU_ACTION_GOTO_CONFIG,
             hasCheckbox: false,
             checkboxValue: false,
@@ -2016,8 +2016,8 @@ class ClientContainerServices{
         };
 
         const gotoSelection = {
-            key: 'SEL',
-            itemName: 'Item Selection',
+            key: MenuAction.MENU_ACTION_GOTO_SELECTION,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_SELECTION),
             action: MenuAction.MENU_ACTION_GOTO_SELECTION,
             hasCheckbox: false,
             checkboxValue: false,
@@ -2025,8 +2025,8 @@ class ClientContainerServices{
         };
 
         const gotoTestConfig = {
-            key: 'TOC',
-            itemName: 'Test Output Config',
+            key: MenuAction.MENU_ACTION_GOTO_TEST_CONFIG,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_GOTO_TEST_CONFIG),
             action: MenuAction.MENU_ACTION_GOTO_TEST_CONFIG,
             hasCheckbox: false,
             checkboxValue: false,
@@ -2035,8 +2035,8 @@ class ClientContainerServices{
 
         // Dropdown Items - View
         const viewDetails = {
-            key: 'DET',
-            itemName: 'Details',
+            key: MenuAction.MENU_ACTION_VIEW_DETAILS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_DETAILS),
             action: MenuAction.MENU_ACTION_VIEW_DETAILS,
             hasCheckbox: true,
             checkboxValue: currentOptions.details.value,
@@ -2044,8 +2044,8 @@ class ClientContainerServices{
         };
 
         const viewTestSummary = {
-            key: 'TSM',
-            itemName: 'Test Summary',
+            key: MenuAction.MENU_ACTION_VIEW_TEST_SUMM,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_TEST_SUMM),
             action: MenuAction.MENU_ACTION_VIEW_TEST_SUMM,
             hasCheckbox: true,
             checkboxValue: currentOptions.testSummary.value,
@@ -2053,8 +2053,8 @@ class ClientContainerServices{
         };
 
         const viewAccTests = {
-            key: 'ACC',
-            itemName: 'Acceptance Tests',
+            key: MenuAction.MENU_ACTION_VIEW_ACC_TESTS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_ACC_TESTS),
             action: MenuAction.MENU_ACTION_VIEW_ACC_TESTS,
             hasCheckbox: true,
             checkboxValue: currentOptions.accTests.value,
@@ -2062,8 +2062,8 @@ class ClientContainerServices{
         };
 
         const viewIntTests = {
-            key: 'INT',
-            itemName: 'Integration Tests',
+            key: MenuAction.MENU_ACTION_VIEW_INT_TESTS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_INT_TESTS),
             action: MenuAction.MENU_ACTION_VIEW_INT_TESTS,
             hasCheckbox: true,
             checkboxValue: currentOptions.intTests.value,
@@ -2071,8 +2071,8 @@ class ClientContainerServices{
         };
 
         const viewUnitTests = {
-            key: 'UNT',
-            itemName: 'Unit Tests',
+            key: MenuAction.MENU_ACTION_VIEW_UNIT_TESTS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_UNIT_TESTS),
             action: MenuAction.MENU_ACTION_VIEW_UNIT_TESTS,
             hasCheckbox: true,
             checkboxValue: currentOptions.unitTests.value,
@@ -2080,8 +2080,8 @@ class ClientContainerServices{
         };
 
         const viewAccFiles = {
-            key: 'ACF',
-            itemName: 'Feature Files',
+            key: MenuAction.MENU_ACTION_VIEW_ACC_FILES,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_ACC_FILES),
             action: MenuAction.MENU_ACTION_VIEW_ACC_FILES,
             hasCheckbox: true,
             checkboxValue: currentOptions.accFiles.value,
@@ -2089,8 +2089,8 @@ class ClientContainerServices{
         };
 
         const viewDomainDict = {
-            key: 'DOM',
-            itemName: 'Domain Dictionary',
+            key: MenuAction.MENU_ACTION_VIEW_DICT,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_DICT),
             action: MenuAction.MENU_ACTION_VIEW_DICT,
             hasCheckbox: true,
             checkboxValue: currentOptions.dictionary.value,
@@ -2099,8 +2099,8 @@ class ClientContainerServices{
 
         // Dropdown Items - Refresh
         const refreshTestData = {
-            key: 'RTD',
-            itemName: 'Test Data',
+            key: MenuAction.MENU_ACTION_REFRESH_TESTS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_TESTS),
             action: MenuAction.MENU_ACTION_REFRESH_TESTS,
             hasCheckbox: false,
             checkboxValue: false,
@@ -2108,8 +2108,8 @@ class ClientContainerServices{
         };
 
         const refreshDesignData = {
-            key: 'RDD',
-            itemName: 'Design and Test Data',
+            key: MenuAction.MENU_ACTION_REFRESH_DATA,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_DATA),
             action: MenuAction.MENU_ACTION_REFRESH_DATA,
             hasCheckbox: false,
             checkboxValue: false,

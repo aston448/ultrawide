@@ -11,10 +11,9 @@ import { DesignVersionStatus, DesignUpdateStatus, RoleType, WorkPackageType } fr
 
 describe('JSX: WorkPackagesList', () => {
 
-    function testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole){
+    function testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext){
 
         const workPackages = [];
-        const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
         const openWpItems = [];
 
         return shallow(
@@ -42,10 +41,13 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 1, 'Add option not found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isTrue(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
         });
     });
 
@@ -57,10 +59,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
             const designUpdateStatus = null;
             const userRole = RoleType.DESIGNER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
 
         it('is not available for Developer', () => {
@@ -69,10 +73,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT;
             const designUpdateStatus = null;
             const userRole = RoleType.DEVELOPER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -84,10 +90,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_NEW;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -99,10 +107,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
 
         it('is not available for updatable complete design version', () => {
@@ -111,10 +121,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -126,10 +138,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = null;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'NONE'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -143,10 +157,13 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 1, 'Add option not found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isTrue(item.find('ItemContainer').props().hasFooterAction, 'Expecting a footer action');
+            chai.assert.equal(item.find('ItemContainer').props().footerAction, 'Add Work Package', 'Expecting Add Work Package footer action');
         });
     });
 
@@ -158,10 +175,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DESIGNER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
 
         it('is not available for Developer', () => {
@@ -170,10 +189,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
             const userRole = RoleType.DEVELOPER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -185,10 +206,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_NEW;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 
@@ -200,10 +223,12 @@ describe('JSX: WorkPackagesList', () => {
             const designVersionStatus = DesignVersionStatus.VERSION_UPDATABLE;
             const designUpdateStatus = DesignUpdateStatus.UPDATE_MERGED;
             const userRole = RoleType.MANAGER;
+            const userContext = {designVersionId: 'ABC', designUpdateId: 'DEF'};
 
-            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole);
+            const item = testWorkPackagesContainer(wpType, designVersionStatus, designUpdateStatus, userRole, userContext);
 
-            chai.assert(item.find('#addWorkPackage').length === 0, 'Add option found!');
+            chai.assert.equal(item.find('ItemContainer').length, 1, 'Item Container not found');
+            chai.assert.isFalse(item.find('ItemContainer').props().hasFooterAction, 'Expecting no footer action');
         });
     });
 

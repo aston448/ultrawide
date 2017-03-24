@@ -60,7 +60,7 @@ export class UltrawideMenuDropdown extends Component {
 
     render() {
 
-        const {itemName, menuType, view, mode, userRole} = this.props;
+        const {itemName, menuType, view, mode, userViewOptions, userRole} = this.props;
 
         let highlight = '';
 
@@ -86,6 +86,7 @@ export class UltrawideMenuDropdown extends Component {
                         menuType: menuType,
                         view: view,
                         mode: mode,
+                        userViewOptions: userViewOptions,
                         clickAction: (newState) => this.setDisplayItems(newState)
                     }}
                     />

@@ -563,42 +563,6 @@ describe('JSX: DesignItemHeader', () => {
         });
     });
 
-    describe('The state of each Design Update is shown', () => {
-
-        it('state shown for new update', () => {
-
-            const itemType = ItemType.DESIGN_UPDATE;
-            const itemStatus = DesignUpdateStatus.UPDATE_NEW;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            chai.assert.equal(item.find('#statusLabel').children().text(), itemStatus);
-        });
-
-        it('state shown for published update', () => {
-
-            const itemType = ItemType.DESIGN_UPDATE;
-            const itemStatus = DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            chai.assert.equal(item.find('#statusLabel').children().text(), itemStatus);
-        });
-
-        it('state shown for merged update', () => {
-
-            const itemType = ItemType.DESIGN_UPDATE;
-            const itemStatus = DesignUpdateStatus.UPDATE_MERGED;
-            const userRole = RoleType.DESIGNER;
-
-            let item = testDesignItemHeader(itemType, null, itemStatus, userRole);
-
-            chai.assert.equal(item.find('#statusLabel').children().text(), itemStatus);
-        });
-    });
-
     describe('A Design Update name has an option to edit it', () => {
 
         it('designer has edit option for new update name', () => {

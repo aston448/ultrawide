@@ -186,7 +186,7 @@ export class DesignUpdate extends Component {
         }
 
         let status =
-            <div className={statusClass}>{designUpdate.updateStatus}</div>;
+            <div id="designUpdateStatus" className={statusClass}>{designUpdate.updateStatus}</div>;
 
         switch(designUpdate.updateStatus){
             case DesignUpdateStatus.UPDATE_NEW:

@@ -193,7 +193,7 @@ class DesignVersionServices{
                 return;
             }
 
-            if(previousDesignVersionId != 'NONE'){
+            if(previousDesignVersionId !== 'NONE'){
                 // Recreate the current DV as the previous DV plus current updates
                 DesignVersionModules.updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
             }
