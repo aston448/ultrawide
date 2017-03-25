@@ -286,11 +286,11 @@ export default class Narrative extends React.Component {
     }
 
     render() {
-        const {designComponent, wpComponent, mode, displayContext, view, testSummary} = this.props;
+        const {designComponent, wpComponent, updateComponent, mode, displayContext, view, testSummary} = this.props;
 
         //console.log("Rendering Narrative with context " + displayContext);
 
-        let itemStyle = getComponentClass(wpComponent, view, displayContext, true);
+        let itemStyle = getComponentClass(wpComponent, updateComponent, view, displayContext, true);
 
         let narrativeHtml = '';
 
@@ -392,6 +392,7 @@ export default class Narrative extends React.Component {
 Narrative.propTypes = {
     designComponent: PropTypes.object.isRequired,
     wpComponent: PropTypes.object,
+    updateComponent: PropTypes.object,
     mode: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,

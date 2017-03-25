@@ -12,6 +12,11 @@ import DesignComponentModules           from '../../service_modules/design/desig
 import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
 
 import { log }                          from '../../common/utils.js'
+
+// REDUX services
+import store from '../../redux/store'
+import {setCurrentUserOpenDesignUpdateItems, updateOpenItemsFlag} from '../../redux/actions'
+
 //======================================================================================================================
 //
 // Server Modules for Design Update Components.
@@ -194,11 +199,11 @@ class DesignUpdateComponentModules{
         }
     };
 
-    insertComponentToUpdateScope(baseComponent, designUpdateId){
+    insertComponentToUpdateScope(baseComponent, designUpdateId, inScope){
 
         const isScopable = DesignUpdateModules.isScopable(baseComponent.componentType);
 
-        DesignUpdateComponents.insert({
+        const designUpdateComponentId = DesignUpdateComponents.insert({
             componentReferenceId:           baseComponent.componentReferenceId,
             designId:                       baseComponent.designId,
             designVersionId:                baseComponent.designVersionId,
@@ -239,9 +244,40 @@ class DesignUpdateComponentModules{
             // Editing state (shared and persistent)
             isRemovable:                    true,
             isScopable:                     isScopable,
-            isInScope:                      isScopable,
-            isParentScope:                  !isScopable
+            isInScope:                      inScope,
+            isParentScope:                  !inScope
         });
+
+        // Set all added components as open by default
+        const openDuItems = store.getState().currentUserOpenDesignUpdateItems;
+        store.dispatch(setCurrentUserOpenDesignUpdateItems(openDuItems, designUpdateComponentId, true));
+        store.dispatch(updateOpenItemsFlag(designUpdateComponentId));
+    }
+
+    updateToActualScope(designUpdateComponentId){
+
+        DesignUpdateComponents.update(
+            {_id: designUpdateComponentId},
+            {
+                $set:{
+                    isParentScope: false,
+                    isInScope: true
+                }
+            }
+        )
+    }
+
+    updateToParentScope(designUpdateComponentId){
+
+        DesignUpdateComponents.update(
+            {_id: designUpdateComponentId},
+            {
+                $set:{
+                    isParentScope: true,
+                    isInScope: false
+                }
+            }
+        )
     }
 
     removeComponentFromUpdateScope(designUpdateComponentId){
@@ -269,8 +305,8 @@ class DesignUpdateComponentModules{
                 });
 
                 if(!currentUpdateComponent){
-                    // No DU Component for the parent so add it to scope
-                    this.insertComponentToUpdateScope(parentComponent, designUpdateId);
+                    // No DU Component for the parent so add it to PARENT scope
+                    this.insertComponentToUpdateScope(parentComponent, designUpdateId, false);
 
                     // And carry on up the tree
                     this.addParentsToScope(parentComponent, designUpdateId);

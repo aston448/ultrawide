@@ -49,7 +49,7 @@ class AppBody extends Component {
     }
 
     render() {
-        const {view, mode, userContext, userRole, currentUserMessage} = this.props;
+        const {view, mode, userContext, userRole, currentUserMessage, testDataFlag} = this.props;
 
         if(userContext) {
             //console.log("Rendering App Body.  Current DV = " + userContext.designVersionId);
@@ -171,7 +171,8 @@ function mapStateToProps(state) {
         userRole:               state.currentUserRole,
         userViewOptions:        state.currentUserViewOptions,
         currentViewDataValue:   state.currentViewOptionsDataValue,
-        currentUserMessage:     state.currentUserMessage
+        currentUserMessage:     state.currentUserMessage,
+        testDataFlag:           state.testDataFlag
     }
 }
 

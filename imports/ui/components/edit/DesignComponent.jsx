@@ -514,6 +514,7 @@ export class DesignComponent extends Component{
                 <Narrative
                     designComponent={narrativeItem}
                     wpComponent={currentItem}
+                    updateComponent={updateItem}
                     mode={mode}
                     displayContext={displayContext}
                     view={view}

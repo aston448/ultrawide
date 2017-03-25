@@ -16,7 +16,7 @@ class DesignVersionValidationServices{
     validateUpdateDesignVersionName(userRole, newName, otherVersions){
 
         // User must be Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE;
         }
 
@@ -39,7 +39,7 @@ class DesignVersionValidationServices{
     validateUpdateDesignVersionNumber(userRole, newNumber, otherVersions){
 
         // User must be Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_UPDATE;
         }
 
@@ -62,7 +62,7 @@ class DesignVersionValidationServices{
     validateEditDesignVersion(userRole, designVersion){
 
         // User must be Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_EDIT ;
         }
 
@@ -82,7 +82,7 @@ class DesignVersionValidationServices{
 
         // User must be a Designer for New versions
         if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_NEW){
-            if((userRole != RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_VIEW_NEW }
+            if((userRole !== RoleType.DESIGNER)){ return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_VIEW_NEW }
         }
 
         return Validation.VALID;
@@ -91,12 +91,12 @@ class DesignVersionValidationServices{
     validatePublishDesignVersion(userRole, designVersion){
 
         // User must be Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_PUBLISH;
         }
 
         // Design Version must be New
-        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_NEW){
+        if(designVersion.designVersionStatus !== DesignVersionStatus.VERSION_NEW){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_PUBLISH;
         }
 
@@ -106,12 +106,12 @@ class DesignVersionValidationServices{
     validateWithdrawDesignVersion(userRole, designVersion){
 
         // User must be Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_WITHDRAW;
         }
 
         // Design Version must be Draft
-        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_DRAFT){
+        if(designVersion.designVersionStatus !== DesignVersionStatus.VERSION_DRAFT){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_WITHDRAW;
         }
 
@@ -126,14 +126,14 @@ class DesignVersionValidationServices{
         }
 
         // The Design Version must be Updatable (i.e. not an initial version or completed)
-        if(designVersion.designVersionStatus != DesignVersionStatus.VERSION_UPDATABLE){
+        if(designVersion.designVersionStatus !== DesignVersionStatus.VERSION_UPDATABLE){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_STATE_UPDATE_WORKING;
         }
 
         // There must be at least one Design Update to Merge to create the updated version
-        if(mergeIncludeCount < 1){
-            return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_WORKING;
-        }
+        // if(mergeIncludeCount < 1){
+        //     return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_UPDATE_WORKING;
+        // }
 
         return Validation.VALID;
     };
@@ -141,7 +141,7 @@ class DesignVersionValidationServices{
     validateCreateNextDesignVersion(userRole, designVersion, mergeIncludeCount){
 
         // User must be Designer
-        if(userRole != RoleType.DESIGNER){
+        if(userRole !== RoleType.DESIGNER){
             return DesignVersionValidationErrors.DESIGN_VERSION_INVALID_ROLE_NEXT
         }
 

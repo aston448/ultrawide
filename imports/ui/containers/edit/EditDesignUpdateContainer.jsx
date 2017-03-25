@@ -111,7 +111,7 @@ export class UpdateApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, updateApplications, userContext, view, mode, viewOptions} = this.props;
+        const {baseApplications, updateApplications, userContext, view, mode, viewOptions, testDataFlag} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 

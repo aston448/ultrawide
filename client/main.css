@@ -1564,6 +1564,16 @@ input {
     padding: 1px;
     margin: 0;
     color: black;
+    background-color: lightgreen;
+}
+
+.in-parent-scope{
+    font-size: 10px;
+    border: 1px solid darkgrey;
+    border-radius: 2px;
+    padding: 1px;
+    margin: 0;
+    color: darkgrey;
     background-color: lightgrey;
 }
 
@@ -1575,6 +1585,16 @@ input {
     margin: 0;
     color: transparent;
     background-color: transparent;
+}
+
+.in-scope-elsewhere{
+    font-size: 10px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    padding: 1px;
+    margin: 0;
+    color: transparent;
+    background-color: lightgrey;
 }
 
 /* -- Progress indication ------------------------------------------------------------------------------------------- */

@@ -753,79 +753,61 @@ class ClientUserContextServices {
         // After here is is possible that the data is not yet subscribed to so skip if not
         if(store.getState().designVersionDataLoaded) {
 
-            // TODO - rethink how this works
-            return contextNameData;
-
             if (userContext.designComponentId !== 'NONE') {
-                switch (userContext.designComponentType) {
-                    case ComponentType.APPLICATION:
-                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
-                            contextNameData.application = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                        } else {
-                            contextNameData.application = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                        }
-                        break;
-                    case ComponentType.DESIGN_SECTION:
-                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
-                            contextNameData.designSection = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                        } else {
-                            contextNameData.designSection = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                        }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
-                        break;
-                    case ComponentType.FEATURE:
-                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
-                            contextNameData.feature = DesignComponents.findOne({_id: userContext.designComponentId}).componentName;
-                        } else {
-                            contextNameData.feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentNameNew;
-                        }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
-                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
-                        break;
-                    case ComponentType.FEATURE_ASPECT:
-                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
 
-                            const contextFeatureAspect = DesignComponents.findOne({_id: userContext.designComponentId});
+                let component = null;
+                let componentName = '';
 
-                            if(contextFeatureAspect){
-                                contextNameData.featureAspect = contextFeatureAspect.componentName;
-                            }
+                if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
+                    component = DesignComponents.findOne({_id: userContext.designComponentId});
+                    if(component){
+                        componentName = component.componentName;
+                    }
+                } else {
+                    component = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                    if(component){
+                        componentName = component.componentNameNew;
+                    }
+                }
 
-                        } else {
+                if(component) {
 
-                            const contextUpdateFeatureAspect = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                    switch (userContext.designComponentType) {
+                        case ComponentType.APPLICATION:
 
-                            if(contextUpdateFeatureAspect){
-                                contextNameData.featureAspect = contextUpdateFeatureAspect.componentNameNew;
-                            }
-                        }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
-                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
-                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext, displayContext);
-                        break;
-                    case ComponentType.SCENARIO:
-                        if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
+                            contextNameData.application = componentName;
+                            break;
 
-                            const contextScenario = DesignComponents.findOne({_id: userContext.designComponentId});
+                        case ComponentType.DESIGN_SECTION:
 
-                            if(contextScenario){
-                                contextNameData.scenario = contextScenario.componentName;
-                            }
+                            contextNameData.designSection = componentName;
+                            contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                            break;
 
-                        } else {
+                        case ComponentType.FEATURE:
 
-                            const contextUpdateScenario = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                            contextNameData.feature = componentName;
+                            contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                            contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
+                            break;
 
-                            if(contextUpdateScenario){
-                                contextNameData.scenario = contextUpdateScenario.componentNameNew;
-                            }
+                        case ComponentType.FEATURE_ASPECT:
 
-                        }
-                        contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
-                        contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
-                        contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext, displayContext);
-                        contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext, displayContext);
-                        break;
+                            contextNameData.featureAspect = componentName;
+                            contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                            contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
+                            contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext, displayContext);
+                            break;
+
+                        case ComponentType.SCENARIO:
+
+                            contextNameData.scenario = componentName;
+                            contextNameData.application = this.getParent(ComponentType.APPLICATION, userContext, displayContext);
+                            contextNameData.designSection = this.getParent(ComponentType.DESIGN_SECTION, userContext, displayContext);
+                            contextNameData.feature = this.getParent(ComponentType.FEATURE, userContext, displayContext);
+                            contextNameData.featureAspect = this.getParent(ComponentType.FEATURE_ASPECT, userContext, displayContext);
+                            break;
+                    }
                 }
             }
         }
@@ -833,7 +815,6 @@ class ClientUserContextServices {
         log((msg) => console.log(msg), LogLevel.TRACE, "Returning {}", contextNameData);
 
         return contextNameData;
-
     };
 
     getParent(parentType, userContext, displayContext){

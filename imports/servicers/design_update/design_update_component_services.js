@@ -50,38 +50,38 @@ class DesignUpdateComponentServices{
 
             let newUpdateComponentId = DesignUpdateComponents.insert(
                 {
-                    componentReferenceId: 'TEMP',                 // Will update this after component created
-                    designId: designId,
-                    designVersionId: designVersionId,
-                    designUpdateId: designUpdateId,
-                    componentType: componentType,
-                    componentLevel: componentLevel,
-                    componentParentIdOld: parentId,
-                    componentParentIdNew: parentId,               // Because this component may be moved later
-                    componentParentReferenceIdOld: parentRefId,
-                    componentParentReferenceIdNew: parentRefId,
+                    componentReferenceId:           'TEMP',                 // Will update this after component created
+                    designId:                       designId,
+                    designVersionId:                designVersionId,
+                    designUpdateId:                 designUpdateId,
+                    componentType:                  componentType,
+                    componentLevel:                 componentLevel,
+                    componentParentIdOld:           parentId,
+                    componentParentIdNew:           parentId,               // Because this component may be moved later
+                    componentParentReferenceIdOld:  parentRefId,
+                    componentParentReferenceIdNew:  parentRefId,
                     componentFeatureReferenceIdOld: featureRefId,
                     componentFeatureReferenceIdNew: featureRefId,
 
                     // Data is all defaults to start with
-                    componentNameOld: defaultName,
-                    componentNameRawOld: defaultRawName,
-                    componentNameNew: defaultName,
-                    componentNameRawNew: defaultRawName,
-                    componentTextRawOld: defaultRawText,
-                    componentTextRawNew: defaultRawText,
+                    componentNameOld:               defaultName,
+                    componentNameRawOld:            defaultRawName,
+                    componentNameNew:               defaultName,
+                    componentNameRawNew:            defaultRawName,
+                    componentTextRawOld:            defaultRawText,
+                    componentTextRawNew:            defaultRawText,
 
                     // State is a new item
-                    isNew: isNew,                   // New item added to design
-                    isChanged: isChanged,           // Usually false - will go to true when name is edited
-                    isTextChanged: false,           // For now - will go to true when text is edited
-                    isMoved: false,
-                    isRemoved: false,
-                    isDevAdded: devAdded,
+                    isNew:                          isNew,                  // New item added to design
+                    isChanged:                      isChanged,              // Usually false
+                    isTextChanged:                  false,                  // For now - will go to true when text is edited
+                    isMoved:                        false,
+                    isRemoved:                      false,
+                    isDevAdded:                     devAdded,
 
-                    isInScope: DesignUpdateModules.isScopable(componentType),         // If scopable then this must be in scope...
-                    isParentScope: false,
-                    isScopable: DesignUpdateModules.isScopable(componentType)          // A Scopable item can be picked as part of a change
+                    isInScope:                      true,         // Must be in scope if added!
+                    isParentScope:                  false,
+                    isScopable:                     DesignUpdateModules.isScopable(componentType)          // A Scopable item can be picked as part of a change
                 }
             );
 
@@ -439,26 +439,43 @@ class DesignUpdateComponentServices{
                         // Just check that it doesn't already exist
                         if (!currentUpdateComponent) {
 
-                            // Add the new component
-                            DesignUpdateComponentModules.insertComponentToUpdateScope(baseComponent, designUpdateId);
+                            // Add the new component as IN SCOPE
+                            DesignUpdateComponentModules.insertComponentToUpdateScope(baseComponent, designUpdateId, true);
 
                             // Add all parents not already added
                             DesignUpdateComponentModules.addParentsToScope(baseComponent, designUpdateId);
 
                             // And fix the parent ids for all the items added
                             DesignUpdateModules.fixParentIds(baseComponent.designVersionId, designUpdateId);
+                        } else {
+
+                            // Component already exists so put in real scope if not in parent scope
+                            DesignUpdateComponentModules.updateToActualScope(currentUpdateComponent._id);
                         }
 
                 } else {
 
-                    // Removing from scope means removing from the update
-                    if(currentUpdateComponent){
+                    // Removing from scope means removing from the update - can only remove if in scope...
+                    if(currentUpdateComponent && currentUpdateComponent.isInScope){
 
                         // Remove it
-                        DesignUpdateComponentModules.removeComponentFromUpdateScope(currentUpdateComponent._id);
 
-                        // And remove anything under it
-                        DesignUpdateComponentModules.removeChildrenFromScope(baseComponent, designUpdateId)
+
+                        // And remove anything above it that is not in scope itself or has in-scope children
+                        // -- UNLESS there is another in scope item below
+                        if(DesignUpdateComponentModules.hasNoInScopeChildren(currentUpdateComponent._id, false)) {
+
+                            // OK to remove completely
+                            DesignUpdateComponentModules.removeComponentFromUpdateScope(currentUpdateComponent._id);
+
+                            // And the parents if OK
+                            DesignUpdateComponentModules.removeChildlessParentsFromScope(baseComponent, designUpdateId);
+
+                        } else {
+
+                            // Need to convert to parent scope
+                            DesignUpdateComponentModules.updateToParentScope(currentUpdateComponent._id);
+                        }
                     }
                 }
             }

@@ -321,6 +321,31 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_CONTEXT_SCOPE;
         }
 
+        // Item must be in scope in this update to remove it
+        if(!newScope && updateComponent){
+            if(!updateComponent.isInScope){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE;
+            }
+        }
+
+        // An item cannot be put in scope if it is in scope for another update (not parent scope)
+        if(newScope) {
+
+            let alreadyInScope = false;
+
+            componentInOtherUpdates.forEach((instance) => {
+                if (instance.isInScope) {
+                    alreadyInScope = true;
+                }
+            });
+
+            if (alreadyInScope) {
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
+            }
+
+
+        }
+
         // A new item added to the Design Update cannot be de-scoped from it
         if(!newScope && updateComponent){
             if(updateComponent.isNew){
@@ -369,25 +394,7 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
-        // A Scenario cannot be put in scope if it is in scope for another update
-        if(newScope && updateComponent) {
 
-            if (updateComponent.componentType === ComponentType.SCENARIO) {
-
-                let alreadyInScope = false;
-
-                componentInOtherUpdates.forEach((instance) => {
-                    if (instance.isInScope) {
-                        alreadyInScope = true;
-                    }
-                });
-
-                if (alreadyInScope) {
-                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
-                }
-
-            }
-        }
 
         return Validation.VALID;
     }

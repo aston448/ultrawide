@@ -180,13 +180,13 @@ export class DesignComponentHeader extends Component{
                 this.setState({parentScope: this.props.currentItem.componentParent});
                 break;
             case DisplayContext.UPDATE_SCOPE:
-                if(this.props.updateItem){
-                    if(this.props.updateItem.isScopable) {
-                        this.setState({inScope: true});
-                    } else {
-                        this.setState({parentScope: true});
-                    }
-                }
+                // if(this.props.updateItem){
+                //     if(this.props.updateItem.isScopable) {
+                //         this.setState({inScope: true});
+                //     } else {
+                //         this.setState({parentScope: true});
+                //     }
+                // }
                 break;
             case DisplayContext.UPDATE_EDIT:
                 break;
@@ -235,8 +235,8 @@ export class DesignComponentHeader extends Component{
                         this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
                     }
 
-                    // Reflect any changes in scope
-                    this.setState({inScope: (newProps.updateItem !== null)});
+                    // // Reflect any changes in scope
+                    // this.setState({inScope: (newProps.updateItem !== null)});
 
                 } else {
                     // For updates we use the new name.  Also update if scope changes so decoration is redone.
@@ -552,11 +552,12 @@ export class DesignComponentHeader extends Component{
     };
 
     // In scope view only, sets an item as in or out of scope for a Design Update or Work Package
-    toggleScope(view, mode, displayContext, currentItem, designUpdateId, updateItem){
+    toggleScope(view, mode, displayContext, currentItem, designUpdateId, updateItem, newScope){
 
         //TODO: warning box if descoping changed item - do you want to revert to base view?
 
-        let newScope = !this.state.inScope;
+        let oldScope = this.state.inScope;
+        //let newScope = !this.state.inScope;
 
         switch(view){
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -576,11 +577,11 @@ export class DesignComponentHeader extends Component{
                 // Update the Design Update component
                 const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, designUpdateId, updateItem, newScope);
 
-                if(duResult.success){
-                    this.setState({inScope: newScope});
-                } else {
-                    this.setState({inScope: false});
-                }
+                // if(duResult.success){
+                //     this.setState({inScope: newScope});
+                // } else {
+                //     this.setState({inScope: oldScope});
+                // }
 
         }
 
@@ -621,31 +622,86 @@ export class DesignComponentHeader extends Component{
             deleteStyle = designItem.isRemovable && (designItem.isDevAdded || designItem.isDevUpdated) ? 'red' : 'lgrey';
         }
 
-        // All items are in scope...
-        let inScope = true;
+        let inScope = false;
+        let inParentScope = false;
+        let inScopeElsewhere = false;
         let isDeleted = false;
         let deleteGlyph = 'remove'; // Normal glyph for delete button
 
-        // Unless editing an update where scope is equal to items in the update
-        if(view === ViewType.DESIGN_UPDATE_EDIT){
-            inScope = (updateItem !== null);
-            isDeleted = currentItem.isRemoved;
+        // Deleted Items ----------------------------------------
 
-            // For logically deleted items in the same update, show the undo icon...
-            if(isDeleted){
-                deleteGlyph = 'arrow-left';
-            } else {
-                deleteStyle = (currentItem.isRemovable && !currentItem.isRemovedElsewhere) ? 'red' : 'lgrey';
+        if(view === ViewType.DESIGN_UPDATE_EDIT){
+
+            switch(displayContext){
+                case DisplayContext.UPDATE_SCOPE:
+
+                    // Show as deleted if possible due to updates of the current version
+                    if(updateItem){
+                        isDeleted = updateItem.isRemoved;
+                    } else {
+                        isDeleted = currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED;
+                    }
+                    break;
+
+                case DisplayContext.UPDATE_EDIT:
+
+                    isDeleted = currentItem.isRemoved;
+
+                    // For logically deleted items in the same update, show the undo icon...
+                    if(isDeleted){
+                        deleteGlyph = 'arrow-left';
+                    } else {
+                        deleteStyle = (currentItem.isRemovable && !currentItem.isRemovedElsewhere) ? 'red' : 'lgrey';
+                    }
             }
         }
 
-        let itemStyle = getComponentClass(currentItem, view, displayContext, false);
+        // Scope status ------------------------------------------
 
-        // Grey out original item when it is being dragged
+        switch(displayContext){
+            case DisplayContext.UPDATE_SCOPE:
+                if(updateItem){
+                    inScope = updateItem.isInScope;
+                    inParentScope = updateItem.isParentScope;
+                } else {
+                    // If not in this update indicate if another update is known to have modified it
+                    if(currentItem.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE){
+                        inScopeElsewhere = true;
+                    }
+                }
+
+                break;
+            case DisplayContext.UPDATE_EDIT:
+                inScope = updateItem.isInScope;
+                inParentScope = updateItem.isParentScope;
+                break;
+            case DisplayContext.WP_SCOPE:
+                inScope = currentItem.componentActive;
+                inParentScope = currentItem.componentParent;
+        }
+
+        // Determine how the check box is shown
+        let scopeStatus = 'out-scope';
+        if(inScope){
+            scopeStatus = 'in-scope';
+        }
+        if(inParentScope){
+            scopeStatus = 'in-parent-scope';
+        }
+        if(inScopeElsewhere){
+            scopeStatus = 'in-scope-elsewhere';
+        }
+
+        // Item main style ------------------------------------------
+        let itemStyle = getComponentClass(currentItem, updateItem, view, displayContext, false);
+
+
+        // Grey out original item when it is being dragged ----------
         if(isDragging){
             itemStyle = itemStyle + ' dragging-item';
         }
 
+        // Open / Closed --------------------------------------------
         let openGlyph = isOpen ? 'minus' :'plus';
 
         let openStatus = isOpen ? 'open-status-open' : 'open-status-closed';
@@ -653,8 +709,7 @@ export class DesignComponentHeader extends Component{
             openStatus = 'invisible';
         }
 
-        let scopeStatus = this.state.inScope ? 'in-scope' : 'out-scope';
-
+        // Indent ---------------------------------------------------
         let itemIndent = 'item-indent-none';
 
         switch(currentItem.componentType){
@@ -717,34 +772,13 @@ export class DesignComponentHeader extends Component{
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, currentItem, userContext.designUpdateId, updateItem)}>
+                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, currentItem, userContext.designUpdateId, updateItem, !inScope)}>
                         <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={true}
-                            ref="editorReadOnly"
-                            readOnly={true}
-                        />
-                    </div>
-                </InputGroup>
-            </div>;
-
-        let viewOnlyScopeHeader =
-            <div id="scopeHeaderItem">
-                <InputGroup>
-                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            spellCheck={false}
                             ref="editorReadOnly"
                             readOnly={true}
                         />
@@ -874,7 +908,6 @@ export class DesignComponentHeader extends Component{
             );
         }
 
-
         let nonDraggableHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
@@ -950,13 +983,7 @@ export class DesignComponentHeader extends Component{
                 break;
             case DisplayContext.UPDATE_SCOPE:
                 // Component displayed as part of Scope Selection
-                // if(currentItem.isScopable) {
-                    // Scope selectable Item
-                    designComponentElement = headerWithCheckbox;
-                // } else {
-                //     // Scope non selectable Item
-                //     designComponentElement = viewOnlyScopeHeader;
-                // }
+                designComponentElement = headerWithCheckbox;
                 break;
             case DisplayContext.BASE_VIEW:
             case DisplayContext.UPDATE_VIEW:

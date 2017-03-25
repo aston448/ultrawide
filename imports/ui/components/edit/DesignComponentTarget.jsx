@@ -88,7 +88,7 @@ DesignComponentTarget.propTypes = {
     view: PropTypes.string.isRequired,
     mode: PropTypes.string.isRequired,
     testSummary: PropTypes.bool.isRequired,
-    testSummaryData: PropTypes.object
+    testSummaryData: PropTypes.object,
 };
 
 // React DnD ===========================================================================================================

@@ -3,7 +3,7 @@
  */
 import React, { Component, PropTypes } from 'react';
 
-import {ComponentType} from '../constants/constants.js';
+import {ComponentType, UpdateMergeStatus} from '../constants/constants.js';
 import {DesignComponents} from '../collections/design/design_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
@@ -28,7 +28,7 @@ export function createSelectionList(typesArray){
     return items;
 }
 
-export function getComponentClass(currentItem, view, context, isNarrative){
+export function getComponentClass(currentItem, updateItem, view, context, isNarrative){
 
     let main = '';
     let modifier = '';
@@ -79,13 +79,35 @@ export function getComponentClass(currentItem, view, context, isNarrative){
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                // For design updates, out of scope things in the update are greyed out
-                if(!currentItem.isInScope && context != DisplayContext.BASE_VIEW){
-                    modifier = ' greyed-out';
+                switch(context){
+                    case DisplayContext.UPDATE_SCOPE:
+                        // Scope pane items are greyed out until scoped
+                        if(!updateItem){
+                            modifier = ' greyed-out';
+
+                            // If a removal has been updated in to the main version show it here
+                            if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+                                deleted = ' removed-item';
+                            }
+                        } else {
+                            if(updateItem.isRemoved){
+                                deleted = ' removed-item';
+                            }
+                        }
+                        break;
+                    case DisplayContext.UPDATE_EDIT:
+                    case DisplayContext.UPDATE_VIEW:
+                        // For design updates, out of scope things in the update are greyed out
+                        if(!currentItem.isInScope){
+                            modifier = ' greyed-out';
+                        }
+                        // And removed stuff is struck through
+                        if(currentItem.isRemoved || currentItem.isRemovedElsewhere){
+                            deleted = ' removed-item';
+                        }
+                        break;
                 }
-                if(currentItem.isRemoved || currentItem.isRemovedElsewhere){
-                    deleted = ' removed-item';
-                }
+
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:

@@ -154,7 +154,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_DELETABLE_REMOVED_ELSEWHERE:    'This component cannot be removed because it is already removed in another update',
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE:                     'A Design Update Component that is not removed is not restorable',
     DESIGN_UPDATE_COMPONENT_NOT_RESTORABLE_PARENT:              'A Design Update Component whose parent is removed is not restorable',
-    DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE:              'This Scenario is already in scope for another Design Update so cannot be added here',
+    DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE:              'This item is already in specific scope for another Design Update so cannot be added here',
     DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED:               'This Feature cannot be put in scope here as its text is being modified in another update',
     DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_REMOVED:               'This component cannot be scoped as it has been removed by another update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW:                 'This component cannot be removed from scope as it is new in this update',
@@ -163,7 +163,8 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER:   'A component cannot be added to this item because it has been removed in another update',
     DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV:                  'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
     DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE:                   'A Design Component is only updatable from a WP if it is a Scenario or is a Feature Aspect added by the Developer',
-    DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE:                     'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer'
+    DESIGN_UPDATE_COMPONENT_NOT_WP_ADDABLE:                     'Only Feature Aspects and Scenarios can be added to a Work Package by a Developer',
+    DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE:                       'Only specifically scoped components can be rmoved from scope'
 };
 
 export const WorkPackageComponentValidationErrors = {
