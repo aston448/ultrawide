@@ -43,9 +43,9 @@ export class DesignComponentTarget extends Component{
 
     render(){
 
-        const {currentItem, designItem, updateItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
+        const {currentItem, updateItem, wpItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
 
-        //console.log("Rendering design component target: " + currentItem.componentName);
+        //console.log("Rendering design component target: " + currentItem.componentNameNew);
 
         if(!(Meteor.isTest) && canDrop && (this.props.displayContext === DisplayContext.UPDATE_EDIT || this.props.displayContext === DisplayContext.BASE_EDIT) && this.props.mode === ViewMode.MODE_EDIT) {
             // Only can be droppable if in Edit mode and if the edit section of the view
@@ -53,8 +53,8 @@ export class DesignComponentTarget extends Component{
                 <div>
                     <DesignComponent
                         currentItem={currentItem}
-                        designItem={designItem}
                         updateItem={updateItem}
+                        wpItem={wpItem}
                         isDragDropHovering={isOverCurrent && canDrop}
                         displayContext={displayContext}
                         testSummary={testSummary}
@@ -67,8 +67,8 @@ export class DesignComponentTarget extends Component{
                 <div>
                     <DesignComponent
                         currentItem={currentItem}
-                        designItem={designItem}
                         updateItem={updateItem}
+                        wpItem={wpItem}
                         isDragDropHovering={false}
                         displayContext={displayContext}
                         testSummary={testSummary}
@@ -82,8 +82,8 @@ export class DesignComponentTarget extends Component{
 
 DesignComponentTarget.propTypes = {
     currentItem: PropTypes.object.isRequired,
-    designItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
+    wpItem: PropTypes.object,
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,
     mode: PropTypes.string.isRequired,

@@ -60,7 +60,7 @@ export class UpdateApplicationsList extends Component {
 
     getDesignUpdateItem(application, displayContext, designUpdateId){
         switch(displayContext){
-            case  DisplayContext.UPDATABLE_VIEW:
+            case  DisplayContext.WORKING_VIEW:
                 return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(application);
             case DisplayContext.UPDATE_SCOPE:
                 // See if this item is in scope - i.e. in the DU

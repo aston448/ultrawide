@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
@@ -144,7 +144,7 @@ Meteor.methods({
         let movingWorkPackageDesignComponent = null;
         if(userContext.designUpdateId === 'NONE'){
             // Get Design Component
-            movingWorkPackageDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+            movingWorkPackageDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
         } else {
             // Get Design Update Component
             movingWorkPackageDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
@@ -155,7 +155,7 @@ Meteor.methods({
             componentReferenceId: movingWorkPackageDesignComponent.componentReferenceId
         });
 
-        if(movingWorkPackageComponent.componentIndex >= targetWorkPackageComponent.componentIndex){
+        if(movingWorkPackageComponent.componentIndexNew >= targetWorkPackageComponent.componentIndexNew){
             throw new Meteor.Error("FAIL", "Expected component " + movingWorkPackageDesignComponent._id + " to be above component " + targetWorkPackageComponent._id + " in the list of " + targetType +"s");
         } else {
             return true;
@@ -170,9 +170,9 @@ Meteor.methods({
         let featureNarrative = '';
         if(userContext.designUpdateId === 'NONE'){
             // Get Design Component
-            currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+            currentDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
             if(currentDesignComponent){
-                featureNarrative = currentDesignComponent.componentNarrative;
+                featureNarrative = currentDesignComponent.componentNarrativeNew;
             } else {
                 throw new Meteor.Error("FAIL", 'No component is currently selected');
             }
@@ -203,8 +203,8 @@ Meteor.methods({
             case WorkPackageType.WP_BASE:
 
                 const designComponent = TestDataHelpers.getContextDesignComponent(userContext.designComponentId);
-                if(designComponent.componentName != componentName){
-                    throw new Meteor.Error("FAIL", 'Expected component name to be ' + componentName + ' but got ' + designComponent.componentName);
+                if(designComponent.componentNameNew != componentName){
+                    throw new Meteor.Error("FAIL", 'Expected component name to be ' + componentName + ' but got ' + designComponent.componentNameNew);
                 }
                 break;
             case WorkPackageType.WP_UPDATE:

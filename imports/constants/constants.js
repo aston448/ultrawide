@@ -114,7 +114,7 @@ export const WindowSize = {
 export const DisplayContext = {
     BASE_EDIT:              'BASE_EDIT',            // Editable new design
     BASE_VIEW:              'BASE_VIEW',            // Base design version window for design update
-    UPDATABLE_VIEW:         'UPDATABLE_VIEW',       // Updatable Design Version progress view
+    WORKING_VIEW:           'WORKING_VIEW',         // Updatable Design Version progress view
     UPDATE_SCOPE:           'UPDATE_SCOPE',         // Update Scope window
     UPDATE_EDIT:            'UPDATE_EDIT',          // Update Edit window
     UPDATE_VIEW:            'UPDATE_VIEW',          // Update when viewing it
@@ -246,6 +246,26 @@ export const ScenarioStepStatus = {
     STEP_STATUS_UNLINKED:   'Unlinked',
     STEP_STATUS_PASS:       'Pass',
     STEP_STATUS_FAIL:       'Fail'
+};
+
+
+export const ExportFileName = {
+    USERS:                      'USERS.EXP',
+    USER_CONTEXT:               'USER_CONTEXT.EXP',
+    TEST_OUTPUT_LOCATIONS:      'TEST_OUTPUT_LOCATIONS.EXP',
+    TEST_OUTPUT_LOCATION_FILES: 'TEST_OUTPUT_LOCATION_FILES.EXP',
+    USER_TEST_TYPE_LOCATIONS:   'USER_TEST_TYPE_LOCATIONS.EXP',
+    DESIGNS:                    'DESIGNS.EXP',
+    DESIGN_VERSIONS:            'DESIGN_VERSIONS.EXP',
+    DESIGN_UPDATES:             'DESIGN_UPDATES.EXP',
+    DESIGN_UPDATE_SUMMARIES:    'DESIGN_UPDATE_SUMMARIES.EXP',
+    WORK_PACKAGES:              'WORK_PACKAGES.EXP',
+    DOMAIN_DICTIONARY:          'DOMAIN_DICTIONARY.EXP',
+    DESIGN_VERSION_COMPONENTS:  'DESIGN_VERSION_COMPONENTS.EXP',
+    DESIGN_UPDATE_COMPONENTS:   'DESIGN_UPDATE_COMPONENTS.EXP',
+    WORK_PACKAGE_COMPONENTS:    'WORK_PACKAGE_COMPONENTS.EXP',
+    FEATURE_BACKGROUND_STEPS:   'FEATURE_BACKGROUND_STEPS.EXP',
+    SCENARIO_STEPS:             'SCENARIO_STEPS.EXP'
 };
 
 export const UserDevFeatureFileStatus = {

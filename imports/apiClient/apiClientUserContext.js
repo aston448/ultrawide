@@ -9,7 +9,7 @@ import { Designs }                  from '../collections/design/designs.js';
 import { DesignVersions }           from '../collections/design/design_versions.js';
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
 import { WorkPackages }             from '../collections/work/work_packages.js';
-import { DesignComponents }         from '../collections/design/design_components.js';
+import { DesignVersionComponents }  from '../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
@@ -158,7 +158,7 @@ class ClientUserContextServices {
     loadMainData(userContext){
         log((msg) => console.log(msg), LogLevel.TRACE, "Loading main data...");
 
-        const dvCount = DesignComponents.find({}).count();
+        const dvCount = DesignVersionComponents.find({}).count();
 
         if(dvCount > 0){
             log((msg) => console.log(msg), LogLevel.TRACE, "Data already loaded...");
@@ -217,7 +217,7 @@ class ClientUserContextServices {
             // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
 
             // All Design Versions
-            const designVersionOpenComponents = DesignComponents.find(
+            const designVersionOpenComponents = DesignVersionComponents.find(
                 {
                     designVersionId: userContext.designVersionId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
@@ -240,7 +240,7 @@ class ClientUserContextServices {
                 // There is a current component...
                 if (userContext.designVersionId != 'NONE') {
 
-                    let dvComponent = DesignComponents.findOne({
+                    let dvComponent = DesignVersionComponents.findOne({
                         _id: userContext.designComponentId
                     });
 
@@ -258,9 +258,9 @@ class ClientUserContextServices {
                                 break;
                             default:
                                 // Anything else is below a Feature so open the Feature and select that
-                                const dvFeatureComponent = DesignComponents.findOne({
+                                const dvFeatureComponent = DesignVersionComponents.findOne({
                                     designVersionId:        dvComponent.designVersionId,
-                                    componentReferenceId:   dvComponent.componentFeatureReferenceId
+                                    componentReferenceId:   dvComponent.componentFeatureReferenceIdNew
                                 });
 
                                 if(dvFeatureComponent){
@@ -451,7 +451,7 @@ class ClientUserContextServices {
                                 // Anything else is below a Feature so open the Feature and select that
                                 const wpFeatureComponent = WorkPackageComponents.findOne({
                                     workPackageId:          wpComponent.workPackageId,
-                                    componentReferenceId:   wpComponent.componentFeatureReferenceId
+                                    componentReferenceId:   wpComponent.componentFeatureReferenceIdNew
                                 });
 
                                 if(wpFeatureComponent){
@@ -759,9 +759,9 @@ class ClientUserContextServices {
                 let componentName = '';
 
                 if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
-                    component = DesignComponents.findOne({_id: userContext.designComponentId});
+                    component = DesignVersionComponents.findOne({_id: userContext.designComponentId});
                     if(component){
-                        componentName = component.componentName;
+                        componentName = component.componentNameNew;
                     }
                 } else {
                     component = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
@@ -828,17 +828,17 @@ class ClientUserContextServices {
 
             if (userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE) {
 
-                let currentItem = DesignComponents.findOne({_id: currentItemId});
+                let currentItem = DesignVersionComponents.findOne({_id: currentItemId});
 
                 if(currentItem) {
-                    let parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+                    let parentItem = DesignVersionComponents.findOne({_id: currentItem.componentParentIdNew});
 
 
                     log((msg) => console.log(msg), LogLevel.TRACE, "Immediate parent is type {}", parentItem.componentType);
 
-                    while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentId !== 'NONE')) {
+                    while (parentItem && (parentItem.componentType !== parentType) && (currentItem.componentParentIdNew !== 'NONE')) {
                         currentItem = parentItem;
-                        parentItem = DesignComponents.findOne({_id: currentItem.componentParentId});
+                        parentItem = DesignVersionComponents.findOne({_id: currentItem.componentParentIdNew});
 
                         if (parentItem) {
                             log((msg) => console.log(msg), LogLevel.TRACE, "Next parent is type {}", parentItem.componentType);
@@ -851,7 +851,7 @@ class ClientUserContextServices {
                         return 'NONE';
                     }
 
-                    return parentItem.componentName;
+                    return parentItem.componentNameNew;
 
                 } else {
 
@@ -868,7 +868,7 @@ class ClientUserContextServices {
                         parentUpdateItem = DesignUpdateComponents.findOne({_id: currentUpdateItem.componentParentIdNew});
                     }
 
-                    return parentUpdateItem.componentName;
+                    return parentUpdateItem.componentNameNew;
                 } else {
 
                     return 'NONE';

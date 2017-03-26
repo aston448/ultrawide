@@ -12,7 +12,7 @@ import { DesignVersions }                   from '../collections/design/design_v
 import { DesignUpdates }                    from '../collections/design_update/design_updates.js';
 import { WorkPackages }                     from '../collections/work/work_packages.js';
 import { WorkPackageComponents }            from '../collections/work/work_package_components.js';
-import { DesignComponents }                 from '../collections/design/design_components.js';
+import { DesignVersionComponents }          from '../collections/design/design_version_components.js';
 import { DesignUpdateComponents }           from '../collections/design_update/design_update_components.js';
 import { FeatureBackgroundSteps }           from '../collections/design/feature_background_steps.js';
 import { ScenarioSteps }                    from '../collections/design/scenario_steps.js';
@@ -117,7 +117,7 @@ class ClientContainerServices{
 
 
                 let dsHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
-                let dcHandle = Meteor.subscribe('designComponents', userContext.designVersionId);
+                let dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 let ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 let fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
                 let ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
@@ -127,7 +127,7 @@ class ClientContainerServices{
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dsHandle.ready() || !dcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready()
+                        !dsHandle.ready() || !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -674,13 +674,12 @@ class ClientContainerServices{
 
         console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
-        const baseApplications = DesignComponents.find(
+        const baseApplications = DesignVersionComponents.find(
             {
                 designVersionId: userContext.designVersionId,
-                componentType: ComponentType.APPLICATION,
-                isRemoved: false
+                componentType: ComponentType.APPLICATION
             },
-            {sort: {componentIndex: 1}}
+            {sort: {componentIndexNew: 1}}
         );
 
         let baseApplicationsArr = baseApplications.fetch();
@@ -703,14 +702,14 @@ class ClientContainerServices{
             updateApplicationsArr = updateApplications.fetch();
         }
 
-        // Get In WP Data if WP Id provided
+        // Get WP Data if WP Id provided
         let wpApplicationsArr = [];
-        let wpApplicationsInScopeArr = [];
+        let wpApplicationComponentsArr = [];
 
         if(userContext.workPackageId !== 'NONE'){
 
             // Which applications are in the WP?
-            const wpApps = WorkPackageComponents.find(
+            const wpAppComponents = WorkPackageComponents.find(
                 {
                     workPackageId: userContext.workPackageId,
                     componentType: ComponentType.APPLICATION,
@@ -718,21 +717,32 @@ class ClientContainerServices{
                 {sort: {componentIndex: 1}}
             );
 
+            wpAppComponents.forEach((wpApp) => {
 
-            wpApplicationsArr = wpApps.fetch();
+                switch(view){
+                    case ViewType.WORK_PACKAGE_BASE_VIEW:
+                    case ViewType.WORK_PACKAGE_BASE_EDIT:
+                    case ViewType.DEVELOP_BASE_WP:
+
+                        // The app data is the Design Version data
+                        let appDvComponent = DesignVersionComponents.find({_id: wpApp.componentId});
+                        wpApplicationsArr.push(appDvComponent);
+                        break;
+
+                    case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                    case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                    case ViewType.DEVELOP_UPDATE_WP:
+
+                        // The app data is the Design Update data
+                        let appDuComponent = DesignUpdateComponents.find({_id: wpApp.componentId});
+                        wpApplicationsArr.push(appDuComponent);
+                        break;
+                }
+            });
+
             //console.log("Found " + wpApplicationsArr.length + " WP applications.");
 
-            // Which applications are in the WP scope?
-            const inScopeWpApps = WorkPackageComponents.find(
-                {
-                    workPackageId: userContext.workPackageId,
-                    componentType: ComponentType.APPLICATION,
-                    $or: [{componentParent: true}, {componentActive: true}]
-                },
-                {sort: {componentIndex: 1}}
-            );
-
-            wpApplicationsInScopeArr = inScopeWpApps.fetch();
+            wpApplicationComponentsArr = wpAppComponents.fetch();
 
         }
 
@@ -767,14 +777,20 @@ class ClientContainerServices{
                 return{
                     updateApplications:     updateApplicationsArr
                 };
+
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
+                return {
+                    scopeApplications:  baseApplicationsArr,
+                    wpApplications:     wpApplicationsArr,
+                };
+
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 // Need base design version apps and WP in scope apps
                 return{
-                    wpScopeApplications:    wpApplicationsArr,
-                    wpViewApplications:     wpApplicationsInScopeArr
+                    scopeApplications:  updateApplicationsArr,
+                    wpApplications:     wpApplicationsArr,
                 };
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
@@ -787,46 +803,45 @@ class ClientContainerServices{
     }
 
     // Get data for all nested design components inside the specified parent
-    getComponentDataForParentComponent(componentType, view, designVersionId, updateId, workPackageId, parentId, displayContext){
-        let currentComponents = null;
+    getComponentDataForParentComponent(componentType, view, designVersionId, designUpdateId, workPackageId, parentId, displayContext){
+        let currentComponents = [];
+        let wpComponents = [];
 
-        //console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
+        console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
 
         switch(view)
         {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
 
-                // Don't show removed components in these views
-                currentComponents = DesignComponents.find(
+                currentComponents = DesignVersionComponents.find(
                     {
                         designVersionId: designVersionId,
                         componentType: componentType,
-                        componentParentId: parentId,
-                        isRemoved: false
+                        componentParentIdNew: parentId
                     },
-                    {sort:{componentIndex: 1}}
-                );
+                    {sort:{componentIndexNew: 1}}
+                ).fetch();
 
                 return {
-                    components: currentComponents.fetch(),
+                    components: currentComponents,
                     displayContext: displayContext
                 };
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
 
                 // Do include removed components in the current updates view
-                currentComponents = DesignComponents.find(
+                currentComponents = DesignVersionComponents.find(
                     {
                         designVersionId: designVersionId,
                         componentType: componentType,
-                        componentParentId: parentId
+                        componentParentIdNew: parentId
                     },
-                    {sort:{componentIndex: 1}}
-                );
+                    {sort:{componentIndexNew: 1}}
+                ).fetch();
 
                 return {
-                    components: currentComponents.fetch(),
+                    components: currentComponents,
                     displayContext: displayContext
                 };
 
@@ -836,7 +851,7 @@ class ClientContainerServices{
             case ViewType.DESIGN_UPDATE_VIEW:
                 // DESIGN UPDATE:  Need to provide data in the context of SCOPE, EDIT, VIEW and BASE Design Version
 
-                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + updateId + " with parent " + parentId);
+                //console.log("Looking for components for version in context: " + displayContext + " for DV " + designVersionId + " update " + designUpdateId + " with parent " + parentId);
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
@@ -847,12 +862,12 @@ class ClientContainerServices{
                                 currentComponents = DesignUpdateComponents.find(
                                     {
                                         designVersionId: designVersionId,
-                                        designUpdateId: updateId,
+                                        designUpdateId: designUpdateId,
                                         componentType: componentType,
                                         componentParentIdNew: parentId
                                     },
                                     {sort:{componentIndexNew: 1}}
-                                );
+                                ).fetch();
                                 break;
                             case ComponentType.FEATURE:
                             case ComponentType.FEATURE_ASPECT:
@@ -861,13 +876,13 @@ class ClientContainerServices{
                                 currentComponents = DesignUpdateComponents.find(
                                     {
                                         designVersionId: designVersionId,
-                                        designUpdateId: updateId,
+                                        designUpdateId: designUpdateId,
                                         componentType: componentType,
                                         componentParentIdNew: parentId,
                                         $or:[{isInScope: true}, {isParentScope: true}]
                                     },
                                     {sort:{componentIndexNew: 1}}
-                                );
+                                ).fetch();
                                 break;
                         }
                         break;
@@ -882,39 +897,39 @@ class ClientContainerServices{
                                 currentComponents = DesignUpdateComponents.find(
                                     {
                                         designVersionId: designVersionId,
-                                        designUpdateId: updateId,
+                                        designUpdateId: designUpdateId,
                                         componentType: componentType,
                                         componentParentIdNew: parentId,
                                         $or:[{isInScope: true}, {isParentScope: true}]
                                     },
                                     {sort:{componentIndexNew: 1}}
-                                );
+                                ).fetch();
                                 break;
                         }
                         break;
 
                     case DisplayContext.UPDATE_SCOPE:
                         // Display all design components in the base design so scope can be chosen
-                        currentComponents = DesignComponents.find(
+                        currentComponents = DesignVersionComponents.find(
                             {
                                 designVersionId: designVersionId,
                                 componentType: componentType,
-                                componentParentId: parentId
+                                componentParentIdOld: parentId
                             },
-                            {sort:{componentIndex: 1}}
-                        );
+                            {sort:{componentIndexOld: 1}}
+                        ).fetch();
                         break;
 
-                    case DisplayContext.BASE_VIEW:
-                        // Display all base design version components
-                        currentComponents = DesignComponents.find(
+                    case DisplayContext.WORKING_VIEW:
+                        // Display latest components in the working view
+                        currentComponents = DesignVersionComponents.find(
                             {
                                 designVersionId: designVersionId,
                                 componentType: componentType,
-                                componentParentId: parentId
+                                componentParentIdNew: parentId
                             },
-                            {sort:{componentIndex: 1}}
-                        );
+                            {sort:{componentIndexNew: 1}}
+                        ).fetch();
 
                         break;
 
@@ -923,55 +938,114 @@ class ClientContainerServices{
                 //console.log("Design update components found: " + currentComponents.count());
 
                 return {
-                    components: currentComponents.fetch(),
+                    components: currentComponents,
                     displayContext: displayContext
                 };
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-                // WORK PACKAGE: The minimal data that defines the SCOPE and the CONTENT (view) of the Work Package.
-                // This is not the actual design data which is retrieved separately where needed.
-                //console.log("Looking for components for WP in context: " + displayContext + " for DV " + designVersionId + " WP " + workPackageId + " with parent " + parentId);
-
-                switch(displayContext){
+                switch(displayContext) {
                     case DisplayContext.WP_SCOPE:
-                        // For scope context we want all possible components to choose from
-                        currentComponents = WorkPackageComponents.find(
+
+                        // Get all Design Components for the scope
+                        currentComponents = DesignVersionComponents.find(
                             {
-                                workPackageId: workPackageId,
-                                componentType: componentType,
-                                componentParentReferenceId: parentId
+                                designVersionId: designVersionId,
+                                componentParentIdNew: parentId
                             },
-                            {sort:{componentIndex: 1}}
-                        );
+                            {sort: {componentIndexNew: 1}}
+                        ).fetch();
                         break;
 
                     case DisplayContext.WP_VIEW:
                     case DisplayContext.DEV_DESIGN:
-                        // For the WP View or during Dev, only include items that have been scoped
-                        currentComponents = WorkPackageComponents.find(
+
+                        // Get only the Design Components that are in the WP
+
+                        // Get the parent component
+                        const parent = DesignVersionComponents.findOne({_id: parentId});
+
+                        // Get the possible WP components
+                        wpComponents = WorkPackageComponents.find(
                             {
                                 workPackageId: workPackageId,
-                                componentType: componentType,
-                                componentParentReferenceId: parentId,
-                                $or: [{componentParent: true}, {componentActive: true}]
+                                componentParentReferenceId: parent.componentReferenceId
                             },
-                            {sort:{componentIndex: 1}}
-                        );
+                            {sort: {componentIndex: 1}});
 
+                        wpComponents.forEach((wpComponent) => {
+
+                            let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
+
+                            currentComponents.push(dvComponent);
+                        });
                         break;
                 }
 
-                //console.log("WP components found: " + currentComponents.count());
+                console.log("Found " + currentComponents.length + " components of type " + componentType + " for display context " + displayContext);
 
-                if(currentComponents.count() > 0){
+                if(currentComponents.length > 0){
                     return {
-                        components: currentComponents.fetch(),
+                        components: currentComponents,
+                        displayContext: displayContext
+                    };
+                } else {
+                    return {
+                        components: [],
+                        displayContext: displayContext
+                    };
+                }
+
+                break;
+
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DEVELOP_UPDATE_WP:
+
+                switch(displayContext) {
+                    case DisplayContext.WP_SCOPE:
+
+                        // Get all Update Components for the scope
+                        currentComponents = DesignUpdateComponents.find(
+                            {
+                                designVersionId: designVersionId,
+                                designUpdateId: designUpdateId,
+                                componentParentIdNew: parentId
+                            },
+                            {sort: {componentIndexNew: 1}}
+                        ).fetch();
+                        break;
+
+                    case DisplayContext.WP_VIEW:
+                    case DisplayContext.DEV_DESIGN:
+
+                        // Get only the Update Components that are in the WP
+
+                        // Get the parent component
+                        const parent = DesignUpdateComponents.findOne({_id: parentId});
+
+                        // Get the possible WP components
+                        wpComponents = WorkPackageComponents.find(
+                            {
+                                workPackageId: workPackageId,
+                                componentParentReferenceId: parent.componentReferenceId
+                            },
+                            {sort: {componentIndex: 1}});
+
+                        wpComponents.forEach((wpComponent) => {
+
+                            let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
+
+                            currentComponents.push(duComponent);
+                        });
+                        break;
+                }
+
+                if(currentComponents.length > 0){
+                    return {
+                        components: currentComponents,
                         displayContext: displayContext
                     };
                 } else {
@@ -1201,7 +1275,7 @@ class ClientContainerServices{
         let currentDesignComponent = null;
         let currentUpdateComponent = null;
 
-        if(userContext && userContext.designComponentId != 'NONE') {
+        if(userContext && userContext.designComponentId !== 'NONE') {
 
             switch(view){
                 case ViewType.DESIGN_NEW_EDIT:
@@ -1210,7 +1284,7 @@ class ClientContainerServices{
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
 
-                    currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+                    currentDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
 
                     break;
 
@@ -1225,7 +1299,7 @@ class ClientContainerServices{
                     // For an update the current item is the update item but we can also get its equivalent in the original design
                     if(currentUpdateComponent) {
 
-                        currentDesignComponent = DesignComponents.findOne({
+                        currentDesignComponent = DesignVersionComponents.findOne({
                             designVersionId:        currentUpdateComponent.designVersionId,
                             componentReferenceId:   currentUpdateComponent.componentReferenceId
                         });
@@ -1235,7 +1309,7 @@ class ClientContainerServices{
                 case ViewType.DESIGN_UPDATABLE_VIEW:
 
                     // Want the current version plus the related DU component to give old text if text has changed
-                    currentDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+                    currentDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
 
                     if(currentDesignComponent) {
 
@@ -1380,14 +1454,6 @@ class ClientContainerServices{
             case ComponentType.FEATURE_ASPECT:
                 // Get all Scenarios in this Feature Aspect
 
-                // // Get reference of particular Aspect selected
-                // let aspectRef = null;
-                // if(userContext.designUpdateId === 'NONE') {
-                //     aspectRef = DesignComponents.findOne({_id: userContext.designComponentId}).componentReferenceId;
-                // } else {
-                //     aspectRef = DesignUpdateComponents.findOne({_id: userContext.designComponentId}).componentReferenceId;
-                // }
-
                 let aspectScenarioMashData = [];
 
                 aspectScenarioMashData = UserWorkPackageMashData.find({
@@ -1453,7 +1519,7 @@ class ClientContainerServices{
 
         } else {
             if (userContext.designUpdateId === 'NONE') {
-                selectedDesignComponent = DesignComponents.findOne({_id: selectionComponentId})
+                selectedDesignComponent = DesignVersionComponents.findOne({_id: selectionComponentId})
             } else {
                 selectedDesignComponent = DesignUpdateComponents.findOne({_id: selectionComponentId})
             }
@@ -1488,7 +1554,7 @@ class ClientContainerServices{
 
                         let mashDesignComponent = null;
                         if (userContext.designUpdateId === 'NONE') {
-                            mashDesignComponent = DesignComponents.findOne({_id: mashItem.designComponentId})
+                            mashDesignComponent = DesignVersionComponents.findOne({_id: mashItem.designComponentId})
                         } else {
                             mashDesignComponent = DesignUpdateComponents.findOne({_id: mashItem.designComponentId})
                         }
@@ -1569,7 +1635,7 @@ class ClientContainerServices{
         let selectedDesignComponent = null;
 
         if (userContext.designUpdateId === 'NONE') {
-            selectedDesignComponent = DesignComponents.findOne({_id: userContext.designComponentId})
+            selectedDesignComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId})
         } else {
             selectedDesignComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId})
         }
@@ -1619,7 +1685,7 @@ class ClientContainerServices{
 
             // The selected Feature must relate to a design or design update feature...
             if(userContext.designUpdateId === 'NONE'){
-                featureName = DesignComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentName
+                featureName = DesignVersionComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentNameNew
             } else {
                 featureName = DesignUpdateComponents.findOne({componentReferenceId: userContext.featureReferenceId}).componentNameNew
             }
@@ -1640,7 +1706,7 @@ class ClientContainerServices{
             // DESIGN VERSION SEARCH
 
             // Check immediate parent
-            parentRefId = child.componentParentReferenceId;
+            parentRefId = child.componentParentReferenceIdNew;
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant: ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
 
@@ -1652,13 +1718,13 @@ class ClientContainerServices{
             // Iterate up until we reach top of tree
             found = false;
 
-            while((parentRefId != 'NONE') && !found){
+            while((parentRefId !== 'NONE') && !found){
                 // Get next parent up
 
-                parentRefId = DesignComponents.findOne({
+                parentRefId = DesignVersionComponents.findOne({
                     designVersionId: userContext.designVersionId,
                     componentReferenceId: parentRefId
-                }).componentParentReferenceId;
+                }).componentParentReferenceIdNew;
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendant (loop): ParentId = {} Current Item Id = {}", parentRefId, parent.componentReferenceId);
 
@@ -1686,7 +1752,7 @@ class ClientContainerServices{
             // Iterate up until we reach top of tree
             found = false;
 
-            while((parentRefId != 'NONE') && !found){
+            while((parentRefId !== 'NONE') && !found){
                 // Get next parent up
 
                 parentRefId = DesignUpdateComponents.findOne({
@@ -1709,13 +1775,13 @@ class ClientContainerServices{
         // Iterate up until we reach top of tree
         let parentId = '';
 
-        while(parentId != 'NONE'){
+        while(parentId !== 'NONE'){
             // Get next parent up
 
             parentId = WorkPackageComponents.findOne({
-                workPackageId: context.workPackageId,
+                workPackageId: userContext.workPackageId,
                 componentReferenceId: parentId
-            }).componentParentReferenceId;
+            }).componentParentReferenceIdNew;
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Checking if descendent (loop): ParentId = {} Current Item Id = {}", parentId, parent.componentReferenceId);
 

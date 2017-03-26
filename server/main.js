@@ -7,7 +7,7 @@ import '../imports/collections/design/designs.js';
 import '../imports/collections/design/design_versions.js';
 import '../imports/collections/design_update/design_updates.js';
 import '../imports/collections/design_update/design_update_summaries.js';
-import '../imports/collections/design/design_components.js';
+import '../imports/collections/design/design_version_components.js';
 import '../imports/collections/design/feature_background_steps.js';
 import '../imports/collections/design/scenario_steps.js';
 import '../imports/collections/users/user_roles.js';

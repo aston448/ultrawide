@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
@@ -24,48 +24,55 @@ import DesignComponentModules   from '../../service_modules/design/design_compon
 class DesignComponentServices{
 
     // Add a new design component
-    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view){
+    addNewComponent(designVersionId, parentId, componentType, componentLevel, defaultName, defaultRawName, defaultRawText, isNew, view, workPackageId='NONE'){
 
         if(Meteor.isServer){
             // Get the parent reference id (if there is a parent)
             let parentRefId = 'NONE';
             let featureRefId = 'NONE';
 
-            let parent = DesignComponents.findOne({_id: parentId});
+            let parent = DesignVersionComponents.findOne({_id: parentId});
 
             if(parent){
                 parentRefId = parent.componentReferenceId;
 
                 // Get the Feature Reference ID.  This will be NONE for anything that is not under a Feature
-                featureRefId = parent.componentFeatureReferenceId;
+                featureRefId = parent.componentFeatureReferenceIdNew;
 
             }
 
-            //console.log("Adding Scenario with view " + view);
-
             // If adding from a Work Package set as dev added
-            let devAdded = (view === ViewType.DEVELOP_BASE_WP);
 
-            //console.log("IsDevAdded = " + devAdded);
+            let devAdded = (workPackageId !== 'NONE');
 
             // Get the design id - this is added to the components for easier access to data
             let designId = DesignVersions.findOne({_id: designVersionId}).designId;
 
-            let designComponentId = DesignComponents.insert(
+            let designComponentId = DesignVersionComponents.insert(
                 {
-                    componentReferenceId:           'TEMP',             // Will update this after component created
-                    designId:                       designId,
-                    designVersionId:                designVersionId,
-                    componentType:                  componentType,
-                    componentLevel:                 componentLevel,
-                    componentName:                  defaultName,
-                    componentNameRaw:               defaultRawName,
-                    componentParentId:              parentId,
-                    componentParentReferenceId:     parentRefId,
-                    componentFeatureReferenceId:    featureRefId,
-                    componentTextRaw:               defaultRawText,
-                    isNew:                          isNew,
-                    isDevAdded:                     devAdded
+                    componentReferenceId:               'TEMP',             // Will update this after component created
+                    designId:                           designId,
+                    designVersionId:                    designVersionId,
+                    componentType:                      componentType,
+                    componentLevel:                     componentLevel,
+
+                    componentParentIdOld:               parentId,
+                    componentParentIdNew:               parentId,
+                    componentParentReferenceIdOld:      parentRefId,
+                    componentParentReferenceIdNew:      parentRefId,
+                    componentFeatureReferenceIdOld:     featureRefId,
+                    componentFeatureReferenceIdNew:     featureRefId,
+
+                    componentNameOld:                   defaultName,
+                    componentNameNew:                   defaultName,
+                    componentNameRawOld:                defaultRawName,
+                    componentNameRawNew:                defaultRawName,
+                    componentTextRawOld:                defaultRawText,
+                    componentTextRawNew:                defaultRawText,
+
+                    isNew:                              isNew,
+                    workPackageId:                      workPackageId,  // For Scenarios only if added from a WP
+                    isDevAdded:                         devAdded
                 },
 
             );
@@ -74,7 +81,7 @@ class DesignComponentServices{
                 // Update the component reference to be the _id.  Note that this is not silly because the CR ID will
                 // always be the _id of the component that was created first.  So for components added in a design update
                 // it will be the design update component _id...
-                DesignComponents.update(
+                DesignVersionComponents.update(
                     {_id: designComponentId},
                     { $set: {componentReferenceId: designComponentId}}
                 );
@@ -84,13 +91,16 @@ class DesignComponentServices{
 
                 // If a Feature also update the Feature Ref Id to the new ID and set a default narrative
                 if(componentType === ComponentType.FEATURE){
-                    DesignComponents.update(
+                    DesignVersionComponents.update(
                         {_id: designComponentId},
                         { $set:
                             {
-                                componentFeatureReferenceId: designComponentId,
-                                componentNarrative: DefaultComponentNames.NEW_NARRATIVE_TEXT,
-                                componentNarrativeRaw: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
+                                componentFeatureReferenceIdOld: designComponentId,
+                                componentFeatureReferenceIdNew: designComponentId,
+                                componentNarrativeOld: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                                componentNarrativeNew: DefaultComponentNames.NEW_NARRATIVE_TEXT,
+                                componentNarrativeRawOld: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT),
+                                componentNarrativeRawNew: DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_NARRATIVE_TEXT)
                             }
                         }
                     );
@@ -99,19 +109,19 @@ class DesignComponentServices{
                     DesignServices.setRemovable(designId);
 
                     // Update the WP before adding the Feature Aspects
-                    DesignComponentModules.updateWorkPackages(designVersionId, designComponentId);
+                    //DesignComponentModules.updateWorkPackages(designVersionId, designComponentId);
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
-                    DesignComponentModules.addDefaultFeatureAspects(designVersionId, designComponentId, defaultRawText);
+                    DesignComponentModules.addDefaultFeatureAspects(designVersionId, designComponentId, defaultRawText, view);
                 } else {
                     // Check for any WPs in this design version and add the components to them too
-                    DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
+                    //DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
                 }
 
                 // When inserting a new design component its parent becomes non-removable
                 if(parentId) {
-                    DesignComponents.update(
+                    DesignVersionComponents.update(
                         {_id: parentId},
                         {$set: {isRemovable: false}}
                     );
@@ -128,13 +138,8 @@ class DesignComponentServices{
 
         if(Meteor.isServer) {
 
-            // Fix missing feature refs
-            let componentFeatureReferenceId = component.componentFeatureReferenceId;
-            if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceId === 'NONE') {
-                componentFeatureReferenceId = component.componentReferenceId;
-            }
 
-            const designComponentId = DesignComponents.insert(
+            const designComponentId = DesignVersionComponents.insert(
                 {
                     // Identity
                     componentReferenceId: component.componentReferenceId,
@@ -142,27 +147,35 @@ class DesignComponentServices{
                     designVersionId: designVersionId,                        // Ditto
                     componentType: component.componentType,
                     componentLevel: component.componentLevel,
-                    componentParentId: component.componentParentId,            // This will be wrong and fixed by restore process
-                    componentParentReferenceId: component.componentParentReferenceId,
-                    componentFeatureReferenceId: componentFeatureReferenceId,
-                    componentIndex: component.componentIndex,
+
+                    componentParentIdOld: component.componentParentIdOld,
+                    componentParentIdNew: component.componentParentIdNew,            // This will be wrong and fixed by restore process
+                    componentParentReferenceIdOld: component.componentParentReferenceIdOld,
+                    componentParentReferenceIdNew: component.componentParentReferenceIdNew,
+                    componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
+                    componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
+                    componentIndexOld: component.componentIndexNew,
+                    componentIndexNew: component.componentIndexNew,
 
                     // Data
-                    componentName: component.componentName,
-                    componentNameRaw: component.componentNameRaw,
-                    componentNarrative: component.componentNarrative,
-                    componentNarrativeRaw: component.componentNarrativeRaw,
-                    componentTextRaw: component.componentTextRaw,
+                    componentNameOld: component.componentNameOld,
+                    componentNameNew: component.componentNameNew,
+                    componentNameRawOld: component.componentNameRawOld,
+                    componentNameRawNew: component.componentNameRawNew,
+                    componentNarrativeOld: component.componentNarrativeOld,
+                    componentNarrativeNew: component.componentNarrativeNew,
+                    componentNarrativeRawNew: component.componentNarrativeRawNew,
+                    componentTextRawOld: component.componentTextRawOld,
+                    componentTextRawNew: component.componentTextRawNew,
 
                     // State (shared and persistent only)
-                    isRemovable: component.isRemovable,
-                    isRemoved: component.isRemoved,
                     isNew: component.isNew,
+                    workPackageId: component.workPackageId,
+                    updateMergeStatus: component.updateMergeStatus,
                     isDevUpdated: component.isDevUpdated,
                     isDevAdded: component.isDevAdded,
-                    lockingUser: component.lockingUser,
-                    designUpdateId: component.designUpdateId,
-                    updateMergeStatus: component.updateMergeStatus
+
+                    isRemovable: component.isRemovable,
                 }
             );
 
@@ -174,20 +187,28 @@ class DesignComponentServices{
     importRestoreParent(designComponentId, componentMap){
 
         if(Meteor.isServer) {
-            const designComponent = DesignComponents.findOne({_id: designComponentId});
+            const designComponent = DesignVersionComponents.findOne({_id: designComponentId});
 
-            const oldParentId = designComponent.componentParentId;
-            let newParentId = 'NONE';
+            const oldOldParentId = designComponent.componentParentIdOld;
+            const oldNewParentId = designComponent.componentParentIdNew;
 
-            if (oldParentId != 'NONE') {
-                newParentId = getIdFromMap(componentMap, oldParentId);
+            let newOldParentId = 'NONE';
+            let newNewParentId = 'NONE';
+
+            if (oldOldParentId !== 'NONE') {
+                newOldParentId = getIdFromMap(componentMap, oldOldParentId);
             }
 
-            DesignComponents.update(
+            if (oldNewParentId !== 'NONE') {
+                newNewParentId = getIdFromMap(componentMap, oldNewParentId);
+            }
+
+            DesignVersionComponents.update(
                 {_id: designComponentId},
                 {
                     $set: {
-                        componentParentId: newParentId
+                        componentParentIdOld: newOldParentId,
+                        componentParentIdNew: newNewParentId
                     }
                 }
             );
@@ -197,10 +218,13 @@ class DesignComponentServices{
     moveDesignComponent(designComponentId, newParentId){
 
         if(Meteor.isServer) {
+
             // Get the unique persistent reference for the parent
-            const newParent = DesignComponents.findOne({_id: newParentId});
-            const movingComponent = DesignComponents.findOne({_id: designComponentId});
-            const oldParentId = movingComponent.componentParentId;
+            const newParent = DesignVersionComponents.findOne({_id: newParentId});
+            const movingComponent = DesignVersionComponents.findOne({_id: designComponentId});
+            const oldParentId = movingComponent.componentParentIdNew;
+            const oldParentReferenceId = movingComponent.componentParentReferenceIdNew;
+            const oldFeatureReferenceId = movingComponent.componentFeatureReferenceIdNew;
 
             // If a Design Section, make sure the level gets changed correctly
             let newLevel = movingComponent.componentLevel;
@@ -209,29 +233,37 @@ class DesignComponentServices{
                 newLevel = newParent.componentLevel + 1;
             }
 
-            let updated =0;
+            let updated = 0;
 
             if(movingComponent.componentType === ComponentType.FEATURE){
+
                 // The Feature Reference does not change
-                updated = DesignComponents.update(
+
+
+                updated = DesignVersionComponents.update(
                     {_id: designComponentId},
                     {
                         $set: {
-                            componentParentId: newParentId,
-                            componentParentReferenceId: newParent.componentReferenceId,
+                            componentParentIdOld: oldParentId,
+                            componentParentIdNew: newParentId,
+                            componentParentReferenceIdOld: oldParentReferenceId,
+                            componentParentReferenceIdNew: newParent.componentReferenceId,
                             componentLevel: newLevel
                         }
                     }
                 );
             } else {
                 // The Feature Reference is the feature reference of the new parent.  A Feature has its own reference as the Feature Reference
-                updated = DesignComponents.update(
+                updated = DesignVersionComponents.update(
                     {_id: designComponentId},
                     {
                         $set: {
-                            componentParentId: newParentId,
-                            componentParentReferenceId: newParent.componentReferenceId,
-                            componentFeatureReferenceId: newParent.componentFeatureReferenceId,
+                            componentParentIdOld: oldParentId,
+                            componentParentIdNew: newParentId,
+                            componentParentReferenceIdOld: oldParentReferenceId,
+                            componentParentReferenceIdNew: newParent.componentReferenceId,
+                            componentFeatureReferenceIdOld: oldFeatureReferenceId,
+                            componentFeatureReferenceIdNew: newParent.componentFeatureReferenceIdNew,
                             componentLevel: newLevel
                         }
                     }
@@ -240,7 +272,7 @@ class DesignComponentServices{
 
             if(updated > 0){
                 // Make sure new Parent is now not removable as it must have a child
-                DesignComponents.update(
+                DesignVersionComponents.update(
                     {_id: newParentId},
                     {
                         $set: {
@@ -251,14 +283,14 @@ class DesignComponentServices{
 
                 // But the old parent may now be removable
                 if (DesignComponentModules.hasNoChildren(oldParentId)) {
-                    DesignComponents.update(
+                    DesignVersionComponents.update(
                         {_id: oldParentId},
                         {$set: {isRemovable: true}}
                     );
                 }
 
                 // Make sure this component is also moved in any work packages
-                DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
+                //DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
             } else {
                 throw new Meteor.Error('designComponent.moveDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
             }
@@ -270,19 +302,26 @@ class DesignComponentServices{
     // Save text for a design component
     updateComponentName(designComponentId, componentName, componentNameRaw){
         if(Meteor.isServer) {
+
             // No actual update or changes needed if no change to name
-            let componentNameOld = DesignComponents.findOne({_id: designComponentId}).componentName;
+            const currentComponent = DesignVersionComponents.findOne({_id: designComponentId});
+            const componentNameOld = currentComponent.componentNameNew;
+            const componentNameRawOld = currentComponent.componentNameRawNew;
+
 
             if (componentName === componentNameOld) {
                 return true;
             }
 
-            let updated = DesignComponents.update(
+            // No longer "New" once name is set
+            let updated = DesignVersionComponents.update(
                 {_id: designComponentId},
                 {
                     $set: {
-                        componentName: componentName,
-                        componentNameRaw: componentNameRaw,
+                        componentNameOld: componentNameOld,
+                        componentNameNew: componentName,
+                        componentNameRawOld: componentNameRawOld,
+                        componentNameRawNew: componentNameRaw,
                         isNew: false
                     }
                 }
@@ -299,12 +338,18 @@ class DesignComponentServices{
     updateFeatureNarrative(featureId, plainText, rawText){
         if(Meteor.isServer) {
 
-            let updated = DesignComponents.update(
+            const currentComponent = DesignVersionComponents.findOne({_id: featureId});
+            const componentNarrativeOld = currentComponent.componentNarrativeNew;
+            const componentNarrativeRawOld = currentComponent.componentNarrativeRawNew;
+
+            let updated = DesignVersionComponents.update(
                 {_id: featureId},
                 {
                     $set: {
-                        componentNarrative: plainText,
-                        componentNarrativeRaw: rawText,
+                        componentNarrativeOld: componentNarrativeOld,
+                        componentNarrativeNew: plainText,
+                        componentNarrativeRawOld: componentNarrativeRawOld,
+                        componentNarrativeRawNew: rawText,
                         isNew: false
                     }
                 }
@@ -318,10 +363,11 @@ class DesignComponentServices{
 
     removeDesignComponent(designComponentId, parentId){
         if(Meteor.isServer) {
-            // Deletes from the base design in initial edit mode are real deletes
-            const designComponent = DesignComponents.findOne({_id: designComponentId});
 
-            let removed = DesignComponents.remove(
+            // Deletes from the base design in initial edit mode are real deletes
+            const designComponent = DesignVersionComponents.findOne({_id: designComponentId});
+
+            let removed = DesignVersionComponents.remove(
                 {_id: designComponentId}
             );
 
@@ -329,14 +375,14 @@ class DesignComponentServices{
 
                 // When removing a design component its parent may become removable
                 if (DesignComponentModules.hasNoChildren(parentId)) {
-                    DesignComponents.update(
+                    DesignVersionComponents.update(
                         {_id: parentId},
                         {$set: {isRemovable: true}}
                     )
                 }
 
                 // Remove component from any related work packages
-                DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
+                // DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
 
                 // If this happened to be the last Feature, Design is now removable
                 if (designComponent.componentType === ComponentType.FEATURE) {
@@ -354,19 +400,21 @@ class DesignComponentServices{
         if(Meteor.isServer) {
             // The new position is always just above the target component
 
-            const movingComponent = DesignComponents.findOne({_id: componentId});
-            const targetComponent = DesignComponents.findOne({_id: targetComponentId});
+            const movingComponent = DesignVersionComponents.findOne({_id: componentId});
+            const targetComponent = DesignVersionComponents.findOne({_id: targetComponentId});
 
-            const peerComponents = DesignComponents.find(
+            const oldIndex = movingComponent.componentIndexNew;
+
+            const peerComponents = DesignVersionComponents.find(
                 {
-                    _id: {$ne: componentId},
-                    componentType: movingComponent.componentType,
-                    componentParentId: movingComponent.componentParentId
+                    _id:                    {$ne: componentId},
+                    componentType:          movingComponent.componentType,
+                    componentParentIdNew:   movingComponent.componentParentIdNew
                 },
-                {sort: {componentIndex: -1}}
+                {sort: {componentIndexNew: -1}}
             );
 
-            let indexBelow = targetComponent.componentIndex;
+            let indexBelow = targetComponent.componentIndexNew;
             log((msg) => console.log(msg), LogLevel.TRACE, "Index below = {}", indexBelow);
 
             let indexAbove = 0;                                 // The default if nothing exists above
@@ -378,10 +426,10 @@ class DesignComponentServices{
             // Go through the list of peers (ordered from bottom to top)
             let i = 0;
             while (i <= listMaxArrayIndex) {
-                if (peerArray[i].componentIndex === targetComponent.componentIndex) {
+                if (peerArray[i].componentIndexNew === targetComponent.componentIndexNew) {
                     // OK, this is the target component so the next one in the list (if there is one) is the one that will be above the new position
                     if (i < listMaxArrayIndex) {
-                        indexAbove = peerArray[i + 1].componentIndex;
+                        indexAbove = peerArray[i + 1].componentIndexNew;
                     }
                     break;
                 }
@@ -394,19 +442,20 @@ class DesignComponentServices{
             const indexDiff = indexBelow - indexAbove;
             const newIndex = (indexBelow + indexAbove) / 2;
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Setting new index for {} to {}", movingComponent.componentName, newIndex);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Setting new index for {} to {}", movingComponent.componentNameNew, newIndex);
 
-            DesignComponents.update(
+            DesignVersionComponents.update(
                 {_id: componentId},
                 {
                     $set: {
-                        componentIndex: newIndex
+                        componentIndexOld: oldIndex,
+                        componentIndexNew: newIndex
                     }
                 }
             );
 
             // Update any WPs with new ordering
-            DesignComponentModules.updateWorkPackageLocation(componentId, true);
+            //DesignComponentModules.updateWorkPackageLocation(componentId, true);
 
 
             // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.
@@ -414,28 +463,29 @@ class DesignComponentServices{
                 log((msg) => console.log(msg), LogLevel.TRACE, "Index reset!");
 
                 // Get the components in current order
-                const resetComponents = DesignComponents.find(
+                const resetComponents = DesignVersionComponents.find(
                     {
                         componentType: movingComponent.componentType,
-                        componentParentId: movingComponent.componentParentId
+                        componentParentIdNew: movingComponent.componentParentIdNew
                     },
-                    {sort: {componentIndex: 1}}
+                    {sort: {componentIndexNew: 1}}
                 );
 
                 let resetIndex = 100;
 
                 // Reset them to 100, 200, 300 etc...
                 resetComponents.forEach((component) => {
-                    DesignComponents.update(
+                    DesignVersionComponents.update(
                         {_id: component._id},
                         {
                             $set: {
-                                componentIndex: resetIndex
+                                componentIndexOld: resetIndex,
+                                componentIndexNew: resetIndex
                             }
                         }
                     );
 
-                    DesignComponentModules.updateWorkPackageLocation(component._id, true);
+                    //DesignComponentModules.updateWorkPackageLocation(component._id, true);
 
                     resetIndex = resetIndex + 100;
 

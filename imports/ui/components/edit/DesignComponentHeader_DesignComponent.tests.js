@@ -1176,7 +1176,7 @@ describe('JSX: DesignComponentHeader', () => {
                 onSelectItem={onSelectItem}
                 mode={ViewMode.MODE_VIEW}
                 view={ViewType.DESIGN_UPDATABLE_VIEW}
-                displayContext={DisplayContext.UPDATABLE_VIEW}
+                displayContext={DisplayContext.WORKING_VIEW}
                 userContext={userContext}
                 testSummary={testSummary}
                 testSummaryData={testSummaryData}
@@ -1495,7 +1495,7 @@ describe('JSX: DesignComponentHeader', () => {
     //
     //     it('shows old and new text for changed application', () => {
     //
-    //         const currentItem = {componentType: ComponentType.APPLICATION, componentName: 'ApplicationOld', updateMergeStatus: UpdateMergeStatus.COMPONENT_MODIFIED};
+    //         const currentItem = {componentType: ComponentType.APPLICATION, componentNameNew: 'ApplicationOld', updateMergeStatus: UpdateMergeStatus.COMPONENT_MODIFIED};
     //         const updateItem = {componentNameOld: 'ApplicationOld', componentNameNew: 'ApplicationNew'};
     //
     //         let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);

@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import { DesignComponents } from '../collections/design/design_components.js';
+import { DesignVersionComponents } from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
 import { DesignComponentValidationErrors, Validation } from '../constants/validation_errors.js';
@@ -23,7 +23,7 @@ class DesignComponentValidationApi{
 
     validateRemoveDesignComponent(view, mode, designComponentId){
 
-        let designComponent = DesignComponents.findOne({_id: designComponentId});
+        let designComponent = DesignVersionComponents.findOne({_id: designComponentId});
 
         const status = DesignComponentValidationServices.validateRemoveDesignComponent(view, mode, designComponent);
 
@@ -42,15 +42,15 @@ class DesignComponentValidationApi{
     validateUpdateComponentName(view, mode, designComponentId, newName){
 
         // Get other components of the same type that should not have the same name
-        const thisComponent = DesignComponents.findOne({_id: designComponentId});
+        const thisComponent = DesignVersionComponents.findOne({_id: designComponentId});
 
-        const existingComponents = DesignComponents.find({
+        const existingComponents = DesignVersionComponents.find({
             _id:                {$ne: designComponentId},
             designVersionId:    thisComponent.designVersionId,
             componentType:      thisComponent.componentType
         }).fetch();
 
-        return DesignComponentValidationServices.validateUpdateComponentName(view, mode, thisComponent.componentType, thisComponent.isDevAdded, newName, existingComponents, thisComponent.componentParentId);
+        return DesignComponentValidationServices.validateUpdateComponentName(view, mode, thisComponent.componentType, thisComponent.isDevAdded, newName, existingComponents, thisComponent.componentParentIdNew);
     };
 
     validateUpdateFeatureNarrative(view, mode){
@@ -60,16 +60,16 @@ class DesignComponentValidationApi{
 
     validateMoveDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId){
 
-        const movingComponent = DesignComponents.findOne({_id: movingComponentId});
-        const targetComponent = DesignComponents.findOne({_id: targetComponentId});
+        const movingComponent = DesignVersionComponents.findOne({_id: movingComponentId});
+        const targetComponent = DesignVersionComponents.findOne({_id: targetComponentId});
 
         return DesignComponentValidationServices.validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent)
     };
 
     validateReorderDesignComponent(view, mode, displayContext, movingComponentId, targetComponentId){
 
-        const movingComponent = DesignComponents.findOne({_id: movingComponentId});
-        const targetComponent = DesignComponents.findOne({_id: targetComponentId});
+        const movingComponent = DesignVersionComponents.findOne({_id: movingComponentId});
+        const targetComponent = DesignVersionComponents.findOne({_id: targetComponentId});
 
         return DesignComponentValidationServices.validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent)
     }

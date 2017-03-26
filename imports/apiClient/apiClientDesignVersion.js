@@ -2,10 +2,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import {DesignVersions}         from '../collections/design/design_versions.js';
-import {DesignUpdates}          from '../collections/design_update/design_updates.js';
-import {DesignComponents}       from '../collections/design/design_components.js';
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
+import {DesignVersions}             from '../collections/design/design_versions.js';
+import {DesignUpdates}              from '../collections/design_update/design_updates.js';
+import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
+import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, MessageType, LogLevel } from '../constants/constants.js';
@@ -38,7 +38,7 @@ class ClientDesignVersionServices{
         // Client validation
         let result = DesignVersionValidationApi.validateUpdateDesignVersionName(userRole, designVersionId, newName);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -339,7 +339,7 @@ class ClientDesignVersionServices{
         ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
         // Force a re-render of each App to trigger opening
-        const designVersionApplications = DesignComponents.find({
+        const designVersionApplications = DesignVersionComponents.find({
             designVersionId: userContext.designVersionId,
             componentType: ComponentType.APPLICATION
         }).fetch();

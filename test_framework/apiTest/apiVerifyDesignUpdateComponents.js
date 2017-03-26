@@ -19,7 +19,7 @@ Meteor.methods({
             designVersionId: userContext.designVersionId,
             designUpdateId: userContext.designUpdateId,
             componentType: componentType,
-            componentName: componentName
+            componentNameNew: componentName
         });
 
         const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
@@ -354,7 +354,7 @@ Meteor.methods({
 
     'verifyDesignUpdateComponents.componentCountCalledIs'(componentType, componentName, componentCount){
 
-        // const designComponentsCount = DesignComponents.find({componentType: componentType, componentName: componentName}).count();
+        // const designComponentsCount = DesignVersionComponents.find({componentType: componentType, componentNameNew: componentName}).count();
         //
         // if(designComponentsCount === componentCount){
         //     return true;
@@ -366,12 +366,12 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignUpdateComponents.componentParentIs'(componentType, componentName, componentParentName){
 
-        // const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
-        // const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
+        // const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
+        // const parentComponent = DesignVersionComponents.findOne({_id: designComponent.componentParentIdNew});
         //
         // let parentName = 'NONE';
         // if(parentComponent){
-        //     parentName = parentComponent.componentName;
+        //     parentName = parentComponent.componentNameNew;
         // }
         //
         // if(parentName != componentParentName){
@@ -387,15 +387,15 @@ Meteor.methods({
         // const design = TestDataHelpers.getDesign(designName);
         // const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
         //
-        // const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+        // const designComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentNameNew: componentName});
         // if(!designComponent){
         //     throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
         // }
-        // const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
+        // const parentComponent = DesignVersionComponents.findOne({_id: designComponent.componentParentIdNew});
         //
         // let parentName = 'NONE';
         // if(parentComponent){
-        //     parentName = parentComponent.componentName;
+        //     parentName = parentComponent.componentNameNew;
         // }
         //
         // if(parentName != componentParentName){
@@ -409,7 +409,7 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignUpdateComponents.componentLevelIs'(componentType, componentName, componentLevel){
 
-        // const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        // const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
         //
         // if(designComponent.componentLevel != componentLevel){
         //     throw new Meteor.Error("FAIL", "Expected level to be " + componentLevel + " but got " + designComponent.componentLevel);
@@ -422,12 +422,12 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignUpdateComponents.componentFeatureIs'(componentType, componentName, componentFeature){
 
-        // const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
-        // const featureComponent = DesignComponents.findOne({componentReferenceId: designComponent.componentFeatureReferenceId});
+        // const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
+        // const featureComponent = DesignVersionComponents.findOne({componentReferenceId: designComponent.componentFeatureReferenceIdNew});
         //
         // let featureName = 'NONE';
         // if(featureComponent){
-        //     featureName = featureComponent.componentName;
+        //     featureName = featureComponent.componentNameNew;
         // }
         //
         // if(featureName != componentFeature){
@@ -459,7 +459,7 @@ Meteor.methods({
             componentBelowName
         );
 
-        if(aboveComponent.componentIndex >= belowComponent.componentIndex){
+        if(aboveComponent.componentIndexNew >= belowComponent.componentIndexNew){
             //console.log("FAIL!");
             throw new Meteor.Error("FAIL", "Expected component " + componentAboveName + " to be above component " + componentBelowName + " in the list of " + componentType +"s");
         } else {
@@ -477,9 +477,9 @@ Meteor.methods({
         const targetComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, targetType, targetParentName, targetName);
 
         // Components highest in the list have the lowest indexes
-        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
-        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
-        if(selectedComponent.componentIndex >= targetComponent.componentIndex){
+        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndexNew);
+        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndexNew);
+        if(selectedComponent.componentIndexNew >= targetComponent.componentIndexNew){
             //console.log("FAIL!");
             throw new Meteor.Error("FAIL", "Expected update component " + selectedComponent + " to be above component " + targetComponent + " in the list of " + targetType +"s");
         } else {

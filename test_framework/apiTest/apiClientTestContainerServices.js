@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
-import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
 import { UserRoles }                from '../../imports/collections/users/user_roles.js';
 
@@ -56,7 +56,7 @@ Meteor.methods({
                     data.components.forEach((component) => {
 
                         if(userContext.designUpdateId === 'NONE'){
-                            if(component.componentName === componentName){
+                            if(component.componentNameNew === componentName){
                                 found = true;
                             }
                         } else {

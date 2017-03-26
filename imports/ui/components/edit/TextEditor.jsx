@@ -103,10 +103,10 @@ export class TextEditor extends Component {
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.DEVELOP_BASE_WP:
-                rawText = props.designComponent.componentTextRaw;
+                rawText = props.designComponent.componentTextRawNew;
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
-                rawText = props.designComponent.componentTextRaw;
+                rawText = props.designComponent.componentTextRawNew;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
@@ -114,7 +114,7 @@ export class TextEditor extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
             case ViewType.DEVELOP_UPDATE_WP:
                 if(props.context === DisplayContext.BASE_VIEW){
-                    rawText = props.designComponent.componentTextRaw;
+                    rawText = props.designComponent.componentTextRawNew;
                 } else {
                     // For update text always look at the new value
                     rawText = props.designComponent.componentTextRawNew;

@@ -3,7 +3,7 @@
 import fs from 'fs';
 
 // Ultrawide Collections
-import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
 import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
@@ -55,20 +55,20 @@ class MashFileServices{
 
             switch (wp.workPackageType) {
                 case WorkPackageType.WP_BASE:
-                    feature = DesignComponents.findOne(
+                    feature = DesignVersionComponents.findOne(
                         {
                             designVersionId: userContext.designVersionId,
                             componentReferenceId: featureReferenceId
                         }
                     );
 
-                    featureName = feature.componentName;
+                    featureName = feature.componentNameNew;
 
-                    scenarios = DesignComponents.find(
+                    scenarios = DesignVersionComponents.find(
                         {
                             designVersionId: userContext.designVersionId,
                             componentType: ComponentType.SCENARIO,
-                            componentFeatureReferenceId: featureReferenceId
+                            componentFeatureReferenceIdNew: featureReferenceId
                         }
                     ).fetch();
                     break;
@@ -89,7 +89,7 @@ class MashFileServices{
                             designVersionId: userContext.designVersionId,
                             designUpdateId: userContext.designUpdateId,
                             componentType: ComponentType.SCENARIO,
-                            componentFeatureReferenceId: featureReferenceId
+                            componentFeatureReferenceIdNew: featureReferenceId
                         }
                     ).fetch();
                     break;
@@ -157,7 +157,7 @@ class MashFileServices{
                 }
 
                 fileText += '  ' + tag + '\n';
-                fileText += '  Scenario: ' + scenario.componentName + '\n';
+                fileText += '  Scenario: ' + scenario.componentNameNew + '\n';
 
                 scenarioSteps = ScenarioSteps.find(
                     {

@@ -100,7 +100,7 @@ class DesignComponentValidationServices{
 
             existingComponents.forEach((component) => {
 
-                if(component.componentName === newName  && component.componentParentId === componentParentId){
+                if(component.componentNameNew === newName  && component.componentParentIdNew === componentParentId){
                     duplicate = true;
                 }
             });
@@ -114,7 +114,7 @@ class DesignComponentValidationServices{
 
             existingComponents.forEach((component) => {
 
-                if(component.componentName === newName){
+                if(component.componentNameNew === newName){
                     duplicate = true;
                 }
             });
@@ -132,11 +132,11 @@ class DesignComponentValidationServices{
 
             existingComponents.forEach((component) => {
 
-                if(component.componentName.includes(newName)){
+                if(component.componentNameNew.includes(newName)){
                     subset = true;
                 }
 
-                if(newName.includes(component.componentName)){
+                if(newName.includes(component.componentNameNew)){
                     superset = true;
                 }
             });

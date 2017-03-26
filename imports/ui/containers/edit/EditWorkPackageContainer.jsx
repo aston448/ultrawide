@@ -43,8 +43,13 @@ class WorkPackageApplicationsList extends Component {
 
     }
 
-    getDesignItem(application){
-        return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
+    // getDesignItem(application){
+    //     return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
+    // }
+
+    getWpItem(currentItem, workPackageId){
+
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(currentItem._id, workPackageId);
     }
 
     getEditorClass(){
@@ -52,14 +57,15 @@ class WorkPackageApplicationsList extends Component {
     }
 
     // A list of top level applications in the work package potential scope
-    renderScopeApplications(wpScopeApplications, context, view, mode) {
+    renderScopeApplications(wpScopeApplications, displayContext, view, mode, userContext) {
         return wpScopeApplications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={this.getDesignItem(application)}
-                    displayContext={context}
+                    updateItem={null}
+                    wpItem={this.getWpItem(application, userContext.workPackageId)}
+                    displayContext={displayContext}
                     view={view}
                     mode={mode}
                     testSummary={false}
@@ -70,14 +76,15 @@ class WorkPackageApplicationsList extends Component {
     }
 
     // A list of top level applications in the work package view
-    renderViewApplications(wpViewApplications, context, view, mode, testSummary) {
+    renderViewApplications(wpViewApplications, displayContext, view, mode, userContext, testSummary) {
         return wpViewApplications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={this.getDesignItem(application)}
-                    displayContext={context}
+                    updateItem={null}
+                    wpItem={this.getWpItem(application, userContext.workPackageId)}
+                    displayContext={displayContext}
                     view={view}
                     mode={mode}
                     testSummary={testSummary}
@@ -89,7 +96,7 @@ class WorkPackageApplicationsList extends Component {
 
     render() {
 
-        const {wpScopeApplications, wpViewApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
+        const {scopeApplications, wpApplications, userContext, viewOptions, currentItemName, view, mode} = this.props;
 
         let layout = '';
 
@@ -103,7 +110,7 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={DisplayContext.WP_SCOPE}
                 />
                 <div className={editorClass}>
-                    {this.renderScopeApplications(wpScopeApplications, DisplayContext.WP_SCOPE, view, mode)}
+                    {this.renderScopeApplications(scopeApplications, DisplayContext.WP_SCOPE, view, mode, userContext)}
                 </div>
                 <DesignEditorFooter
                     hasDesignSummary={false}
@@ -117,7 +124,7 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={DisplayContext.WP_VIEW}
                 />
                 <div className={editorClass}>
-                    {this.renderViewApplications(wpViewApplications, DisplayContext.WP_VIEW, view, mode, viewOptions.devTestSummaryVisible)}
+                    {this.renderViewApplications(wpApplications, DisplayContext.WP_VIEW, view, mode, userContext, viewOptions.devTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
                     hasDesignSummary={false}
@@ -254,7 +261,7 @@ class WorkPackageApplicationsList extends Component {
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
 
                 // Create the layout
-                if(wpScopeApplications) {
+                if(scopeApplications) {
                     // Layout is SCOPE | WP | TEXT | opt DICT
 
                     // WHAT OPTIONAL COMPONENTS ARE VISIBLE (Besides Scope and WP)
@@ -388,8 +395,8 @@ class WorkPackageApplicationsList extends Component {
 }
 
 WorkPackageApplicationsList.propTypes = {
-    wpScopeApplications: PropTypes.array.isRequired,
-    wpViewApplications: PropTypes.array.isRequired
+    scopeApplications:  PropTypes.array.isRequired,
+    wpApplications:     PropTypes.array
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

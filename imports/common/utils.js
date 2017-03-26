@@ -4,7 +4,7 @@
 import React, { Component, PropTypes } from 'react';
 
 import {ComponentType, UpdateMergeStatus} from '../constants/constants.js';
-import {DesignComponents} from '../collections/design/design_components.js';
+import {DesignVersionComponents} from '../collections/design/design_version_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
 import {ViewType, MessageType, DisplayContext, MashStatus, LogLevel} from '../constants/constants.js';
@@ -28,7 +28,7 @@ export function createSelectionList(typesArray){
     return items;
 }
 
-export function getComponentClass(currentItem, updateItem, view, context, isNarrative){
+export function getComponentClass(currentItem, updateItem, wpItem, view, context, isNarrative){
 
     let main = '';
     let modifier = '';
@@ -115,17 +115,19 @@ export function getComponentClass(currentItem, updateItem, view, context, isNarr
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 //console.log("Get Style with WP Active scope " + currentItem.componentActive)
                 // For work package stuff is greyed out unless active
-                if(!currentItem.componentActive){
+                if(wpItem){
+                    if(!wpItem.componentActive){
+                        modifier = ' greyed-out';
+                    }
+                } else {
                     modifier = ' greyed-out';
                 }
                 break;
         }
 
-
-
         // Final format class:
         let format =  main + modifier + deleted;
-        //console.log("Format for " + currentItem.componentName + " in context " + context + " is " + format);
+        //console.log("Format for " + currentItem.componentNameNew + " in context " + context + " is " + format);
         return format;
 
     } else {
@@ -144,7 +146,7 @@ export function getComponentClass(currentItem, updateItem, view, context, isNarr
 //     }
 //
 //     // Problem if any components of the same name in this design version (apart from the current one)
-//     let existingComponents = DesignComponents.find({_id:{$ne: component._id}, designVersionId: component.designVersionId, componentName: newName});
+//     let existingComponents = DesignVersionComponents.find({_id:{$ne: component._id}, designVersionId: component.designVersionId, componentName: newName});
 //
 //     let message = '';
 //
@@ -270,12 +272,12 @@ export function reorderDropAllowed(item, target) {
             log((msg) => console.log(msg), LogLevel.TRACE, "Target type: {}  Moving type: {} Target parent: {} Moving parent: {}",
                 target.componentType,
                 item.componentType,
-                item.componentParentId,
-                target.componentParentId
+                item.componentParentIdNew,
+                target.componentParentIdNew
             );
             return (
                 (item.componentType === target.componentType) &&
-                (item.componentParentId === target.componentParentId) &&
+                (item.componentParentIdNew === target.componentParentIdNew) &&
                 (item._id != target._id)
             );
     }

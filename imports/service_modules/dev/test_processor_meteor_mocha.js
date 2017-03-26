@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
 import { UserUnitTestResults }           from '../../collections/dev/user_unit_test_results';

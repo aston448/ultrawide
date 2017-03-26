@@ -8,12 +8,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 
 // Ultrawide GUI Components
-import DesignComponentTarget from '../../components/edit/DesignComponentTarget.jsx';
+import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 
 // Ultrawide Services
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
-import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js'
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+
 import { ViewType, ComponentType, DisplayContext } from '../../../constants/constants.js';
 
 // Bootstrap
@@ -39,18 +40,9 @@ class DesignSectionsList extends Component {
         super(props);
     }
 
-    getDesignItem(designSection, displayContext){
-        // Design Item needed only in WP context (otherwise we already have it as the current item)
-        if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
-            return ClientWorkPackageComponentServices.getDesignItem(designSection.componentId, designSection.workPackageType);
-        } else {
-            return designSection;
-        }
-    }
-
     getDesignUpdateItem(designSection, displayContext, designUpdateId){
         switch(displayContext){
-            case  DisplayContext.UPDATABLE_VIEW:
+            case  DisplayContext.WORKING_VIEW:
                 return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(designSection);
             case DisplayContext.UPDATE_SCOPE:
                 // See if this item is in scope - i.e. in the DU
@@ -58,6 +50,10 @@ class DesignSectionsList extends Component {
             default:
                 return designSection;
         }
+    }
+
+    getWpItem(designSection, workPackageId){
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(designSection._id, workPackageId);
     }
 
     // A list of top level headings in the design
@@ -85,21 +81,27 @@ class DesignSectionsList extends Component {
                 break;
         }
 
-        return components.map((designSection) => {
+        if(components.length > 0) {
+            return components.map((designSection) => {
 
-            return (
-                <DesignComponentTarget
-                    key={designSection._id}
-                    currentItem={designSection}
-                    designItem={this.getDesignItem(designSection, displayContext)}
-                    updateItem={this.getDesignUpdateItem(designSection, displayContext, userContext.designUpdateId)}
-                    displayContext={displayContext}
-                    view={view}
-                    mode={mode}
-                    testSummary={testSummary}
-                />
-            );
-        });
+                return (
+                    <DesignComponentTarget
+                        key={designSection._id}
+                        currentItem={designSection}
+                        updateItem={this.getDesignUpdateItem(designSection, displayContext, userContext.designUpdateId)}
+                        wpItem={this.getWpItem(designSection, userContext.workPackageId)}
+                        displayContext={displayContext}
+                        view={view}
+                        mode={mode}
+                        testSummary={testSummary}
+                    />
+                );
+            });
+        } else {
+            return(
+                <div></div>
+            )
+        }
     }
 
     render() {

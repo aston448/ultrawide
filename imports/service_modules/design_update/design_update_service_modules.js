@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
@@ -26,7 +26,7 @@ class DesignUpdateModules{
         // are NOT included so all updates start from the same base. This is a good thing as otherwise updates get mingled as they are created.
         // Validation is in place to prevent contradictory changes.
 
-        let versionComponents = DesignComponents.find({designVersionId: baseDesignVersionId});
+        let versionComponents = DesignVersionComponents.find({designVersionId: baseDesignVersionId});
         let designId = DesignVersions.findOne({_id: baseDesignVersionId}).designId;
 
         versionComponents.forEach((component) => {
@@ -43,25 +43,25 @@ class DesignUpdateModules{
                     designUpdateId:                 designUpdateId,                                     // This update
                     componentType:                  component.componentType,
                     componentLevel:                 component.componentLevel,
-                    componentIndexOld:              component.componentIndex,
-                    componentIndexNew:              component.componentIndex,
-                    componentParentIdOld:           component.componentParentId,                        // Parent IDs will be wrong and are fixed afterwards
-                    componentParentIdNew:           component.componentParentId,
-                    componentParentReferenceIdOld:  component.componentParentReferenceId,
-                    componentParentReferenceIdNew:  component.componentParentReferenceId,
-                    componentFeatureReferenceIdOld: component.componentFeatureReferenceId,
-                    componentFeatureReferenceIdNew: component.componentFeatureReferenceId,
+                    componentIndexOld:              component.componentIndexNew,
+                    componentIndexNew:              component.componentIndexNew,
+                    componentParentIdOld:           component.componentParentIdNew,                        // Parent IDs will be wrong and are fixed afterwards
+                    componentParentIdNew:           component.componentParentIdNew,
+                    componentParentReferenceIdOld:  component.componentParentReferenceIdNew,
+                    componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
+                    componentFeatureReferenceIdOld: component.componentFeatureReferenceIdNew,
+                    componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
 
-                    componentNameOld:               component.componentName,
-                    componentNameNew:               component.componentName,
-                    componentNameRawOld:            component.componentNameRaw,
-                    componentNameRawNew:            component.componentNameRaw,
-                    componentNarrativeOld:          component.componentNarrative,
-                    componentNarrativeNew:          component.componentNarrative,
-                    componentNarrativeRawOld:       component.componentNarrativeRaw,
-                    componentNarrativeRawNew:       component.componentNarrativeRaw,
-                    componentTextRawOld:            component.componentTextRaw,
-                    componentTextRawNew:            component.componentTextRaw,
+                    componentNameOld:               component.componentNameNew,
+                    componentNameNew:               component.componentNameNew,
+                    componentNameRawOld:            component.componentNameRawNew,
+                    componentNameRawNew:            component.componentNameRawNew,
+                    componentNarrativeOld:          component.componentNarrativeNew,
+                    componentNarrativeNew:          component.componentNarrativeNew,
+                    componentNarrativeRawOld:       component.componentNarrativeRawNew,
+                    componentNarrativeRawNew:       component.componentNarrativeRawNew,
+                    componentTextRawOld:            component.componentTextRawNew,
+                    componentTextRawNew:            component.componentTextRawNew,
 
                     isNew:                          false,
                     isChanged:                      false,

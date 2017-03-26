@@ -54,7 +54,7 @@ describe('UC 124 - Open or Close Design Component', function(){
             {
                 componentType:  ComponentType.FEATURE_ASPECT,
                 parentName:     'Feature1',
-                componentName:  'Actions'
+                componentNameNew:  'Actions'
             }
         ];
 
@@ -69,7 +69,7 @@ describe('UC 124 - Open or Close Design Component', function(){
             {
                 componentType:  ComponentType.FEATURE_ASPECT,
                 parentName:     'Feature1',
-                componentName:  'Actions'
+                componentNameNew:  'Actions'
             }
         ];
         DesignComponentActions.designerOpensSelectedComponentWithExpectation(expectedOpenComponents);
@@ -89,27 +89,27 @@ describe('UC 124 - Open or Close Design Component', function(){
             {
                 componentType:  ComponentType.FEATURE,
                 parentName:     'Section1',
-                componentName:  'Feature1'
+                componentNameNew:  'Feature1'
             },
             {
                 componentType:  ComponentType.FEATURE_ASPECT,
                 parentName:     'Feature1',
-                componentName:  'Interface'
+                componentNameNew:  'Interface'
             },
             {
                 componentType:  ComponentType.FEATURE_ASPECT,
                 parentName:     'Feature1',
-                componentName:  'Actions'
+                componentNameNew:  'Actions'
             },
             {
                 componentType:  ComponentType.FEATURE_ASPECT,
                 parentName:     'Feature1',
-                componentName:  'Conditions'
+                componentNameNew:  'Conditions'
             },
             {
                 componentType:  ComponentType.FEATURE_ASPECT,
                 parentName:     'Feature1',
-                componentName:  'Consequences'
+                componentNameNew:  'Consequences'
             },
         ];
 

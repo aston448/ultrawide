@@ -13,7 +13,7 @@ import { DesignUpdates }                from '../../collections/design_update/de
 import { DesignUpdateSummaries }        from '../../collections/design_update/design_update_summaries.js';
 import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { DomainDictionary }             from '../../collections/design/domain_dictionary.js'
-import { DesignComponents }             from '../../collections/design/design_components.js';
+import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
 import { ScenarioSteps }                from '../../collections/design/scenario_steps.js';
 import { FeatureBackgroundSteps }       from '../../collections/design/feature_background_steps.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
@@ -70,7 +70,7 @@ class ImpExServices{
             WorkPackages.remove({designVersionId: designVersion._id});
 
             // All design components in this version
-            DesignComponents.remove({designVersionId: designVersion._id});
+            DesignVersionComponents.remove({designVersionId: designVersion._id});
 
             // All Design Update components in this version
             DesignUpdateComponents.remove({designVersionId: designVersion._id});
@@ -137,7 +137,7 @@ class ImpExServices{
                 });
 
                 // All design components in this version
-                let designComponentData = DesignComponents.find({designVersionId: designVersion._id}).fetch();
+                let designComponentData = DesignVersionComponents.find({designVersionId: designVersion._id}).fetch();
                 designComponentData.forEach((designComponent) => {
                     designComponents.push(designComponent);
                 });
@@ -277,7 +277,7 @@ class ImpExServices{
 
             let workPackagesMapping = this.restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasUpdates);
 
-            let designComponentsMapping = this.restoreDesignComponentData(newDesignComponentData, designsMapping, designVersionsMapping);
+            let designComponentsMapping = this.restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping);
 
             let designUpdateComponentsMapping = this.restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping);
 
@@ -325,7 +325,7 @@ class ImpExServices{
                 WorkPackages.remove({designVersionId: designVersion._id});
 
                 // All design components in this version
-                DesignComponents.remove({designVersionId: designVersion._id});
+                DesignVersionComponents.remove({designVersionId: designVersion._id});
 
                 // All Design Update components in this version
                 DesignUpdateComponents.remove({designVersionId: designVersion._id});
@@ -491,25 +491,63 @@ class ImpExServices{
 
     migrateDesignComponentData(designComponentData, backupVersion, currentVersion){
         // Add to this function for each release
-        let newDesignComponentData = [];
+        let newDesignVersionComponentData = designComponentData;
+
 
         switch(backupVersion){
             case 1:
                 switch(currentVersion){
                     case 2:
-                        // Fix broken merge status in v1
-                        designComponentData.forEach((component) => {
-                            if(component.updateMergeStatus === 'BASE'){
-                                component.updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
-                                newDesignComponentData.push(component);
-                            } else {
-                                newDesignComponentData.push(component);
-                            }
-                        });
+                        // Migrate to Design Version Component data
+                        // designComponentData.forEach((component) => {
+                        //
+                        //     let newDesignVersionComponent = {};
+                        //
+                        //     newDesignVersionComponent._id = component._id;
+                        //     newDesignVersionComponent.componentReferenceId = component.componentReferenceId;
+                        //     newDesignVersionComponent.designId = component.designId;
+                        //     newDesignVersionComponent.designVersionId = component.designVersionId;
+                        //     newDesignVersionComponent.componentType = component.componentType;
+                        //     newDesignVersionComponent.componentLevel = component.componentLevel;
+                        //
+                        //     // Location
+                        //     newDesignVersionComponent.componentParentIdOld = component.componentParentId;
+                        //     newDesignVersionComponent.componentParentIdNew = component.componentParentId;
+                        //     newDesignVersionComponent.componentParentReferenceIdOld = component.componentParentReferenceId;
+                        //     newDesignVersionComponent.componentParentReferenceIdNew = component.componentParentReferenceId;
+                        //     newDesignVersionComponent.componentFeatureReferenceIdOld = component.componentFeatureReferenceId;
+                        //     newDesignVersionComponent.componentFeatureReferenceIdNew = component.componentFeatureReferenceId;
+                        //     newDesignVersionComponent.componentIndexOld = component.componentIndex;
+                        //     newDesignVersionComponent.componentIndexNew = component.componentIndex;
+                        //
+                        //     // Data
+                        //     newDesignVersionComponent.componentNameOld = component.componentName;
+                        //     newDesignVersionComponent.componentNameNew = component.componentName;
+                        //     newDesignVersionComponent.componentNameRawOld = component.componentNameRaw;
+                        //     newDesignVersionComponent.componentNameRawNew = component.componentNameRaw;
+                        //     newDesignVersionComponent.componentNarrativeOld = component.componentNarrative;
+                        //     newDesignVersionComponent.componentNarrativeNew = component.componentNarrative;
+                        //     newDesignVersionComponent.componentNarrativeRawOld = component.componentNarrativeRaw;
+                        //     newDesignVersionComponent.componentNarrativeRawNew = component.componentNarrativeRaw;
+                        //     newDesignVersionComponent.componentTextRawOld = component.componentTextRaw;
+                        //     newDesignVersionComponent.componentTextRawNew = component.componentTextRaw;
+                        //
+                        //     // Component State
+                        //     newDesignVersionComponent.isNew = component.isNew;
+                        //     newDesignVersionComponent.workPackageId = 'NONE';
+                        //     newDesignVersionComponent.updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
+                        //     newDesignVersionComponent.isDevUpdated = false;
+                        //     newDesignVersionComponent.isDevAdded = false;
+                        //
+                        //     // Editing state (shared and persistent)
+                        //     newDesignVersionComponent.isRemovable = component.isRemovable;
+                        //
+                        //     newDesignVersionComponentData.push(newDesignVersionComponent);
+                        // });
                 }
         }
 
-        return newDesignComponentData;
+        return newDesignVersionComponentData;
     };
 
     migrateDesignUpdateComponentData(designUpdateComponentData, backupVersion, currentVersion){
@@ -804,15 +842,15 @@ class ImpExServices{
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
     };
 
-    restoreDesignComponentData(newDesignComponentData, designsMapping, designVersionsMapping){
+    restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Components...");
+        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Version Components...");
 
         let designComponentsMapping = [];
         let componentCount = 0;
 
         newDesignComponentData.forEach((component) => {
-            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentName);
+            log((msg) => console.log(msg), LogLevel.TRACE, "Adding Design Component {} - {}", component.componentType, component.componentNameNew);
 
             let designId = getIdFromMap(designsMapping, component.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
@@ -842,7 +880,7 @@ class ImpExServices{
             DesignServices.setRemovable(designMap.newId);
         });
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Components", componentCount);
+        log((msg) => console.log(msg), LogLevel.INFO, "Added {} Design Version Components", componentCount);
 
         return designComponentsMapping;
     };
@@ -1069,7 +1107,7 @@ class ImpExServices{
         this.produceExportFile(DomainDictionary, path, doubleBackupPath, 'DOMAIN_DICTIONARY');
 
         // Design Components
-        this.produceExportFile(DesignComponents, path, doubleBackupPath, 'DESIGN_COMPONENTS');
+        this.produceExportFile(DesignVersionComponents, path, doubleBackupPath, 'DESIGN_COMPONENTS');
 
         // Design Update Components
         this.produceExportFile(DesignUpdateComponents, path, doubleBackupPath, 'DESIGN_UPDATE_COMPONENTS');
@@ -1441,7 +1479,7 @@ class ImpExServices{
         if(designComponents.length > 0) {
 
             let migratedDesignComponents = this.migrateDesignComponentData(designComponents, backupDataVersion, currentDataVersion);
-            designComponentsMapping = this.restoreDesignComponentData(migratedDesignComponents, designsMapping, designVersionsMapping);
+            designComponentsMapping = this.restoreDesignVersionComponentData(migratedDesignComponents, designsMapping, designVersionsMapping);
 
         } else {
             // No Design Components - could be OK

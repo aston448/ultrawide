@@ -28,7 +28,7 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.APPLICATION);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.addApplicationToDesignVersion.failValidation', result)
         }
 
@@ -41,7 +41,9 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
                 0,                          // Apps are at level 0
                 DefaultComponentNames.NEW_APPLICATION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_APPLICATION_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_APPLICATION_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_APPLICATION_DETAILS),
+                true,
+                view
             );
         } catch (e) {
             console.log(e);
@@ -66,7 +68,7 @@ export const addDesignSectionToApplication = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.addDesignSectionToApplication.failValidation', result)
         }
 
@@ -79,7 +81,9 @@ export const addDesignSectionToApplication = new ValidatedMethod({
                 1,                          // All sections added to the design version are level 1
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_DESIGN_SECTION_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS),
+                true,
+                view
             );
         } catch (e) {
             console.log(e);
@@ -105,7 +109,7 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.DESIGN_SECTION);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.addDesignSectionToDesignSection.failValidation', result)
         }
 
@@ -118,7 +122,9 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
                 parentLevel + 1,
                 DefaultComponentNames.NEW_DESIGN_SECTION_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_DESIGN_SECTION_NAME),
-                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS)
+                DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_DESIGN_SECTION_DETAILS),
+                true,
+                view
             );
         } catch (e) {
             console.log(e);
@@ -143,7 +149,7 @@ export const addFeatureToDesignSection = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.addFeatureToDesignSection.failValidation', result)
         }
 
@@ -157,6 +163,8 @@ export const addFeatureToDesignSection = new ValidatedMethod({
                 DefaultComponentNames.NEW_FEATURE_NAME,
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_FEATURE_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_FEATURE_DETAILS),
+                true,
+                view
             );
         } catch (e) {
             console.log(e);
@@ -181,7 +189,7 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.FEATURE_ASPECT);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.addFeatureAspectToFeature.failValidation', result)
         }
 
@@ -215,15 +223,16 @@ export const addScenario = new ValidatedMethod({
         view:               {type: String},
         mode:               {type: String},
         designVersionId:    {type: String},
-        parentId:           {type: String}
+        parentId:           {type: String},
+        workPackageId:      {type: String, optional: true},
     }).validator(),
 
-    run({view, mode, designVersionId, parentId}){
+    run({view, mode, designVersionId, parentId, workPackageId}){
 
         // Server validation
         const result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.SCENARIO);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designComponent.addScenario.failValidation', result)
         }
 
@@ -238,7 +247,8 @@ export const addScenario = new ValidatedMethod({
                 DesignComponentModules.getRawTextFor(DefaultComponentNames.NEW_SCENARIO_NAME),
                 DesignComponentModules.getRawTextFor(DefaultDetailsText.NEW_SCENARIO_DETAILS),
                 true,
-                view
+                view,
+                workPackageId
             );
         } catch (e) {
             console.log(e);

@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
 import {DesignVersions}             from '../../collections/design/design_versions.js';
-import {DesignComponents}           from '../../collections/design/design_components.js';
+import {DesignVersionComponents}           from '../../collections/design/design_version_components.js';
 
 // Ultrawide Services
 import { DesignVersionStatus }      from '../../constants/constants.js';
@@ -127,7 +127,7 @@ class DesignVersionServices{
             const currentDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
             const previousDesignVersionId = currentDesignVersion.baseDesignVersionId;
 
-            if(previousDesignVersionId != 'NONE'){
+            if(previousDesignVersionId !== 'NONE'){
                 // The current DV is updatable so make a final version of its components based on the final Design Update configuration
                 DesignVersionModules.finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
             }

@@ -39,18 +39,9 @@ class ScenariosList extends Component {
 
     };
 
-    getDesignItem(scenario, displayContext){
-        // Design Item needed only in WP context (otherwise we already have it as the current item)
-        if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
-            return ClientWorkPackageComponentServices.getDesignItem(scenario.componentId, scenario.workPackageType);
-        } else {
-            return scenario;
-        }
-    };
-
     getDesignUpdateItem(scenario, displayContext, designUpdateId){
         switch(displayContext){
-            case  DisplayContext.UPDATABLE_VIEW:
+            case  DisplayContext.WORKING_VIEW:
                 return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(scenario);
             case DisplayContext.UPDATE_SCOPE:
                 // See if this item is in scope - i.e. in the DU
@@ -59,6 +50,10 @@ class ScenariosList extends Component {
                 return scenario;
         }
     };
+
+    getWpItem(scenario, workPackageId){
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(scenario._id, workPackageId);
+    }
 
     // A list of Scenarios in a Feature or Feature Aspect
     renderScenarios() {
@@ -99,8 +94,8 @@ class ScenariosList extends Component {
                     <DesignComponentTarget
                         key={scenario._id}
                         currentItem={scenario}
-                        designItem={this.getDesignItem(scenario, displayContext)}
                         updateItem={this.getDesignUpdateItem(scenario, displayContext, userContext.designUpdateId)}
+                        wpItem={this.getWpItem(scenario, userContext.workPackageId)}
                         displayContext={displayContext}
                         view={view}
                         mode={mode}

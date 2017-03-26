@@ -1,7 +1,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import {DesignComponents}       from '../collections/design/design_components.js';
+import {DesignVersionComponents}       from '../collections/design/design_version_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js'
 import {WorkPackageComponents}  from '../collections/work/work_package_components.js'
 
@@ -33,7 +33,7 @@ class ClientWorkPackageComponentServices {
         // Client validation
         let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, wpComponentId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -77,7 +77,7 @@ class ClientWorkPackageComponentServices {
 
         switch(wpType){
             case WorkPackageType.WP_BASE:
-                return DesignComponents.findOne({_id: componentId});
+                return DesignVersionComponents.findOne({_id: componentId});
             case WorkPackageType.WP_UPDATE:
                 return DesignUpdateComponents.findOne({_id: componentId});
             default:
@@ -86,21 +86,45 @@ class ClientWorkPackageComponentServices {
         }
     }
 
+    getWorkPackageComponent(componentId, workPackageId){
+
+        return WorkPackageComponents.findOne({workPackageId: workPackageId, componentId: componentId});
+    }
+
     // User opened or closed a WP component
-    setOpenClosed(wpComponent, currentList, setOpen){
+    setOpenClosed(wpType, wpComponent, currentList, setOpen){
 
         if(wpComponent.componentType === ComponentType.FEATURE){
 
             // Open or close the whole feature
             if(setOpen) {
 
-                const featureComponents = WorkPackageComponents.find(
-                    {
-                        workPackageId: wpComponent.workPackageId,
-                        componentFeatureReferenceId: wpComponent.componentReferenceId,
-                        componentType: {$ne:(ComponentType.SCENARIO)}
-                    }
-                );
+                let featureComponents = [];
+
+                switch(wpType){
+                    case WorkPackageType.WP_BASE:
+
+                        featureComponents = DesignVersionComponents.find(
+                            {
+                                designVersionId: wpComponent.designVersionId,
+                                componentFeatureReferenceIdNew: wpComponent.componentReferenceId,
+                                componentType: {$ne:(ComponentType.SCENARIO)}
+                            }
+                        ).fetch();
+                        break;
+
+                    case WorkPackageType.WP_UPDATE:
+
+                        featureComponents = DesignUpdatenComponents.find(
+                            {
+                                designVersionId: wpComponent.designVersionId,
+                                designUpdateId: wpComponent.designUpdateId,
+                                componentFeatureReferenceIdNew: wpComponent.componentReferenceId,
+                                componentType: {$ne:(ComponentType.SCENARIO)}
+                            }
+                        ).fetch();
+                        break;
+                }
 
                 featureComponents.forEach((component) => {
 
@@ -156,7 +180,7 @@ class ClientWorkPackageComponentServices {
         let childComponents = DesignUpdateComponents.find(
             {
                 workPackageId: wpComponent.workPackageId,
-                componentParentReferenceId: wpComponent.componentReferenceId
+                componentParentReferenceIdNew: wpComponent.componentReferenceId
             }
         );
 

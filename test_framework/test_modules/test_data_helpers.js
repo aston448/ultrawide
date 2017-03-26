@@ -7,7 +7,7 @@ import { DesignVersions }           from '../../imports/collections/design/desig
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { DomainDictionary }         from '../../imports/collections/design/domain_dictionary.js';
-import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 import { UserCurrentEditContext }   from '../../imports/collections/context/user_current_edit_context.js';
@@ -170,7 +170,7 @@ class TestDataHelpers {
 
     getContextDesignComponent(componentId){
 
-        const component = DesignComponents.findOne({_id: componentId});
+        const component = DesignVersionComponents.findOne({_id: componentId});
 
         if(component){
             return component;
@@ -230,9 +230,9 @@ class TestDataHelpers {
         const designVersion = DesignVersions.findOne({_id: designVersionId});
 
         if(designUpdateId === 'NONE'){
-            designComponent = DesignComponents.findOne({
+            designComponent = DesignVersionComponents.findOne({
                 designVersionId: designVersionId,
-                componentName:  componentName
+                componentNameNew:  componentName
             });
 
         } else {
@@ -260,21 +260,21 @@ class TestDataHelpers {
         const designVersion = DesignVersions.findOne({_id: designVersionId});
 
 
-        const designComponents = DesignComponents.find({
+        const designComponents = DesignVersionComponents.find({
             designVersionId: designVersionId,
             componentType: componentType,
-            componentName:  componentName
+            componentNameNew:  componentName
         }).fetch();
 
         // Get the component that has the expected parent- except for Applications that have no parent
         if(componentType != ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
-                parentComponent = DesignComponents.findOne({
-                    _id: component.componentParentId
+                parentComponent = DesignVersionComponents.findOne({
+                    _id: component.componentParentIdNew
                 });
 
-                if (parentComponent.componentName === componentParentName) {
+                if (parentComponent.componentNameNew === componentParentName) {
                     designComponent = component;
                 }
 
@@ -346,22 +346,22 @@ class TestDataHelpers {
         const workPackage = WorkPackages.findOne({_id: workPackageId});
 
         if(designUpdateId === 'NONE'){
-            designComponents = DesignComponents.find({
+            designComponents = DesignVersionComponents.find({
                 designVersionId: designVersionId,
                 componentType: componentType,
-                componentName:  componentName
+                componentNameNew:  componentName
             }).fetch();
 
             // Get the component that has the expected parent- except for Applications that have no parent
             if(componentType != ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
-                    parentComponent = DesignComponents.findOne({
-                        _id: component.componentParentId
+                    parentComponent = DesignVersionComponents.findOne({
+                        _id: component.componentParentIdNew
                     });
 
 
-                    if (parentComponent.componentName === componentParentName) {
+                    if (parentComponent.componentNameNew === componentParentName) {
                         designComponent = component;
                     }
 
@@ -439,14 +439,14 @@ class TestDataHelpers {
         const workPackage = WorkPackages.findOne({_id: workPackageId});
 
         if(designUpdateId === 'NONE'){
-            designComponent = DesignComponents.findOne({
+            designComponent = DesignVersionComponents.findOne({
                 designVersionId: designVersionId,
                 componentType: componentType,
-                componentName:  componentName
+                componentNameNew:  componentName
             });
 
             if(designComponent){
-                designComponentParentRef = designComponent.componentParentReferenceId;
+                designComponentParentRef = designComponent.componentParentReferenceIdNew;
             } else {
                 throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
             }
@@ -454,13 +454,13 @@ class TestDataHelpers {
             if(designComponentParentRef === 'NONE'){
                 return 'NONE';
             } else {
-                parentComponent = DesignComponents.findOne({
+                parentComponent = DesignVersionComponents.findOne({
                     designVersionId: designVersionId,
                     componentReferenceId: designComponentParentRef
                 });
 
                 if(parentComponent){
-                    return parentComponent.componentName;
+                    return parentComponent.componentNameNew;
                 } else {
                     return 'NONE';
                 }
@@ -601,9 +601,9 @@ class TestDataHelpers {
         let testScenario = null;
 
         if(userContext.designUpdateId === 'NONE'){
-            testScenario = DesignComponents.findOne({
+            testScenario = DesignVersionComponents.findOne({
                 designVersionId:    userContext.designVersionId,
-                componentName:      scenarioName
+                componentNameNew:      scenarioName
             });
         } else {
             testScenario = DesignUpdateComponents.findOne({

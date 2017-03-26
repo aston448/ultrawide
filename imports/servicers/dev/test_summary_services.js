@@ -2,7 +2,7 @@
 // Ultrawide Collections
 import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_test_summary_data.js';
 import { UserDevDesignSummaryData }     from '../../collections/dev/user_dev_design_summary_data.js';
-import { DesignComponents }             from '../../collections/design/design_components.js';
+import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
 import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
@@ -38,7 +38,7 @@ class TestSummaryServices {
         if(userContext.designUpdateId === 'NONE'){
 
             // In a base Design Version context
-            designScenarios = DesignComponents.find({
+            designScenarios = DesignVersionComponents.find({
                 designId: userContext.designId,
                 designVersionId: userContext.designVersionId,
                 componentType: ComponentType.SCENARIO
@@ -85,8 +85,8 @@ class TestSummaryServices {
 
             // Get Scenario Name
             if(userContext.designUpdateId === 'NONE'){
-                scenarioName = designScenario.componentName;
-                featureReferenceId = designScenario.componentFeatureReferenceId;
+                scenarioName = designScenario.componentNameNew;
+                featureReferenceId = designScenario.componentFeatureReferenceIdNew;
             } else {
                 scenarioName = designScenario.componentNameNew;
                 featureReferenceId = designScenario.componentFeatureReferenceIdNew;
@@ -171,7 +171,7 @@ class TestSummaryServices {
         if(userContext.designUpdateId === 'NONE'){
 
             // In a base Design Version context
-            designFeatures = DesignComponents.find({
+            designFeatures = DesignVersionComponents.find({
                 designId: userContext.designId,
                 designVersionId: userContext.designVersionId,
                 componentType: ComponentType.FEATURE

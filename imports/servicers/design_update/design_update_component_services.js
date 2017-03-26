@@ -2,7 +2,7 @@
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide services
@@ -151,9 +151,9 @@ class DesignUpdateComponentServices{
         if(Meteor.isServer) {
 
             // Fix any missing feature refs
-            let componentFeatureReferenceId = component.componentFeatureReferenceIdNew;
-            if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceId === 'NONE') {
-                componentFeatureReferenceId = component.componentReferenceId;
+            let componentFeatureReferenceIdNew = component.componentFeatureReferenceIdNew;
+            if (component.componentType === ComponentType.FEATURE && componentFeatureReferenceIdNew === 'NONE') {
+                componentFeatureReferenceIdNew = component.componentReferenceId;
             }
 
             const designUpdateComponentId = DesignUpdateComponents.insert(
@@ -170,7 +170,7 @@ class DesignUpdateComponentServices{
                     componentParentReferenceIdOld: component.componentParentReferenceIdOld,
                     componentParentReferenceIdNew: component.componentParentReferenceIdNew,
                     componentFeatureReferenceIdOld: component.componentFeatureReferenceIdOld,
-                    componentFeatureReferenceIdNew: componentFeatureReferenceId,
+                    componentFeatureReferenceIdNew: componentFeatureReferenceIdNew,
                     componentIndexOld: component.componentIndexOld,
                     componentIndexNew: component.componentIndexNew,
 
@@ -372,7 +372,7 @@ class DesignUpdateComponentServices{
             const indexDiff = indexBelow - indexAbove;
             const newIndex = (indexBelow + indexAbove) / 2;
 
-            //console.log("Setting new index for " + movingComponent.componentName + " to " + newIndex);
+            //console.log("Setting new index for " + movingComponent.componentNameNew + " to " + newIndex);
 
             DesignUpdateComponents.update(
                 {_id: componentId},
@@ -424,7 +424,7 @@ class DesignUpdateComponentServices{
 
         if(Meteor.isServer) {
 
-            const baseComponent = DesignComponents.findOne({_id: baseComponentId});
+            const baseComponent = DesignVersionComponents.findOne({_id: baseComponentId});
 
             if (baseComponent) {
 

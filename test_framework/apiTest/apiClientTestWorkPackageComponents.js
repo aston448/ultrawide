@@ -137,7 +137,7 @@ Meteor.methods({
                 if(designComponent.componentType != ComponentType.FEATURE_ASPECT){
                     throw new Meteor.Error("FAIL", "Can only add Scenarios to Feature Aspects.  This is a " + designComponent.componentType);
                 }
-                outcome = ClientDesignComponentServices.addScenario(view, mode, designComponent);
+                outcome = ClientDesignComponentServices.addScenario(view, mode, designComponent, workPackage._id);
                 break;
             case WorkPackageType.WP_UPDATE:
                 view = ViewType.DEVELOP_UPDATE_WP;

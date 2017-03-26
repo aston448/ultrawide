@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
 import {Designs}                    from '../../collections/design/designs.js'
-import {DesignComponents}           from '../../collections/design/design_components.js'
+import {DesignVersionComponents}    from '../../collections/design/design_version_components.js'
 import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js'
 import {DesignVersions}             from '../../collections/design/design_versions.js'
 import {DesignUpdates}              from '../../collections/design_update/design_updates.js'
@@ -90,7 +90,7 @@ class DesignServices{
             // If this design has any features at all in any version it is not removable
             // Its possible someone could have create a Design with no features and the be working on an Update to add some so check for that too
 
-            const features = DesignComponents.find({designId: designId, componentType: ComponentType.FEATURE});
+            const features = DesignVersionComponents.find({designId: designId, componentType: ComponentType.FEATURE});
             const updateFeatures = DesignUpdateComponents.find({
                 designId: designId,
                 componentType: ComponentType.FEATURE
@@ -115,7 +115,7 @@ class DesignServices{
         if(Meteor.isServer) {
 
             // Remove all data relating to the design - there can't be much as there can't be any features
-            DesignComponents.remove({designId: designId});
+            DesignVersionComponents.remove({designId: designId});
             DesignUpdateComponents.remove({designId: designId});
 
             let designVersions = DesignVersions.find({designId: designId});

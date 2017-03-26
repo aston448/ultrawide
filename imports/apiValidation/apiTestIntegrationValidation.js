@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import { DesignComponents }         from '../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
@@ -19,7 +19,7 @@ class TestIntegrationValidationApi{
         let designComponent = null;
 
         if(userContext.designUpdateId === 'NONE'){
-            designComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+            designComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
         } else {
             designComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
         }

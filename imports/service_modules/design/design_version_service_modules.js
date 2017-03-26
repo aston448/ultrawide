@@ -2,7 +2,7 @@
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { DomainDictionary }         from '../../collections/design/domain_dictionary.js';
 
@@ -49,24 +49,24 @@ class DesignVersionModules{
 
     deleteCurrentVersionComponents(currentDesignVersionId){
 
-        DesignComponents.remove({designVersionId: currentDesignVersionId});
+        DesignVersionComponents.remove({designVersionId: currentDesignVersionId});
     };
 
     copyPreviousDesignVersionToCurrent(previousDesignVersionId, currentDesignVersionId){
 
         // Abort if current version has not been cleared
-        const currentComponentsCount = DesignComponents.find({designVersionId: currentDesignVersionId}).count();
+        const currentComponentsCount = DesignVersionComponents.find({designVersionId: currentDesignVersionId}).count();
         if(currentComponentsCount > 0){
             throw new Meteor.Error('COPY DV', 'Current version has not been cleared');
         }
 
         // Get all the old version components
-        const oldDesignComponents = DesignComponents.find({designVersionId: previousDesignVersionId});
+        const oldDesignComponents = DesignVersionComponents.find({designVersionId: previousDesignVersionId});
 
         // Recreate the current version as an exact copy
         oldDesignComponents.forEach((oldComponent) => {
 
-            let newDesignComponentId = DesignComponents.insert(
+            let newDesignComponentId = DesignVersionComponents.insert(
                 {
                     // Identity
                     componentReferenceId:       oldComponent.componentReferenceId,
@@ -74,17 +74,17 @@ class DesignVersionModules{
                     designVersionId:            currentDesignVersionId,
                     componentType:              oldComponent.componentType,
                     componentLevel:             oldComponent.componentLevel,
-                    componentParentId:          oldComponent.componentParentId,                     // This will be wrong but updated afterwards
-                    componentParentReferenceId: oldComponent.componentParentReferenceId,
-                    componentFeatureReferenceId:oldComponent.componentFeatureReferenceId,
-                    componentIndex:             oldComponent.componentIndex,
+                    componentParentIdNew:          oldComponent.componentParentIdNew,                     // This will be wrong but updated afterwards
+                    componentParentReferenceIdNew: oldComponent.componentParentReferenceIdNew,
+                    componentFeatureReferenceIdNew:oldComponent.componentFeatureReferenceIdNew,
+                    componentIndexNew:             oldComponent.componentIndexNew,
 
                     // Data
-                    componentName:              oldComponent.componentName,
-                    componentNameRaw:           oldComponent.componentNameRaw,
-                    componentNarrative:         oldComponent.componentNarrative,
-                    componentNarrativeRaw:      oldComponent.componentNarrativeRaw,
-                    componentTextRaw:           oldComponent.componentTextRaw,
+                    componentNameNew:              oldComponent.componentNameNew,
+                    componentNameRawNew:           oldComponent.componentNameRawNew,
+                    componentNarrativeNew:         oldComponent.componentNarrativeNew,
+                    componentNarrativeRawNew:      oldComponent.componentNarrativeRawNew,
+                    componentTextRawNew:           oldComponent.componentTextRawNew,
 
                     // State
                     isRemovable:                oldComponent.isRemovable,
@@ -107,12 +107,12 @@ class DesignVersionModules{
     populateNextDesignVersion(currentDesignVersionId, newDesignVersionId){
 
         // Get all the current version components.  These are now updated with latest updates
-        const currentDesignComponents = DesignComponents.find({designVersionId: currentDesignVersionId});
+        const currentDesignComponents = DesignVersionComponents.find({designVersionId: currentDesignVersionId});
 
         // Recreate the current version as an exact copy but resetting any change indication flags so we have a blank sheet for new changes
         currentDesignComponents.forEach((currentComponent) => {
 
-            let newDesignComponentId = DesignComponents.insert(
+            let newDesignComponentId = DesignVersionComponents.insert(
                 {
                     // Identity
                     componentReferenceId:       currentComponent.componentReferenceId,
@@ -120,17 +120,17 @@ class DesignVersionModules{
                     designVersionId:            newDesignVersionId,
                     componentType:              currentComponent.componentType,
                     componentLevel:             currentComponent.componentLevel,
-                    componentParentId:          currentComponent.componentParentId,                     // This will be wrong but updated afterwards
-                    componentParentReferenceId: currentComponent.componentParentReferenceId,
-                    componentFeatureReferenceId:currentComponent.componentFeatureReferenceId,
-                    componentIndex:             currentComponent.componentIndex,
+                    componentParentIdNew:          currentComponent.componentParentIdNew,                     // This will be wrong but updated afterwards
+                    componentParentReferenceIdNew: currentComponent.componentParentReferenceIdNew,
+                    componentFeatureReferenceIdNew:currentComponent.componentFeatureReferenceIdNew,
+                    componentIndexNew:             currentComponent.componentIndexNew,
 
                     // Data
-                    componentName:              currentComponent.componentName,
-                    componentNameRaw:           currentComponent.componentNameRaw,
-                    componentNarrative:         currentComponent.componentNarrative,
-                    componentNarrativeRaw:      currentComponent.componentNarrativeRaw,
-                    componentTextRaw:           currentComponent.componentTextRaw,
+                    componentNameNew:              currentComponent.componentNameNew,
+                    componentNameRawNew:           currentComponent.componentNameRawNew,
+                    componentNarrativeNew:         currentComponent.componentNarrativeNew,
+                    componentNarrativeRawNew:      currentComponent.componentNarrativeRawNew,
+                    componentTextRawNew:           currentComponent.componentTextRawNew,
 
                     // State
                     isRemovable:                currentComponent.isRemovable,
@@ -154,12 +154,12 @@ class DesignVersionModules{
     fixParentIds(newDesignVersionId){
 
         // The correct parent id for the new version will be the id of the component that has the reference id relating to the parent reference id
-        const newDesignVersionComponents = DesignComponents.find({designVersionId: newDesignVersionId});
+        const newDesignVersionComponents = DesignVersionComponents.find({designVersionId: newDesignVersionId});
 
         newDesignVersionComponents.forEach((component) => {
 
             // Get the id of the new component that has the parent reference id as its unchanging reference id
-            let parent = DesignComponents.findOne({designVersionId: newDesignVersionId, componentReferenceId: component.componentParentReferenceId});
+            let parent = DesignVersionComponents.findOne({designVersionId: newDesignVersionId, componentReferenceId: component.componentParentReferenceIdNew});
 
             let parentId = 'NONE';
             if(parent){
@@ -167,11 +167,11 @@ class DesignVersionModules{
             }
 
             // Update if needs updating
-            DesignComponents.update(
-                { _id: component._id, componentParentId: {$ne: parentId}},
+            DesignVersionComponents.update(
+                { _id: component._id, componentParentIdNew: {$ne: parentId}},
                 {
                     $set:{
-                        componentParentId: parentId
+                        componentParentIdNew: parentId
                     }
                 }
             );
@@ -215,18 +215,18 @@ class DesignVersionModules{
                     mergeStatus = UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED;
                 }
 
-                DesignComponents.update(
+                DesignVersionComponents.update(
                     {
                         designVersionId:        currentDesignVersionId,
                         componentReferenceId:   changedComponent.componentReferenceId
                     },
                     {
                         $set:{
-                            componentName:              changedComponent.componentNameNew,
-                            componentNameRaw:           changedComponent.componentNameRawNew,
-                            componentNarrative:         changedComponent.componentNarrativeNew,
-                            componentNarrativeRaw:      changedComponent.componentNarrativeRawNew,
-                            componentTextRaw:           changedComponent.componentTextRawNew,
+                            componentNameNew:              changedComponent.componentNameNew,
+                            componentNameRawNew:           changedComponent.componentNameRawNew,
+                            componentNarrativeNew:         changedComponent.componentNarrativeNew,
+                            componentNarrativeRawNew:      changedComponent.componentNarrativeRawNew,
+                            componentTextRawNew:           changedComponent.componentTextRawNew,
                             updateMergeStatus:          mergeStatus
                         }
                     }
@@ -242,7 +242,7 @@ class DesignVersionModules{
             movedComponents.forEach((movedComponent) => {
 
                 // Get the actual parent id of the moved component from the existing design
-                actualParent = DesignComponents.findOne({componentReferenceId: movedComponent.componentParentReferenceIdNew});
+                actualParent = DesignVersionComponents.findOne({componentReferenceId: movedComponent.componentParentReferenceIdNew});
                 if(actualParent){
                     actualParentId = actualParent._id;
                 } else {
@@ -256,16 +256,16 @@ class DesignVersionModules{
                     mergeStatus = UpdateMergeStatus.COMPONENT_MODIFIED;
                 }
 
-                DesignComponents.update(
+                DesignVersionComponents.update(
                     {
                         designVersionId:        currentDesignVersionId,
                         componentReferenceId:   movedComponent.componentReferenceId
                     },
                     {
                         $set:{
-                            componentParentId:          actualParentId,
-                            componentParentReferenceId: movedComponent.componentParentReferenceIdNew,
-                            componentIndex:             movedComponent.componentIndexNew,
+                            componentParentIdNew:          actualParentId,
+                            componentParentReferenceIdNew: movedComponent.componentParentReferenceIdNew,
+                            componentIndexNew:             movedComponent.componentIndexNew,
                             updateMergeStatus:          mergeStatus
                         }
                     }
@@ -285,7 +285,7 @@ class DesignVersionModules{
                 // Creating new version - remove completely from the version
                 removedComponents.forEach((removedComponent) => {
 
-                    DesignComponents.remove(
+                    DesignVersionComponents.remove(
                         {
                             designVersionId:        currentDesignVersionId,
                             componentReferenceId:   removedComponent.componentReferenceId
@@ -297,7 +297,7 @@ class DesignVersionModules{
 
                 // This is a work progress update - logically delete - just mark as removed
                 removedComponents.forEach((removedComponent) => {
-                    DesignComponents.update(
+                    DesignVersionComponents.update(
                         {
                             designVersionId:        currentDesignVersionId,
                             componentReferenceId:   removedComponent.componentReferenceId
@@ -318,7 +318,7 @@ class DesignVersionModules{
             newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true});
 
             newComponents.forEach((newComponent) => {
-                DesignComponents.insert(
+                DesignVersionComponents.insert(
                     {
                         // Identity
                         componentReferenceId:       newComponent.componentReferenceId,
@@ -326,17 +326,17 @@ class DesignVersionModules{
                         designVersionId:            currentDesignVersionId,                                 // New design version
                         componentType:              newComponent.componentType,
                         componentLevel:             newComponent.componentLevel,                        // TODO - allow level to change??
-                        componentParentId:          newComponent.componentParentIdNew,                  // This will be wrong but updated afterwards
-                        componentParentReferenceId: newComponent.componentParentReferenceIdNew,
-                        componentFeatureReferenceId:newComponent.componentFeatureReferenceIdNew,
-                        componentIndex:             newComponent.componentIndexNew,
+                        componentParentIdNew:          newComponent.componentParentIdNew,                  // This will be wrong but updated afterwards
+                        componentParentReferenceIdNew: newComponent.componentParentReferenceIdNew,
+                        componentFeatureReferenceIdNew:newComponent.componentFeatureReferenceIdNew,
+                        componentIndexNew:             newComponent.componentIndexNew,
 
                         // Data
-                        componentName:              newComponent.componentNameNew,
-                        componentNameRaw:           newComponent.componentNameRawNew,
-                        componentNarrative:         newComponent.componentNarrativeNew,
-                        componentNarrativeRaw:      newComponent.componentNarrativeRawNew,
-                        componentTextRaw:           newComponent.componentTextRawNew,
+                        componentNameNew:              newComponent.componentNameNew,
+                        componentNameRawNew:           newComponent.componentNameRawNew,
+                        componentNarrativeNew:         newComponent.componentNarrativeNew,
+                        componentNarrativeRawNew:      newComponent.componentNarrativeRawNew,
+                        componentTextRawNew:           newComponent.componentTextRawNew,
 
                         // State
                         isRemovable:                newComponent.isRemovable,
@@ -401,7 +401,7 @@ class DesignVersionModules{
             updateComponentsToUpdate.forEach((updateComponent) => {
 
                 // Update the details to that of the same component in the new DV
-                currentDesignVersionComponent = DesignComponents.findOne({designVersionId: newDesignVersionId, componentReferenceId: updateComponent.componentReferenceId});
+                currentDesignVersionComponent = DesignVersionComponents.findOne({designVersionId: newDesignVersionId, componentReferenceId: updateComponent.componentReferenceId});
 
                 if(currentDesignVersionComponent) {
 
@@ -409,16 +409,16 @@ class DesignVersionModules{
                         {_id: updateComponent._id},
                         {
                             $set: {
-                                componentNameOld: currentDesignVersionComponent.componentName,
-                                componentNameNew: currentDesignVersionComponent.componentName,
-                                componentNameRawOld: currentDesignVersionComponent.componentNameRaw,
-                                componentNameRawNew: currentDesignVersionComponent.componentNameRaw,
-                                componentNarrativeOld: currentDesignVersionComponent.componentNarrative,
-                                componentNarrativeNew: currentDesignVersionComponent.componentNarrative,
-                                componentNarrativeRawOld: currentDesignVersionComponent.componentNarrativeRaw,
-                                componentNarrativeRawNew: currentDesignVersionComponent.componentNarrativeRaw,
-                                componentTextRaw: currentDesignVersionComponent.componentTextRaw,
-                                componentTextRawNew: currentDesignVersionComponent.componentTextRaw
+                                componentNameOld: currentDesignVersionComponent.componentNameNew,
+                                componentNameNew: currentDesignVersionComponent.componentNameNew,
+                                componentNameRawOld: currentDesignVersionComponent.componentNameRawNew,
+                                componentNameRawNew: currentDesignVersionComponent.componentNameRawNew,
+                                componentNarrativeOld: currentDesignVersionComponent.componentNarrativeNew,
+                                componentNarrativeNew: currentDesignVersionComponent.componentNarrativeNew,
+                                componentNarrativeRawOld: currentDesignVersionComponent.componentNarrativeRawNew,
+                                componentNarrativeRawNew: currentDesignVersionComponent.componentNarrativeRawNew,
+                                componentTextRawNew: currentDesignVersionComponent.componentTextRawNew,
+                                componentTextRawNew: currentDesignVersionComponent.componentTextRawNew
                             }
                         }
                     );

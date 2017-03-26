@@ -4,17 +4,10 @@
 import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
-import { UserRoles }                from '../collections/users/user_roles.js';
-import { UserCurrentEditContext }   from '../collections/context/user_current_edit_context.js';
-import { Designs }                  from '../collections/design/designs.js';
-import { DesignVersions }           from '../collections/design/design_versions.js';
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
 import { DesignUpdateSummaries }    from '../collections/design_update/design_update_summaries.js';
-import { DesignComponents }         from '../collections/design/design_components.js';
-import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
 
 // Ultrawide GUI Components
-
 
 // Ultrawide Services
 import { ComponentType, DesignUpdateSummaryItem, DesignUpdateSummaryType} from '../constants/constants.js';

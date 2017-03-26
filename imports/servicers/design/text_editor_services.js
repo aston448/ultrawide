@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 //======================================================================================================================
@@ -16,11 +16,11 @@ class TextEditorServices{
     // Save text for a component in the base design (initial edit only)
     saveText(designComponentId, rawText){
         if(Meteor.isServer) {
-            DesignComponents.update(
+            DesignVersionComponents.update(
                 {_id: designComponentId},
                 {
                     $set: {
-                        componentTextRaw: rawText
+                        componentTextRawNew: rawText
                     }
                 }
             );

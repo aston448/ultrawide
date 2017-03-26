@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js'
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js'
-import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import { ComponentType }            from '../../imports/constants/constants.js';
 
@@ -12,7 +12,7 @@ Meteor.methods({
 
     'verifyDesignComponents.componentExistsCalled'(componentType, componentName){
 
-        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
 
         if(designComponent){
             return true;
@@ -26,7 +26,7 @@ Meteor.methods({
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
 
-        const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+        const designComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentNameNew: componentName});
 
         if(designComponent){
             return true;
@@ -37,7 +37,7 @@ Meteor.methods({
 
     'verifyDesignComponents.componentDoesNotExistCalled'(componentType, componentName){
 
-        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
 
         if(designComponent){
             throw new Meteor.Error("FAIL", "A Design Component of type " + componentType + " exists with name " + componentName);
@@ -52,7 +52,7 @@ Meteor.methods({
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
 
-        const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+        const designComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentNameNew: componentName});
 
         if(designComponent){
             throw new Meteor.Error("FAIL", "Design Component of type " + componentType + " does exist with name " + componentName + " in Design Version " + designVersionName + " for Design " + designName);
@@ -66,10 +66,10 @@ Meteor.methods({
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
 
-        const designComponentsCount = DesignComponents.find({
+        const designComponentsCount = DesignVersionComponents.find({
             designVersionId: designVersion._id,
             componentType: componentType,
-            componentName: componentName}
+            componentNameNew: componentName}
             ).count();
 
         if(designComponentsCount === componentCount){
@@ -82,12 +82,12 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentParentIs'(componentType, componentName, componentParentName){
 
-        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
-        const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
+        const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
+        const parentComponent = DesignVersionComponents.findOne({_id: designComponent.componentParentIdNew});
 
         let parentName = 'NONE';
         if(parentComponent){
-            parentName = parentComponent.componentName;
+            parentName = parentComponent.componentNameNew;
         }
 
         if(parentName != componentParentName){
@@ -103,15 +103,15 @@ Meteor.methods({
         const design = TestDataHelpers.getDesign(designName);
         const designVersion = TestDataHelpers.getDesignVersion(design._id, designVersionName);
 
-        const designComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentName: componentName});
+        const designComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: componentType, componentNameNew: componentName});
         if(!designComponent){
             throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
         }
-        const parentComponent = DesignComponents.findOne({_id: designComponent.componentParentId});
+        const parentComponent = DesignVersionComponents.findOne({_id: designComponent.componentParentIdNew});
 
         let parentName = 'NONE';
         if(parentComponent){
-            parentName = parentComponent.componentName;
+            parentName = parentComponent.componentNameNew;
         }
 
         if(parentName != componentParentName){
@@ -132,10 +132,10 @@ Meteor.methods({
         if(!designComponent){
             throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersionName);
         }
-        const featureComponent = DesignComponents.findOne({
+        const featureComponent = DesignVersionComponents.findOne({
             designVersionId: designVersion._id,
             componentType: ComponentType.FEATURE,
-            componentName: featureName
+            componentNameNew: featureName
         });
 
         let featureRef = 'NONE';
@@ -146,8 +146,8 @@ Meteor.methods({
             throw new Meteor.Error("FAIL", "Feature Component " + featureName + " not found for Design Version " + designVersionName);
         }
 
-        if(designComponent.componentFeatureReferenceId != featureRef){
-            throw new Meteor.Error("FAIL", "Expected feature reference to be " + featureRef + " but got " + designComponent.componentFeatureReferenceId + " for component " + componentName);
+        if(designComponent.componentFeatureReferenceIdNew != featureRef){
+            throw new Meteor.Error("FAIL", "Expected feature reference to be " + featureRef + " but got " + designComponent.componentFeatureReferenceIdNew + " for component " + componentName);
         } else {
             return true;
         }
@@ -157,7 +157,7 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentLevelIs'(componentType, componentName, componentLevel){
 
-        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
+        const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
 
         if(designComponent.componentLevel != componentLevel){
             throw new Meteor.Error("FAIL", "Expected level to be " + componentLevel + " but got " + designComponent.componentLevel);
@@ -170,12 +170,12 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentFeatureIs'(componentType, componentName, componentFeature){
 
-        const designComponent = DesignComponents.findOne({componentType: componentType, componentName: componentName});
-        const featureComponent = DesignComponents.findOne({componentReferenceId: designComponent.componentFeatureReferenceId});
+        const designComponent = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentName});
+        const featureComponent = DesignVersionComponents.findOne({componentReferenceId: designComponent.componentFeatureReferenceIdNew});
 
         let featureName = 'NONE';
         if(featureComponent){
-            featureName = featureComponent.componentName;
+            featureName = featureComponent.componentNameNew;
         }
 
         if(featureName != componentFeature){
@@ -189,13 +189,13 @@ Meteor.methods({
     // Note - be careful when testing to make sure that component names are unique before using this check
     'verifyDesignComponents.componentIsAboveComponent'(componentType, componentAboveName, componentBelowName){
 
-        const designComponentAbove = DesignComponents.findOne({componentType: componentType, componentName: componentAboveName});
-        const designComponentBelow = DesignComponents.findOne({componentType: componentType, componentName: componentBelowName});
+        const designComponentAbove = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentAboveName});
+        const designComponentBelow = DesignVersionComponents.findOne({componentType: componentType, componentNameNew: componentBelowName});
 
         // Components highest in the list have the lowest indexes
-        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
-        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
-        if(designComponentAbove.componentIndex >= designComponentBelow.componentIndex){
+        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndexNew);
+        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndexNew);
+        if(designComponentAbove.componentIndexNew >= designComponentBelow.componentIndexNew){
             //console.log("FAIL!");
             throw new Meteor.Error("FAIL", "Expected component " + componentAboveName + " to be above component " + componentBelowName + " in the list of " + componentType +"s");
         } else {
@@ -209,15 +209,15 @@ Meteor.methods({
         // Component MUST be selected first
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const selectedComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        const selectedComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
         const targetComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
 
         // Components highest in the list have the lowest indexes
-        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndex);
-        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndex);
-        if(selectedComponent.componentIndex >= targetComponent.componentIndex){
+        //console.log("Component " + componentAboveName + " has index " + designComponentAbove.componentIndexNew);
+        //console.log("Component " + componentBelowName + " has index " + designComponentBelow.componentIndexNew);
+        if(selectedComponent.componentIndexNew >= targetComponent.componentIndexNew){
             //console.log("FAIL!");
-            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentName + " to be above component " + targetComponent.componentName + " in the list of " + targetType +"s");
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentNameNew + " to be above component " + targetComponent.componentNameNew + " in the list of " + targetType +"s");
         } else {
             return true;
         }
@@ -228,10 +228,10 @@ Meteor.methods({
         // Component MUST be selected first
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const selectedComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        const selectedComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
 
         if(selectedComponent.updateMergeStatus != mergeStatus){
-            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentName + " to have merge status " + mergeStatus + " but found " + selectedComponent.updateMergeStatus);
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentNameNew + " to have merge status " + mergeStatus + " but found " + selectedComponent.updateMergeStatus);
         } else {
             return true;
         }
@@ -241,13 +241,13 @@ Meteor.methods({
         // Component MUST be selected first.  Note: can only test basic non-complex text here
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const selectedComponent = DesignComponents.findOne({_id: userContext.designComponentId});
+        const selectedComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
 
-        const rawDetails = selectedComponent.componentTextRaw;
+        const rawDetails = selectedComponent.componentTextRawNew;
         const plainDetails = rawDetails.blocks[0].text;
 
         if(plainDetails != detailsText){
-            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentName + " to have details text " + detailsText + " but found " + plainDetails);
+            throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentNameNew + " to have details text " + detailsText + " but found " + plainDetails);
         } else {
             return true;
         }
@@ -255,11 +255,11 @@ Meteor.methods({
 
     'verifyDesignComponents.featureNarrativeIs'(featureName, narrativeText){
 
-        const featureComponent = DesignComponents.findOne({componentType: ComponentType.FEATURE, componentName: featureName});
+        const featureComponent = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE, componentNameNew: featureName});
 
         let featureNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
         if(featureComponent){
-            featureNarrative = featureComponent.componentNarrative;
+            featureNarrative = featureComponent.componentNarrativeNew;
         }
 
         if(featureNarrative.trim() !=  narrativeText.trim()){

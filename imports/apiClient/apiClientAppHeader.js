@@ -3,7 +3,7 @@
 // Meteor / React Services
 
 // Ultrawide Collections
-import { DesignComponents } from '../collections/design/design_components.js';
+import { DesignVersionComponents } from '../collections/design/design_version_components.js';
 import { DesignUpdateComponents } from '../collections/design_update/design_update_components.js';
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
@@ -117,7 +117,7 @@ class ClientAppHeaderServices{
 
         if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
 
-            const designVersionOpenComponents = DesignComponents.find(
+            const designVersionOpenComponents = DesignVersionComponents.find(
                 {
                     designVersionId: userContext.designVersionId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
@@ -198,7 +198,7 @@ class ClientAppHeaderServices{
 
         if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
 
-            const designVersionOpenComponents = DesignComponents.find(
+            const designVersionOpenComponents = DesignVersionComponents.find(
                 {
                     designVersionId: userContext.designVersionId,
                     componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
@@ -253,9 +253,9 @@ class ClientAppHeaderServices{
     hasNoFeaturesDc(userContext, component){
 
         // Returns true if there are no features that are children of the component
-        return DesignComponents.find({
+        return DesignVersionComponents.find({
                 designVersionId: userContext.designVersionId,
-                componentParentReferenceId: component.componentReferenceId,
+                componentParentReferenceIdNew: component.componentReferenceId,
                 componentType: ComponentType.FEATURE
             }).count() === 0;
     }
@@ -277,7 +277,7 @@ class ClientAppHeaderServices{
         return WorkPackageComponents.find({
             designVersionId: userContext.designVersionId,
             workPackageId: userContext.workPackageId,
-            componentParentReferenceId: component.componentReferenceId,
+            componentParentReferenceIdNew: component.componentReferenceId,
             componentType: ComponentType.FEATURE
         }).count() === 0;
     }

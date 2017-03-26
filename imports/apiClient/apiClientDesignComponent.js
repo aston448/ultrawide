@@ -1,11 +1,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide collections
-import {DesignComponents}           from '../collections/design/design_components.js';
-import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
-import {UserUnitTestMashData}        from '../collections/dev/user_unit_test_mash_data.js';
-import {UserWorkPackageMashData}    from '../collections/dev/user_work_package_mash_data.js';
-//import {UserAccTestMashData}        from '../collections/dev/user_acc_test_mash_data.js';
+import {DesignVersionComponents}        from '../collections/design/design_version_components.js';
+import {DesignUpdateComponents}         from '../collections/design_update/design_update_components.js';
+import {UserUnitTestMashData}           from '../collections/dev/user_unit_test_mash_data.js';
+import {UserWorkPackageMashData}        from '../collections/dev/user_work_package_mash_data.js';
 
 // Ultrawide Services
 import { ComponentType, DisplayContext, MashTestStatus, LogLevel, MessageType} from '../constants/constants.js';
@@ -37,7 +36,7 @@ class ClientDesignComponentServices{
         // Client validation
         let result = DesignComponentValidationApi.validateUpdateComponentName(view, mode, designComponentId, newPlainText);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -300,12 +299,12 @@ class ClientDesignComponentServices{
     };
 
     // User clicked Add Scenario in either a Feature or Feature Aspect -------------------------------------------------
-    addScenario(view, mode, parentComponent){
+    addScenario(view, mode, parentComponent, workPackageId){
 
         // Client validation
         let result = DesignComponentValidationApi.validateAddDesignComponent(view, mode, ComponentType.SCENARIO);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -317,6 +316,7 @@ class ClientDesignComponentServices{
             mode,
             parentComponent.designVersionId,
             parentComponent._id,
+            workPackageId,
             (err, result) => {
 
                 if(err){
@@ -373,7 +373,7 @@ class ClientDesignComponentServices{
             view,
             mode,
             designComponent._id,
-            designComponent.componentParentId,
+            designComponent.componentParentIdNew,
             (err, result) => {
 
                 if(err){
@@ -499,9 +499,9 @@ class ClientDesignComponentServices{
             let componentParentRef = '';
 
             if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
-                component = DesignComponents.findOne({_id: newDesignComponentId});
-                componentFeatureRef = component.componentFeatureReferenceId;
-                componentParentRef = component.componentParentReferenceId;
+                component = DesignVersionComponents.findOne({_id: newDesignComponentId});
+                componentFeatureRef = component.componentFeatureReferenceIdNew;
+                componentParentRef = component.componentParentReferenceIdNew;
             } else {
                 component = DesignUpdateComponents.findOne({_id: newDesignComponentId});
                 componentFeatureRef = component.componentFeatureReferenceIdNew;
@@ -567,10 +567,10 @@ class ClientDesignComponentServices{
 
             // Open or close the whole feature
             if(setOpen) {
-                const featureComponents = DesignComponents.find(
+                const featureComponents = DesignVersionComponents.find(
                     {
                         designVersionId: designComponent.designVersionId,
-                        componentFeatureReferenceId: designComponent.componentReferenceId,
+                        componentFeatureReferenceIdNew: designComponent.componentReferenceId,
                         componentType: {$ne:(ComponentType.SCENARIO)}
                     }
                 );
@@ -634,10 +634,10 @@ class ClientDesignComponentServices{
     closeChildren(designComponent, currentList){
 
         // If component is open close it and move down to children
-        let childComponents = DesignComponents.find(
+        let childComponents = DesignVersionComponents.find(
             {
                 designVersionId: designComponent.designVersionId,
-                componentParentReferenceId: designComponent.componentReferenceId,
+                componentParentReferenceIdNew: designComponent.componentReferenceId,
                 componentType: {$ne: (ComponentType.SCENARIO)}
             }
         );
@@ -666,97 +666,6 @@ class ClientDesignComponentServices{
         }
     };
 
-    // User chose to refresh implementation progress data --------------------------------------------------------------
-    // getProgressData(designComponent, userContext){
-    //
-    //     switch(designComponent.componentType){
-    //         case ComponentType.FEATURE:
-    //             // Get number of Scenarios defined
-    //             const scenarioCount = DesignComponents.find({
-    //                 designVersionId:                designComponent.designVersionId,
-    //                 componentType:                  ComponentType.SCENARIO,
-    //                 componentFeatureReferenceId:    designComponent.componentReferenceId
-    //             }).count();
-    //
-    //             // Get number of passing tests
-    //             const passingUnitTestsCount = UserUnitTestMashData.find({
-    //                 userId:                         userContext.userId,
-    //                 designFeatureReferenceId:       designComponent.componentReferenceId,
-    //                 testOutcome:                    MashTestStatus.MASH_PASS
-    //             }).count();
-    //
-    //             const passingIntegrationTestsCount = UserWorkPackageMashData.find({
-    //                 userId:                         userContext.userId,
-    //                 designVersionId:                designComponent.designVersionId,
-    //                 designFeatureReferenceId:       designComponent.componentReferenceId,
-    //                 intMashTestStatus:                 MashTestStatus.MASH_PASS
-    //             }).count();
-    //
-    //             const passingAcceptanceTestsCount = UserAccTestMashData.find({
-    //                 userId:                         userContext.userId,
-    //                 designVersionId:                designComponent.designVersionId,
-    //                 designFeatureReferenceId:       designComponent.componentReferenceId,
-    //                 mashTestStatus:                 MashTestStatus.MASH_PASS
-    //             }).count();
-    //
-    //             // Get number of failing tests
-    //             const failingUnitTestsCount = UserUnitTestMashData.find({
-    //                 userId:                         userContext.userId,
-    //                 designFeatureReferenceId:       designComponent.componentReferenceId,
-    //                 testOutcome:                    MashTestStatus.MASH_FAIL
-    //             }).count();
-    //
-    //             const failingIntegrationTestsCount = UserWorkPackageMashData.find({
-    //                 userId:                         userContext.userId,
-    //                 designVersionId:                designComponent.designVersionId,
-    //                 designFeatureReferenceId:       designComponent.componentReferenceId,
-    //                 intMashTestStatus:                 MashTestStatus.MASH_FAIL
-    //             }).count();
-    //
-    //             const failingAcceptanceTestsCount = UserAccTestMashData.find({
-    //                 userId:                         userContext.userId,
-    //                 designVersionId:                designComponent.designVersionId,
-    //                 designFeatureReferenceId:       designComponent.componentReferenceId,
-    //                 mashTestStatus:                 MashTestStatus.MASH_FAIL
-    //             }).count();
-    //
-    //
-    //             log((msg) => console.log(msg), LogLevel.TRACE, "Progress for {}.  Pass: {} Fail: {} ", designComponent.componentName, passingUnitTestsCount + passingAcceptanceTestsCount + passingAcceptanceTestsCount, failingUnitTestsCount + failingIntegrationTestsCount + failingAcceptanceTestsCount);
-    //
-    //             return({
-    //                 featureCount:       0,
-    //                 scenarioCount:      scenarioCount,
-    //                 passingTestsCount:  passingUnitTestsCount + passingIntegrationTestsCount + passingAcceptanceTestsCount,
-    //                 failingTestsCount:  failingUnitTestsCount + failingIntegrationTestsCount + failingAcceptanceTestsCount
-    //             });
-    //         case ComponentType.DESIGN_SECTION:
-    //             // TODO - make this nesting compatible - currently only supports one level
-    //             // Get number of Features defined
-    //             const featureCount = DesignComponents.find({
-    //                 designVersionId:                designComponent.designVersionId,
-    //                 componentType:                  ComponentType.FEATURE,
-    //                 componentParentReferenceId:     designComponent.componentReferenceId
-    //             }).count();
-    //
-    //
-    //             return({
-    //                 featureCount:       featureCount,
-    //                 scenarioCount:      0,
-    //                 passingTestsCount:  0,
-    //                 failingTestsCount:  0
-    //             });
-    //
-    //         default:
-    //
-    //             return({
-    //                 featureCount:       0,
-    //                 scenarioCount:      0,
-    //                 passingTestsCount:  0,
-    //                 failingTestsCount:  0
-    //             });
-    //     }
-    //
-    // };
 
     getNewAndOldRawText(newText, oldText){
 

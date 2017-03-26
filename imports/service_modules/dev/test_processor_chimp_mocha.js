@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
 import {UserIntTestResults} from '../../collections/dev/user_int_test_results.js'
@@ -20,7 +20,7 @@ class ChimpMochaTestServices{
 
             // Are we working from an Initial Design or a Design Update?
             if(userContext.designUpdateId === 'NONE') {
-                feature = DesignComponents.findOne({_id: userContext.designComponentId});
+                feature = DesignVersionComponents.findOne({_id: userContext.designComponentId});
             } else {
                 feature = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
             }
@@ -30,7 +30,7 @@ class ChimpMochaTestServices{
                 return;
             }
 
-            const fileName = feature.componentName + '_spec.js';
+            const fileName = feature.componentNameNew + '_spec.js';
 
             log((msg) => console.log(msg), LogLevel.DEBUG, "Writing integration test file {}", fileName);
 
@@ -47,7 +47,7 @@ class ChimpMochaTestServices{
             let fileText = '';
 
             // Add the top parts
-            fileText += "describe('" + feature.componentName + "', function(){\n";
+            fileText += "describe('" + feature.componentNameNew + "', function(){\n";
             fileText += "\n";
             fileText += "    before(function(){\n\n";
             fileText += "    });";
@@ -70,20 +70,20 @@ class ChimpMochaTestServices{
             let featureAspects = [];
 
             if(userContext.designUpdateId === 'NONE') {
-                featureAspects = DesignComponents.find(
+                featureAspects = DesignVersionComponents.find(
                     {
                         componentType: ComponentType.FEATURE_ASPECT,
-                        componentFeatureReferenceId: feature.componentReferenceId
+                        componentFeatureReferenceIdNew: feature.componentReferenceId
                     },
-                    {sort: {componentIndex: 1}}
+                    {sort: {componentIndexNew: 1}}
                 ).fetch();
             } else {
                 featureAspects = DesignUpdateComponents.find(
                     {
                         componentType: ComponentType.FEATURE_ASPECT,
-                        componentFeatureReferenceId: feature.componentReferenceId
+                        componentFeatureReferenceIdNew: feature.componentReferenceId
                     },
-                    {sort: {componentIndex: 1}}
+                    {sort: {componentIndexNew: 1}}
                 ).fetch();
             }
 
@@ -93,31 +93,31 @@ class ChimpMochaTestServices{
                 let scenarios = [];
 
                 if(userContext.designUpdateId === 'NONE') {
-                    scenarios = DesignComponents.find(
+                    scenarios = DesignVersionComponents.find(
                         {
                             componentType: ComponentType.SCENARIO,
-                            componentParentReferenceId: aspect.componentReferenceId
+                            componentParentReferenceIdNew: aspect.componentReferenceId
                         },
-                        {sort: {componentIndex: 1}}
+                        {sort: {componentIndexNew: 1}}
                     ).fetch();
                 } else {
                     scenarios = DesignUpdateComponents.find(
                         {
                             componentType: ComponentType.SCENARIO,
-                            componentParentReferenceId: aspect.componentReferenceId
+                            componentParentReferenceIdNew: aspect.componentReferenceId
                         },
-                        {sort: {componentIndex: 1}}
+                        {sort: {componentIndexNew: 1}}
                     ).fetch();
                 }
 
                 // Add Feature aspect comment and scenarios if there are any
                 if(scenarios.length > 0) {
 
-                    fileText += "\n    // " + aspect.componentName + "\n";
+                    fileText += "\n    // " + aspect.componentNameNew + "\n";
 
                     scenarios.forEach((scenario) => {
 
-                        fileText += "    it('" + scenario.componentName + "');\n\n";
+                        fileText += "    it('" + scenario.componentNameNew + "');\n\n";
 
                     });
                 }

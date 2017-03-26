@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
@@ -19,11 +19,11 @@ import  DesignComponentServices     from '../../servicers/design/design_componen
 
 class DesignComponentModules{
 
-    addDefaultFeatureAspects(designVersionId, featureId, defaultRawText){
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawTextFor('Interface'), defaultRawText, false);
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawTextFor('Actions'), defaultRawText, false);
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawTextFor('Conditions'), defaultRawText, false);
-        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawTextFor('Consequences'), defaultRawText, false);
+    addDefaultFeatureAspects(designVersionId, featureId, defaultRawText, view){
+        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', this.getRawTextFor('Interface'), defaultRawText, false, view);
+        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', this.getRawTextFor('Actions'), defaultRawText, false, view);
+        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', this.getRawTextFor('Conditions'), defaultRawText, false, view);
+        DesignComponentServices.addNewComponent(designVersionId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', this.getRawTextFor('Consequences'), defaultRawText, false, view);
     }
 
     getRawTextFor(plainText){
@@ -51,7 +51,7 @@ class DesignComponentModules{
             workPackageType:    WorkPackageType.WP_BASE
         }).fetch();
 
-        const component = DesignComponents.findOne({_id: newComponentId});
+        const component = DesignVersionComponents.findOne({_id: newComponentId});
 
         workPackages.forEach((wp) => {
 
@@ -63,10 +63,10 @@ class DesignComponentModules{
                     componentId:                    component._id,
                     componentReferenceId:           component.componentReferenceId,
                     componentType:                  component.componentType,
-                    componentParentReferenceId:     component.componentParentReferenceId,
-                    componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                    componentParentReferenceId:     component.componentParentReferenceIdNew,
+                    componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                     componentLevel:                 component.componentLevel,
-                    componentIndex:                 component.componentIndex,
+                    componentIndex:                 component.componentIndexNew,
                     componentParent:                false,
                     componentActive:                false       // Start by assuming nothing in scope
                 }
@@ -76,7 +76,7 @@ class DesignComponentModules{
             if(component.componentType === ComponentType.SCENARIO || component.componentType === ComponentType.FEATURE_ASPECT){
 
                 // Get the Design parent
-                const parent = DesignComponents.findOne({_id: component.componentParentId});
+                const parent = DesignVersionComponents.findOne({_id: component.componentParentIdNew});
 
                 // Get the parent in the WP
                 const wpParent = WorkPackageComponents.findOne({workPackageId: wp._id, componentReferenceId: parent.componentReferenceId});
@@ -106,7 +106,7 @@ class DesignComponentModules{
 
     updateWorkPackageLocation(designComponentId, reorder){
 
-        const component = DesignComponents.findOne({_id: designComponentId});
+        const component = DesignVersionComponents.findOne({_id: designComponentId});
 
         // See if any base WPs affected by this update
         const workPackages = WorkPackages.find({
@@ -130,9 +130,9 @@ class DesignComponentModules{
                     {
                         $set:{
                             componentParentReferenceId:     component.componentParentReferenceId,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                             componentLevel:                 component.componentLevel,
-                            componentIndex:                 component.componentIndex,
+                            componentIndex:                 component.componentIndexNew,
                         }
                     },
                     {multi: true}
@@ -148,9 +148,9 @@ class DesignComponentModules{
                     {
                         $set:{
                             componentParentReferenceId:     component.componentParentReferenceId,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                             componentLevel:                 component.componentLevel,
-                            componentIndex:                 component.componentIndex,
+                            componentIndex:                 component.componentIndexNew,
                             componentParent:                false,      // Reset WP status
                             componentActive:                false
                         }
@@ -188,7 +188,7 @@ class DesignComponentModules{
 
     // Set any other components to no longer new
     setComponentsOld(designComponentId){
-        DesignComponents.update(
+        DesignVersionComponents.update(
             {
                 _id:     {$ne: designComponentId},
                 isNew:   true
@@ -212,32 +212,33 @@ class DesignComponentModules{
     }
 
     hasNoChildren(designComponentId){
-        return DesignComponents.find({componentParentId: designComponentId}).count() === 0;
+        return DesignVersionComponents.find({componentParentIdNew: designComponentId}).count() === 0;
     };
 
     setIndex(componentId, componentType, parentId){
 
         // Get the max index of OTHER components of this type under the same parent
-        const peerComponents = DesignComponents.find(
+        const peerComponents = DesignVersionComponents.find(
             {
                 _id: {$ne: componentId},
                 componentType: componentType,
-                componentParentId: parentId
+                componentParentIdNew: parentId
             },
-            {sort:{componentIndex: -1}}
+            {sort:{componentIndexNew: -1}}
         ).fetch();
 
         // If no components then leave as default
         if(peerComponents.length > 0){
-            //console.log("Highest peer is " + peerComponents[0].componentName);
+            //console.log("Highest peer is " + peerComponents[0].componentNameNew);
 
-            let newIndex = peerComponents[0].componentIndex + 100;
+            let newIndex = peerComponents[0].componentIndexNew + 100;
 
-            DesignComponents.update(
+            DesignVersionComponents.update(
                 {_id: componentId},
                 {
                     $set:{
-                        componentIndex: newIndex
+                        componentIndexOld: newIndex,
+                        componentIndexNew: newIndex
                     }
                 }
             );

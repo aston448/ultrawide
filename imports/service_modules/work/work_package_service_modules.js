@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
-import { DesignComponents }             from '../../collections/design/design_components.js';
+import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
@@ -24,7 +24,7 @@ class WorkPackageModules {
             case WorkPackageType.WP_BASE:
                 // Potential components are all those in base design version
 
-                let dvComponents = DesignComponents.find({designVersionId: designVersionId});
+                let dvComponents = DesignVersionComponents.find({designVersionId: designVersionId});
 
                 dvComponents.forEach((component) => {
 
@@ -36,10 +36,10 @@ class WorkPackageModules {
                             componentId:                    component._id,
                             componentReferenceId:           component.componentReferenceId,
                             componentType:                  component.componentType,
-                            componentParentReferenceId:     component.componentParentReferenceId,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceId,
+                            componentParentReferenceId:     component.componentParentReferenceIdNew,
+                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                             componentLevel:                 component.componentLevel,
-                            componentIndex:                 component.componentIndex,
+                            componentIndex:                 component.componentIndexNew,
                             componentParent:                false,
                             componentActive:                false       // Start by assuming nothing in scope
                         }
@@ -69,7 +69,7 @@ class WorkPackageModules {
                             componentReferenceId:           component.componentReferenceId,
                             componentType:                  component.componentType,
                             componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                             componentLevel:                 component.componentLevel,
                             componentIndex:                 component.componentIndexNew,
                             componentParent:                false,

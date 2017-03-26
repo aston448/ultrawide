@@ -62,7 +62,7 @@ export class DesignApplicationsList extends Component {
     }
 
     getDesignUpdateItem(application, displayContext){
-        if(displayContext === DisplayContext.UPDATABLE_VIEW){
+        if(displayContext === DisplayContext.WORKING_VIEW){
             return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(application);
         } else {
             return null;
@@ -118,7 +118,7 @@ export class DesignApplicationsList extends Component {
                 displayContext = DisplayContext.BASE_VIEW;
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
-                displayContext = DisplayContext.UPDATABLE_VIEW;
+                displayContext = DisplayContext.WORKING_VIEW;
                 break;
         }
 

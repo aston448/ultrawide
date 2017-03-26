@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js'
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js'
-import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
 import { DomainDictionary }         from '../../imports/collections/design/domain_dictionary.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
 import { ComponentType }            from '../../imports/constants/constants.js';

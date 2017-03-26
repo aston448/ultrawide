@@ -95,14 +95,15 @@ class ServerDesignComponentApi {
         );
     }
 
-    addScenario(view, mode, designVersionId, parentId, callback){
+    addScenario(view, mode, designVersionId, parentId, workPackageId, callback){
 
         addScenario.call(
             {
                 view: view,
                 mode: mode,
                 designVersionId: designVersionId,
-                parentId: parentId
+                parentId: parentId,
+                workPackageId: workPackageId
             },
             (err, result) => {
                 callback(err, result);

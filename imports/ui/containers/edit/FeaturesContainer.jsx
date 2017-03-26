@@ -40,18 +40,9 @@ class FeaturesList extends Component {
         super(props);
     };
 
-    getDesignItem(feature, displayContext){
-        // Design Item needed only in WP context (otherwise we already have it as the current item)
-        if(displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.DEV_DESIGN) {
-            return ClientWorkPackageComponentServices.getDesignItem(feature.componentId, feature.workPackageType);
-        } else {
-            return feature;
-        }
-    };
-
     getDesignUpdateItem(feature, displayContext, designUpdateId){
         switch(displayContext){
-            case  DisplayContext.UPDATABLE_VIEW:
+            case  DisplayContext.WORKING_VIEW:
                 return ClientDesignVersionServices.getDesignUpdateItemForUpdatableVersion(feature);
             case DisplayContext.UPDATE_SCOPE:
                 // See if this item is in scope - i.e. in the DU
@@ -60,6 +51,10 @@ class FeaturesList extends Component {
                 return feature;
         }
     };
+
+    getWpItem(feature, workPackageId){
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(feature._id, workPackageId);
+    }
 
     // A list of Features in a Design Section
     renderFeatures() {
@@ -100,8 +95,8 @@ class FeaturesList extends Component {
                     <DesignComponentTarget
                         key={feature._id}
                         currentItem={feature}
-                        designItem={this.getDesignItem(feature, displayContext)}
                         updateItem={this.getDesignUpdateItem(feature, displayContext, userContext.designUpdateId)}
+                        wpItem={this.getWpItem(feature, userContext.workPackageId)}
                         displayContext={displayContext}
                         view={view}
                         mode={mode}

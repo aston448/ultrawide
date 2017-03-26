@@ -118,7 +118,7 @@ export class DesignComponentHeader extends Component{
                     nextState.inScope === this.state.inScope &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen &&
-                    nextProps.currentItem.componentName === this.props.currentItem.componentName &&
+                    nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
@@ -218,8 +218,8 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
-                if (newProps.currentItem.componentName !== this.props.currentItem.componentName) {
-                    this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
+                if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
+                    this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 }
 
                 // if(newProps.currentProgressDataValue != this.props.currentProgressDataValue) {
@@ -231,8 +231,8 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_UPDATE_EDIT:
                 if(this.props.displayContext === DisplayContext.UPDATE_SCOPE){
                     // Base view.  Should not be updating
-                    if (newProps.currentItem.componentName !== this.props.currentItem.componentName) {
-                        this.updateTitleText(newProps, newProps.currentItem.componentNameRaw);
+                    if (newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew) {
+                        this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                     }
 
                     // // Reflect any changes in scope
@@ -258,7 +258,7 @@ export class DesignComponentHeader extends Component{
                 if(this.props.displayContext === DisplayContext.WP_SCOPE){
                     this.setState({inScope: newProps.currentItem.componentParent || newProps.currentItem.componentActive});
                 }
-                this.updateTitleText(newProps, newProps.designItem.componentNameRaw);
+                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
 
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
@@ -266,13 +266,13 @@ export class DesignComponentHeader extends Component{
                 if(newProps.displayContext === DisplayContext.WP_SCOPE){
                     this.setState({inScope: newProps.currentItem.componentParent || newProps.currentItem.componentActive});
                 }
-                this.updateTitleText(newProps, newProps.designItem.componentNameRawNew);
+                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
             case ViewType.DEVELOP_BASE_WP:
-                this.updateTitleText(newProps, newProps.designItem.componentNameRaw);
+                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
             case ViewType.DEVELOP_UPDATE_WP:
-                this.updateTitleText(newProps, newProps.designItem.componentNameRawNew);
+                this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
 
         }
@@ -351,18 +351,18 @@ export class DesignComponentHeader extends Component{
                 case ViewType.DESIGN_NEW_EDIT:
                 case ViewType.DESIGN_PUBLISHED_VIEW:
 
-                    existingRawText = props.currentItem.componentNameRaw;
+                    existingRawText = props.currentItem.componentNameRawNew;
                     break;
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     // If there is an item whose name has changed then create a new editor entry showing both
                     if(props.updateItem){
-                        if(props.updateItem.componentNameOld !== item.componentName) {
-                            existingRawText = this.getNewAndOldRawText(item.componentName, props.updateItem.componentNameOld);
+                        if(props.updateItem.componentNameOld !== item.componentNameNew) {
+                            existingRawText = this.getNewAndOldRawText(item.componentNameNew, props.updateItem.componentNameOld);
                         } else {
-                            existingRawText = props.currentItem.componentNameRaw;
+                            existingRawText = props.currentItem.componentNameRawNew;
                         }
                     } else {
-                        existingRawText = props.currentItem.componentNameRaw;
+                        existingRawText = props.currentItem.componentNameRawNew;
                     }
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
@@ -371,7 +371,7 @@ export class DesignComponentHeader extends Component{
                     switch(props.displayContext){
                         case  DisplayContext.UPDATE_SCOPE:
                             // Scope uses the base DV components
-                            existingRawText = props.currentItem.componentNameRaw;
+                            existingRawText = props.currentItem.componentNameRawNew;
                             break;
                         case DisplayContext.UPDATE_VIEW:
                         case DisplayContext.UPDATE_EDIT:
@@ -386,15 +386,11 @@ export class DesignComponentHeader extends Component{
                 case ViewType.WORK_PACKAGE_BASE_EDIT:
                 case ViewType.WORK_PACKAGE_BASE_VIEW:
                 case ViewType.DEVELOP_BASE_WP:
-                    // For Design WP name data comes from original Design Component
-                    existingRawText = props.designItem.componentNameRaw;
-                    break;
-
                 case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 case ViewType.DEVELOP_UPDATE_WP:
-                    // For Update WP name data comes from original Design Update Component
-                    existingRawText = props.designItem.componentNameRawNew;
+
+                    existingRawText = props.currentItem.componentNameRawNew;
                     break;
             }
 
@@ -566,11 +562,11 @@ export class DesignComponentHeader extends Component{
                 // Update the WP component(s)
                 const wpResult = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, currentItem._id, newScope);
 
-                if (wpResult.success){
-                    this.setState({inScope: newScope});
-                } else {
-                    this.setState({inScope: false});
-                }
+                // if (wpResult.success){
+                //     this.setState({inScope: newScope});
+                // } else {
+                //     this.setState({inScope: false});
+                // }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
 
@@ -587,21 +583,9 @@ export class DesignComponentHeader extends Component{
 
     };
 
-    // getProgressData(currentItem, userContext, view){
-    //     switch(view){
-    //         case ViewType.DESIGN_NEW_EDIT:
-    //         case ViewType.DESIGN_PUBLISHED_VIEW:
-    //             this.setState({progressData: ClientDesignComponentServices.getProgressData(currentItem, userContext)});
-    //             break;
-    //         case ViewType.DESIGN_UPDATE_EDIT:
-    //         case ViewType.DESIGN_UPDATE_VIEW:
-    //             // TODO
-    //     }
-    // }
-
     // Render the header of the design component - has tools in it depending on context
     render(){
-        const {currentItem, designItem, updateItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
+        const {currentItem, updateItem, wpItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
 
         // TODO - add all the tooltips required
         const tooltipEdit = (
@@ -614,12 +598,12 @@ export class DesignComponentHeader extends Component{
         // Determine the look of the item ------------------------------------------------------------------------------
 
         // Delete item greyed out if not removable but not if logically deleted in update  || (currentItem.isRemoved && view === ViewType.EDIT_UPDATE)
-        let deleteStyle = designItem.isRemovable ? 'red' : 'lgrey';
+        let deleteStyle = currentItem.isRemovable ? 'red' : 'lgrey';
 
 
         // For Work Packages only stuff added in WP is removable
         if(view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP){
-            deleteStyle = designItem.isRemovable && (designItem.isDevAdded || designItem.isDevUpdated) ? 'red' : 'lgrey';
+            deleteStyle = currentItem.isRemovable && (currentItem.isDevAdded || currentItem.isDevUpdated) ? 'red' : 'lgrey';
         }
 
         let inScope = false;
@@ -628,7 +612,7 @@ export class DesignComponentHeader extends Component{
         let isDeleted = false;
         let deleteGlyph = 'remove'; // Normal glyph for delete button
 
-        // Deleted Items ----------------------------------------
+        // Deleted Items for DU Edit ----------------------------------
 
         if(view === ViewType.DESIGN_UPDATE_EDIT){
 
@@ -676,8 +660,20 @@ export class DesignComponentHeader extends Component{
                 inParentScope = updateItem.isParentScope;
                 break;
             case DisplayContext.WP_SCOPE:
-                inScope = currentItem.componentActive;
-                inParentScope = currentItem.componentParent;
+                if(wpItem) {
+                    inScope = wpItem.componentActive;
+                    inParentScope = wpItem.componentParent;
+                } else {
+                    if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
+                        // Item is in sc0pe in another WP
+                        inScopeElsewhere = true;
+                    }
+                }
+                break;
+            case DisplayContext.WP_VIEW:
+                inScope = wpItem.componentActive;
+                inParentScope = wpItem.componentParent;
+                break;
         }
 
         // Determine how the check box is shown
@@ -693,7 +689,7 @@ export class DesignComponentHeader extends Component{
         }
 
         // Item main style ------------------------------------------
-        let itemStyle = getComponentClass(currentItem, updateItem, view, displayContext, false);
+        let itemStyle = getComponentClass(currentItem, updateItem, wpItem, view, displayContext, false);
 
 
         // Grey out original item when it is being dragged ----------
@@ -991,7 +987,7 @@ export class DesignComponentHeader extends Component{
                 // View only
                 designComponentElement = viewOnlyHeader;
                 break;
-            case DisplayContext.UPDATABLE_VIEW:
+            case DisplayContext.WORKING_VIEW:
                 // Progress view
                 designComponentElement = viewOnlyVersionProgressHeader;
                 break;
@@ -1155,8 +1151,8 @@ export class DesignComponentHeader extends Component{
 // Additional properties are added by React DnD collectSource
 DesignComponentHeader.propTypes = {
     currentItem: PropTypes.object.isRequired,
-    designItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
+    wpItem: PropTypes.object,
     isDragDropHovering: PropTypes.bool,
     onToggleOpen: PropTypes.func,
     onSelectItem: PropTypes.func,

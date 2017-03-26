@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 
 import {UserUnitTestMashData}            from '../../collections/dev/user_unit_test_mash_data.js';
@@ -41,7 +41,7 @@ class UnitTestServices{
 
         // Get relevant scenarios
         if(userContext.designUpdateId === 'NONE'){
-            designScenarios = DesignComponents.find({
+            designScenarios = DesignVersionComponents.find({
                 designVersionId:    userContext.designVersionId,
                 componentType:      ComponentType.SCENARIO
             }).fetch();
@@ -59,10 +59,10 @@ class UnitTestServices{
         designScenarios.forEach((designScenario) => {
             if(userContext.designUpdateId === 'NONE'){
                 designScenarioList.push({
-                    scenarioName:   designScenario.componentName,
+                    scenarioName:   designScenario.componentNameNew,
                     scenarioRef:    designScenario.componentReferenceId,
-                    aspectRef:      designScenario.componentParentReferenceId,
-                    featureRef:     designScenario.componentFeatureReferenceId,
+                    aspectRef:      designScenario.componentParentReferenceIdNew,
+                    featureRef:     designScenario.componentFeatureReferenceIdNew,
 
                 });
             } else {

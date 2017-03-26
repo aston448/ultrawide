@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import { DesignComponents }         from '../../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
@@ -57,7 +57,7 @@ class DesignUpdateComponentModules{
                     componentReferenceId:           component.componentReferenceId,
                     componentType:                  component.componentType,
                     componentParentReferenceId:     component.componentParentReferenceIdNew,
-                    componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                    componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                     componentLevel:                 component.componentLevel,
                     componentIndex:                 component.componentIndexNew,
                     componentParent:                false,
@@ -123,7 +123,7 @@ class DesignUpdateComponentModules{
                     {
                         $set:{
                             componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                             componentLevel:                 component.componentLevel,
                             componentIndex:                 component.componentIndexNew,
                         }
@@ -141,7 +141,7 @@ class DesignUpdateComponentModules{
                     {
                         $set:{
                             componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
                             componentLevel:                 component.componentLevel,
                             componentIndex:                 component.componentIndexNew,
                             componentParent:                false,      // Reset WP status
@@ -212,24 +212,24 @@ class DesignUpdateComponentModules{
             componentLevel:                 baseComponent.componentLevel,
             componentParentIdOld:           'NONE',                                             // To be corrected after
             componentParentIdNew:           'NONE',                                             // To be corrected after
-            componentParentReferenceIdOld:  baseComponent.componentParentReferenceId,
-            componentParentReferenceIdNew:  baseComponent.componentParentReferenceId,
-            componentFeatureReferenceIdOld: baseComponent.componentFeatureReferenceId,
-            componentFeatureReferenceIdNew: baseComponent.componentFeatureReferenceId,
-            componentIndexOld:              baseComponent.componentIndex,
-            componentIndexNew:              baseComponent.componentIndex,
+            componentParentReferenceIdOld:  baseComponent.componentParentReferenceIdNew,
+            componentParentReferenceIdNew:  baseComponent.componentParentReferenceIdNew,
+            componentFeatureReferenceIdOld: baseComponent.componentFeatureReferenceIdNew,
+            componentFeatureReferenceIdNew: baseComponent.componentFeatureReferenceIdNew,
+            componentIndexOld:              baseComponent.componentIndexNew,
+            componentIndexNew:              baseComponent.componentIndexNew,
 
             // Data
-            componentNameOld:               baseComponent.componentName,
-            componentNameNew:               baseComponent.componentName,
-            componentNameRawOld:            baseComponent.componentNameRaw,
-            componentNameRawNew:            baseComponent.componentNameRaw,
-            componentNarrativeOld:          baseComponent.componentNarrative,
-            componentNarrativeNew:          baseComponent.componentNarrative,
-            componentNarrativeRawOld:       baseComponent.componentNarrativeRaw,
-            componentNarrativeRawNew:       baseComponent.componentNarrativeRaw,
-            componentTextRawOld:            baseComponent.componentTextRaw,
-            componentTextRawNew:            baseComponent.componentTextRaw,
+            componentNameOld:               baseComponent.componentNameNew,
+            componentNameNew:               baseComponent.componentNameNew,
+            componentNameRawOld:            baseComponent.componentNameRawNew,
+            componentNameRawNew:            baseComponent.componentNameRawNew,
+            componentNarrativeOld:          baseComponent.componentNarrativeNew,
+            componentNarrativeNew:          baseComponent.componentNarrativeNew,
+            componentNarrativeRawOld:       baseComponent.componentNarrativeRawNew,
+            componentNarrativeRawNew:       baseComponent.componentNarrativeRawNew,
+            componentTextRawOld:            baseComponent.componentTextRawNew,
+            componentTextRawNew:            baseComponent.componentTextRawNew,
 
             // Update State
             isNew:                          false,
@@ -291,11 +291,11 @@ class DesignUpdateComponentModules{
         // Setting this component in scope
         // Set all parents to be in Parent Scope (unless already in scope themselves)
 
-        let parentId = DesignComponents.findOne({_id: childComponent._id}).componentParentId;
+        let parentId = DesignVersionComponents.findOne({_id: childComponent._id}).componentParentIdNew;
 
         if(parentId !== 'NONE'){
 
-            let parentComponent = DesignComponents.findOne({_id: parentId});
+            let parentComponent = DesignVersionComponents.findOne({_id: parentId});
 
             if(parentComponent) {
 
@@ -317,9 +317,9 @@ class DesignUpdateComponentModules{
 
     removeChildrenFromScope(parentComponent, designUpdateId){
 
-        let dvChildren = DesignComponents.find({
+        let dvChildren = DesignVersionComponents.find({
             designVersionId: parentComponent.designVersionId,
-            componentParentId: parentComponent._id
+            componentParentIdNew: parentComponent._id
         });
 
         dvChildren.forEach((child) => {
@@ -343,11 +343,11 @@ class DesignUpdateComponentModules{
         // Removing this component from scope
         // Remove all parents from scope unless they have other children still in scope
 
-        let parentId = DesignComponents.findOne({_id: childComponent._id}).componentParentId;
+        let parentId = DesignVersionComponents.findOne({_id: childComponent._id}).componentParentIdNew;
 
         if(parentId !== 'NONE'){
 
-            let parentComponent = DesignComponents.findOne({_id: parentId});
+            let parentComponent = DesignVersionComponents.findOne({_id: parentId});
 
             if(parentComponent) {
 

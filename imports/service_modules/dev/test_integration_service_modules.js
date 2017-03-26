@@ -1,6 +1,6 @@
 
 // Ultrawide Collections
-import { DesignComponents }                 from '../../collections/design/design_components.js';
+import { DesignVersionComponents }                 from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
 import { FeatureBackgroundSteps }           from '../../collections/design/feature_background_steps.js';
 import { ScenarioSteps }                    from '../../collections/design/scenario_steps.js';
@@ -439,7 +439,7 @@ class TestIntegrationModules{
             let wpDesignItems = WorkPackageComponents.find({
                 designVersionId:                userContext.designVersionId,
                 workPackageId:                  userContext.workPackageId,
-                componentFeatureReferenceId:    feature.componentReferenceId,
+                componentFeatureReferenceIdNew:    feature.componentReferenceId,
                 componentType:      { $in:[ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
                 $or: [{componentActive: true}, {componentParent: true}]
             }).fetch();
@@ -463,7 +463,7 @@ class TestIntegrationModules{
                 }
 
                 if(designItem.componentType === ComponentType.SCENARIO){
-                    aspectRef = designItem.componentParentReferenceId;
+                    aspectRef = designItem.componentParentReferenceIdNew;
                     scenarioRef = designItem.componentReferenceId;
                 }
 
@@ -479,9 +479,9 @@ class TestIntegrationModules{
                 let designComponentName = '';
                 if(userContext.designUpdateId === 'NONE'){
 
-                    designComponentName = DesignComponents.findOne({
+                    designComponentName = DesignVersionComponents.findOne({
                         _id: designItem.componentId
-                    }).componentName;
+                    }).componentNameNew;
 
                 } else {
 
@@ -495,11 +495,11 @@ class TestIntegrationModules{
                     itemName:       designComponentName,
                     itemType:       designItem.componentType,
                     itemRef:        designItem.componentReferenceId,
-                    itemParentRef:  designItem.componentParentReferenceId,
-                    featureRef:     designItem.componentFeatureReferenceId,
+                    itemParentRef:  designItem.componentParentReferenceIdNew,
+                    featureRef:     designItem.componentFeatureReferenceIdNew,
                     aspectRef:      aspectRef,
                     scenarioRef:    scenarioRef,
-                    index:          designItem.componentIndex,
+                    index:          designItem.componentIndexNew,
                     featureIndex:   currentFeatureIndex,
                     hasChildren:    hasChildren
                 });
@@ -509,15 +509,15 @@ class TestIntegrationModules{
 
             // Insert the Feature into the mash as the testing baseline
             let featureName = '';
-            let itemIndex = feature.componentIndex;
+            let itemIndex = feature.componentIndexNew;
 
             // Get the actual Feature name from the actual Design Component.
             // Note we don't denormalise this to avoid headache of name changes having to be propagated manually
             if(userContext.designUpdateId === 'NONE'){
 
-                featureName = DesignComponents.findOne({
+                featureName = DesignVersionComponents.findOne({
                     _id: feature.componentId
-                }).componentName;
+                }).componentNameNew;
 
             } else {
 

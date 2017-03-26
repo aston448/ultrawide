@@ -19,7 +19,7 @@ import MoveTarget               from './MoveTarget.jsx';
 import DesignComponentHeader    from './DesignComponentHeader.jsx';
 
 // Ultrawide Services
-import {ComponentType, ViewMode, ViewType, DisplayContext, LogLevel} from '../../../constants/constants.js';
+import {ComponentType, ViewMode, ViewType, DisplayContext, WorkPackageType, LogLevel} from '../../../constants/constants.js';
 import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
@@ -63,11 +63,6 @@ export class DesignComponent extends Component{
         // Do refresh if this specific component is gaining or losing focus
         let currentItemId = this.props.currentItem._id;
 
-        // But for WP need the Design Item Id
-        if(this.props.displayContext === DisplayContext.WP_VIEW || this.props.displayContext === DisplayContext.WP_SCOPE || this.props.displayContext === DisplayContext.DEV_DESIGN){
-            currentItemId = this.props.designItem._id;
-        }
-
         if((nextProps.userContext.designComponentId === currentItemId) && (this.props.userContext.designComponentId !== currentItemId)){
             return true;
         }
@@ -103,7 +98,7 @@ export class DesignComponent extends Component{
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
-                    nextProps.currentItem.componentName === this.props.currentItem.componentName &&
+                    nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
@@ -159,7 +154,7 @@ export class DesignComponent extends Component{
         switch(this.props.displayContext){
             case DisplayContext.BASE_EDIT:
                 if(this.props.currentItem.isNew){
-                    console.log("Opening DV item on mount" + this.props.currentItem.componentName);
+                    console.log("Opening DV item on mount" + this.props.currentItem.componentNameNew);
                     ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, true);
                 }
                 break;
@@ -295,12 +290,16 @@ export class DesignComponent extends Component{
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
+            case ViewType.DEVELOP_BASE_WP:
+
+                ClientWorkPackageComponentServices.setOpenClosed(WorkPackageType.WP_BASE, this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
+                break;
+
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-            case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
 
-                ClientWorkPackageComponentServices.setOpenClosed(this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
+                ClientWorkPackageComponentServices.setOpenClosed(WorkPackageType.WP_UPDATE, this.props.currentItem, this.props.openWorkPackageItems, !this.state.open);
                 break;
         }
 
@@ -373,12 +372,12 @@ export class DesignComponent extends Component{
     }
 
     // Add a new scenario to this component (Feature or Feature Aspect)
-    addScenario(view, mode, parentItem){
+    addScenario(view, mode, parentItem, userContext){
 
         switch(this.props.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DEVELOP_BASE_WP:
-                ClientDesignComponentServices.addScenario(view, mode, parentItem);
+                ClientDesignComponentServices.addScenario(view, mode, parentItem, userContext.workPackageId);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
                 ClientDesignUpdateComponentServices.addScenario(view, mode, parentItem);
@@ -393,37 +392,24 @@ export class DesignComponent extends Component{
     render() {
 
 
-        const {currentItem, designItem, updateItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, testDataFlag, currentViewDataValue} = this.props;
+        const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, testDataFlag, currentViewDataValue} = this.props;
 
-        console.log("Render " + view + "  DC in context " + displayContext + "with current item " + currentItem.componentName +  " and updateItem " + updateItem);
+        console.log("Render " + view + "  DC in context " + displayContext + "with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem);
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
         // Active component?  For Design Versions and Design Updates it is if the current user component is the Current Item
-        // For Work Packages it is if the current user component is the Design Item
-        // Don't highlight if Test Summary being shown to avoid clutter
-        let itemStyle = '';
-
-        let workPackageItem = (displayContext === DisplayContext.WP_VIEW || displayContext === DisplayContext.WP_SCOPE || displayContext === DisplayContext.DEV_DESIGN);
-
-        if(workPackageItem){
-            itemStyle = (designItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
-        } else {
-            itemStyle = (currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
-        }
-
-        // For work packages make sure the active component refers to the actual design component
-        let activeComponentId = workPackageItem ? designItem._id : currentItem._id;
+        let itemStyle = (currentItem._id === userContext.designComponentId ? 'design-component dc-active' : 'design-component');
 
         // Define the Index Item HEADER: Editable and possibly draggable component -------------------------------------
         let headerHtml =
             <div id="componentHeader" className={highlightStyle}>
                 <DesignComponentHeader
                     currentItem={currentItem}
-                    designItem={designItem}
                     updateItem={updateItem}
+                    wpItem={wpItem}
                     onToggleOpen={ () => this.toggleOpen()}
-                    onSelectItem={ () => this.setNewDesignComponentActive(activeComponentId, userContext, displayContext)}
+                    onSelectItem={ () => this.setNewDesignComponentActive(currentItem._id, userContext, displayContext)}
                     mode={mode}
                     view={view}
                     displayContext={displayContext}
@@ -453,22 +439,7 @@ export class DesignComponent extends Component{
             }
 
             // Determine the correct parent id
-            let parentId = null;
-
-            switch (view) {
-                case ViewType.WORK_PACKAGE_BASE_EDIT:
-                case ViewType.WORK_PACKAGE_BASE_VIEW:
-                case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                case ViewType.DEVELOP_BASE_WP:
-                case ViewType.DEVELOP_UPDATE_WP:
-                    // Parent Id is the Ref Id for a WP editor item
-                    parentId = currentItem.componentReferenceId;
-                    break;
-                default:
-                    // In all other cases it is the actual ID
-                    parentId = currentItem._id;
-            }
+            let parentId = currentItem._id;
 
             // Common components used:
             let designSectionsContainer =
@@ -492,29 +463,13 @@ export class DesignComponent extends Component{
                 }}/>;
 
 
-            // Use the original design item for narrative data in Work Package editing
-            let narrativeItem = workPackageItem ? designItem : currentItem;
-
-            let currentItemText = '';
-            if(userContext.designUpdateId === 'NONE'){
-                if(userContext.workPackageId === 'NONE'){
-                    currentItemText = currentItem.componentName;
-                } else {
-                    currentItemText = designItem.componentName;
-                }
-            } else {
-                if(userContext.workPackageId === 'NONE'){
-                    currentItemText = currentItem.componentNameNew;
-                } else {
-                    currentItemText = designItem.componentNameNew;
-                }
-            }
+            let currentItemText = currentItem.componentNameNew;
 
             let narrative =
                 <Narrative
-                    designComponent={narrativeItem}
-                    wpComponent={currentItem}
+                    designComponent={currentItem}
                     updateComponent={updateItem}
+                    wpComponent={wpItem}
                     mode={mode}
                     displayContext={displayContext}
                     view={view}
@@ -725,7 +680,7 @@ export class DesignComponent extends Component{
                                             <td id="addScenario" className="control-table-data-scenario">
                                                 <DesignComponentAdd
                                                     addText="Add scenario"
-                                                    onClick={ () => this.addScenario(view, mode, designItem)}
+                                                    onClick={ () => this.addScenario(view, mode, designItem, userContext)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -774,8 +729,8 @@ export class DesignComponent extends Component{
 
 DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
-    designItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
+    wpItem: PropTypes.object,
     isDragDropHovering: PropTypes.bool.isRequired,
     displayContext: PropTypes.string.isRequired,
     testSummary: PropTypes.bool.isRequired,

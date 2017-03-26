@@ -11,7 +11,7 @@ import { DesignUpdates }            from '../../imports/collections/design_updat
 import { DesignUpdateSummaries }    from '../../imports/collections/design_update/design_update_summaries.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
-import { DesignComponents }         from '../../imports/collections/design/design_components.js';
+import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { FeatureBackgroundSteps }   from '../../imports/collections/design/feature_background_steps.js';
 import { ScenarioSteps }            from '../../imports/collections/design/scenario_steps.js';
@@ -58,7 +58,7 @@ Meteor.methods({
             ScenarioSteps.remove({});
             FeatureBackgroundSteps.remove({});
             DesignUpdateComponents.remove({});
-            DesignComponents.remove({});
+            DesignVersionComponents.remove({});
             WorkPackageComponents.remove({});
             WorkPackages.remove({});
             DesignUpdateSummaries.remove({});
@@ -346,117 +346,117 @@ Meteor.methods({
 
         // Add Application1
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
-        const application1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
+        const application1Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentNameNew: DefaultComponentNames.NEW_APPLICATION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Application1');
         ClientDesignComponentServices.updateComponentName(view, mode, application1Component._id, 'Application1', rawName);
 
         // Add Application88 in case a removable App needed
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
-        const application88Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
+        const application88Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentNameNew: DefaultComponentNames.NEW_APPLICATION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Application88');
         ClientDesignComponentServices.updateComponentName(view, mode, application88Component._id, 'Application88', rawName);
 
         // Add Application99 in case a second Base App needed
         ClientDesignComponentServices.addApplicationToDesignVersion(view, mode, designVersion._id);
-        const application99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentName: DefaultComponentNames.NEW_APPLICATION_NAME});
+        const application99Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.APPLICATION, componentNameNew: DefaultComponentNames.NEW_APPLICATION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Application99');
         ClientDesignComponentServices.updateComponentName(view, mode, application99Component._id, 'Application99', rawName);
 
         // Add Section1
         ClientDesignComponentServices.addDesignSectionToApplication(view, mode, application1Component);
-        const section1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        const section1Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentNameNew: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Section1');
         ClientDesignComponentServices.updateComponentName(view, mode, section1Component._id, 'Section1', rawName);
 
         // Add Section2
         ClientDesignComponentServices.addDesignSectionToApplication(view, mode, application1Component);
-        const section2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        const section2Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentNameNew: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Section2');
         ClientDesignComponentServices.updateComponentName(view, mode, section2Component._id, 'Section2', rawName);
 
         // Add Section99
         ClientDesignComponentServices.addDesignSectionToApplication(view, mode, application99Component);
-        const section99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        const section99Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentNameNew: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('Section99');
         ClientDesignComponentServices.updateComponentName(view, mode, section99Component._id, 'Section99', rawName);
 
         // Add Feature1 to Section 1
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section1Component);
-        const feature1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
+        const feature1Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentNameNew: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature1');
         ClientDesignComponentServices.updateComponentName(view, mode, feature1Component._id, 'Feature1', rawName);
 
         // Add ExtraAspect to Feature1
         ClientDesignComponentServices.addFeatureAspectToFeature(view, mode, feature1Component);
-        const extraAspectComponent = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentName: DefaultComponentNames.NEW_FEATURE_ASPECT_NAME});
+        const extraAspectComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentNameNew: DefaultComponentNames.NEW_FEATURE_ASPECT_NAME});
         rawName = DesignComponentModules.getRawTextFor('ExtraAspect');
         ClientDesignComponentServices.updateComponentName(view, mode, extraAspectComponent._id, 'ExtraAspect', rawName);
 
         // Add Feature444 to Section 1
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section1Component);
-        const feature444Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
+        const feature444Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentNameNew: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature444');
         ClientDesignComponentServices.updateComponentName(view, mode, feature444Component._id, 'Feature444', rawName);
 
         // Add Feature2 to Section 2
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section2Component);
-        const feature2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
+        const feature2Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentNameNew: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature2');
         ClientDesignComponentServices.updateComponentName(view, mode, feature2Component._id, 'Feature2', rawName);
 
         // Add Feature99 to Section 99 - and make removable by removing Aspects
         ClientDesignComponentServices.addFeatureToDesignSection(view, mode, section99Component);
-        const feature99Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentName: DefaultComponentNames.NEW_FEATURE_NAME});
+        const feature99Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.FEATURE, componentNameNew: DefaultComponentNames.NEW_FEATURE_NAME});
         rawName = DesignComponentModules.getRawTextFor('Feature99');
         ClientDesignComponentServices.updateComponentName(view, mode, feature99Component._id, 'Feature99', rawName);
-        const feature99Aspects = DesignComponents.find({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentParentId: feature99Component._id}).fetch();
+        const feature99Aspects = DesignVersionComponents.find({designVersionId: designVersion._id, componentType: ComponentType.FEATURE_ASPECT, componentParentIdNew: feature99Component._id}).fetch();
         feature99Aspects.forEach((aspect) => {
             ClientDesignComponentServices.removeDesignComponent(view, mode, aspect, userContext)
         });
 
         // Add SubSection1 to Section1
         ClientDesignComponentServices.addSectionToDesignSection(view, mode, section1Component);
-        const subSection1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        const subSection1Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentNameNew: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('SubSection1');
         ClientDesignComponentServices.updateComponentName(view, mode, subSection1Component._id, 'SubSection1', rawName);
 
         // Add SubSection2 to Section2
         ClientDesignComponentServices.addSectionToDesignSection(view, mode, section2Component);
-        const subSection2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentName: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
+        const subSection2Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.DESIGN_SECTION, componentNameNew: DefaultComponentNames.NEW_DESIGN_SECTION_NAME});
         rawName = DesignComponentModules.getRawTextFor('SubSection2');
         ClientDesignComponentServices.updateComponentName(view, mode, subSection2Component._id, 'SubSection2', rawName);
 
         // Add Scenario1 to Feature1 Actions
-        const featureAspect1Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Actions', componentParentId: feature1Component._id});
-        ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component);
-        const scenario1Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
+        const featureAspect1Component = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: 'Actions', componentParentIdNew: feature1Component._id});
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component, 'NONE');
+        const scenario1Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario1');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario1Component._id, 'Scenario1', rawName);
 
         // Add Scenario7 to Feature1 Actions
-        ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component);
-        const Scenario7Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component, 'NONE');
+        const Scenario7Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario7');
         ClientDesignComponentServices.updateComponentName(view, mode, Scenario7Component._id, 'Scenario7', rawName);
 
         // Add Scenario2 to Feature1 Conditions
-        const featureAspect2Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Conditions', componentParentId: feature1Component._id});
-        ClientDesignComponentServices.addScenario(view, mode, featureAspect2Component);
-        const scenario2Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
+        const featureAspect2Component = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: 'Conditions', componentParentIdNew: feature1Component._id});
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect2Component, 'NONE');
+        const scenario2Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario2');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario2Component._id, 'Scenario2', rawName);
 
         // Add Scenario3 to Feature2 Actions
-        const featureAspect3Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Actions', componentParentId: feature2Component._id});
-        ClientDesignComponentServices.addScenario(view, mode, featureAspect3Component);
-        const scenario3Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
+        const featureAspect3Component = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: 'Actions', componentParentIdNew: feature2Component._id});
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect3Component, 'NONE');
+        const scenario3Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario3');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario3Component._id, 'Scenario3', rawName);
 
         // Add Scenario4 to Feature2 Conditions
-        const featureAspect4Component = DesignComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentName: 'Conditions', componentParentId: feature2Component._id});
-        ClientDesignComponentServices.addScenario(view, mode, featureAspect4Component);
-        const scenario4Component = DesignComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentName: DefaultComponentNames.NEW_SCENARIO_NAME});
+        const featureAspect4Component = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: 'Conditions', componentParentIdNew: feature2Component._id});
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect4Component, 'NONE');
+        const scenario4Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario4');
         ClientDesignComponentServices.updateComponentName(view, mode, scenario4Component._id, 'Scenario4', rawName);
     },

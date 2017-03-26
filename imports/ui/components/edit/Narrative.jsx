@@ -91,7 +91,7 @@ export default class Narrative extends React.Component {
             editorState: EditorState.createEmpty()
         };
 
-        //console.log(" NARRATIVE: " + props.designComponent.componentName + " : " + props.designComponent.componentNarrative);
+        //console.log(" NARRATIVE: " + props.designComponent.componentNameNew + " : " + props.designComponent.componentNarrativeNew);
 
         this.updateNarrativeText(props);
 
@@ -126,8 +126,8 @@ export default class Narrative extends React.Component {
         if(props.designComponent) {
 
             if(
-                ((props.displayContext === DisplayContext.WP_SCOPE) && !props.wpComponent.componentActive) ||
-                ((props.displayContext === DisplayContext.UPDATE_SCOPE) && !props.designComponent.isInScope)
+                ((props.displayContext === DisplayContext.WP_SCOPE) && !props.wpComponent) ||
+                ((props.displayContext === DisplayContext.UPDATE_SCOPE) && !props.updateComponent)
             ) {
                 // The narrative will be decorated as greyed out and no syntax highlighting...
                 compositeDecorator = new CompositeDecorator([
@@ -166,8 +166,8 @@ export default class Narrative extends React.Component {
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.DEVELOP_BASE_WP:
-                //console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
-                rawNarrative = props.designComponent.componentNarrativeRaw;
+                //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
+                rawNarrative = props.designComponent.componentNarrativeRawNew;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
@@ -175,8 +175,8 @@ export default class Narrative extends React.Component {
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
                 if(props.displayContext === DisplayContext.UPDATE_SCOPE){
-                    //console.log("Raw narrative is " + props.designComponent.componentNarrativeRaw);
-                    rawNarrative = props.designComponent.componentNarrativeRaw;
+                    //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
+                    rawNarrative = props.designComponent.componentNarrativeRawNew;
 
                 } else {
                     //console.log("Raw narrative is " + props.designComponent.componentNarrativeRawNew);
@@ -286,11 +286,11 @@ export default class Narrative extends React.Component {
     }
 
     render() {
-        const {designComponent, wpComponent, updateComponent, mode, displayContext, view, testSummary} = this.props;
+        const {designComponent, updateComponent, wpComponent, mode, displayContext, view, testSummary} = this.props;
 
         //console.log("Rendering Narrative with context " + displayContext);
 
-        let itemStyle = getComponentClass(wpComponent, updateComponent, view, displayContext, true);
+        let itemStyle = getComponentClass(designComponent, updateComponent, wpComponent, view, displayContext, true);
 
         let narrativeHtml = '';
 
@@ -391,8 +391,8 @@ export default class Narrative extends React.Component {
 
 Narrative.propTypes = {
     designComponent: PropTypes.object.isRequired,
-    wpComponent: PropTypes.object,
     updateComponent: PropTypes.object,
+    wpComponent: PropTypes.object,
     mode: PropTypes.string.isRequired,
     displayContext: PropTypes.string.isRequired,
     view: PropTypes.string.isRequired,

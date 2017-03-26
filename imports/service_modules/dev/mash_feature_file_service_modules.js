@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Ultrawide Collections
-import { DesignComponents }                 from '../../collections/design/design_components.js';
+import { DesignVersionComponents }                 from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
 import { FeatureBackgroundSteps }           from '../../collections/design/feature_background_steps.js';
 import { ScenarioSteps }                    from '../../collections/design/scenario_steps.js';
@@ -98,12 +98,12 @@ class MashFeatureFileModules{
                     );
                 } else {
                     // Working from a base design
-                    designFeature = DesignComponents.findOne(
+                    designFeature = DesignVersionComponents.findOne(
                         {
                             designId: userContext.designId,
                             designVersionId: userContext.designVersionId,
                             componentType: ComponentType.FEATURE,
-                            componentName: featureName
+                            componentNameNew: featureName
                         }
                     );
                 }
@@ -187,12 +187,12 @@ class MashFeatureFileModules{
 
                 if (userContext.designUpdateId === 'NONE') {
                     // Working from a base design
-                    designScenario = DesignComponents.findOne(
+                    designScenario = DesignVersionComponents.findOne(
                         {
                             designId: userContext.designId,
                             designVersionId: userContext.designVersionId,
                             componentType: ComponentType.SCENARIO,
-                            componentName: devScenario.scenario
+                            componentNameNew: devScenario.scenario
                         }
                     );
                 } else {
@@ -210,7 +210,7 @@ class MashFeatureFileModules{
 
                 if(designScenario){
                     if (userContext.designUpdateId === 'NONE') {
-                        devScenarioData.featureReferenceId = designScenario.componentFeatureReferenceId;
+                        devScenarioData.featureReferenceId = designScenario.componentFeatureReferenceIdNew;
                     } else {
                         devScenarioData.featureReferenceId = designScenario.componentFeatureReferenceIdNew;
                     }

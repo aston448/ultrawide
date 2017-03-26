@@ -2,7 +2,7 @@
 import fs from 'fs';
 
 // Ultrawide Collections
-import {DesignComponents}               from '../../collections/design/design_components.js';
+import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
 import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
 import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
 import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';

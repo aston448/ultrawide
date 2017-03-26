@@ -81,7 +81,7 @@ class DesignComponentText extends Component {
                     }
                 }
                 if(baseComponent){
-                    baseComponentFeatureReference = baseComponent.componentFeatureReferenceId;
+                    baseComponentFeatureReference = baseComponent.componentFeatureReferenceIdNew;
                 }
                 if(view === ViewType.WORK_PACKAGE_UPDATE_VIEW){
                     detailsClosable = false;
@@ -95,8 +95,8 @@ class DesignComponentText extends Component {
             case ViewType.DEVELOP_BASE_WP:
                 mainComponent = currentDesignComponent;
                 if(mainComponent) {
-                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceId;
-                    titleName = mainComponent.componentName;
+                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceIdNew;
+                    titleName = mainComponent.componentNameNew;
                     textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                 }
                 if(view === ViewType.WORK_PACKAGE_BASE_VIEW){
@@ -108,8 +108,8 @@ class DesignComponentText extends Component {
                 // Possible New and Old Details here where Design Update has been merged
                 mainComponent = currentDesignComponent;
                 if(mainComponent) {
-                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceId;
-                    titleName = mainComponent.componentName;
+                    mainComponentFeatureReference = mainComponent.componentFeatureReferenceIdNew;
+                    titleName = mainComponent.componentNameNew;
                     textTitle = TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                     if(mainComponent.isRemoved){
                         textTitle = textTitle + ' (REMOVED)';
@@ -120,7 +120,7 @@ class DesignComponentText extends Component {
                     // If there is a change, then the new title should say NEW
                     textTitle = 'NEW: ' + TextLookups.componentTypeName(mainComponent.componentType) + ' - ' + titleName;
                     titleNameOld = baseComponent.componentNameOld;
-                    baseComponentFeatureReference = baseComponent.componentFeatureReferenceId;
+                    baseComponentFeatureReference = baseComponent.componentFeatureReferenceIdNew;
                 }
                 break;
             default:

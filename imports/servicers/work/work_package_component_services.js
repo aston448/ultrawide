@@ -1,9 +1,10 @@
 
 // Ultrawide Collections
-import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
-
+import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
+import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
+import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 // Ultrawide Services
-import { ComponentType }            from '../../constants/constants.js';
+import { ComponentType, ViewType }            from '../../constants/constants.js';
 
 import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
 
@@ -18,11 +19,23 @@ import  WorkPackageModules          from '../../service_modules/work/work_packag
 class WorkPackageComponentServices{
 
     // Store the scope state of a WP component
-    toggleScope(wpComponentId, newScope){
+    //TODO - pass in view.  Fix validation...
+    toggleScope(wpComponentId, view, newScope){
 
         if(Meteor.isServer) {
 
-            const wpComponent = WorkPackageComponents.findOne({_id: wpComponentId});
+            let wpComponent = null;
+
+            switch(view){
+                case ViewType.WORK_PACKAGE_BASE_EDIT:
+                    wpComponent = DesignVersionComponents.findOne({_id: wpComponentId});
+                    break;
+                case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                    wpComponent = DesignUpdateComponents.findOne({_id: wpComponentId});
+                    break;
+            }
+
+            //TODO - Sort this out to add and remove WP components as required...
 
             if (wpComponent) {
                 let startingComponentRef = wpComponent.componentReferenceId;

@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
 import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
-import { DesignComponents }         from '../collections/design/design_components.js';
+import { DesignVersionComponents }         from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
 import { DesignUpdateComponentValidationErrors } from '../constants/validation_errors.js';
@@ -124,7 +124,7 @@ class DesignUpdateComponentValidationApi{
 
     validateToggleDesignUpdateComponentScope(view, mode, displayContext, baseComponentId, designUpdateId, updateComponent, newScope){
 
-        const designComponent = DesignComponents.findOne({_id: baseComponentId});
+        const designComponent = DesignVersionComponents.findOne({_id: baseComponentId});
 
         let hasNoNewChildren = true;
 
