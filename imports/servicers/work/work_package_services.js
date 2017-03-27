@@ -33,14 +33,6 @@ class WorkPackageServices{
                 }
             );
 
-            // if(workPackageId){
-            //
-            //     // Now populate the work package components
-            //     if (populateWp) {
-            //         WorkPackageModules.populateWorkPackageComponents(workPackageId, designVersionId, designUpdateId, wpType);
-            //     }
-            // }
-
             return workPackageId;
         }
     };
@@ -79,10 +71,9 @@ class WorkPackageServices{
                     componentId: designComponentId,
                     componentReferenceId: wpComponent.componentReferenceId,
                     componentParentReferenceId: wpComponent.componentParentReferenceId,
-                    componentFeatureReferenceIdNew: wpComponent.componentFeatureReferenceIdNew,
+                    componentFeatureReferenceId: wpComponent.componentFeatureReferenceId,
                     componentType: wpComponent.componentType,
-                    componentLevel: wpComponent.componentLevel,
-                    componentIndex: wpComponent.componentIndexNew,
+                    componentIndex: wpComponent.componentIndex,
 
                     // Status
                     componentParent: wpComponent.componentParent,

@@ -161,7 +161,7 @@ export class DesignComponentHeader extends Component{
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
+                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.isOpen === this.props.isOpen
@@ -197,7 +197,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DEVELOP_BASE_WP:
                 // A new component is automatically editable
-                if (this.props.designItem.isNew) {
+                if (this.props.currentItem.isNew) {
                     this.editComponentName();
                 }
                 break;
@@ -288,15 +288,6 @@ export class DesignComponentHeader extends Component{
         let currentContent = {};
         let compositeDecorator = null;
         let item = props.currentItem;
-
-        // For Work Package items the item needed for decoration is the Design Item
-        if(
-            props.displayContext === DisplayContext.WP_SCOPE ||
-            props.displayContext === DisplayContext.WP_VIEW ||
-            props.displayContext === DisplayContext.DEV_DESIGN
-        ){
-            item = props.designItem;
-        }
 
         // Decoration for Scenarios only - and not if greyed out in WP scope
         if(props.currentItem.componentType === ComponentType.SCENARIO) {
@@ -500,7 +491,7 @@ export class DesignComponentHeader extends Component{
         let plainText = this.state.editorState.getCurrentContent().getPlainText();
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
 
-        let item = this.props.designItem;
+        let item = this.props.currentItem;
 
         let result = {};
 
@@ -548,7 +539,7 @@ export class DesignComponentHeader extends Component{
     };
 
     // In scope view only, sets an item as in or out of scope for a Design Update or Work Package
-    toggleScope(view, mode, displayContext, currentItem, designUpdateId, updateItem, newScope){
+    toggleScope(view, mode, displayContext, userContext, currentItem, updateItem, newScope){
 
         //TODO: warning box if descoping changed item - do you want to revert to base view?
 
@@ -560,25 +551,13 @@ export class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
 
                 // Update the WP component(s)
-                const wpResult = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, currentItem._id, newScope);
+                const wpResult = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, currentItem._id, newScope);
 
-                // if (wpResult.success){
-                //     this.setState({inScope: newScope});
-                // } else {
-                //     this.setState({inScope: false});
-                // }
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
 
                 // Update the Design Update component
-                const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, designUpdateId, updateItem, newScope);
-
-                // if(duResult.success){
-                //     this.setState({inScope: newScope});
-                // } else {
-                //     this.setState({inScope: oldScope});
-                // }
-
+                const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, userContext.designUpdateId, updateItem, newScope);
         }
 
     };
@@ -609,6 +588,7 @@ export class DesignComponentHeader extends Component{
         let inScope = false;
         let inParentScope = false;
         let inScopeElsewhere = false;
+        let nextScope = false;
         let isDeleted = false;
         let deleteGlyph = 'remove'; // Normal glyph for delete button
 
@@ -654,6 +634,8 @@ export class DesignComponentHeader extends Component{
                     }
                 }
 
+                nextScope = !inScope;
+
                 break;
             case DisplayContext.UPDATE_EDIT:
                 inScope = updateItem.isInScope;
@@ -669,6 +651,8 @@ export class DesignComponentHeader extends Component{
                         inScopeElsewhere = true;
                     }
                 }
+
+                nextScope = !inScope;
                 break;
             case DisplayContext.WP_VIEW:
                 inScope = wpItem.componentActive;
@@ -768,7 +752,7 @@ export class DesignComponentHeader extends Component{
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, currentItem, userContext.designUpdateId, updateItem, !inScope)}>
+                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem, updateItem, !inScope)}>
                         <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
                     </InputGroup.Addon>
                     <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
@@ -855,7 +839,7 @@ export class DesignComponentHeader extends Component{
                                 <div className="blue"><Glyphicon glyph="edit"/></div>
                             </OverlayTrigger>
                         </InputGroup.Addon>
-                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                             <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
@@ -889,7 +873,7 @@ export class DesignComponentHeader extends Component{
                                 <div className="blue"><Glyphicon glyph="edit"/></div>
                             </OverlayTrigger>
                         </InputGroup.Addon>
-                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                             <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                         </InputGroup.Addon>
                         <InputGroup.Addon>
@@ -926,7 +910,7 @@ export class DesignComponentHeader extends Component{
                             <div className="blue"><Glyphicon glyph="edit"/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
-                    <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, designItem, userContext)}>
+                    <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
                         <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon>
@@ -992,7 +976,6 @@ export class DesignComponentHeader extends Component{
                 designComponentElement = viewOnlyVersionProgressHeader;
                 break;
             case DisplayContext.UPDATE_EDIT:
-            case DisplayContext.BASE_EDIT:
                 // Component displayed as part of Editor
                 switch (mode){
                     case  ViewMode.MODE_VIEW:
@@ -1004,7 +987,7 @@ export class DesignComponentHeader extends Component{
                         // Only editable if in scope for an update.  For new design all is in scope.
                         if(inScope) {
                             // Editable component
-                            if (this.state.editable  && inScope) {
+                            if (this.state.editable) {
                                 // Being edited now...
                                 designComponentElement = editingHeader;
 
@@ -1019,6 +1002,28 @@ export class DesignComponentHeader extends Component{
                         break;
                 }
                 break;
+            case DisplayContext.BASE_EDIT:
+                // Component displayed as part of Editor
+                switch (mode){
+                    case  ViewMode.MODE_VIEW:
+                        // View only
+                        designComponentElement = viewOnlyHeader;
+                        break;
+
+                    case ViewMode.MODE_EDIT:
+
+                        // Editable component
+                        if (this.state.editable) {
+                            // Being edited now...
+                            designComponentElement = editingHeader;
+
+                        } else {
+                            // Not being edited now
+                            designComponentElement = draggableHeader;
+                        }
+                        break;
+                }
+                break;
             case DisplayContext.DEV_DESIGN:
                 // Scenarios are editable
                 switch (mode){
@@ -1029,7 +1034,7 @@ export class DesignComponentHeader extends Component{
 
                     case ViewMode.MODE_EDIT:
                         // Scenarios and new Feature Aspects are editable.
-                        if(designItem.componentType === ComponentType.SCENARIO || (designItem.componentType === ComponentType.FEATURE_ASPECT && designItem.isDevAdded)) {
+                        if(currentItem.componentType === ComponentType.SCENARIO || (currentItem.componentType === ComponentType.FEATURE_ASPECT && currentItem.isDevAdded)) {
                             // Editable component
                             if (this.state.editable) {
                                 // Being edited now...

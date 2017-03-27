@@ -235,13 +235,13 @@ export class DesignEditorHeader extends Component {
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 
-                if(displayContext === DisplayContext.WP_VIEW){
+                //if(displayContext === DisplayContext.WP_VIEW){
                     options =
                         <div className="details-menu-bar">
                             {zoomFeaturesOption}
                             {zoomSectionsOption}
                         </div>;
-                }
+                //}
                 break;
             default:
                 options = '';

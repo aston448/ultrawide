@@ -77,21 +77,29 @@ class WorkPackageApplicationsList extends Component {
 
     // A list of top level applications in the work package view
     renderViewApplications(wpViewApplications, displayContext, view, mode, userContext, testSummary) {
-        return wpViewApplications.map((application) => {
-            return (
-                <DesignComponentTarget
-                    key={application._id}
-                    currentItem={application}
-                    updateItem={null}
-                    wpItem={this.getWpItem(application, userContext.workPackageId)}
-                    displayContext={displayContext}
-                    view={view}
-                    mode={mode}
-                    testSummary={testSummary}
-                    testSummaryData={null}
-                />
-            );
-        });
+
+        if(wpViewApplications.length > 0) {
+
+            console.log("rendering view apps");
+
+            return wpViewApplications.map((application) => {
+                return (
+                    <DesignComponentTarget
+                        key={application._id}
+                        currentItem={application}
+                        updateItem={null}
+                        wpItem={this.getWpItem(application, userContext.workPackageId)}
+                        displayContext={displayContext}
+                        view={view}
+                        mode={mode}
+                        testSummary={testSummary}
+                        testSummaryData={null}
+                    />
+                );
+            });
+        } else {
+            console.log("no view apps");
+        }
     }
 
     render() {

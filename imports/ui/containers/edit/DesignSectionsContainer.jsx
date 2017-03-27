@@ -60,28 +60,29 @@ class DesignSectionsList extends Component {
     renderDesignSections() {
         const {components, displayContext, view, mode, viewOptions, userContext} = this.props;
 
-        // Get the appropriate test summary flag for the view
-        let testSummary = false;
-
-        switch(view){
-            case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
-                testSummary = viewOptions.designTestSummaryVisible;
-                break;
-            case ViewType.DESIGN_UPDATE_EDIT:
-            case ViewType.DESIGN_UPDATE_VIEW:
-                testSummary = viewOptions.updateTestSummaryVisible;
-                break;
-            case ViewType.DEVELOP_BASE_WP:
-            case ViewType.DEVELOP_UPDATE_WP:
-            case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                testSummary = viewOptions.devTestSummaryVisible;
-                break;
-        }
-
         if(components.length > 0) {
+
+            // Get the appropriate test summary flag for the view
+            let testSummary = false;
+
+            switch(view){
+                case ViewType.DESIGN_NEW_EDIT:
+                case ViewType.DESIGN_PUBLISHED_VIEW:
+                case ViewType.DESIGN_UPDATABLE_VIEW:
+                    testSummary = viewOptions.designTestSummaryVisible;
+                    break;
+                case ViewType.DESIGN_UPDATE_EDIT:
+                case ViewType.DESIGN_UPDATE_VIEW:
+                    testSummary = viewOptions.updateTestSummaryVisible;
+                    break;
+                case ViewType.DEVELOP_BASE_WP:
+                case ViewType.DEVELOP_UPDATE_WP:
+                case ViewType.WORK_PACKAGE_BASE_VIEW:
+                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                    testSummary = viewOptions.devTestSummaryVisible;
+                    break;
+            }
+
             return components.map((designSection) => {
 
                 return (

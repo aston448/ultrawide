@@ -109,14 +109,14 @@ class DesignComponentServices{
                     DesignServices.setRemovable(designId);
 
                     // Update the WP before adding the Feature Aspects
-                    //DesignComponentModules.updateWorkPackages(designVersionId, designComponentId);
+                    DesignComponentModules.updateWorkPackagesWithNewItem(designVersionId, designComponentId);
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
                     DesignComponentModules.addDefaultFeatureAspects(designVersionId, designComponentId, defaultRawText, view);
                 } else {
                     // Check for any WPs in this design version and add the components to them too
-                    //DesignComponentModules.updateWorkPackages(designVersionId, designComponentId)
+                    DesignComponentModules.updateWorkPackagesWithNewItem(designVersionId, designComponentId)
                 }
 
                 // When inserting a new design component its parent becomes non-removable
@@ -290,7 +290,7 @@ class DesignComponentServices{
                 }
 
                 // Make sure this component is also moved in any work packages
-                //DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
+                DesignComponentModules.updateWorkPackageLocation(designComponentId, false);
             } else {
                 throw new Meteor.Error('designComponent.moveDesignComponent.noComponent', 'Design Component did not exist', designComponentId)
             }
@@ -382,7 +382,7 @@ class DesignComponentServices{
                 }
 
                 // Remove component from any related work packages
-                // DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
+                DesignComponentModules.removeWorkPackageItems(designComponent._id, designComponent.designVersionId);
 
                 // If this happened to be the last Feature, Design is now removable
                 if (designComponent.componentType === ComponentType.FEATURE) {
@@ -455,7 +455,7 @@ class DesignComponentServices{
             );
 
             // Update any WPs with new ordering
-            //DesignComponentModules.updateWorkPackageLocation(componentId, true);
+            DesignComponentModules.updateWorkPackageLocation(componentId, true);
 
 
             // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.

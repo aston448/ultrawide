@@ -24,6 +24,7 @@ import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUp
 import ClientDesignUpdateComponentServices  from '../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageServices            from '../apiClient/apiClientWorkPackage.js';
 import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPackageComponent.js';
+import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -216,29 +217,16 @@ class ClientUserContextServices {
 
             // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
 
-            // All Design Versions
-            const designVersionOpenComponents = DesignVersionComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
-
-                },
-                {fields: {_id: 1}}
-            );
-
-
-            designVersionOpenComponents.forEach((component) => {
-                dvArr.push(component._id);
-            });
+            dvArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
 
             // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
             log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
-            if (userContext.designComponentId != 'NONE') {
+            if (userContext.designComponentId !== 'NONE') {
 
                 // There is a current component...
-                if (userContext.designVersionId != 'NONE') {
+                if (userContext.designVersionId !== 'NONE') {
 
                     let dvComponent = DesignVersionComponents.findOne({
                         _id: userContext.designComponentId
@@ -306,31 +294,16 @@ class ClientUserContextServices {
         try {
 
             // Set all Applications and Design Sections to be open
-
-            // All Design Updates in current design version and update
-            const designUpdateOpenComponents = DesignUpdateComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-                },
-                {fields: {_id: 1}}
-            );
-
-
-            designUpdateOpenComponents.forEach((component) => {
-                duArr.push(component._id);
-            });
-
+            duArr = ClientAppHeaderServices.getDesignUpdateFeatures(userContext);
 
             // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
             log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
-            if (userContext.designComponentId != 'NONE') {
+            if (userContext.designComponentId !== 'NONE') {
 
                 // There is a current component...
-                if (userContext.designUpdateId != 'NONE') {
+                if (userContext.designUpdateId !== 'NONE') {
 
                     // In a Design update so open to the DU component
 
@@ -407,33 +380,32 @@ class ClientUserContextServices {
             // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
 
 
-            // Work Packages - open in scope items down to Feature level
-            const workPackageOpenComponents = WorkPackageComponents.find(
-                {
-                    $or: [{componentActive: true}, {componentParent: true}],
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-
-                },
-                {fields: {_id: 1}}
-            );
-
-            workPackageOpenComponents.forEach((component) => {
-                wpArr.push(component._id);
-            });
-
+            // Work Packages - open in scope items down to Section Level
+            if(userContext.designUpdateId === 'NONE'){
+                wpArr = ClientAppHeaderServices.getDesignVersionSections(userContext);
+            } else {
+                wpArr = ClientAppHeaderServices.getDesignUpdateSections(userContext);
+            }
 
             // Plus for the actual open item context, open all the way down to that item
             log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
                 userContext.designComponentId, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId);
 
-            if (userContext.designComponentId != 'NONE') {
+            if (userContext.designComponentId !== 'NONE') {
                 // There is a current component...
-                if (userContext.workPackageId != 'NONE') {
+                if (userContext.workPackageId !== 'NONE') {
                     // User is in a WP so drill down to that item...
 
-                    let wpComponent = WorkPackageComponents.findOne({
-                        componentId: userContext.designComponentId
-                    });
+                    let wpComponent = null;
+                    let wpType = '';
+
+                    if(userContext.designUpdateId === 'NONE'){
+                        wpComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
+                        wpType = WorkPackageType.WP_BASE;
+                    } else {
+                        wpComponent = DesignUpdateComponents.findOne({_id: userContext.designComponentId});
+                        wpType = WorkPackageType.WP_UPDATE;
+                    }
 
                     if(wpComponent) {
 
@@ -445,14 +417,25 @@ class ClientUserContextServices {
                                 break;
                             case ComponentType.FEATURE:
                                 // Open it and all stuff below
-                                wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpComponent, wpArr, true);
+                                wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpType, wpComponent, wpArr, true);
                                 break;
                             default:
                                 // Anything else is below a Feature so open the Feature and select that
-                                const wpFeatureComponent = WorkPackageComponents.findOne({
-                                    workPackageId:          wpComponent.workPackageId,
-                                    componentReferenceId:   wpComponent.componentFeatureReferenceIdNew
-                                });
+                                let wpFeatureComponent = null;
+
+                                if(userContext.designUpdateId === 'NONE'){
+                                    wpFeatureComponent = DesignVersionComponents.findOne({
+                                        designVersionId: userContext.designVersionId,
+                                        componentType: ComponentType.FEATURE,
+                                        componentReferenceId: wpComponent.componentFeatureReferenceIdNew
+                                    });
+                                } else {
+                                    wpFeatureComponent = DesignUpdateComponents.findOne({
+                                        designVersionId: userContext.designVersionId,
+                                        componentType: ComponentType.FEATURE,
+                                        componentReferenceId: wpComponent.componentFeatureReferenceIdNew
+                                    });
+                                }
 
                                 if(wpFeatureComponent){
                                     // Reset user context.  Feature id is the DESIGN component ID, not the WP component ID
@@ -466,7 +449,7 @@ class ClientUserContextServices {
                                     store.dispatch(setCurrentUserItemContext(userContext, true));
 
                                     // Open the feature
-                                    wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpFeatureComponent, wpArr, true);
+                                    wpArr = ClientWorkPackageComponentServices.setOpenClosed(wpType, wpFeatureComponent, wpArr, true);
                                 }
                         }
                     }

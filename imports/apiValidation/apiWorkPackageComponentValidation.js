@@ -1,8 +1,10 @@
 // Ultrawide Collections
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
+import { DesignVersionComponents }      from '../collections/design/design_version_components.js';
+import { DesignUpdateComponents }       from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ComponentType } from '../constants/constants.js';
+import { ComponentType, ViewType } from '../constants/constants.js';
 import { WorkPackageComponentValidationErrors } from '../constants/validation_errors.js';
 import WorkPackageComponentValidationServices from '../service_modules/validation/work_package_component_validation_services.js';
 
@@ -14,26 +16,22 @@ import WorkPackageComponentValidationServices from '../service_modules/validatio
 
 class WorkPackageComponentValidationApi {
 
-    validateToggleInScope(view, displayContext, wpComponentId){
+    validateToggleInScope(view, displayContext, userContext, designComponentId){
 
-        // Need to return a fail if user is trying to add a specific scenario that is already in scope elsewhere
-        const workPackageComponent = WorkPackageComponents.findOne({_id: wpComponentId});
+        // Get the design component being toggled
+        let designComponent = null;
+        let wpType = '';
 
-        if(workPackageComponent.componentType === ComponentType.SCENARIO && !workPackageComponent.componentActive){
-            // See if this Scenario is already in scope elsewhere
-            const otherInstances = WorkPackageComponents.find({
-                _id:                    {$ne: workPackageComponent._id},            // Not same WP item
-                designVersionId:        workPackageComponent.designVersionId,       // Same Base Design Version
-                componentReferenceId:   workPackageComponent.componentReferenceId,  // Same component
-                componentActive:        true                                        // Already in scope
-            }).fetch();
-
-            if(otherInstances.length > 0){
-                return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE;
-            }
+        switch(view){
+            case ViewType.WORK_PACKAGE_BASE_EDIT:
+                designComponent = DesignVersionComponents.findOne({_id: designComponentId});
+                break;
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+                designComponent = DesignUpdateComponents.findOne({_id: designComponentId});
+                break;
         }
 
-        return WorkPackageComponentValidationServices.validateToggleInScope(view, displayContext)
+        return WorkPackageComponentValidationServices.validateToggleInScope(view, displayContext, userContext, designComponent)
     };
 }
 

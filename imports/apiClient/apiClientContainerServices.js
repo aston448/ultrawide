@@ -704,7 +704,6 @@ class ClientContainerServices{
 
         // Get WP Data if WP Id provided
         let wpApplicationsArr = [];
-        let wpApplicationComponentsArr = [];
 
         if(userContext.workPackageId !== 'NONE'){
 
@@ -725,7 +724,7 @@ class ClientContainerServices{
                     case ViewType.DEVELOP_BASE_WP:
 
                         // The app data is the Design Version data
-                        let appDvComponent = DesignVersionComponents.find({_id: wpApp.componentId});
+                        let appDvComponent = DesignVersionComponents.findOne({_id: wpApp.componentId});
                         wpApplicationsArr.push(appDvComponent);
                         break;
 
@@ -734,15 +733,13 @@ class ClientContainerServices{
                     case ViewType.DEVELOP_UPDATE_WP:
 
                         // The app data is the Design Update data
-                        let appDuComponent = DesignUpdateComponents.find({_id: wpApp.componentId});
+                        let appDuComponent = DesignUpdateComponents.findOne({_id: wpApp.componentId});
                         wpApplicationsArr.push(appDuComponent);
                         break;
                 }
             });
 
             //console.log("Found " + wpApplicationsArr.length + " WP applications.");
-
-            wpApplicationComponentsArr = wpAppComponents.fetch();
 
         }
 
@@ -953,7 +950,8 @@ class ClientContainerServices{
                         currentComponents = DesignVersionComponents.find(
                             {
                                 designVersionId: designVersionId,
-                                componentParentIdNew: parentId
+                                componentParentIdNew: parentId,
+                                componentType: componentType
                             },
                             {sort: {componentIndexNew: 1}}
                         ).fetch();
@@ -971,7 +969,8 @@ class ClientContainerServices{
                         wpComponents = WorkPackageComponents.find(
                             {
                                 workPackageId: workPackageId,
-                                componentParentReferenceId: parent.componentReferenceId
+                                componentParentReferenceId: parent.componentReferenceId,
+                                componentType: componentType
                             },
                             {sort: {componentIndex: 1}});
 
@@ -1012,7 +1011,8 @@ class ClientContainerServices{
                             {
                                 designVersionId: designVersionId,
                                 designUpdateId: designUpdateId,
-                                componentParentIdNew: parentId
+                                componentParentIdNew: parentId,
+                                componentType: componentType
                             },
                             {sort: {componentIndexNew: 1}}
                         ).fetch();
@@ -1030,7 +1030,8 @@ class ClientContainerServices{
                         wpComponents = WorkPackageComponents.find(
                             {
                                 workPackageId: workPackageId,
-                                componentParentReferenceId: parent.componentReferenceId
+                                componentParentReferenceId: parent.componentReferenceId,
+                                componentType: componentType
                             },
                             {sort: {componentIndex: 1}});
 

@@ -15,7 +15,7 @@ import ServerWorkPackageComponentApi     from '../apiServer/apiWorkPackageCompon
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag} from '../redux/actions';
+import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, updateTestDataFlag} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Components
@@ -28,10 +28,10 @@ class ClientWorkPackageComponentServices {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User put an item in the scope view in or out of scope for a Work Package
-    toggleInScope(view, displayContext, wpComponentId, newScope){
+    toggleInScope(view, displayContext, userContext, wpComponentId, newScope){
 
         // Client validation
-        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, wpComponentId);
+        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, userContext, wpComponentId);
 
         if(result !== Validation.VALID){
 
@@ -41,7 +41,7 @@ class ClientWorkPackageComponentServices {
         }
 
         // Real action call - server actions
-        ServerWorkPackageComponentApi.toggleInScope(view, displayContext, wpComponentId, newScope, (err, result) => {
+        ServerWorkPackageComponentApi.toggleInScope(view, displayContext, userContext, wpComponentId, newScope, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.
@@ -49,6 +49,8 @@ class ClientWorkPackageComponentServices {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
+                const testDataFlag = store.getState().testDataFlag;
+                store.dispatch(updateTestDataFlag(!testDataFlag));
 
                 // Show action success on screen
                 if(newScope) {
@@ -115,7 +117,7 @@ class ClientWorkPackageComponentServices {
 
                     case WorkPackageType.WP_UPDATE:
 
-                        featureComponents = DesignUpdatenComponents.find(
+                        featureComponents = DesignUpdateComponents.find(
                             {
                                 designVersionId: wpComponent.designVersionId,
                                 designUpdateId: wpComponent.designUpdateId,

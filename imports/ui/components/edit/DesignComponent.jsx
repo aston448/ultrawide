@@ -138,7 +138,7 @@ export class DesignComponent extends Component{
                 return !(
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
-                    nextProps.designItem.isRemovable === this.props.designItem.isRemovable &&
+                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.mode === this.props.mode &&
                     nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.testSummary === this.props.testSummary //&&
@@ -394,7 +394,7 @@ export class DesignComponent extends Component{
 
         const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, testDataFlag, currentViewDataValue} = this.props;
 
-        console.log("Render " + view + "  DC in context " + displayContext + "with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem);
+        //console.log("Render " + view + "  DC in context " + displayContext + "with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem);
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -503,8 +503,8 @@ export class DesignComponent extends Component{
                 displayContext === DisplayContext.BASE_VIEW ||
                 displayContext === DisplayContext.WP_SCOPE ||
                 displayContext === DisplayContext.WP_VIEW ||
-                (displayContext === DisplayContext.DEV_DESIGN && designItem.componentType === ComponentType.APPLICATION) ||
-                (displayContext === DisplayContext.DEV_DESIGN && designItem.componentType === ComponentType.DESIGN_SECTION)
+                (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.APPLICATION) ||
+                (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.DESIGN_SECTION)
             );
 
             switch (currentItem.componentType) {
@@ -533,7 +533,7 @@ export class DesignComponent extends Component{
                                             <td id="addDesignSectionToApp" className="control-table-data-section">
                                                 <DesignComponentAdd
                                                     addText="Add Design Section"
-                                                    onClick={ () => this.addDesignSectionToApplication(view, mode, designItem)}
+                                                    onClick={ () => this.addDesignSectionToApplication(view, mode, currentItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -582,14 +582,14 @@ export class DesignComponent extends Component{
                                             <td id="addFeature" className="control-table-data-feature">
                                                 <DesignComponentAdd
                                                     addText='Add Feature'
-                                                    onClick={ () => this.addFeatureToDesignSection(view, mode, designItem)}
+                                                    onClick={ () => this.addFeatureToDesignSection(view, mode, currentItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
                                             <td id="addDesignSectionToDesignSection">
                                                 <DesignComponentAdd
                                                     addText="Add sub section"
-                                                    onClick={ () => this.addSectionToDesignSection(view, mode, designItem)}
+                                                    onClick={ () => this.addSectionToDesignSection(view, mode, currentItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -640,7 +640,7 @@ export class DesignComponent extends Component{
                                             <td id="addFeatureAspect" className="control-table-data-feature-aspect">
                                                 <DesignComponentAdd
                                                     addText="Add feature aspect"
-                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, designItem)}
+                                                    onClick={ () => this.addFeatureAspectToFeature(view, mode, currentItem)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>
@@ -680,7 +680,7 @@ export class DesignComponent extends Component{
                                             <td id="addScenario" className="control-table-data-scenario">
                                                 <DesignComponentAdd
                                                     addText="Add scenario"
-                                                    onClick={ () => this.addScenario(view, mode, designItem, userContext)}
+                                                    onClick={ () => this.addScenario(view, mode, currentItem, userContext)}
                                                     toggleHighlight={ (value) => this.toggleHighlight(value)}
                                                 />
                                             </td>

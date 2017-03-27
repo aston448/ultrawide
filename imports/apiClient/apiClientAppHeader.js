@@ -91,18 +91,15 @@ class ClientAppHeaderServices{
 
         if(userContext.workPackageId !== 'NONE'){
 
-            const wpOpenComponents = WorkPackageComponents.find(
-                {
-                    workPackageId: userContext.workPackageId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            // WP situation - is it a Base Design or Design Update WP?
+            if(userContext.designUpdateId === 'NONE'){
 
-                },
-                {fields: {_id: 1}}
-            );
+                componentArray = this.getDesignVersionFeatures(userContext);
 
-            wpOpenComponents.forEach((component) => {
-                componentArray.push(component._id);
-            });
+            } else {
+
+                componentArray = this.getDesignUpdateFeatures(userContext);
+            }
 
             store.dispatch(setCurrentUserOpenWorkPackageItems(
                 componentArray,
@@ -112,55 +109,37 @@ class ClientAppHeaderServices{
 
             store.dispatch((updateOpenItemsFlag('NONE')));
 
-            return;
-        }
-
-        if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
-
-            const designVersionOpenComponents = DesignVersionComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-                },
-                {fields: {_id: 1}}
-            );
-
-            designVersionOpenComponents.forEach((component) => {
-                componentArray.push(component._id);
-            });
-
-            store.dispatch(setCurrentUserOpenDesignItems(
-                componentArray,
-                null,
-                null
-            ));
-
-            store.dispatch((updateOpenItemsFlag('NONE')));
-
         } else {
 
-            const designUpdateOpenComponents = DesignUpdateComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-                },
-                {fields: {_id: 1}}
-            );
+            // Not a WP - do we want to be displaying Update or Base Version components?
 
-            designUpdateOpenComponents.forEach((component) => {
-                componentArray.push(component._id);
-            });
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
 
-            store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                componentArray,
-                null,
-                null
-            ));
+               componentArray = this.getDesignVersionFeatures(userContext);
 
-            store.dispatch((updateOpenItemsFlag('NONE')));
+                store.dispatch(setCurrentUserOpenDesignItems(
+                    componentArray,
+                    null,
+                    null
+                ));
 
+                store.dispatch((updateOpenItemsFlag('NONE')));
+
+            } else {
+
+                componentArray = this.getDesignUpdateFeatures(userContext);
+
+                store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                    componentArray,
+                    null,
+                    null
+                ));
+
+                store.dispatch((updateOpenItemsFlag('NONE')));
+            }
         }
+
+
     }
 
     setViewLevelSections(userContext, displayContext){
@@ -170,20 +149,15 @@ class ClientAppHeaderServices{
 
         if(userContext.workPackageId !== 'NONE'){
 
-            const wpOpenComponents = WorkPackageComponents.find(
-                {
-                    workPackageId: userContext.workPackageId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            // WP situation - is it a Base Design or Design Update WP?
+            if(userContext.designUpdateId === 'NONE'){
 
-                },
-                {fields: {_id: 1, componentReferenceId: 1}}
-            ).fetch();
+                componentArray = this.getDesignVersionSections(userContext);
 
-            wpOpenComponents.forEach((component) => {
-                if(this.hasNoFeaturesWp(userContext, component)) {
-                    componentArray.push(component._id);
-                }
-            });
+            } else {
+
+                componentArray = this.getDesignUpdateSections(userContext);
+            }
 
             store.dispatch(setCurrentUserOpenWorkPackageItems(
                 componentArray,
@@ -193,70 +167,128 @@ class ClientAppHeaderServices{
 
             store.dispatch((updateOpenItemsFlag('NONE')));
 
-            return;
-        }
-
-        if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
-
-            const designVersionOpenComponents = DesignVersionComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-
-                },
-                {fields: {_id: 1, componentReferenceId: 1}}
-            ).fetch();
-
-            designVersionOpenComponents.forEach((component) => {
-                if(this.hasNoFeaturesDc(userContext, component)) {
-                    componentArray.push(component._id);
-                }
-            });
-
-            store.dispatch(setCurrentUserOpenDesignItems(
-                componentArray,
-                null,
-                null
-            ));
-
-            store.dispatch((updateOpenItemsFlag('NONE')));
-
         } else {
 
-            const designUpdateOpenComponents = DesignUpdateComponents.find(
-                {
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId,
-                    componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-                },
-                {fields: {_id: 1, componentReferenceId: 1}}
-            ).fetch();
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
 
-            designUpdateOpenComponents.forEach((component) => {
-                if(this.hasNoFeaturesDu(userContext, component)) {
+                componentArray = this.getDesignVersionSections(userContext);
 
-                    componentArray.push(component._id);
-                }
-            });
+                store.dispatch(setCurrentUserOpenDesignItems(
+                    componentArray,
+                    null,
+                    null
+                ));
 
-            store.dispatch(setCurrentUserOpenDesignUpdateItems(
-                componentArray,
-                null,
-                null
-            ));
+                store.dispatch((updateOpenItemsFlag('NONE')));
 
-            store.dispatch((updateOpenItemsFlag('NONE')));
+            } else {
 
+                componentArray = this.getDesignUpdateSections(userContext);
+
+                store.dispatch(setCurrentUserOpenDesignUpdateItems(
+                    componentArray,
+                    null,
+                    null
+                ));
+
+                store.dispatch((updateOpenItemsFlag('NONE')));
+
+            }
         }
+    }
+
+    getDesignVersionFeatures(userContext){
+
+        const componentArray = [];
+
+        const designVersionOpenComponents = DesignVersionComponents.find(
+            {
+                designVersionId: userContext.designVersionId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            },
+            {fields: {_id: 1}}
+        );
+
+        designVersionOpenComponents.forEach((component) => {
+            componentArray.push(component._id);
+        });
+
+        return componentArray;
+    }
+
+    getDesignUpdateFeatures(userContext){
+
+        const componentArray = [];
+
+        const designUpdateOpenComponents = DesignUpdateComponents.find(
+            {
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            },
+            {fields: {_id: 1}}
+        );
+
+        designUpdateOpenComponents.forEach((component) => {
+            componentArray.push(component._id);
+        });
+
+        return componentArray;
+    }
+
+    getDesignVersionSections(userContext){
+
+        const componentArray = [];
+
+        const designVersionOpenComponents = DesignVersionComponents.find(
+            {
+                designVersionId: userContext.designVersionId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+
+            },
+            {fields: {_id: 1, componentReferenceId: 1}}
+        ).fetch();
+
+        designVersionOpenComponents.forEach((component) => {
+            if(this.hasNoFeaturesDc(userContext, component)) {
+                componentArray.push(component._id);
+            }
+        });
+
+        return componentArray;
+    }
+
+    getDesignUpdateSections(userContext){
+
+        const componentArray = [];
+
+        const designUpdateOpenComponents = DesignUpdateComponents.find(
+            {
+                designVersionId: userContext.designVersionId,
+                designUpdateId: userContext.designUpdateId,
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+            },
+            {fields: {_id: 1, componentReferenceId: 1}}
+        ).fetch();
+
+        // Add only sections that have no Features in Design Update
+        designUpdateOpenComponents.forEach((component) => {
+            if(this.hasNoFeaturesDu(userContext, component)) {
+
+                componentArray.push(component._id);
+            }
+        });
+
+        return componentArray;
     }
 
     hasNoFeaturesDc(userContext, component){
 
         // Returns true if there are no features that are children of the component
         return DesignVersionComponents.find({
-                designVersionId: userContext.designVersionId,
-                componentParentReferenceIdNew: component.componentReferenceId,
-                componentType: ComponentType.FEATURE
+                designVersionId:                userContext.designVersionId,
+                componentParentReferenceIdNew:  component.componentReferenceId,
+                componentType:                  ComponentType.FEATURE
             }).count() === 0;
     }
 
@@ -264,25 +296,12 @@ class ClientAppHeaderServices{
 
         // Returns true if there are no features that are children of the component
         return DesignUpdateComponents.find({
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                componentParentReferenceIdNew: component.componentReferenceId,
-                componentType: ComponentType.FEATURE
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
+                componentParentReferenceIdNew:  component.componentReferenceId,
+                componentType:                  ComponentType.FEATURE
             }).count() === 0;
     }
-
-    hasNoFeaturesWp(userContext, component){
-
-        // Returns true if there are no features that are children of the component
-        return WorkPackageComponents.find({
-            designVersionId: userContext.designVersionId,
-            workPackageId: userContext.workPackageId,
-            componentParentReferenceIdNew: component.componentReferenceId,
-            componentType: ComponentType.FEATURE
-        }).count() === 0;
-    }
-
-
 
     setViewDesigns() {
         // Returns to the Design selection screen

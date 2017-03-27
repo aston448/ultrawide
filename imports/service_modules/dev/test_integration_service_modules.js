@@ -343,7 +343,8 @@ class TestIntegrationModules{
         // Get all Applications active in WP Design in order.  Must always be at least one as the parent of whatever is in the WP
         let wpApplications = [];
 
-        if (userContext.workPackageId != 'NONE') {
+        if (userContext.workPackageId !== 'NONE') {
+
             wpApplications = WorkPackageComponents.find(
                 {
                     designVersionId: userContext.designVersionId,
@@ -439,7 +440,7 @@ class TestIntegrationModules{
             let wpDesignItems = WorkPackageComponents.find({
                 designVersionId:                userContext.designVersionId,
                 workPackageId:                  userContext.workPackageId,
-                componentFeatureReferenceIdNew:    feature.componentReferenceId,
+                componentFeatureReferenceId:    feature.componentReferenceId,
                 componentType:      { $in:[ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
                 $or: [{componentActive: true}, {componentParent: true}]
             }).fetch();
@@ -449,29 +450,29 @@ class TestIntegrationModules{
             let designItemList = [];
 
             // Get a uniform list
-            wpDesignItems.forEach((designItem) => {
+            wpDesignItems.forEach((wpItem) => {
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Processing item {}", designItem.componentReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Processing item {}", wpItem.componentReferenceId);
 
                 let aspectRef = 'NONE';
                 let scenarioRef = 'NONE';
                 let hasChildren = false;
 
 
-                if(designItem.componentType === ComponentType.FEATURE_ASPECT){
-                    aspectRef = designItem.componentReferenceId;
+                if(wpItem.componentType === ComponentType.FEATURE_ASPECT){
+                    aspectRef = wpItem.componentReferenceId;
                 }
 
-                if(designItem.componentType === ComponentType.SCENARIO){
-                    aspectRef = designItem.componentParentReferenceIdNew;
-                    scenarioRef = designItem.componentReferenceId;
+                if(wpItem.componentType === ComponentType.SCENARIO){
+                    aspectRef = wpItem.componentParentReferenceId;
+                    scenarioRef = wpItem.componentReferenceId;
                 }
 
                 hasChildren = WorkPackageComponents.find(
                         {
                             designVersionId:            userContext.designVersionId,
                             workPackageId:              userContext.workPackageId,
-                            componentParentReferenceId: designItem.componentReferenceId
+                            componentParentReferenceId: wpItem.componentReferenceId
                         }).count() > 0;
 
                 // Get the actual component name from the actual Design Component.
@@ -480,26 +481,26 @@ class TestIntegrationModules{
                 if(userContext.designUpdateId === 'NONE'){
 
                     designComponentName = DesignVersionComponents.findOne({
-                        _id: designItem.componentId
+                        _id: wpItem.componentId
                     }).componentNameNew;
 
                 } else {
 
                     designComponentName = DesignUpdateComponents.findOne({
-                        _id: designItem.componentId
+                        _id: wpItem.componentId
                     }).componentNameNew;
                 }
 
                 designItemList.push({
-                    itemId:         designItem.componentId,
+                    itemId:         wpItem.componentId,
                     itemName:       designComponentName,
-                    itemType:       designItem.componentType,
-                    itemRef:        designItem.componentReferenceId,
-                    itemParentRef:  designItem.componentParentReferenceIdNew,
-                    featureRef:     designItem.componentFeatureReferenceIdNew,
+                    itemType:       wpItem.componentType,
+                    itemRef:        wpItem.componentReferenceId,
+                    itemParentRef:  wpItem.componentParentReferenceId,
+                    featureRef:     wpItem.componentFeatureReferenceId,
                     aspectRef:      aspectRef,
                     scenarioRef:    scenarioRef,
-                    index:          designItem.componentIndexNew,
+                    index:          wpItem.componentIndex,
                     featureIndex:   currentFeatureIndex,
                     hasChildren:    hasChildren
                 });
@@ -509,7 +510,7 @@ class TestIntegrationModules{
 
             // Insert the Feature into the mash as the testing baseline
             let featureName = '';
-            let itemIndex = feature.componentIndexNew;
+            let itemIndex = feature.componentIndex;
 
             // Get the actual Feature name from the actual Design Component.
             // Note we don't denormalise this to avoid headache of name changes having to be propagated manually

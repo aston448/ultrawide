@@ -17,22 +17,23 @@ export const toggleInScope = new ValidatedMethod({
     validate: new SimpleSchema({
         view:               {type: String},
         displayContext:     {type: String},
+        userContext:        {type: Object, blackbox: true},
         wpComponentId:      {type: String},
         newScope:           {type: Boolean}
     }).validator(),
 
-    run({view, displayContext, wpComponentId, newScope}){
+    run({view, displayContext, userContext, wpComponentId, newScope}){
 
         // Server validation
-        const result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, wpComponentId);
+        const result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, userContext, wpComponentId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('workPackageComponent.toggleInScope.failValidation', result)
         }
 
         // Server action
         try {
-            WorkPackageComponentServices.toggleScope(wpComponentId, newScope);
+            WorkPackageComponentServices.toggleScope(wpComponentId, view, userContext, newScope);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)
