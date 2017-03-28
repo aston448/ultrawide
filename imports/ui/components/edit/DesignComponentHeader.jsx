@@ -346,23 +346,43 @@ export class DesignComponentHeader extends Component{
                     break;
                 case ViewType.DESIGN_UPDATABLE_VIEW:
                     // If there is an item whose name has changed then create a new editor entry showing both
-                    if(props.updateItem){
-                        if(props.updateItem.componentNameOld !== item.componentNameNew) {
-                            existingRawText = this.getNewAndOldRawText(item.componentNameNew, props.updateItem.componentNameOld);
-                        } else {
-                            existingRawText = props.currentItem.componentNameRawNew;
-                        }
+                    if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
+                        existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
                     } else {
-                        existingRawText = props.currentItem.componentNameRawNew;
+                        existingRawText = item.componentNameRawNew;
                     }
+
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
+
+                    switch(props.displayContext){
+                        case  DisplayContext.UPDATE_SCOPE:
+                            // The editor shows the Old DV Values
+                            existingRawText = item.componentNameRawOld;
+                            break;
+                        case DisplayContext.UPDATE_VIEW:
+                        case DisplayContext.UPDATE_EDIT:
+                            // The editor shows what's in the actual DU
+                            if(props.updateItem) {
+                                existingRawText = props.updateItem.componentNameRawNew;
+                            }
+                            break;
+                        case DisplayContext.WORKING_VIEW:
+                            // The editor shows the New DV Values
+                            if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
+                                existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
+                            } else {
+                                existingRawText = item.componentNameRawNew;
+                            }
+                    }
+                    break;
+
                 case ViewType.DESIGN_UPDATE_VIEW:
 
                     switch(props.displayContext){
                         case  DisplayContext.UPDATE_SCOPE:
                             // Scope uses the base DV components
-                            existingRawText = props.currentItem.componentNameRawNew;
+                            existingRawText = item.componentNameRawNew;
                             break;
                         case DisplayContext.UPDATE_VIEW:
                         case DisplayContext.UPDATE_EDIT:
@@ -505,6 +525,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
                 // Updates to a design update
+                console.log("Updating component name to " + plainText);
                 result = ClientDesignUpdateComponentServices.updateComponentName(view, mode, item, plainText, rawText);
                 break;
         }

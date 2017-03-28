@@ -109,9 +109,29 @@ export class UpdateApplicationsList extends Component {
         });
     }
 
+    // A list of top level applications in the working design version
+    renderWorkingVersionApplications(workingApplications, context, view, mode, testSummary) {
+        return workingApplications.map((application) => {
+            // All applications are shown even in update edit view even if not in scope so that new items can be added to them
+            return (
+                <DesignComponentTarget
+                    key={application._id}
+                    currentItem={application}
+                    designItem={application}
+                    updateItem={application}
+                    displayContext={context}
+                    view={view}
+                    mode={mode}
+                    testSummary={testSummary}
+                />
+            );
+
+        });
+    }
+
     render() {
 
-        const {baseApplications, updateApplications, userContext, view, mode, viewOptions, testDataFlag} = this.props;
+        const {baseApplications, updateApplications, workingApplications, userContext, view, mode, viewOptions, testDataFlag} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -147,6 +167,7 @@ export class UpdateApplicationsList extends Component {
                     {this.renderScopeApplications(baseApplications, DisplayContext.UPDATE_SCOPE, view, mode, userContext, false)}
                 </div>
                 <DesignEditorFooter
+                    displayContext={DisplayContext.UPDATE_SCOPE}
                     hasDesignSummary={false}
                 />
             </div>;
@@ -162,6 +183,7 @@ export class UpdateApplicationsList extends Component {
                     {addComponent}
                 </div>
                 <DesignEditorFooter
+                    displayContext={DisplayContext.UPDATE_EDIT}
                     hasDesignSummary={false}
                 />
             </div>;
@@ -176,6 +198,22 @@ export class UpdateApplicationsList extends Component {
                     {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
+                    displayContext={DisplayContext.UPDATE_VIEW}
+                    hasDesignSummary={false}
+                />
+            </div>;
+
+        // View Working Design Version
+        let workingVersionComponent =
+            <div id="editorPaneView" className="design-editor-container">
+                <DesignEditorHeader
+                    displayContext={DisplayContext.WORKING_VIEW}
+                />
+                <div className={editorClass}>
+                    {this.renderWorkingVersionApplications(workingApplications, DisplayContext.WORKING_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
+                </div>
+                <DesignEditorFooter
+                    displayContext={DisplayContext.WORKING_VIEW}
                     hasDesignSummary={false}
                 />
             </div>;
@@ -226,7 +264,7 @@ export class UpdateApplicationsList extends Component {
             if(view === ViewType.DESIGN_UPDATE_EDIT && mode === ViewMode.MODE_EDIT){
                 // Editable DU
 
-                // Layout is SCOPE | UPDATE | TEXT | SUMMARY or DICT
+                // Layout is SCOPE | UPDATE | DV PROGRESS | TEXT | SUMMARY or DICT
 
                 // If dictionary visible, this replaces the base view
                 let col4component = updateSummary;
@@ -239,13 +277,16 @@ export class UpdateApplicationsList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col id="scopeCol" md={3} className="close-col">
+                                <Col id="scopeCol" md={2} className="close-col">
                                     {updateScopeComponent}
                                 </Col>
                                 <Col id="designCol" md={3} className="close-col">
                                     {updateEditComponent}
                                 </Col>
-                                <Col id="detailsCol" md={3} className="close-col">
+                                <Col id="workingCol" md={2} className="close-col">
+                                    {workingVersionComponent}
+                                </Col>
+                                <Col id="detailsCol" md={2} className="close-col">
                                     {updateTextComponent}
                                 </Col>
                                 <Col id="dictSummCol" md={3} className="close-col">
@@ -257,13 +298,16 @@ export class UpdateApplicationsList extends Component {
                     layout =
                         <Grid>
                             <Row>
-                                <Col id="scopeCol" md={4} className="close-col">
+                                <Col id="scopeCol" md={3} className="close-col">
                                     {updateScopeComponent}
                                 </Col>
-                                <Col id="designCol" md={4} className="close-col">
+                                <Col id="designCol" md={3} className="close-col">
                                     {updateEditComponent}
                                 </Col>
-                                <Col id="dictSummCol" md={4} className="close-col">
+                                <Col id="workingCol" md={3} className="close-col">
+                                    {workingVersionComponent}
+                                </Col>
+                                <Col id="dictSummCol" md={3} className="close-col">
                                     {col4component}
                                 </Col>
                             </Row>
@@ -366,8 +410,9 @@ export class UpdateApplicationsList extends Component {
 
 
 UpdateApplicationsList.propTypes = {
-    baseApplications:   PropTypes.array.isRequired,
-    updateApplications: PropTypes.array.isRequired
+    baseApplications:       PropTypes.array.isRequired,
+    updateApplications:     PropTypes.array.isRequired,
+    workingApplications:    PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

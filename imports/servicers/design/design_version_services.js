@@ -117,48 +117,49 @@ class DesignVersionServices{
         if(Meteor.isServer) {
 
             // The steps are:
-            // 1. If an Updatable Version, merge in the updates set for merge
-            // 2. Create a new unmarked Design Version from the old version
+            // 1. Create new Design Version (current)
+            // 2. Copy what is now previous Design Version to current ignoring removed stuff and resetting statuses
             // 3. Roll forward any updates that have been marked as Carry Forward
             // 4. Close down any Ignore Updates
+            // 5. Carry forward a copy of the Domain Dictionary
             // 5. Complete the old version
 
-            // Get the current design version details
+            console.log('Looking for current design version with id ' + currentDesignVersionId);
+
+            // Get the current design version details - the version being completed
             const currentDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
-            const previousDesignVersionId = currentDesignVersion.baseDesignVersionId;
 
-            if(previousDesignVersionId !== 'NONE'){
-                // The current DV is updatable so make a final version of its components based on the final Design Update configuration
-                DesignVersionModules.finaliseCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
-            }
-
-            // Now add a new Design Version to become our new working version
-            let newDesignVersionId = DesignVersions.insert(
+            // Now add a new Design Version to become the new current version
+            let nextDesignVersionId = DesignVersions.insert(
                 {
                     designId: currentDesignVersion.designId,
                     designVersionName: DefaultItemNames.NEXT_DESIGN_VERSION_NAME,
                     designVersionNumber: DefaultItemNames.NEXT_DESIGN_VERSION_NUMBER,
                     designVersionStatus: DesignVersionStatus.VERSION_UPDATABLE,
-                    baseDesignVersionId: currentDesignVersionId,                        // Based on the previous DV
-                    designVersionIndex: currentDesignVersion.designVersionIndex + 1     // Increment index to create correct ordering
+                    baseDesignVersionId: currentDesignVersionId,                            // Based on the previous DV
+                    designVersionIndex: currentDesignVersion.designVersionIndex + 1        // Increment index to create correct ordering
                 }
             );
 
             // If that was successful do the real work...
-            if(newDesignVersionId) {
+            if(nextDesignVersionId) {
 
                 try {
-                    // Populate new DV with a copy of the updated current version
-                    DesignVersionModules.populateNextDesignVersion(currentDesignVersionId, newDesignVersionId);
+                    // Populate new DV with a copy of the previous version
+                    DesignVersionModules.copyPreviousDesignVersionToCurrent(currentDesignVersion._id, nextDesignVersionId);
 
-                    // Process the updates to be Rolled Forward
-                    DesignVersionModules.rollForwardUpdates(currentDesignVersionId, newDesignVersionId);
+                    // If moving from an updatable DV deal with any non-merged updates
+                    if(currentDesignVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE) {
 
-                    // Put to bed the ignored updates
-                    DesignVersionModules.closeDownIgnoreUpdates(currentDesignVersionId, newDesignVersionId);
+                        // Process the updates to be Rolled Forward
+                        DesignVersionModules.rollForwardUpdates(currentDesignVersionId, nextDesignVersionId);
+
+                        // Put to bed the ignored updates
+                        DesignVersionModules.closeDownIgnoreUpdates(currentDesignVersionId);
+                    }
 
                     // Carry forward the Domain Dictionary
-                    DesignVersionModules.rollForwardDomainDictionary(currentDesignVersionId, newDesignVersionId);
+                    DesignVersionModules.rollForwardDomainDictionary(currentDesignVersionId, nextDesignVersionId);
 
                 } catch(e) {
 
@@ -169,37 +170,37 @@ class DesignVersionServices{
                 }
 
                 // And finally update the old design version to complete
-                DesignVersionModules.completeCurrentDesignVersion(currentDesignVersionId);
+                DesignVersionModules.completePreviousDesignVersion(currentDesignVersionId);
             }
         }
     };
 
-    updateWorkingDesignVersion(currentDesignVersionId){
-
-        if(Meteor.isServer){
-            // Here we are creating a temporary preview of what the working DV will look like.  To do this
-            // we delete all data for the DV and repopulate it as per creating the next DV: merge any
-            // updates that are marked as include.  But we don't create a new DV or move any updates.
-
-            // This applies only to updatable design versions.
-
-            // Get the Design Version the working one is based on
-            const workingDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
-            let previousDesignVersionId = 'NONE';
-
-            if(workingDesignVersion){
-                previousDesignVersionId = workingDesignVersion.baseDesignVersionId;
-            } else {
-                return;
-            }
-
-            if(previousDesignVersionId !== 'NONE'){
-                // Recreate the current DV as the previous DV plus current updates
-                DesignVersionModules.updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
-            }
-
-        }
-    }
+    // updateWorkingDesignVersion(currentDesignVersionId){
+    //
+    //     if(Meteor.isServer){
+    //         // Here we are creating a temporary preview of what the working DV will look like.  To do this
+    //         // we delete all data for the DV and repopulate it as per creating the next DV: merge any
+    //         // updates that are marked as include.  But we don't create a new DV or move any updates.
+    //
+    //         // This applies only to updatable design versions.
+    //
+    //         // Get the Design Version the working one is based on
+    //         const workingDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
+    //         let previousDesignVersionId = 'NONE';
+    //
+    //         if(workingDesignVersion){
+    //             previousDesignVersionId = workingDesignVersion.baseDesignVersionId;
+    //         } else {
+    //             return;
+    //         }
+    //
+    //         if(previousDesignVersionId !== 'NONE'){
+    //             // Recreate the current DV as the previous DV plus current updates
+    //             DesignVersionModules.updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
+    //         }
+    //
+    //     }
+    // }
 }
 
 export default new DesignVersionServices();

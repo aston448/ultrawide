@@ -31,7 +31,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateComponentName(view, mode, designUpdateComponent._id, newPlainText);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -531,7 +531,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateReorderDesignUpdateComponent(view, mode, displayContext, movingComponent._id, targetComponent._id);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};

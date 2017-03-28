@@ -121,6 +121,7 @@ class WorkPackageApplicationsList extends Component {
                     {this.renderScopeApplications(scopeApplications, DisplayContext.WP_SCOPE, view, mode, userContext)}
                 </div>
                 <DesignEditorFooter
+                    displayContext={DisplayContext.WP_SCOPE}
                     hasDesignSummary={false}
                 />
             </div>;
@@ -135,6 +136,7 @@ class WorkPackageApplicationsList extends Component {
                     {this.renderViewApplications(wpApplications, DisplayContext.WP_VIEW, view, mode, userContext, viewOptions.devTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
+                    displayContext={DisplayContext.WP_VIEW}
                     hasDesignSummary={false}
                 />
             </div>;

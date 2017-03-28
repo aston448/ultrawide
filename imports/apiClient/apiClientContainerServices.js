@@ -34,7 +34,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignUpdateStatus,
     StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
-    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType } from '../constants/constants.js';
+    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, UpdateMergeStatus } from '../constants/constants.js';
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -674,7 +674,18 @@ class ClientContainerServices{
 
         console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
+        // Just get the original base items, not any new stuff
         const baseApplications = DesignVersionComponents.find(
+            {
+                designVersionId: userContext.designVersionId,
+                componentType: ComponentType.APPLICATION,
+                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_ADDED}
+            },
+            {sort: {componentIndexNew: 1}}
+        );
+
+        // All the existing and new stuff in the Designversion
+        const workingApplications = DesignVersionComponents.find(
             {
                 designVersionId: userContext.designVersionId,
                 componentType: ComponentType.APPLICATION
@@ -683,6 +694,8 @@ class ClientContainerServices{
         );
 
         let baseApplicationsArr = baseApplications.fetch();
+        let workingApplicationsArr = workingApplications.fetch();
+
         log((msg) => console.log(msg), LogLevel.INFO, "Found {} base applications.", baseApplicationsArr.length);
 
         // Get Update Apps if update Id provided
@@ -761,18 +774,22 @@ class ClientContainerServices{
                 // Just need base design version applications
                 return{
                     baseApplications:       baseApplicationsArr,
+                    workingApplications:    workingApplicationsArr,
                     designSummaryData:      designSummaryData
                 };
             case ViewType.DESIGN_UPDATE_EDIT:
                 // Need base and update apps
                 return{
                     baseApplications:       baseApplicationsArr,
-                    updateApplications:     updateApplicationsArr
+                    updateApplications:     updateApplicationsArr,
+                    workingApplications:    workingApplicationsArr,
                 };
             case ViewType.DESIGN_UPDATE_VIEW:
                 // Need design update apps only
                 return{
-                    updateApplications:     updateApplicationsArr
+                    baseApplications:       [],
+                    updateApplications:     updateApplicationsArr,
+                    workingApplications:    []
                 };
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -909,9 +926,10 @@ class ClientContainerServices{
                         // Display all design components in the base design so scope can be chosen
                         currentComponents = DesignVersionComponents.find(
                             {
-                                designVersionId: designVersionId,
-                                componentType: componentType,
-                                componentParentIdOld: parentId
+                                designVersionId:        designVersionId,
+                                componentType:          componentType,
+                                componentParentIdOld:   parentId,
+                                updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_ADDED}
                             },
                             {sort:{componentIndexOld: 1}}
                         ).fetch();
@@ -921,9 +939,9 @@ class ClientContainerServices{
                         // Display latest components in the working view
                         currentComponents = DesignVersionComponents.find(
                             {
-                                designVersionId: designVersionId,
-                                componentType: componentType,
-                                componentParentIdNew: parentId
+                                designVersionId:        designVersionId,
+                                componentType:          componentType,
+                                componentParentIdNew:   parentId
                             },
                             {sort:{componentIndexNew: 1}}
                         ).fetch();
@@ -932,7 +950,7 @@ class ClientContainerServices{
 
                 }
 
-                //console.log("Design update components found: " + currentComponents.count());
+                console.log("Design update components found: " + currentComponents.length);
 
                 return {
                     components: currentComponents,

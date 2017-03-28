@@ -124,6 +124,7 @@ class DevApplicationsList extends Component {
                     {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
+                    displayContext={DisplayContext.DEV_DESIGN}
                     hasDesignSummary={false}
                 />
             </div>;

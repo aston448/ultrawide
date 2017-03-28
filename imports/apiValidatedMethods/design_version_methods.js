@@ -161,11 +161,12 @@ export const createNextDesignVersion = new ValidatedMethod({
 
         const result = DesignVersionValidationApi.validateCreateNextDesignVersion(userRole, designVersionId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designVersion.createNextDesignVersion.failValidation', result)
         }
 
         try {
+            console.log("Creating next DV from id " + designVersionId);
             DesignVersionServices.createNextDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);

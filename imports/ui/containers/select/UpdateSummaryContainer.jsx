@@ -116,6 +116,7 @@ export class DesignUpdateSummaryList extends Component {
                         {changes}
                     </div>
                     <DesignEditorFooter
+                        displayContext={DisplayContext.UPDATE_SUMMARY}
                         hasDesignSummary={false}
                     />
                 </div>
@@ -132,6 +133,7 @@ export class DesignUpdateSummaryList extends Component {
                         <div className="design-item-note">No update selected</div>
                     </div>
                     <DesignEditorFooter
+                        displayContext={DisplayContext.UPDATE_SUMMARY}
                         hasDesignSummary={false}
                     />
                 </div>

@@ -1,13 +1,15 @@
 
 // Ultrawide Collections
 import { DesignVersions }           from '../../collections/design/design_versions.js';
-import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
+import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
+import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel } from '../../constants/constants.js';
+import { ComponentType, DesignUpdateMergeAction, LogLevel } from '../../constants/constants.js';
 
 import DesignUpdateComponentModules from '../../service_modules/design_update/design_update_component_service_modules.js';
+import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
 
 //======================================================================================================================
 //
@@ -130,6 +132,26 @@ class DesignUpdateModules{
         }).fetch();
 
         return (componentRemovedInOtherUpdates.length > 0);
+    };
+
+    removeMergedUpdateFromDesignVersion(designUpdateId){
+
+        const update = DesignUpdates.findOne({_id: designUpdateId});
+
+        if(update.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.unmergeDesignUpdate(designUpdateId);
+        }
+    };
+
+    addUpdateToDesignVersion(designUpdateId){
+
+        const update = DesignUpdates.findOne({_id: designUpdateId});
+
+        if(update.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.mergeDesignUpdate(designUpdateId);
+        }
     };
 
 

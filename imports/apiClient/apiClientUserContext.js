@@ -16,6 +16,7 @@ import { WorkPackageComponents }    from '../collections/work/work_package_compo
 // Ultrawide Services
 import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize, DisplayContext } from '../constants/constants.js';
 import { log } from '../common/utils.js';
+import TextLookups from '../common/lookups.js'
 
 import ClientContainerServices              from '../apiClient/apiClientContainerServices.js';
 import ClientDesignVersionServices          from '../apiClient/apiClientDesignVersion.js';
@@ -311,7 +312,7 @@ class ClientUserContextServices {
                         _id: userContext.designComponentId
                     });
 
-                    console.log("Opening design update component " + duComponent.componentNameNew);
+                    //console.log("Opening design update component " + duComponent.componentNameNew);
 
                     if(duComponent) {
 
@@ -689,6 +690,7 @@ class ClientUserContextServices {
             design:             'NONE',
             designVersion:      'NONE',
             designUpdate:       'NONE',
+            designUpdateAction: 'NONE',
             workPackage:        'NONE',
             application:        'NONE',
             designSection:      'NONE',
@@ -721,6 +723,7 @@ class ClientUserContextServices {
 
             if(designUpdate) {
                 contextNameData.designUpdate = designUpdate.updateName;
+                contextNameData.designUpdateAction = TextLookups.updateMergeActions(designUpdate.updateMergeAction);
             }
         }
 

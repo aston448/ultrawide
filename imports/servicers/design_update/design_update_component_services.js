@@ -95,7 +95,7 @@ class DesignUpdateComponentServices{
                     {$set: {componentReferenceId: newUpdateComponentId}}
                 );
 
-                // Set the starting index for a new component (at end of list)
+                // Set the starting index for a new component (at end of list).  This checks against the working design, not just this update
                 DesignUpdateComponentModules.setIndex(newUpdateComponentId, componentType, parentId);
 
                 // Ensure that all parents of the component are now in ParentScope
@@ -121,14 +121,20 @@ class DesignUpdateComponentServices{
                     DesignServices.setRemovable(designId);
 
                     // Update any WPs before adding the feature aspects
-                    DesignUpdateComponentModules.updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId);
+                    DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
+
+                    // And update the Working Design Version if update is for Merging
+                    DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
 
                     // And for Features add the default Feature Aspects
                     // TODO - that could be user configurable!
                     DesignUpdateComponentModules.addDefaultFeatureAspects(designVersionId, designUpdateId, newUpdateComponentId, '', view);
                 } else {
                     // Just update any WPs
-                    DesignUpdateComponentModules.updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId);
+                    DesignUpdateComponentModules.updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId);
+
+                    // And update the Working Design Version if update is for Merging
+                    DesignUpdateComponentModules.updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId);
                 }
 
                 // When inserting a new design component its parent becomes non-removable
@@ -258,7 +264,7 @@ class DesignUpdateComponentServices{
             const oldParentId = movingComponent.componentParentIdOld;
 
             // Not moved if the old parent is the same as the new one
-            let isMoved = (oldParentId != newParentId);
+            let isMoved = (oldParentId !== newParentId);
 
             // If a Design Section, make sure the level gets changed correctly
             let newLevel = movingComponent.componentLevel;
@@ -319,6 +325,9 @@ class DesignUpdateComponentServices{
 
                 // Make sure this component is also moved in any work packages
                 DesignUpdateComponentModules.updateWorkPackageLocation(componentId, false);
+
+                // And in the current Design Version
+                DesignUpdateComponentModules.updateCurrentDesignVersionWithNewLocation(componentId);
 
                 // Design Update Summary is now stale
                 DesignUpdates.update({_id: movingComponent.designUpdateId}, {$set:{summaryDataStale: true}});
@@ -385,6 +394,9 @@ class DesignUpdateComponentServices{
 
             // Update any WPs with new ordering
             DesignUpdateComponentModules.updateWorkPackageLocation(componentId, true);
+
+            // And also the current Design Version
+            DesignUpdateComponentModules.updateCurrentDesignVersionWithNewLocation(componentId);
 
             // Over time the indexing differences may get too small to work any more so periodically reset the indexes for this list.
             if (indexDiff < 0.001) {
@@ -506,8 +518,13 @@ class DesignUpdateComponentServices{
                 }
             );
 
-            // And the Design Update Summary is now stale if it was a real change
+
             if(changed) {
+
+                // Update the design version if necessary
+                DesignUpdateComponentModules.updateCurrentDesignVersionComponentName(designUpdateComponentId);
+
+                // And the Design Update Summary is now stale if it was a real change
                 DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
             }
         }
@@ -518,9 +535,9 @@ class DesignUpdateComponentServices{
     updateFeatureNarrative(featureId, newNarrative, newRawNarrative){
 
         if(Meteor.isServer) {
-            let componentOldNarrative = DesignUpdateComponents.findOne({_id: featureId}).componentNarrativeOld;
 
-            //console.log("old narrative: " + componentOldNarrative + " New narrative: " + newNarrative);
+            let duComponent = DesignUpdateComponents.findOne({_id: featureId});
+            let componentOldNarrative = duComponent.componentNarrativeOld;
 
             let changed = (newNarrative !== componentOldNarrative);
 
@@ -534,6 +551,12 @@ class DesignUpdateComponentServices{
                     }
                 }
             );
+
+            if(changed){
+
+                // Update the design version if necessary
+                DesignUpdateComponentModules.updateCurrentDesignVersionComponentDetails(featureId);
+            }
         }
     };
 
@@ -547,6 +570,9 @@ class DesignUpdateComponentServices{
             let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
             if (designUpdateComponent.isNew) {
+
+                // Remove from the Design Version
+                DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(designUpdateComponent);
 
                 // Actually delete it - Validation has already confirmed it is removable
                 let removedComponents = DesignUpdateComponents.remove(
@@ -565,6 +591,7 @@ class DesignUpdateComponentServices{
 
                     // Remove component from any related work packages
                     DesignUpdateComponentModules.removeWorkPackageItems(designUpdateComponent._id, designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId);
+
 
                     // If this happened to be the last Feature, Design is now removable
                     if (designUpdateComponent.componentType === ComponentType.FEATURE) {
@@ -611,23 +638,14 @@ class DesignUpdateComponentServices{
 
                 if(deletedComponents > 0){
 
-                    // For scopable components set the deleted component as in scope only in the update where it was deleted
+                    // For logically deleted components set the deleted component as in scope only in the update where it was deleted
 
                     DesignUpdateComponents.update(
-                        {_id: designUpdateComponentId, isScopable: true},
+                        {_id: designUpdateComponentId},
                         {
                             $set: {
                                 isInScope: true,
-                                isParentScope: true
-                            }
-                        }
-                    );
-
-                    DesignUpdateComponents.update(
-                        {_id: designUpdateComponentId, isScopable: false},
-                        {
-                            $set: {
-                                isParentScope: true
+                                isParentScope: false
                             }
                         }
                     );
@@ -638,6 +656,9 @@ class DesignUpdateComponentServices{
 
                     // And we logically delete 'elsewhere' the components in all parallel updates to prevent contradictory instructions
                     DesignUpdateComponentModules.logicallyDeleteChildrenForAllUpdates(designUpdateComponentId);
+
+                    // And mark as removed in the Design Version
+                    DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(thisComponent);
 
                     // This is a real change to functionality so set DU Summary as stale
                     DesignUpdates.update({_id: thisComponent.designUpdateId}, {$set: {summaryDataStale: true}});
@@ -697,6 +718,9 @@ class DesignUpdateComponentServices{
 
                 // For a logical delete restore we allow restoration of all children - and are restored in all updates
                 DesignUpdateComponentModules.logicallyRestoreChildrenForAllUpdates(designUpdateComponentId);
+
+                // And mark as removed in the Design Version
+                DesignUpdateComponentModules.updateCurrentDesignVersionWithRestore(designUpdateComponentId);
             }
         }
     }

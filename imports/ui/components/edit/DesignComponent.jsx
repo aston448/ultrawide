@@ -192,7 +192,7 @@ export class DesignComponent extends Component{
                     break;
                 case ViewType.DESIGN_UPDATE_EDIT:
                 case ViewType.DESIGN_UPDATE_VIEW:
-                    if(newProps.displayContext === DisplayContext.UPDATE_SCOPE){
+                    if(newProps.displayContext === DisplayContext.UPDATE_SCOPE || newProps.displayContext === DisplayContext.WORKING_VIEW){
                         if (
                             (newProps.openDesignItems.includes(this.props.currentItem._id) && !(this.props.openDesignItems.includes(this.props.currentItem._id))) ||
                             (!(newProps.openDesignItems.includes(this.props.currentItem._id)) && this.props.openDesignItems.includes(this.props.currentItem._id)) ||
@@ -244,7 +244,7 @@ export class DesignComponent extends Component{
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                if(props.displayContext === DisplayContext.UPDATE_SCOPE) {
+                if(props.displayContext === DisplayContext.UPDATE_SCOPE || props.displayContext === DisplayContext.WORKING_VIEW) {
                     this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 } else {
                     if(props.updateItem) {
@@ -281,7 +281,7 @@ export class DesignComponent extends Component{
 
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
-                if(this.props.displayContext === DisplayContext.UPDATE_SCOPE) {
+                if(this.props.displayContext === DisplayContext.UPDATE_SCOPE || this.props.displayContext === DisplayContext.WORKING_VIEW) {
                     ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
                 } else {
                     ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
@@ -500,6 +500,7 @@ export class DesignComponent extends Component{
             let notEditable = (
                 mode === ViewMode.MODE_VIEW ||
                 displayContext === DisplayContext.UPDATE_SCOPE ||
+                displayContext === DisplayContext.WORKING_VIEW ||
                 displayContext === DisplayContext.BASE_VIEW ||
                 displayContext === DisplayContext.WP_SCOPE ||
                 displayContext === DisplayContext.WP_VIEW ||

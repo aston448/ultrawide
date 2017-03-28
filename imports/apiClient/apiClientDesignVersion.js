@@ -74,7 +74,7 @@ class ClientDesignVersionServices{
         // Client validation
         let result = DesignVersionValidationApi.validateUpdateDesignVersionNumber(userRole, designVersionId, newNumber);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -110,7 +110,7 @@ class ClientDesignVersionServices{
         // Client validation
         let result = DesignVersionValidationApi.validatePublishDesignVersion(userRole, designVersionToPublishId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -148,7 +148,7 @@ class ClientDesignVersionServices{
         // Client validation
         let result = DesignVersionValidationApi.validateWithdrawDesignVersion(userRole, designVersionToUnPublishId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -186,7 +186,7 @@ class ClientDesignVersionServices{
         // Client validation
         let result = DesignVersionValidationApi.validateUpdateWorkingDesignVersion(userRole, workingDesignVersionId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -224,7 +224,7 @@ class ClientDesignVersionServices{
         // Client validation
         let result = DesignVersionValidationApi.validateCreateNextDesignVersion(userRole, baseDesignVersionId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -261,7 +261,7 @@ class ClientDesignVersionServices{
 
         let result = DesignVersionValidationApi.validateCreateNextDesignVersion(userRole, baseDesignVersionId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -297,11 +297,11 @@ class ClientDesignVersionServices{
         // Only want to reset component though if changing DV
         let designComponentId = userContext.designComponentId;
 
-        if(newDesignVersionId != userContext.designVersionId){
+        if(newDesignVersionId !== userContext.designVersionId){
             designComponentId = 'NONE';
         }
 
-        if(forceReset || (newDesignVersionId != userContext.designVersionId)) {
+        if(forceReset || (newDesignVersionId !== userContext.designVersionId)) {
 
             newContext = {
                 userId: userContext.userId,
@@ -320,7 +320,7 @@ class ClientDesignVersionServices{
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
             // Subscribe to the appropriate data for the new DV if DV changing
-            if(newDesignVersionId != userContext.designVersionId) {
+            if(newDesignVersionId !== userContext.designVersionId) {
                 store.dispatch(setDesignVersionDataLoadedTo(false));
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
@@ -356,7 +356,7 @@ class ClientDesignVersionServices{
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -393,7 +393,7 @@ class ClientDesignVersionServices{
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersionId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             log((msg) => console.log(msg), LogLevel.WARNING, result);
 
             // Business validation failed - show error on screen

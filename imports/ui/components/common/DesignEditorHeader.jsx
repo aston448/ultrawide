@@ -121,6 +121,9 @@ export class DesignEditorHeader extends Component {
                             description += ' for ' + nameData.designUpdate
                         }
                         break;
+                    case DisplayContext.WORKING_VIEW:
+                        description = 'Working Design Version (Merged Updates)';
+                        break;
                     default:
                         description = nameData.designUpdate;
                 }
@@ -185,6 +188,13 @@ export class DesignEditorHeader extends Component {
                     case DisplayContext.UPDATE_SUMMARY:
                         options = '';
                         break;
+
+                    case DisplayContext.WORKING_VIEW:
+                        options =
+                            <div className="details-menu-bar">
+                                {zoomFeaturesOption}
+                                {zoomSectionsOption}
+                            </div>;
 
                     default:
                         if(mode === ViewMode.MODE_VIEW){

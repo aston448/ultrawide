@@ -1,15 +1,18 @@
 
 // Ultrawide Collections
-import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
+import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
+import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType }      from '../../constants/constants.js';
+import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DesignUpdateMergeAction }      from '../../constants/constants.js';
 import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
 import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
+import DesignVersionModules             from '../../service_modules/design/design_version_service_modules.js';
+import WorkPackageModules               from '../../service_modules/work/work_package_service_modules.js';
 
 import { log }                          from '../../common/utils.js'
 
@@ -34,7 +37,7 @@ class DesignUpdateComponentModules{
         DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, true, view, true);
     }
 
-    updateWorkPackages(designVersionId, designUpdateId, newUpdateComponentId){
+    updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId){
 
         // See if any update WPs affected by this update
         const workPackages = WorkPackages.find({
@@ -45,57 +48,28 @@ class DesignUpdateComponentModules{
         }).fetch();
 
         const component = DesignUpdateComponents.findOne({_id: newUpdateComponentId});
+        const componentParent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
 
+        // If the parent is in the WP actual scope, add in this component too
         workPackages.forEach((wp) => {
 
-            const wpComponentId = WorkPackageComponents.insert(
-                {
-                    designVersionId:                designVersionId,
-                    workPackageId:                  wp._id,
-                    workPackageType:                wp.workPackageType,
-                    componentId:                    component._id,
-                    componentReferenceId:           component.componentReferenceId,
-                    componentType:                  component.componentType,
-                    componentParentReferenceId:     component.componentParentReferenceIdNew,
-                    componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
-                    componentLevel:                 component.componentLevel,
-                    componentIndex:                 component.componentIndexNew,
-                    componentParent:                false,
-                    componentActive:                false       // Start by assuming nothing in scope
-                }
-            );
+            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId);
 
-            // If the added item is a Scenario or a Feature Aspect and its parent is already in scope for this WP then put it in scope for the WP
-            if(component.componentType === ComponentType.SCENARIO || component.componentType === ComponentType.FEATURE_ASPECT){
-
-                // Get the Design parent
-                const parent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
-
-                // Get the parent in the WP
-                const wpParent = WorkPackageComponents.findOne({workPackageId: wp._id, componentReferenceId: parent.componentReferenceId});
-
-                // Update if active in this WP - Scenarios if sibling Scenarios are active.
-                if(component.componentType === ComponentType.SCENARIO && (wpParent.componentActive || wpParent.componentParent)){
-                    WorkPackageComponents.update(
-                        {_id: wpComponentId},
-                        {
-                            $set:{componentActive: true}
-                        }
-                    );
-                }
-
-                // Feature Aspects if Feature is active
-                if(component.componentType === ComponentType.FEATURE_ASPECT && wpParent.componentActive){
-                    WorkPackageComponents.update(
-                        {_id: wpComponentId},
-                        {
-                            $set:{componentActive: true}
-                        }
-                    );
-                }
-            }
         });
     };
+
+    updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId){
+
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+
+        // Add this item to the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            const updateComponent = DesignUpdateComponents.findOne({_id: newUpdateComponentId});
+
+            DesignVersionModules.addUpdateItemToDesignVersion(updateComponent);
+        }
+    }
 
     updateWorkPackageLocation(designUpdateComponentId, reorder){
 
@@ -109,50 +83,28 @@ class DesignUpdateComponentModules{
             workPackageType:    WorkPackageType.WP_UPDATE
         }).fetch();
 
-        //console.log("Update WP Location WPs to update: " + workPackages.length);
+        const componentParent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
 
         workPackages.forEach((wp) => {
-            if(reorder){
-                // Just a reordering job so can keep the WP scope as it is
-                WorkPackageComponents.update(
-                    {
-                        workPackageId:                  wp._id,
-                        workPackageType:                wp.workPackageType,
-                        componentId:                    designUpdateComponentId
-                    },
-                    {
-                        $set:{
-                            componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
-                            componentLevel:                 component.componentLevel,
-                            componentIndex:                 component.componentIndexNew,
-                        }
-                    },
-                    {multi: true}
-                );
-            } else {
-                // Moved to a new section so will have to descope from WP
-                WorkPackageComponents.update(
-                    {
-                        workPackageId:                  wp._id,
-                        workPackageType:                wp.workPackageType,
-                        componentId:                    designUpdateComponentId
-                    },
-                    {
-                        $set:{
-                            componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
-                            componentLevel:                 component.componentLevel,
-                            componentIndex:                 component.componentIndexNew,
-                            componentParent:                false,      // Reset WP status
-                            componentActive:                false
-                        }
-                    },
-                    {multi: true}
-                );
-            }
+
+            WorkPackageModules.updateDesignComponentLocationInWorkPackage(reorder, wp, component, componentParent);
+
         });
     };
+
+    updateCurrentDesignVersionWithNewLocation(movingComponentId){
+
+        // Pass in the ID and get the component again AFTER the change...
+
+        const designUpdateComponent = DesignUpdateComponents.findOne({_id: movingComponentId});
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateComponent.designUpdateId});
+
+        // Add this item to the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.moveUpdateItemInDesignVersion(designUpdateComponent);
+        }
+    }
 
     removeWorkPackageItems(designUpdateComponentId, designVersionId, designUpdateId){
 
@@ -165,27 +117,98 @@ class DesignUpdateComponentModules{
         }).fetch();
 
         workPackages.forEach((wp) => {
-            WorkPackageComponents.remove(
-                {
-                    workPackageId:                  wp._id,
-                    workPackageType:                wp.workPackageType,
-                    componentId:                    designUpdateComponentId
-                }
-            );
-        });
 
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp_id, designUpdateComponentId);
+
+        });
     };
+
+    updateCurrentDesignVersionWithRemoval(removedComponent){
+
+        // With this action we can pass in the actual component as we act BEFORE it is removed.
+
+        const designUpdate = DesignUpdates.findOne({_id: removedComponent.designUpdateId});
+
+        // Remove from working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.removeUpdateItemInDesignVersion(removedComponent)
+        }
+    }
+
+    updateCurrentDesignVersionWithRestore(restoredComponentId){
+
+        const designUpdateComponent = DesignUpdateComponents.findOne({_id: restoredComponentId});
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateComponent.designUpdateId});
+
+        // Restore to the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.restoreUpdateItemInDesignVersion(designUpdateComponent)
+        }
+    }
+
+    updateCurrentDesignVersionComponentName(updatedComponentId){
+
+        const designUpdateComponent = DesignUpdateComponents.findOne({_id: updatedComponentId});
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateComponent.designUpdateId});
+
+        // Update the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.updateItemNameInDesignVersion(designUpdateComponent)
+        }
+    }
+
+    updateCurrentDesignVersionComponentDetails(updatedComponentId){
+
+        const designUpdateComponent = DesignUpdateComponents.findOne({_id: updatedComponentId});
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateComponent.designUpdateId});
+
+        // Update the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.updateItemDetailsInDesignVersion(designUpdateComponent)
+        }
+    }
 
     setIndex(componentId, componentType, parentId){
 
-        // Get the max index of OTHER components of this type under the same parent
-        const peerComponents = DesignUpdateComponents.find({_id: {$ne: componentId}, componentType: componentType, componentParentIdNew: parentId}, {sort:{componentIndexNew: -1}});
+        // Get the max index of OTHER components of this type under the same parent in the working version
+        let peerComponents = [];
+        const updateComponent = DesignUpdateComponents.findOne({_id: componentId});
+
+        if(componentType === ComponentType.APPLICATION){
+
+            peerComponents = DesignVersionComponents.find(
+                {
+                    designVersionId: updateComponent.designVersionId,
+                    componentReferenceId: {$ne: updateComponent.componentReferenceId},
+                    componentType: componentType
+                },
+                {sort:{componentIndexNew: -1}}
+            ).fetch();
+
+        } else {
+
+            peerComponents = DesignVersionComponents.find(
+                {
+                    designVersionId: updateComponent.designVersionId,
+                    componentReferenceId: {$ne: updateComponent.componentReferenceId},
+                    componentType: componentType,
+                    componentParentReferenceIdNew: updateComponent.componentParentReferenceIdNew
+                },
+                {sort: {componentIndexNew: -1}}
+            ).fetch();
+        }
+
+        console.log('Peer components found =  ' + peerComponents.length);
 
         // If no components then leave as default of 100
-        if(peerComponents.count() > 0){
-            //console.log("Highest peer is " + peerComponents.fetch()[0].componentNameOld);
+        if(peerComponents.length > 0){
 
-            let newIndex = peerComponents.fetch()[0].componentIndexOld + 100;
+            console.log('Placing new component below ' + peerComponents[0].componentNameNew);
+            let newIndex = peerComponents[0].componentIndexNew + 100;
 
             DesignUpdateComponents.update(
                 {_id: componentId},
@@ -610,6 +633,8 @@ class DesignUpdateComponentModules{
     // Recursive function to mark all children down to the bottom of the tree as removed
     logicallyDeleteChildren(designUpdateComponentId, masterDesignUpdateId){
 
+        // TODO - have to add the components first and then logically delete if we are going to alow this...
+
         let childComponents = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
 
         if(childComponents.count() > 0){
@@ -623,18 +648,18 @@ class DesignUpdateComponentModules{
 
                     // The scope is updated if you are the Update actually doing the delete
 
-                    switch (child.componentType) {
-                        case ComponentType.FEATURE:
-                        case ComponentType.FEATURE_ASPECT:
-                        case ComponentType.SCENARIO:
-                            inScope = true;
-                            parentScope = true;
-                            break;
-                        default:
-                            inScope = false;
-                            parentScope = true;
-                            break;
-                    }
+                    // switch (child.componentType) {
+                    //     case ComponentType.FEATURE:
+                    //     case ComponentType.FEATURE_ASPECT:
+                    //     case ComponentType.SCENARIO:
+                    //         inScope = true;
+                    //         parentScope = true;
+                    //         break;
+                    //     default:
+                    //         inScope = false;
+                    //         parentScope = true;
+                    //         break;
+                    // }
 
                     // And the component is logically removed
                     DesignUpdateComponents.update(
@@ -642,8 +667,8 @@ class DesignUpdateComponentModules{
                         {
                             $set:{
                                 isRemoved: true,
-                                isInScope: inScope,     // Any Feature, Feature Aspect, Scenario removed is automatically in scope
-                                isParentScope: parentScope
+                                isInScope: true,     // Any component removed is automatically in scope
+                                isParentScope: false
                             }
                         }
                     );
@@ -662,7 +687,7 @@ class DesignUpdateComponentModules{
                 }
 
                 // Recursively call for these children - if not a Scenario which is the bottom of the tree
-                if(child.componentType != ComponentType.SCENARIO) {
+                if(child.componentType !== ComponentType.SCENARIO) {
                     this.logicallyDeleteChildren(child._id, masterDesignUpdateId)
                 }
 
@@ -696,7 +721,7 @@ class DesignUpdateComponentModules{
                 );
 
                 // Recursively call for these children - if not a Scenario which is the bottom of the tree
-                if(child.componentType != ComponentType.SCENARIO) {
+                if(child.componentType !== ComponentType.SCENARIO) {
                     this.logicallyRestoreChildren(child._id)
                 }
 

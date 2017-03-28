@@ -219,6 +219,103 @@ class WorkPackageModules {
 
         return children;
     }
+
+    addNewDesignComponentToWorkPackage(workPackage, component, componentParentId, designVersionId){
+
+        let wpActiveParentComponent = WorkPackageComponents.findOne({
+            workPackageId: workPackage._id,
+            componentId: componentParentId,
+            componentActive: true
+        });
+
+        if (wpActiveParentComponent){
+
+            let wpComponentId = WorkPackageComponents.insert(
+                {
+                    designVersionId:                designVersionId,
+                    workPackageId:                  workPackage._id,
+                    workPackageType:                workPackage.workPackageType,
+                    componentId:                    component._id,
+                    componentReferenceId:           component.componentReferenceId,
+                    componentType:                  component.componentType,
+                    componentParentReferenceId:     component.componentParentReferenceIdNew,
+                    componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                    componentIndex:                 component.componentIndexNew,
+                    componentParent:                false,
+                    componentActive:                true
+                }
+            );
+
+        }
+    };
+
+    updateDesignComponentLocationInWorkPackage(reorder, workPackage, component, componentParent){
+
+        if(reorder){
+            // Just a reordering job so can keep the WP scope as it is
+            WorkPackageComponents.update(
+                {
+                    workPackageId:                  workPackage._id,
+                    componentId:                    component._id
+                },
+                {
+                    $set:{
+                        componentParentReferenceId:     component.componentParentReferenceIdNew,
+                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
+                        componentIndex:                 component.componentIndexNew,
+                    }
+                },
+                {multi: true}
+            );
+        } else {
+            // Moved to a new section so descope from WP if new parent not active
+
+            let wpParent = null;
+            let isActive = false;
+            let isParent = false;
+
+            if(componentParent){
+                wpParent = WorkPackageComponents.findOne({
+                    workPackageId:  workPackage._id,
+                    componentId:    componentParent._id
+                });
+
+                if(wpParent){
+                    isActive = wpParent.componentActive;
+                    // Moved retains parent status is its parent is a parent and we have decided it isn't active
+                    isParent = ((!isActive) && wpParent.componentParent);
+                }
+            }
+
+            WorkPackageComponents.update(
+                {
+                    workPackageId:                  workPackage._id,
+                    componentId:                    component._id
+                },
+                {
+                    $set:{
+                        componentParentReferenceId:         component.componentParentReferenceId,
+                        componentFeatureReferenceId:        component.componentFeatureReferenceIdNew,
+                        componentLevel:                     component.componentLevel,
+                        componentIndex:                     component.componentIndexNew,
+                        componentParent:                    isParent,      // Reset WP status
+                        componentActive:                    isActive
+                    }
+                },
+                {multi: true}
+            );
+        }
+    };
+
+    removeDesignComponentFromWorkPackage(workPackageId, designComponentId){
+
+        WorkPackageComponents.remove(
+            {
+                workPackageId:  workPackageId,
+                componentId:    designComponentId
+            }
+        );
+    };
 }
 
 export default new WorkPackageModules();

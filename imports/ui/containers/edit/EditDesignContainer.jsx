@@ -99,7 +99,7 @@ export class DesignApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, designSummaryData, userContext, view, mode, viewOptions} = this.props;
+        const {baseApplications, workingApplications, designSummaryData, userContext, view, mode, viewOptions} = this.props;
 
         let layout = '';
 
@@ -143,6 +143,14 @@ export class DesignApplicationsList extends Component {
 
         // Get correct window height
         const editorClass = this.getEditorClass();
+        let applications = [];
+
+        // Display working version if in the updatable version view
+        if(view === ViewType.DESIGN_UPDATABLE_VIEW){
+            applications = workingApplications;
+        } else {
+           applications = baseApplications;
+        }
 
         let designEditor =
             <div className="design-editor-container">
@@ -150,14 +158,16 @@ export class DesignApplicationsList extends Component {
                     displayContext={displayContext}
                 />
                 <div className={editorClass}>
-                    {this.renderApplications(baseApplications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
+                    {this.renderApplications(applications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
                     {addComponent}
                 </div>
                 <DesignEditorFooter
                     hasDesignSummary={true}
+                    displayContext={displayContext}
                     designSummaryData={designSummaryData}
                 />
             </div>;
+
 
         // WHAT COMPONENTS ARE VISIBLE (Besides Design)
 
@@ -287,6 +297,7 @@ export class DesignApplicationsList extends Component {
 
 DesignApplicationsList.propTypes = {
     baseApplications: PropTypes.array.isRequired,
+    workingApplications: PropTypes.array.isRequired,
     designSummaryData: PropTypes.object
 };
 

@@ -7,7 +7,8 @@ import { WorkPackageComponents }    from '../../collections/work/work_package_co
 // Ultrawide Services
 import { ComponentType, WorkPackageStatus, WorkPackageType, LogLevel } from '../../constants/constants.js';
 
-import  DesignComponentServices     from '../../servicers/design/design_component_services.js';
+import DesignComponentServices      from '../../servicers/design/design_component_services.js';
+import WorkPackageModules           from '../../service_modules/work/work_package_service_modules.js';
 
 //======================================================================================================================
 //
@@ -57,31 +58,8 @@ class DesignComponentModules{
         // If the parent is in the WP actual scope, add in this component too
         workPackages.forEach((wp) => {
 
-            let wpActiveParentComponent = WorkPackageComponents.findOne({
-                workPackageId: wp._id,
-                componentId: componentParent._id,
-                componentActive: true
-            });
+            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId);
 
-            if (wpActiveParentComponent){
-
-                let wpComponentId = WorkPackageComponents.insert(
-                    {
-                        designVersionId:                designVersionId,
-                        workPackageId:                  wp._id,
-                        workPackageType:                wp.workPackageType,
-                        componentId:                    component._id,
-                        componentReferenceId:           component.componentReferenceId,
-                        componentType:                  component.componentType,
-                        componentParentReferenceId:     component.componentParentReferenceIdNew,
-                        componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                        componentIndex:                 component.componentIndexNew,
-                        componentParent:                false,
-                        componentActive:                true
-                    }
-                );
-
-            }
         });
     };
 
@@ -97,63 +75,11 @@ class DesignComponentModules{
             workPackageType:    WorkPackageType.WP_BASE
         }).fetch();
 
-        //console.log("Update WP Location WPs to update: " + workPackages.length);
+        const componentParent = DesignVersionComponents.findOne({_id: component.componentParentIdNew});
 
         workPackages.forEach((wp) => {
-            if(reorder){
-                // Just a reordering job so can keep the WP scope as it is
-                WorkPackageComponents.update(
-                    {
-                        workPackageId:                  wp._id,
-                        componentId:                    designComponentId
-                    },
-                    {
-                        $set:{
-                            componentParentReferenceId:     component.componentParentReferenceIdNew,
-                            componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
-                            componentIndex:                 component.componentIndexNew,
-                        }
-                    },
-                    {multi: true}
-                );
-            } else {
-                // Moved to a new section so descope from WP if new parent not active
-                const itemParent = DesignVersionComponents.findOne({_id: component.componentParentIdNew});
-                let wpParent = null;
-                let isActive = false;
-                let isParent = false;
 
-                if(itemParent){
-                    wpParent = WorkPackageComponents.findOne({
-                        workPackageId:  wp._id,
-                        componentId:    itemParent._id
-                    });
-
-                    if(wpParent){
-                        isActive = wpParent.componentActive;
-                        // Moved retains parent status is its parent is a parent and we have decided it isn't active
-                        isParent = ((!isActive) && wpParent.componentParent);
-                    }
-                }
-
-                WorkPackageComponents.update(
-                    {
-                        workPackageId:                  wp._id,
-                        componentId:                    designComponentId
-                    },
-                    {
-                        $set:{
-                            componentParentReferenceId:     component.componentParentReferenceId,
-                            componentFeatureReferenceIdNew:    component.componentFeatureReferenceIdNew,
-                            componentLevel:                 component.componentLevel,
-                            componentIndex:                 component.componentIndexNew,
-                            componentParent:                isParent,      // Reset WP status
-                            componentActive:                isActive
-                        }
-                    },
-                    {multi: true}
-                );
-            }
+            WorkPackageModules.updateDesignComponentLocationInWorkPackage(reorder, wp, component, componentParent);
 
         });
     }
@@ -170,17 +96,11 @@ class DesignComponentModules{
 
         workPackages.forEach((wp) => {
 
-            WorkPackageComponents.remove(
-                {
-                    workPackageId:                  wp._id,
-                    componentId:                    designComponentId
-                }
-            );
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp._id, designComponentId);
+
         });
 
     };
-
-
 
     // Set any other components to no longer new
     setComponentsOld(designComponentId){

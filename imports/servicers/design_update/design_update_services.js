@@ -21,10 +21,10 @@ import DesignUpdateModules          from '../../service_modules/design_update/de
 class DesignUpdateServices{
 
     // Add a new design update
-    addNewDesignUpdate(designVersionId, populateUpdate){
+    addNewDesignUpdate(designVersionId){
 
         if(Meteor.isServer) {
-            // First Add a new Update record
+
             const designUpdateId = DesignUpdates.insert(
                 {
                     designVersionId:    designVersionId,                                // The design version this is a change to
@@ -34,17 +34,6 @@ class DesignUpdateServices{
                 }
             );
 
-            // Next get the base design version to create the update from
-            const designVersion = DesignVersions.findOne({
-                _id: designVersionId
-            });
-
-            // if (designUpdateId && designVersion) {
-            //     if (populateUpdate) {
-            //         DesignUpdateModules.populateDesignUpdate(designVersion.baseDesignVersionId, designVersionId, designUpdateId);
-            //     }
-            // }
-
             return designUpdateId;
         }
     };
@@ -52,6 +41,7 @@ class DesignUpdateServices{
     importDesignUpdate(designVersionId, designUpdate){
 
         if(Meteor.isServer) {
+
             let designUpdateId = DesignUpdates.insert(
                 {
                     designVersionId:    designVersionId,
@@ -80,12 +70,19 @@ class DesignUpdateServices{
                     }
                 }
             );
+
+            // Merge this update with the Design Version
+            DesignUpdateModules.addUpdateToDesignVersion(designUpdateId);
         }
     };
 
     withdrawUpdate(designUpdateId){
 
         if(Meteor.isServer) {
+
+            // This call will only act if DU is currently merged
+            DesignUpdateModules.removeMergedUpdateFromDesignVersion(designUpdateId);
+
             DesignUpdates.update(
                 {_id: designUpdateId},
                 {
@@ -95,6 +92,8 @@ class DesignUpdateServices{
                     }
                 }
             );
+
+
         }
     };
 
@@ -131,6 +130,10 @@ class DesignUpdateServices{
     removeUpdate(designUpdateId){
 
         if(Meteor.isServer) {
+
+            // Remove this update from the Design version if it is Merged - it should not be as have to withdraw before remove
+            DesignUpdateModules.removeMergedUpdateFromDesignVersion(designUpdateId);
+
             // Delete all components in the design update
             let removedComponents = DesignUpdateComponents.remove(
                 {designUpdateId: designUpdateId}
@@ -148,6 +151,13 @@ class DesignUpdateServices{
 
         if(Meteor.isServer){
 
+            // If becoming not merged remove before change
+            if(newAction !== DesignUpdateMergeAction.MERGE_INCLUDE){
+
+                // This call will only act if DU is currently merged
+                DesignUpdateModules.removeMergedUpdateFromDesignVersion(designUpdateId);
+            }
+
             DesignUpdates.update(
                 {_id: designUpdateId},
                 {
@@ -156,6 +166,12 @@ class DesignUpdateServices{
                     }
                 }
             );
+
+            // Merge this update with the Design Version if now merged
+            if(newAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+                DesignUpdateModules.addUpdateToDesignVersion(designUpdateId);
+            }
+
         }
     };
 }

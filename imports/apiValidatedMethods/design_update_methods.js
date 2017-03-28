@@ -23,12 +23,12 @@ export const addDesignUpdate = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateAddDesignUpdate(userRole, designVersionId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.addDesignUpdate.failValidation', result)
         }
 
         try {
-            DesignUpdateServices.addNewDesignUpdate(designVersionId, true);
+            DesignUpdateServices.addNewDesignUpdate(designVersionId);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)
@@ -51,7 +51,7 @@ export const updateDesignUpdateName = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateUpdateDesignUpdateName(userRole, designUpdateId, newName);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.updateDesignUpdateName.failValidation', result)
         }
 
@@ -79,7 +79,7 @@ export const updateDesignUpdateRef = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.updateDesignUpdateRef.failValidation', result)
         }
 
@@ -106,7 +106,7 @@ export const publishDesignUpdate = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validatePublishDesignUpdate(userRole, designUpdateId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.publishDesignUpdate.failValidation', result)
         }
 
@@ -133,7 +133,7 @@ export const withdrawDesignUpdate = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateWithdrawDesignUpdate(userRole, designUpdateId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.withdrawDesignUpdate.failValidation', result)
         }
 
@@ -160,7 +160,7 @@ export const removeDesignUpdate = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateRemoveDesignUpdate(userRole, designUpdateId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.removeDesignUpdate.failValidation', result)
         }
 
@@ -188,7 +188,7 @@ export const updateMergeAction = new ValidatedMethod({
 
         const result = DesignUpdateValidationApi.validateUpdateMergeAction(userRole, designUpdateId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designUpdate.updateMergeAction.failValidation', result)
         }
 

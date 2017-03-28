@@ -37,19 +37,25 @@ export class DesignEditorFooter extends Component {
         return ClientUserContextServices.getContextNameData(userContext, DisplayContext.EDITOR_FOOTER);
     }
 
-    getFooterText(userContext){
+    getFooterText(userContext, displayContext){
 
         const nameData = this.getNameData(userContext);
 
-        if(userContext.workPackageId != 'NONE'){
-            if(userContext.designUpdateId != 'NONE'){
+        if(userContext.workPackageId !== 'NONE'){
+            if(userContext.designUpdateId !== 'NONE'){
                 return nameData.design + ' - ' + nameData.designVersion + ' - ' + nameData.designUpdate;
             } else {
                 return nameData.design + ' - ' + nameData.designVersion
             }
         } else {
-            if(userContext.designUpdateId != 'NONE'){
-                return nameData.design + ' - ' + nameData.designVersion;
+            if(userContext.designUpdateId !== 'NONE'){
+                switch(displayContext){
+                    case DisplayContext.UPDATE_EDIT:
+                        return 'Update Action: ' + nameData.designUpdateAction;
+                    default:
+                        return nameData.design + ' - ' + nameData.designVersion;
+                }
+
             } else {
                 return nameData.design
             }
@@ -59,7 +65,7 @@ export class DesignEditorFooter extends Component {
 
     render() {
 
-        const {hasDesignSummary, designSummaryData, userContext} = this.props;
+        const {hasDesignSummary, displayContext, designSummaryData, userContext} = this.props;
 
         if(hasDesignSummary && designSummaryData) {
             return (
@@ -72,7 +78,7 @@ export class DesignEditorFooter extends Component {
         } else {
             return (
                 <div className="design-editor-footer">
-                    <div className="details-footer-note">{this.getFooterText(userContext)}</div>
+                    <div className="details-footer-note">{this.getFooterText(userContext, displayContext)}</div>
                 </div>
             );
         }
@@ -80,7 +86,8 @@ export class DesignEditorFooter extends Component {
 }
 
 DesignEditorFooter.propTypes = {
-    hasDesignSummary: PropTypes.bool.isRequired,
+    hasDesignSummary:   PropTypes.bool.isRequired,
+    displayContext:     PropTypes.string.isRequired,
     designSummaryData:  PropTypes.object
 };
 

@@ -1,7 +1,10 @@
 
 // Ultrawide Collections
-import { DesignVersionComponents }         from '../../collections/design/design_version_components.js';
-import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
+import { DesignVersionComponents }          from '../../collections/design/design_version_components.js';
+import { DesignUpdateComponents }           from '../../collections/design_update/design_update_components.js';
+
+// Ultrawide Services
+import DesignUpdateComponentModules         from '../../service_modules/design_update/design_update_component_service_modules.js';
 
 //======================================================================================================================
 //
@@ -30,6 +33,7 @@ class TextEditorServices{
     // Save text for a component in a design update
     saveUpdateText(designUpdateComponentId, rawText){
         if(Meteor.isServer) {
+
             // When updating an update we update the new text and mark as text changed
             DesignUpdateComponents.update(
                 {_id: designUpdateComponentId},
@@ -40,6 +44,9 @@ class TextEditorServices{
                     }
                 }
             );
+
+            // Update the design version if necessary
+            DesignUpdateComponentModules.updateCurrentDesignVersionComponentDetails(designUpdateComponentId);
         }
     };
 }
