@@ -40,7 +40,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         const baseComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+        const designUpdateComponent = null; // TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, baseComponent, userContext.designUpdateId, designUpdateComponent, true);
 
