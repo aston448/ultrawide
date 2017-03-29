@@ -39,9 +39,10 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
+        const baseComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
         const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
-        const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, true);
+        const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, baseComponent, userContext.designUpdateId, designUpdateComponent, true);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Add Component to Update Scope');
     },
@@ -55,9 +56,10 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
+        const baseComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
         const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
-        const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, designUpdateComponent, false);
+        const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, baseComponent, userContext.designUpdateId, designUpdateComponent, false);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Component from Update Scope');
     },

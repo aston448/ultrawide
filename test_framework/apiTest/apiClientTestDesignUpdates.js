@@ -139,7 +139,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        if(userContext.designUpdateId != 'NONE') {
+        if(userContext.designUpdateId !== 'NONE') {
             ClientDesignUpdateServices.refreshSummary(userContext.designUpdateId);
         }
     }

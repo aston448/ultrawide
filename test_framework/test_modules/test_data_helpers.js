@@ -196,7 +196,7 @@ class TestDataHelpers {
 
         const designVersion = DesignVersions.findOne({_id: designVersionId});
         let designUpdateName = 'NONE';
-        if(designUpdateId != 'NONE'){
+        if(designUpdateId !== 'NONE'){
             designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
         }
 
@@ -267,7 +267,7 @@ class TestDataHelpers {
         }).fetch();
 
         // Get the component that has the expected parent- except for Applications that have no parent
-        if(componentType != ComponentType.APPLICATION) {
+        if(componentType !== ComponentType.APPLICATION) {
             designComponents.forEach((component) => {
 
                 parentComponent = DesignVersionComponents.findOne({
@@ -306,7 +306,7 @@ class TestDataHelpers {
         }).fetch();
 
         // Get the component that has the expected parent- except for Applications that have no parent
-        if(componentType != ComponentType.APPLICATION) {
+        if(componentType !== ComponentType.APPLICATION) {
             designUpdateComponents.forEach((component) => {
 
                 parentComponent = DesignUpdateComponents.findOne({
