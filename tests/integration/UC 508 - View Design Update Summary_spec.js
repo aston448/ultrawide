@@ -66,6 +66,7 @@ describe('UC 508 - View Design Update Summary', function(){
         // Setup
         // Add a new Feature to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Refresh Summary
@@ -99,6 +100,7 @@ describe('UC 508 - View Design Update Summary', function(){
         // Setup
         // Add a new Feature and Scenario to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
 
@@ -147,6 +149,7 @@ describe('UC 508 - View Design Update Summary', function(){
         // Setup
         // Remove Section2 - Will remove Feature2
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
         // Refresh Summary
@@ -162,6 +165,7 @@ describe('UC 508 - View Design Update Summary', function(){
         // Setup
         // Remove Section2 - Will remove Feature2 + Scenarios 3 and 4
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
         // Refresh Summary
@@ -179,6 +183,7 @@ describe('UC 508 - View Design Update Summary', function(){
         // Setup
         // Add a new Feature to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Refresh Summary
@@ -270,6 +275,7 @@ describe('UC 508 - View Design Update Summary', function(){
         // Setup
         // Add a new Feature to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Refresh Summary
