@@ -60,6 +60,7 @@ describe('UC 522 - Select Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
 
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
@@ -73,6 +74,7 @@ describe('UC 522 - Select Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
 
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
@@ -85,6 +87,7 @@ describe('UC 522 - Select Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
 
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
@@ -97,6 +100,7 @@ describe('UC 522 - Select Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
 
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
@@ -109,6 +113,7 @@ describe('UC 522 - Select Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Execute
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
