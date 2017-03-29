@@ -668,7 +668,7 @@ export class DesignComponentHeader extends Component{
                     inParentScope = wpItem.componentParent;
                 } else {
                     if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
-                        // Item is in sc0pe in another WP
+                        // Item is in scope in another WP
                         inScopeElsewhere = true;
                     }
                 }

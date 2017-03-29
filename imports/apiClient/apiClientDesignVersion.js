@@ -467,7 +467,7 @@ class ClientDesignVersionServices{
             componentReferenceId:   currentComponent.componentReferenceId,
         });
 
-        console.log("getting update component returning " + updateComponent);
+        //console.log("getting update component returning " + updateComponent);
 
         if(updateComponent){
             return updateComponent;

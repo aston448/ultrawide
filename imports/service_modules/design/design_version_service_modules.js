@@ -7,7 +7,7 @@ import { DesignUpdateComponents }   from '../../collections/design_update/design
 import { DomainDictionary }         from '../../collections/design/domain_dictionary.js';
 
 // Ultrawide Services
-import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, UpdateMergeStatus } from '../../constants/constants.js';
+import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, UpdateMergeStatus, ComponentType } from '../../constants/constants.js';
 
 //======================================================================================================================
 //
@@ -500,6 +500,44 @@ class DesignVersionModules{
         }
     };
 
+    logicallyDeleteDesignVersionItem(designVersionItem){
+
+        DesignVersionComponents.update(
+            {_id: designVersionItem._id},
+            {
+                $set: {
+                    updateMergeStatus: UpdateMergeStatus.COMPONENT_REMOVED
+                }
+            }
+        );
+    }
+
+    logicallyRestoreDesignVersionItem(designVersionItem){
+
+        // Mark the item as no longer deleted
+        let updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
+
+        // Check for previous changes
+        if(designVersionItem.componentNarrativeNew !== designVersionItem.componentNarrativeOld) {
+            updateMergeStatus = UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED;
+        }
+
+        //TODO - currently not feasible to check for text changes unless we start storing non-raw?
+
+        if(designVersionItem.componentNameNew !== designVersionItem.componentNameOld) {
+            updateMergeStatus = UpdateMergeStatus.COMPONENT_MODIFIED;
+        }
+
+        DesignVersionComponents.update(
+            {_id: designVersionItem._id},
+            {
+                $set:{
+                    updateMergeStatus:  updateMergeStatus
+                }
+            }
+        );
+    }
+
     removeUpdateItemInDesignVersion(updateItem){
 
         const designVersionItem = DesignVersionComponents.findOne({
@@ -510,25 +548,42 @@ class DesignVersionModules{
         if(designVersionItem){
 
             if(updateItem.isNew){
+                // New DU item
 
-                // Complete delete
+                // Complete delete - this sort of delete does not delete children as only bottom level can be deleted
                 DesignVersionComponents.remove({_id: designVersionItem._id});
 
             } else {
+                // Existing DV item
 
                 // Mark the item as logically deleted
-                DesignVersionComponents.update(
-                    {_id: designVersionItem._id},
-                    {
-                        $set: {
-                            updateMergeStatus: UpdateMergeStatus.COMPONENT_REMOVED
-                        }
-                    }
-                );
+                this.logicallyDeleteDesignVersionItem(designVersionItem);
+
+                // And do the same for all children
+                this.removeUpdateItemChildren(designVersionItem);
             }
         }
     };
 
+    removeUpdateItemChildren(designVersionItem){
+
+        const children = DesignVersionComponents.find({
+            designVersionId:        designVersionItem.designVersionId,
+            componentParentIdNew:   designVersionItem._id
+        }).fetch();
+
+        children.forEach((child) => {
+
+            this.logicallyDeleteDesignVersionItem(child);
+
+            // And go on down if more children
+            if(child.componentType !== ComponentType.SCENARIO){
+
+                this.removeUpdateItemChildren(child);
+            }
+        });
+
+    }
 
     restoreUpdateItemInDesignVersion(updateItem){
 
@@ -540,29 +595,29 @@ class DesignVersionModules{
 
         if(designVersionItem){
 
-            // Mark the item as no longer deleted
-            let updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
+            this.logicallyRestoreDesignVersionItem(designVersionItem);
 
-            // Check for previous changes
-            if(designVersionItem.componentNarrativeNew !== designVersionItem.componentNarrativeOld) {
-                updateMergeStatus = UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED;
-            }
-
-            //TODO - currently not feasible to check for text changes unless we start storing non-raw?
-
-            if(designVersionItem.componentNameNew !== designVersionItem.componentNameOld) {
-                updateMergeStatus = UpdateMergeStatus.COMPONENT_MODIFIED;
-            }
-
-            DesignVersionComponents.update(
-                {_id: designVersionItem._id},
-                {
-                    $set:{
-                        updateMergeStatus:  updateMergeStatus
-                    }
-                }
-            );
+            this.restoreUpdateItemChildren(designVersionItem);
         }
+    }
+
+    restoreUpdateItemChildren(designVersionItem){
+
+        const children = DesignVersionComponents.find({
+            designVersionId:        designVersionItem.designVersionId,
+            componentParentIdNew:   designVersionItem._id
+        }).fetch();
+
+        children.forEach((child) => {
+
+            this.logicallyRestoreDesignVersionItem(child);
+
+            // And go on down if more children
+            if(child.componentType !== ComponentType.SCENARIO){
+
+                this.restoreUpdateItemChildren(child);
+            }
+        });
     }
 
     updateItemNameInDesignVersion(updateItem){

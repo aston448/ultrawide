@@ -821,7 +821,7 @@ class ClientContainerServices{
         let currentComponents = [];
         let wpComponents = [];
 
-        console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
+        //console.log("Looking for " + componentType + " data for view " + view + " and context " + displayContext);
 
         switch(view)
         {
@@ -869,60 +869,23 @@ class ClientContainerServices{
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
-                        // Display all components that should be in scope plus stuff to add things to
-                        switch(componentType){
-                            case ComponentType.DESIGN_SECTION:
-                                // Always in scope so stuff can be added in the update
-                                currentComponents = DesignUpdateComponents.find(
-                                    {
-                                        designVersionId: designVersionId,
-                                        designUpdateId: designUpdateId,
-                                        componentType: componentType,
-                                        componentParentIdNew: parentId
-                                    },
-                                    {sort:{componentIndexNew: 1}}
-                                ).fetch();
-                                break;
-                            case ComponentType.FEATURE:
-                            case ComponentType.FEATURE_ASPECT:
-                            case ComponentType.SCENARIO:
-                                // Only get in scope items
-                                currentComponents = DesignUpdateComponents.find(
-                                    {
-                                        designVersionId: designVersionId,
-                                        designUpdateId: designUpdateId,
-                                        componentType: componentType,
-                                        componentParentIdNew: parentId,
-                                        $or:[{isInScope: true}, {isParentScope: true}]
-                                    },
-                                    {sort:{componentIndexNew: 1}}
-                                ).fetch();
-                                break;
-                        }
-                        break;
                     case DisplayContext.UPDATE_VIEW:
-                        // Display all components that should be in scope
-                        switch(componentType){
-                            case ComponentType.DESIGN_SECTION:
-                            case ComponentType.FEATURE:
-                            case ComponentType.FEATURE_ASPECT:
-                            case ComponentType.SCENARIO:
-                                // Only get in scope items
-                                currentComponents = DesignUpdateComponents.find(
-                                    {
-                                        designVersionId: designVersionId,
-                                        designUpdateId: designUpdateId,
-                                        componentType: componentType,
-                                        componentParentIdNew: parentId,
-                                        $or:[{isInScope: true}, {isParentScope: true}]
-                                    },
-                                    {sort:{componentIndexNew: 1}}
-                                ).fetch();
-                                break;
-                        }
+
+                        // Display all DU components.  Only in-scope components exist
+                        currentComponents = DesignUpdateComponents.find(
+                            {
+                                designVersionId:        designVersionId,
+                                designUpdateId:         designUpdateId,
+                                componentType:          componentType,
+                                componentParentIdNew:   parentId
+                            },
+                            {sort:{componentIndexNew: 1}}
+                        ).fetch();
+
                         break;
 
                     case DisplayContext.UPDATE_SCOPE:
+
                         // Display all design components in the base design so scope can be chosen
                         currentComponents = DesignVersionComponents.find(
                             {
@@ -936,6 +899,7 @@ class ClientContainerServices{
                         break;
 
                     case DisplayContext.WORKING_VIEW:
+
                         // Display latest components in the working view
                         currentComponents = DesignVersionComponents.find(
                             {
@@ -950,7 +914,7 @@ class ClientContainerServices{
 
                 }
 
-                console.log("Design update components found: " + currentComponents.length);
+                //console.log("Design update components found: " + currentComponents.length);
 
                 return {
                     components: currentComponents,
@@ -1001,7 +965,7 @@ class ClientContainerServices{
                         break;
                 }
 
-                console.log("Found " + currentComponents.length + " components of type " + componentType + " for display context " + displayContext);
+                //console.log("Found " + currentComponents.length + " components of type " + componentType + " for display context " + displayContext);
 
                 if(currentComponents.length > 0){
                     return {
@@ -1082,7 +1046,7 @@ class ClientContainerServices{
     getBackgroundStepsInFeature(view, displayContext, stepContext, designId, designVersionId, updateId, featureReferenceId){
         let backgroundSteps = null;
 
-        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature background steps in feature: {}", featureReferenceId);
+        //log((msg) => console.log(msg), LogLevel.TRACE, "Looking for feature background steps in feature: {}", featureReferenceId);
 
         // Assume feature is in scope unless we find it isn't for an Update
         let featureInScope = true;

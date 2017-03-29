@@ -432,7 +432,7 @@ class DesignUpdateComponentServices{
     };
 
     // Change the scope state of a design update component
-    toggleScope(baseComponentId, designUpdateId, newScope){
+    toggleScope(baseComponentId, designUpdateId, newScope, forceRemove = false){
 
         if(Meteor.isServer) {
 
@@ -470,24 +470,37 @@ class DesignUpdateComponentServices{
                     // Removing from scope means removing from the update - can only remove if in scope...
                     if(currentUpdateComponent && currentUpdateComponent.isInScope){
 
-                        // Remove it
+                        if(forceRemove){
 
+                            // In this case we are restoring a delete so we want to remove everything that is in scope
+                            DesignUpdateComponentModules.removeChildrenFromScope(baseComponent, designUpdateId);
 
-                        // And remove anything above it that is not in scope itself or has in-scope children
-                        // -- UNLESS there is another in scope item below
-                        if(DesignUpdateComponentModules.hasNoInScopeChildren(currentUpdateComponent._id, false)) {
-
-                            // OK to remove completely
                             DesignUpdateComponentModules.removeComponentFromUpdateScope(currentUpdateComponent._id);
 
-                            // And the parents if OK
                             DesignUpdateComponentModules.removeChildlessParentsFromScope(baseComponent, designUpdateId);
 
                         } else {
 
-                            // Need to convert to parent scope
-                            DesignUpdateComponentModules.updateToParentScope(currentUpdateComponent._id);
+                            // Remove anything above it that is not in scope itself or has in-scope children
+                            // -- UNLESS there is another in scope item below
+                            if(DesignUpdateComponentModules.hasNoInScopeChildren(currentUpdateComponent._id, false)) {
+
+                                // OK to remove completely
+                                DesignUpdateComponentModules.removeComponentFromUpdateScope(currentUpdateComponent._id);
+
+                                // And the parents if OK
+                                DesignUpdateComponentModules.removeChildlessParentsFromScope(baseComponent, designUpdateId);
+
+                            } else {
+
+                                // Need to convert to parent scope
+                                DesignUpdateComponentModules.updateToParentScope(currentUpdateComponent._id);
+                            }
                         }
+
+
+
+
                     }
                 }
             }
@@ -654,10 +667,11 @@ class DesignUpdateComponentServices{
                     // We would not allow it if any new Components are under the component being deleted
                     // in this or any other Update.  This logic happens in Validation.
 
-                    // And we logically delete 'elsewhere' the components in all parallel updates to prevent contradictory instructions
-                    DesignUpdateComponentModules.logicallyDeleteChildrenForAllUpdates(designUpdateComponentId);
+                    // Assuming we can delete because this component or a child of it is not in scope in another update
+                    // we need to add all child components to the update scope as deleted
+                    DesignUpdateComponentModules.logicallyDeleteChildren(thisComponent);
 
-                    // And mark as removed in the Design Version
+                    // And mark all as removed in the Design Version
                     DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(thisComponent);
 
                     // This is a real change to functionality so set DU Summary as stale
@@ -670,24 +684,16 @@ class DesignUpdateComponentServices{
     restoreComponent(designUpdateComponentId, parentId){
 
         if(Meteor.isServer) {
+
             // Undo a logical delete
             let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-            // Restore the actual deleted component
-            let restoredComponents = DesignUpdateComponents.update(
-                {
-                    _id: designUpdateComponentId
-                },
-                {
-                    $set: {
-                        isRemoved: false,
-                        isRemovable: true   // It can't have any children or it would not have been deletable
-                    }
-                },
-                {multi: true}
-            );
+            let baseComponent = DesignVersionComponents.findOne({
+                designVersionId: thisComponent.designVersionId,
+                componentReferenceId: thisComponent.componentReferenceId
+            });
 
-            // Restore other Update component instances removed elsewhere
+            // Clear any parallel update components
             DesignUpdateComponents.update(
                 {
                     _id:                    {$ne: designUpdateComponentId},
@@ -703,25 +709,12 @@ class DesignUpdateComponentServices{
                 {multi: true}
             );
 
-            if(restoredComponents > 0){
+            // Mark as no longer removed in the Design Version
+            DesignUpdateComponentModules.updateCurrentDesignVersionWithRestore(thisComponent);
 
-                // For scopable components set the restored component as not in scope only in the update where it was deleted
-
-                DesignUpdateComponents.update(
-                    {_id: designUpdateComponentId, isScopable: true},
-                    {
-                        $set: {
-                            isInScope: false
-                        }
-                    }
-                );
-
-                // For a logical delete restore we allow restoration of all children - and are restored in all updates
-                DesignUpdateComponentModules.logicallyRestoreChildrenForAllUpdates(designUpdateComponentId);
-
-                // And mark as removed in the Design Version
-                DesignUpdateComponentModules.updateCurrentDesignVersionWithRestore(designUpdateComponentId);
-            }
+            // Restore the component and its children - which effectively just means removing it from scope
+            // Use force remove option to remove everything
+            this.toggleScope(baseComponent._id, thisComponent.designUpdateId, false, true);
         }
     }
 

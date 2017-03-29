@@ -153,22 +153,29 @@ export class DesignComponent extends Component{
         // If this is a new component just added, set it as open
         switch(this.props.displayContext){
             case DisplayContext.BASE_EDIT:
+
+                // Open New items in the base design editor
                 if(this.props.currentItem.isNew){
                     console.log("Opening DV item on mount" + this.props.currentItem.componentNameNew);
                     ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, true);
                 }
                 break;
+
             case DisplayContext.UPDATE_EDIT:
-                if(this.props.updateItem.isNew && !this.props.updateItem.isChanged){
-                    console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
+
+                // In the update editor open any item that is added to scope
+                if(this.props.updateItem){
+                    //console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
                     ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, true);
+                    this.setState({open: true});
                 }
+
                 break;
         }
 
-        // Set as open if open in REDUX state
-        //console.log("Opening item on mount" + this.props.currentItem.componentNameNew);
+        // Generally open things that are open...
         this.setOpenState(this.props);
+
     }
 
     componentWillReceiveProps(newProps){
@@ -204,6 +211,7 @@ export class DesignComponent extends Component{
 
                     } else {
                         if(newProps.updateItem) {
+                            //console.log("NEW PROPS: " + this.props.updateItem.componentNameNew);
                             if (
                                 (newProps.openDesignUpdateItems.includes(this.props.updateItem._id) && !(this.props.openDesignUpdateItems.includes(this.props.updateItem._id))) ||
                                 (!(newProps.openDesignUpdateItems.includes(this.props.updateItem._id)) && this.props.openDesignUpdateItems.includes(this.props.updateItem._id)) ||
@@ -235,7 +243,13 @@ export class DesignComponent extends Component{
     }
 
     setOpenState(props){
-        const openUpdateItems = store.getState().currentUserOpenDesignUpdateItems;
+        const openUpdateItems = this.props.openDesignUpdateItems;
+
+        // console.log("Open design update items length is " + openUpdateItems.length);
+        // openUpdateItems.forEach((item) => {
+        //     console.log("Item: " + item);
+        // });
+
         switch(props.view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
@@ -248,6 +262,7 @@ export class DesignComponent extends Component{
                     this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 } else {
                     if(props.updateItem) {
+                        //console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + openUpdateItems.includes(props.updateItem._id));
                         this.setState({open: openUpdateItems.includes(props.updateItem._id)});
                     }
                 }
@@ -505,7 +520,9 @@ export class DesignComponent extends Component{
                 displayContext === DisplayContext.WP_SCOPE ||
                 displayContext === DisplayContext.WP_VIEW ||
                 (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.APPLICATION) ||
-                (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.DESIGN_SECTION)
+                (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.DESIGN_SECTION) ||
+                (updateItem && updateItem.isParentScope) ||
+                (updateItem && updateItem.isRemoved)
             );
 
             switch (currentItem.componentType) {

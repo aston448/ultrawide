@@ -113,7 +113,7 @@ class ClientAppHeaderServices{
 
             // Not a WP - do we want to be displaying Update or Base Version components?
 
-            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WORKING_VIEW){
 
                componentArray = this.getDesignVersionFeatures(userContext);
 

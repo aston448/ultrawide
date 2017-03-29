@@ -256,17 +256,21 @@ export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newS
 
         let newItems = openItems;
 
+        //console.log("REDUX: Setting Open Update Items");
+
         // Only adding or subtracting if a specific component id provided.  Otherwise assume a bulk set of data in existing items
         if (componentId) {
             if (newState) {
                 // Trying to set the component as OPEN so add component to list if not there
                 if (!newItems.includes(componentId)) {
+                    //console.log("REDUX: Adding item " + componentId);
                     newItems.push(componentId)
                 }
             } else {
                 // Trying to set the component as CLOSED so remove from list if present
                 const itemIndex = newItems.indexOf(componentId);
 
+                //console.log("REDUX: Removing item " + componentId);
                 if (itemIndex >= 0) {
                     newItems.splice(itemIndex, 1);
                 }

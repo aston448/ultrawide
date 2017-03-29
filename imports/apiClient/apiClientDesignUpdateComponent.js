@@ -71,7 +71,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -108,7 +108,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, null, ComponentType.APPLICATION);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             //ClientAuditServices.updateUserAction(auditKey, 'FAIL', result);
@@ -144,7 +144,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.DESIGN_SECTION);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -188,7 +188,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.DESIGN_SECTION);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             //ClientAuditServices.updateUserAction(auditKey, 'FAIL', result);
@@ -232,7 +232,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.FEATURE);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -274,7 +274,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.FEATURE_ASPECT);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -315,7 +315,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateAddDesignUpdateComponent(view, mode, parentComponent._id, ComponentType.SCENARIO);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -357,7 +357,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateRemoveDesignUpdateComponent(view, mode, designUpdateComponent._id);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -378,6 +378,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 9: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
+                    const testDataFlag = store.getState().testDataFlag;
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
+
                     this.refreshDesignUpdateSummary(designUpdateComponent);
 
                     // No need to remove from user context as only a logical delete and still visible
@@ -401,7 +404,7 @@ class ClientDesignUpdateComponentServices{
         // Client validation
         let result = DesignUpdateComponentValidationApi.validateRestoreDesignUpdateComponent(view, mode, designUpdateComponent._id);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -422,6 +425,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 10: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
+                    const testDataFlag = store.getState().testDataFlag;
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
+
                     this.refreshDesignUpdateSummary(designUpdateComponent);
 
                     // No need to remove from user context as only a logical delete and still visible
@@ -461,8 +467,13 @@ class ClientDesignUpdateComponentServices{
                 alert('Unexpected error 11: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Toggle Scope Actions:
+
+                // Ensure that all in scope items are open (and any descoped are removed)
+                this.openInScopeItems(designUpdateId);
+
                 const testDataFlag = store.getState().testDataFlag;
                 store.dispatch(updateTestDataFlag(!testDataFlag));
+
                 // Show action success on screen
                 if(newScope) {
                     store.dispatch(updateUserMessage({
@@ -509,6 +520,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 12: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Move Component Actions:
+                    const testDataFlag = store.getState().testDataFlag;
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
+
                     this.refreshDesignUpdateSummary(movingComponent);
 
                     // Show action success on screen
@@ -552,6 +566,8 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 13: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Reorder Component Actions:
+                    const testDataFlag = store.getState().testDataFlag;
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -586,7 +602,7 @@ class ClientDesignUpdateComponentServices{
                 );
 
                 featureComponents.forEach((component) => {
-                    console.log("Setting component " + component.componentNameNew + " open to " + setOpen);
+                    //console.log("Setting component " + component.componentNameNew + " open to " + setOpen);
                     store.dispatch(setCurrentUserOpenDesignUpdateItems(
                         currentList,
                         component._id,
@@ -598,6 +614,7 @@ class ClientDesignUpdateComponentServices{
 
             } else {
 
+                //console.log("Setting component " + designComponent.componentNameNew + " CLOSED");
                 // Close - close all children
                 this.closeChildren(designComponent, currentList);
 
@@ -613,6 +630,7 @@ class ClientDesignUpdateComponentServices{
                     setOpen
                 ));
 
+                console.log("item " + designComponent.componentNameNew + " set to OPEN");
                 store.dispatch((updateOpenItemsFlag(designComponent._id)));
             } else {
 
@@ -658,6 +676,33 @@ class ClientDesignUpdateComponentServices{
             return false;
         }
     };
+
+    openInScopeItems(designUpdateId){
+
+        const designUpdateOpenComponents = DesignUpdateComponents.find(
+            {
+                designUpdateId: designUpdateId,
+            },
+            {fields: {_id: 1}}
+        ).fetch();
+
+        let openDuItems = [];
+
+        designUpdateOpenComponents.forEach((component) => {
+            openDuItems.push(component._id);
+        });
+
+        //console.log("SETTING " + openDuItems.length + " DU items as open");
+
+        store.dispatch(setCurrentUserOpenDesignUpdateItems(
+            openDuItems,
+            null,
+            true
+        ));
+
+        //const testDataFlag = store.getState().testDataFlag;
+        //store.dispatch(updateTestDataFlag(!testDataFlag));
+    }
 
     // Call this after a change that might need the summary updating.  It wil only actually update if the data has been
     // marked as stale on the server...

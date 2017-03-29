@@ -27,28 +27,33 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD;
         }
 
-        // Check that scopable target is in scope for adding to if there is one
-        if(parentComponent){
-            switch(parentComponent.componentType){
-                case ComponentType.FEATURE:
-                case ComponentType.FEATURE_ASPECT:
-                case ComponentType.SCENARIO:
-                    // Must be in scope to add stuff to them
-                    if(!parentComponent.isInScope){
-                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
-                    }
-                    // And not removed
-                    if(parentComponent.isRemoved|| parentComponent.isRemovedElsewhere){
-                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
-                    }
-                    break;
-                default:
-                    // Others must not be removed
-                    if(parentComponent.isRemoved || parentComponent.isRemovedElsewhere){
-                        return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
-                    }
-            }
+        // Cannot add to a deleted parent
+        if(parentComponent.isRemoved|| parentComponent.isRemovedElsewhere){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
         }
+
+        // // Check that target is in scope for adding to if there is one
+        // if(parentComponent){
+        //     switch(parentComponent.componentType){
+        //         case ComponentType.FEATURE:
+        //         case ComponentType.FEATURE_ASPECT:
+        //         case ComponentType.SCENARIO:
+        //             // Must be in scope to add stuff to them
+        //             if(!parentComponent.isInScope){
+        //                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
+        //             }
+        //             // And not removed
+        //             if(parentComponent.isRemoved|| parentComponent.isRemovedElsewhere){
+        //                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+        //             }
+        //             break;
+        //         default:
+        //             // Others must not be removed
+        //             if(parentComponent.isRemoved || parentComponent.isRemovedElsewhere){
+        //                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+        //             }
+        //     }
+        // }
 
         // For Update WPs, additions only allowed for Scenarios and Feature Aspects
         if(view === ViewType.DEVELOP_UPDATE_WP){
@@ -75,7 +80,7 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_REMOVE;
         }
 
-        // If WP, must added by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
+        // If WP, must removed by the developer.  Since only Scenarios and Feature Aspects can be added by Dev, limited to these.
         if(view === ViewType.DEVELOP_UPDATE_WP){
             if(!designUpdateComponent.isDevAdded){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV;
@@ -328,8 +333,8 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
-        // An item cannot be put in scope if it is in scope for another update (not parent scope)
-        if(newScope) {
+        // A Scenario cannot be put in scope if it is in scope for another update (not parent scope)
+        if(newScope && updateComponent.componentType === ComponentType.SCENARIO) {
 
             let alreadyInScope = false;
 
@@ -350,6 +355,13 @@ class DesignUpdateComponentValidationServices{
         if(!newScope && updateComponent){
             if(updateComponent.isNew){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW;
+            }
+        }
+
+        // An item cannot be put out of scope if it is removed
+        if(!newScope && updateComponent){
+            if(updateComponent.isRemoved){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_REMOVED;
             }
         }
 
