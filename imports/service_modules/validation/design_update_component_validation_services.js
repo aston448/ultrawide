@@ -309,7 +309,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateToggleDesignUpdateComponentScope(view, mode, displayContext, updateComponent, componentInOtherUpdates, hasNoNewChildren, newScope){
+    validateToggleDesignUpdateComponentScope(view, mode, displayContext, scopeComponent, updateComponent, componentInOtherUpdates, hasNoNewChildren, newScope){
 
         // Updates only allowed in update edit when in edit mode
         if(view !== ViewType.DESIGN_UPDATE_EDIT){
@@ -334,9 +334,9 @@ class DesignUpdateComponentValidationServices{
         }
 
         // A Scenario cannot be put in scope if it is in scope for another update (not parent scope)
-        if(newScope && updateComponent){
+        if(newScope){
 
-            if(updateComponent.componentType === ComponentType.SCENARIO) {
+            if(scopeComponent.componentType === ComponentType.SCENARIO) {
 
                 let alreadyInScope = false;
 
@@ -389,9 +389,9 @@ class DesignUpdateComponentValidationServices{
         }
 
         // A Feature cannot be put in scope if it has been changed in another update
-        if(newScope && updateComponent){
+        if(newScope){
 
-            if(updateComponent.componentType === ComponentType.FEATURE){
+            if(scopeComponent.componentType === ComponentType.FEATURE){
 
                 let alreadyChanged = false;
 
