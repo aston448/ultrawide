@@ -73,7 +73,10 @@ describe('UC 501 - Add New Design Update', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
+        // Make sure that changes are public
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Execute
         // Add a second update
@@ -81,11 +84,11 @@ describe('UC 501 - Add New Design Update', function(){
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
 
-        // Verify - removed stuff is marked as removed elsewhere
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(UpdateComponentVerifications.componentIsRemovedElsewhereForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        // Verify - removed stuff is marked as removed in the scope
+        expect(UpdateComponentVerifications.updateScopeComponentIsRemovedForDesigner(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.updateScopeComponentIsRemovedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.updateScopeComponentIsRemovedForDesigner(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.updateScopeComponentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
 });

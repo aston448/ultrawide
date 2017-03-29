@@ -1,10 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 
-import { Designs }                  from '../../imports/collections/design/designs.js'
-import { DesignUpdates }           from '../../imports/collections/design_update/design_updates.js'
-import { DesignUpdateComponents }         from '../../imports/collections/design_update/design_update_components.js';
-import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
-import { ComponentType }            from '../../imports/constants/constants.js';
+import { DesignUpdates }                    from '../../imports/collections/design_update/design_updates.js'
+import { DesignUpdateComponents }           from '../../imports/collections/design_update/design_update_components.js';
+
+import { ComponentType, UpdateMergeStatus }            from '../../imports/constants/constants.js';
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
@@ -186,18 +185,27 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
             userContext.designVersionId,
-            userContext.designUpdateId,
             componentType,
             componentParentName,
             componentName
         );
 
-        if(!(designUpdateComponent.isInScope || designUpdateComponent.isParentScope)){
+        // If not in scope there should be no DU component for this component unless it's in Parent Scope
+        const duComponent = DesignUpdateComponents.findOne({
+            designUpdateId: userContext.designUpdateId,
+            componentReferenceId: designVersionComponent.componentReferenceId
+        });
+
+        if(!(duComponent)){
             return true;
         } else {
-            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to not be in scope");
+            if(duComponent.isInScope){
+                throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to not be in scope");
+            } else {
+                return true;
+            }
         }
     },
 
@@ -283,6 +291,42 @@ Meteor.methods({
             } else {
                 return true;
             }
+        }
+    },
+
+    'verifyDesignUpdateComponents.scopeComponentIsRemoved'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be Removed in Scope");
+        }
+    },
+
+    'verifyDesignUpdateComponents.scopeComponentIsNotRemoved'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designVersionComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to NOT be Removed in Scope");
         }
     },
 

@@ -98,11 +98,11 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                     case DisplayContext.UPDATE_EDIT:
                     case DisplayContext.UPDATE_VIEW:
                         // For design updates, out of scope things in the update are greyed out
-                        if(!currentItem.isInScope){
+                        if(!updateItem.isInScope){
                             modifier = ' greyed-out';
                         }
                         // And removed stuff is struck through
-                        if(currentItem.isRemoved || currentItem.isRemovedElsewhere){
+                        if(updateItem.isRemoved || updateItem.isRemovedElsewhere){
                             deleted = ' removed-item';
                         }
                         break;

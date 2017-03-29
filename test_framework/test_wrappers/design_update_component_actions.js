@@ -61,6 +61,14 @@ class UpdateComponentActions{
     }
 
     // Scope addition
+    designerAddsApplicationToCurrentUpdateScope(appName, expectation){
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
+    }
+
+    designerAddsDesignSectionToCurrentUpdateScope(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
+    }
+
     designerAddsFeatureToCurrentUpdateScope(featureParent, featureName, expectation){
         server.call('testDesignUpdateComponents.addComponentToUpdateScope', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }
@@ -74,6 +82,14 @@ class UpdateComponentActions{
     }
 
     // Scope removal
+    designerRemovesApplicationFromCurrentUpdateScope(appName, expectation){
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.APPLICATION, 'NONE', appName, 'gloria', ViewMode.MODE_EDIT, expectation);
+    }
+
+    designerRemovesDesignSectionFromCurrentUpdateScope(sectionParent, sectionName, expectation){
+        server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.DESIGN_SECTION, sectionParent, sectionName, 'gloria', ViewMode.MODE_EDIT, expectation);
+    }
+
     designerRemovesFeatureFromCurrentUpdateScope(featureParent, featureName, expectation){
         server.call('testDesignUpdateComponents.removeComponentFromUpdateScope', ComponentType.FEATURE, featureParent, featureName, 'gloria', ViewMode.MODE_EDIT, expectation);
     }

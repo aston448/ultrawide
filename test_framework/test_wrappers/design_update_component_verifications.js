@@ -85,6 +85,22 @@ class UpdateComponentVerifications{
         );
     }
 
+    updateScopeComponentIsRemovedForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.scopeComponentIsRemoved', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateScopeComponentIsNotRemovedForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.scopeComponentIsNotRemoved', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(componentType, componentName, count){
         server.call('verifyDesignUpdateComponents.componentCountWithNameIs', componentType, componentName, count, 'gloria',
             (function(error, result){

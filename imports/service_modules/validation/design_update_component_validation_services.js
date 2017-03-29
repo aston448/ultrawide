@@ -334,20 +334,22 @@ class DesignUpdateComponentValidationServices{
         }
 
         // A Scenario cannot be put in scope if it is in scope for another update (not parent scope)
-        if(newScope && updateComponent.componentType === ComponentType.SCENARIO) {
+        if(newScope && updateComponent){
 
-            let alreadyInScope = false;
+            if(updateComponent.componentType === ComponentType.SCENARIO) {
 
-            componentInOtherUpdates.forEach((instance) => {
-                if (instance.isInScope) {
-                    alreadyInScope = true;
+                let alreadyInScope = false;
+
+                componentInOtherUpdates.forEach((instance) => {
+                    if (instance.isInScope) {
+                        alreadyInScope = true;
+                    }
+                });
+
+                if (alreadyInScope) {
+                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
                 }
-            });
-
-            if (alreadyInScope) {
-                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE;
             }
-
 
         }
 
@@ -405,8 +407,6 @@ class DesignUpdateComponentValidationServices{
 
             }
         }
-
-
 
         return Validation.VALID;
     }
