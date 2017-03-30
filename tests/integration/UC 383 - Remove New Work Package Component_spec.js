@@ -50,8 +50,8 @@ describe('UC 383 - Remove New Work Package Component - Base Design', function(){
         WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
         // Make sure WP scope covers everything we want to play with
-        WpComponentActions.managerAddsApplicationToScopeForCurrentBaseWp('Application1');
-        WpComponentActions.managerAddsApplicationToScopeForCurrentBaseWp('Application99');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application99');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
     });
 
@@ -265,8 +265,8 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         // Make sure WP scope covers everything we want to play with
-        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application1');
-        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application99');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application99');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
     });
 

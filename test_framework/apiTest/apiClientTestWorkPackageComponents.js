@@ -11,69 +11,83 @@ import TestDataHelpers                      from '../test_modules/test_data_help
 
 Meteor.methods({
 
-    'testWorkPackageComponents.toggleInitialWpComponentInScope'(componentType, componentParentName, componentName, userName, expectation){
+    'testWorkPackageComponents.toggleWpComponentInScope'(componentType, componentParentName, componentName, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const view = ViewType.WORK_PACKAGE_BASE_EDIT;
+        let view = '';
         const displayContext = DisplayContext.WP_SCOPE;
-
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, workPackageComponent._id, true);
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            view = ViewType.WORK_PACKAGE_BASE_EDIT;
+        } else {
+            view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
+        }
+
+        const designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+
+        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, true);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component In Scope');
     },
 
-    'testWorkPackageComponents.toggleInitialWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){
+    'testWorkPackageComponents.toggleWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){
 
         expectation = TestDataHelpers.getExpectation(expectation);
 
-        const view = ViewType.WORK_PACKAGE_BASE_EDIT;
+        let view = '';
         const displayContext = DisplayContext.WP_SCOPE;
-
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, workPackageComponent._id, false);
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            view = ViewType.WORK_PACKAGE_BASE_EDIT;
+        } else {
+            view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
+        }
+
+        const designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+
+        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, false);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component Out Scope');
     },
 
-    'testWorkPackageComponents.toggleUpdateWpComponentInScope'(componentType, componentParentName, componentName, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
-        const displayContext = DisplayContext.WP_SCOPE;
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
-
-        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, workPackageComponent._id, true);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd WP Component In Scope');
-    },
-
-    'testWorkPackageComponents.toggleUpdateWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
-        const displayContext = DisplayContext.WP_SCOPE;
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
-
-        const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, workPackageComponent._id, false);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd WP Component Out Scope');
-    },
+    // 'testWorkPackageComponents.toggleUpdateWpComponentInScope'(componentType, componentParentName, componentName, userName, expectation){
+    //
+    //     expectation = TestDataHelpers.getExpectation(expectation);
+    //
+    //     const view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
+    //     const displayContext = DisplayContext.WP_SCOPE;
+    //
+    //     const userContext = TestDataHelpers.getUserContext(userName);
+    //     const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+    //
+    //     const designUpdateComponent =  TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+    //
+    //     const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designUpdateComponent._id, true);
+    //
+    //     TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd WP Component In Scope');
+    // },
+    //
+    // 'testWorkPackageComponents.toggleUpdateWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){
+    //
+    //     expectation = TestDataHelpers.getExpectation(expectation);
+    //
+    //     const view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
+    //     const displayContext = DisplayContext.WP_SCOPE;
+    //
+    //     const userContext = TestDataHelpers.getUserContext(userName);
+    //     const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+    //
+    //     const designUpdateComponent =  TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+    //
+    //     const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designUpdateComponent._id, false);
+    //
+    //     TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Upd WP Component Out Scope');
+    // },
 
     'testWorkPackageComponents.selectWorkPackageComponent'(componentType, componentParentName, componentName, userName){
 

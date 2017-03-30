@@ -8,13 +8,13 @@ import { toggleInScope } from '../apiValidatedMethods/work_package_component_met
 // =====================================================================================================================
 class ServerWorkPackageComponentApi {
 
-    toggleInScope(view, displayContext, userContext, wpComponentId, newScope, callback){
+    toggleInScope(view, displayContext, userContext, designComponentId, newScope, callback){
         toggleInScope.call(
             {
                 view: view,
                 displayContext: displayContext,
                 userContext: userContext,
-                wpComponentId: wpComponentId,
+                designComponentId: designComponentId,
                 newScope: newScope
             },
             (err, result) => {

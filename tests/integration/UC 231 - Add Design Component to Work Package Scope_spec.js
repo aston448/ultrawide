@@ -93,7 +93,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Application1 in scope
-        WpComponentActions.managerAddsApplicationToScopeForCurrentBaseWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
 
         // Verify
         // Application1 is in parent scope
@@ -132,7 +132,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Section1 in scope
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentWp('Application1', 'Section1');
 
         // Verify
         // Application1 is in parent scope
@@ -171,7 +171,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Feature1 in scope
-        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
 
         // Verify
         // Application1 is in parent scope
@@ -210,7 +210,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Feature1 Actions in scope
-        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentBaseWp('Feature1', 'Actions');
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrenWp('Feature1', 'Actions');
 
         // Verify
         // Application1 is in parent scope
@@ -249,7 +249,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Scenario3 in scope
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario3');
 
         // Verify
         // Application1 is in parent scope
@@ -288,12 +288,12 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario3');
 
         // Execute - add everything below Application1 in scope for WorkPackage2
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage2');
-        WpComponentActions.managerAddsApplicationToScopeForCurrentBaseWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
 
         // Verify - Scenarios 1, 2 and 4 should be in scope but not 3
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
@@ -315,13 +315,13 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario3');
 
         // Execute - add Scenario3 in scope for WorkPackage2
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage2');
         const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE};
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3', expectation);
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario3', expectation);
 
         // Verify - Scenario3 should be in scope for WP1 but not WP2
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
@@ -348,7 +348,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Scenario3 in scope
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario3');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario3');
 
         // Verify
         // Application1 is in parent scope
@@ -463,7 +463,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Execute - Add Application1 to scope
-        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
 
         // Verify
 
@@ -507,7 +507,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Execute - Add Application1 to scope
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentUpdateWp('Application1', 'Section2');
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentWp('Application1', 'Section2');
 
         // Verify - Just Feature2 + New Scenario and its parents in scope
 
@@ -548,7 +548,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Execute - Add Feature1 to scope
-        WpComponentActions.managerAddsFeatureToScopeForCurrentUpdateWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
 
         // Verify
 
@@ -589,7 +589,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Execute - Add Feature2 Actions to scope
-        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentUpdateWp('Feature2', 'Actions');
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentWp('Feature2', 'Actions');
 
         // Verify
 
@@ -630,7 +630,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Execute - Add Feature2 Actions to scope
-        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'NewScenario');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'NewScenario');
 
         // Verify
 
@@ -681,11 +681,11 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
         // Put Scenario1 in scope for the new WP
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
-        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'Scenario1');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario1');
 
         // Execute - add Feature1 to the scope for the original WP
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentUpdateWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
 
         // Verify - Scenario1 not in scope in original WP but Scenario2 is
 
@@ -739,12 +739,12 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
         // Put Scenario1 in scope for the new WP
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
-        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'Scenario1');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario1');
 
         // Execute - add Scenario1 to the scope for the original WP - expect failure
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE};
-        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'Scenario1', expectation);
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario1', expectation);
 
         // Verify - nothing in scope
 
@@ -792,7 +792,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
 
         // Execute - Add  Actions New Scenario to scope
-        WpComponentActions.managerAddsScenarioToScopeForCurrentUpdateWp('Actions', 'NewScenario');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'NewScenario');
 
         // Verify
 

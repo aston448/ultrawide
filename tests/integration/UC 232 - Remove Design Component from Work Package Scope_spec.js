@@ -51,7 +51,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         
         // Add Application1 in scope
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsApplicationToScopeForCurrentBaseWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
     });
 
     afterEach(function(){
@@ -91,7 +91,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesApplicationFromScopeForCurrentBaseWp('Application1');
+        WpComponentActions.managerRemovesApplicationFromScopeForCurrentWp('Application1');
 
         // Verify - everything not in scope
         // Application1 is out of scope
@@ -153,7 +153,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesDesignSectionFromScopeForCurrentBaseWp('Application1', 'Section1');
+        WpComponentActions.managerRemovesDesignSectionFromScopeForCurrentWp('Application1', 'Section1');
 
         // Verify - everything in Section1 is out of scope - rest still in
         // Application1 is in parent scope
@@ -215,7 +215,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesFeatureFromScopeForCurrentBaseWp('Section1', 'Feature1');
+        WpComponentActions.managerRemovesFeatureFromScopeForCurrentWp('Section1', 'Feature1');
 
         // Verify - everything in Feature1 is out of scope - rest still in
         // Application1 is in parent scope
@@ -277,7 +277,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesFeatureAspectFromScopeForCurrentBaseWp('Feature1', 'Actions');
+        WpComponentActions.managerRemovesFeatureAspectFromScopeForCurrenWp('Feature1', 'Actions');
 
         // Verify - everything in Feature1 Actions is out of scope - rest still in
         // Application1 is in parent scope
@@ -339,7 +339,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario1');
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentWp('Actions', 'Scenario1');
 
         // Verify - Scenario1 is out of scope - rest still in
         // Application1 is in parent scope
@@ -428,7 +428,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
 
         // Add the whole of Application1 to the WP scope
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
-        WpComponentActions.managerAddsApplicationToScopeForCurrentUpdateWp('Application1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
 
     });
 
@@ -472,7 +472,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesApplicationFromScopeForCurrentUpdateWp('Application1');
+        WpComponentActions.managerRemovesApplicationFromScopeForCurrentWp('Application1');
 
         // Verify - nothing now in scope
 
@@ -543,7 +543,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesDesignSectionFromScopeForCurrentUpdateWp('Application1', 'Section1');
+        WpComponentActions.managerRemovesDesignSectionFromScopeForCurrentWp('Application1', 'Section1');
 
         // Verify
         // Actual Scoped Items - included Feature and Scenario items that were in DU scope
@@ -612,7 +612,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesFeatureFromScopeForCurrentUpdateWp('Section2', 'Feature2');
+        WpComponentActions.managerRemovesFeatureFromScopeForCurrentWp('Section2', 'Feature2');
 
         // Verify
         // Actual Scoped Items - included Feature and Scenario items that were in DU scope
@@ -681,7 +681,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesFeatureAspectFromScopeForCurrentUpdateWp('Feature1', 'Actions');
+        WpComponentActions.managerRemovesFeatureAspectFromScopeForCurrentWp('Feature1', 'Actions');
 
         // Verify
         // Actual Scoped Items - included Feature and Scenario items that were in DU scope
@@ -750,7 +750,7 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
         expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
 
         // Execute
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentUpdateWp('Actions', 'NewScenario');
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentWp('Actions', 'NewScenario');
 
         // Verify
         // Actual Scoped Items - included Feature and Scenario items that were in DU scope

@@ -147,6 +147,9 @@ class DesignUpdateComponentServices{
                     );
                 }
 
+                // Peer components are also added in parent scope if not already added so that new component can be placed by user
+                DesignUpdateComponentModules.addComponentPeers(designVersionId, designUpdateId, parentRefId, componentType, newUpdateComponentId);
+
                 // And the Design Update Summary is now stale
                 DesignUpdates.update({_id: designUpdateId}, {$set:{summaryDataStale: true}});
             }
@@ -487,6 +490,9 @@ class DesignUpdateComponentServices{
 
                                 // OK to remove completely
                                 DesignUpdateComponentModules.removeComponentFromUpdateScope(currentUpdateComponent._id);
+
+                                // And also remove any children that may be in parent scope due to abandoned component addition
+                                DesignUpdateComponentModules.removeChildrenFromScope(baseComponent, designUpdateId);
 
                                 // And the parents if OK
                                 DesignUpdateComponentModules.removeChildlessParentsFromScope(baseComponent, designUpdateId);

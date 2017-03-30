@@ -49,8 +49,8 @@ describe('UC 381 - Add New Component To Work Package - Base Design', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section2', 'Feature2');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section2', 'Feature2');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
     });
 
@@ -226,7 +226,7 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentUpdateWp('Section1', 'Feature3');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature3');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
     });
 

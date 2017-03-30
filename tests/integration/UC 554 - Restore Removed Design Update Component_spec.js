@@ -394,6 +394,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
 
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');  // Make sure published so data is shared
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');

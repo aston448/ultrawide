@@ -230,7 +230,7 @@ describe('UC 144 - Remove Design Component', function(){
         // Put Scenario1 in scope in WP1
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario1');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario1');
 
         // Execute
         // Designer removes Scenario1 from base version

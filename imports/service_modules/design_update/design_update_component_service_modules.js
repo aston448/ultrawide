@@ -221,6 +221,26 @@ class DesignUpdateComponentModules{
         }
     };
 
+    addComponentPeers(designVersionId, designUpdateId, parentRefId, componentType, newUpdateComponentId){
+
+        // Get the new component added to DU
+        const duComponent = DesignUpdateComponents.findOne({_id: newUpdateComponentId});
+
+        // Get the peer components
+        const peers = DesignVersionComponents.find({
+            designVersionId:                designVersionId,
+            componentType:                  componentType,
+            componentParentReferenceIdNew:  parentRefId,
+            componentReferenceId:           {$ne: duComponent.componentReferenceId}
+        });
+
+        peers.forEach((peer) => {
+
+            // This call only inserts stuff not already there so won't insert others that happen to be existing
+            this.insertComponentToUpdateScope(peer, designUpdateId, false)  // Insert as in parent scope
+        });
+    }
+
     insertComponentToUpdateScope(baseComponent, designUpdateId, inScope){
 
         // Only insert if not already existing

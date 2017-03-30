@@ -579,9 +579,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Setup Add a second Design Update...
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdate();
-        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
-        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
 
         // Execute - remove Feature1 from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');

@@ -28,10 +28,10 @@ class ClientWorkPackageComponentServices {
     // VALIDATED METHODS THAT CALL SERVER API ==========================================================================
 
     // User put an item in the scope view in or out of scope for a Work Package
-    toggleInScope(view, displayContext, userContext, wpComponentId, newScope){
+    toggleInScope(view, displayContext, userContext, designComponentId, newScope){
 
         // Client validation
-        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, userContext, wpComponentId);
+        let result = WorkPackageComponentValidationApi.validateToggleInScope(view, displayContext, userContext, designComponentId);
 
         if(result !== Validation.VALID){
 
@@ -41,7 +41,7 @@ class ClientWorkPackageComponentServices {
         }
 
         // Real action call - server actions
-        ServerWorkPackageComponentApi.toggleInScope(view, displayContext, userContext, wpComponentId, newScope, (err, result) => {
+        ServerWorkPackageComponentApi.toggleInScope(view, displayContext, userContext, designComponentId, newScope, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

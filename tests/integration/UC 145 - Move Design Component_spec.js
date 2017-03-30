@@ -406,7 +406,7 @@ describe('UC 145 - Move Design Component', function(){
         // Put Section1 in scope in WP1
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        WpComponentActions.managerAddsDesignSectionToScopeForCurrentBaseWp('Application1', 'Section1');
+        WpComponentActions.managerAddsDesignSectionToScopeForCurrentWp('Application1', 'Section1');
 
         // Execute - move SubSection1 from Section1 to Application1
         DesignActions.designerWorksOnDesign('Design1');

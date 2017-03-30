@@ -259,7 +259,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Put Feature1 in scope in WP1
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
 
         // Execute
         // Designer changes Feature1 to Feature11 in the base version

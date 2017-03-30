@@ -41,10 +41,10 @@ describe('UC 311 - Refresh Design Test Mash Data', function(){
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section1', 'Feature1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentBaseWp('Section2', 'Feature2');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section2', 'Feature2');
         // But make sure Scenario7 in Feature1 is not in scope
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentBaseWp('Actions', 'Scenario7');
+        WpComponentActions.managerRemovesScenarioFromScopeForCurrentWp('Actions', 'Scenario7');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
 
@@ -136,7 +136,7 @@ describe('UC 311 - Refresh Design Test Mash Data', function(){
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsScenarioToScopeForCurrentBaseWp('Actions', 'Scenario5');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario5');
 
         // WP contains Scenario5 for Developer
         expect(WpComponentVerifications.componentIsInDeveloperCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario5'));

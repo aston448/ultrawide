@@ -269,34 +269,30 @@ Meteor.methods({
 
         const du = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
-        if(du.updateMergeAction !== DesignUpdateMergeAction.MERGE_INCLUDE){
-            throw new Meteor.Error("FAIL", "This test can only work if the update is set to merge");
+        // Being removed elsewhere means that the DV component will be marked as removed
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        // See if the component is also present in this update
+        const duComponent = DesignUpdateComponents.findOne({
+            designUpdateId: userContext.designUpdateId,
+            componentReferenceId: designVersionComponent.componentReferenceId
+        });
+
+        if (designVersionComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED) {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be removed in Design Version.  Was the update Merged?");
         } else {
-
-            // Being removed elsewhere means that the DV component will be marked as removed
-            const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
-                userContext.designVersionId,
-                componentType,
-                componentParentName,
-                componentName
-            );
-
-            // See if the component is also present in this update
-            const duComponent = DesignUpdateComponents.findOne({
-                designUpdateId: userContext.designUpdateId,
-                componentReferenceId: designVersionComponent.componentReferenceId
-            });
-
-            if (designVersionComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_REMOVED) {
-                throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be removed in Design Version");
+            if(duComponent && duComponent.isRemoved){
+                throw new Meteor.Error("FAIL", "Expecting Design Update component " + componentName + " NOT to be removed");
             } else {
-                if(duComponent && duComponent.isRemoved){
-                    throw new Meteor.Error("FAIL", "Expecting Design Update component " + componentName + " NOT to be removed");
-                } else {
-                    return true;
-                }
+                return true;
             }
         }
+
     },
 
     'verifyDesignUpdateComponents.componentIsNotRemovedElsewhere'(componentType, componentParentName, componentName, userName){
