@@ -77,6 +77,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Add new Section to original Application 1
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateApplication('Application1');
 
         // Verify
@@ -89,6 +90,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Add new Section to original Section 1
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateSection('Application1', 'Section1');
 
         // Verify
@@ -131,6 +133,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         // Setup
         // Delete Section2 in the update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
         // Execute - try to add SubSection3 to Section2 in DU1.  Note: need to add to a non-scopable component for this failure to be possible
@@ -142,29 +145,6 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME));
 
     });
-
-    it('An organisational Design Update Component cannot be added to a component removed in another Design Update', function(){
-
-        // Setup
-        // And another update
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
-        // Delete Section2 in that update
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
-
-        // Execute - try to add SubSection3 to Section2 in DU1.  Note: need to add to a non-scopable component for this failure to be possible
-        // as otherwise it would not be possible to scope the parent and would fail because parent not scoped
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateSection('Application1', 'Section2', expectation);
-
-        // Verify - no new section
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME));
-
-    });
-
 
     // Consequences
     it('When an organisational Design Component is added to a Draft Design Update it is also added to any Work Package based on the update', function(){
@@ -180,6 +160,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         // Execute - Designer Adds Section3 to DU1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Verify - Section3 is in the WP now too
@@ -189,6 +170,8 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
     });
 
-    it('An organisational Design Component added to a Design Update appears as an organisational addition in the Design Update summary');
+    it('When an organisational Design Component is added to a Design Update to be included in the current Design Version it becomes visible as a new item in the Design Version');
+
+    it('An organisational Design Component added to a Design Update does not appear in the Design Update Scope');
 
 });

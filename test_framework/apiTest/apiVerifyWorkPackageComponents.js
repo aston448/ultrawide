@@ -45,6 +45,45 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackageComponents.componentExistsInCurrentWpScopeCalled'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        let scopeComponent = null;
+
+        // This call will actually verify the component exists and return error if not
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            scopeComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+        } else {
+            scopeComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName)
+        }
+
+        return true;
+    },
+
+    'verifyWorkPackageComponents.componentDoesNotExistInCurrentWpScopeCalled'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        let scopeComponent = null;
+
+        // This call will actually verify the component exists and return error if not
+        try {
+            if (workPackage.workPackageType === WorkPackageType.WP_BASE) {
+                scopeComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+            } else {
+                scopeComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName)
+            }
+        } catch(e) {
+            // Expecting an error
+            return true
+        }
+
+        throw new Meteor.Error("FAIL", "Expecting WP Component " + componentParentName + " - " + componentName + " not to exist in WP scope but it does");
+    },
+
     'verifyWorkPackageComponents.componentParentIs'(workPackageName, componentType, componentName, parentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

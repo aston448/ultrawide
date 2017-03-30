@@ -108,6 +108,7 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
         // Setup - Remove Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
 
         // Execute - try to add new Feature to Section1
@@ -117,26 +118,6 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         // Verify - no new Feature
         expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME));
 
-    });
-
-    it('A functional Design Update Component cannot be added to a component removed in another Design Update', function(){
-
-        // Setup
-        // And another update
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
-        // Delete Section1 in that update
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
-
-        // Execute - try to add new feature to Section1 in DU1.
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED};
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1', expectation);
-
-        // Verify - no new Feature
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE, DefaultComponentNames.NEW_FEATURE_NAME));
     });
 
 
@@ -167,6 +148,7 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         // Execute - Designer Adds Feature3 to DU1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Verify - Feature3 is in the WP now too
@@ -181,6 +163,7 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Add new Feature to original Section 1
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
 
         // Verify - new Feature in scope

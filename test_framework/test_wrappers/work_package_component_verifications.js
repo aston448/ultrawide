@@ -7,7 +7,7 @@ class WpComponentVerifications{
 
     // This means a component is available to add to the WP scope (unless it has already been added to another WP)
     componentIsAvailableForManagerCurrentWp(type, parentName, name){
-        server.call('verifyWorkPackageComponents.componentExistsInCurrentWpCalled', type, parentName, name, 'miles',
+        server.call('verifyWorkPackageComponents.componentExistsInCurrentWpScopeCalled', type, parentName, name, 'miles',
             (function(error, result){
                 return(error === null);
             })
@@ -16,7 +16,7 @@ class WpComponentVerifications{
 
     // This means the component is not available to add to the WP scope - probably because it is not in an Update scope
     componentIsNotAvailableForManagerCurrentWp(type, parentName, name){
-        server.call('verifyWorkPackageComponents.componentDoesNotExistInCurrentWpCalled', type, parentName, name, 'miles',
+        server.call('verifyWorkPackageComponents.componentDoesNotExistInCurrentWpScopeCalled', type, parentName, name, 'miles',
             (function(error, result){
                 return(error === null);
             })
