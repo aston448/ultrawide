@@ -636,7 +636,7 @@ class DesignVersionModules{
                 updateMergeStatus = UpdateMergeStatus.COMPONENT_ADDED;
             }
 
-            console.log('Updating component name to ' + updateItem.componentNameNew + ' in DV');
+            //console.log('Updating component name to ' + updateItem.componentNameNew + ' in DV');
 
             // Update the name to the latest value
             DesignVersionComponents.update(

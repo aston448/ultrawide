@@ -201,12 +201,12 @@ class DesignUpdateComponentModules{
             ).fetch();
         }
 
-        console.log('Peer components found =  ' + peerComponents.length);
+        //console.log('Peer components found =  ' + peerComponents.length);
 
         // If no components then leave as default of 100
         if(peerComponents.length > 0){
 
-            console.log('Placing new component below ' + peerComponents[0].componentNameNew);
+            //console.log('Placing new component below ' + peerComponents[0].componentNameNew);
             let newIndex = peerComponents[0].componentIndexNew + 100;
 
             DesignUpdateComponents.update(

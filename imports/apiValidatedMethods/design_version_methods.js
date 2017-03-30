@@ -24,7 +24,7 @@ export const updateDesignVersionName = new ValidatedMethod({
 
         const result = DesignVersionValidationApi.validateUpdateDesignVersionName(userRole, designVersionId, newName);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designVersion.updateDesignVersionName.failValidation', result)
         }
 
@@ -52,7 +52,7 @@ export const updateDesignVersionNumber = new ValidatedMethod({
 
         const result = DesignVersionValidationApi.validateUpdateDesignVersionNumber(userRole, designVersionId, newNumber);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designVersion.updateDesignVersionNumber.failValidation', result)
         }
 
@@ -80,7 +80,7 @@ export const publishDesignVersion = new ValidatedMethod({
 
         const result = DesignVersionValidationApi.validatePublishDesignVersion(userRole, designVersionId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designVersion.publishDesignVersion.failValidation', result)
         }
 
@@ -107,7 +107,7 @@ export const withdrawDesignVersion = new ValidatedMethod({
 
         const result = DesignVersionValidationApi.validateWithdrawDesignVersion(userRole, designVersionId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designVersion.withdrawDesignVersion.failValidation', result)
         }
 
@@ -134,7 +134,7 @@ export const updateWorkingDesignVersion = new ValidatedMethod({
 
         const result = DesignVersionValidationApi.validateUpdateWorkingDesignVersion(userRole, designVersionId);
 
-        if (result != Validation.VALID) {
+        if (result !== Validation.VALID) {
             throw new Meteor.Error('designVersion.updateWorkingDesignVersion.failValidation', result)
         }
 
@@ -166,7 +166,6 @@ export const createNextDesignVersion = new ValidatedMethod({
         }
 
         try {
-            console.log("Creating next DV from id " + designVersionId);
             DesignVersionServices.createNextDesignVersion(designVersionId);
         } catch (e) {
             console.log(e);

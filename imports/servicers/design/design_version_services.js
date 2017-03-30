@@ -124,8 +124,6 @@ class DesignVersionServices{
             // 5. Carry forward a copy of the Domain Dictionary
             // 5. Complete the old version
 
-            console.log('Looking for current design version with id ' + currentDesignVersionId);
-
             // Get the current design version details - the version being completed
             const currentDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
 
