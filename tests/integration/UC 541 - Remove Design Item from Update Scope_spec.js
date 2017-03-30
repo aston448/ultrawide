@@ -108,6 +108,7 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
 
         // Setup - Add a new Feature to DU1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Execute - try to descope Feature 3

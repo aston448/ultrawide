@@ -110,10 +110,10 @@ export class DesignEditorHeader extends Component {
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_SCOPE:
-                        description = nameData.designUpdate + ' (SCOPE)';
+                        description = nameData.designUpdate + ' - BASELINE';
                         break;
                     case DisplayContext.UPDATE_EDIT:
-                        description = nameData.designUpdate + ' (CONTENT)';
+                        description = nameData.designUpdate + ' - CHANGES';
                         break;
                     case DisplayContext.UPDATE_SUMMARY:
                         description = 'Design Update Summary';
