@@ -28,8 +28,10 @@ class DesignUpdateComponentValidationServices{
         }
 
         // Cannot add to a deleted parent
-        if(parentComponent.isRemoved|| parentComponent.isRemovedElsewhere){
-            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+        if(parentComponent) {
+            if (parentComponent.isRemoved || parentComponent.isRemovedElsewhere) {
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
+            }
         }
 
         // // Check that target is in scope for adding to if there is one
