@@ -25,6 +25,15 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
     before(function(){
         TestFixtures.logTestSuite('UC 553 - Mark Existing Design Update Component as Removed');
 
+
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data
@@ -34,16 +43,6 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -586,6 +585,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Execute - remove Feature1 from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');  // Make sure published so data is shared
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature1');

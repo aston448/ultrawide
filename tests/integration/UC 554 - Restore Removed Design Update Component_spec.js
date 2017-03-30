@@ -24,6 +24,13 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 554 - Restore Removed Design Update Component');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
 
@@ -34,16 +41,6 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -62,6 +59,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
         
         // Verify - all stuff removed
@@ -102,6 +100,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section1');
 
         // Verify - all stuff removed for Section
@@ -142,6 +141,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature1');
 
         // Verify - all stuff removed for Feature
@@ -182,6 +182,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerLogicallyDeletesUpdateFeatureAspect('Feature1', 'Actions');
         
         // Verify - all stuff removed for Aspect
@@ -222,6 +223,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
         
         // Verify - all stuff removed for Scenario
@@ -265,6 +267,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup - remove everything
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
  
         // Try to restore Section1
@@ -348,6 +351,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
 
         // Verify - all stuff removed
@@ -391,6 +395,7 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
 
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
 
         // Verify - all stuff removed elsewhere in DU2

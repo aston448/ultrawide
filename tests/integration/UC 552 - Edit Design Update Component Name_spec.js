@@ -24,7 +24,13 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 552 - Edit Design Update Component Name');
+    });
 
+    after(function(){
+
+    });
+
+    beforeEach(function(){
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data
@@ -34,16 +40,6 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');

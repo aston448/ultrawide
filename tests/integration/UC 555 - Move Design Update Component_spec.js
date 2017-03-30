@@ -24,6 +24,13 @@ describe('UC 555 - Move Design Update Component', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 555 - Move Design Update Component');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
 
@@ -34,17 +41,6 @@ describe('UC 555 - Move Design Update Component', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
-        TestFixtures.clearWorkPackages();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -65,13 +61,15 @@ describe('UC 555 - Move Design Update Component', function(){
 
 
     // Actions
-    it('A new Design Section for a Design Update can be moved to a different Application', function(){
+    it('A new Design Section for a Design Update can be moved to a different in scope Application', function(){
 
         // Setup - add new Design section to Application1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Execute - move it to Application2
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application2');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section3');
         UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.APPLICATION, 'NONE', 'Application2');
 
@@ -79,14 +77,16 @@ describe('UC 555 - Move Design Update Component', function(){
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application2', 'Section3'));
     });
 
-    it('A new Design Section for a Design Update can be moved to a different Design Section', function(){
+    it('A new Design Section for a Design Update can be moved to a different in scope Design Section', function(){
 
         // Setup - add new Design section to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section1', 'SubSection2');
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2'));
 
         // Execute - move it to Section2
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection2');
         UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
@@ -94,14 +94,16 @@ describe('UC 555 - Move Design Update Component', function(){
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section2', 'SubSection2'));
     });
 
-    it('A new Feature for a Design Update can be moved to a different Design Section', function(){
+    it('A new Feature for a Design Update can be moved to a different in scope Design Section', function(){
 
         // Setup - add new Feature to Section1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
 
         // Execute - move it to Section2
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
         UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
 
@@ -112,8 +114,6 @@ describe('UC 555 - Move Design Update Component', function(){
         expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions', 'Feature3'));
     });
 
-    it('A new Scenario for a Design Update can be moved to a different in Scope Feature');
-
     it('A new Scenario for a Design Update can be moved to a different in Scope Feature Aspect', function(){
 
         // Setup - add new Scenario to Feature1 Actions
@@ -121,10 +121,8 @@ describe('UC 555 - Move Design Update Component', function(){
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario99');
 
-        // Make sure the target is in scope
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Conditions');
-
         // Execute - move it to Feature2 Conditions
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Conditions');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario99');
         UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions');
 
@@ -134,14 +132,14 @@ describe('UC 555 - Move Design Update Component', function(){
         expect(UpdateComponentVerifications.componentFeatureReferenceForDesignerCurrentUpdateIs(ComponentType.SCENARIO, 'Conditions', 'Scenario99', 'Feature2'));
     });
 
-    it('A new Feature Aspect for a Design Update can be moved to a different in Scope Feature');
-
 
     // Conditions
     it('An existing Design Section from the Base Design Version cannot be moved', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application2');
 
         // Execute - Try to move existing Section1 to Application2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
@@ -156,6 +154,8 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
 
         // Execute - Try to move existing Feature1 to Section2
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
@@ -170,8 +170,7 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-
-        // Make sure the target is in scope
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'ExtraAspect');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
 
         // Execute - Try to move existing Feature1 ExtraAspect to Feature2
@@ -187,7 +186,7 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        // Make sure the target is in scope
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Conditions');
 
         // Execute - Try to move existing Scenario1 to Feature1 Conditions
@@ -204,6 +203,7 @@ describe('UC 555 - Move Design Update Component', function(){
 
         // Setup - Add some new Sections to DU1...
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature8');
