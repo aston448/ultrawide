@@ -1,5 +1,6 @@
 
 // Ultrawide Collections
+import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
 import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
@@ -37,6 +38,8 @@ class WorkPackageModules {
                     componentId:    component._id,
                     workPackageId:  {$ne: userContext.workPackageId}
                 });
+
+
             }
 
             if (!otherWp) {
@@ -55,6 +58,25 @@ class WorkPackageModules {
                         componentActive:                activeScope
                     }
                 );
+
+                // And, if Scenario mark the design item as in the WP
+                if (component.componentType === ComponentType.SCENARIO) {
+                    if(wpType === WorkPackageType.WP_BASE){
+                        DesignVersionComponents.update(
+                            {_id: component._id},
+                            {
+                                $set: {workPackageId: userContext.workPackageId}
+                            }
+                        );
+                    } else {
+                        DesignUpdateComponents.update(
+                            {_id: component._id},
+                            {
+                                $set: {workPackageId: userContext.workPackageId}
+                            }
+                        );
+                    }
+                }
             }
 
         } else {
@@ -78,10 +100,37 @@ class WorkPackageModules {
 
     removeWorkPackageComponent(userContext, designComponentId){
 
-        WorkPackageComponents.remove({
+        const wpComponent = WorkPackageComponents.findOne({
             workPackageId:              userContext.workPackageId,
             componentId:                designComponentId
         });
+
+        if(wpComponent) {
+
+            WorkPackageComponents.remove({_id: wpComponent._id});
+
+            // And clear Design Item if Scenario
+            if(wpComponent.componentType === ComponentType.SCENARIO) {
+
+                const wp = WorkPackages.findOne({_id: userContext.workPackageId});
+
+                if (wp.workPackageType === WorkPackageType.WP_BASE) {
+                    DesignVersionComponents.update(
+                        {_id: designComponentId},
+                        {
+                            $set: {workPackageId: 'NONE'}
+                        }
+                    );
+                } else {
+                    DesignUpdateComponents.update(
+                        {_id: designComponentId},
+                        {
+                            $set: {workPackageId: 'NONE'}
+                        }
+                    );
+                }
+            }
+        }
     }
 
     addComponentChildrenToWp(userContext, wpType, parentComponent){

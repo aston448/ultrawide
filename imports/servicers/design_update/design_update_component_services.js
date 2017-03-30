@@ -203,6 +203,7 @@ class DesignUpdateComponentServices{
                     isRemoved: component.isRemoved,
                     isDevUpdated: component.isDevUpdated,
                     isDevAdded: component.isDevAdded,
+                    workPackageId: component.workPackageId,
 
                     // Editing state (shared and persistent)
                     isRemovable: component.isRemovable,

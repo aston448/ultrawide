@@ -166,6 +166,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
         if(workPackageComponent.componentParent || workPackageComponent.componentActive){

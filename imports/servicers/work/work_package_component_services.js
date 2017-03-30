@@ -19,7 +19,7 @@ import  WorkPackageModules          from '../../service_modules/work/work_packag
 class WorkPackageComponentServices{
 
     // Store the scope state of a WP component
-    //TODO - pass in view + userCon.  Fix validation...
+
     toggleScope(designComponentId, view, userContext, newScope){
 
         if(Meteor.isServer) {
@@ -37,8 +37,6 @@ class WorkPackageComponentServices{
                     wpType = WorkPackageType.WP_UPDATE;
                     break;
             }
-
-            //TODO - Sort this out to add and remove WP components as required...
 
             if (designComponent) {
 

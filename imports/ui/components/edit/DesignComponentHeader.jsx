@@ -658,23 +658,26 @@ export class DesignComponentHeader extends Component{
                 nextScope = !inScope;
 
                 break;
+
             case DisplayContext.UPDATE_EDIT:
                 inScope = updateItem.isInScope;
                 inParentScope = updateItem.isParentScope;
                 break;
+
             case DisplayContext.WP_SCOPE:
                 if(wpItem) {
                     inScope = wpItem.componentActive;
                     inParentScope = wpItem.componentParent;
                 } else {
                     if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
-                        // Item is in scope in another WP
+                        // Scenario is in scope in another WP
                         inScopeElsewhere = true;
                     }
                 }
 
                 nextScope = !inScope;
                 break;
+
             case DisplayContext.WP_VIEW:
                 inScope = wpItem.componentActive;
                 inParentScope = wpItem.componentParent;
