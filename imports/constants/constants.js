@@ -199,6 +199,13 @@ export const DesignUpdateStatus = {
     UPDATE_IGNORED:         'IGNORED'           // Neither merged nor carried forward in a change to the next design version
 };
 
+export const UpdateScopeType = {
+    SCOPE_IN_SCOPE:         'SCOPE_IN_SCOPE',
+    SCOPE_PARENT_SCOPE:     'SCOPE_PARENT_SCOPE',
+    SCOPE_PEER_SCOPE:       'SCOPE_PEER_SCOPE',
+    SCOPE_OUT_SCOPE:        'SCOPE_OUT_SCOPE'
+};
+
 export const WorkPackageStatus = {
     WP_NEW:                 'NEW',
     WP_AVAILABLE:           'AVAILABLE',

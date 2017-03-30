@@ -4,6 +4,8 @@
 
 import { Mongo } from 'meteor/mongo';
 
+import { UpdateScopeType } from '../../constants/constants.js';
+
 export const DesignUpdateComponents = new Mongo.Collection('designUpdateComponents');
 
 let Schema = new SimpleSchema({
@@ -49,8 +51,7 @@ let Schema = new SimpleSchema({
     // Editing state (shared and persistent)
     isRemovable:                    {type: Boolean, defaultValue: true} ,               // Flag to indicate if current component can be deleted
     isScopable:                     {type: Boolean},                                    // Indicates that a component can have scope set for it and whether we think changes are significant
-    isInScope:                      {type: Boolean, defaultValue: false},               // Indicated that this item is in scope for a design update and therefore editable
-    isParentScope:                  {type: Boolean, defaultValue: false},               // Indicates that this item is a parent item of an in scope item and shown as read-only
+    scopeType:                      {type: String, defaultValue: UpdateScopeType.SCOPE_OUT_SCOPE},  // Indicates if item is in full, parent or peer scope in an update
     lockingUser:                    {type: String, defaultValue: 'NONE'},               // Indicates if a component is locked for edit by a user
 
 

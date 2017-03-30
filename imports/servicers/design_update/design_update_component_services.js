@@ -6,7 +6,7 @@ import { DesignVersionComponents }         from '../../collections/design/design
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide services
-import { ComponentType, ViewType, LogLevel }  from '../../constants/constants.js';
+import { ComponentType, ViewType, UpdateScopeType, LogLevel }  from '../../constants/constants.js';
 import { DefaultComponentNames }    from '../../constants/default_names.js';
 import { getIdFromMap, log }        from '../../common/utils.js';
 
@@ -79,9 +79,8 @@ class DesignUpdateComponentServices{
                     isRemoved:                      false,
                     isDevAdded:                     devAdded,
 
-                    isInScope:                      true,         // Must be in scope if added!
-                    isParentScope:                  false,
-                    isScopable:                     DesignUpdateModules.isScopable(componentType)          // A Scopable item can be picked as part of a change
+                    scopeType:                      UpdateScopeType.SCOPE_IN_SCOPE,                         // All new items are automatically in scope
+                    isScopable:                     DesignUpdateModules.isScopable(componentType)           // A Scopable item can be picked as part of a change
                 }
             );
 
@@ -208,8 +207,7 @@ class DesignUpdateComponentServices{
                     // Editing state (shared and persistent)
                     isRemovable: component.isRemovable,
                     isScopable: component.isScopable,
-                    isInScope: component.isInScope,
-                    isParentScope: component.isParentScope,
+                    scopeType: component.scopeType,
                     lockingUser: component.lockingUser
                 }
             );
@@ -456,7 +454,7 @@ class DesignUpdateComponentServices{
                         if (!currentUpdateComponent) {
 
                             // Add the new component as IN SCOPE
-                            DesignUpdateComponentModules.insertComponentToUpdateScope(baseComponent, designUpdateId, true);
+                            DesignUpdateComponentModules.insertComponentToUpdateScope(baseComponent, designUpdateId, UpdateScopeType.SCOPE_IN_SCOPE);
 
                             // Add all parents not already added
                             DesignUpdateComponentModules.addParentsToScope(baseComponent, designUpdateId);
@@ -472,7 +470,7 @@ class DesignUpdateComponentServices{
                 } else {
 
                     // Removing from scope means removing from the update - can only remove if in scope...
-                    if(currentUpdateComponent && currentUpdateComponent.isInScope){
+                    if(currentUpdateComponent && (currentUpdateComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
 
                         if(forceRemove){
 
@@ -664,8 +662,7 @@ class DesignUpdateComponentServices{
                         {_id: designUpdateComponentId},
                         {
                             $set: {
-                                isInScope: true,
-                                isParentScope: false
+                                scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                             }
                         }
                     );

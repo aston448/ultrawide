@@ -5,7 +5,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignComponent } from './DesignComponent.jsx';  // Non Redux wrapped
 
-import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../../constants/constants.js'
+import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType} from '../../../constants/constants.js'
 
 import { DesignVersions } from '../../../collections/design/design_versions.js'
 
@@ -562,7 +562,7 @@ describe('JSX: DesignComponent', () => {
 
         it('has the option in edit mode', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -579,7 +579,7 @@ describe('JSX: DesignComponent', () => {
 
         it('no option if not in scope', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: false};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -669,7 +669,7 @@ describe('JSX: DesignComponent', () => {
 
         it('no option to add aspect to in scope feature in view mode', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -686,7 +686,7 @@ describe('JSX: DesignComponent', () => {
 
         it('no option to add aspect to in scope feature when viewing', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
@@ -726,7 +726,7 @@ describe('JSX: DesignComponent', () => {
 
         it('has the option in edit mode', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -743,7 +743,7 @@ describe('JSX: DesignComponent', () => {
 
         it('no option if not in scope', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: false};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -797,7 +797,7 @@ describe('JSX: DesignComponent', () => {
 
         it('no option to add scenario to feature aspect in view mode', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -814,7 +814,7 @@ describe('JSX: DesignComponent', () => {
 
         it('no option to add scenario to feature aspect when viewing', () => {
 
-            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {_id: 'componentId', componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const designItem = {};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;

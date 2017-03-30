@@ -34,7 +34,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignUpdateStatus,
     StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
-    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, UpdateMergeStatus } from '../constants/constants.js';
+    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, UpdateMergeStatus, UpdateScopeType } from '../constants/constants.js';
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -871,13 +871,14 @@ class ClientContainerServices{
                     case DisplayContext.UPDATE_EDIT:
                     case DisplayContext.UPDATE_VIEW:
 
-                        // Display all DU components.  Only in-scope components exist
+                        // Display all DU components.  Only in-scope components exist.  Ignore Peer scope for WPs
                         currentComponents = DesignUpdateComponents.find(
                             {
                                 designVersionId:        designVersionId,
                                 designUpdateId:         designUpdateId,
                                 componentType:          componentType,
-                                componentParentIdNew:   parentId
+                                componentParentIdNew:   parentId,
+                                scopeType:              {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
                             },
                             {sort:{componentIndexNew: 1}}
                         ).fetch();
@@ -994,7 +995,7 @@ class ClientContainerServices{
                                 designVersionId: designVersionId,
                                 designUpdateId: designUpdateId,
                                 componentParentIdNew: parentId,
-                                componentType: componentType
+                                componentType: componentType,
                             },
                             {sort: {componentIndexNew: 1}}
                         ).fetch();
@@ -1114,7 +1115,7 @@ class ClientContainerServices{
                         );
 
                         if(feature){
-                            featureInScope = feature.isInScope;
+                            featureInScope = (feature.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
                         }
 
                         break;
@@ -1215,7 +1216,7 @@ class ClientContainerServices{
                         );
 
                         if(scenario){
-                            scenarioInScope = scenario.isInScope;
+                            scenarioInScope = (scenario.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
                         }
 
                         break;

@@ -21,70 +21,70 @@ import DesignVersionModules         from '../../service_modules/design/design_ve
 
 class DesignUpdateModules{
 
-    // Copy the current base design version to a new update.  Initially the "new" values are the same as the current ones.
-    populateDesignUpdate(baseDesignVersionId, designVersionId, designUpdateId){
-
-        // Here we want to copy the BASE, not the CURRENT design version components to this update.  This means that parallel updates
-        // are NOT included so all updates start from the same base. This is a good thing as otherwise updates get mingled as they are created.
-        // Validation is in place to prevent contradictory changes.
-
-        let versionComponents = DesignVersionComponents.find({designVersionId: baseDesignVersionId});
-        let designId = DesignVersions.findOne({_id: baseDesignVersionId}).designId;
-
-        versionComponents.forEach((component) => {
-
-            // Updates are not mingled BUT where a component has been removed in another update we will mark it as removed
-            // (though not actually set it as removed in this update) so that it is clear as to why this component is not accessible to further updates
-            const isRemovedElsewhere = this.componentIsRemovedInOtherUpdate(component, designVersionId);
-
-            DesignUpdateComponents.insert(
-                {
-                    componentReferenceId:           component.componentReferenceId,                     // Keeps the same reference from original design
-                    designId:                       designId,                                           // Denormalised for easy access
-                    designVersionId:                designVersionId,                                    // The design version this is a change to
-                    designUpdateId:                 designUpdateId,                                     // This update
-                    componentType:                  component.componentType,
-                    componentLevel:                 component.componentLevel,
-                    componentIndexOld:              component.componentIndexNew,
-                    componentIndexNew:              component.componentIndexNew,
-                    componentParentIdOld:           component.componentParentIdNew,                        // Parent IDs will be wrong and are fixed afterwards
-                    componentParentIdNew:           component.componentParentIdNew,
-                    componentParentReferenceIdOld:  component.componentParentReferenceIdNew,
-                    componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
-                    componentFeatureReferenceIdOld: component.componentFeatureReferenceIdNew,
-                    componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
-
-                    componentNameOld:               component.componentNameNew,
-                    componentNameNew:               component.componentNameNew,
-                    componentNameRawOld:            component.componentNameRawNew,
-                    componentNameRawNew:            component.componentNameRawNew,
-                    componentNarrativeOld:          component.componentNarrativeNew,
-                    componentNarrativeNew:          component.componentNarrativeNew,
-                    componentNarrativeRawOld:       component.componentNarrativeRawNew,
-                    componentNarrativeRawNew:       component.componentNarrativeRawNew,
-                    componentTextRawOld:            component.componentTextRawNew,
-                    componentTextRawNew:            component.componentTextRawNew,
-
-                    isNew:                          false,
-                    isChanged:                      false,
-                    isTextChanged:                  false,
-                    isMoved:                        false,
-                    isRemoved:                      false,
-                    isRemovedElsewhere:             isRemovedElsewhere,
-
-                    isInScope:                      false,
-                    isParentScope:                  false,
-                    isScopable:                     this.isScopable(component.componentType)             // A Scopable item can be picked as part of a change
-                }
-            );
-        });
-
-        // Now update the parent ids as necessary to match the new PKs (_ids) on this data
-        this.fixParentIds(designVersionId, designUpdateId);
-
-        // NOTE: All items populated here remain REMOVABLE as they are logically deleted when removed and we allow bulk deletes
-
-    };
+    // // Copy the current base design version to a new update.  Initially the "new" values are the same as the current ones.
+    // populateDesignUpdate(baseDesignVersionId, designVersionId, designUpdateId){
+    //
+    //     // Here we want to copy the BASE, not the CURRENT design version components to this update.  This means that parallel updates
+    //     // are NOT included so all updates start from the same base. This is a good thing as otherwise updates get mingled as they are created.
+    //     // Validation is in place to prevent contradictory changes.
+    //
+    //     let versionComponents = DesignVersionComponents.find({designVersionId: baseDesignVersionId});
+    //     let designId = DesignVersions.findOne({_id: baseDesignVersionId}).designId;
+    //
+    //     versionComponents.forEach((component) => {
+    //
+    //         // Updates are not mingled BUT where a component has been removed in another update we will mark it as removed
+    //         // (though not actually set it as removed in this update) so that it is clear as to why this component is not accessible to further updates
+    //         const isRemovedElsewhere = this.componentIsRemovedInOtherUpdate(component, designVersionId);
+    //
+    //         DesignUpdateComponents.insert(
+    //             {
+    //                 componentReferenceId:           component.componentReferenceId,                     // Keeps the same reference from original design
+    //                 designId:                       designId,                                           // Denormalised for easy access
+    //                 designVersionId:                designVersionId,                                    // The design version this is a change to
+    //                 designUpdateId:                 designUpdateId,                                     // This update
+    //                 componentType:                  component.componentType,
+    //                 componentLevel:                 component.componentLevel,
+    //                 componentIndexOld:              component.componentIndexNew,
+    //                 componentIndexNew:              component.componentIndexNew,
+    //                 componentParentIdOld:           component.componentParentIdNew,                        // Parent IDs will be wrong and are fixed afterwards
+    //                 componentParentIdNew:           component.componentParentIdNew,
+    //                 componentParentReferenceIdOld:  component.componentParentReferenceIdNew,
+    //                 componentParentReferenceIdNew:  component.componentParentReferenceIdNew,
+    //                 componentFeatureReferenceIdOld: component.componentFeatureReferenceIdNew,
+    //                 componentFeatureReferenceIdNew: component.componentFeatureReferenceIdNew,
+    //
+    //                 componentNameOld:               component.componentNameNew,
+    //                 componentNameNew:               component.componentNameNew,
+    //                 componentNameRawOld:            component.componentNameRawNew,
+    //                 componentNameRawNew:            component.componentNameRawNew,
+    //                 componentNarrativeOld:          component.componentNarrativeNew,
+    //                 componentNarrativeNew:          component.componentNarrativeNew,
+    //                 componentNarrativeRawOld:       component.componentNarrativeRawNew,
+    //                 componentNarrativeRawNew:       component.componentNarrativeRawNew,
+    //                 componentTextRawOld:            component.componentTextRawNew,
+    //                 componentTextRawNew:            component.componentTextRawNew,
+    //
+    //                 isNew:                          false,
+    //                 isChanged:                      false,
+    //                 isTextChanged:                  false,
+    //                 isMoved:                        false,
+    //                 isRemoved:                      false,
+    //                 isRemovedElsewhere:             isRemovedElsewhere,
+    //
+    //                 isInScope:                      false,
+    //                 isParentScope:                  false,
+    //                 isScopable:                     this.isScopable(component.componentType)             // A Scopable item can be picked as part of a change
+    //             }
+    //         );
+    //     });
+    //
+    //     // Now update the parent ids as necessary to match the new PKs (_ids) on this data
+    //     this.fixParentIds(designVersionId, designUpdateId);
+    //
+    //     // NOTE: All items populated here remain REMOVABLE as they are logically deleted when removed and we allow bulk deletes
+    //
+    // };
 
 
     // Change the old design parent ids to the ids for the new design update

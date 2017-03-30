@@ -5,7 +5,7 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignComponentHeader } from './DesignComponentHeader.jsx';  // Non Redux wrapped
 
-import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType, UpdateMergeStatus} from '../../../constants/constants.js'
+import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js'
 
 describe('JSX: DesignComponentHeader', () => {
 
@@ -128,7 +128,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isInScope: false, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isScopable: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -148,7 +148,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature aspect has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isInScope: false, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isScopable: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -168,7 +168,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped scenario has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isInScope: false, isScopable: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isScopable: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -189,7 +189,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isInScope: true, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isScopable: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -209,7 +209,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature aspect has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isInScope: true, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isScopable: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -229,7 +229,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped scenario has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isInScope: true, isScopable: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isScopable: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
@@ -422,7 +422,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has edit option when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -438,7 +438,7 @@ describe('JSX: DesignComponentHeader', () => {
 
          it('feature has edit option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -451,7 +451,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has edit option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -499,7 +499,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has a save option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -515,7 +515,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has a save option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -531,7 +531,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has a save option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -582,7 +582,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has undo option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -598,7 +598,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has undo option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -614,7 +614,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has undo option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -685,7 +685,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no edit option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -698,7 +698,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no edit option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -711,7 +711,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no edit option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -724,7 +724,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no edit option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -737,7 +737,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no edit option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -750,7 +750,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no edit option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -794,7 +794,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -807,7 +807,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -820,7 +820,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -888,7 +888,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -901,7 +901,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -914,7 +914,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature aspect is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -927,7 +927,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature aspect is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -940,7 +940,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed scenario is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true, isRemoved: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -953,7 +953,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed scenario is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true, isRemoved: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1017,7 +1017,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1029,7 +1029,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1041,7 +1041,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1053,7 +1053,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1065,7 +1065,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1077,7 +1077,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1120,7 +1120,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1133,7 +1133,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1146,7 +1146,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1211,7 +1211,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1223,7 +1223,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1235,7 +1235,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1247,7 +1247,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1259,7 +1259,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1271,7 +1271,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1310,7 +1310,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new feature has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1322,7 +1322,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new feature aspect has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1334,7 +1334,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new scenario has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1373,7 +1373,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('existing feature has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1385,7 +1385,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('existing feature aspect has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1397,7 +1397,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('existing scenario has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1460,7 +1460,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new feature has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1472,7 +1472,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new feature has no move option for when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1484,7 +1484,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new feature aspect has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1496,7 +1496,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new feature aspect has no move option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1508,7 +1508,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new scenario has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1520,7 +1520,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new scenario has no move option for when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
@@ -1535,7 +1535,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is not editable when not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: false};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1547,7 +1547,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is editable when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1562,7 +1562,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is not editable when not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: false};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1574,7 +1574,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is editable when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1589,7 +1589,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is not editable when not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: false};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1601,7 +1601,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is editable when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: true};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1616,7 +1616,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('application is always in scope', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isScopable: false, isInScope: false};
+            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isScopable: false, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1628,7 +1628,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('design section is always in scope', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isScopable: false, isInScope: false};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isScopable: false, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1640,7 +1640,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, isInScope: false};
+            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1652,7 +1652,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, isInScope: false};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
@@ -1664,7 +1664,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, isInScope: false};
+            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;

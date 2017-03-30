@@ -3,7 +3,7 @@ import {DesignUpdates} from '../../collections/design_update/design_updates.js';
 
 import DesignUpdateComponentValidationServices from '../../service_modules/validation/design_update_component_validation_services.js';
 
-import { RoleType, ViewType, ViewMode, ComponentType, DesignVersionStatus }     from '../../constants/constants.js';
+import { RoleType, ViewType, ViewMode, ComponentType, DesignVersionStatus, UpdateScopeType }     from '../../constants/constants.js';
 import { Validation, DesignUpdateComponentValidationErrors }   from '../../constants/validation_errors.js';
 
 import StubCollections from 'meteor/hwillson:stub-collections';
@@ -72,7 +72,7 @@ describe('VAL: Update Component', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const mode = ViewMode.MODE_EDIT;
             const componentType = ComponentType.DESIGN_SECTION;
-            const parentComponent = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true, isRemoved: false};
+            const parentComponent = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: false};
             const expectation = Validation.VALID;
 
             const result = DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, componentType, parentComponent);
@@ -85,7 +85,7 @@ describe('VAL: Update Component', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const mode = ViewMode.MODE_VIEW;
             const componentType = ComponentType.DESIGN_SECTION;
-            const parentComponent = {componentType: ComponentType.FEATURE, isScopable: true, isInScope: true, isRemoved: false};
+            const parentComponent = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: false};
             const expectation = DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_ADD;
 
             const result = DesignUpdateComponentValidationServices.validateAddDesignUpdateComponent(view, mode, componentType, parentComponent);

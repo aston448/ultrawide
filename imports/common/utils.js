@@ -3,7 +3,7 @@
  */
 import React, { Component, PropTypes } from 'react';
 
-import {ComponentType, UpdateMergeStatus} from '../constants/constants.js';
+import {ComponentType, UpdateMergeStatus, UpdateScopeType} from '../constants/constants.js';
 import {DesignVersionComponents} from '../collections/design/design_version_components.js';
 import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js';
 
@@ -98,7 +98,7 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                     case DisplayContext.UPDATE_EDIT:
                     case DisplayContext.UPDATE_VIEW:
                         // For design updates, out of scope things in the update are greyed out
-                        if(!updateItem.isInScope){
+                        if(!(updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
                             modifier = ' greyed-out';
                         }
                         // And removed stuff is struck through

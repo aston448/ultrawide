@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, ComponentType } from '../../constants/constants.js';
+import { ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType } from '../../constants/constants.js';
 import { Validation, DesignUpdateComponentValidationErrors } from '../../constants/validation_errors.js';
 
 import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js';
@@ -33,29 +33,6 @@ class DesignUpdateComponentValidationServices{
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
             }
         }
-
-        // // Check that target is in scope for adding to if there is one
-        // if(parentComponent){
-        //     switch(parentComponent.componentType){
-        //         case ComponentType.FEATURE:
-        //         case ComponentType.FEATURE_ASPECT:
-        //         case ComponentType.SCENARIO:
-        //             // Must be in scope to add stuff to them
-        //             if(!parentComponent.isInScope){
-        //                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD;
-        //             }
-        //             // And not removed
-        //             if(parentComponent.isRemoved|| parentComponent.isRemovedElsewhere){
-        //                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
-        //             }
-        //             break;
-        //         default:
-        //             // Others must not be removed
-        //             if(parentComponent.isRemoved || parentComponent.isRemovedElsewhere){
-        //                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED;
-        //             }
-        //     }
-        // }
 
         // For Update WPs, additions only allowed for Scenarios and Feature Aspects
         if(view === ViewType.DEVELOP_UPDATE_WP){
@@ -267,7 +244,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // The component must be in scope for the update
-        if(!(updateComponent.isInScope)){
+        if(!(updateComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_SCOPE_EDIT;
         }
 
@@ -298,7 +275,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // Moves must be to a valid destination
-        if(!locationMoveDropAllowed(movingComponent.componentType, targetComponent.componentType, view, targetComponent.isInScope)){
+        if(!locationMoveDropAllowed(movingComponent.componentType, targetComponent.componentType, view, (targetComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE))){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MOVE;
         }
 
@@ -397,7 +374,7 @@ class DesignUpdateComponentValidationServices{
                 let alreadyInScope = false;
 
                 componentInOtherUpdates.forEach((instance) => {
-                    if (instance.isInScope) {
+                    if (instance.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
                         alreadyInScope = true;
                     }
                 });
@@ -411,7 +388,7 @@ class DesignUpdateComponentValidationServices{
 
         // Item must be in scope in this update to remove it
         if(!newScope && updateComponent){
-            if(!updateComponent.isInScope){
+            if(updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE;
             }
         }

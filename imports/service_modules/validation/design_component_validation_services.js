@@ -23,7 +23,7 @@ class DesignComponentValidationServices{
         }
 
         // Additions not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_ADD;
         }
 
@@ -46,7 +46,7 @@ class DesignComponentValidationServices{
         }
 
         // Remove not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_REMOVE;
         }
 
@@ -73,7 +73,7 @@ class DesignComponentValidationServices{
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_EDIT;
         }
 
@@ -87,7 +87,7 @@ class DesignComponentValidationServices{
             }
 
             // Anything else that's not a Scenario or Feature aspect is no good
-            if((componentType != ComponentType.SCENARIO) && (componentType != ComponentType.FEATURE_ASPECT)){
+            if((componentType !== ComponentType.SCENARIO) && (componentType !== ComponentType.FEATURE_ASPECT)){
                 // FAIL can't update any other components
                 return DesignComponentValidationErrors.DESIGN_COMPONENT_NOT_WP_UPDATABLE;
             }
@@ -157,12 +157,12 @@ class DesignComponentValidationServices{
     validateUpdateFeatureNarrative(view, mode){
 
         // Updates only allowed in design edit when in edit mode
-        if(view != ViewType.DESIGN_NEW_EDIT){
+        if(view !== ViewType.DESIGN_NEW_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_EDIT;
         }
 
         // Updates not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_EDIT;
         }
 
@@ -172,22 +172,22 @@ class DesignComponentValidationServices{
     validateMoveDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
 
         // Moves only allowed in design edit when in edit mode
-        if(view != ViewType.DESIGN_NEW_EDIT){
+        if(view !== ViewType.DESIGN_NEW_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_MOVE;
         }
 
         // Moves not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_MOVE;
         }
 
         // Moves not allowed outside the Design Editor
-        if(displayContext != DisplayContext.BASE_EDIT){
+        if(displayContext !== DisplayContext.BASE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_CONTEXT_MOVE;
         }
 
         // Moves must be to a valid destination
-        if(!locationMoveDropAllowed(movingComponent.componentType, targetComponent.componentType, view, targetComponent.isInScope)){
+        if(!locationMoveDropAllowed(movingComponent.componentType, targetComponent.componentType, view, true)){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MOVE;
         }
 
@@ -197,17 +197,17 @@ class DesignComponentValidationServices{
     validateReorderDesignComponent(view, mode, displayContext, movingComponent, targetComponent){
 
         // Moves only allowed in design edit when in edit mode
-        if(view != ViewType.DESIGN_NEW_EDIT){
+        if(view !== ViewType.DESIGN_NEW_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_VIEW_MOVE;
         }
 
         // Moves not allowed in view only mode
-        if(mode != ViewMode.MODE_EDIT){
+        if(mode !== ViewMode.MODE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_MODE_MOVE;
         }
 
         // Moves not allowed outside the Design Editor
-        if(displayContext != DisplayContext.BASE_EDIT){
+        if(displayContext !== DisplayContext.BASE_EDIT){
             return DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_CONTEXT_MOVE;
         }
 

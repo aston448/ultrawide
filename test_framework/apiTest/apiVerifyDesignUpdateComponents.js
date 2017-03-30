@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { DesignUpdates }                    from '../../imports/collections/design_update/design_updates.js'
 import { DesignUpdateComponents }           from '../../imports/collections/design_update/design_update_components.js';
 
-import { ComponentType, UpdateMergeStatus, DesignUpdateMergeAction }            from '../../imports/constants/constants.js';
+import { ComponentType, UpdateMergeStatus, UpdateScopeType, DesignUpdateMergeAction }            from '../../imports/constants/constants.js';
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
@@ -174,7 +174,7 @@ Meteor.methods({
             componentName
         );
 
-        if(designUpdateComponent.isParentScope){
+        if(designUpdateComponent.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in parent scope");

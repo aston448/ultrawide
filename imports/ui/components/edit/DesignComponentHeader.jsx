@@ -18,7 +18,7 @@ import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWo
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
 import {getComponentClass, log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js'
 
@@ -144,8 +144,7 @@ export class DesignComponentHeader extends Component{
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
-                    nextProps.currentItem.isInScope === this.props.currentItem.isInScope &&
-                    nextProps.currentItem.isParentScope === this.props.currentItem.isParentScope &&
+                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
@@ -242,7 +241,7 @@ export class DesignComponentHeader extends Component{
                     // For updates we use the new name.  Also update if scope changes so decoration is redone.
                     if(
                         newProps.currentItem.componentNameNew !== this.props.currentItem.componentNameNew ||
-                        newProps.currentItem.isInScope !== this.props.currentItem.isInScope
+                        newProps.currentItem.scopeType !== this.props.currentItem.scopeType
                     ){
                         this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                     }
@@ -307,7 +306,7 @@ export class DesignComponentHeader extends Component{
                     ]);
                 }
 
-                if((props.displayContext === DisplayContext.UPDATE_SCOPE) && props.currentItem.isInScope){
+                if((props.displayContext === DisplayContext.UPDATE_SCOPE) && (props.currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)){
                     // The Update Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
@@ -646,8 +645,8 @@ export class DesignComponentHeader extends Component{
         switch(displayContext){
             case DisplayContext.UPDATE_SCOPE:
                 if(updateItem){
-                    inScope = updateItem.isInScope;
-                    inParentScope = updateItem.isParentScope;
+                    inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+                    inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
                 } else {
                     // If not in this update indicate if another update is known to have modified it
                     if(currentItem.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE){
@@ -660,8 +659,8 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.UPDATE_EDIT:
-                inScope = updateItem.isInScope;
-                inParentScope = updateItem.isParentScope;
+                inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+                inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
                 break;
 
             case DisplayContext.WP_SCOPE:

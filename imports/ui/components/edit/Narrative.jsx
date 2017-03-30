@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewMode, ViewType, DisplayContext, LogLevel} from '../../../constants/constants.js';
+import {ViewMode, ViewType, DisplayContext, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
 import ClientDesignComponentServices            from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices      from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
@@ -301,7 +301,7 @@ export default class Narrative extends React.Component {
             displayContext === DisplayContext.WP_SCOPE ||
             displayContext === DisplayContext.WP_VIEW ||
             displayContext === DisplayContext.DEV_DESIGN ||
-            (updateComponent && updateComponent.isParentScope) ||
+            (updateComponent && (updateComponent.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE)) ||
             (updateComponent && updateComponent.isRemoved)
         ){
             // VIEW MODE

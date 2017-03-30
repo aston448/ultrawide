@@ -7,7 +7,7 @@ import { WorkPackages }             from '../../collections/work/work_packages.j
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DesignUpdateMergeAction }      from '../../constants/constants.js';
+import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DesignUpdateMergeAction, UpdateScopeType }      from '../../constants/constants.js';
 import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
 import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
@@ -237,11 +237,11 @@ class DesignUpdateComponentModules{
         peers.forEach((peer) => {
 
             // This call only inserts stuff not already there so won't insert others that happen to be existing
-            this.insertComponentToUpdateScope(peer, designUpdateId, false)  // Insert as in parent scope
+            this.insertComponentToUpdateScope(peer, designUpdateId, UpdateScopeType.SCOPE_PEER_SCOPE)  // Insert as in peer scope
         });
     }
 
-    insertComponentToUpdateScope(baseComponent, designUpdateId, inScope){
+    insertComponentToUpdateScope(baseComponent, designUpdateId, scopeType){
 
         // Only insert if not already existing
         const updateComponent = DesignVersionComponents.findOne({
@@ -293,8 +293,7 @@ class DesignUpdateComponentModules{
                 // Editing state (shared and persistent)
                 isRemovable:                    true,           // Note all update items are removable when scoped
                 isScopable:                     isScopable,
-                isInScope:                      inScope,
-                isParentScope:                  !inScope
+                scopeType:                      scopeType
             });
 
             // // Set all added components as open by default
@@ -350,8 +349,7 @@ class DesignUpdateComponentModules{
             {_id: designUpdateComponentId},
             {
                 $set:{
-                    isParentScope: false,
-                    isInScope: true
+                    scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                 }
             }
         )
@@ -363,8 +361,7 @@ class DesignUpdateComponentModules{
             {_id: designUpdateComponentId},
             {
                 $set:{
-                    isParentScope: true,
-                    isInScope: false
+                    scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE
                 }
             }
         )
@@ -396,7 +393,7 @@ class DesignUpdateComponentModules{
 
                 if(!currentUpdateComponent){
                     // No DU Component for the parent so add it to PARENT scope
-                    this.insertComponentToUpdateScope(parentComponent, designUpdateId, false);
+                    this.insertComponentToUpdateScope(parentComponent, designUpdateId, UpdateScopeType.SCOPE_PARENT_SCOPE);
 
                     // And carry on up the tree
                     this.addParentsToScope(parentComponent, designUpdateId);
@@ -449,7 +446,7 @@ class DesignUpdateComponentModules{
                 if(currentUpdateComponent){
 
                     // Only remove components that are not in scope themselves
-                    if(!currentUpdateComponent.isInScope) {
+                    if(!(currentUpdateComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE)) {
                         if (this.hasNoChildren(currentUpdateComponent._id)) {
 
                             // OK to remove the DU component
@@ -466,74 +463,81 @@ class DesignUpdateComponentModules{
     }
 
 
-    updateParentScope(designUpdateComponentId, newScope){
-
-        if(newScope){
-            // Setting this component in scope
-            // Set all parents to be in Parent Scope (unless already in scope themselves)
-
-            let parentAddId = DesignUpdateComponents.findOne({_id: designUpdateComponentId}).componentParentIdNew;
-
-            let applicationAdd = false;
-
-            // Applications at the top level are created with parent id = 'NONE';
-            while(!applicationAdd){
-
-                DesignUpdateComponents.update(
-                    {_id: parentAddId, isInScope: false},
-                    {
-                        $set:{
-                            isParentScope: true
-                        }
-                    }
-                );
-
-
-                // If we have just updated an Application its time to stop
-                applicationAdd = (parentAddId === 'NONE');
-
-                // Get next parent if continuing
-                if(!applicationAdd) {
-                    parentAddId = DesignUpdateComponents.findOne({_id: parentAddId}).componentParentIdNew;
-                }
-            }
-        } else {
-            // Setting this component out of scope:
-
-            // That does not mean children of it are out of scope...
-
-            let descopedItem = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
-
-            // Remove all parents from parent scope if they no longer have a child in scope
-
-            // Are there any other in scope or parent scope components that have the same parent id as the descoped item.  If so we don't descope the parent
-            let inScopeChildren = DesignUpdateComponents.find({componentParentIdNew: descopedItem.componentParentIdNew, $or:[{isInScope: true}, {isParentScope: true}]}).count();
-            let continueLooking = true;
-
-            while(inScopeChildren == 0 && continueLooking){
-
-                DesignUpdateComponents.update(
-                    {_id: descopedItem.componentParentIdNew},
-                    {
-                        $set:{
-                            isParentScope: false
-                        }
-                    }
-                );
-
-                // Stop looking if we have reached the Application level
-                continueLooking = (descopedItem.componentType != ComponentType.APPLICATION);
-
-                // Get next parent if continuing
-                if(continueLooking) {
-                    // Move descoped item up to the parent that has just been descoped
-                    descopedItem = DesignUpdateComponents.findOne({_id: descopedItem.componentParentIdNew});
-                    // And see if its parent has any in scope children
-                    inScopeChildren = DesignUpdateComponents.find({componentParentIdNew: descopedItem.componentParentIdNew, isInScope: true}).count();
-                }
-            }
-        }
-    };
+    // updateParentScope(designUpdateComponentId, newScope){
+    //
+    //     if(newScope){
+    //         // Setting this component in scope
+    //         // Set all parents to be in Parent Scope (unless already in scope themselves)
+    //
+    //         let parentAddId = DesignUpdateComponents.findOne({_id: designUpdateComponentId}).componentParentIdNew;
+    //
+    //         let applicationAdd = false;
+    //
+    //         // Applications at the top level are created with parent id = 'NONE';
+    //         while(!applicationAdd){
+    //
+    //             DesignUpdateComponents.update(
+    //                 {_id: parentAddId},
+    //                 {
+    //                     $set:{
+    //                         scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE
+    //                     }
+    //                 }
+    //             );
+    //
+    //
+    //             // If we have just updated an Application its time to stop
+    //             applicationAdd = (parentAddId === 'NONE');
+    //
+    //             // Get next parent if continuing
+    //             if(!applicationAdd) {
+    //                 parentAddId = DesignUpdateComponents.findOne({_id: parentAddId}).componentParentIdNew;
+    //             }
+    //         }
+    //     } else {
+    //         // Setting this component out of scope:
+    //
+    //         // That does not mean children of it are out of scope...
+    //
+    //         let descopedItem = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+    //
+    //         // Remove all parents from parent scope if they no longer have a child in scope
+    //
+    //         // Are there any other in scope or parent scope components that have the same parent id as the descoped item.  If so we don't descope the parent
+    //         let inScopeChildren = DesignUpdateComponents.find({
+    //             componentParentIdNew:   descopedItem.componentParentIdNew,
+    //             scopeType:              { $in:[UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
+    //         }).count();
+    //
+    //         let continueLooking = true;
+    //
+    //         while(inScopeChildren === 0 && continueLooking){
+    //
+    //             DesignUpdateComponents.update(
+    //                 {_id: descopedItem.componentParentIdNew},
+    //                 {
+    //                     $set:{
+    //                         scopeType: UpdateScopeType.SCOPE_OUT_SCOPE
+    //                     }
+    //                 }
+    //             );
+    //
+    //             // Stop looking if we have reached the Application level
+    //             continueLooking = (descopedItem.componentType !== ComponentType.APPLICATION);
+    //
+    //             // Get next parent if continuing
+    //             if(continueLooking) {
+    //                 // Move descoped item up to the parent that has just been descoped
+    //                 descopedItem = DesignUpdateComponents.findOne({_id: descopedItem.componentParentIdNew});
+    //                 // And see if its parent has any in scope children
+    //                 inScopeChildren = DesignUpdateComponents.find({
+    //                     componentParentIdNew: descopedItem.componentParentIdNew,
+    //                     scopeType: UpdateScopeType.SCOPE_IN_SCOPE
+    //                 }).count();
+    //             }
+    //         }
+    //     }
+    // };
 
     hasNoChildren(designUpdateComponentId){
         // Children are those with their parent id = this item and not logically deleted
@@ -557,7 +561,7 @@ class DesignUpdateComponentModules{
         otherInstances.forEach((instance) => {
 
             // Want also to reject if the item being removed is itself in scope elsewhere
-            if(instance.isInScope && instance._id !== designUpdateComponentId){
+            if((instance.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) && (instance._id !== designUpdateComponentId)){
                 noInScopeChildren = false;
             }
 
@@ -606,7 +610,7 @@ class DesignUpdateComponentModules{
             log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
 
             children.forEach((child) => {
-                if(child.isInScope && !child.isRemoved){
+                if((child.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) && !child.isRemoved){
                     log((msg) => console.log(msg), LogLevel.TRACE, "In scope child found");
                     inScopeChild = true;
                 } else {
@@ -704,26 +708,12 @@ class DesignUpdateComponentModules{
             {
                 $set:{
                     isRemoved: true,
-                    isInScope: true,     // Any component removed is automatically in scope
-                    isParentScope: false
+                    scopeType: UpdateScopeType.SCOPE_IN_SCOPE  // Automatically in scope when deleted
                 }
             }
         );
     }
 
-    // logicallyRestoreComponent(designUpdateComponentId){
-    //
-    //     DesignUpdateComponents.update(
-    //         {_id: designUpdateComponentId},
-    //         {
-    //             $set:{
-    //                 isRemoved: false,
-    //                 isInScope: false,
-    //                 isParentScope: false
-    //             }
-    //         }
-    //     );
-    // }
 
     // Recursive function to mark all children down to the bottom of the tree as removed
     logicallyDeleteChildren(designUpdateComponent){
@@ -747,7 +737,7 @@ class DesignUpdateComponentModules{
             if(!childDuComponent){
 
                 // Add as new in scope item - if not already there.  If it is there it must already be deleted
-                const newDesignUpdateComponentId = this.insertComponentToUpdateScope(child, designUpdateComponent.designUpdateId, true);
+                const newDesignUpdateComponentId = this.insertComponentToUpdateScope(child, designUpdateComponent.designUpdateId, UpdateScopeType.SCOPE_IN_SCOPE);
 
                 // And mark it as deleted if added
                 if(newDesignUpdateComponentId) {

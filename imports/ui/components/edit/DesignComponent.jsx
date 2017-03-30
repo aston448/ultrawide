@@ -19,7 +19,7 @@ import MoveTarget               from './MoveTarget.jsx';
 import DesignComponentHeader    from './DesignComponentHeader.jsx';
 
 // Ultrawide Services
-import {ComponentType, ViewMode, ViewType, DisplayContext, WorkPackageType, LogLevel} from '../../../constants/constants.js';
+import {ComponentType, ViewMode, ViewType, DisplayContext, WorkPackageType, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
 import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
@@ -123,8 +123,7 @@ export class DesignComponent extends Component{
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
-                    nextProps.currentItem.isInScope === this.props.currentItem.isInScope &&
-                    nextProps.currentItem.isParentScope === this.props.currentItem.isParentScope &&
+                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
                     nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
@@ -450,7 +449,7 @@ export class DesignComponent extends Component{
 
             if ((displayContext === DisplayContext.UPDATE_EDIT && view === ViewType.DESIGN_UPDATE_EDIT) || (displayContext === DisplayContext.UPDATE_VIEW && view === ViewType.DESIGN_UPDATE_VIEW)) {
                 // For a design update we can check if in scope
-                inScope = currentItem.isInScope;
+                inScope = (currentItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
             }
 
             // Determine the correct parent id
@@ -521,7 +520,8 @@ export class DesignComponent extends Component{
                 displayContext === DisplayContext.WP_VIEW ||
                 (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.APPLICATION) ||
                 (displayContext === DisplayContext.DEV_DESIGN && currentItem.componentType === ComponentType.DESIGN_SECTION) ||
-                (updateItem && updateItem.isParentScope) ||
+                (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) ||
+                (updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE) ||
                 (updateItem && updateItem.isRemoved)
             );
 
