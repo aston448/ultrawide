@@ -98,9 +98,9 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
 
         let newNarrative = 'As a Designer\nI want to update my Narrative\nSo that I can clarify what my Feature is about\n';
 
-        // Setup - don't add Feature to Scope
+        // Setup - don't add Feature to Scope but get it into the update by adding a child of it.  The Feature is then in parent scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         expect(UpdateComponentVerifications.designerSelectedFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));
 

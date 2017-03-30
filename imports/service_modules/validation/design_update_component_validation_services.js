@@ -430,6 +430,13 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
+        // An item cannot be put out of scope if it is modified
+        if(!newScope && updateComponent){
+            if(updateComponent.isChanged){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_CHANGED;
+            }
+        }
+
         // An item that has new children in the update cannot be de-scoped from it
         if(!newScope && !hasNoNewChildren){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN;

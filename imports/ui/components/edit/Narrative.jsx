@@ -229,7 +229,7 @@ export default class Narrative extends React.Component {
             // Save the title on ENTER
             //console.log("Saving...");
 
-            this.saveNarrative(this.props.view, this.props.mode, this.props.designComponent._id);
+            this.saveNarrative(this.props.view, this.props.mode);
             return true;
         }
 
@@ -255,7 +255,7 @@ export default class Narrative extends React.Component {
         this.setState({editable: true});
     }
 
-    saveNarrative(view, mode, componentId){
+    saveNarrative(view, mode){
         event.preventDefault();
         //console.log("SAVE");
         let rawText = convertToRaw(this.state.editorState.getCurrentContent());
@@ -263,10 +263,10 @@ export default class Narrative extends React.Component {
 
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
-                ClientDesignComponentServices.updateFeatureNarrative(view, mode, componentId, plainText, rawText);
+                ClientDesignComponentServices.updateFeatureNarrative(view, mode, this.props.designComponent._id, plainText, rawText);
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
-                ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, componentId, plainText, rawText);
+                ClientDesignUpdateComponentServices.updateFeatureNarrative(view, mode, this.props.updateComponent._id, plainText, rawText);
                 break;
 
         }
@@ -300,7 +300,9 @@ export default class Narrative extends React.Component {
             displayContext === DisplayContext.BASE_VIEW ||
             displayContext === DisplayContext.WP_SCOPE ||
             displayContext === DisplayContext.WP_VIEW ||
-            displayContext === DisplayContext.DEV_DESIGN
+            displayContext === DisplayContext.DEV_DESIGN ||
+            (updateComponent && updateComponent.isParentScope) ||
+            (updateComponent && updateComponent.isRemoved)
         ){
             // VIEW MODE
             narrativeHtml =
@@ -332,7 +334,7 @@ export default class Narrative extends React.Component {
                                 blockStyleFn={this.blockStyles}
                                 readOnly={false}
                             />
-                            <InputGroup.Addon id="actionSaveNarrative" onClick={ () => this.saveNarrative(view, mode, designComponent._id)}>
+                            <InputGroup.Addon id="actionSaveNarrative" onClick={ () => this.saveNarrative(view, mode)}>
                                 <div className="green"><Glyphicon glyph="ok"/></div>
                             </InputGroup.Addon>
                             <InputGroup.Addon id="actionUndoEditNarrative" onClick={ () => this.undoNarrativeChange()}>

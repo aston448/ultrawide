@@ -160,6 +160,7 @@ export const DesignUpdateComponentValidationErrors = {
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW:                 'This component cannot be removed from scope as it is new in this update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN:        'This component cannot be removed from scope as it has new children in this update',
     DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_REMOVED:             'You cannot remove deleted items from scope except by undoing the delete',
+    DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_CHANGED:             'This component cannot be removed from scope as it has been changed in this update',
     DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED:         'A component cannot be added to this item because it has been removed in this update',
     DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_REMOVED_OTHER:   'A component cannot be added to this item because it has been removed in another update',
     DESIGN_UPDATE_COMPONENT_NOT_REMOVABLE_DEV:                  'Only Scenarios or Feature Aspects added by a Developer may be removed in a Work Package',
