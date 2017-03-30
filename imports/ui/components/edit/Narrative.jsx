@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewMode, ViewType, DisplayContext, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
+import {ViewMode, ViewType, DisplayContext, UpdateScopeType, WorkPackageScopeType, LogLevel} from '../../../constants/constants.js';
 import ClientDesignComponentServices            from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices      from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
@@ -123,11 +123,15 @@ export default class Narrative extends React.Component {
 
         let compositeDecorator = null;
 
+
         if(props.designComponent) {
 
             if(
-                ((props.displayContext === DisplayContext.WP_SCOPE) && !props.wpComponent) ||
-                ((props.displayContext === DisplayContext.UPDATE_SCOPE) && !props.updateComponent)
+                ((props.displayContext === DisplayContext.WP_SCOPE) && (!props.wpComponent || (props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
+                ((props.displayContext === DisplayContext.UPDATE_SCOPE) && (!props.updateComponent || props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+                ((props.displayContext === DisplayContext.WP_VIEW) && props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
+                ((props.displayContext === DisplayContext.UPDATE_EDIT && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+                ((props.displayContext === DisplayContext.UPDATE_VIEW && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
             ) {
                 // The narrative will be decorated as greyed out and no syntax highlighting...
                 compositeDecorator = new CompositeDecorator([

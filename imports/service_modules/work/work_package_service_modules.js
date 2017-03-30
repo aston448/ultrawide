@@ -6,7 +6,7 @@ import { DesignVersionComponents }      from '../../collections/design/design_ve
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { WorkPackageType, ComponentType } from '../../constants/constants.js';
+import { WorkPackageType, ComponentType, WorkPackageScopeType, UpdateScopeType } from '../../constants/constants.js';
 
 //======================================================================================================================
 //
@@ -18,7 +18,7 @@ import { WorkPackageType, ComponentType } from '../../constants/constants.js';
 
 class WorkPackageModules {
 
-    addWorkPackageComponent(userContext, wpType, component, activeScope){
+    addWorkPackageComponent(userContext, wpType, component, scopeType){
 
         // Check that this component is not already there...
         const wpComponent = WorkPackageComponents.findOne({
@@ -28,7 +28,6 @@ class WorkPackageModules {
 
         if(!wpComponent) {
 
-            const parentScope = !activeScope;
             let otherWp = null;
 
             // If component is Scenario and already exists in other WP, don't add it
@@ -54,8 +53,7 @@ class WorkPackageModules {
                         componentParentReferenceId:     component.componentParentReferenceIdNew,
                         componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
                         componentIndex:                 component.componentIndexNew,
-                        componentParent:                parentScope,
-                        componentActive:                activeScope
+                        scopeType:                      scopeType
                     }
                 );
 
@@ -81,16 +79,15 @@ class WorkPackageModules {
 
         } else {
 
-            // Component was already there.  If was a parent and we are trying to activate it update the scope
-            if(wpComponent.componentParent && activeScope){
+            // Component was already there.  If we are trying to activate it update the scope
+            if(scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
 
                 // No need to add anything, just update it
                 WorkPackageComponents.update(
                     {_id: wpComponent._id},
                     {
                         $set:{
-                            componentParent:                false,
-                            componentActive:                true
+                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE
                         }
                     }
                 );
@@ -142,7 +139,7 @@ class WorkPackageModules {
             children.forEach((child) => {
 
                 // Add as active component
-                this.addWorkPackageComponent(userContext, wpType, child, true);
+                this.addWorkPackageComponent(userContext, wpType, child, WorkPackageScopeType.SCOPE_ACTIVE);
 
                 // And carry on down
                 this.addComponentChildrenToWp(userContext, wpType, child);
@@ -175,7 +172,7 @@ class WorkPackageModules {
         if(parent){
 
             // Add as parent component
-            this.addWorkPackageComponent(userContext, wpType, parent, false);
+            this.addWorkPackageComponent(userContext, wpType, parent, WorkPackageScopeType.SCOPE_PARENT);
 
             // And carry on up
             this.addComponentParentsToWp(userContext, wpType, parent)
@@ -202,7 +199,7 @@ class WorkPackageModules {
                 });
 
                 if(wpComponent){
-                    if(wpComponent.componentActive){
+                    if(wpComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
                         activeChild = true;
                     }
                 }
@@ -261,7 +258,8 @@ class WorkPackageModules {
                 children = DesignUpdateComponents.find({
                     designVersionId:        userContext.designVersionId,
                     designUpdateId:         userContext.designUpdateId,
-                    componentParentIdNew:   parentComponentId
+                    componentParentIdNew:   parentComponentId,
+                    scopeType:              {$in:[UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}  // Ignore Peer Items
                 }).fetch();
                 break;
         }
@@ -274,7 +272,7 @@ class WorkPackageModules {
         let wpActiveParentComponent = WorkPackageComponents.findOne({
             workPackageId: workPackage._id,
             componentId: componentParentId,
-            componentActive: true
+            scopeType: WorkPackageScopeType.SCOPE_ACTIVE
         });
 
         if (wpActiveParentComponent){
@@ -290,8 +288,7 @@ class WorkPackageModules {
                     componentParentReferenceId:     component.componentParentReferenceIdNew,
                     componentFeatureReferenceId:    component.componentFeatureReferenceIdNew,
                     componentIndex:                 component.componentIndexNew,
-                    componentParent:                false,
-                    componentActive:                true
+                    scopeType:                      WorkPackageScopeType.SCOPE_ACTIVE
                 }
             );
 
@@ -323,16 +320,17 @@ class WorkPackageModules {
             let isActive = false;
             let isParent = false;
 
+            let scopeType = WorkPackageScopeType.SCOPE_NONE;
+
             if(componentParent){
                 wpParent = WorkPackageComponents.findOne({
                     workPackageId:  workPackage._id,
                     componentId:    componentParent._id
                 });
 
+                // Scope type follows parent
                 if(wpParent){
-                    isActive = wpParent.componentActive;
-                    // Moved retains parent status is its parent is a parent and we have decided it isn't active
-                    isParent = ((!isActive) && wpParent.componentParent);
+                    scopeType = wpParent.scopeType;
                 }
             }
 
@@ -347,8 +345,7 @@ class WorkPackageModules {
                         componentFeatureReferenceId:        component.componentFeatureReferenceIdNew,
                         componentLevel:                     component.componentLevel,
                         componentIndex:                     component.componentIndexNew,
-                        componentParent:                    isParent,      // Reset WP status
-                        componentActive:                    isActive
+                        scopeType:                          scopeType,      // Reset WP status
                     }
                 },
                 {multi: true}

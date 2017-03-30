@@ -4,7 +4,7 @@ import { WorkPackageComponents }        from '../../collections/work/work_packag
 import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 // Ultrawide Services
-import { ComponentType, ViewType, WorkPackageType }            from '../../constants/constants.js';
+import { ComponentType, ViewType, WorkPackageType, WorkPackageScopeType }            from '../../constants/constants.js';
 
 import  WorkPackageModules          from '../../service_modules/work/work_package_service_modules.js';
 
@@ -50,7 +50,7 @@ class WorkPackageComponentServices{
                     WorkPackageModules.addComponentParentsToWp(userContext, wpType, designComponent);
 
                     // Add the component itself
-                    WorkPackageModules.addWorkPackageComponent(userContext, wpType, designComponent, true);
+                    WorkPackageModules.addWorkPackageComponent(userContext, wpType, designComponent, WorkPackageScopeType.SCOPE_ACTIVE);
 
                     // Add all valid children
                     WorkPackageModules.addComponentChildrenToWp(userContext, wpType, designComponent);

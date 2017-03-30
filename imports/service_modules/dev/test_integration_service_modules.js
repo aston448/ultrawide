@@ -20,7 +20,7 @@ import { TestOutputLocations }              from '../../collections/configure/te
 import { TestOutputLocationFiles }          from '../../collections/configure/test_output_location_files.js';
 
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, ScenarioStepStatus, ScenarioStepType, TestLocationType, TestLocationFileType,  LogLevel } from '../../constants/constants.js';
+import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, WorkPackageScopeType, ScenarioStepStatus, ScenarioStepType, TestLocationType, TestLocationFileType,  LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
 import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
@@ -350,7 +350,7 @@ class TestIntegrationModules{
                     designVersionId: userContext.designVersionId,
                     workPackageId: userContext.workPackageId,
                     componentType: ComponentType.APPLICATION,
-                    $or: [{componentActive: true}, {componentParent: true}]
+                    scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
                 },
                 {sort: {componentIndex: 1}}).fetch();
         }
@@ -388,7 +388,7 @@ class TestIntegrationModules{
                 workPackageId:              userContext.workPackageId,
                 componentType:              ComponentType.DESIGN_SECTION,
                 componentParentReferenceId: parentComponent.componentReferenceId,
-                $or: [{componentActive: true}, {componentParent: true}]
+                scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
             },
             {sort:{componentIndex: 1}}).fetch();
 
@@ -407,7 +407,7 @@ class TestIntegrationModules{
                         workPackageId:              userContext.workPackageId,
                         componentType:              ComponentType.FEATURE,
                         componentParentReferenceId: subsection.componentReferenceId,
-                        $or: [{componentActive: true}, {componentParent: true}]
+                        scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
                     },
                     {sort:{componentIndex: 1}}).fetch();
 
@@ -442,7 +442,7 @@ class TestIntegrationModules{
                 workPackageId:                  userContext.workPackageId,
                 componentFeatureReferenceId:    feature.componentReferenceId,
                 componentType:      { $in:[ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
-                $or: [{componentActive: true}, {componentParent: true}]
+                scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
             }).fetch();
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Got {} design items", wpDesignItems.length);

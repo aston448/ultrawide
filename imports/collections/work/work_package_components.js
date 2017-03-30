@@ -1,7 +1,7 @@
 
 import { Mongo } from 'meteor/mongo';
 
-import {WorkPackageStatus} from '../../constants/constants.js';
+import {WorkPackageScopeType} from '../../constants/constants.js';
 
 // A Work Package Component is the key to a real design or design update component
 // They do not provide data, just a marker for how the actual components are selected and displayed
@@ -21,8 +21,7 @@ let Schema = new SimpleSchema({
     componentIndex:             {type: Number, decimal: true, defaultValue: 100000},    // Used for ordering
 
     // Status
-    componentParent:            {type: Boolean, defaultValue: false},    // TRUE if component needs to be included as a parent of an in scope component
-    componentActive:            {type: Boolean, defaultValue: false},    // TRUE if component is actually in scope for the Work Package
+    scopeType:                  {type: String, defaultValue: WorkPackageScopeType.SCOPE_NONE}  // Whether active or a parent in the WP
 });
 
 WorkPackageComponents.attachSchema(Schema);

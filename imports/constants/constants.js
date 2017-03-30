@@ -206,6 +206,12 @@ export const UpdateScopeType = {
     SCOPE_OUT_SCOPE:        'SCOPE_OUT_SCOPE'
 };
 
+export const WorkPackageScopeType = {
+    SCOPE_ACTIVE:           'SCOPE_ACTIVE',
+    SCOPE_PARENT:           'SCOPE_PARENT',
+    SCOPE_NONE:             'SCOPE_NONE'
+};
+
 export const WorkPackageStatus = {
     WP_NEW:                 'NEW',
     WP_AVAILABLE:           'AVAILABLE',

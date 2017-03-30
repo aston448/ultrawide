@@ -34,7 +34,7 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 // Ultrawide Services
 import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignUpdateStatus,
     StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
-    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, UpdateMergeStatus, UpdateScopeType } from '../constants/constants.js';
+    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType } from '../constants/constants.js';
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -871,14 +871,13 @@ class ClientContainerServices{
                     case DisplayContext.UPDATE_EDIT:
                     case DisplayContext.UPDATE_VIEW:
 
-                        // Display all DU components.  Only in-scope components exist.  Ignore Peer scope for WPs
+                        // Display all DU components.  Only in-scope components exist.
                         currentComponents = DesignUpdateComponents.find(
                             {
                                 designVersionId:        designVersionId,
                                 designUpdateId:         designUpdateId,
                                 componentType:          componentType,
                                 componentParentIdNew:   parentId,
-                                scopeType:              {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
                             },
                             {sort:{componentIndexNew: 1}}
                         ).fetch();
@@ -989,13 +988,14 @@ class ClientContainerServices{
                 switch(displayContext) {
                     case DisplayContext.WP_SCOPE:
 
-                        // Get all Update Components for the scope
+                        // Get all Update Components for the scope.  Ignore Peer scope for Update WPs
                         currentComponents = DesignUpdateComponents.find(
                             {
-                                designVersionId: designVersionId,
-                                designUpdateId: designUpdateId,
-                                componentParentIdNew: parentId,
-                                componentType: componentType,
+                                designVersionId:        designVersionId,
+                                designUpdateId:         designUpdateId,
+                                componentParentIdNew:   parentId,
+                                componentType:          componentType,
+                                scopeType:              {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
                             },
                             {sort: {componentIndexNew: 1}}
                         ).fetch();
@@ -1024,6 +1024,7 @@ class ClientContainerServices{
 
                             currentComponents.push(duComponent);
                         });
+
                         break;
                 }
 
@@ -1376,7 +1377,7 @@ class ClientContainerServices{
                 let features = WorkPackageComponents.find({
                     workPackageId: userContext.workPackageId,
                     componentType: ComponentType.FEATURE,
-                    componentActive: true
+                    scopeType: WorkPackageScopeType.SCOPE_ACTIVE
                 }).fetch();
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Found {} features in Work Package", features.length);

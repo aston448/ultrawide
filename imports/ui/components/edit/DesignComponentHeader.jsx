@@ -18,7 +18,7 @@ import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWo
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
 import {getComponentClass, log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js'
 
@@ -120,8 +120,7 @@ export class DesignComponentHeader extends Component{
                     nextProps.isOpen === this.props.isOpen &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
-                    nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
+                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.isDragging === this.props.isDragging &&
@@ -145,8 +144,6 @@ export class DesignComponentHeader extends Component{
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
                     nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
-                    nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
-                    nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.testDataFlag === this.props.testDataFlag &&
@@ -175,8 +172,8 @@ export class DesignComponentHeader extends Component{
         switch(this.props.displayContext){
             case DisplayContext.WP_SCOPE:
                 // Need to get from WP scope for current item
-                this.setState({inScope: this.props.currentItem.componentActive || this.props.currentItem.componentParent});
-                this.setState({parentScope: this.props.currentItem.componentParent});
+                this.setState({inScope: this.props.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
+                this.setState({parentScope: this.props.currentItem.scopeType === WorkPackageScopeType.SCOPE_PARENT});
                 break;
             case DisplayContext.UPDATE_SCOPE:
                 // if(this.props.updateItem){
@@ -255,7 +252,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
                 if(this.props.displayContext === DisplayContext.WP_SCOPE){
-                    this.setState({inScope: newProps.currentItem.componentParent || newProps.currentItem.componentActive});
+                    this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
                 }
                 this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
@@ -263,7 +260,7 @@ export class DesignComponentHeader extends Component{
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 if(newProps.displayContext === DisplayContext.WP_SCOPE){
-                    this.setState({inScope: newProps.currentItem.componentParent || newProps.currentItem.componentActive});
+                    this.setState({inScope: newProps.currentItem.scopeType !== WorkPackageScopeType.SCOPE_NONE});
                 }
                 this.updateTitleText(newProps, newProps.currentItem.componentNameRawNew);
                 break;
@@ -296,7 +293,7 @@ export class DesignComponentHeader extends Component{
             // Item is a Scenario
             if(props.displayContext === DisplayContext.WP_SCOPE || props.displayContext === DisplayContext.UPDATE_SCOPE){
                 // We are in a WP or Update Scope context
-                if((props.displayContext === DisplayContext.WP_SCOPE) && props.currentItem.componentActive){
+                if((props.displayContext === DisplayContext.WP_SCOPE) && props.currentItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
                     // The WP Scenario is active
                     compositeDecorator = new CompositeDecorator([
                         {
@@ -665,8 +662,8 @@ export class DesignComponentHeader extends Component{
 
             case DisplayContext.WP_SCOPE:
                 if(wpItem) {
-                    inScope = wpItem.componentActive;
-                    inParentScope = wpItem.componentParent;
+                    inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
+                    inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
                 } else {
                     if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
                         // Scenario is in scope in another WP
@@ -678,8 +675,8 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.WP_VIEW:
-                inScope = wpItem.componentActive;
-                inParentScope = wpItem.componentParent;
+                inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
+                inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
                 break;
         }
 

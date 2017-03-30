@@ -18,7 +18,7 @@ import { UserDevFeatureScenarios }          from '../../collections/dev/user_dev
 import { UserDevFeatureScenarioSteps }      from '../../collections/dev/user_dev_feature_scenario_steps.js';
 
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, MashStatus, MashTestStatus, DevTestTag, StepContext, ScenarioStepStatus, ScenarioStepType, LogLevel } from '../../constants/constants.js';
+import { TestType, TestRunner, ComponentType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus, UserDevScenarioStepStatus, WorkPackageScopeType, StepContext, ScenarioStepStatus, ScenarioStepType, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
 import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
@@ -117,7 +117,7 @@ class MashFeatureFileModules{
                         {
                             workPackageId: userContext.workPackageId,
                             componentType: ComponentType.FEATURE,
-                            componentActive: true,
+                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE,
                             componentReferenceId: designFeature.componentReferenceId
                         }
                     );
@@ -222,7 +222,7 @@ class MashFeatureFileModules{
                         {
                             workPackageId: userContext.workPackageId,
                             componentType: ComponentType.SCENARIO,
-                            componentActive: true,
+                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE,
                             componentReferenceId: designScenario.componentReferenceId
                         }
                     );

@@ -100,8 +100,7 @@ export class DesignComponent extends Component{
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
-                    nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
+                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.testDataFlag === this.props.testDataFlag //&&
@@ -124,8 +123,6 @@ export class DesignComponent extends Component{
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
                     nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
-                    nextProps.currentItem.componentParent === this.props.currentItem.componentParent &&
-                    nextProps.currentItem.componentActive === this.props.currentItem.componentActive &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.mode === this.props.mode //&&

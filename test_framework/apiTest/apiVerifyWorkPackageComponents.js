@@ -5,7 +5,7 @@ import { DesignUpdateComponents }   from '../../imports/collections/design_updat
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType} from '../../imports/constants/constants.js';
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType, WorkPackageScopeType} from '../../imports/constants/constants.js';
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
@@ -103,7 +103,7 @@ Meteor.methods({
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.componentActive){
+        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not Active in Scope");
@@ -116,7 +116,7 @@ Meteor.methods({
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.componentActive){
+        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not Active in Scope");
@@ -129,7 +129,7 @@ Meteor.methods({
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.componentParent){
+        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not in Parent Scope");
@@ -142,7 +142,7 @@ Meteor.methods({
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.componentParent){
+        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not in Parent Scope");
@@ -155,7 +155,7 @@ Meteor.methods({
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.componentParent || workPackageComponent.componentActive){
+        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT || workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is in Scope!");
         } else {
             return true;
@@ -169,7 +169,7 @@ Meteor.methods({
 
         const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.componentParent || workPackageComponent.componentActive){
+        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT || workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is in Scope!");
         } else {
             return true;

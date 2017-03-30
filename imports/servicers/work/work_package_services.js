@@ -76,8 +76,7 @@ class WorkPackageServices{
                     componentIndex: wpComponent.componentIndex,
 
                     // Status
-                    componentParent: wpComponent.componentParent,
-                    componentActive: wpComponent.componentActive
+                    scopeType: wpComponent.scopeType
                 }
             );
 
