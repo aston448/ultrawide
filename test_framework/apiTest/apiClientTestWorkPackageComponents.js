@@ -19,14 +19,16 @@ Meteor.methods({
         const displayContext = DisplayContext.WP_SCOPE;
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+        let designComponent = null;
 
         if(workPackage.workPackageType === WorkPackageType.WP_BASE){
             view = ViewType.WORK_PACKAGE_BASE_EDIT;
+            designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
         } else {
             view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
+            designComponent =  TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
         }
 
-        const designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, true);
 
@@ -41,14 +43,15 @@ Meteor.methods({
         const displayContext = DisplayContext.WP_SCOPE;
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
+        let designComponent = null;
 
         if(workPackage.workPackageType === WorkPackageType.WP_BASE){
             view = ViewType.WORK_PACKAGE_BASE_EDIT;
+            designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
         } else {
             view = ViewType.WORK_PACKAGE_UPDATE_EDIT;
+            designComponent =  TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
         }
-
-        const designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, false);
 

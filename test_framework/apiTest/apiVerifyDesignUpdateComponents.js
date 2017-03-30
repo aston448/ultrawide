@@ -301,28 +301,24 @@ Meteor.methods({
 
         const du = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
-        if(du.updateMergeAction !== DesignUpdateMergeAction.MERGE_INCLUDE){
-            throw new Meteor.Error("FAIL", "This test can only work if the update is set to merge");
-        } else {
+        // Being removed elsewhere means that the DV component will be marked as removed
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            componentParentName,
+            componentName
+        );
 
-            // Being removed elsewhere means that the DV component will be marked as removed
-            const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
-                userContext.designVersionId,
-                componentType,
-                componentParentName,
-                componentName
-            );
+        // See if the component is also present in this update
+        const duComponent = DesignUpdateComponents.findOne({
+            designUpdateId: userContext.designUpdateId,
+            componentReferenceId: designVersionComponent.componentReferenceId
+        });
 
-            // See if the component is also present in this update
-            const duComponent = DesignUpdateComponents.findOne({
-                designUpdateId: userContext.designUpdateId,
-                componentReferenceId: designVersionComponent.componentReferenceId
-            });
-
-            if (designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED) {
-                throw new Meteor.Error("FAIL", "Expecting component " + componentName + " NOT to be removed in Design Version");
-            }
+        if (designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED) {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " NOT to be removed in Design Version.  Was the update Merged?");
         }
+
     },
 
     'verifyDesignUpdateComponents.scopeComponentIsRemoved'(componentType, componentParentName, componentName, userName){

@@ -25,6 +25,14 @@ describe('UC 559 - Remove New Design Update Component', function(){
     before(function(){
         TestFixtures.logTestSuite('UC 559 - Remove New Design Update Component');
 
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data
@@ -34,16 +42,6 @@ describe('UC 559 - Remove New Design Update Component', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -75,6 +73,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Setup - add new Section
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
 
         // Remove Section
@@ -88,6 +87,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Setup - add new Feature - need to remove default Feature Aspects
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Interface');
         UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
@@ -139,6 +139,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Setup - add new Section
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         // Add Feature to it
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
@@ -155,6 +156,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Setup - add new Feature - automatically adds aspects as children
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
 
         // Remove Feature
@@ -169,6 +171,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Setup - add new Feature - automatically adds aspects as children
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         // Add Scenario to Actions aspect
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario99');
