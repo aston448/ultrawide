@@ -96,7 +96,13 @@ class DesignUpdateComponentValidationApi{
             componentType:      thisUpdateComponent.componentType
         }).fetch();
 
-        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent, newName, existingUpdateComponents);
+        const existingDesignVersionComponents = DesignVersionComponents.find({
+            componentReferenceId:   {$ne: thisUpdateComponent.componentReferenceId},
+            designVersionId:        thisUpdateComponent.designVersionId,
+            componentType:          thisUpdateComponent.componentType
+        });
+
+        return DesignUpdateComponentValidationServices.validateUpdateDesignUpdateComponentName(view, mode, thisUpdateComponent, newName, existingUpdateComponents, existingDesignVersionComponents);
     };
 
     validateUpdateDesignUpdateFeatureNarrative(view, mode, designUpdateComponentId){

@@ -135,7 +135,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateDesignUpdateComponentName(view, mode, component, newName, existingUpdateComponents){
+    validateUpdateDesignUpdateComponentName(view, mode, component, newName, existingUpdateComponents, existingDesignVersionComponents){
 
         // Updates only allowed in update edit or WP Develop when in edit mode
         if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
@@ -181,6 +181,13 @@ class DesignUpdateComponentValidationServices{
                 }
             });
 
+            existingDesignVersionComponents.forEach((existingComponent) => {
+
+                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === component.componentParentReferenceIdNew){
+                    duplicate = true;
+                }
+            });
+
             if(duplicate){
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT;
             }
@@ -189,6 +196,13 @@ class DesignUpdateComponentValidationServices{
             let duplicate = false;
 
             existingUpdateComponents.forEach((existingComponent) => {
+
+                if(existingComponent.componentNameNew === newName){
+                    duplicate = true;
+                }
+            });
+
+            existingDesignVersionComponents.forEach((existingComponent) => {
 
                 if(existingComponent.componentNameNew === newName){
                     duplicate = true;
@@ -207,6 +221,17 @@ class DesignUpdateComponentValidationServices{
             let superset = false;
 
             existingUpdateComponents.forEach((existingComponent) => {
+
+                if(existingComponent.componentNameNew.includes(newName)){
+                    subset = true;
+                }
+
+                if(newName.includes(existingComponent.componentNameNew)){
+                    superset = true;
+                }
+            });
+
+            existingDesignVersionComponents.forEach((existingComponent) => {
 
                 if(existingComponent.componentNameNew.includes(newName)){
                     subset = true;
