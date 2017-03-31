@@ -25,15 +25,7 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
     before(function(){
         TestFixtures.logTestSuite('UC 540 - Add Design Item to Update Scope');
 
-        TestFixtures.clearAllData();
 
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
-
-        // Complete the Design Version and create the next
-        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
-        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
     });
 
     after(function(){
@@ -42,14 +34,20 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
     beforeEach(function(){
 
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Complete the Design Version and create the next
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdate();
-        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
-        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate1');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+
     });
 
     afterEach(function(){
@@ -58,7 +56,59 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
 
     // Actions
-    it('A Feature can be added to a Design Update Scope', function(){
+    it('An Application can be added to the Design Update Scope', function(){
+
+        // Setup
+        // Verify that Application1 is not in the scope yet
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+
+        // Execute
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+
+        // Verify
+
+        // In Scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+
+        // Out of Scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+
+    });
+
+    it('A Design Section can be added to the Design Update Scope', function(){
+
+        // Setup
+        // Verify that Section1 is not in the scope yet
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+
+        // Execute
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+
+        // Verify
+
+        // In Scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+
+        // In Parent scope
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+
+        // Out of Scope
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+
+    });
+
+    it('A Feature can be added to the Design Update Scope', function(){
 
         // Setup
         // Verify that Feature1 is not in the scope yet
@@ -71,19 +121,20 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Verify
         // Feature1 now in scope
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        // Section1 and Application1 in Parent Scope
+
+        // In Parent Scope
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        // And just confirm Section2, Feature2 still out of scope
+
+        // Out of Scope
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        // And the children of the Feature are not added either
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
 
     });
 
-    it('A Feature Aspect can be added to a Design Update Scope', function(){
+    it('A Feature Aspect can be added to the Design Update Scope', function(){
 
         // Setup
         // Verify that Feature1 Actions is not in the scope yet
@@ -96,18 +147,19 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Verify
         // Actions now in scope
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        // Feature1, Section1 and Application1 in Parent Scope
+
+        // In Parent Scope
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        // And just confirm Section2, Feature2 still out of scope
+
+        // Out of scope
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        // And the child Scenario still out of scope
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
-    it('A Scenario can be added to a Design Update Scope', function(){
+    it('A Scenario can be added to the Design Update Scope', function(){
 
         // Setup
         // Verify that Feature1 Actions is not in the scope yet
@@ -120,18 +172,102 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Verify
         // Scenario1 now in scope
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        // Actions, Feature1, Section1 and Application1 in Parent Scope
+
+        // In Parent Scope
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        // And just confirm Section2, Feature2 still out of scope
+
+        // Out of scope
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
-        // And the other Scenario still out of scope
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
     });
 
+    it('An Application can be added to the Scope of more than one Design Update', function(){
+
+        // Setup
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add Application 1 to both DU1 and DU2 - no errors
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+
+        // Verify in scope for both
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+    });
+
+    it('A Design Section can be added to the Scope of more than one Design Update', function(){
+
+        // Setup
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add Application 1 to both DU1 and DU2 - no errors
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+
+        // Verify in scope for both
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+    });
+
+    it('A Feature can be added to the Scope of more than one Design Update', function(){
+
+        // Setup
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add Application 1 to both DU1 and DU2 - no errors
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+
+        // Verify in scope for both
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+    });
+
+    it('A Feature Aspect can be added to the Scope of more than one Design Update', function(){
+
+        // Setup
+        // Add a new Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add Application 1 to both DU1 and DU2 - no errors
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+
+        // Verify in scope for both
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+    });
 
     // Conditions
     it('A Scenario cannot be added to Design Update Scope if it is in scope for another Design Update for the current Design Version', function(){
