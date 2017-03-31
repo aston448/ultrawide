@@ -818,7 +818,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
         // Execute - Try to add a non-Update item to the scope that is in the WP as a parent
         const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE};
-        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Section1', 'Feature1', expectation);
+        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1', expectation);
 
         // Verify that the component is not scopable - and neither are its parents
         expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));

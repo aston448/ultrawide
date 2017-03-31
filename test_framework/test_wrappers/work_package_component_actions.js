@@ -64,7 +64,7 @@ class WpComponentActions{
         server.call('testWorkPackageComponents.toggleWpComponentOutScope', ComponentType.FEATURE, parentName, featureName, 'miles', expectation);
     }
 
-    managerRemovesFeatureAspectFromScopeForCurrenWp(parentName, aspectName, expectation){
+    managerRemovesFeatureAspectFromScopeForCurrentWp(parentName, aspectName, expectation){
         server.call('testWorkPackageComponents.toggleWpComponentOutScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles', expectation);
     }
 
