@@ -170,9 +170,18 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = TestDataHelpers.getWorkPackage(userContext.designVersionId, userContext.designUpdateId, workPackageName);
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
 
-        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT || workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
+        let  workPackageComponent = null;
+
+        // Expecting WP Component not to exist
+        try {
+            workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+        } catch(e){
+            return true
+        }
+
+        // Error if it did exist and in scope
+        if(workPackageComponent && (workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT || workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE)){
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is in Scope!");
         } else {
             return true;
@@ -184,9 +193,17 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
         const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
-        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+        let  workPackageComponent = null;
 
-        if(workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT || workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
+        // Expecting WP Component not to exist
+        try {
+            workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+        } catch(e){
+            return true
+        }
+
+        // Error if it did exist and in scope
+        if(workPackageComponent && (workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT || workPackageComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE)){
             throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is in Scope!");
         } else {
             return true;
