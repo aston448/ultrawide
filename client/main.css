@@ -1587,7 +1587,7 @@ input {
     background-color: transparent;
 }
 
-.in-scope-elsewhere{
+.not-scopable{
     font-size: 10px;
     border: 1px solid lightgrey;
     border-radius: 2px;

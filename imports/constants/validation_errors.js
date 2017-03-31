@@ -173,6 +173,7 @@ export const WorkPackageComponentValidationErrors = {
     WORK_PACKAGE_COMPONENT_INVALID_VIEW_SCOPE:          'Work Package scope can only be changed in the Work Package editor',
     WORK_PACKAGE_COMPONENT_INVALID_CONTEXT_SCOPE:       'Work Package scope can only be changed in the Work Package scope editor',
     WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE:            'This Scenario is already in Scope for another Work Package',
+    WORK_PACKAGE_COMPONENT_NOT_SCOPABLE:                'This component cannot be added to the Work Package scope because it is not in the Update scope'
 };
 
 export const DomainDictionaryValidationErrors = {

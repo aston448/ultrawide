@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { ViewType, DisplayContext, ComponentType } from '../../constants/constants.js';
+import { ViewType, DisplayContext, ComponentType, UpdateScopeType } from '../../constants/constants.js';
 import { Validation, WorkPackageComponentValidationErrors } from '../../constants/validation_errors.js';
 
 //======================================================================================================================
@@ -32,6 +32,13 @@ class WorkPackageComponentValidationServices{
                 if(designComponent.workPackageId !== userContext.workPackageId){
                     return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_ALREADY_IN_SCOPE;
                 }
+            }
+        }
+
+        // An update WP item can't be scoped if it is not in specific scope in the update
+        if(view === ViewType.WORK_PACKAGE_UPDATE_EDIT){
+            if(designComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+                return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE;
             }
         }
 

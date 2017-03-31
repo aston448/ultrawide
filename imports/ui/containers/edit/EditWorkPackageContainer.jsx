@@ -21,6 +21,7 @@ import { log } from '../../../common/utils.js'
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
@@ -48,8 +49,15 @@ class WorkPackageApplicationsList extends Component {
     // }
 
     getWpItem(currentItem, workPackageId){
-
         return ClientWorkPackageComponentServices.getWorkPackageComponent(currentItem._id, workPackageId);
+    }
+
+    getUpdateItem(application, designUpdateId){
+        if(designUpdateId !== 'NONE') {
+            return ClientDesignVersionServices.getDesignUpdateItemForUpdate(application, designUpdateId);
+        } else {
+            return null;
+        }
     }
 
     getEditorClass(){
@@ -63,7 +71,7 @@ class WorkPackageApplicationsList extends Component {
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    updateItem={null}
+                    updateItem={this.getUpdateItem(application, userContext.designUpdateId)}
                     wpItem={this.getWpItem(application, userContext.workPackageId)}
                     displayContext={displayContext}
                     view={view}

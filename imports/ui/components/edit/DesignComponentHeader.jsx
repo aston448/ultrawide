@@ -605,6 +605,7 @@ export class DesignComponentHeader extends Component{
         let inScope = false;
         let inParentScope = false;
         let inScopeElsewhere = false;
+        let updateParentOnly = false;
         let nextScope = false;
         let isDeleted = false;
         let deleteGlyph = 'remove'; // Normal glyph for delete button
@@ -664,11 +665,16 @@ export class DesignComponentHeader extends Component{
                 if(wpItem) {
                     inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
                     inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
-                } else {
-                    if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
-                        // Scenario is in scope in another WP
-                        inScopeElsewhere = true;
-                    }
+                }
+
+                if((currentItem.workPackageId !== 'NONE') && (currentItem.workPackageId !== userContext.workPackageId)){
+                    // Scenario is in scope in another WP
+                    inScopeElsewhere = true;
+                }
+
+                if(updateItem && updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+                    // We don't want to allow scoping of items that are not actually in scope in the update (i.e. parent items)
+                    updateParentOnly = true;
                 }
 
                 nextScope = !inScope;
@@ -682,14 +688,15 @@ export class DesignComponentHeader extends Component{
 
         // Determine how the check box is shown
         let scopeStatus = 'out-scope';
+
         if(inScope){
             scopeStatus = 'in-scope';
         }
         if(inParentScope){
             scopeStatus = 'in-parent-scope';
         }
-        if(inScopeElsewhere){
-            scopeStatus = 'in-scope-elsewhere';
+        if(inScopeElsewhere || updateParentOnly){
+            scopeStatus = 'not-scopable';
         }
 
         // Item main style ------------------------------------------
