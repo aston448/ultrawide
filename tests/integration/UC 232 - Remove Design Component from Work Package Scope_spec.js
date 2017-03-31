@@ -282,13 +282,23 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Design Upda
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
 
-        // The update is to Feature1 Scenarios 1 and 2 and to Feature2 - a new Scenario in Actions
+        // The update is to Feature1 Scenarios 1 and 2 and to Feature2 - a new Scenario in Actions plus the required parent components so we can scope everything in the WP
+
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Conditions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario2');
+
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Actions');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature2', 'Actions', 'NewScenario');
+
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // And add a new Update WP

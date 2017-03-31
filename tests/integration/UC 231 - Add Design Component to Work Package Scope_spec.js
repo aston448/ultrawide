@@ -798,7 +798,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
     it('Only Design Components that are in Scope for a Design Update can be added to the Scope of a Design Update Work Package', function(){
 
         // Setup
-        // Add another update that just contains Feature1 - ExtraAspect + Scenario7
+        // Add another update that just contains Feature1 - Conditions + Scenario2
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
@@ -806,8 +806,8 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
         // Edit Update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'ExtraAspect');
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('ExtraAspect', 'Scenario7');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Conditions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario2');
 
         // Add another WP based on the update
         DesignActions.managerWorksOnDesign('Design1');
