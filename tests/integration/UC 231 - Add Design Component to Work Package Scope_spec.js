@@ -798,16 +798,15 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
     it('Only Design Components that are in Scope for a Design Update can be added to the Scope of a Design Update Work Package', function(){
 
         // Setup
-        // Add another update that just contains Feature1 - Conditions + Scenario2
+        // Add another update that just contains Feature1 - Actions - Scenario7
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
 
-        // Edit Update
+        // Edit Update - add a Scenario that is not in DU1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Conditions');
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario2');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario7');
 
         // Add another WP based on the update
         DesignActions.managerWorksOnDesign('Design1');
@@ -821,7 +820,8 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE};
         WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1', expectation);
 
-        // Verify that the component is not scopable - and neither are its parents
+        // Verify that the component is not scopable - and neither are any parents of the scoped item
+        expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
