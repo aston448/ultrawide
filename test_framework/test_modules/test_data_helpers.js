@@ -353,7 +353,7 @@ class TestDataHelpers {
             }).fetch();
 
             // Get the component that has the expected parent- except for Applications that have no parent
-            if(componentType != ComponentType.APPLICATION) {
+            if(componentType !== ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
                     parentComponent = DesignVersionComponents.findOne({
@@ -380,7 +380,7 @@ class TestDataHelpers {
             }).fetch();
 
             // Get the component that has the expected parent- except for Applications that have no parent
-            if(componentType != ComponentType.APPLICATION) {
+            if(componentType !== ComponentType.APPLICATION) {
                 designComponents.forEach((component) => {
 
                     let parentComponent = DesignUpdateComponents.findOne({

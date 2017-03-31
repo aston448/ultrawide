@@ -346,7 +346,7 @@ export function log(callback, level, message, ...vars){
         case LogLevel.WARNING:
         case LogLevel.ERROR:
             // Log if not NONE
-            log = logLevel != LogLevel.NONE;
+            log = logLevel !== LogLevel.NONE;
             break;
     }
 
@@ -360,7 +360,7 @@ export function log(callback, level, message, ...vars){
         let date = new Date();
 
         // Callback so the actual line number of the calling code is logged
-        callback(level + ' ' + date.getMinutes() + ':' + date.getSeconds() +'.' + date.getMilliseconds() + ' ' + finalMessage);
+        callback(level + ' ' + padDigits(date.getMinutes(), 2) + ':' + padDigits(date.getSeconds(), 2) +'.' + padDigits(date.getMilliseconds(), 3) + ' ' + finalMessage);
     }
 
 }

@@ -50,6 +50,13 @@ class WpComponentVerifications{
         )
     }
 
+    componentIsInScopeElsewhereForManagerCurrentWp(type, parentName, name){
+        server.call('verifyWorkPackageComponents.currentWpComponentIsInScopeElsewhere', type, parentName, name, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
 
     managerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
         server.call('verifyWorkPackageComponents.currentWpComponentIsAboveComponent', targetType, targetParentName, targetName, 'miles',

@@ -43,7 +43,7 @@ class WpComponentActions{
         server.call('testWorkPackageComponents.toggleWpComponentInScope', ComponentType.FEATURE, parentName, featureName, 'miles', expectation);
     }
 
-    managerAddsFeatureAspectToScopeForCurrenWp(parentName, aspectName, expectation){
+    managerAddsFeatureAspectToScopeForCurrentWp(parentName, aspectName, expectation){
         server.call('testWorkPackageComponents.toggleWpComponentInScope', ComponentType.FEATURE_ASPECT, parentName, aspectName, 'miles', expectation);
     }
 

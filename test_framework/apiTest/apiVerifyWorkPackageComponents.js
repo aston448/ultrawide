@@ -193,6 +193,30 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackageComponents.currentWpComponentIsInScopeElsewhere'(componentType, componentParentName, componentName, userName){
+
+        if(componentType !== ComponentType.SCENARIO){
+            throw new Meteor.Error("FAIL", "This test is only expected to apply to Scenarios");
+        }
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        let designComponent = null;
+
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            designComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+        } else {
+            designComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName)
+        }
+
+        if((designComponent.workPackageId !== 'NONE') && (designComponent.workPackageId !== userContext.workPackageId)){
+            return true;
+        }else {
+            throw new Meteor.Error("FAIL", "Work Package Scenario " + componentName + " with parent: " + componentParentName + " was expected to be in scope elswhere");
+        }
+    },
+
     'verifyWorkPackageComponents.currentWpComponentIsAboveComponent'(targetType, targetParentName, targetName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
