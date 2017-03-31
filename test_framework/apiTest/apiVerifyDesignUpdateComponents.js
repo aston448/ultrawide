@@ -126,7 +126,7 @@ Meteor.methods({
         if(designUpdateComponent){
             let parentComponent = null;
             let parentName = 'NONE';
-            if(componentType != ComponentType.APPLICATION) {
+            if(componentType !== ComponentType.APPLICATION) {
                 parentComponent = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
                 if(parentComponent){
                     parentName = parentComponent.componentNameNew;
@@ -155,7 +155,7 @@ Meteor.methods({
             componentName
         );
 
-        if(designUpdateComponent.isInScope){
+        if(designUpdateComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in scope");
@@ -201,7 +201,7 @@ Meteor.methods({
         if(!duComponent){
             return true;
         } else {
-            if(duComponent.isInScope){
+            if(duComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE || duComponent.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
                 throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to not be in scope");
             } else {
                 return true;

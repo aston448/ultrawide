@@ -381,11 +381,11 @@ class ClientUserContextServices {
             // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
 
 
-            // Work Packages - open in scope items down to Section Level
+            // Work Packages - open in scope items down to Feature Level
             if(userContext.designUpdateId === 'NONE'){
-                wpArr = ClientAppHeaderServices.getDesignVersionSections(userContext);
+                wpArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
             } else {
-                wpArr = ClientAppHeaderServices.getDesignUpdateSections(userContext);
+                wpArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
             }
 
             // Plus for the actual open item context, open all the way down to that item

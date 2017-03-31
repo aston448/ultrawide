@@ -139,9 +139,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         // Setup
         // And another update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdate();
-        DesignUpdateActions.designerSelectsUpdate(DefaultItemNames.NEW_DESIGN_UPDATE_NAME);
-        DesignUpdateActions.designerEditsSelectedUpdateNameTo('DesignUpdate2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
         // Add Scenario1 to first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
