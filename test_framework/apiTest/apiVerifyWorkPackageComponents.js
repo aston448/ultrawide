@@ -234,6 +234,26 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackageComponents.currentWpComponentIsNotScopable'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+
+        let designComponent = null;
+
+        if(workPackage.workPackageType === WorkPackageType.WP_BASE){
+            throw new Meteor.Error("FAIL", "This test is only expected to apply to Update WPs");
+        } else {
+            designComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+        }
+
+        if((designComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)){
+            return true;
+        }else {
+            throw new Meteor.Error("FAIL", "Work Package component " + componentName + " with parent: " + componentParentName + " was expected not to have an in-scope update item");
+        }
+    },
+
     'verifyWorkPackageComponents.currentWpComponentIsAboveComponent'(targetType, targetParentName, targetName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

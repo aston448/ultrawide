@@ -32,7 +32,7 @@ Meteor.methods({
 
         const outcome = ClientWorkPackageComponentServices.toggleInScope(view, displayContext, userContext, designComponent._id, true);
 
-        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component In Scope');
+        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'WP Component In Scope for ' + componentName);
     },
 
     'testWorkPackageComponents.toggleWpComponentOutScope'(componentType, componentParentName, componentName, userName, expectation){

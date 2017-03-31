@@ -409,7 +409,6 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Actions');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature2', 'Actions', 'NewScenario');
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // And add a new Update WP
         DesignActions.managerWorksOnDesign('Design1');
@@ -794,6 +793,37 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
+    });
+
+    it('Only Design Components that are in Scope for a Design Update can be added to the Scope of a Design Update Work Package', function(){
+
+        // Setup
+        // Add another update that just contains Feature1 - ExtraAspect + Scenario7
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
+
+        // Edit Update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'ExtraAspect');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('ExtraAspect', 'Scenario7');
+
+        // Add another WP based on the update
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2');
+
+
+        // Execute - Try to add a non-Update item to the scope that is in the WP as a parent
+        const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE};
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Section1', 'Feature1', expectation);
+
+        // Verify that the component is not scopable - and neither are its parents
+        expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(WpComponentVerifications.componentIsNotScopableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
     });
 
 

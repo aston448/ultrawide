@@ -227,13 +227,14 @@ describe('UC 232 - Remove Design Component from Work Package Scope - Initial Des
         // Execute
         WpComponentActions.managerRemovesScenarioFromScopeForCurrentWp('Actions', 'Scenario1');
 
-        // Verify - Scenario1 is out of scope.  Feature 1 Actions removed because no children
-        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Verify - Scenario1 is out of scope.  Actions is still in scope because of Scenario 7
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario7'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
