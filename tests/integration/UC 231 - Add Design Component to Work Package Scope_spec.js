@@ -805,15 +805,16 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
 
         // Edit Update
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Conditions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario2');
 
         // Add another WP based on the update
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate2');
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
 
 
         // Execute - Try to add a non-Update item to the scope that is in the WP as a parent
