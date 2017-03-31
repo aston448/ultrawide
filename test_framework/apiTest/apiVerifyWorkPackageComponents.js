@@ -5,7 +5,7 @@ import { DesignUpdateComponents }   from '../../imports/collections/design_updat
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType, WorkPackageScopeType} from '../../imports/constants/constants.js';
+import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageType, WorkPackageScopeType, UpdateScopeType} from '../../imports/constants/constants.js';
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
 Meteor.methods({
@@ -59,6 +59,13 @@ Meteor.methods({
             scopeComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName)
         }
 
+        if (workPackage.workPackageType === WorkPackageType.WP_UPDATE) {
+            if(scopeComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE || scopeComponent.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Expecting WP Component " + componentParentName + " - " + componentName + " to be in WP scope");
+            }
+        }
         return true;
     },
 
@@ -81,7 +88,17 @@ Meteor.methods({
             return true
         }
 
-        throw new Meteor.Error("FAIL", "Expecting WP Component " + componentParentName + " - " + componentName + " not to exist in WP scope but it does");
+        // If we did get a return for Update WP because of Peer components check it is in scope
+        if (workPackage.workPackageType === WorkPackageType.WP_UPDATE) {
+            if(scopeComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE || scopeComponent.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
+                throw new Meteor.Error("FAIL", "Expecting WP Component " + componentParentName + " - " + componentName + " not to exist in WP scope but it does");
+            } else {
+                return true;
+            }
+        }
+
+
+
     },
 
     'verifyWorkPackageComponents.componentParentIs'(workPackageName, componentType, componentName, parentName, userName){
