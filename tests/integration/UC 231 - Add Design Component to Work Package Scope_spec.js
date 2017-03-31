@@ -210,7 +210,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Initial Design V
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
 
         // Execute - toggle Feature1 Actions in scope
-        WpComponentActions.managerAddsFeatureAspectToScopeForCurrenWp('Feature1', 'Actions');
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentWp('Feature1', 'Actions');
 
         // Verify
         // Application1 is in parent scope
@@ -368,6 +368,14 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
     before(function(){
         TestFixtures.logTestSuite('UC 231 - Add Design Component to Work Package Scope - Design Update');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data
@@ -378,17 +386,6 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        TestFixtures.clearWorkPackages();
-        TestFixtures.clearDesignUpdates();
 
         // Add update to the updatable DV
         DesignActions.designerWorksOnDesign('Design1');
