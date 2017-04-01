@@ -727,7 +727,7 @@ class ClientContainerServices{
                     componentType: ComponentType.APPLICATION,
                 },
                 {sort: {componentIndex: 1}}
-            );
+            ).fetch();
 
             wpAppComponents.forEach((wpApp) => {
 
@@ -738,7 +738,9 @@ class ClientContainerServices{
 
                         // The app data is the Design Version data
                         let appDvComponent = DesignVersionComponents.findOne({_id: wpApp.componentId});
-                        wpApplicationsArr.push(appDvComponent);
+                        if(appDvComponent) {
+                            wpApplicationsArr.push(appDvComponent);
+                        }
                         break;
 
                     case ViewType.WORK_PACKAGE_UPDATE_VIEW:
@@ -747,7 +749,9 @@ class ClientContainerServices{
 
                         // The app data is the Design Update data
                         let appDuComponent = DesignUpdateComponents.findOne({_id: wpApp.componentId});
-                        wpApplicationsArr.push(appDuComponent);
+                        if(appDuComponent) {
+                            wpApplicationsArr.push(appDuComponent);
+                        }
                         break;
                 }
             });

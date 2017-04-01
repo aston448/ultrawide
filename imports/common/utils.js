@@ -110,9 +110,7 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
 
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
-            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
-            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 // For work package stuff is greyed out unless active
                 if(wpItem){
                     if(wpItem.scopeType !== WorkPackageScopeType.SCOPE_ACTIVE){
@@ -121,6 +119,28 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                 } else {
                     modifier = ' greyed-out';
                 }
+                break;
+            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
+            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                // For work package stuff is greyed out unless active
+                if(wpItem){
+                    if(wpItem.scopeType !== WorkPackageScopeType.SCOPE_ACTIVE){
+                        modifier = ' greyed-out';
+                    }
+                    if(updateItem){
+                        if(updateItem.isRemoved){
+                            deleted = ' removed-item';
+                        }
+                    }
+                } else {
+                    modifier = ' greyed-out';
+                    if(updateItem){
+                        if(updateItem.isRemoved){
+                            deleted = ' removed-item';
+                        }
+                    }
+                }
+
                 break;
         }
 

@@ -742,6 +742,9 @@ class DesignUpdateComponentModules{
                 if(newDesignUpdateComponentId) {
                     this.logicallyDeleteComponent(newDesignUpdateComponentId);
 
+                    // And add a WP component if original component was in WP
+                    this.updateWorkPackagesWithNewUpdateItem(designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId, newDesignUpdateComponentId);
+
                     childDuComponent = DesignUpdateComponents.findOne({_id: newDesignUpdateComponentId});
                 } else {
 

@@ -66,6 +66,7 @@ class WorkPackageApplicationsList extends Component {
 
     // A list of top level applications in the work package potential scope
     renderScopeApplications(wpScopeApplications, displayContext, view, mode, userContext) {
+
         return wpScopeApplications.map((application) => {
             return (
                 <DesignComponentTarget
@@ -88,14 +89,13 @@ class WorkPackageApplicationsList extends Component {
 
         if(wpViewApplications.length > 0) {
 
-            console.log("rendering view apps");
-
             return wpViewApplications.map((application) => {
+
                 return (
                     <DesignComponentTarget
                         key={application._id}
                         currentItem={application}
-                        updateItem={null}
+                        updateItem={this.getUpdateItem(application, userContext.designUpdateId)}
                         wpItem={this.getWpItem(application, userContext.workPackageId)}
                         displayContext={displayContext}
                         view={view}
@@ -105,8 +105,6 @@ class WorkPackageApplicationsList extends Component {
                     />
                 );
             });
-        } else {
-            console.log("no view apps");
         }
     }
 
@@ -414,7 +412,7 @@ class WorkPackageApplicationsList extends Component {
 
 WorkPackageApplicationsList.propTypes = {
     scopeApplications:  PropTypes.array.isRequired,
-    wpApplications:     PropTypes.array
+    wpApplications:     PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
