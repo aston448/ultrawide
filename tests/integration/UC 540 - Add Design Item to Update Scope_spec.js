@@ -423,7 +423,37 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
 
 
     // Consequences
-    it('When a Feature is added to Design Update Scope it is possible to add new Feature Aspects or Scenarios to it', function(){
+    it('When an Application is added to Design Update Scope it is possible to add new Design Sections to it', function(){
+
+        // Setup - edit DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+
+        // Execute
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
+
+        // Verify
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section4'));
+    });
+
+    it('When a Design Section is added to Design Update Scope it is possible to add new Design Sections or Features to it', function(){
+
+        // Setup - edit DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+
+        // Execute
+        UpdateComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection4');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Section1', 'Feature4');
+
+        // Verify
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature4'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section1', 'SubSection4'));
+    });
+
+    it('When a Feature is added to Design Update Scope it is possible to add new Feature Aspects to it', function(){
 
         // Setup - edit DU1
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
