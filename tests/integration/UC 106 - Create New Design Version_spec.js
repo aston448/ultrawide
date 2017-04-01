@@ -478,6 +478,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the second update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         // New section - Section5
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section5');
         // New Feature - Feature5
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section5', 'Feature5');
@@ -499,7 +500,7 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate2', DesignUpdateMergeAction.MERGE_IGNORE));
     });
 
-    it('When a new Design Version is created any Design Components marked as removed in a merged Design Update are removed completely from the previous Design Version', function(){
+    it('When a new Design Version is created any Design Components marked as removed in the working Design Version are removed completely', function(){
 
         // Setup - create updatable design version
         DesignActions.designerSelectsDesign('Design1');
@@ -566,7 +567,7 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion1'));
     });
 
-    it('The new Design Version is an identical copy of the previous Design Version with all items shown as base version items when it is viewed', function(){
+    it('The new Design Version is an identical copy of the working Design Version with all items shown as base version items when it is viewed', function(){
 
         // Setup - create updatable design version
         DesignActions.designerSelectsDesign('Design1');
