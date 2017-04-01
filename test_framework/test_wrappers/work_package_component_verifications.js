@@ -66,6 +66,22 @@ class WpComponentVerifications{
         )
     }
 
+    componentIsRemovedForManagerCurrentWp(type, parentName, name){
+        server.call('verifyWorkPackageComponents.currentWpComponentIsRemoved', type, parentName, name, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    componentIsNotRemovedForManagerCurrentWp(type, parentName, name){
+        server.call('verifyWorkPackageComponents.currentWpComponentIsNotRemoved', type, parentName, name, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     managerSelectedComponentIsAboveComponent_WithParent_Called_(targetType, targetParentName, targetName){
         server.call('verifyWorkPackageComponents.currentWpComponentIsAboveComponent', targetType, targetParentName, targetName, 'miles',
             (function(error, result){

@@ -414,7 +414,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Verify
-        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature100');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_MODIFIED));
 
     });

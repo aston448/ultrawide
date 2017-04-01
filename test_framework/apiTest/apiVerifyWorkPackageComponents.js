@@ -254,6 +254,40 @@ Meteor.methods({
         }
     },
 
+    'verifyWorkPackageComponents.currentWpComponentIsRemoved'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+        let designUpdateComponent = null;
+
+        if(workPackageComponent){
+            designUpdateComponent = DesignUpdateComponents.findOne({_id: workPackageComponent.componentId});
+            if(designUpdateComponent.isRemoved){
+                return true;
+            } else {
+                throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is not removed");
+            }
+        }
+    },
+
+    'verifyWorkPackageComponents.currentWpComponentIsNotRemoved'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+        const workPackageComponent = TestDataHelpers.getWorkPackageComponentWithParent(userContext.designVersionId, userContext.designUpdateId, workPackage._id, componentType, componentParentName, componentName);
+        let designUpdateComponent = null;
+
+        if(workPackageComponent){
+            designUpdateComponent = DesignUpdateComponents.findOne({_id: workPackageComponent.componentId});
+            if(designUpdateComponent.isRemoved){
+                throw new Meteor.Error("FAIL", "Work Package Component " + componentName + " with parent: " + componentParentName + " is removed");
+            } else {
+                return true;
+            }
+        }
+    },
+
     'verifyWorkPackageComponents.currentWpComponentIsAboveComponent'(targetType, targetParentName, targetName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
