@@ -710,15 +710,15 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Verify - WP now contains all the removed items
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        expect(WpComponentVerifications.componentIsNotRemovedForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        expect(WpComponentVerifications.componentIsNotRemovedForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
-        expect(WpComponentVerifications.componentIsNotRemovedForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
-        expect(WpComponentVerifications.componentIsNotRemovedForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
-        expect(WpComponentVerifications.componentIsNotRemovedForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
     it('When an existing component is removed in a Design Update to be included in the current Design Version it becomes visible as a removed item in the Design Version', function(){

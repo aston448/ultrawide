@@ -484,6 +484,8 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+        // Publish so WP can be added
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Manager add a WP
         DesignActions.managerSelectsDesign('Design1');

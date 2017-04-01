@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, UpdateMergeStatus, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -196,6 +196,23 @@ describe('UC 555 - Move Design Update Component', function(){
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
+    it('A new Feature Aspect for a Design Update cannot be moved to another Feature', function(){
+
+        // Setup - add new Feature Aspect to Feature1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
+
+        // Execute - move it to Feature2
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section2', 'Feature2');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Aspect1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MOVE};
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.FEATURE, 'Section2', 'Feature2', expectation);
+
+        // Verify not moved
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Aspect1'));
+    });
+
     // Consequences
     it('When a new Design Update Component is moved it is also moved in any Work Package based on the Design Update', function(){
 
@@ -205,8 +222,6 @@ describe('UC 555 - Move Design Update Component', function(){
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature8');
-        // Need to add a scopable item as well so that the new section can be included in the WP
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature9');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         // Add a WP and add Sections to WP scope
         DesignActions.managerWorksOnDesign('Design1');
@@ -228,6 +243,27 @@ describe('UC 555 - Move Design Update Component', function(){
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         // Feature8 is in Section4
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section4', 'Feature8'));
+    });
+
+    it('When a new Design Update Component is moved for a Design Update to be included in the current Design Version it is also moved in the Design Version', function(){
+
+        // Setup - Add some new Sections to DU1...
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature8');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Execute - move Feature8 to Section4
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section3', 'Feature8');
+        UpdateComponentActions.designerMovesSelectedUpdateComponentTo(ComponentType.DESIGN_SECTION, 'Application1', 'Section4');
+
+        // Verify - Feature8 in Section4 in DV - as Added, not Moved
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignComponentActions.designerSelectsFeature('Section4', 'Feature8');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
     });
 
 });
