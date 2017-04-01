@@ -120,18 +120,20 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
         // Add new Section to Application1 without scoping Application1
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_OUT_SCOPE};
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateApplication('Application1', expectation);
 
         // Add new SubSection to Section1 without scoping Section1
-        UpdateComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection3', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateSection('Application1', 'Section1', expectation);
 
         // Add new Feature Aspect to Feature1 without scoping Feature1
-        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateFeature('Section1', 'Feature1', expectation);
 
         // Verify
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section3'));
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'SubSection3'));
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Aspect1'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, DefaultComponentNames.NEW_DESIGN_SECTION_NAME));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
     });
 
     it('An organisational Design Update Component cannot be added to a component removed in this Design Update', function(){
