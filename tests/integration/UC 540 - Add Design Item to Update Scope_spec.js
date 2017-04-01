@@ -444,8 +444,8 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
 
         // Execute
-        UpdateComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection4');
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Section1', 'Feature4');
+        UpdateComponentActions.designerAddsDesignSectionTo_Section_Called('Application1', 'Section1', 'SubSection4');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature4');
 
         // Verify
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));

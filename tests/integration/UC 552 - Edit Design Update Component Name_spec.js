@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, UpdateMergeStatus, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -401,6 +401,42 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
     });
 
-    it('A change to a Feature or Scenario name appears as a functional modification in the Design Update summary')
+    it('When an existing component name is changed in a Design Update to be included in the current Design Version it becomes visible as a changed item in the Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Execute
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature100');
+        // Merge changes into Design Version
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Verify
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_MODIFIED));
+
+    });
+
+    it('When a new component name is changed in a Design Update to be included in the current Design Version it remains a new item in the Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // Add new Feature to original Section 1
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
+
+        // Execute
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Feature3');
+        // Merge changes into Design Version
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Verify - added not modified
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature3');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+    })
 
 });
