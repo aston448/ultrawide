@@ -118,7 +118,7 @@ class DesignUpdateComponentModules{
 
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.removeDesignComponentFromWorkPackage(wp_id, designUpdateComponentId);
+            WorkPackageModules.removeDesignComponentFromWorkPackage(wp._id, designUpdateComponentId);
 
         });
     };
@@ -230,13 +230,12 @@ class DesignUpdateComponentModules{
         const peers = DesignVersionComponents.find({
             designVersionId:                designVersionId,
             componentType:                  componentType,
-            componentParentReferenceIdNew:  parentRefId,
-            componentReferenceId:           {$ne: duComponent.componentReferenceId}
+            componentParentReferenceIdNew:  parentRefId
         });
 
         peers.forEach((peer) => {
 
-            // This call only inserts stuff not already there so won't insert others that happen to be existing
+            // This call only inserts stuff not already in the update so won't insert others that happen to be in scope
             this.insertComponentToUpdateScope(peer, designUpdateId, UpdateScopeType.SCOPE_PEER_SCOPE)  // Insert as in peer scope
         });
     }
@@ -244,7 +243,7 @@ class DesignUpdateComponentModules{
     insertComponentToUpdateScope(baseComponent, designUpdateId, scopeType){
 
         // Only insert if not already existing
-        const updateComponent = DesignVersionComponents.findOne({
+        const updateComponent = DesignUpdateComponents.findOne({
             designUpdateId: designUpdateId,
             componentReferenceId: baseComponent.componentReferenceId
         });

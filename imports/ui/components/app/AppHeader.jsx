@@ -208,6 +208,7 @@ export class AppHeader extends Component {
                     appHeaderMenuContent =
                         <div className="top-menu-bar">
                             {homeItem}
+                            {selectItem}
                             <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                             <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
                             {logoutItem}

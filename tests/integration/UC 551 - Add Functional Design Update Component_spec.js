@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, UpdateMergeStatus, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -58,28 +58,27 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
 
     // Actions
-    it('A Feature can be added to a Design Update Design Section', function(){
+    it('A Feature can be added to an in scope Design Update Design Section', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Add new Feature to original Section 1
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
 
         // Verify
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
     });
 
-    it('A Scenario can be added to an in Scope Design Update Feature');
 
-    it('A Scenario can be added to an in Scope Design Update Feature Aspect', function(){
+    it('A Scenario can be added to an in scope Design Update Feature Aspect', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        // Make sure Feature1 Actions is in Scope
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
 
         // Add new Scenario to original Feature 1 Actions
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // Verify
@@ -88,20 +87,22 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
 
     // Conditions
-    it('A Scenario cannot be added to a Feature that is not in Scope for the Design Update');
 
-    it('A Scenario cannot be added to a Feature Aspect that is not in Scope for the Design Update', function(){
+    it('A functional Design Update Component cannot be added to a component that is not in Scope for the Design Update', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        // Actions is not in scope
 
-        // Add new Scenario to original Feature 1 Actions
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD};
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions', expectation);
+        // Add new Feature to original Section1 without scoping Section1
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE};
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3', expectation);
+
+        // Add new Scenario to original Feature 1 Actions without scoping Actions
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8', expectation);
 
         // Verify
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Scenario8'));
     });
 
     it('A functional Design Update Component cannot be added to a component removed in this Design Update', function(){
@@ -157,6 +158,38 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature3'));
     });
 
+    it('When a functional Design Component is added to a Design Update to be included in the current Design Version it becomes visible as a new item in the Design Version', function(){
+
+        // Setup - Publish DU so that additions to it are merged
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Initial check
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion2'));
+
+        // Execute
+        // New Feature
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+
+        // New Scenario
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+
+
+        // Verify new stuff is now present
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion2'));
+
+        // And it is marked as New
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature3');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario8');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+    });
+
     it('When a Feature is added to a Design Update default Feature Aspects are also added as new Design Update Components', function(){
 
         // Setup
@@ -189,6 +222,30 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
     });
 
-    it('A functional Design Component added to a Design Update appears as a functional addition in the Design Update summary');
+    it('When a new functional Design Component is added to a Design Update its peer components are added as placeholders if not already in scope', function(){
 
+        // Setup - Publish DU so that additions to it are merged
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Execute
+        // New Feature - should add other features in Section1 as peer scope
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+
+        // New Scenario - should add other scenarios in Actions as peer scope.  But not ExtraScenario which we are putting in scope already
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'ExtraScenario');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+
+
+        // Verify
+        // Peer Features added
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature444'));
+
+        // Peer Scenarios added
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario7'));
+
+        // But ExtraScenario just in scope
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'ExtraScenario'));
+    })
 });

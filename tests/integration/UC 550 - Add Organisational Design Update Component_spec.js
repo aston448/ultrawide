@@ -110,18 +110,25 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
 
     // Conditions
-    it('A Feature Aspect cannot be added to a Feature that is not in Scope for the Design Update', function(){
+    it('An organisational Design Update Component cannot be added to a component that is not in Scope for the Design Update', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        // Don't add Feature1 to scope
 
-        // Add new Feature Aspect to Feature1
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_COMPONENT_ADD};
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateFeature('Section1', 'Feature1', expectation);
+        // Add new Section to Application1 without scoping Application1
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE};
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3', expectation);
+
+        // Add new SubSection to Section1 without scoping Section1
+        UpdateComponentActions.designerAddsDesignSectionToDesignSection_Called('Section1', 'SubSection3', expectation);
+
+        // Add new Feature Aspect to Feature1 without scoping Feature1
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1', expectation);
 
         // Verify
-        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_ASPECT_NAME));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Section3'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'SubSection3'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Aspect1'));
     });
 
     it('An organisational Design Update Component cannot be added to a component removed in this Design Update', function(){
@@ -205,7 +212,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
     });
 
-    it('When a new organisational Design Component is added to a Design Update its peer components are added as in parent scope if not already in scope', function(){
+    it('When a new organisational Design Component is added to a Design Update its peer components are added as placeholders if not already in scope', function(){
 
         // Setup - Publish DU so that additions to it are merged
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');

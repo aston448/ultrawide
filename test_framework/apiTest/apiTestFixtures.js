@@ -319,6 +319,7 @@ Meteor.methods({
         //              Actions
         //                  Scenario1
         //                  Scenario7
+        //                  ExtraScenario
         //              Conditions
         //                  Scenario2
         //              Consequences
@@ -438,6 +439,12 @@ Meteor.methods({
         const Scenario7Component = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
         rawName = DesignComponentModules.getRawTextFor('Scenario7');
         ClientDesignComponentServices.updateComponentName(view, mode, Scenario7Component._id, 'Scenario7', rawName);
+
+        // Add ExtraScenario to Feature1 Actions
+        ClientDesignComponentServices.addScenario(view, mode, featureAspect1Component, 'NONE');
+        const ExtraScenarioComponent = DesignVersionComponents.findOne({designVersionId: designVersion._id, componentType: ComponentType.SCENARIO, componentNameNew: DefaultComponentNames.NEW_SCENARIO_NAME});
+        rawName = DesignComponentModules.getRawTextFor('ExtraScenario');
+        ClientDesignComponentServices.updateComponentName(view, mode, ExtraScenarioComponent._id, 'ExtraScenario', rawName);
 
         // Add Scenario2 to Feature1 Conditions
         const featureAspect2Component = DesignVersionComponents.findOne({componentType: ComponentType.FEATURE_ASPECT, componentNameNew: 'Conditions', componentParentIdNew: feature1Component._id});
