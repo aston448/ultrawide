@@ -582,7 +582,6 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
 
         // Execute - remove Feature1 from DesignUpdate1
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');  // Make sure published so data is shared
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature1');
@@ -686,6 +685,8 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
 
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         DesignUpdateActions.managerAddsUpdateWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('WorkPackage1');
@@ -737,7 +738,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
         DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
-        DesignComponentActions.designerSelectsScenario('Actions', 'Scenario1');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
 
         // Stuff not below not removed
