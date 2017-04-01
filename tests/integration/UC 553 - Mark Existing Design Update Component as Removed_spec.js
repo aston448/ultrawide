@@ -688,7 +688,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         DesignActions.managerSelectsDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
-        DesignUpdateActions.managerAddsUpdateWorkPackageCalled('WorkPackage1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('WorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('WorkPackage1');
         WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
 

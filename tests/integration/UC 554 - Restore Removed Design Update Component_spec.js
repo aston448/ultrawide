@@ -347,6 +347,47 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
 
     // Consequences
+    it('Restoring an existing Design Update Component removes it from the Design Update Scope', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+
+        // Check
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+
+        // Execute
+        UpdateComponentActions.designerRestoresDeletedUpdateApplication('Application1');
+
+        // Verify
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section2', 'Feature2'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature2', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario3'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature2', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Conditions', 'Scenario4'));
+    });
+
     it('Restoring an existing Design Update Component updates it as no longer removed in the Design Update Scope', function(){
 
         // Setup
@@ -437,4 +478,39 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
 
     });
 
+    it('Restoring an existing Design Component updates it as no longer removed in any Work Packages that include the Design Update Component', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+
+        // Manager add a WP
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('WorkPackage1');
+        WorkPackageActions.managerEditsUpdateWorkPackage('WorkPackage1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
+
+        // Check
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(WpComponentVerifications.componentIsRemovedForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+
+        // Execute - Restore in DU1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerRestoresDeletedUpdateApplication('Application1');
+
+        // Verify - nothing in scope for WP any more as nothing in scope for update
+        WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application1'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE, 'Section1', 'Feature1'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+
+    });
 });
