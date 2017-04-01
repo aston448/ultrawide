@@ -205,4 +205,39 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
     });
 
+    it('When a new organisational Design Component is added to a Design Update its peer components are added as in parent scope if not already in scope', function(){
+
+        // Setup - Publish DU so that additions to it are merged
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Execute
+        // New Application - should add other apps as peer scope
+        UpdateComponentActions.designerAddsApplicationCalled('Application3');
+
+        // New Section - should add other sections in App1 as peer scope
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+
+        // New Feature Aspect - should add other Feature Aspects for Feature1 as peer scope - except Actions which we are scoping
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
+
+        // Verify
+        // Peer Apps added
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application88'));
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application99'));
+
+        // Peer Sections added
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
+
+        // Peer Feature Aspects added as peers - except for Actions which is in scope
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Interface'));
+        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Consequences'));
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'ExtraAspect'));
+    });
+
 });

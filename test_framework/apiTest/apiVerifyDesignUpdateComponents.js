@@ -158,7 +158,7 @@ Meteor.methods({
         if(designUpdateComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
             return true;
         } else {
-            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in scope");
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in scope but was " + designUpdateComponent.scopeType);
         }
     },
 
@@ -177,7 +177,26 @@ Meteor.methods({
         if(designUpdateComponent.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE){
             return true;
         } else {
-            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in parent scope");
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in parent scope but was " + designUpdateComponent.scopeType);
+        }
+    },
+
+    'verifyDesignUpdateComponents.componentIsInPeerScope'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in peer scope but was " + designUpdateComponent.scopeType);
         }
     },
 

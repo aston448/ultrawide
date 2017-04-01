@@ -45,6 +45,14 @@ class UpdateComponentVerifications{
         )
     }
 
+    componentIsInPeerScopeForDesignerCurrentUpdate(type, parentName, name){
+        server.call('verifyDesignUpdateComponents.componentIsInPeerScope', type, parentName, name, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
     componentIsNotInScopeForDesignerCurrentUpdate(type, parentName, name){
         server.call('verifyDesignUpdateComponents.componentIsNotInScope', type, parentName, name, 'gloria',
             (function(error, result){
