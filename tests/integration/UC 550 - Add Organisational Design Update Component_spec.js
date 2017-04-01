@@ -115,6 +115,9 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
+        // Add this Scenario to the scope so the other stuff gets added as Parent Scope
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+
         // Add new Section to Application1 without scoping Application1
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE};
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3', expectation);

@@ -25,15 +25,6 @@ describe('UC 551 - Add Functional Design Update Component', function(){
     before(function(){
         TestFixtures.logTestSuite('UC 551 - Add Functional Design Update Component');
 
-        TestFixtures.clearAllData();
-
-        // Add  Design1 / DesignVersion1 + basic data
-        TestFixtures.addDesignWithDefaultData();
-
-        // Complete the Design Version and create the next
-        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
-        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
     });
 
     after(function(){
@@ -42,8 +33,15 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
     beforeEach(function(){
 
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
+        TestFixtures.clearAllData();
+
+        // Add  Design1 / DesignVersion1 + basic data
+        TestFixtures.addDesignWithDefaultData();
+
+        // Complete the Design Version and create the next
+        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
@@ -92,6 +90,9 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+
+        // Add this Scenario to the scope so the other stuff gets added as Parent Scope
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Add new Feature to original Section1 without scoping Section1
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE};
