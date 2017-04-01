@@ -544,22 +544,22 @@ describe('UC 106 - Create New Design Version', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE));
 
-        // Both the previous and new DV should not contain the removed items at all
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion2'));
+        // The removed item should not be present in the new design version but still exist in the previous updatable version
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario3','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario3','Design1', 'DesignVersion3'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion3'));
 
-        // But they remain in the previous design version
+        // And they remain in the initial design version
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion1'));
@@ -684,19 +684,19 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario1','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario1','Design1', 'DesignVersion3'));
 
-        // Removed stuff gone
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion2'));
+        // Removed stuff gone from latest version
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion3'));
 
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario3','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario3','Design1', 'DesignVersion3'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion3'));
 
         // And all stuff remaining in DV3 is at baseline status
