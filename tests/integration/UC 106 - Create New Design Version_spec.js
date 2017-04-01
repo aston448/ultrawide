@@ -216,87 +216,87 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE));
     });
 
-    it('When a new Design Version is created Design Updates selected for Merge are included in the previous Design Version', function(){
-
-        // Setup - create updatable design version
-        DesignActions.designerSelectsDesign('Design1');
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
-        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
-        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
-
-        // Add a Design Update so it can be completed
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
-
-        // Add new functionality to the update
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-
-        // New section - Section3
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
-        // New Feature - Feature3
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
-        // New Sceario - Scenario8
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
-
-        // Set update to INCLUDE
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
-
-        // Check
-        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
-
-        // Execute - create another new DV from DesignVersion2
-        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
-
-        // Verify - new DV created with default name
-        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
-        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
-        expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
-
-        // Select the new DV and name it
-        DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion3');
-
-        // And status should be updatable
-        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE));
-
-        // And previous DV should be complete
-        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE));
-
-        // Both the previous and new DV should contain the new items merged into the previous version
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3'));
-
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion3'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion3'));
-
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion3'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion3'));
-
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion3'));
-
-        // And check that they are in the right places
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion2', 'NONE'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion2', 'Application1'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion2', 'Section3'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion2', 'Actions'));
-
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3', 'NONE'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion3', 'Application1'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion3', 'Section3'));
-        expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion3', 'Actions'));
-
-        // But the new items should not be in the base design version
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion1'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion1'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion1'));
-    });
+    // it('When a new Design Version is created Design Updates selected for Merge are included in the previous Design Version', function(){
+    //
+    //     // Setup - create updatable design version
+    //     DesignActions.designerSelectsDesign('Design1');
+    //     DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+    //     DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
+    //     DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+    //     DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+    //     DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+    //
+    //     // Add a Design Update so it can be completed
+    //     DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+    //
+    //     // Add new functionality to the update
+    //     DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+    //
+    //     // New section - Section3
+    //     UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
+    //     // New Feature - Feature3
+    //     UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
+    //     // New Sceario - Scenario8
+    //     UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
+    //
+    //     // Set update to INCLUDE
+    //     DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+    //     DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+    //
+    //     // Check
+    //     expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
+    //
+    //     // Execute - create another new DV from DesignVersion2
+    //     DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
+    //
+    //     // Verify - new DV created with default name
+    //     expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion1'));
+    //     expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', 'DesignVersion2'));
+    //     expect(DesignVersionVerifications.designVersionExistsForDesign_Called('Design1', DefaultItemNames.NEXT_DESIGN_VERSION_NAME));
+    //
+    //     // Select the new DV and name it
+    //     DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion3');
+    //
+    //     // And status should be updatable
+    //     expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion3', DesignVersionStatus.VERSION_UPDATABLE));
+    //
+    //     // And previous DV should be complete
+    //     DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+    //     expect(DesignVersionVerifications.designVersion_StatusForDesignerIs('DesignVersion2', DesignVersionStatus.VERSION_UPDATABLE_COMPLETE));
+    //
+    //     // Both the previous and new DV should contain the new items merged into the previous version
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion2'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3'));
+    //
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion2'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section1','Design1', 'DesignVersion3'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion2'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion3'));
+    //
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion2'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1','Design1', 'DesignVersion3'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion2'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion3'));
+    //
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion2'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.SCENARIO, 'Scenario8', 'Design1', 'DesignVersion3'));
+    //
+    //     // And check that they are in the right places
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion2', 'NONE'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion2', 'Application1'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion2', 'Section3'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion2', 'Actions'));
+    //
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.APPLICATION, 'Application1','Design1', 'DesignVersion3', 'NONE'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion3', 'Application1'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion3', 'Section3'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_ParentIs_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion3', 'Actions'));
+    //
+    //     // But the new items should not be in the base design version
+    //     expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion1'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature3','Design1', 'DesignVersion1'));
+    //     expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario8','Design1', 'DesignVersion1'));
+    // });
 
     it('When a new Design Version is created Design Updates selected for Carry Forward are now updates for the new Design Version', function(){
 
@@ -314,12 +314,12 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // New section - Section4
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         // New Feature - Feature4
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature4');
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
@@ -329,10 +329,11 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the second update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         // New section - Section5
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section5');
         // New Feature - Feature5
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section5', 'Feature5');
-        // Set update to ROLL FORWARD
+        // Set update to ROLL FORWARD after publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
         DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_ROLL);
         // Check
@@ -402,12 +403,12 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // New section - Section4
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         // New Feature - Feature4
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature4');
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
@@ -417,6 +418,7 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the second update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         // New section - Section5
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section5');
         // New Feature - Feature5
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section5', 'Feature5');
@@ -461,12 +463,12 @@ describe('UC 106 - Create New Design Version', function(){
         // Add new functionality to the first update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // New section - Section4
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section4');
         // New Feature - Feature4
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section4', 'Feature4');
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
@@ -514,11 +516,11 @@ describe('UC 106 - Create New Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Remove Section2.  Will also Remove Feature2 and its Scenarios and SubSection2
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         // Check
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
@@ -556,7 +558,7 @@ describe('UC 106 - Create New Design Version', function(){
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario4','Design1', 'DesignVersion3'));
 
-        // But they remain in the base design version
+        // But they remain in the previous design version
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section2','Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'SubSection1','Design1', 'DesignVersion1'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature2','Design1', 'DesignVersion1'));
@@ -581,15 +583,15 @@ describe('UC 106 - Create New Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // New section - Section3
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
         // New Feature - Feature3
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section3', 'Feature3');
         // New Sceario - Scenario8
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
 
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         // Add a Design Update
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
@@ -598,12 +600,12 @@ describe('UC 106 - Create New Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
 
         // Modify a Scenario Name
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario Name');
 
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         // Add a Design Update
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate3');
@@ -612,12 +614,11 @@ describe('UC 106 - Create New Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate3');
 
         // Remove Section2.  Will also Remove Feature2 and its Scenarios and SubSection2
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
 
-        // Set update to INCLUDE
+        // Set update to INCLUDE by publishing
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate3');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
-
 
         // Execute - create another new DV from DesignVersion2
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion2');
