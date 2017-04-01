@@ -34,6 +34,13 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
+        // Cannot add to a parent that is not in scope
+        if(parentComponent){
+            if(parentComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+                return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_OUT_SCOPE;
+            }
+        }
+
         // For Update WPs, additions only allowed for Scenarios and Feature Aspects
         if(view === ViewType.DEVELOP_UPDATE_WP){
 

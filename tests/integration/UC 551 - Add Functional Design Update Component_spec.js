@@ -95,7 +95,7 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Add new Feature to original Section1 without scoping Section1
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_IN_SCOPE};
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_ADDABLE_PARENT_OUT_SCOPE};
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3', expectation);
 
         // Add new Scenario to original Feature 1 Actions without scoping Actions
