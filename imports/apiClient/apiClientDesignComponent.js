@@ -498,7 +498,11 @@ class ClientDesignComponentServices{
             let componentFeatureRef = '';
             let componentParentRef = '';
 
-            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WORKING_VIEW){
+            if(userContext.designUpdateId === 'NONE' ||
+                displayContext === DisplayContext.UPDATE_SCOPE ||
+                displayContext === DisplayContext.WORKING_VIEW ||
+                displayContext === DisplayContext.BASE_EDIT
+            ){
                 component = DesignVersionComponents.findOne({_id: newDesignComponentId});
                 componentFeatureRef = component.componentFeatureReferenceIdNew;
                 componentParentRef = component.componentParentReferenceIdNew;
