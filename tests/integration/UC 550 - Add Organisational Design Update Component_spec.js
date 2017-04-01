@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, UpdateMergeStatus, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -24,6 +24,13 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 550 - Add Organisational Design Update Component');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
 
@@ -34,17 +41,6 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2')
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Remove any Design Updates before each test
-        TestFixtures.clearDesignUpdates();
-
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdate();
@@ -170,8 +166,43 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
     });
 
-    it('When an organisational Design Component is added to a Design Update to be included in the current Design Version it becomes visible as a new item in the Design Version');
+    it('When an organisational Design Component is added to a Design Update to be included in the current Design Version it becomes visible as a new item in the Design Version', function(){
 
-    it('An organisational Design Component added to a Design Update does not appear in the Design Update Scope');
+        // Setup - Publish DU so that additions to it are merged
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Initial check
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.APPLICATION, 'Application3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE_ASPECT, 'Aspect1','Design1', 'DesignVersion2'));
+
+        // Execute
+        // New Application
+        UpdateComponentActions.designerAddsApplicationCalled('Application3');
+
+        // New Section
+        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application3', 'Section3');
+
+        // New Feature Aspect
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
+
+        // Verify new stuff is now present
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section3','Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE_ASPECT, 'Aspect1','Design1', 'DesignVersion2'));
+
+        // And it is marked as New
+        DesignComponentActions.designerSelectsApplication('Application3');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+
+        DesignComponentActions.designerSelectsDesignSection('Application3', 'Section3');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Aspect1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+
+    });
 
 });
