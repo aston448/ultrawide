@@ -187,7 +187,7 @@ Meteor.methods({
               return true;
             } else {
                 if(designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED){
-                    if(componentName === designVersionComponent.componentNameNew){
+                    if(componentName === designVersionComponent.componentNameOld){
                         throw new Meteor.Error("FAIL", "Not expecting component to be in update Scope as "  + componentName);
                     }
                 } else {

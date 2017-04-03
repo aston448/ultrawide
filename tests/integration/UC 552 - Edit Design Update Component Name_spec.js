@@ -71,6 +71,76 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
 
     // Conditions
+    it('A Design Update Component name may not be edited if the component is not in Scope for the Design Update', function(){
+
+        // An item may be visible in parent scope but this does not make it editable
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+
+        // Execute - try to edit the parent items for Scenario1 - expect failures for all
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_SCOPE};
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE, Application1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationNew', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionNew', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ActionsNew', expectation);
+    });
+
+    it('An organisational Design Update Component name may not be edited if it has already been edited in another published Design Update', function(){
+
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // Add stuff to scope
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        // Edit names
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE, Application1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationNew');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'ApplicationNew', 'Section1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionNew');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'SectionNew', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'FeatureNew', 'Actions');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ActionsNew');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'ActionsNew', 'Scenario1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ScenarioNew');
+        // Publish
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Add another update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        let expectation = {};
+
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+
+        // The Feature won't be scopable in the first place as has been modified so we don't want other people changing it too
+        expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_CHANGED};
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1', expectation);
+
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+
+        // The scenario won't be scopable in the frst place
+        expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_SCOPABLE_IN_SCOPE};
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1', expectation);
+
+        // The rest, the organisational components are scopable so that other stuff can be added to them.
+        // But updating their names should not be allowed
+        expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_OTHER_DU};
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE, Application1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationOld', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'ApplicationNew', 'Section1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionOld', expectation);
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'FeatureNew', 'Actions');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ActionsOld', expectation);
+    });
 
     it('An Application name may not be changed to the same name as another Application in the Design Update or Base Design Version', function(){
 

@@ -1,6 +1,6 @@
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType } from '../../constants/constants.js';
+import { ViewType, ViewMode, DisplayContext, ComponentType, UpdateScopeType, UpdateMergeStatus } from '../../constants/constants.js';
 import { Validation, DesignUpdateComponentValidationErrors } from '../../constants/validation_errors.js';
 
 import {locationMoveDropAllowed, reorderDropAllowed} from '../../common/utils.js';
@@ -119,7 +119,7 @@ class DesignUpdateComponentValidationServices{
         return Validation.VALID;
     };
 
-    validateUpdateDesignUpdateComponentName(view, mode, component, newName, existingUpdateComponents, existingDesignVersionComponents){
+    validateUpdateDesignUpdateComponentName(view, mode, updateComponent, newName, existingUpdateComponents, existingDesignVersionComponents, designVersionComponent){
 
         // Updates only allowed in update edit or WP Develop when in edit mode
         if(!(view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DEVELOP_UPDATE_WP)){
@@ -132,7 +132,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // Component must not be removed elsewhere
-        if(component.isRemovedElsewhere){
+        if(updateComponent.isRemovedElsewhere){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED;
         }
 
@@ -140,34 +140,50 @@ class DesignUpdateComponentValidationServices{
         if(view === ViewType.DEVELOP_UPDATE_WP){
 
             // Fail bad Feature Aspects
-            if(component.componentType === ComponentType.FEATURE_ASPECT && !component.isDevAdded){
+            if(updateComponent.componentType === ComponentType.FEATURE_ASPECT && !updateComponent.isDevAdded){
                 // FAIL - cant update non dev added Feature Aspects
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE;
             }
 
             // Anything else that's not a Scenario or Feature aspect is no good
-            if((component.componentType !== ComponentType.SCENARIO) && (component.componentType !== ComponentType.FEATURE_ASPECT)){
+            if((updateComponent.componentType !== ComponentType.SCENARIO) && (updateComponent.componentType !== ComponentType.FEATURE_ASPECT)){
                 // FAIL can't update any other components
                 return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_WP_UPDATABLE;
             }
         }
 
+        // Name cannot be edited if not an in scope item
+        if(updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_SCOPE;
+        }
+
+        // Name cannot be updated if it is updated in another published update
+        if(designVersionComponent){
+            if(designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED){
+                // The component has been modified by some update
+                if(!updateComponent.isChanged){
+                    // But its not by us already so don't allow it
+                    return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_OTHER_DU;
+                }
+            }
+        }
+
         // Name must be unique for component type - for functional components only
-        if(component.componentType === ComponentType.DESIGN_SECTION || component.componentType === ComponentType.FEATURE_ASPECT){
+        if(updateComponent.componentType === ComponentType.DESIGN_SECTION || updateComponent.componentType === ComponentType.FEATURE_ASPECT){
 
             // For non-functional components must be unique under the same parent only
             let duplicate = false;
 
             existingUpdateComponents.forEach((existingComponent) => {
 
-                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === component.componentParentReferenceIdNew){
+                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === updateComponent.componentParentReferenceIdNew){
                     duplicate = true;
                 }
             });
 
             existingDesignVersionComponents.forEach((existingComponent) => {
 
-                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === component.componentParentReferenceIdNew){
+                if(existingComponent.componentNameNew === newName  && existingComponent.componentParentReferenceIdNew === updateComponent.componentParentReferenceIdNew){
                     duplicate = true;
                 }
             });
@@ -199,7 +215,7 @@ class DesignUpdateComponentValidationServices{
         }
 
         // A Scenario name must not be the subset or superset of another Scenario name
-        if(component.componentType === ComponentType.SCENARIO){
+        if(updateComponent.componentType === ComponentType.SCENARIO){
 
             let subset = false;
             let superset = false;

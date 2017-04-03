@@ -136,4 +136,18 @@ describe('UC 509 - Withdraw Draft Design Update', function(){
         expect(DesignUpdateVerifications.updateStatusForUpdate_ForDeveloperIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
     });
 
+    // Consequences
+    it('A withdrawn Design Update is set to Ignore', function(){
+
+        // Setup
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT));
+
+        // Execute
+        DesignUpdateActions.designerWithdrawsUpdate('DesignUpdate1');
+
+        // Verify
+        expect(DesignUpdateVerifications.updateStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateStatus.UPDATE_NEW));
+        expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE));
+    })
 });
