@@ -537,8 +537,12 @@ class DesignUpdateComponentServices{
                     }
                 );
 
+                // Keep DV up to date
+                DesignUpdateComponentModules.updateCurrentDesignVersionComponentName(designUpdateComponentId);
+
                 // Make sure summary updates...
                 DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+
 
             } else {
 
@@ -593,6 +597,9 @@ class DesignUpdateComponentServices{
                         }
                     }
                 );
+
+                // Keep DV up to date
+                DesignUpdateComponentModules.updateCurrentDesignVersionComponentDetails(featureId);
 
             } else {
                 // An existing component so just update the new narrative...
