@@ -24,6 +24,13 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
 
     before(function(){
         TestFixtures.logTestSuite('UC 507 - Set Design Update Action for Next Design Version');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
 
@@ -34,15 +41,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        TestFixtures.clearDesignUpdates();
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1'); // Published
@@ -161,7 +159,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
         // Move
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature444', 'Actions');
-        UpdateComponentActions.designerSelectsUpdateComponent('Feature444', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions');
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface');
         // Remove
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application99', 'Section99');
@@ -214,7 +212,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
         // Move
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature444', 'Actions');
-        UpdateComponentActions.designerSelectsUpdateComponent('Feature444', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions');
         UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface');
         // Remove
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application99', 'Section99');
