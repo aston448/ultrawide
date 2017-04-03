@@ -232,7 +232,7 @@ describe('UC 109 - View Design Version', function(){
         // Verify - Design Version 2 has Feature1 and Children removed (not visible)
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignVersionActions.designerViewsDesignVersion('DesignVersion2');
-        DesignComponentActions.designerSelectsFeature('Application1', 'Feature1');
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
         DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
