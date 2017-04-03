@@ -7,7 +7,7 @@ import { WorkPackages }             from '../../collections/work/work_packages.j
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DesignUpdateMergeAction, UpdateScopeType }      from '../../constants/constants.js';
+import { ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, DesignUpdateMergeAction, UpdateScopeType, UpdateMergeStatus }      from '../../constants/constants.js';
 import DesignUpdateComponentServices    from '../../servicers/design_update/design_update_component_services.js';
 import DesignComponentModules           from '../../service_modules/design/design_component_service_modules.js';
 import DesignUpdateModules              from '../../service_modules/design_update/design_update_service_modules.js';
@@ -174,40 +174,74 @@ class DesignUpdateComponentModules{
     setIndex(componentId, componentType, parentId){
 
         // Get the max index of OTHER components of this type under the same parent in the working version
-        let peerComponents = [];
+        // List of Peers has to be a combination of EXISTING and NEW peers
+        let existingPeerComponents = [];
+        let newPeerComponents = [];
+
         const updateComponent = DesignUpdateComponents.findOne({_id: componentId});
 
         if(componentType === ComponentType.APPLICATION){
 
-            peerComponents = DesignVersionComponents.find(
+            existingPeerComponents = DesignVersionComponents.find(
                 {
                     designVersionId: updateComponent.designVersionId,
                     componentReferenceId: {$ne: updateComponent.componentReferenceId},
-                    componentType: componentType
+                    componentType: componentType,
+                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
+                },
+                {sort:{componentIndexNew: -1}}
+            ).fetch();
+
+            newPeerComponents = DesignUpdateComponents.find(
+                {
+                    designUpdateId: updateComponent.designUpdateId,
+                    componentReferenceId: {$ne: updateComponent.componentReferenceId},
+                    componentType: componentType,
+                    isNew: true
                 },
                 {sort:{componentIndexNew: -1}}
             ).fetch();
 
         } else {
 
-            peerComponents = DesignVersionComponents.find(
+            existingPeerComponents = DesignVersionComponents.find(
                 {
                     designVersionId: updateComponent.designVersionId,
                     componentReferenceId: {$ne: updateComponent.componentReferenceId},
                     componentType: componentType,
-                    componentParentReferenceIdNew: updateComponent.componentParentReferenceIdNew
+                    componentParentReferenceIdNew: updateComponent.componentParentReferenceIdNew,
+                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
                 },
                 {sort: {componentIndexNew: -1}}
             ).fetch();
+
+            newPeerComponents = DesignUpdateComponents.find(
+                {
+                    designUpdateId: updateComponent.designUpdateId,
+                    componentReferenceId: {$ne: updateComponent.componentReferenceId},
+                    componentType: componentType,
+                    componentParentReferenceIdNew: updateComponent.componentParentReferenceIdNew,
+                    isNew: true
+                },
+                {sort:{componentIndexNew: -1}}
+            ).fetch();
         }
 
-        //console.log('Peer components found =  ' + peerComponents.length);
-
         // If no components then leave as default of 100
-        if(peerComponents.length > 0){
+        if(existingPeerComponents.length > 0 || newPeerComponents.length > 0){
 
-            //console.log('Placing new component below ' + peerComponents[0].componentNameNew);
-            let newIndex = peerComponents[0].componentIndexNew + 100;
+            // Find the biggest from the new and existing
+            let maxPeer = 0;
+            if(existingPeerComponents.length > 0){
+                maxPeer = existingPeerComponents[0].componentIndexNew;
+            }
+            if(newPeerComponents.length > 0){
+                if(newPeerComponents[0].componentIndexNew > maxPeer){
+                    maxPeer = newPeerComponents[0].componentIndexNew;
+                }
+            }
+
+            let newIndex = maxPeer + 100;
 
             DesignUpdateComponents.update(
                 {_id: componentId},
