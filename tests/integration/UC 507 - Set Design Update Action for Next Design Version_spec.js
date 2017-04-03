@@ -57,6 +57,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
 
         // Setup - Draft DU is merge by default so change it back first
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE));
 
         // Execute
@@ -115,6 +116,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
     it('A Developer cannot set Design Update actions', function(){
 
         // Setup
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
@@ -131,6 +133,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
     it('A Manager cannot set Design Update actions', function(){
 
         // Setup
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');

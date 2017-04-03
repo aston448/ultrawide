@@ -672,13 +672,13 @@ class DesignVersionModules{
                 updateMergeStatus = UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED;
             }
 
-            // Update the name to the latest value
+            // Update the name to the previous value
             DesignVersionComponents.update(
                 {_id: designVersionItem._id},
                 {
                     $set:{
-                        componentNameNew:               updateItem.componentNameNew,
-                        componentNameRawNew:            updateItem.componentNameRawNew,
+                        componentNameNew:               updateItem.componentNameOld,
+                        componentNameRawNew:            updateItem.componentNameRawOld,
                         updateMergeStatus:              updateMergeStatus
                     }
                 }
