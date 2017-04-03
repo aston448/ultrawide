@@ -337,4 +337,27 @@ describe('UC 556 - ReOrder Design Update Component List', function(){
         expect(WpComponentVerifications.managerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature9'));
     });
 
+    it('When a new Design Update Component is reordered for a Design Update to be included in the current Design Version it is also reordered in the Design Version', function(){
+
+        // Setup - Add some new Features to DU1...
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'Feature9');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section2', 'Feature8');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Check - 9 above 8 in DV
+        DesignComponentActions.designerSelectsFeature('Section2', 'Feature9');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature8'));
+
+        // Execute - reorder Features in Update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section2', 'Feature8');
+        UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE, 'Section2', 'Feature9');
+
+        // Verify 8 now above 9 in DV
+        DesignComponentActions.designerSelectsFeature('Section2', 'Feature8');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature9'));
+    });
+
 });

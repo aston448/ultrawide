@@ -85,6 +85,14 @@ class DesignComponentVerifications{
         );
     }
 
+    designerSelectedFeatureNarrativeIs(narrativeText){
+        server.call('verifyDesignComponents.selectedFeatureNarrativeIs', narrativeText, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
     designerSelectedComponentDetailsTextIs(detailsText){
         server.call('verifyDesignComponents.selectedComponentDetailsTextIs', detailsText, 'gloria',
             (function(error, result){

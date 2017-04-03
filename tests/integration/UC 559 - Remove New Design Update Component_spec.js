@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, UpdateMergeStatus, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -187,4 +187,51 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
     it('A new Scenario cannot be removed from a Design Update if it has Scenario Steps');
 
+    // Consequences
+    it('When a new Design Update Component is removed it is removed from any Work Package based on the Design Update', function(){
+
+        // Setup - add new Application
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        // Create a WP based on DU1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('WorkPackage1');
+
+        // Check Application2 in WP1
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
+
+        // Add to WP1
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application2');
+        expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
+
+        // Remove Application
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerRemovesUpdateApplication('Application2');
+
+        // Verify no longer in WP or available to scope
+        expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
+        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
+    });
+
+    it('When a new Design Update Component is removed from a Design Update to be included in the current Design Version it is removed completely from the Design Version', function(){
+
+        // Setup - add new Application
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Check now new item in DV
+        DesignComponentActions.designerSelectsApplication('Application2');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
+
+        // Remove Application
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerRemovesUpdateApplication('Application2');
+
+        // Verify not in DV any more
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+    });
 });

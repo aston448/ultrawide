@@ -230,7 +230,7 @@ Meteor.methods({
 
         const selectedComponent = DesignVersionComponents.findOne({_id: userContext.designComponentId});
 
-        if(selectedComponent.updateMergeStatus != mergeStatus){
+        if(selectedComponent.updateMergeStatus !== mergeStatus){
             throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentNameNew + " to have merge status " + mergeStatus + " but found " + selectedComponent.updateMergeStatus);
         } else {
             return true;
@@ -246,8 +246,29 @@ Meteor.methods({
         const rawDetails = selectedComponent.componentTextRawNew;
         const plainDetails = rawDetails.blocks[0].text;
 
-        if(plainDetails != detailsText){
+        if(plainDetails !== detailsText){
             throw new Meteor.Error("FAIL", "Expected component " + selectedComponent.componentNameNew + " to have details text " + detailsText + " but found " + plainDetails);
+        } else {
+            return true;
+        }
+    },
+
+    'verifyDesignComponents.selectedFeatureNarrativeIs'(narrativeText, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const featureComponent = DesignVersionComponents.findOne({
+            _id: userContext.designComponentId
+        });
+
+        let featureNarrative = DefaultComponentNames.NEW_NARRATIVE_TEXT;
+
+        if(featureComponent){
+            featureNarrative = featureComponent.componentNarrativeNew;
+        }
+
+        if(featureNarrative.trim() !==  narrativeText.trim()){
+            throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + featureNarrative);
         } else {
             return true;
         }
@@ -262,7 +283,7 @@ Meteor.methods({
             featureNarrative = featureComponent.componentNarrativeNew;
         }
 
-        if(featureNarrative.trim() !=  narrativeText.trim()){
+        if(featureNarrative.trim() !==  narrativeText.trim()){
             throw new Meteor.Error("FAIL", "Expected feature narrative to be " + narrativeText + " but found " + featureNarrative);
         } else {
             return true;

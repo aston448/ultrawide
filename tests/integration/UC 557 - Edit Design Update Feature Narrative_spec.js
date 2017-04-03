@@ -130,6 +130,28 @@ describe('UC 557 - Edit Design Update Feature Narrative', function(){
         expect(UpdateComponentVerifications.designerSelectedOldFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));
         expect(UpdateComponentVerifications.designerSelectedFeatureNarrativeIs(newNarrative));
         expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE, 'Section1', 'Feature1'));
+    });
+
+    it('When an existing component Narrative is changed in a Design Update to be included in the current Design Version the Feature becomes visible as a changed item in the Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Check
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        expect(DesignComponentVerifications.designerSelectedFeatureNarrativeIs(DefaultComponentNames.NEW_NARRATIVE_TEXT));
+
+        const newNarrative = 'As a hen\nI want to peck\nSo that I can eat';
+
+        // Execute
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateFeatureNarrativeTo(newNarrative);
+
+        // Verify
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        expect(DesignComponentVerifications.designerSelectedFeatureNarrativeIs(newNarrative));
     })
 
 });
