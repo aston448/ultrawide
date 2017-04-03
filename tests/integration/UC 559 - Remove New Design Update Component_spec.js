@@ -214,7 +214,7 @@ describe('UC 559 - Remove New Design Update Component', function(){
 
         // Verify no longer in WP or available to scope
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
-        expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
+        expect(WpComponentVerifications.componentIsNotAvailableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
     });
 
     it('When a new Design Update Component is removed from a Design Update to be included in the current Design Version it is removed completely from the Design Version', function(){
