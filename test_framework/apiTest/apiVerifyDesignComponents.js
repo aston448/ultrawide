@@ -213,8 +213,8 @@ Meteor.methods({
         const targetComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, targetType, targetParentName, targetName);
 
         // Components highest in the list have the lowest indexes
-        console.log("Selected Component (" + selectedComponent.componentNameNew + ") has index " + selectedComponent.componentIndexNew);
-        console.log("Target Component (" + targetComponent.componentNameNew + ") has index " + targetComponent.componentIndexNew);
+        // console.log("Selected Component (" + selectedComponent.componentNameNew + ") has index " + selectedComponent.componentIndexNew);
+        // console.log("Target Component (" + targetComponent.componentNameNew + ") has index " + targetComponent.componentIndexNew);
 
         if(selectedComponent.componentIndexNew >= targetComponent.componentIndexNew){
             //console.log("FAIL!");

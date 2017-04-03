@@ -78,19 +78,6 @@ class ServerDesignVersionApi {
         );
     };
 
-    updateWorkingDesignVersion(userRole, designVersionId, callback){
-
-        updateWorkingDesignVersion.call(
-            {
-                userRole: userRole,
-                designVersionId: designVersionId
-            },
-            (err, result) => {
-                callback(err, result);
-            }
-        );
-    }
-
     createNextDesignVersion(userRole, designVersionId, callback){
 
         createNextDesignVersion.call(

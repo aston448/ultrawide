@@ -59,16 +59,6 @@ class DesignVersionValidationApi{
         return DesignVersionValidationServices.validateWithdrawDesignVersion(userRole, thisVersion);
     };
 
-    validateUpdateWorkingDesignVersion(userRole, designVersionId){
-        const thisVersion = DesignVersions.findOne({_id: designVersionId});
-        const mergeIncludeUpdatesCount = DesignUpdates.find({
-            designVersionId: designVersionId,
-            updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
-        }).count();
-
-        return DesignVersionValidationServices.validateUpdateWorkingDesignVersion(userRole, thisVersion, mergeIncludeUpdatesCount);
-    }
-
     validateCreateNextDesignVersion(userRole, designVersionId){
 
         const thisVersion = DesignVersions.findOne({_id: designVersionId});

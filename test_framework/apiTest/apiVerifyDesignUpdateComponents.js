@@ -143,6 +143,63 @@ Meteor.methods({
 
     },
 
+    'verifyDesignUpdateComponents.componentIsAvailable'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designVersionComponent){
+            if(designVersionComponent.updateMergeStatus !== UpdateMergeStatus.COMPONENT_ADDED){
+                if(designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED){
+                    if(componentName !== designVersionComponent.componentNameOld){
+                        throw new Meteor.Error("FAIL", "Expecting component to be in update Scope as "  + componentName);
+                    }
+                } else {
+                    return true;
+                }
+            } else {
+                throw new Meteor.Error("FAIL", "Not expecting new Update component " + componentName + " to be in other Update scope");
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in base design version");
+        }
+    },
+
+    'verifyDesignUpdateComponents.componentIsNotAvailable'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+            userContext.designVersionId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designVersionComponent){
+            if(designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_ADDED){
+              return true;
+            } else {
+                if(designVersionComponent.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED){
+                    if(componentName === designVersionComponent.componentNameNew){
+                        throw new Meteor.Error("FAIL", "Not expecting component to be in update Scope as "  + componentName);
+                    }
+                } else {
+                    return true;
+                }
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be in base design version");
+        }
+    },
+
+
     'verifyDesignUpdateComponents.componentIsInScope'(componentType, componentParentName, componentName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);

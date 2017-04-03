@@ -91,15 +91,6 @@ export class DesignVersion extends Component {
         );
     }
 
-    onUpdateWorkingDesignVersion(userRole, userContext, dv){
-
-        ClientDesignVersionServices.updateWorkingDesignVersion(
-            userRole,
-            userContext,
-            dv._id
-        );
-    }
-
     onCreateNextDesignVersion(userRole, userContext, dv){
 
         this.setState({ showModal: false });
@@ -196,9 +187,6 @@ export class DesignVersion extends Component {
 
         const withdrawButton =
             <Button id="butWithdraw" bsSize="xs" onClick={ () => this.onWithdrawDesignVersion(userRole, userContext, designVersion)}>Withdraw</Button>;
-
-        const updateButton =
-            <Button id="butUpdate" bsSize="xs" onClick={ () => this.onUpdateWorkingDesignVersion(userRole, userContext, designVersion)}>Update</Button>;
 
         const createNextButton =
             <Button id="butCreateNext" bsSize="xs" onClick={ () => this.onShowModal(userRole, designVersion)}>Create Next</Button>;
@@ -344,9 +332,6 @@ export class DesignVersion extends Component {
                                     {viewButton}
                                 </ButtonGroup>
                                 <ButtonGroup className="button-group-left">
-                                    {updateButton}
-                                 </ButtonGroup>
-                                <ButtonGroup className="button-group-left">
                                     {createNextButton}
                                 </ButtonGroup>
                             </div>;
@@ -356,9 +341,6 @@ export class DesignVersion extends Component {
                             <div>
                                 <ButtonGroup className="button-group-left">
                                     {viewButton}
-                                </ButtonGroup>
-                                <ButtonGroup className="button-group-left">
-                                    {updateButton}
                                 </ButtonGroup>
                             </div>;
                         break;

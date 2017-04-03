@@ -121,33 +121,6 @@ export const withdrawDesignVersion = new ValidatedMethod({
 
 });
 
-export const updateWorkingDesignVersion = new ValidatedMethod({
-
-    name: 'designVersion.updateWorkingDesignVersion',
-
-    validate: new SimpleSchema({
-        userRole:           {type: String},
-        designVersionId:    {type: String}
-    }).validator(),
-
-    run({userRole, designVersionId}){
-
-        const result = DesignVersionValidationApi.validateUpdateWorkingDesignVersion(userRole, designVersionId);
-
-        if (result !== Validation.VALID) {
-            throw new Meteor.Error('designVersion.updateWorkingDesignVersion.failValidation', result)
-        }
-
-        try {
-            DesignVersionServices.updateWorkingDesignVersion(designVersionId);
-        } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
-        }
-    }
-
-});
-
 export const createNextDesignVersion = new ValidatedMethod({
 
     name: 'designVersion.createNextDesignVersion',

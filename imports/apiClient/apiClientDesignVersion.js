@@ -180,44 +180,6 @@ class ClientDesignVersionServices{
         return {success: true, message: ''};
     };
 
-    // User chose to update the working Updatable Design Version with the latest updates set to Merge
-    updateWorkingDesignVersion(userRole, userContext, workingDesignVersionId){
-
-        // Client validation
-        let result = DesignVersionValidationApi.validateUpdateWorkingDesignVersion(userRole, workingDesignVersionId);
-
-        if(result !== Validation.VALID){
-
-            // Business validation failed - show error on screen
-            store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
-            return {success: false, message: result};
-        }
-
-        // Ensure that the current version is the version we chose to update and that user context is updated
-        this.setDesignVersion(userContext, userRole, workingDesignVersionId, false);
-
-        // Real action call - server actions
-        ServerDesignVersionApi.updateWorkingDesignVersion(userRole, workingDesignVersionId, (err, result) => {
-
-            if (err) {
-                // Unexpected error as all expected errors already handled - show alert.
-                // Can't update screen here because of error
-                alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
-            } else {
-                // Client actions:
-
-                // Show action success on screen
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
-                    messageText: DesignVersionMessages.MSG_DESIGN_VERSION_UPDATED
-                }));
-            }
-        });
-
-        // Indicate that business validation passed
-        return {success: true, message: ''};
-    }
-
     // User chose to create a new updatable Design Version from the current version and any updates selected
     createNextDesignVersion(userRole, userContext, baseDesignVersionId){
 

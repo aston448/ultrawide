@@ -29,6 +29,22 @@ class UpdateComponentVerifications{
         );
     }
 
+    componentIsAvailableForDesignerCurrentUpdate(type, parentName, name){
+        server.call('verifyDesignUpdateComponents.componentIsAvailable', type, parentName, name, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
+    componentIsNotAvailableForDesignerCurrentUpdate(type, parentName, name){
+        server.call('verifyDesignUpdateComponents.componentIsNotAvailable', type, parentName, name, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        )
+    }
+
     componentIsInScopeForDesignerCurrentUpdate(type, parentName, name){
         server.call('verifyDesignUpdateComponents.componentIsInScope', type, parentName, name, 'gloria',
             (function(error, result){
