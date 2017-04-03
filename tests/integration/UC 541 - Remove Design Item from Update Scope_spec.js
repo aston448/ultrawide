@@ -180,9 +180,12 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
     // Consequences
     it('When a Design Component is removed from Design Update Scope it disappears from the Design Update editor', function(){
 
+        // Have to add parents of tested component in this test so that there is something to try to get child data for...
+
         // FEATURE
         // Setup - Add Feature1 to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         // Confirm that feature is now included in editor data
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature1'));
@@ -197,6 +200,7 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         // FEATURE ASPECT
         // Setup - Add Feature1 Actions to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         // Confirm that feature aspect is now included in editor data
         expect(ContainerDataVerifications.featureAspectIsSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
@@ -210,6 +214,7 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         // SCENARIO
         // Setup - Add Feature1 Actions Scenario1 to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         // Confirm that scenario is now included in editor data
         expect(ContainerDataVerifications.scenarioIsSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
@@ -226,6 +231,7 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         // Setup - add Scenario1 to scope...
         // Setup - Add Feature1 Actions Scenario1 to the scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         // Confirm that scenario is now included in editor data
         expect(ContainerDataVerifications.scenarioIsSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
@@ -233,14 +239,15 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         expect(ContainerDataVerifications.featureAspectIsSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
         // And Feature1
         expect(ContainerDataVerifications.featureIsSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
+        // And Section1
+        expect(ContainerDataVerifications.designSectionIsSeenInUpdateEditorForDesigner('Application1', 'Section1'));
 
         // Execute - remove Scenario1 from scope
         UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
 
-        // Verify - all 3 components gone
-        expect(ContainerDataVerifications.featureNotSeenInUpdateEditorForDesigner('Application1', 'Section1', 'Feature1'));
-        expect(ContainerDataVerifications.featureAspectNotSeenInUpdateEditorForDesigner('Section1', 'Feature1', 'Actions'));
-        expect(ContainerDataVerifications.scenarioNotSeenInUpdateEditorForDesigner('Feature1', 'Actions', 'Scenario1'));
+        // Verify - Design Section is gone - so all below it must have too
+
+        expect(ContainerDataVerifications.designSectionIsNotSeenInUpdateEditorForDesigner('Application1', 'Section1'));
     });
 
 

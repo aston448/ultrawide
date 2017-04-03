@@ -22,6 +22,22 @@ class ContainerDataVerifications {
         );
     }
 
+    designSectionIsNotSeenInUpdateEditorForDesigner(parentName, sectionName) {
+
+        // When using this always use a section that is under an Application
+
+        server.call('testContainerServices.getAndValidateChildComponentsForParent',
+            ComponentType.APPLICATION, 'NONE', parentName,
+            ComponentType.DESIGN_SECTION, sectionName,
+            'gloria',
+            ViewType.DESIGN_UPDATE_EDIT, DisplayContext.UPDATE_EDIT,
+            'VALIDATE_NO_COMPONENT_RETURNED',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    }
+
     featureIsSeenInUpdateEditorForDesigner(featureGrandparent, featureParent, featureName) {
 
         server.call('testContainerServices.getAndValidateChildComponentsForParent',

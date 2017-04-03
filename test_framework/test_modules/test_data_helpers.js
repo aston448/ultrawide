@@ -414,6 +414,47 @@ class TestDataHelpers {
 
     };
 
+    getDesignUpdateComponentWithParentOld(designVersionId, designUpdateId, componentType, componentParentName, componentName){
+
+        let designUpdateComponent = null;
+        let parentComponent = null;
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+
+        const designUpdateComponents = DesignUpdateComponents.find({
+            designVersionId: designVersionId,
+            designUpdateId: designUpdateId,
+            componentType: componentType,
+            componentNameOld:  componentName
+        }).fetch();
+
+        // Get the component that has the expected parent- except for Applications that have no parent
+        if(componentType !== ComponentType.APPLICATION) {
+            designUpdateComponents.forEach((component) => {
+
+                parentComponent = DesignUpdateComponents.findOne({
+                    _id: component.componentParentIdNew
+                });
+
+                if (parentComponent.componentNameOld === componentParentName) {
+                    designUpdateComponent = component;
+                }
+
+            });
+        } else {
+            // Application names are unique so assume can be only one
+            designUpdateComponent = designUpdateComponents[0];
+        }
+
+        let designUpdateName = DesignUpdates.findOne({_id: designUpdateId}).updateName;
+
+        if(!designUpdateComponent){
+            //console.log("Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName)
+            throw new Meteor.Error("FAIL", "Design Update Component " + componentType + " : " + componentName + " not found with parent " + componentParentName + " for Design Version " + designVersion.designVersionName + " and Design Update " + designUpdateName);
+        }
+
+        return designUpdateComponent;
+
+    };
 
     getWorkPackageComponentWithParent(designVersionId, designUpdateId, workPackageId, componentType, componentParentName, componentName, expectationFailure = false){
         // Allows us to get a component by combination of name and parent name - so we can get Feature Aspects successfully

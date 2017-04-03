@@ -59,7 +59,7 @@ Meteor.methods({
 
         // Get the component based on the Old Name as that's what is in the Scope
         const baseComponent = TestDataHelpers.getDesignComponentWithParentOld(userContext.designVersionId, componentType, componentParentName, componentName);
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParentOld(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, baseComponent, userContext.designUpdateId, designUpdateComponent, false);
 
