@@ -16,7 +16,7 @@ import WpComponentActions           from '../../test_framework/test_wrappers/wor
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications from '../../test_framework/test_wrappers/design_update_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, UpdateMergeStatus, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateComponentValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -515,4 +515,42 @@ describe('UC 554 - Restore Removed Design Update Component', function(){
         expect(WpComponentVerifications.componentIsNotInScopeForManagerCurrentWp(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
 
     });
+
+    it('When a removed component is restored in a Design Update to be included in the current Design Version it reverts to a base item in the Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateApplication('Application1');
+        // Publish so merges to current working Design Version
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Check
+        DesignComponentActions.designerSelectsApplication('Application1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+
+        // Execute
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerRestoresDeletedUpdateApplication('Application1');
+
+        // Verify
+        DesignComponentActions.designerSelectsApplication('Application1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
+        DesignComponentActions.designerSelectsDesignSection('Application1', 'Section1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
+        DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
+        DesignComponentActions.designerSelectsFeatureAspect('Feature1', 'Actions');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
+    })
 });
