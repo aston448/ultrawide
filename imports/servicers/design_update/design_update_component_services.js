@@ -522,28 +522,51 @@ class DesignUpdateComponentServices{
 
             let duComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-            let changed = (componentNewName !== duComponent.componentNameOld);
+            // For a new component, the name updates to whatever the latest name is - no old and new versions as the whole thing is NEW
+            if(duComponent.isNew){
 
-            // Update the new names for the update
-            DesignUpdateComponents.update(
-                {_id: designUpdateComponentId},
-                {
-                    $set: {
-                        componentNameNew: componentNewName,
-                        componentNameRawNew: componentNewNameRaw,
-                        isChanged: changed
+                DesignUpdateComponents.update(
+                    {_id: designUpdateComponentId},
+                    {
+                        $set: {
+                            componentNameOld: componentNewName,
+                            componentNameNew: componentNewName,
+                            componentNameRawOld: componentNewNameRaw,
+                            componentNameRawNew: componentNewNameRaw,
+                        }
                     }
-                }
-            );
+                );
 
-
-            if(changed) {
-
-                // Update the design version if necessary
-                DesignUpdateComponentModules.updateCurrentDesignVersionComponentName(designUpdateComponentId);
-
-                // And the Design Update Summary is now stale if it was a real change
+                // Make sure summary updates...
                 DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+
+            } else {
+
+                // An existing component so just update the new name...
+
+                let changed = (componentNewName !== duComponent.componentNameOld);
+
+                // Update the new names for the update
+                DesignUpdateComponents.update(
+                    {_id: designUpdateComponentId},
+                    {
+                        $set: {
+                            componentNameNew: componentNewName,
+                            componentNameRawNew: componentNewNameRaw,
+                            isChanged: changed
+                        }
+                    }
+                );
+
+
+                if (changed) {
+
+                    // Update the design version if necessary
+                    DesignUpdateComponentModules.updateCurrentDesignVersionComponentName(designUpdateComponentId);
+
+                    // And the Design Update Summary is now stale if it was a real change
+                    DesignUpdates.update({_id: duComponent.designUpdateId}, {$set: {summaryDataStale: true}});
+                }
             }
         }
     };
@@ -555,25 +578,43 @@ class DesignUpdateComponentServices{
         if(Meteor.isServer) {
 
             let duComponent = DesignUpdateComponents.findOne({_id: featureId});
-            let componentOldNarrative = duComponent.componentNarrativeOld;
 
-            let changed = (newNarrative !== componentOldNarrative);
+            // For a new component, the narrative updates to whatever the latest name is - no old and new versions as the whole thing is NEW
+            if(duComponent.isNew){
 
-            DesignUpdateComponents.update(
-                {_id: featureId},
-                {
-                    $set: {
-                        componentNarrativeNew: newNarrative,
-                        componentNarrativeRawNew: newRawNarrative,
-                        isChanged: changed
+                DesignUpdateComponents.update(
+                    {_id: featureId},
+                    {
+                        $set: {
+                            componentNarrativeOld: newNarrative,
+                            componentNarrativeNew: newNarrative,
+                            componentNarrativeRawOld: newRawNarrative,
+                            componentNarrativeRawNew: newRawNarrative,
+                        }
                     }
+                );
+
+            } else {
+                // An existing component so just update the new narrative...
+
+                let changed = (newNarrative !== duComponent.componentNarrativeOld);
+
+                DesignUpdateComponents.update(
+                    {_id: featureId},
+                    {
+                        $set: {
+                            componentNarrativeNew: newNarrative,
+                            componentNarrativeRawNew: newRawNarrative,
+                            isChanged: changed
+                        }
+                    }
+                );
+
+                if (changed) {
+
+                    // Update the design version if necessary
+                    DesignUpdateComponentModules.updateCurrentDesignVersionComponentDetails(featureId);
                 }
-            );
-
-            if(changed){
-
-                // Update the design version if necessary
-                DesignUpdateComponentModules.updateCurrentDesignVersionComponentDetails(featureId);
             }
         }
     };
