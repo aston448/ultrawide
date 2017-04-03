@@ -137,9 +137,9 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_OTHER_DU};
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'ApplicationNew');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationOld', expectation);
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'ApplicationNew', 'Section1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'ApplicationNew', 'SectionNew');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionOld', expectation);
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'FeatureNew', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'FeatureNew', 'ActionsNew');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ActionsOld', expectation);
     });
 
