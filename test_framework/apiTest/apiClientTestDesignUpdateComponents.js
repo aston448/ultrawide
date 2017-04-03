@@ -39,7 +39,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const baseComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+        // Get the component based on the Old Name as that's what is in the Scope
+        const baseComponent = TestDataHelpers.getDesignComponentWithParentOld(userContext.designVersionId, componentType, componentParentName, componentName);
         const designUpdateComponent = null; // TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, baseComponent, userContext.designUpdateId, designUpdateComponent, true);
@@ -56,7 +57,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const baseComponent = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, componentType, componentParentName, componentName);
+        // Get the component based on the Old Name as that's what is in the Scope
+        const baseComponent = TestDataHelpers.getDesignComponentWithParentOld(userContext.designVersionId, componentType, componentParentName, componentName);
         const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
 
         const outcome = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, baseComponent, userContext.designUpdateId, designUpdateComponent, false);
