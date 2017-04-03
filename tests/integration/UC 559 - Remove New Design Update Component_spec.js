@@ -200,10 +200,11 @@ describe('UC 559 - Remove New Design Update Component', function(){
         DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('WorkPackage1');
 
-        // Check Application2 in WP1
+        // Check Application2 available in WP1
+        WorkPackageActions.managerEditsUpdateWorkPackage('WorkPackage1');
         expect(WpComponentVerifications.componentIsAvailableForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
 
-        // Add to WP1
+        // Add to WP1 scope
         WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application2');
         expect(WpComponentVerifications.componentIsInScopeForManagerCurrentWp(ComponentType.APPLICATION, 'NONE', 'Application2'));
 
