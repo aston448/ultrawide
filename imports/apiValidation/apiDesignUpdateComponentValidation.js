@@ -138,10 +138,11 @@ class DesignUpdateComponentValidationApi{
         const designComponent = DesignVersionComponents.findOne({_id: baseComponentId});
 
         let hasNoNewChildren = true;
+        let hasNoRemovedChildren = true;
 
         if(updateComponent && !newScope){
             // Component exists and de-scoping
-            hasNoNewChildren = DesignUpdateComponentModules.hasNoNewChildren(updateComponent._id, false);
+            hasNoNewChildren = DesignUpdateComponentModules.isNotParentOfNewChildren(updateComponent._id, false);
         }
 
         // A list of this component in other updates for the same design version.  Used to stop stuff being changed in two parallel updates at once

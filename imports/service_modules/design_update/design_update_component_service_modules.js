@@ -628,7 +628,6 @@ class DesignUpdateComponentModules{
 
     hasNoInScopeChildren(designUpdateComponentId, inScopeChild){
 
-        // Not counted as in scope if child is removed
 
         let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
 
@@ -643,7 +642,7 @@ class DesignUpdateComponentModules{
             log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
 
             children.forEach((child) => {
-                if((child.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) && !child.isRemoved){
+                if(child.scopeType === UpdateScopeType.SCOPE_IN_SCOPE){
                     log((msg) => console.log(msg), LogLevel.TRACE, "In scope child found");
                     inScopeChild = true;
                 } else {
@@ -687,6 +686,64 @@ class DesignUpdateComponentModules{
 
             // Return false if new child found
             return !newChild;
+        }
+    };
+
+    isNotParentOfNewChildren(designUpdateComponentId){
+
+        let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
+        let newChild = false;
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for new children for component {}", designUpdateComponentId);
+
+        if(children.count() === 0){
+            // No children so return true
+            log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
+            return true
+        } else {
+            // Are any new?
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+
+            children.forEach((child) => {
+                if(child.isNew){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "New child found");
+                    newChild = true;
+                }
+            });
+
+            // Return false if new child found
+            return !newChild;
+        }
+    }
+
+    hasNoRemovedChildren(designUpdateComponentId, removedChild){
+
+        let children = DesignUpdateComponents.find({componentParentIdNew: designUpdateComponentId});
+
+        log((msg) => console.log(msg), LogLevel.TRACE, "Looking for removed children for component {}", designUpdateComponentId);
+
+        if(children.count() === 0){
+            // No more children so return what the current findings are
+            log((msg) => console.log(msg), LogLevel.TRACE, "No children found");
+            return !removedChild;
+        } else {
+            // Are any removed?
+            log((msg) => console.log(msg), LogLevel.TRACE, "{} children found", children.count());
+
+            children.forEach((child) => {
+                if(child.isRemoved){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Removed child found");
+                    removedChild = true;
+                } else {
+
+                    // Search it for removed children
+                    log((msg) => console.log(msg), LogLevel.TRACE, "Looking for removed children for component {}", child._id);
+                    removedChild = !this.hasNoRemovedChildren(child._id, removedChild);
+                }
+            });
+
+            // Return false if removed child found
+            return !removedChild;
         }
     };
 

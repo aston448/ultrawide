@@ -437,10 +437,11 @@ class DesignUpdateComponentValidationServices{
             }
         }
 
-        // An item that has new children in the update cannot be de-scoped from it
+        // An item that is the direct parent of new children in the update cannot be de-scoped
         if(!newScope && !hasNoNewChildren){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UNSCOPABLE_NEW_CHILDREN;
         }
+
 
         return Validation.VALID;
     }

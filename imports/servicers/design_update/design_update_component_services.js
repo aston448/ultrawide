@@ -483,7 +483,7 @@ class DesignUpdateComponentServices{
 
                         } else {
 
-                            // Remove anything above it that is not in scope itself or has in-scope children
+                            // Remove anything above it that is not in scope itself or has in-scope children (due to additions or removals or changes)
                             // -- UNLESS there is another in scope item below
                             if(DesignUpdateComponentModules.hasNoInScopeChildren(currentUpdateComponent._id, false)) {
 
@@ -498,7 +498,7 @@ class DesignUpdateComponentServices{
 
                             } else {
 
-                                // Need to convert to parent scope
+                                // Need to convert to parent scope os effectively not removable from scope
                                 DesignUpdateComponentModules.updateToParentScope(currentUpdateComponent._id);
                             }
                         }
