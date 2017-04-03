@@ -122,7 +122,7 @@ class DesignVersionServices{
             // 3. Roll forward any updates that have been marked as Carry Forward
             // 4. Close down any Ignore Updates
             // 5. Carry forward a copy of the Domain Dictionary
-            // 5. Complete the old version
+            // 6. Complete the old version - remove stuff that is removed and set merged updates to Merged
 
             // Get the current design version details - the version being completed
             const currentDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});

@@ -128,7 +128,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         // Put Feature1 Actions in Scope for WP1
         WorkPackageActions.managerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.managerEditsSelectedBaseWorkPackage();
-        WpComponentActions.managerAddsFeatureAspectToScopeForCurrenWp('Feature1', 'Actions');
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentWp('Feature1', 'Actions');
 
         // Execute - designer adds Scenario5 to Feature1 Actions
         DesignActions.designerWorksOnDesign('Design1');

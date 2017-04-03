@@ -18,7 +18,9 @@ import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWo
 import ClientDomainDictionaryServices       from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices             from '../../../apiClient/apiClientTextEditor.js';
 
-import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
+import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
+    MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
+import {DefaultComponentNames} from '../../../constants/default_names.js';
 import {getComponentClass, log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js'
 
@@ -188,21 +190,27 @@ export class DesignComponentHeader extends Component{
                 break;
         }
 
-        // New untouched items are editable unless they are new default feature aspects in a Design Update...
+        // New untouched items are editable by default as they need to be changed
         switch (this.props.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DEVELOP_BASE_WP:
-                // A new component is automatically editable
-                if (this.props.currentItem.isNew) {
-                    this.editComponentName();
-                }
-                break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DEVELOP_UPDATE_WP:
                 // A new component not yet changed is automatically editable
-                if (this.props.currentItem.isNew && ! this.props.currentItem.isChanged) {
+                const item = this.props.currentItem;
+                if(item.componentType === ComponentType.APPLICATION && item.componentNameNew === DefaultComponentNames.NEW_APPLICATION_NAME){
                     this.editComponentName();
                 }
+                if(item.componentType === ComponentType.DESIGN_SECTION && item.componentNameNew === DefaultComponentNames.NEW_DESIGN_SECTION_NAME){
+                    this.editComponentName();
+                }
+                if(item.componentType === ComponentType.FEATURE && item.componentNameNew === DefaultComponentNames.NEW_FEATURE_NAME){
+                    this.editComponentName();
+                }
+                if(item.componentType === ComponentType.SCENARIO && item.componentNameNew === DefaultComponentNames.NEW_SCENARIO_NAME){
+                    this.editComponentName();
+                }
+
                 break;
         }
     }

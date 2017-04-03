@@ -204,15 +204,16 @@ describe('UC 146 - ReOrder Design Component List', function(){
         // Publish DV1
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-        // Add 2 work packages
+        // Add 2 work packages and put everything under App1 in scope for both
         DesignActions.managerWorksOnDesign('Design1');
         DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage1');
-        WorkPackageActions.managerAddsBaseDesignWorkPackage();
-        WorkPackageActions.managerSelectsWorkPackage(DefaultItemNames.NEW_WORK_PACKAGE_NAME);
-        WorkPackageActions.managerUpdatesSelectedWpNameTo('WorkPackage2');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
+        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
+
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage2');
+        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage2');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
 
         // Execute - Reorder Section1 Features
         DesignActions.designerWorksOnDesign('Design1');

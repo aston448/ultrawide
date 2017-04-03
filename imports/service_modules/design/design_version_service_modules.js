@@ -1091,6 +1091,21 @@ class DesignVersionModules{
         let newDvStatus = DesignVersionStatus.VERSION_DRAFT_COMPLETE;
 
         if(currentDv.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE){
+
+            // Complete the merged updates
+            DesignUpdates.update(
+                {
+                    designVersionId: previousDesignVersionId,
+                    updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
+                },
+                {
+                    $set:{
+                        updateStatus: DesignUpdateStatus.UPDATE_MERGED
+                    }
+                },
+                {multi: true}
+            );
+
             newDvStatus = DesignVersionStatus.VERSION_UPDATABLE_COMPLETE;
         }
 

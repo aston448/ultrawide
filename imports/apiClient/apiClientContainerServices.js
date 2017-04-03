@@ -32,9 +32,11 @@ import { UserTestTypeLocations }            from '../collections/configure/user_
 
 
 // Ultrawide Services
-import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignUpdateStatus,
+import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignVersionStatus, DesignUpdateStatus,
     StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
-    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType } from '../constants/constants.js';
+    TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType,
+    UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType } from '../constants/constants.js';
+
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
@@ -674,6 +676,8 @@ class ClientContainerServices{
 
         console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
+        const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
+
         // Just get the original base items, not any new stuff
         const baseApplications = DesignVersionComponents.find(
             {
@@ -684,14 +688,28 @@ class ClientContainerServices{
             {sort: {componentIndexNew: 1}}
         );
 
-        // All the existing and new stuff in the Designversion
-        const workingApplications = DesignVersionComponents.find(
-            {
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.APPLICATION
-            },
-            {sort: {componentIndexNew: 1}}
-        );
+        // All the existing and new stuff in the Design version - but for completed updatable versions leave out deleted
+        let workingApplications  = null;
+
+        if(designVersion.designVersionStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
+            workingApplications = DesignVersionComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentType: ComponentType.APPLICATION,
+                    updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                },
+                {sort: {componentIndexNew: 1}}
+            );
+
+        } else {
+            workingApplications = DesignVersionComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentType: ComponentType.APPLICATION
+                },
+                {sort: {componentIndexNew: 1}}
+            );
+        }
 
         let baseApplicationsArr = baseApplications.fetch();
         let workingApplicationsArr = workingApplications.fetch();
@@ -832,11 +850,13 @@ class ClientContainerServices{
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
 
+                // Don't include removed components in this view if a completed updatable version
                 currentComponents = DesignVersionComponents.find(
                     {
-                        designVersionId: designVersionId,
-                        componentType: componentType,
-                        componentParentIdNew: parentId
+                        designVersionId:        designVersionId,
+                        componentType:          componentType,
+                        componentParentIdNew:   parentId,
+                        updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
                     },
                     {sort:{componentIndexNew: 1}}
                 ).fetch();
@@ -851,9 +871,9 @@ class ClientContainerServices{
                 // Do include removed components in the current updates view
                 currentComponents = DesignVersionComponents.find(
                     {
-                        designVersionId: designVersionId,
-                        componentType: componentType,
-                        componentParentIdNew: parentId
+                        designVersionId:        designVersionId,
+                        componentType:          componentType,
+                        componentParentIdNew:   parentId
                     },
                     {sort:{componentIndexNew: 1}}
                 ).fetch();

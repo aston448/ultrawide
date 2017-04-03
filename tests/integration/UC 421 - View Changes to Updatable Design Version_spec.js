@@ -57,12 +57,11 @@ describe('UC 421 - View Changes to Updatable Design Version', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
-        // Publish Update - sets to Merge
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Execute
-        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Verify
         DesignVersionActions.designerViewsDesignVersion('DesignVersion2');
@@ -77,11 +76,9 @@ describe('UC 421 - View Changes to Updatable Design Version', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario111');
-        // Publish Update - sets to Merge
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Execute
-        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Verify
         DesignVersionActions.designerViewsDesignVersion('DesignVersion2');
@@ -97,11 +94,9 @@ describe('UC 421 - View Changes to Updatable Design Version', function(){
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
-        // Publish Update - sets to Merge
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Execute
-        DesignVersionActions.designerUpdatesDesignVersionWithUpdates('DesignVersion2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
         // Verify
         DesignVersionActions.designerViewsDesignVersion('DesignVersion2');

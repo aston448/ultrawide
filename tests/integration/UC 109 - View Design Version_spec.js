@@ -11,7 +11,7 @@ import DesignVersionVerifications   from '../../test_framework/test_wrappers/des
 import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
 import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, UpdateMergeStatus, ComponentType, DesignUpdateMergeAction} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 
 describe('UC 109 - View Design Version', function(){
@@ -229,12 +229,14 @@ describe('UC 109 - View Design Version', function(){
         DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
         DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion3');
 
-        // Verify - Design Version 2 no longer has Feature1 or its children
+        // Verify - Design Version 2 has Feature1 and Children removed (not visible)
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignVersionActions.designerViewsDesignVersion('DesignVersion2');
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
-        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion2'));
-        // Nor do they exist in the latest design version
+        DesignComponentActions.designerSelectsFeature('Application1', 'Feature1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        // Nor do they exist at all in the latest design version
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion3');
         DesignVersionActions.designerViewsDesignVersion('DesignVersion3');
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion3'));
