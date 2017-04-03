@@ -118,6 +118,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         let expectation = {};
 
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
         UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
 

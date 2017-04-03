@@ -205,7 +205,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParentOld(
             userContext.designVersionId,
             userContext.designUpdateId,
             componentType,
@@ -224,7 +224,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParentOld(
             userContext.designVersionId,
             userContext.designUpdateId,
             componentType,
@@ -243,7 +243,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParentOld(
             userContext.designVersionId,
             userContext.designUpdateId,
             componentType,
@@ -262,7 +262,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+        const designVersionComponent = TestDataHelpers.getDesignComponentWithParentOld(
             userContext.designVersionId,
             componentType,
             componentParentName,
