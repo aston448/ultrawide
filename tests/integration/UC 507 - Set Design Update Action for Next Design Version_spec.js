@@ -43,9 +43,8 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1'); // Published
-        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
-        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2'); // Still New
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
     });
 
     afterEach(function(){
@@ -58,7 +57,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
 
         // Setup - Draft DU is merge by default so change it back first
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
-        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE));
 
         // Execute
@@ -72,6 +70,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
 
         // Setup
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
         // Execute
@@ -85,6 +84,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
 
         // Setup
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
 
         // Execute
@@ -149,7 +149,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
 
         // Setup
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
-        // Make an addition, modification move and removal - on unpublished Update
+        // Make an addition, modification and removal - on unpublished Update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Addition
         UpdateComponentActions.designerAddsApplicationCalled('Application2');
@@ -157,10 +157,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
-        // Move
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature444', 'Actions');
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions');
-        UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface');
         // Remove
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application99', 'Section99');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application99', 'Section99');
@@ -171,9 +167,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is still Feature1
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface is still above Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Interface');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions'));
         // Section99 not removed yet
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99', 'Design1', 'DesignVersion2'));
@@ -187,9 +180,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is now FeatureNew
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface now below Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
         // Section99 is removed
         DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
@@ -202,7 +192,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
-        // Make an addition, modification move and removal - on unpublished Update
+        // Make an addition, modification and removal - on unpublished Update
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         // Addition
         UpdateComponentActions.designerAddsApplicationCalled('Application2');
@@ -210,10 +200,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
-        // Move
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature444', 'Actions');
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions');
-        UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface');
         // Remove
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application99', 'Section99');
         UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application99', 'Section99');
@@ -223,9 +209,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is now FeatureNew
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface now below Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
         // Section99 is removed
         DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
@@ -241,9 +224,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is still Feature1
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface is still above Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Interface');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions'));
         // Section99 not removed yet
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99', 'Design1', 'DesignVersion2'));
@@ -256,9 +236,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is now FeatureNew
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface now below Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
         // Section99 is removed
         DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
@@ -274,14 +251,11 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is still Feature1
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface is still above Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Interface');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions'));
         // Section99 not removed yet
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99', 'Design1', 'DesignVersion2'));
 
-        // Just check that can get canges back again from here
+        // Just check that can get changes back again from here
         DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
 
         // Check all changes are there
@@ -289,9 +263,6 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Feature1 is now FeatureNew
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
-        // Feature444 Interface now below Actions
-        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
-        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
         // Section99 is removed
         DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
