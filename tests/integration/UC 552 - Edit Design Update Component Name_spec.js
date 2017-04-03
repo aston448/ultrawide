@@ -79,7 +79,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
 
         // Execute - try to edit the parent items for Scenario1 - expect failures for all
         const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_SCOPE};
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE, Application1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationNew', expectation);
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionNew', expectation);
@@ -99,7 +99,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         // Edit names
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE, Application1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationNew');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'ApplicationNew', 'Section1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionNew');
@@ -134,7 +134,7 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         // The rest, the organisational components are scopable so that other stuff can be added to them.
         // But updating their names should not be allowed
         expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_NOT_UPDATABLE_OTHER_DU};
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE, Application1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.APPLICATION, 'NONE', 'Application1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('ApplicationOld', expectation);
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.DESIGN_SECTION, 'ApplicationNew', 'Section1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('SectionOld', expectation);

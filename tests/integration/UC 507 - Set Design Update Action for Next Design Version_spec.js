@@ -58,6 +58,7 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         // Setup - Draft DU is merge by default so change it back first
         DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_IGNORE);
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_IGNORE));
 
         // Execute
