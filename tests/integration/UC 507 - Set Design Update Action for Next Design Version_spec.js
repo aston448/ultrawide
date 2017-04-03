@@ -16,7 +16,7 @@ import WorkPackageVerifications     from '../../test_framework/test_wrappers/wor
 import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 
-import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
+import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, UpdateMergeStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {DesignUpdateValidationErrors} from '../../imports/constants/validation_errors.js';
 
@@ -146,4 +146,158 @@ describe('UC 507 - Set Design Update Action for Next Design Version', function()
         expect(DesignUpdateVerifications.updateMergeActionForUpdate_ForManagerIs('DesignUpdate1', DesignUpdateMergeAction.MERGE_INCLUDE));
     });
 
+    // Consequences
+    it('When a Design Update is set to Merge all changes in the update are merged into the current Design Version', function(){
+
+        // Setup
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        // Make an addition, modification move and removal - on unpublished Update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // Addition
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+        // Modification
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
+        // Move
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature444', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent('Feature444', 'Actions');
+        UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface');
+        // Remove
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application99', 'Section99');
+        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application99', 'Section99');
+
+        // Check
+        // No Application2
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is still Feature1
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface is still above Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Interface');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions'));
+        // Section99 not removed yet
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99', 'Design1', 'DesignVersion2'));
+
+        // Execute - publish to merge with DV
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Verify all changes now present in the DV...
+        // Has Application2
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is now FeatureNew
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface now below Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
+        // Section99 is removed
+        DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsFeature('Section99', 'Feature99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+    });
+
+    it('When a Design Update set to Merge is set to Ignore or Carry Forward all changes in the update are removed from the current Design Version', function(){
+        // Setup - publish update s changes are erged as made
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Make an addition, modification move and removal - on unpublished Update
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        // Addition
+        UpdateComponentActions.designerAddsApplicationCalled('Application2');
+        // Modification
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('FeatureNew');
+        // Move
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature444', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent('Feature444', 'Actions');
+        UpdateComponentActions.designerReordersSelectedUpdateComponentToAbove(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface');
+        // Remove
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application99', 'Section99');
+        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application99', 'Section99');
+
+        // Check all changes are there
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is now FeatureNew
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface now below Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
+        // Section99 is removed
+        DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsFeature('Section99', 'Feature99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+
+        // Execute - withdraw the update (sets to Ignore)
+        DesignUpdateActions.designerWithdrawsUpdate('DesignUpdate1');
+
+        // Verify changes removed
+        // No Application2
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is still Feature1
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface is still above Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Interface');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions'));
+        // Section99 not removed yet
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99', 'Design1', 'DesignVersion2'));
+
+        // Publish it again
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Check all changes are there
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is now FeatureNew
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface now below Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
+        // Section99 is removed
+        DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsFeature('Section99', 'Feature99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+
+        // Execute - set to roll forward
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_ROLL);
+
+        // Verify changes removed
+        // No Application2
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is still Feature1
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface is still above Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Interface');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Actions'));
+        // Section99 not removed yet
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.DESIGN_SECTION, 'Section99', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'Feature99', 'Design1', 'DesignVersion2'));
+
+        // Just check that can get canges back again from here
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_INCLUDE);
+
+        // Check all changes are there
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
+        // Feature1 is now FeatureNew
+        expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion2'));
+        expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.FEATURE, 'FeatureNew', 'Design1', 'DesignVersion2'));
+        // Feature444 Interface now below Actions
+        DesignComponentActions.designerSelectsFeatureAspect('Feature444', 'Actions');
+        expect(DesignComponentVerifications.designerSelectedComponentIsAboveComponent_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature444', 'Interface'));
+        // Section99 is removed
+        DesignComponentActions.designerSelectsDesignSection('Application99', 'Section99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+        DesignComponentActions.designerSelectsFeature('Section99', 'Feature99');
+        expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_REMOVED));
+    });
 });

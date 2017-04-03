@@ -292,6 +292,46 @@ class TestDataHelpers {
 
     };
 
+    getDesignComponentOldWithParent(designVersionId, componentType, componentParentName, componentName){
+
+        let designComponent = null;
+        let parentComponent = null;
+        let designUpdateName = 'NONE';
+        const designVersion = DesignVersions.findOne({_id: designVersionId});
+
+
+        const designComponents = DesignVersionComponents.find({
+            designVersionId: designVersionId,
+            componentType: componentType,
+            componentNameOld:  componentName
+        }).fetch();
+
+        // Get the component that has the expected parent- except for Applications that have no parent
+        if(componentType !== ComponentType.APPLICATION) {
+            designComponents.forEach((component) => {
+
+                parentComponent = DesignVersionComponents.findOne({
+                    _id: component.componentParentIdOld
+                });
+
+                if (parentComponent.componentNameOld === componentParentName) {
+                    designComponent = component;
+                }
+
+            });
+        } else {
+            // Application names are unique so assume can be only one
+            designComponent = designComponents[0];
+        }
+
+        if(!designComponent){
+            throw new Meteor.Error("FAIL", "Design Component " + componentName + " not found for Design Version " + designVersion.designVersionName + " with parent " + componentParentName);
+        }
+
+        return designComponent;
+
+    };
+
     getDesignUpdateComponentWithParent(designVersionId, designUpdateId, componentType, componentParentName, componentName){
 
         let designUpdateComponent = null;

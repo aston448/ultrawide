@@ -147,7 +147,8 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const designVersionComponent = TestDataHelpers.getDesignComponentWithParent(
+        // Get the old version of the component as that is what we will see
+        const designVersionComponent = TestDataHelpers.getDesignComponentOldWithParent(
             userContext.designVersionId,
             componentType,
             componentParentName,
