@@ -122,7 +122,8 @@ Meteor.methods({
                 designComponentId:      wpComponent.componentId
             });
 
-            if(mashComponent){
+            // Feature aspect is shown if it has children
+            if(mashComponent && mashComponent.hasChildren){
                 return true;
             } else {
                 throw new Meteor.Error("FAIL", "Feature Aspect " + aspectName + " not found in Test Mash for Feature " + featureName + " in user context DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
@@ -147,7 +148,8 @@ Meteor.methods({
                 designComponentId:      wpComponent.componentId
             });
 
-            if(mashComponent){
+            // Feature aspect is shown if it has children
+            if(mashComponent && mashComponent.hasChildren){
                 throw new Meteor.Error("FAIL", "Feature Aspect " + aspectName + " IS FOUND in Test Mash for Feature " + featureName + " in user context DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
             } else {
                 return true;

@@ -97,13 +97,15 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                         break;
                     case DisplayContext.UPDATE_EDIT:
                     case DisplayContext.UPDATE_VIEW:
-                        // For design updates, out of scope things in the update are greyed out
-                        if(updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
-                            modifier = ' greyed-out';
-                        }
-                        // And removed stuff is struck through
-                        if(updateItem.isRemoved || updateItem.isRemovedElsewhere){
-                            deleted = ' removed-item';
+                        if(updateItem) {
+                            // For design updates, out of scope things in the update are greyed out
+                            if (updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) {
+                                modifier = ' greyed-out';
+                            }
+                            // And removed stuff is struck through
+                            if (updateItem.isRemoved || updateItem.isRemovedElsewhere) {
+                                deleted = ' removed-item';
+                            }
                         }
                         break;
                 }

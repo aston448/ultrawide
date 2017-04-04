@@ -205,7 +205,7 @@ export class UpdateApplicationsList extends Component {
 
         // View Working Design Version
         let workingVersionComponent =
-            <div id="editorPaneView" className="design-editor-container">
+            <div id="editorPaneWorking" className="design-editor-container">
                 <DesignEditorHeader
                     displayContext={DisplayContext.WORKING_VIEW}
                 />

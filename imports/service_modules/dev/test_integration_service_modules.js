@@ -774,7 +774,7 @@ class TestIntegrationModules{
                     }
 
                     // And add the Scenario Step results too
-                    if(testResult.stepName != 'NONE') {
+                    if(testResult.stepName !== 'NONE') {
 
                         let designScenario = UserWorkPackageMashData.findOne({
                             userId: userContext.userId,

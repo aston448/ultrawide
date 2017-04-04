@@ -5,17 +5,16 @@ import { chai } from 'meteor/practicalmeteor:chai';
 
 import { DesignComponentHeader } from './DesignComponentHeader.jsx';  // Non Redux wrapped
 
-import { DesignVersionStatus, RoleType, ViewType, ViewMode, DisplayContext, ComponentType} from '../../../constants/constants.js'
+import { ViewType, ViewMode, DisplayContext, ComponentType, WorkPackageScopeType} from '../../../constants/constants.js'
 
-import { DesignVersions } from '../../../collections/design/design_versions.js'
 
 describe('JSX: DesignComponentHeader', () => {
 
     // Work Package Components -----------------------------------------------------------------------------------------
 
-    function workPackageComponentHeaderTest(currentItem, mode, view, displayContext){
+    function workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext){
 
-        const designItem = {};
+
         const updateItem = {};
         const isDragDropHovering = false;
         const onToggleOpen = () => {};
@@ -30,8 +29,8 @@ describe('JSX: DesignComponentHeader', () => {
         return shallow(
             <DesignComponentHeader
                 currentItem={currentItem}
-                designItem={designItem}
                 updateItem={updateItem}
+                wpItem={wpItem}
                 isDragDropHovering={isDragDropHovering}
                 onToggleOpen={onToggleOpen}
                 onSelectItem={onSelectItem}
@@ -52,11 +51,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('an application scope item has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_SCOPE;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -66,11 +66,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a design section scope item has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_SCOPE;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -80,11 +81,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature scope item has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_SCOPE;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -94,12 +96,13 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature aspect scope item has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_SCOPE;
 
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -112,11 +115,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a scenario scope item has no open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_SCOPE;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
 
@@ -129,11 +133,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('an application has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -143,11 +148,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('an application has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -157,11 +163,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a design section has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -171,11 +178,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a design section has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -185,12 +193,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_VIEW;
 
-
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -200,11 +208,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -214,11 +223,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature aspect has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -229,11 +239,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature aspect has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -247,11 +258,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a scenario has no open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.WORK_PACKAGE_BASE_EDIT;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
 
@@ -260,11 +272,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a scenario has no open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
+            const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.WORK_PACKAGE_BASE_VIEW;
             const displayContext = DisplayContext.WP_VIEW;
 
-            let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+            let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
             chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
 
@@ -274,11 +287,12 @@ describe('JSX: DesignComponentHeader', () => {
     function scopeCheckboxTest(componentType, viewType) {
 
         const currentItem = {componentType: componentType};
+        const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
         const mode = ViewMode.MODE_EDIT;
         const view = viewType;
         const displayContext = DisplayContext.WP_SCOPE;
 
-        let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+        let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
         chai.assert.equal(item.find('#scopeCheckBox').length, 1, 'Scope check box not present!');
     }
@@ -392,11 +406,12 @@ describe('JSX: DesignComponentHeader', () => {
     function scopeCheckboxNotPresentTest(componentType, viewType) {
 
         const currentItem = {componentType: componentType};
+        const wpItem = {scopeType: WorkPackageScopeType.SCOPE_ACTIVE};
         const mode = ViewMode.MODE_VIEW;
         const view = viewType;
         const displayContext = DisplayContext.WP_VIEW;
 
-        let item = workPackageComponentHeaderTest(currentItem, mode, view, displayContext);
+        let item = workPackageComponentHeaderTest(currentItem, wpItem, mode, view, displayContext);
 
         chai.assert.equal(item.find('#scopeCheckBox').length, 0, 'Scope check box present!');
     }

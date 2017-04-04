@@ -227,6 +227,13 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
 
     before(function(){
         TestFixtures.logTestSuite('UC 383 - Remove New Work Package Component - Design Update');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
 
@@ -237,17 +244,6 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Clear WPs and Design Updates and start again...
-        TestFixtures.clearDesignUpdates();
-        TestFixtures.clearWorkPackages();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');

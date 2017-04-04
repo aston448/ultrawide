@@ -635,7 +635,9 @@ export class DesignComponentHeader extends Component{
 
                 case DisplayContext.UPDATE_EDIT:
 
-                    isDeleted = currentItem.isRemoved;
+                    if(updateItem) {
+                        isDeleted = updateItem.isRemoved;
+                    }
 
                     // For logically deleted items in the same update, show the undo icon...
                     if(isDeleted){
@@ -665,8 +667,10 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.UPDATE_EDIT:
-                inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
-                inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
+                if(updateItem) {
+                    inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+                    inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
+                }
                 break;
 
             case DisplayContext.WP_SCOPE:
@@ -691,8 +695,10 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.WP_VIEW:
-                inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
-                inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
+                if(wpItem) {
+                    inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
+                    inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
+                }
                 break;
         }
 
@@ -957,7 +963,7 @@ export class DesignComponentHeader extends Component{
             </div>;
 
         let viewOnlyVersionProgressHeader =
-            <div id="editorHeaderItem">
+            <div id="workingHeaderItem">
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
@@ -1014,31 +1020,42 @@ export class DesignComponentHeader extends Component{
                 break;
             case DisplayContext.UPDATE_EDIT:
                 // Component displayed as part of Editor
-                switch (mode){
-                    case  ViewMode.MODE_VIEW:
-                        // View only
-                        designComponentElement = viewOnlyHeader;
-                        break;
-
-                    case ViewMode.MODE_EDIT:
-                        // Only editable if in scope for an update.  For new design all is in scope.
-                        if(inScope) {
-                            // Editable component
-                            if (this.state.editable) {
-                                // Being edited now...
-                                designComponentElement = editingHeader;
-
-                            } else {
-                                // Not being edited now
-                                designComponentElement = draggableHeader;
-                            }
-                        } else {
-                            // Item is out of scope so cannot be edited or dragged
+                if(updateItem) {
+                    switch (mode) {
+                        case  ViewMode.MODE_VIEW:
+                            // View only
                             designComponentElement = viewOnlyHeader;
-                        }
-                        break;
+                            break;
+
+                        case ViewMode.MODE_EDIT:
+                            // Only editable if in scope for an update.  For new design all is in scope.
+                            if (inScope) {
+                                // Editable component
+                                if (this.state.editable) {
+                                    // Being edited now...
+                                    designComponentElement = editingHeader;
+
+                                } else {
+                                    // Not being edited now.  Only new items can be moved.
+                                    if(updateItem.isNew) {
+                                        designComponentElement = draggableHeader;
+                                    } else {
+                                        designComponentElement = nonDraggableHeader;
+                                    }
+                                }
+                            } else {
+                                // Item is out of scope so cannot be edited or dragged
+                                designComponentElement = viewOnlyHeader;
+                            }
+                            break;
+                    }
+
+                } else {
+                    // Nothing in editor if no design update item
+                    designComponentElement = <div></div>;
                 }
                 break;
+
             case DisplayContext.BASE_EDIT:
                 // Component displayed as part of Editor
                 switch (mode){

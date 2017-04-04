@@ -14,12 +14,16 @@ describe('JSX: EditDesignContainer', () => {
     function testEditDesignContainer(mode, view, viewOptions){
 
         const baseApplications = [];
+        const workingApplications = [];
+        const designSummaryData = null;
         const userContext = {};
         const currentViewDataValue = false;
 
         return shallow(
             <DesignApplicationsList
                 baseApplications={baseApplications}
+                workingApplications={workingApplications}
+                designSummaryData={designSummaryData}
                 userContext={userContext}
                 mode={mode}
                 view={view}

@@ -42,8 +42,7 @@ class DesignComponentServices{
             }
 
             // If adding from a Work Package set as dev added
-
-            let devAdded = (workPackageId !== 'NONE');
+            let devAdded = (view === ViewType.DEVELOP_BASE_WP || view === ViewType.DEVELOP_UPDATE_WP);
 
             // Get the design id - this is added to the components for easier access to data
             let designId = DesignVersions.findOne({_id: designVersionId}).designId;

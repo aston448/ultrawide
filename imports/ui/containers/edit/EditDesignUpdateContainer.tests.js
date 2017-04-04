@@ -13,17 +13,22 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
     function testEditDesignUpdateContainer(mode, view, viewOptions){
 
+        const baseApplications = [];
         const updateApplications = [];
+        const workingApplications = [];
         const userContext = {};
         const currentViewDataValue = false;
 
         return shallow(
             <UpdateApplicationsList
+                baseApplications={baseApplications}
                 updateApplications={updateApplications}
+                workingApplications={workingApplications}
                 userContext={userContext}
                 mode={mode}
                 view={view}
                 viewOptions={viewOptions}
+                testDataFlag={false}
             />
         );
     }
@@ -48,6 +53,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -68,10 +74,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | DETAILS EDIT | UPDATE SUMMARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DETAILS EDIT | UPDATE SUMMARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 1, 'Details Edit pane is not visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -96,6 +103,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -123,6 +131,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -143,10 +152,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | DETAILS EDIT | UPDATE SUMMARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DETAILS EDIT | UPDATE SUMMARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -171,6 +181,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -198,6 +209,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
@@ -218,10 +230,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | DOMAIN DICTIONARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DOMAIN DICTIONARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
@@ -245,7 +258,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
             // Expecting UPDATE VIEW | DOMAIN DICTIONARY
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
-            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
@@ -273,6 +287,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -293,10 +308,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | UPDATE SUMMARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | UPDATE SUMMARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -321,6 +337,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -348,6 +365,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -368,10 +386,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | DETAILS EDIT | UPDATE SUMMARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DETAILS EDIT | UPDATE SUMMARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 1, 'Details Edit pane is not visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
@@ -399,6 +418,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
             chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
@@ -419,10 +439,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | DETAILS EDIT | DICTIONARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DETAILS EDIT | DICTIONARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 1, 'Details Edit pane is not visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
@@ -492,11 +513,13 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope not found');
             chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Working not found');
             chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
 
-            chai.assert.equal(item.find('#scopeCol').props().md, 4, 'Expecting width 4 for Design');
-            chai.assert.equal(item.find('#designCol').props().md, 4, 'Expecting width 4 for Design');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 4, 'Expecting width 4 for Summary');
+            chai.assert.equal(item.find('#scopeCol').props().md, 3, 'Expecting width 3 for Scope');
+            chai.assert.equal(item.find('#designCol').props().md, 3, 'Expecting width 3 for Design');
+            chai.assert.equal(item.find('#workingCol').props().md, 3, 'Expecting width 3 for Working');
+            chai.assert.equal(item.find('#dictSummCol').props().md, 3, 'Expecting width 3 for Summary');
         });
 
         it('in edit with details scope, design and details take up a quarter of the screen each', () => {
@@ -515,12 +538,14 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope not found');
             chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Working not found');
             chai.assert.equal(item.find('#detailsCol').length, 1, 'Details not found');
             chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
 
-            chai.assert.equal(item.find('#scopeCol').props().md, 3, 'Expecting width 3 for Design');
+            chai.assert.equal(item.find('#scopeCol').props().md, 2, 'Expecting width 2 for Design');
             chai.assert.equal(item.find('#designCol').props().md, 3, 'Expecting width 3 for Design');
-            chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 3 for Details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Working');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Details');
             chai.assert.equal(item.find('#dictSummCol').props().md, 3, 'Expecting width 3 for Summary');
         });
 

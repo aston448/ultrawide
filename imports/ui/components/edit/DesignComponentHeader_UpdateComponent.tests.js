@@ -11,10 +11,9 @@ describe('JSX: DesignComponentHeader', () => {
 
     // Design Components -----------------------------------------------------------------------------------------------
 
-    function designComponentHeaderTest(currentItem, mode, view, displayContext){
-
-        const designItem = {};
-        const updateItem = {};
+    function designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext){
+        
+        const wpItem = {};
         const isDragDropHovering = false;
         const onToggleOpen = () => {};
         const onSelectItem = () => {};
@@ -27,8 +26,8 @@ describe('JSX: DesignComponentHeader', () => {
         return shallow(
             <DesignComponentHeader
                 currentItem={currentItem}
-                designItem={designItem}
                 updateItem={updateItem}
+                wpItem={wpItem}
                 isDragDropHovering={isDragDropHovering}
                 onToggleOpen={onToggleOpen}
                 onSelectItem={onSelectItem}
@@ -53,11 +52,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('an application has open-close option in scope pane', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -67,11 +67,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a design section has open-close option in scope pane', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -81,11 +82,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature has open-close option in scope pane', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -95,11 +97,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature aspect has open-close option in scope pane', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -112,11 +115,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a scenario has no open-close option in scope pane', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
 
@@ -128,12 +132,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Ensure box cleared
             item.setState({inScope: false});
@@ -148,12 +153,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature aspect has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Ensure box cleared
             item.setState({inScope: false});
@@ -168,12 +174,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped scenario has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isScopable: true};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Ensure box cleared
             item.setState({inScope: false});
@@ -189,12 +196,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Simulate checking the box
             item.setState({inScope: true});
@@ -209,12 +217,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped feature aspect has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isScopable: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Simulate checking the box
             item.setState({inScope: true});
@@ -229,12 +238,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('non scoped scenario has an unchecked toggle', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isScopable: true};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_SCOPE;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Simulate checking the box
             item.setState({inScope: true});
@@ -252,11 +262,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('an application has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -266,11 +277,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('an application has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -280,11 +292,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a design section has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -294,11 +307,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a design section has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -308,11 +322,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -322,11 +337,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -336,11 +352,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature aspect has open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -350,11 +367,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a feature aspect has open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#openClose').length === 1, 'Open-close option not found');
             chai.assert.notEqual(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was invisible!');
@@ -368,11 +386,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a scenario has no open-close option in edit mode', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
 
@@ -381,11 +400,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('a scenario has no open-close option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert.equal(item.find('#openCloseIcon').props().className, 'invisible', 'Open-close option was visible!');
 
@@ -397,11 +417,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('application has edit option', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has edit option
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
@@ -410,11 +431,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('design section has edit option', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has edit option
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
@@ -422,12 +444,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has edit option when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has edit option
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
@@ -438,12 +461,13 @@ describe('JSX: DesignComponentHeader', () => {
 
          it('feature has edit option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+             const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has edit option
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
@@ -451,12 +475,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has edit option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            const item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has edit option
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
@@ -468,11 +493,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('application has a save option when being edited', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -484,11 +510,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('design section has a save option when being edited', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -499,12 +526,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has a save option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -515,12 +543,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has a save option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -531,12 +560,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has a save option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -551,11 +581,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('application has undo option when being edited', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -567,11 +598,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('design section has undo option when being edited', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -582,12 +614,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has undo option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -598,12 +631,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has undo option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -614,12 +648,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has undo option when being edited', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Edit
             item.setState({editable: true});
@@ -634,11 +669,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('application has no edit option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -647,11 +683,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('application has no edit option when viewing', () => {
 
             const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -660,11 +697,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('design section has no edit option in view mode', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -673,11 +711,12 @@ describe('JSX: DesignComponentHeader', () => {
         it('design section has no edit option when viewing', () => {
 
             const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -685,12 +724,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no edit option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -698,12 +738,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature has no edit option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -711,12 +752,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no edit option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -724,12 +766,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('feature aspect has no edit option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -737,12 +780,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no edit option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -750,12 +794,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('scenario has no edit option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Has no edit option
             chai.assert(item.find('#actionEdit').length === 0, 'Has edit option');
@@ -768,12 +813,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('application has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Remove option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'remove', 'Remove icon not correct');
@@ -781,12 +827,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('design section has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Remove option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'remove', 'Remove icon not correct');
@@ -794,12 +841,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Remove option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'remove', 'Remove icon not correct');
@@ -807,12 +855,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Remove option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'remove', 'Remove icon not correct');
@@ -820,12 +869,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has a remove option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Remove option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'remove', 'Remove icon not correct');
@@ -836,12 +886,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed application is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -849,12 +900,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed application is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -862,12 +914,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed design section is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -875,12 +928,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed design section is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -888,12 +942,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -901,12 +956,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -914,12 +970,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature aspect is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -927,12 +984,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed feature aspect is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -940,12 +998,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed scenario is struck through', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -953,12 +1012,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('removed scenario is struck through when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isRemoved: true};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             // Is struck through
             chai.assert(item.find('#editorReadOnly').props().className.endsWith('removed-item'), 'Item not struck through');
@@ -969,120 +1029,130 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('application has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('application has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('design section has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('design section has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('feature has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('feature has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('feature aspect has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('feature aspect has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('scenario has no remove option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
 
         it('scenario has no remove option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has remove option');
         });
@@ -1094,12 +1164,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('application has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Restore option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'arrow-left', 'Restore icon not correct');
@@ -1107,12 +1178,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('design section has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Restore option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'arrow-left', 'Restore icon not correct');
@@ -1120,12 +1192,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Restore option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'arrow-left', 'Restore icon not correct');
@@ -1133,12 +1206,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope feature aspect has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Restore option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'arrow-left', 'Restore icon not correct');
@@ -1146,12 +1220,13 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('in scope scenario has a restore option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 1, 'Restore option not found!');
             chai.assert.equal(item.find('#deleteIcon').props().glyph, 'arrow-left', 'Restore icon not correct');
@@ -1163,120 +1238,130 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('application has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('application has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('design section has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('design section has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isRemoved: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('feature has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('feature has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('feature aspect has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('feature aspect has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('scenario has no restore option in view mode', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
 
         it('scenario has no restore option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isRemoved: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false, isRemoved: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionDelete').length === 0, 'Has restore option');
         });
@@ -1286,60 +1371,65 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new application has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
         });
 
         it('new design section has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
         });
 
         it('new feature has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
         });
 
         it('new feature aspect has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
         });
 
         it('new scenario has a move option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 1, 'Move option not found!');
         });
@@ -1349,60 +1439,65 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('existing application has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('existing design section has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('existing feature has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('existing feature aspect has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('existing scenario has no move option', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
@@ -1412,120 +1507,130 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('new application has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new application has no move option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: true};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new design section has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new design section has no move option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: true};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new feature has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new feature has no move option for when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new feature aspect has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new feature aspect has no move option when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new scenario has no move option for view only', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
 
         it('new scenario has no move option for when viewing', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: true, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: true};
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
             const displayContext = DisplayContext.UPDATE_VIEW;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionMove').length === 0, 'Move option found!');
         });
@@ -1535,24 +1640,39 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is not editable when not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
+        });
+
+        it('is not editable when in parent scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isNew: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
         });
 
         it('is editable when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
         });
@@ -1562,24 +1682,39 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is not editable when not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
+
+            chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
+        });
+
+        it('is not editable when in parent scope', () => {
+
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE, isNew: false};
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+            const displayContext = DisplayContext.UPDATE_EDIT;
+
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
         });
 
         it('is editable when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
         });
@@ -1589,24 +1724,26 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('is not editable when not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 0, 'Edit option found!');
         });
 
         it('is editable when in scope', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_IN_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = {scopeType: UpdateScopeType.SCOPE_IN_SCOPE, isNew: false};
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#actionEdit').length === 1, 'Edit option not found!');
         });
@@ -1614,62 +1751,67 @@ describe('JSX: DesignComponentHeader', () => {
 
     describe('When a Design Component is removed from Design Update Scope it disappears from the Design Update editor', () => {
 
-        it('application is always in scope', () => {
+        it('application is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, isNew: false, isScopable: false, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.APPLICATION};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
-            chai.assert(item.find('#editorHeaderItem').length === 1, 'Application not found');
+            chai.assert(item.find('#editorHeaderItem').length === 0, 'Application was found');
         });
 
-        it('design section is always in scope', () => {
+        it('design section is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.DESIGN_SECTION, isNew: false, isScopable: false, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.DESIGN_SECTION};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
-            chai.assert(item.find('#editorHeaderItem').length === 1, 'Section not found');
+            chai.assert(item.find('#editorHeaderItem').length === 0, 'Section was found');
         });
 
         it('feature is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#editorHeaderItem').length === 0, 'Feature was found');
         });
 
         it('feature aspect is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.FEATURE_ASPECT, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.FEATURE_ASPECT};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#editorHeaderItem').length === 0, 'Feature aspect was found');
         });
 
         it('scenario is not present if not in scope', () => {
 
-            const currentItem = {componentType: ComponentType.SCENARIO, isNew: false, isScopable: true, scopeType: UpdateScopeType.SCOPE_PARENT_SCOPE};
+            const currentItem = {componentType: ComponentType.SCENARIO};
+            const updateItem = null;
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
             const displayContext = DisplayContext.UPDATE_EDIT;
 
-            let item = designComponentHeaderTest(currentItem, mode, view, displayContext);
+            const item = designComponentHeaderTest(currentItem, updateItem, mode, view, displayContext);
 
             chai.assert(item.find('#editorHeaderItem').length === 0, 'Scenario was found');
         });
