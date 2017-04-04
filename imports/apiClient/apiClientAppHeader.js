@@ -50,8 +50,6 @@ class ClientAppHeaderServices{
         // Toggles a particular view option
         let newOptions = currentOptions;
 
-        console.log('toggling option ' + optionType);
-
         newOptions[optionType] = !currentOptions[optionType];
 
         store.dispatch(setCurrentUserViewOptions(newOptions, true));
