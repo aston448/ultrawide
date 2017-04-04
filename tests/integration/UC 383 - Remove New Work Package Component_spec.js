@@ -250,6 +250,7 @@ describe('UC 383 - Remove New Work Package Component - Design Update', function(
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         // Add some new functionality to it and publish.  Add other existing stuff we need into scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
         UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section99', 'Feature99');

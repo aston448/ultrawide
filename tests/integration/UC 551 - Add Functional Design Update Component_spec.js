@@ -126,19 +126,6 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
 
     // Consequences
-    it('When a functional Design Component is added to a Design Update it is also added to the Design Update Scope', function(){
-
-        // Setup
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-
-        // Add new Feature to original Section 1
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateSection('Application1', 'Section1');
-
-        // Verify - new Feature in scope
-        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', DefaultComponentNames.NEW_FEATURE_NAME));
-    });
-
     it('When a functional Design Component is added to a Draft Design Update it is also added to any Work Package based on the update', function(){
 
         // Setup

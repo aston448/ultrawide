@@ -191,6 +191,15 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
     before(function(){
         TestFixtures.logTestSuite('UC 381 - Add New Component To Work Package - Design Update');
 
+
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
 
         // Add  Design1 / DesignVersion1 + basic data
@@ -200,23 +209,13 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Clear WPs and Design Updates and start again...
-        TestFixtures.clearDesignUpdates();
-        TestFixtures.clearWorkPackages();
 
         // Add a new Design Update
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         // Add some new functionality to it and publish
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');

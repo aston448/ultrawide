@@ -242,6 +242,7 @@ describe('UC 382 - Update Work Package Component Name - Design Update', function
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         // Add some new functionality to it and publish
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');

@@ -392,35 +392,6 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
     });
 
-    it('All Applications are in scope by default so that new Design Sections can be added', function(){
-
-        // Setup - edit DU1
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-
-        // Add a new Section to Application1 without scoping it first
-        UpdateComponentActions.designerAddsDesignSectionToApplication_Called('Application1', 'Section3');
-
-        // Verify - organisational items will have parent scope
-        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
-        // Design Sections are not Scopable so won't be specifically in scope
-        expect(UpdateComponentVerifications.componentIsNotInScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section3'));
-
-    });
-
-    it('All Design Sections are in scope by default so that new Design Sections and Features can be added', function(){
-
-        // Setup - edit DU1
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-
-        // Add a new Feature to Section1 without scoping it first
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
-
-        // Verify - organisational items will have parent scope and new functional in scope
-        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
-        // Feature is a scopable item so goes in scope
-        expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.FEATURE, 'Section1', 'Feature3'));
-    });
-
 
     // Consequences
     it('When an Application is added to Design Update Scope it is possible to add new Design Sections to it', function(){
