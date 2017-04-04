@@ -23,7 +23,7 @@ import { AppGlobalData }                from '../../collections/app/app_global_d
 
 // Ultrawide Services
 import {getIdFromMap, padDigits, log}              from '../../common/utils.js';
-import { DesignStatus, WorkPackageType, UpdateMergeStatus, LogLevel} from '../../constants/constants.js';
+import { DesignStatus, WorkPackageType, UpdateMergeStatus, LogLevel, ExportFileName} from '../../constants/constants.js';
 
 import TestOutputLocationServices       from '../configure/test_output_location_services.js';
 import DesignServices                   from '../design/design_services.js';
@@ -1059,67 +1059,96 @@ class ImpExServices{
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Scenario Steps", componentCount);
     }
 
+    getBackupPath(){
+
+        const iniFile = process.env["PWD"] + '/ultrawide.ini';
+
+        if(fs.existsSync(iniFile)){
+            try {
+                log((msg) => console.log(msg), LogLevel.INFO, "Opening ini file: {}", iniFile);
+
+                const iniData = fs.readFileSync(iniFile);
+                const iniJson = JSON.parse(iniData);
+
+                log((msg) => console.log(msg), LogLevel.INFO, "Backup location is: {}", iniJson.backupPath);
+
+                return iniJson.backupPath;
+            } catch (e){
+                log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Ultrawide ini file: {}", e);
+                return'NONE';
+            }
+
+        } else {
+            log((msg) => console.log(msg), LogLevel.ERROR, "Can't locate Ultrawide ini file");
+            return 'NONE';
+        }
+    }
 
     exportUltrawideData(){
         // Export all the essential data to a file
 
-        // TODO - make backup location a setting
-        let path = '/Users/aston/UltrawideBackups/backup/';
-        if(fs.existsSync(path) === false) {
-            fs.mkdirSync(path);
+        let path = this.getBackupPath();
+
+        if(path !== 'NONE' && path.length > 0) {
+
+            if (fs.existsSync(path) === false) {
+                fs.mkdirSync(path);
+            }
+
+            // Create the double backup folder
+            let date = new Date();
+            let dateDir = date.getFullYear() + '_' + padDigits((date.getMonth() + 1), 2) + '_' + padDigits(date.getDate(), 2) + '_' + padDigits(date.getHours(), 2) + padDigits(date.getMinutes(), 2) + padDigits(date.getSeconds(), 2);
+            let doubleBackupPath = path + dateDir + '/';
+            if (fs.existsSync(doubleBackupPath) === false) {
+                fs.mkdirSync(doubleBackupPath);
+            }
+
+            // User Data
+            this.produceExportFile(UserRoles, path, doubleBackupPath, ExportFileName.USERS);
+
+            // User Context
+            this.produceExportFile(UserCurrentEditContext, path, doubleBackupPath, ExportFileName.USER_CONTEXT);
+
+            // Test Output Locations
+            this.produceExportFile(TestOutputLocations, path, doubleBackupPath, ExportFileName.TEST_OUTPUT_LOCATIONS);
+            this.produceExportFile(TestOutputLocationFiles, path, doubleBackupPath, ExportFileName.TEST_OUTPUT_LOCATION_FILES);
+            this.produceExportFile(UserTestTypeLocations, path, doubleBackupPath, ExportFileName.USER_TEST_TYPE_LOCATIONS);
+
+            // Designs
+            this.produceExportFile(Designs, path, doubleBackupPath, ExportFileName.DESIGNS);
+
+            // Design Versions
+            this.produceExportFile(DesignVersions, path, doubleBackupPath, ExportFileName.DESIGN_VERSIONS);
+
+            // Design Updates
+            this.produceExportFile(DesignUpdates, path, doubleBackupPath, ExportFileName.DESIGN_UPDATES);
+
+            // Design Update Summaries
+            this.produceExportFile(DesignUpdateSummaries, path, doubleBackupPath, ExportFileName.DESIGN_UPDATE_SUMMARIES);
+
+            // Work Packages
+            this.produceExportFile(WorkPackages, path, doubleBackupPath, ExportFileName.WORK_PACKAGES);
+
+            // Domain Dictionary
+            this.produceExportFile(DomainDictionary, path, doubleBackupPath, ExportFileName.DOMAIN_DICTIONARY);
+
+            // Design Components
+            this.produceExportFile(DesignVersionComponents, path, doubleBackupPath, ExportFileName.DESIGN_VERSION_COMPONENTS);
+
+            // Design Update Components
+            this.produceExportFile(DesignUpdateComponents, path, doubleBackupPath, ExportFileName.DESIGN_UPDATE_COMPONENTS);
+
+            // Work Package Components
+            this.produceExportFile(WorkPackageComponents, path, doubleBackupPath, ExportFileName.WORK_PACKAGE_COMPONENTS);
+
+            // Feature Background Steps
+            this.produceExportFile(FeatureBackgroundSteps, path, doubleBackupPath, ExportFileName.FEATURE_BACKGROUND_STEPS);
+
+            // Scenario Steps
+            this.produceExportFile(ScenarioSteps, path, doubleBackupPath, ExportFileName.SCENARIO_STEPS);
+        } else {
+            log((msg) => console.log(msg), LogLevel.ERROR, "No backup produced");
         }
-
-        // Create the double backup folder
-        let date = new Date();
-        let dateDir = date.getFullYear() + '_' + padDigits((date.getMonth() + 1), 2) + '_' + padDigits(date.getDate(), 2) + '_' + padDigits(date.getHours(), 2) + padDigits(date.getMinutes(), 2) + padDigits(date.getSeconds(), 2);
-        let doubleBackupPath = '/Users/aston/UltrawideBackups/backup/' + dateDir + '/';
-        if(fs.existsSync(doubleBackupPath) === false) {
-            fs.mkdirSync(doubleBackupPath);
-        }
-
-        // User Data
-        this.produceExportFile(UserRoles, path, doubleBackupPath, 'USERS');
-
-        // User Context
-        this.produceExportFile(UserCurrentEditContext, path, doubleBackupPath, 'USER_CONTEXT');
-
-        // Test Output Locations
-        this.produceExportFile(TestOutputLocations, path, doubleBackupPath, 'TEST_OUTPUT_LOCATIONS');
-        this.produceExportFile(TestOutputLocationFiles, path, doubleBackupPath, 'TEST_OUTPUT_LOCATION_FILES');
-        this.produceExportFile(UserTestTypeLocations, path, doubleBackupPath, 'USER_TEST_TYPE_LOCATIONS');
-
-        // Designs
-        this.produceExportFile(Designs, path, doubleBackupPath, 'DESIGNS');
-
-        // Design Versions
-        this.produceExportFile(DesignVersions, path, doubleBackupPath, 'DESIGN_VERSIONS');
-
-        // Design Updates
-        this.produceExportFile(DesignUpdates, path, doubleBackupPath, 'DESIGN_UPDATES');
-
-        // Design Update Summaries
-        this.produceExportFile(DesignUpdateSummaries, path, doubleBackupPath, 'DESIGN_UPDATE_SUMMARIES');
-
-        // Work Packages
-        this.produceExportFile(WorkPackages, path, doubleBackupPath, 'WORK_PACKAGES');
-
-        // Domain Dictionary
-        this.produceExportFile(DomainDictionary, path, doubleBackupPath, 'DOMAIN_DICTIONARY');
-
-        // Design Components
-        this.produceExportFile(DesignVersionComponents, path, doubleBackupPath, 'DESIGN_COMPONENTS');
-
-        // Design Update Components
-        this.produceExportFile(DesignUpdateComponents, path, doubleBackupPath, 'DESIGN_UPDATE_COMPONENTS');
-
-        // Work Package Components
-        this.produceExportFile(WorkPackageComponents, path, doubleBackupPath, 'WORK_PACKAGE_COMPONENTS');
-
-        // Feature Background Steps
-        this.produceExportFile(FeatureBackgroundSteps, path, doubleBackupPath, 'FEATURE_BACKGROUND_STEPS');
-
-        // Scenario Steps
-        this.produceExportFile(ScenarioSteps, path, doubleBackupPath, 'SCENARIO_STEPS');
     };
 
     produceExportFile(collection, path, doubleBackupPath, fileName){
@@ -1130,9 +1159,9 @@ class ImpExServices{
         const data = collection.find({});
         const jsonData = JSON.stringify(data.fetch());
 
-        fs.writeFile(path + fileName +'.EXP', jsonData);
+        fs.writeFile(path + fileName, jsonData);
 
-        fs.writeFile(doubleBackupPath + fileName +'.EXP', jsonData);
+        fs.writeFile(doubleBackupPath + fileName, jsonData);
 
     }
 
@@ -1163,7 +1192,12 @@ class ImpExServices{
     importUltrawideData(){
         // Recreate the data using the latest code so that it is compatible...
 
-        let path = '/Users/aston/UltrawideBackups/backup/';
+        let path = this.getBackupPath();
+
+        if(path === 'NONE' || path.length === 0){
+            log((msg) => console.log(msg), LogLevel.ERROR, "Export location not found.  Aborting");
+            return;
+        }
 
         let usersMapping = [];
         let testOutputLocationsMapping = [];
@@ -1186,8 +1220,8 @@ class ImpExServices{
         let userContexts = [];
 
         try {
-            userData = fs.readFileSync(path + 'USERS.EXP');
-            userContextData = fs.readFileSync(path + 'USER_CONTEXT.EXP');
+            userData = fs.readFileSync(path + ExportFileName.USERS);
+            userContextData = fs.readFileSync(path + ExportFileName.USER_CONTEXT);
             users = JSON.parse(userData);
             userContexts = JSON.parse(userContextData);
         } catch (e){
@@ -1203,7 +1237,7 @@ class ImpExServices{
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Processing User : {}", user.displayName);
 
                 // Don't restore the admin user if there was one
-                if(user.userName != 'admin') {
+                if(user.userName !== 'admin') {
 
                     let password = user.password;
 
@@ -1295,9 +1329,9 @@ class ImpExServices{
 
         // Test Output Locations ---------------------------------------------------------------------------------------
         try {
-            locationData = fs.readFileSync(path + 'TEST_OUTPUT_LOCATIONS.EXP');
-            locationFileData = fs.readFileSync(path + 'TEST_OUTPUT_LOCATION_FILES.EXP');
-            userLocationData = fs.readFileSync(path + 'USER_TEST_TYPE_LOCATIONS.EXP');
+            locationData = fs.readFileSync(path + ExportFileName.TEST_OUTPUT_LOCATIONS);
+            locationFileData = fs.readFileSync(path + ExportFileName.TEST_OUTPUT_LOCATION_FILES);
+            userLocationData = fs.readFileSync(path + ExportFileName.USER_TEST_TYPE_LOCATIONS);
             outputLocations = JSON.parse(locationData);
             outputLocationFiles = JSON.parse(locationFileData);
             userOutputLocations = JSON.parse(userLocationData);
@@ -1336,7 +1370,7 @@ class ImpExServices{
         let designs = [];
 
         try {
-            designData = fs.readFileSync(path + 'DESIGNS.EXP');
+            designData = fs.readFileSync(path + ExportFileName.DESIGNS);
             designs = JSON.parse(designData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Designs export file: {}", e);
@@ -1359,7 +1393,7 @@ class ImpExServices{
         let designVersions = [];
 
         try{
-            designVersionsData = fs.readFileSync(path + 'DESIGN_VERSIONS.EXP');
+            designVersionsData = fs.readFileSync(path + ExportFileName.DESIGN_VERSIONS);
             designVersions = JSON.parse(designVersionsData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Versions export file: {}", e);
@@ -1382,7 +1416,7 @@ class ImpExServices{
         let designUpdates = [];
 
         try{
-            designUpdatesData = fs.readFileSync(path + 'DESIGN_UPDATES.EXP');
+            designUpdatesData = fs.readFileSync(path + ExportFileName.DESIGN_UPDATES);
             designUpdates = JSON.parse(designUpdatesData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Updates export file: {}", e);
@@ -1404,7 +1438,7 @@ class ImpExServices{
         let designUpdateSummaries = [];
 
         try{
-            designUpdateSummaryData = fs.readFileSync(path + 'DESIGN_UPDATE_SUMMARIES.EXP');
+            designUpdateSummaryData = fs.readFileSync(path + ExportFileName.DESIGN_UPDATE_SUMMARIES);
             designUpdateSummaries = JSON.parse(designUpdateSummaryData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Update Summaries export file: {}", e);
@@ -1425,7 +1459,7 @@ class ImpExServices{
         let workPackages = [];
 
         try{
-            workPackagesData = fs.readFileSync(path + 'WORK_PACKAGES.EXP');
+            workPackagesData = fs.readFileSync(path + ExportFileName.WORK_PACKAGES);
             workPackages = JSON.parse(workPackagesData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Work Packages export file: {}", e);
@@ -1449,7 +1483,7 @@ class ImpExServices{
         let dictionaryTerms = [];
 
         try{
-            domainDictionaryData = fs.readFileSync(path + 'DOMAIN_DICTIONARY.EXP');
+            domainDictionaryData = fs.readFileSync(path + ExportFileName.DOMAIN_DICTIONARY);
             dictionaryTerms = JSON.parse(domainDictionaryData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Domain Dictionary export file: {}", e);
@@ -1470,7 +1504,7 @@ class ImpExServices{
         let designComponents = [];
 
         try{
-            designComponentsData = fs.readFileSync(path + 'DESIGN_COMPONENTS.EXP');
+            designComponentsData = fs.readFileSync(path + ExportFileName.DESIGN_VERSION_COMPONENTS);
             designComponents = JSON.parse(designComponentsData);
         } catch (e){
             log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Components export file: {}", e);
@@ -1496,7 +1530,7 @@ class ImpExServices{
             let designUpdateComponents = [];
 
             try {
-                designUpdateComponentsData = fs.readFileSync(path + 'DESIGN_UPDATE_COMPONENTS.EXP');
+                designUpdateComponentsData = fs.readFileSync(path + ExportFileName.DESIGN_UPDATE_COMPONENTS);
                 designUpdateComponents = JSON.parse(designUpdateComponentsData);
             } catch (e) {
                 log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Update Components export file: {}", e);
@@ -1519,7 +1553,7 @@ class ImpExServices{
         let workPackageComponents = [];
 
         try{
-            workPackageComponentsData = fs.readFileSync(path + 'WORK_PACKAGE_COMPONENTS.EXP');
+            workPackageComponentsData = fs.readFileSync(path + ExportFileName.WORK_PACKAGE_COMPONENTS);
             workPackageComponents = JSON.parse(workPackageComponentsData);
         } catch (e) {
             log((msg) => console.log(msg), LogLevel.DEBUG, "Can't open Work Package Components export file: {}", e);
@@ -1540,7 +1574,7 @@ class ImpExServices{
         let backgroundSteps = [];
 
         try{
-            backgroundStepsData = fs.readFileSync(path + 'FEATURE_BACKGROUND_STEPS.EXP');
+            backgroundStepsData = fs.readFileSync(path + ExportFileName.FEATURE_BACKGROUND_STEPS);
             backgroundSteps = JSON.parse(backgroundStepsData);
         } catch (e) {
             log((msg) => console.log(msg), LogLevel.DEBUG, "Can't open Feature Background Steps export file: {}", e);
@@ -1561,7 +1595,7 @@ class ImpExServices{
         let scenarioSteps = [];
 
         try{
-            scenarioStepsData = fs.readFileSync(path + 'SCENARIO_STEPS.EXP');
+            scenarioStepsData = fs.readFileSync(path + ExportFileName.SCENARIO_STEPS);
             scenarioSteps = JSON.parse(scenarioStepsData);
         } catch (e) {
             log((msg) => console.log(msg), LogLevel.DEBUG, "Can't open Scenario Steps export file: {}", e);
