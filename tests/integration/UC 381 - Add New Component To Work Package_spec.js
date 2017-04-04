@@ -215,6 +215,7 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         // Add some new functionality to it and publish
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsApplicationToCurrentUpdateScope('Application1');
         UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
         UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
         UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
@@ -226,6 +227,14 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature3');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        // Manager creates Update WP that includes Application1
+        DesignActions.managerWorksOnDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2');
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
+        WpComponentActions.managerAddsApplicationToScopeForCurrentWp('Application1');
         WorkPackageActions.managerPublishesSelectedWorkPackage();
     });
 
@@ -295,7 +304,8 @@ describe('UC 381 - Add New Component To Work Package - Design Update', function(
         DesignActions.developerWorksOnDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.developerSelectsUpdate('DesignUpdate1');
-        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage1');
+        // Select the WP that contains Section1
+        WorkPackageActions.developerSelectsWorkPackage('UpdateWorkPackage2');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
