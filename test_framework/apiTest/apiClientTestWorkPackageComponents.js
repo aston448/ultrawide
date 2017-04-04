@@ -221,7 +221,7 @@ Meteor.methods({
 
                 // Get parent component - if not adding App
                 let designComponent = null;
-                if(componentType != ComponentType.APPLICATION) {
+                if(componentType !== ComponentType.APPLICATION) {
                     designComponent = TestDataHelpers.getContextDesignComponent(userContext.designComponentId);
                 }
 
@@ -246,7 +246,7 @@ Meteor.methods({
                 view = ViewType.DEVELOP_UPDATE_WP;
                 // Get parent component - if not adding App
                 let designUpdateComponent = null;
-                if(componentType != ComponentType.APPLICATION) {
+                if(componentType !== ComponentType.APPLICATION) {
                     designUpdateComponent = TestDataHelpers.getContextDesignUpdateComponent(userContext.designComponentId);
                 }
 
