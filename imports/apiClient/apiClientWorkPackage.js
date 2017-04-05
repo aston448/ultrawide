@@ -4,6 +4,8 @@
 import { WorkPackages }             from '../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 import { UserRoles }                from '../collections/users/user_roles.js';
+import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
+import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import { RoleType, ViewType, ViewMode, ComponentType, WorkPackageType, WorkPackageStatus, MessageType} from '../constants/constants.js';
@@ -17,7 +19,7 @@ import ClientTestIntegrationServices   from './apiClientTestIntegration';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setMashDataStaleTo, setTestDataStaleTo, setWorkPackageDataLoadedTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setCurrentUserOpenWorkPackageItems, setWorkPackageScopeItems, setMashDataStaleTo, setTestDataStaleTo, setWorkPackageDataLoadedTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Items
@@ -35,7 +37,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateAddWorkPackage(userRole, userContext.designVersionId, userContext.designUpdateId, workPackageType);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -89,7 +91,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateUpdateWorkPackageName(userRole, workPackageId, newName);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -124,7 +126,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validatePublishWorkPackage(userRole, workPackageToPublishId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -162,7 +164,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateWithdrawWorkPackage(userRole, workPackageToWithdrawId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -200,7 +202,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateAdoptWorkPackage(userRole, workPackageId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -238,7 +240,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateReleaseWorkPackage(userRole, userContext.userId, workPackageId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -273,7 +275,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateRemoveWorkPackage(userRole, workPackageToDeleteId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -326,7 +328,7 @@ class ClientWorkPackageServices {
 
         let newContext = userContext;
 
-        if((workPackage.workPackageStatus === WorkPackageStatus.WP_NEW) && (userRole != RoleType.MANAGER)){
+        if((workPackage.workPackageStatus === WorkPackageStatus.WP_NEW) && (userRole !== RoleType.MANAGER)){
             // Not selectable
         } else {
             newContext = this.setWorkPackage(userRole, userContext, workPackage._id, testIntegrationDataContext);
@@ -340,7 +342,7 @@ class ClientWorkPackageServices {
 
         // Returns updated context so this can be passed on if needed
 
-        if(newWorkPackageId != userContext.workPackageId) {
+        if(newWorkPackageId !== userContext.workPackageId) {
 
             const newContext = {
                 userId:                         userContext.userId,
@@ -359,7 +361,7 @@ class ClientWorkPackageServices {
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
             // If we are changing WP as DEVELOPER, set the Design Mash and Test data as stale as we need to reload a new lot
-            if(userRole == RoleType.DEVELOPER && testIntegrationDataContext) {
+            if(userRole === RoleType.DEVELOPER && testIntegrationDataContext) {
                 store.dispatch(setMashDataStaleTo(true));
                 store.dispatch(setTestDataStaleTo(true));
                 testIntegrationDataContext.mashDataStale = true;
@@ -383,7 +385,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateEditWorkPackage(userRole, workPackageToEditId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -406,6 +408,36 @@ class ClientWorkPackageServices {
                 break;
         }
 
+        // Set up the scope items as the current in scope items
+        const workPackage = WorkPackages.findOne({_id: workPackageToEditId});
+        const wpItems = WorkPackageComponents.find({workPackageId: workPackageToEditId}).fetch();
+
+        let wpItemsArr = [];
+        let designItem = null;
+
+        wpItems.forEach((item) => {
+            if(wpType === WorkPackageType.WP_BASE) {
+                designItem = DesignVersionComponents.findOne({
+                    designVersionId: workPackage.designVersionId,
+                    componentReferenceId: item.componentReferenceId
+                });
+            } else {
+                designItem = DesignUpdateComponents.findOne({
+                    designUpdateId: workPackage.designUpdateId,
+                    componentReferenceId: item.componentReferenceId
+                });
+            }
+            wpItemsArr.push(designItem._id);
+        });
+
+        store.dispatch(setWorkPackageScopeItems(
+            {
+                current:    wpItemsArr,
+                added:      [],
+                removed:    []
+            }
+        ));
+
         return {success: true, message: ''};
 
     };
@@ -416,7 +448,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateViewWorkPackage(userRole, workPackageToViewId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
@@ -449,7 +481,7 @@ class ClientWorkPackageServices {
         // Client validation
         let result = WorkPackageValidationApi.validateDevelopWorkPackage(userRole, userContext.userId, wpToDevelopId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
 
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));

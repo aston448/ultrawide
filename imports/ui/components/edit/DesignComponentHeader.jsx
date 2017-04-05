@@ -74,6 +74,7 @@ export class DesignComponentHeader extends Component{
         this.state = {
             inScope: false,
             parentScope: false,
+            scopeChange: false,
             editable: false,
             highlighted: false,
             name: '',
@@ -96,17 +97,45 @@ export class DesignComponentHeader extends Component{
 
     shouldComponentUpdate(nextProps, nextState){
 
-        // Item is going into update scope
-        if(nextProps.updateComponent !== null && this.props.updateComponent === null){
-            return true;
-        }
-
-        // Item is going out of update scope
-        if(nextProps.updateComponent === null && this.props.updateComponent !== null){
-            return true;
-        }
-
         // Optimisation.  No need to re-render this component if no change to what is seen
+
+        // Check for scope updates in Update Editor
+        if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
+
+            if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
+                // An update has been triggered.  Render if this item is in the update
+
+                // If its one of the descoped items
+                if (nextProps.updateScopeItems.removed.includes(this.props.currentItem._id)) {
+                    return true;
+                }
+
+                // Or its in the scope
+                if (nextProps.updateItem) {
+                    return true;
+                }
+            }
+        }
+
+        // Check for scope updates in WP Editor
+        if(this.props.view === ViewType.WORK_PACKAGE_BASE_EDIT || this.props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+
+            if (nextProps.workPackageScopeFlag !== this.props.workPackageScopeFlag) {
+                // An update has been triggered.  Render if this item is in the WP
+
+                // If its one of the descoped items
+                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem._id)) {
+                    return true;
+                }
+
+                // Or its in the scope
+                if (nextProps.wpItem) {
+                    return true;
+                }
+            }
+        }
+
+
         switch (this.props.view) {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
@@ -117,17 +146,14 @@ export class DesignComponentHeader extends Component{
                     nextState.highlighted === this.state.highlighted &&
                     nextState.editable === this.state.editable &&
                     nextState.editorState === this.state.editorState &&
-                    nextState.inScope === this.state.inScope &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.isOpen === this.props.isOpen &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.isDragging === this.props.isDragging &&
-                    nextProps.testDataFlag === this.props.testDataFlag //&&
-                    //nextProps.currentViewDataValue === this.props.currentViewDataValue
+                    nextProps.testDataFlag === this.props.testDataFlag
                 );
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -144,11 +170,8 @@ export class DesignComponentHeader extends Component{
                     nextProps.isOpen === this.props.isOpen &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
-                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.testDataFlag === this.props.testDataFlag &&
                     nextProps.isDragging === this.props.isDragging
                 );
                 break;
@@ -583,6 +606,10 @@ export class DesignComponentHeader extends Component{
 
                 // Update the Design Update component
                 const duResult = ClientDesignUpdateComponentServices.toggleInScope(view, mode, displayContext, currentItem, userContext.designUpdateId, updateItem, newScope);
+
+                if(duResult.success){
+                    this.setState({scopeChange: !this.state.scopeChange});
+                }
         }
 
     };
@@ -598,6 +625,7 @@ export class DesignComponentHeader extends Component{
             </Tooltip>
         );
 
+        //console.log("Render Design Version Header for " + currentItem.componentNameNew + " in context " + displayContext);
 
         // Determine the look of the item ------------------------------------------------------------------------------
 
@@ -1222,7 +1250,11 @@ DesignComponentHeader.propTypes = {
     testSummary: PropTypes.bool.isRequired,
     testSummaryData: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
-    testDataFlag: PropTypes.bool.isRequired
+    testDataFlag: PropTypes.bool.isRequired,
+    updateScopeItems: PropTypes.object.isRequired,
+    updateScopeFlag: PropTypes.number.isRequired,
+    workPackageScopeItems: PropTypes.object.isRequired,
+    workPackageScopeFlag: PropTypes.number.isRequired,
 };
 
 // React DnD ===========================================================================================================

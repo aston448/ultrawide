@@ -21,6 +21,18 @@ const initialState = {
     currentUserOpenDesignItems:         [],
     currentUserOpenDesignUpdateItems:   [],
     currentUserOpenWorkPackageItems:    [],
+    currentUpdateScopeItems:            {
+        current: [],
+        added: [],
+        removed: []
+    },
+    currentUpdateScopeFlag:             0,
+    currentWorkPackageScopeItems:       {
+        current: [],
+        added: [],
+        removed: []
+    },
+    currentWorkPackageScopeFlag:        0,
     currentDesignComponentName:         'No Component',
     currentDesignComponentRawName:      null,
     currentUserMessage:                 {messageType: MessageType.INFO, messageText: 'Please log in...' },
@@ -97,6 +109,22 @@ export function myApplication(state = initialState, action) {
         case Actions.SET_CURRENT_USER_OPEN_WORK_PACKAGE_ITEMS:
             return Object.assign({}, state, {
                 currentUserOpenWorkPackageItems: action.newUserOpenWorkPackageItems
+            });
+        case Actions.SET_UPDATE_SCOPE_ITEMS:
+            return Object.assign({}, state, {
+                currentUpdateScopeItems: action.newUpdateScopeItems
+            });
+        case Actions.SET_UPDATE_SCOPE_FLAG:
+            return Object.assign({}, state, {
+                currentUpdateScopeFlag: action.newUpdateScopeFlag
+            });
+        case Actions.SET_WP_SCOPE_ITEMS:
+            return Object.assign({}, state, {
+                currentWorkPackageScopeItems: action.newWpScopeItems
+            });
+        case Actions.SET_WP_SCOPE_FLAG:
+            return Object.assign({}, state, {
+                currentWorkPackageScopeFlag: action.newWpScopeFlag
             });
         case Actions.UPDATE_DESIGN_COMPONENT_NAME:
             return Object.assign({}, state, {

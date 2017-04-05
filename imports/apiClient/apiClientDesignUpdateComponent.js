@@ -2,6 +2,7 @@
 
 // Ultrawide collections
 import {DesignUpdateComponents}             from '../collections/design_update/design_update_components.js';
+import {DesignVersionComponents}            from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
 import { ComponentType, MessageType}        from '../constants/constants.js';
@@ -14,7 +15,7 @@ import ClientDesignUpdateServices           from '../apiClient/apiClientDesignUp
 
 // REDUX services
 import store from '../redux/store'
-import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage, updateOpenItemsFlag, updateTestDataFlag} from '../redux/actions'
+import {updateDesignComponentName, setCurrentUserOpenDesignUpdateItems, updateUserMessage, updateOpenItemsFlag, updateTestDataFlag, setUpdateScopeFlag, setUpdateScopeItems} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Update Components
@@ -485,8 +486,45 @@ class ClientDesignUpdateComponentServices{
                 // Ensure that all in scope items are open (and any descoped are removed)
                 this.openInScopeItems(designUpdateId);
 
-                const testDataFlag = store.getState().testDataFlag;
-                store.dispatch(updateTestDataFlag(!testDataFlag));
+                // Calculate data used for managing scope rendering efficiently
+                const updateItems = DesignUpdateComponents.find({designUpdateId: designUpdateId});
+
+                let addedItems = [];
+                let removedItems = [];
+                let currentItems = [];
+                let designItem = null;
+
+                updateItems.forEach((item) => {
+                    designItem = DesignVersionComponents.findOne({
+                        designVersionId:        item.designVersionId,
+                        componentReferenceId:   item.componentReferenceId
+                    });
+                    currentItems.push(designItem._id);
+                });
+
+                const updateScopeItems = store.getState().currentUpdateScopeItems;
+
+                if(!newScope) {
+
+                    // Make a list of anything no longer in DB
+                    updateScopeItems.current.forEach((item) => {
+                        if(!(currentItems.includes(item))){
+                            removedItems.push(item);
+                        }
+                    });
+                }
+
+                store.dispatch(setUpdateScopeItems(
+                    {
+                        current:    currentItems,
+                        added:      addedItems,
+                        removed:    removedItems
+                    }
+                ));
+
+                // Trigger items to update
+                const updateScopeFlag = store.getState().currentUpdateScopeFlag;
+                store.dispatch(setUpdateScopeFlag(updateScopeFlag));
 
                 // Show action success on screen
                 if(newScope) {

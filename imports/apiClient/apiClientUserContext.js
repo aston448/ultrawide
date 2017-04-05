@@ -218,7 +218,7 @@ class ClientUserContextServices {
 
             // Set all Applications and Design Sections to be open for all Design Versions, Design Updates and Work Packages
 
-            dvArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
+            dvArr = ClientAppHeaderServices.getDesignVersionSections(userContext);
 
             // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
             log((msg) => console.log(msg), LogLevel.TRACE, "USER CONTEXT: Component: {}, DV: {}, DU: {}, WP: {}",
@@ -294,7 +294,7 @@ class ClientUserContextServices {
 
         try {
 
-            // Set all Applications and Design Sections to be open
+            // Open to feature level by default
             duArr = ClientAppHeaderServices.getDesignUpdateFeatures(userContext);
 
             // Plus for the actual open item context, open the FEATURE that the item is in and select it as the current item
@@ -502,7 +502,7 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_DRAFT:
 
                             // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
-                            if(userContext.designComponentId != 'NONE'){
+                            if(userContext.designComponentId !== 'NONE'){
                                 ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, testDataFlag, testIntegrationDataContext);
                             } else {
                                 store.dispatch(setCurrentView(ViewType.SELECT));
@@ -512,7 +512,7 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_UPDATABLE:
 
                             // If there is an update in the context go to that otherwise go to selection
-                            if (userContext.designUpdateId != 'NONE') {
+                            if (userContext.designUpdateId !== 'NONE') {
 
                                 // See what the status of this update is - is it editable?
                                 const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
@@ -524,7 +524,7 @@ class ClientUserContextServices {
                                         case DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT:
 
                                             // Go to edit update in Edit Mode
-                                            if(userContext.designComponentId != 'NONE') {
+                                            if(userContext.designComponentId !== 'NONE') {
                                                 ClientDesignUpdateServices.editDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId);
                                             } else {
                                                 store.dispatch(setCurrentView(ViewType.SELECT));
@@ -533,7 +533,7 @@ class ClientUserContextServices {
 
                                         default:
                                             // Anything else, just view the update - here there could be a test summary
-                                            if(userContext.designComponentId != 'NONE') {
+                                            if(userContext.designComponentId !== 'NONE') {
                                                 ClientDesignUpdateServices.viewDesignUpdate(userRole, userContext, userViewOptions, userContext.designUpdateId, testDataFlag, testIntegrationDataContext);
                                             } else {
                                                 store.dispatch(setCurrentView(ViewType.SELECT));
@@ -554,7 +554,7 @@ class ClientUserContextServices {
                         case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
 
                             // View that final design version if user had selected something in it
-                            if(userContext.designComponentId != 'NONE') {
+                            if(userContext.designComponentId !== 'NONE') {
                                 ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, testDataFlag, testIntegrationDataContext);
                             } else {
                                 store.dispatch(setCurrentView(ViewType.SELECT));

@@ -78,8 +78,8 @@ export class UpdateApplicationsList extends Component {
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={application}
                     updateItem={this.getDesignUpdateItem(application, displayContext, userContext.designUpdateId)}
+                    wpItem={null}
                     displayContext={displayContext}
                     view={view}
                     mode={mode}
@@ -97,8 +97,8 @@ export class UpdateApplicationsList extends Component {
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={application}
                     updateItem={application}
+                    wpItem={null}
                     displayContext={context}
                     view={view}
                     mode={mode}
@@ -117,8 +117,8 @@ export class UpdateApplicationsList extends Component {
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={application}
-                    updateItem={application}
+                    updateItem={null}
+                    wpItem={null}
                     displayContext={context}
                     view={view}
                     mode={mode}
@@ -132,6 +132,8 @@ export class UpdateApplicationsList extends Component {
     render() {
 
         const {baseApplications, updateApplications, workingApplications, userContext, view, mode, viewOptions, testDataFlag} = this.props;
+
+        console.log("RENDER DESIGN UPDATE CONTAINER " + view);
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -422,8 +424,9 @@ function mapStateToProps(state) {
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
         viewOptions:            state.currentUserViewOptions,
-        testDataFlag:           state.testDataFlag
-
+        testDataFlag:           state.testDataFlag,
+        updateScopeFlag:        state.currentUpdateScopeFlag,
+        workPackageScopeFlag:   state.currentWorkPackageScopeFlag
     }
 }
 

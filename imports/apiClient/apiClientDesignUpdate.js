@@ -3,6 +3,7 @@
 // Ultrawide Collections
 import {DesignUpdates}              from '../collections/design_update/design_updates.js';
 import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
+import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, ComponentType, MessageType, DesignUpdateStatus } from '../constants/constants.js';
@@ -17,7 +18,7 @@ import ClientUserContextServices        from '../apiClient/apiClientUserContext.
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage, setCurrentUserViewOptions} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, setCurrentUserOpenDesignUpdateItems, updateUserMessage, setCurrentUserViewOptions, setUpdateScopeItems} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Update Items
@@ -34,7 +35,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateAddDesignUpdate(userRole, designVersionId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -68,7 +69,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateUpdateDesignUpdateName(userRole, designUpdateId, newName);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -102,7 +103,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateUpdateDesignUpdateReference(userRole, designUpdateId, newRef);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -136,7 +137,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validatePublishDesignUpdate(userRole, designUpdateToPublishId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -172,7 +173,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateWithdrawDesignUpdate(userRole, designUpdateToWithdrawId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -208,7 +209,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateRemoveDesignUpdate(userRole, designUpdateToDeleteId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -258,7 +259,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateUpdateMergeAction(userRole, designUpdateId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -294,7 +295,7 @@ class ClientDesignUpdateServices {
 
         let newContext = userContext;
 
-        if(newDesignUpdateId != userContext.designUpdateId) {
+        if(newDesignUpdateId !== userContext.designUpdateId) {
 
             // Also clears current WP selection when DU changes
             newContext = {
@@ -313,10 +314,10 @@ class ClientDesignUpdateServices {
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
-            // Open default items
-            newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
-
         }
+
+        // Open default items
+        newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
 
         // Load or refresh DU Summary data
         ClientDesignUpdateSummary.getDesignUpdateSummary(newDesignUpdateId);
@@ -331,7 +332,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateEditDesignUpdate(userRole, designUpdateToEditId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};
@@ -352,6 +353,29 @@ class ClientDesignUpdateServices {
         // Switch to update edit view
         store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_EDIT));
 
+
+        // Set up the scope items as the current in scope items
+        const updateItems = DesignUpdateComponents.find({designUpdateId: designUpdateToEditId}).fetch();
+
+        let updateItemsArr = [];
+        let designItem = null;
+
+        updateItems.forEach((item) => {
+            designItem = DesignVersionComponents.findOne({
+                designVersionId:        item.designVersionId,
+                componentReferenceId:   item.componentReferenceId
+            });
+            updateItemsArr.push(designItem._id);
+        });
+
+        store.dispatch(setUpdateScopeItems(
+            {
+                current:    updateItemsArr,
+                added:      [],
+                removed:    []
+            }
+        ));
+
         return {success: true, message: ''};
 
     };
@@ -362,7 +386,7 @@ class ClientDesignUpdateServices {
         // Client validation
         let result = DesignUpdateValidationApi.validateViewDesignUpdate(userRole, designUpdateToViewId);
 
-        if(result != Validation.VALID){
+        if(result !== Validation.VALID){
             // Business validation failed - show error on screen
             store.dispatch(updateUserMessage({messageType: MessageType.ERROR, messageText: result}));
             return {success: false, message: result};

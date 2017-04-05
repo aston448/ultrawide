@@ -172,7 +172,9 @@ function mapStateToProps(state) {
         userViewOptions:        state.currentUserViewOptions,
         currentViewDataValue:   state.currentViewOptionsDataValue,
         currentUserMessage:     state.currentUserMessage,
-        testDataFlag:           state.testDataFlag
+        testDataFlag:           state.testDataFlag,
+        updateScopeFlag:        state.currentUpdateScopeFlag,
+        workPackageScopeFlag:   state.currentWorkPackageScopeFlag
     }
 }
 

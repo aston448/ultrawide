@@ -10,7 +10,7 @@ import React, { Component, PropTypes } from 'react';
 import DesignComponent from './DesignComponent.jsx';
 
 // Ultrawide Services
-import {ComponentType, ViewMode, ViewType, DisplayContext} from '../../../constants/constants.js';
+import {ComponentType, ViewMode, ViewType, DisplayContext, UpdateScopeType} from '../../../constants/constants.js';
 import {locationMoveDropAllowed} from '../../../common/utils.js';
 
 // Bootstrap
@@ -41,11 +41,20 @@ export class DesignComponentTarget extends Component{
         };
     }
 
+    componentWillReceiveProps(newProps) {
+        //console.log("TARGET " + this.props.currentItem.componentType + " - " + this.props.currentItem.componentNameNew + " receiving props Update Item was " + this.props.updateItem + " and now " + newProps.updateItem);
+    }
+
     render(){
 
         const {currentItem, updateItem, wpItem, displayContext, connectDropTarget, isOverCurrent, canDrop, testSummary, testSummaryData} = this.props;
 
-        //console.log("Rendering design component target: " + currentItem.componentNameNew);
+        let updateItemScope = UpdateScopeType.SCOPE_OUT_SCOPE;
+        if(updateItem && updateItem.scopeType){
+            updateItemScope = updateItem.scopeType;
+        }
+
+        //console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " display context " + displayContext);
 
         if(!(Meteor.isTest) && canDrop && (this.props.displayContext === DisplayContext.UPDATE_EDIT || this.props.displayContext === DisplayContext.BASE_EDIT) && this.props.mode === ViewMode.MODE_EDIT) {
             // Only can be droppable if in Edit mode and if the edit section of the view
@@ -54,6 +63,7 @@ export class DesignComponentTarget extends Component{
                     <DesignComponent
                         currentItem={currentItem}
                         updateItem={updateItem}
+                        updateItemScope={updateItemScope}
                         wpItem={wpItem}
                         isDragDropHovering={isOverCurrent && canDrop}
                         displayContext={displayContext}
@@ -68,6 +78,7 @@ export class DesignComponentTarget extends Component{
                     <DesignComponent
                         currentItem={currentItem}
                         updateItem={updateItem}
+                        updateItemScope={updateItemScope}
                         wpItem={wpItem}
                         isDragDropHovering={false}
                         displayContext={displayContext}

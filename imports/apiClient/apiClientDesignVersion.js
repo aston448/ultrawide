@@ -8,7 +8,7 @@ import {DesignVersionComponents}    from '../collections/design/design_version_c
 import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, DesignUpdateMergeAction, MessageType, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, UpdateScopeType, MessageType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -309,6 +309,33 @@ class ClientDesignVersionServices{
         designVersionApplications.forEach((app) => {
             store.dispatch((updateOpenItemsFlag(app._id)));
         });
+
+        // if(userContext.designUpdateId !== 'NONE'){
+        //
+        //     // Set up the scope items as the current in scope items
+        //     const updateItems = DesignUpdateComponents.find({designUpdateId: userContext.designUpdateId}).fetch();
+        //
+        //     let updateItemsArr = [];
+        //     let designItem = null;
+        //
+        //     updateItems.forEach((item) => {
+        //         designItem = DesignVersionComponents.findOne({
+        //             designVersionId:        item.designVersionId,
+        //             componentReferenceId:   item.componentReferenceId
+        //         });
+        //         updateItemsArr.push(designItem._id);
+        //     });
+        //
+        //     console.log("SETTING CURRENT ITEMS for DU");
+        //
+        //     store.dispatch(setUpdateScopeItems(
+        //         {
+        //             current:    updateItemsArr,
+        //             added:      [],
+        //             removed:    []
+        //         }
+        //     ));
+        // }
 
     }
 

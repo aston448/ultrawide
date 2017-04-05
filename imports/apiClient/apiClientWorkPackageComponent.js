@@ -1,9 +1,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import {DesignVersionComponents}       from '../collections/design/design_version_components.js';
-import {DesignUpdateComponents} from '../collections/design_update/design_update_components.js'
-import {WorkPackageComponents}  from '../collections/work/work_package_components.js'
+import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
+import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js'
+import { WorkPackages }             from '../collections/work/work_packages.js';
+import {WorkPackageComponents}      from '../collections/work/work_package_components.js'
 
 // Ultrawide Services
 import { WorkPackageType, ComponentType, MessageType } from '../constants/constants.js';
@@ -15,7 +16,7 @@ import ServerWorkPackageComponentApi     from '../apiServer/apiWorkPackageCompon
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, updateTestDataFlag} from '../redux/actions';
+import {setCurrentUserOpenWorkPackageItems, updateUserMessage, updateOpenItemsFlag, setWorkPackageScopeItems, setWorkPackageScopeFlag, updateTestDataFlag} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Work Package Components
@@ -49,8 +50,54 @@ class ClientWorkPackageComponentServices {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
-                const testDataFlag = store.getState().testDataFlag;
-                store.dispatch(updateTestDataFlag(!testDataFlag));
+
+                // Calculate data used for managing scope rendering efficiently
+                const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
+                const wpItems = WorkPackageComponents.find({workPackageId: userContext.workPackageId});
+
+                let addedItems = [];
+                let removedItems = [];
+                let currentItems = [];
+                let designItem = null;
+
+                wpItems.forEach((item) => {
+                    if(workPackage.workPackageType === WorkPackageType.WP_BASE) {
+                        designItem = DesignVersionComponents.findOne({
+                            designVersionId: workPackage.designVersionId,
+                            componentReferenceId: item.componentReferenceId
+                        });
+                    } else {
+                        designItem = DesignUpdateComponents.findOne({
+                            designUpdateId: workPackage.designUpdateId,
+                            componentReferenceId: item.componentReferenceId
+                        });
+                    }
+                    currentItems.push(designItem._id);
+                });
+
+                const wpScopeItems = store.getState().currentWorkPackageScopeItems;
+
+                if(!newScope) {
+
+                    // Make a list of anything no longer in DB
+                    wpScopeItems.current.forEach((item) => {
+                        if(!(currentItems.includes(item))){
+                            removedItems.push(item);
+                        }
+                    });
+                }
+
+                store.dispatch(setWorkPackageScopeItems(
+                    {
+                        current:    currentItems,
+                        added:      addedItems,
+                        removed:    removedItems
+                    }
+                ));
+
+                // Trigger items to update
+                const wpScopeFlag = store.getState().currentWorkPackageScopeFlag;
+                store.dispatch(setWorkPackageScopeFlag(wpScopeFlag));
 
                 // Show action success on screen
                 if(newScope) {

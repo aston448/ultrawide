@@ -31,6 +31,12 @@ export const SET_CURRENT_USER_OPEN_DESIGN_ITEMS = 'SET_CURRENT_USER_OPEN_DESIGN_
 export const SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS = 'SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS';
 export const SET_CURRENT_USER_OPEN_WORK_PACKAGE_ITEMS = 'SET_CURRENT_USER_OPEN_WORK_PACKAGE_ITEMS';
 
+export const SET_UPDATE_SCOPE_ITEMS = 'SET_UPDATE_SCOPE_ITEMS';
+export const SET_UPDATE_SCOPE_FLAG = 'SET_UPDATE_SCOPE_FLAG';
+
+export const SET_WP_SCOPE_ITEMS = 'SET_WP_SCOPE_ITEMS';
+export const SET_WP_SCOPE_FLAG = 'SET_WP_SCOPE_FLAG';
+
 // Passes on updates to displayed text for a component
 export const UPDATE_DESIGN_COMPONENT_NAME = 'UPDATE_DESIGN_COMPONENT_NAME';
 export const UPDATE_DESIGN_COMPONENT_RAW_NAME = 'UPDATE_DESIGN_COMPONENT_RAW_NAME';
@@ -311,6 +317,45 @@ export function setCurrentUserOpenWorkPackageItems(openItems, componentId, newSt
 
 }
 
+// Updates the current DU scope data
+export function setUpdateScopeItems(updateScopeItems) {
+    return function (dispatch) {
+
+        dispatch({type: SET_UPDATE_SCOPE_ITEMS, newUpdateScopeItems: updateScopeItems});
+    };
+}
+
+export function setUpdateScopeFlag(updateScopeFlag) {
+    return function (dispatch) {
+
+        let newFlag = updateScopeFlag + 1;
+        if(newFlag > 100){
+            newFlag = 0;
+        }
+
+        dispatch({type: SET_UPDATE_SCOPE_FLAG, newUpdateScopeFlag: newFlag});
+    };
+}
+
+// Updates the current WP scope data
+export function setWorkPackageScopeItems(wpScopeItems) {
+    return function (dispatch) {
+
+        dispatch({type: SET_WP_SCOPE_ITEMS, newWpScopeItems: wpScopeItems});
+    };
+}
+
+export function setWorkPackageScopeFlag(wpScopeFlag) {
+    return function (dispatch) {
+
+        let newFlag = wpScopeFlag + 1;
+        if(newFlag > 100){
+            newFlag = 0;
+        }
+
+        dispatch({type: SET_WP_SCOPE_FLAG, newWpScopeFlag: newFlag});
+    };
+}
 
 // Updates the current design component name if changed
 export function updateDesignComponentName(designComponentName) {

@@ -71,19 +71,45 @@ export class DesignComponent extends Component{
             return true;
         }
 
-        // If this item has been opened or closed... scoped or descoped
+        // If this item has been opened or closed...
         if(nextProps.openItemsFlag.item === currentItemId){
             return true;
         }
 
-        // Item is going into update scope
-        if(nextProps.updateComponent !== null && this.props.updateComponent === null){
-            return true;
+        if(this.props.view === ViewType.DESIGN_UPDATE_EDIT) {
+
+            // Look for Design Update scoping trigger
+
+            if (nextProps.updateScopeFlag !== this.props.updateScopeFlag) {
+
+                // If its one of the descoped items
+                if (nextProps.updateScopeItems.removed.includes(nextProps.currentItem._id)) {
+                    return true;
+                }
+
+                // Or its in the update scope
+                if (this.props.updateItem || nextProps.updateItem) {
+                    return true;
+                }
+            }
         }
 
-        // Item is going out of update scope
-        if(nextProps.updateComponent === null && this.props.updateComponent !== null){
-            return true;
+        // Check for scope updates in WP Editor
+        if(this.props.view === ViewType.WORK_PACKAGE_BASE_EDIT || this.props.view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+
+            if (nextProps.workPackageScopeFlag !== this.props.workPackageScopeFlag) {
+                // An update has been triggered.  Render if this item is in the WP
+
+                // If its one of the descoped items
+                if (nextProps.workPackageScopeItems.removed.includes(this.props.currentItem._id)) {
+                    return true;
+                }
+
+                // Or its in the scope
+                if (nextProps.wpItem) {
+                    return true;
+                }
+            }
         }
 
         switch (nextProps.view) {
@@ -99,8 +125,6 @@ export class DesignComponent extends Component{
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
-                    nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
                     nextProps.testDataFlag === this.props.testDataFlag //&&
@@ -115,18 +139,12 @@ export class DesignComponent extends Component{
                     nextState.open === this.state.open &&
                     nextState.highlighted === this.state.highlighted &&
                     nextState.editable === this.state.editable &&
-                    nextState.inScope === this.state.inScope &&
-                    nextState.parentScope === this.state.parentScope &&
                     nextState.editorState === this.state.editorState &&
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
-                    nextProps.currentItem.isRemoved === this.props.currentItem.isRemoved &&
-                    nextProps.currentItem.scopeType === this.props.currentItem.scopeType &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.testDataFlag === this.props.testDataFlag &&
-                    nextProps.mode === this.props.mode //&&
-                    //nextProps.openItemsFlag === this.props.openItemsFlag
+                    nextProps.mode === this.props.mode
                 );
                 break;
             case ViewType.DEVELOP_BASE_WP:
@@ -137,8 +155,7 @@ export class DesignComponent extends Component{
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
                     nextProps.mode === this.props.mode &&
                     nextProps.testDataFlag === this.props.testDataFlag &&
-                    nextProps.testSummary === this.props.testSummary //&&
-                    //nextProps.openItemsFlag === this.props.openItemsFlag
+                    nextProps.testSummary === this.props.testSummary
                  );
         }
 
@@ -152,7 +169,7 @@ export class DesignComponent extends Component{
 
                 // Open New items in the base design editor
                 if(this.props.currentItem.isNew){
-                    console.log("Opening DV item on mount" + this.props.currentItem.componentNameNew);
+                    //console.log("Opening DV item on mount" + this.props.currentItem.componentNameNew);
                     ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, true);
                 }
                 break;
@@ -403,9 +420,10 @@ export class DesignComponent extends Component{
     render() {
 
 
-        const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext, testSummary, testSummaryData, testDataFlag, currentViewDataValue} = this.props;
+        const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext,
+            testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag, workPackageScopeItems, workPackageScopeFlag} = this.props;
 
-        //console.log("Render " + view + "  DC in context " + displayContext + "with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem);
+        //console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + "with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem);
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -429,6 +447,11 @@ export class DesignComponent extends Component{
                     testSummaryData={testSummaryData}
                     isOpen={this.state.open}
                     testDataFlag={testDataFlag}
+                    updateScopeItems={updateScopeItems}
+                    updateScopeFlag={updateScopeFlag}
+                    workPackageScopeItems={workPackageScopeItems}
+                    workPackageScopeFlag={workPackageScopeFlag}
+
                     //currentViewDataValue={currentViewDataValue}
                 />
             </div>;
@@ -745,6 +768,7 @@ export class DesignComponent extends Component{
 DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
+    updateItemScope: PropTypes.string.isRequired,
     wpItem: PropTypes.object,
     isDragDropHovering: PropTypes.bool.isRequired,
     displayContext: PropTypes.string.isRequired,
@@ -763,7 +787,11 @@ function mapStateToProps(state) {
         openDesignUpdateItems:      state.currentUserOpenDesignUpdateItems,
         openWorkPackageItems:       state.currentUserOpenWorkPackageItems,
         testDataFlag:               state.testDataFlag,
-        openItemsFlag:              state.openItemsFlag
+        openItemsFlag:              state.openItemsFlag,
+        updateScopeItems:           state.currentUpdateScopeItems,
+        updateScopeFlag:            state.currentUpdateScopeFlag,
+        workPackageScopeItems:      state.currentWorkPackageScopeItems,
+        workPackageScopeFlag:       state.currentWorkPackageScopeFlag
     }
 }
 
