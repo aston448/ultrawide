@@ -435,7 +435,7 @@ class ClientDesignVersionServices{
         }
 
         // Get dev data and the latest test results if summary showing - and switch to the view when loaded
-        if(viewOptions.designTestSummaryVisible) {
+        if(viewOptions.designTestSummaryVisible || (userRole === RoleType.DEVELOPER && (viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible || viewOptions.devAccTestsVisible))) {
 
             ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag, testIntegrationDataContext);
         } else {

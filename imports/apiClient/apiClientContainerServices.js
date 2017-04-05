@@ -1376,136 +1376,8 @@ class ClientContainerServices{
         }
     };
 
-    getDesignMashData(userContext){
 
-        // Get mash data for key functional items under the current item to display in the Dev Mash.  This could be:
-        // - Features UNDER an Application or Design Section
-        // - Scenarios in a Feature
-        // - Scenarios in a Feature Aspect
-        // - Steps in a Scenario
-
-        log((msg) => console.log(msg), LogLevel.TRACE, "Searching for Mash data for user {} context D: {} DV: {}, DU: {}, WP: {} Type: {} FR: {}",
-            userContext.userId, userContext.designId, userContext.designVersionId, userContext.designUpdateId,
-            userContext.workPackageId, userContext.designComponentType, userContext.featureReferenceId);
-
-        switch(userContext.designComponentType){
-            case ComponentType.APPLICATION:
-            case ComponentType.DESIGN_SECTION:
-                // Get all features and weed out those that are not children of the specific components
-
-                let selectedWpItem = WorkPackageComponents.findOne({
-                    workPackageId: userContext.workPackageId,
-                    componentId: userContext.designComponentId
-                });
-
-                let features = WorkPackageComponents.find({
-                    workPackageId: userContext.workPackageId,
-                    componentType: ComponentType.FEATURE,
-                    scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                }).fetch();
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} features in Work Package", features.length);
-
-                let wantedFeatures = [];
-
-                features.forEach((feature) => {
-
-                    if(this.isDescendantOf(feature, selectedWpItem, userContext)){
-                        wantedFeatures.push(feature);
-                    }
-                });
-
-                let featureMashData = [];
-                let featureMash = null;
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} child features for current component", wantedFeatures.length);
-
-                // Get feature mash data
-                wantedFeatures.forEach((feature) => {
-                    featureMash = UserWorkPackageMashData.findOne({
-                        userId:                     userContext.userId,
-                        designVersionId:            userContext.designVersionId,
-                        designUpdateId:             userContext.designUpdateId,
-                        workPackageId:              userContext.workPackageId,
-                        mashComponentType:          ComponentType.FEATURE,
-                        designFeatureReferenceId:   feature.componentReferenceId
-                    });
-
-                    if(featureMash) {
-                        featureMashData.push(featureMash);
-                    }
-                });
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} feature mash entries for current component", featureMashData.length);
-
-                return featureMashData;
-                break;
-
-            case ComponentType.FEATURE:
-                // Here we want to get all Scenario data that may be related to the feature.  This should already be set in the Mash data
-
-                let scenarioMashData = [];
-
-                scenarioMashData = UserWorkPackageMashData.find({
-                    userId:                     userContext.userId,
-                    designVersionId:            userContext.designVersionId,
-                    designUpdateId:             userContext.designUpdateId,
-                    workPackageId:              userContext.workPackageId,
-                    designFeatureReferenceId:   userContext.featureReferenceId,
-                    mashComponentType:          ComponentType.SCENARIO
-                }).fetch();
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current component", scenarioMashData.length);
-
-                return scenarioMashData;
-                break;
-
-            case ComponentType.FEATURE_ASPECT:
-                // Get all Scenarios in this Feature Aspect
-
-                let aspectScenarioMashData = [];
-
-                aspectScenarioMashData = UserWorkPackageMashData.find({
-                    userId:                         userContext.userId,
-                    designVersionId:                userContext.designVersionId,
-                    designUpdateId:                 userContext.designUpdateId,
-                    workPackageId:                  userContext.workPackageId,
-                    designFeatureReferenceId:       userContext.featureReferenceId,
-                    designFeatureAspectReferenceId: userContext.featureAspectReferenceId,
-                    mashComponentType:              ComponentType.SCENARIO
-                }).fetch();
-
-                log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario mash entries for current aspect {}", aspectScenarioMashData.length, userContext.featureAspectReferenceId);
-
-                return aspectScenarioMashData;
-                break;
-
-            case ComponentType.SCENARIO:
-                //Get all Scenario Mash Steps for the scenario
-                //
-                // let stepsScenarioMashData = [];
-                //
-                // stepsScenarioMashData = UserDesignDevMashData.find({
-                //     userId:                         userContext.userId,
-                //     designVersionId:                userContext.designVersionId,
-                //     designUpdateId:                 userContext.designUpdateId,
-                //     workPackageId:                  userContext.workPackageId,
-                //     designScenarioReferenceId:      userContext.scenarioReferenceId,
-                //     mashComponentType:              ComponentType.SCENARIO_STEP
-                // }).fetch();
-                //
-                // log((msg) => console.log(msg), LogLevel.TRACE, "Found {} scenario step mash entries for current scenario {}", stepsScenarioMashData.length, userContext.scenarioReferenceId);
-                //
-                // return stepsScenarioMashData;
-
-                break;
-            default:
-
-        }
-
-    };
-
-    getWorkPackageMashData(userContext, mashCurrentItem){
+    getDesignDevMashData(userContext, mashCurrentItem){
 
         // Return all the data that is relevant to the currently selected Design Item or item in the Mash
 
@@ -1562,12 +1434,13 @@ class ClientContainerServices{
                     intTestMash.forEach((mashItem) => {
 
                         let mashDesignComponent = null;
-                        if (userContext.designUpdateId === 'NONE') {
+                        if (userContext.designUpdateId === 'NONE' || userContext.workPackageId === 'NONE') {
                             mashDesignComponent = DesignVersionComponents.findOne({_id: mashItem.designComponentId})
                         } else {
                             mashDesignComponent = DesignUpdateComponents.findOne({_id: mashItem.designComponentId})
                         }
 
+                        console.log("Design component for mash item " + mashItem.designComponentId + " is " + mashDesignComponent);
                         if (this.isDescendantOf(mashDesignComponent, selectedDesignComponent, userContext)) {
                             returnData.push(mashItem);
                         }
@@ -1982,6 +1855,13 @@ class ClientContainerServices{
         switch(view){
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
+                detailsOption = ViewOptionType.DESIGN_DETAILS;
+                detailsValue = userViewOptions.designDetailsVisible;
+                dictOption = ViewOptionType.DESIGN_DICT;
+                dictValue = userViewOptions.designDomainDictVisible;
+                testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.designTestSummaryVisible;
+                break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
                 detailsValue = userViewOptions.designDetailsVisible;
@@ -1989,6 +1869,8 @@ class ClientContainerServices{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.designTestSummaryVisible;
+                intTestOption = ViewOptionType.DEV_INT_TESTS;
+                intTestValue = userViewOptions.devIntTestsVisible;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
@@ -2068,7 +1950,7 @@ class ClientContainerServices{
                 return currentOptions.accFiles;
         }
     }
-    getDropdownMenuItems(menuType, view, mode, userViewOptions){
+    getDropdownMenuItems(menuType, view, mode, userRole, userViewOptions){
 
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Getting menu items for menu {} in view {}", menuType, view);
@@ -2234,7 +2116,6 @@ class ClientContainerServices{
 
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.DESIGN_UPDATE_VIEW:
 
                 switch (menuType) {
@@ -2258,7 +2139,41 @@ class ClientContainerServices{
                             ];
                 }
                 break;
+            case ViewType.DESIGN_UPDATABLE_VIEW:
 
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return  [
+                            gotoSelection,
+                            gotoConfig,
+                            gotoDesigns
+                        ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+
+                        switch(userRole){
+                            // Developer can access test results on this screen
+                            case RoleType.DEVELOPER:
+                                return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewIntTests,
+                                    viewTestSummary
+                                ];
+                            default:
+                                return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewTestSummary
+                                ];
+                        }
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+                        return [
+                            refreshTestData
+                        ];
+                }
+                break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 

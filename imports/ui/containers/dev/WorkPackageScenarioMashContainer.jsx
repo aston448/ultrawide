@@ -138,7 +138,7 @@ WorkPackageScenarioMashList = connect(mapStateToProps)(WorkPackageScenarioMashLi
 export default WorkPackageScenarioMashContainer = createContainer(({params}) => {
 
 
-    let designMashItemData = ClientContainerServices.getWorkPackageMashData(params.userContext, params.parentMash);
+    let designMashItemData = ClientContainerServices.getDesignDevMashData(params.userContext, params.parentMash);
 
     return{
         designMashItemData: designMashItemData,

@@ -13,6 +13,7 @@ import DesignComponentTarget            from '../../components/edit/DesignCompon
 import DesignComponentAdd               from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
+import WorkPackageFeatureMashContainer  from '../dev/WorkPackageFeatureMashContainer.jsx';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -106,6 +107,7 @@ export class DesignApplicationsList extends Component {
         let addComponent = '';
         let designDetails = '';
         let domainDictionary = '';
+        let intTests = '';
         let displayedItems = 1;
 
         // Get the correct display context
@@ -175,6 +177,7 @@ export class DesignApplicationsList extends Component {
         let col1width = 6;
         let col2width = 6;
         let col3width = 6;
+        let col4width = 6;
 
         // Details
         if(viewOptions.designDetailsVisible){
@@ -206,6 +209,40 @@ export class DesignApplicationsList extends Component {
             displayedItems++;
         }
 
+        if(viewOptions.devIntTestsVisible){
+            intTests =
+                <WorkPackageFeatureMashContainer params={{
+                    userContext: userContext,
+                    displayContext: DisplayContext.MASH_INT_TESTS
+                }}/>;
+
+            switch(displayedItems){
+                case 1:
+                    // Now 2 items
+                    col1width = 6;
+                    col2width = 6;
+                    col3width = 6;
+                    col4width = 6;
+                    break;
+                case 2:
+                    // Now 3 items
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    break;
+                case 3:
+                    // Now 4 items
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    break;
+            }
+
+            displayedItems++;
+        }
+
         // Test Summary - this actually just makes col 1 wider
         if(viewOptions.designTestSummaryVisible){
 
@@ -215,18 +252,28 @@ export class DesignApplicationsList extends Component {
                     col1width = 12;
                     col2width = 0;
                     col3width = 0;
+                    col4width = 0;
                     break;
                 case 2:
                     // Col 1 gets bigger
                     col1width = 8;
                     col2width = 4;
                     col3width = 4;
+                    col4width = 4;
                     break;
                 case 3:
                     // Col 1 gets bigger
                     col1width = 6;
                     col2width = 3;
                     col3width = 3;
+                    col4width = 3;
+                    break;
+                case 4:
+                    // Col 1 gets bigger
+                    col1width = 6;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
                     break;
             }
         }
@@ -252,7 +299,6 @@ export class DesignApplicationsList extends Component {
                     </Col>;
             }
 
-
             let col3 = '';
             if(viewOptions.designDomainDictVisible){
                 col3 =
@@ -261,6 +307,13 @@ export class DesignApplicationsList extends Component {
                     </Col>;
             }
 
+            let col4 = '';
+            if(viewOptions.devIntTestsVisible){
+                col4 =
+                    <Col id="column4" md={col4width} className="close-col">
+                        {intTests}
+                    </Col>;
+            }
 
             // Make up the layout based on the view options
             layout =
@@ -272,6 +325,7 @@ export class DesignApplicationsList extends Component {
                         {col1}
                         {col2}
                         {col3}
+                        {col4}
                     </Row>
                 </Grid>;
 

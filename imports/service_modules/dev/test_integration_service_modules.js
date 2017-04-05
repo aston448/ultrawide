@@ -20,7 +20,8 @@ import { TestOutputLocations }              from '../../collections/configure/te
 import { TestOutputLocationFiles }          from '../../collections/configure/test_output_location_files.js';
 
 // Ultrawide Services
-import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, WorkPackageScopeType, ScenarioStepStatus, ScenarioStepType, TestLocationType, TestLocationFileType,  LogLevel } from '../../constants/constants.js';
+import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, WorkPackageScopeType,
+    ScenarioStepStatus, ScenarioStepType, TestLocationType, TestLocationFileType, UpdateMergeStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
 
 import  DesignComponentModules     from '../../service_modules/design/design_component_service_modules.js';
@@ -327,7 +328,7 @@ class TestIntegrationModules{
 
     };
 
-    calculateWorkPackageMash(userContext){
+    calculateDesignDevMash(userContext){
 
         // Clear the data we are refreshing
 
@@ -341,11 +342,11 @@ class TestIntegrationModules{
         // of Features and then adding in their children
 
         // Get all Applications active in WP Design in order.  Must always be at least one as the parent of whatever is in the WP
-        let wpApplications = [];
+        let mashApplications = [];
 
         if (userContext.workPackageId !== 'NONE') {
-
-            wpApplications = WorkPackageComponents.find(
+            // Mash applies to a WP
+            mashApplications = WorkPackageComponents.find(
                 {
                     designVersionId: userContext.designVersionId,
                     workPackageId: userContext.workPackageId,
@@ -353,15 +354,24 @@ class TestIntegrationModules{
                     scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
                 },
                 {sort: {componentIndex: 1}}).fetch();
+        } else {
+            // Mash applies to a design version
+            mashApplications = DesignVersionComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentType: ComponentType.APPLICATION,
+                    updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                },
+                {sort: {componentIndex: 1}}).fetch();
         }
 
-        if (wpApplications.length > 0) {
+        if (mashApplications.length > 0) {
 
             // Each feature, in order, will be given an index
             let featureIndex = 0;
 
             // Get the Design Sections in order for each Application
-            wpApplications.forEach((application) => {
+            mashApplications.forEach((application) => {
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Mash Data for application {}", application.componentReferenceId);
 
@@ -382,15 +392,26 @@ class TestIntegrationModules{
         let subsections = [];
         let features = [];
 
-        subsections = WorkPackageComponents.find(
-            {
-                designVersionId:            userContext.designVersionId,
-                workPackageId:              userContext.workPackageId,
-                componentType:              ComponentType.DESIGN_SECTION,
-                componentParentReferenceId: parentComponent.componentReferenceId,
-                scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
-            },
-            {sort:{componentIndex: 1}}).fetch();
+        if(userContext.workPackageId !== 'NONE') {
+            subsections = WorkPackageComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    workPackageId: userContext.workPackageId,
+                    componentType: ComponentType.DESIGN_SECTION,
+                    componentParentReferenceId: parentComponent.componentReferenceId,
+                    scopeType: {$in: [WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
+                },
+                {sort: {componentIndex: 1}}).fetch();
+        } else {
+            subsections = DesignVersionComponents.find(
+                {
+                    designVersionId: userContext.designVersionId,
+                    componentType: ComponentType.DESIGN_SECTION,
+                    componentParentReferenceIdNew: parentComponent.componentReferenceId,
+                    updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                },
+                {sort: {componentIndex: 1}}).fetch();
+        }
 
         log((msg) => console.log(msg), LogLevel.TRACE, "Check feature index is {}", featureIndex);
 
@@ -401,16 +422,26 @@ class TestIntegrationModules{
                 // Get the Features
                 log((msg) => console.log(msg), LogLevel.TRACE, "Getting Integration Mash Data Features for section {}", subsection.componentReferenceId);
 
-                features = WorkPackageComponents.find(
-                    {
-                        designVersionId:            userContext.designVersionId,
-                        workPackageId:              userContext.workPackageId,
-                        componentType:              ComponentType.FEATURE,
-                        componentParentReferenceId: subsection.componentReferenceId,
-                        scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
-                    },
-                    {sort:{componentIndex: 1}}).fetch();
-
+                if(userContext.workPackageId !== 'NONE') {
+                    features = WorkPackageComponents.find(
+                        {
+                            designVersionId: userContext.designVersionId,
+                            workPackageId: userContext.workPackageId,
+                            componentType: ComponentType.FEATURE,
+                            componentParentReferenceId: subsection.componentReferenceId,
+                            scopeType: {$in: [WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
+                        },
+                        {sort: {componentIndex: 1}}).fetch();
+                } else {
+                    features = DesignVersionComponents.find(
+                        {
+                            designVersionId: userContext.designVersionId,
+                            componentType: ComponentType.FEATURE,
+                            componentParentReferenceIdNew: subsection.componentReferenceId,
+                            updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                        },
+                        {sort: {componentIndex: 1}}).fetch();
+                }
                 // Add Mash Data for these Features
                 log((msg) => console.log(msg), LogLevel.TRACE, "Before processing features index is {}", currentFeatureIndex);
                 currentFeatureIndex = this.processFeatures(userContext, features, currentFeatureIndex);
@@ -436,95 +467,150 @@ class TestIntegrationModules{
 
             log((msg) => console.log(msg), LogLevel.TRACE, "Processing Mash Data for Feature {} with index {}", feature.componentReferenceId, currentFeatureIndex);
 
-            // Get Aspects and Scenarios in the Feature
-            let wpDesignItems = WorkPackageComponents.find({
-                designVersionId:                userContext.designVersionId,
-                workPackageId:                  userContext.workPackageId,
-                componentFeatureReferenceId:    feature.componentReferenceId,
-                componentType:      { $in:[ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
-                scopeType: {$in:[WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
-            }).fetch();
+            let mashDesignItems = [];
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Got {} design items", wpDesignItems.length);
+            // Get Aspects and Scenarios in the Feature
+            if(userContext.workPackageId !== 'NONE') {
+                mashDesignItems = WorkPackageComponents.find({
+                    designVersionId: userContext.designVersionId,
+                    workPackageId: userContext.workPackageId,
+                    componentFeatureReferenceId: feature.componentReferenceId,
+                    componentType: {$in: [ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
+                    scopeType: {$in: [WorkPackageScopeType.SCOPE_ACTIVE, WorkPackageScopeType.SCOPE_PARENT]}
+                }).fetch();
+            } else {
+                mashDesignItems = DesignVersionComponents.find({
+                    designVersionId: userContext.designVersionId,
+                    componentFeatureReferenceIdNew: feature.componentReferenceId,
+                    componentType: {$in: [ComponentType.FEATURE_ASPECT, ComponentType.SCENARIO]},
+                    updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                }).fetch();
+            }
+
+            log((msg) => console.log(msg), LogLevel.TRACE, "Got {} design items", mashDesignItems.length);
 
             let designItemList = [];
 
             // Get a uniform list
-            wpDesignItems.forEach((wpItem) => {
+            mashDesignItems.forEach((mashItem) => {
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Processing item {}", wpItem.componentReferenceId);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Processing item {}", mashItem.componentReferenceId);
 
                 let aspectRef = 'NONE';
                 let scenarioRef = 'NONE';
                 let hasChildren = false;
 
 
-                if(wpItem.componentType === ComponentType.FEATURE_ASPECT){
-                    aspectRef = wpItem.componentReferenceId;
+                if(mashItem.componentType === ComponentType.FEATURE_ASPECT){
+                    aspectRef = mashItem.componentReferenceId;
                 }
 
-                if(wpItem.componentType === ComponentType.SCENARIO){
-                    aspectRef = wpItem.componentParentReferenceId;
-                    scenarioRef = wpItem.componentReferenceId;
+                if(mashItem.componentType === ComponentType.SCENARIO){
+                    if(userContext.workPackageId !== 'NONE') {
+                        aspectRef = mashItem.componentParentReferenceId;
+                    } else {
+                        aspectRef = mashItem.componentParentReferenceIdNew;
+                    }
+                    scenarioRef = mashItem.componentReferenceId;
                 }
 
-                hasChildren = WorkPackageComponents.find(
-                        {
-                            designVersionId:            userContext.designVersionId,
-                            workPackageId:              userContext.workPackageId,
-                            componentParentReferenceId: wpItem.componentReferenceId
-                        }).count() > 0;
+                if(userContext.workPackageId !== 'NONE') {
+                    hasChildren = WorkPackageComponents.find(
+                            {
+                                designVersionId: userContext.designVersionId,
+                                workPackageId: userContext.workPackageId,
+                                componentParentReferenceId: mashItem.componentReferenceId
+                            }).count() > 0;
+                } else {
+                    hasChildren = DesignVersionComponents.find(
+                            {
+                                designVersionId: userContext.designVersionId,
+                                componentParentReferenceIdNew: mashItem.componentReferenceId
+                            }).count() > 0;
+                }
 
                 // Get the actual component name from the actual Design Component.
                 // Note we don't denormalise this to avoid headache of name changes having to be propagated manually
                 let designComponentName = '';
-                if(userContext.designUpdateId === 'NONE'){
-
-                    designComponentName = DesignVersionComponents.findOne({
-                        _id: wpItem.componentId
-                    }).componentNameNew;
-
+                if(userContext.workPackageId === 'NONE'){
+                    // Mash item is the DV item
+                    designComponentName = mashItem.componentNameNew;
                 } else {
-
-                    designComponentName = DesignUpdateComponents.findOne({
-                        _id: wpItem.componentId
-                    }).componentNameNew;
+                    // Mash item is a WP item so get DV or DU
+                    if(userContext.designUpdateId === 'NONE'){
+                        designComponentName = DesignVersionComponents.findOne({
+                            _id: mashItem.componentId
+                        }).componentNameNew;
+                    } else {
+                        designComponentName = DesignUpdateComponents.findOne({
+                            _id: mashItem.componentId
+                        }).componentNameNew;
+                    }
                 }
 
-                designItemList.push({
-                    itemId:         wpItem.componentId,
-                    itemName:       designComponentName,
-                    itemType:       wpItem.componentType,
-                    itemRef:        wpItem.componentReferenceId,
-                    itemParentRef:  wpItem.componentParentReferenceId,
-                    featureRef:     wpItem.componentFeatureReferenceId,
-                    aspectRef:      aspectRef,
-                    scenarioRef:    scenarioRef,
-                    index:          wpItem.componentIndex,
-                    featureIndex:   currentFeatureIndex,
-                    hasChildren:    hasChildren
-                });
+                if(userContext.workPackageId !== 'NONE') {
+                    // From WP component
+                    designItemList.push({
+                        itemId: mashItem.componentId,
+                        itemName: designComponentName,
+                        itemType: mashItem.componentType,
+                        itemRef: mashItem.componentReferenceId,
+                        itemParentRef: mashItem.componentParentReferenceId,
+                        featureRef: mashItem.componentFeatureReferenceId,
+                        aspectRef: aspectRef,
+                        scenarioRef: scenarioRef,
+                        index: mashItem.componentIndex,
+                        featureIndex: currentFeatureIndex,
+                        hasChildren: hasChildren
+                    });
+                } else {
+                    // From real component
+                    designItemList.push({
+                        itemId: mashItem._id,
+                        itemName: designComponentName,
+                        itemType: mashItem.componentType,
+                        itemRef: mashItem.componentReferenceId,
+                        itemParentRef: mashItem.componentParentReferenceIdNew,
+                        featureRef: mashItem.componentFeatureReferenceIdNew,
+                        aspectRef: aspectRef,
+                        scenarioRef: scenarioRef,
+                        index: mashItem.componentIndexNew,
+                        featureIndex: currentFeatureIndex,
+                        hasChildren: hasChildren
+                    });
+                }
 
             });
 
 
             // Insert the Feature into the mash as the testing baseline
             let featureName = '';
+            let featureId = 'NONE';
             let itemIndex = feature.componentIndex;
 
             // Get the actual Feature name from the actual Design Component.
             // Note we don't denormalise this to avoid headache of name changes having to be propagated manually
-            if(userContext.designUpdateId === 'NONE'){
+            if(userContext.workPackageId === 'NONE'){
+
+                featureId = feature._id;
 
                 featureName = DesignVersionComponents.findOne({
-                    _id: feature.componentId
+                    _id: featureId
                 }).componentNameNew;
 
             } else {
 
-                featureName = DesignUpdateComponents.findOne({
-                    _id: feature.componentId
-                }).componentNameNew;
+                featureId = feature.componentId;
+
+                if(userContext.designUpdateId === 'NONE'){
+                    featureName = DesignVersionComponents.findOne({
+                        _id: featureId
+                    }).componentNameNew;
+                } else {
+                    featureName = DesignUpdateComponents.findOne({
+                        _id: featureId
+                    }).componentNameNew;
+                }
 
             }
 
@@ -537,7 +623,7 @@ class TestIntegrationModules{
                     workPackageId:                  userContext.workPackageId,
                     mashComponentType:              ComponentType.FEATURE,
                     designComponentName:            featureName,
-                    designComponentId:              feature.componentId,
+                    designComponentId:              featureId,
                     designComponentReferenceId:     feature.componentReferenceId,
                     designFeatureReferenceId:       feature.componentReferenceId,
                     designFeatureAspectReferenceId: 'NONE',
@@ -554,8 +640,8 @@ class TestIntegrationModules{
                     accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                     intMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
                     intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                    unitMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
-                    unitMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                    unitMashStatus:                 MashStatus.MASH_NOT_IMPLEMENTED,
+                    unitMashTestStatus:             MashTestStatus.MASH_NOT_LINKED,
                 }
 
             );
@@ -632,8 +718,8 @@ class TestIntegrationModules{
                         accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
                         intMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
                         intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
-                        unitMashStatus:                  MashStatus.MASH_NOT_IMPLEMENTED,
-                        unitMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                        unitMashStatus:                 MashStatus.MASH_NOT_IMPLEMENTED,
+                        unitMashTestStatus:             MashTestStatus.MASH_NOT_LINKED,
                     }
                 );
 

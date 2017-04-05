@@ -105,6 +105,7 @@ export default DropdownItemsContainer = createContainer(({params}) => {
         params.menuType,
         params.view,
         params.mode,
+        params.userRole,
         params.userViewOptions
     );
 

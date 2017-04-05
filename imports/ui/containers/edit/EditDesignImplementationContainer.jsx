@@ -12,7 +12,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentTextContainer         from '../edit/DesignComponentTextContainer.jsx';
 import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
-import DesignDevUnitMashContainer           from '../dev/DesignDevUnitMashContainer.jsx';
 import WorkPackageFeatureMashContainer      from '../dev/WorkPackageFeatureMashContainer.jsx';
 import DomainDictionaryContainer            from './DomainDictionaryContainer.jsx';
 import DesignEditorHeader                   from '../../components/common/DesignEditorHeader.jsx';

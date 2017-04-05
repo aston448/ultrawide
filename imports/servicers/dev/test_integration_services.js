@@ -36,14 +36,14 @@ import ChimpMochaTestServices           from '../../service_modules/dev/test_pro
 
 class TestIntegrationServices{
 
-    populateWorkPackageMashData(userContext){
+    populateDesignDevMashData(userContext){
 
-        // To be called when a Work Package is opened to get the basic mash data ready
+        // To be called when a Work Package or Updatable Design Version Developer View is opened to get the basic mash data ready
 
         if(Meteor.isServer){
 
             // Recalculate the Design Mash data and add in the latest results
-            MashDataModules.calculateWorkPackageMash(userContext)
+            MashDataModules.calculateDesignDevMash(userContext)
 
         }
     }

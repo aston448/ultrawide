@@ -95,7 +95,7 @@ WorkPackageFeatureAspectsMashList = connect(mapStateToProps)(WorkPackageFeatureA
 export default WorkPackageFeatureAspectMashContainer = createContainer(({params}) => {
 
 
-    let designMashItemData = ClientContainerServices.getWorkPackageMashData(params.userContext, params.featureMash);
+    let designMashItemData = ClientContainerServices.getDesignDevMashData(params.userContext, params.featureMash);
 
     return{
         designMashItemData: designMashItemData,

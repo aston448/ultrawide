@@ -325,7 +325,7 @@ WorkPackageFeatureMashList = connect(mapStateToProps)(WorkPackageFeatureMashList
 export default WorkPackageFeatureMashContainer = createContainer(({params}) => {
 
 
-    let designMashItemData = ClientContainerServices.getWorkPackageMashData(params.userContext, null);
+    let designMashItemData = ClientContainerServices.getDesignDevMashData(params.userContext, null);
     let nonDesignScenarioData = ClientContainerServices.getNonDesignAcceptanceScenarioData(params.userContext);
     let existingFeatureFile = ClientContainerServices.checkForExistingFeatureFile(params.userContext);
 

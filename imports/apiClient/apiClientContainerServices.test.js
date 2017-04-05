@@ -8,7 +8,7 @@ import ClientContainerServices from '../apiClient/apiClientContainerServices.js'
 
 describe('API: ClientContainer', () => {
 
-    function testGetDropdownMenuItems(menuType, view, mode){
+    function testGetDropdownMenuItems(menuType, view, mode, userRole=RoleType.DESIGNER){
 
         const userViewOptions = {
             designDetailsVisible:       true,
@@ -28,7 +28,7 @@ describe('API: ClientContainer', () => {
             devDomainDictVisible:       false
         };
 
-        return ClientContainerServices.getDropdownMenuItems(menuType, view, mode, userViewOptions);
+        return ClientContainerServices.getDropdownMenuItems(menuType, view, mode, userRole, userViewOptions);
     }
 
     function menuContains(menu, key){

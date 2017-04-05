@@ -21,7 +21,7 @@ export const populateWorkPackageMashData = new ValidatedMethod({
     run({userContext}){
 
         try {
-            TestIntegrationServices.populateWorkPackageMashData(userContext);
+            TestIntegrationServices.populateDesignDevMashData(userContext);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)

@@ -86,6 +86,7 @@ export class UltrawideMenuDropdown extends Component {
                         menuType: menuType,
                         view: view,
                         mode: mode,
+                        userRole: userRole,
                         userViewOptions: userViewOptions,
                         clickAction: (newState) => this.setDisplayItems(newState)
                     }}
