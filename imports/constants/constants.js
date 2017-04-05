@@ -185,6 +185,7 @@ export const DesignVersionStatus = {
 
 export const UpdateMergeStatus = {
     COMPONENT_BASE:                 'component-base',             // Component is unchanged from base design
+    COMPONENT_BASE_PARENT:          'component-base-parent',      // Component is unchanged but is the parent of a changed component
     COMPONENT_ADDED:                'component-added',            // Component added in an Update
     COMPONENT_MODIFIED:             'component-modified',         // Component name was changed by an Update
     COMPONENT_DETAILS_MODIFIED:     'component-details-modified', // Component details text only changed by an update

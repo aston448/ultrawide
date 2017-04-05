@@ -163,6 +163,8 @@ class TextLookups {
                 return 'Moved in this Version';
             case UpdateMergeStatus.COMPONENT_REMOVED:
                 return 'Removed in this version';
+            case UpdateMergeStatus.COMPONENT_BASE_PARENT:
+                return 'Has updated children...';
         }
     }
 

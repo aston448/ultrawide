@@ -22,8 +22,8 @@ let Schema = new SimpleSchema({
     componentParentReferenceIdNew:  {type: String},                                     // A unique ID that persists across design updates - after move
     componentFeatureReferenceIdOld: {type: String, defaultValue: 'NONE'},               // If a component is part of a feature this is set
     componentFeatureReferenceIdNew: {type: String, defaultValue: 'NONE'},               // If a component is part of a feature this is set - after move
-    componentIndexOld:              {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering
-    componentIndexNew:              {type: Number, decimal: true, defaultValue: 100000},  // Used for ordering
+    componentIndexOld:              {type: Number, decimal: true, defaultValue: 1000000},  // Used for ordering
+    componentIndexNew:              {type: Number, decimal: true, defaultValue: 1000000},  // Used for ordering
 
     // Data
     componentNameOld:               {type: String},                                     // Name - plain text - base version

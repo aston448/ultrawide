@@ -1440,30 +1440,33 @@ input {
 .update-merge-status{
     width: 18px;
     height: 18px;
-    border: 1px solid black;
 }
 .component-base{
-    background-color: lightgrey;
+    color: lightgrey;
+}
+
+.component-base-parent{
+    color: lightblue;
 }
 
 .component-added{
-    background-color: limegreen;
+    color: limegreen;
 }
 
 .component-modified{
-    background-color: orange;
+    color: orange;
 }
 
 .component-details-modified{
-    background-color: palegoldenrod;
+    color: palegoldenrod;
 }
 
 .component-removed{
-    background-color: indianred;
+    color: indianred;
 }
 
 .component-moved{
-    background-color: lightblue;
+    color: lightblue;
 }
 
 .step-type-col{

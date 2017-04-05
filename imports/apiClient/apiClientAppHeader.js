@@ -167,7 +167,7 @@ class ClientAppHeaderServices{
 
         } else {
 
-            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE){
+            if(userContext.designUpdateId === 'NONE' || displayContext === DisplayContext.UPDATE_SCOPE || displayContext === DisplayContext.WORKING_VIEW){
 
                 componentArray = this.getDesignVersionSections(userContext);
 

@@ -689,7 +689,7 @@ export class DesignComponentHeader extends Component{
                     inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
                 } else {
                     // If not in this update indicate if another update is known to have modified it
-                    if(currentItem.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE){
+                    if(!(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE || currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT)){
                         inScopeElsewhere = true;
                     }
                 }
@@ -785,13 +785,39 @@ export class DesignComponentHeader extends Component{
                 break;
         }
 
-        // Get status for updatable views - display as a tooltip over the status icon
-        let updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
-        let updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
-
+        let updateStatusClass = '';
+        let updateStatusText = '';
+        let updateStatusGlyph = '';
         let updateTextClass = '';
-        if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
-            updateTextClass = ' removed-item';
+
+        if(view === ViewType.DESIGN_UPDATABLE_VIEW || (view === ViewType.DESIGN_UPDATE_EDIT && displayContext === DisplayContext.WORKING_VIEW)) {
+
+            // Get status for working views - display as a tooltip over the status icon
+
+            updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
+            updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
+            updateStatusGlyph = 'th-large';
+
+            switch (currentItem.updateMergeStatus) {
+                case UpdateMergeStatus.COMPONENT_REMOVED:
+                    updateStatusGlyph = 'trash';
+                    break;
+                case UpdateMergeStatus.COMPONENT_ADDED:
+                    updateStatusGlyph = 'plus-sign';
+                    break;
+                case UpdateMergeStatus.COMPONENT_MODIFIED:
+                    updateStatusGlyph = 'adjust';
+                    break;
+                case UpdateMergeStatus.COMPONENT_BASE_PARENT:
+                    // Set a flag if changed items below
+                    updateStatusGlyph = 'flag';
+                    break;
+            }
+
+            if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+                updateTextClass = ' removed-item';
+            }
+
         }
 
         const tooltipUpdateStatus = (
@@ -1002,7 +1028,7 @@ export class DesignComponentHeader extends Component{
                 <InputGroup onClick={ () => this.setCurrentComponent()}>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div id="updateStatusIcon" className={updateStatusClass}></div>
+                            <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
                     <InputGroup.Addon id="openClose"  onClick={ () => this.toggleOpen()}>

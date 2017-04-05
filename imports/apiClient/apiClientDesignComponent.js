@@ -7,7 +7,7 @@ import {UserUnitTestMashData}           from '../collections/dev/user_unit_test_
 import {UserWorkPackageMashData}        from '../collections/dev/user_work_package_mash_data.js';
 
 // Ultrawide Services
-import { ComponentType, DisplayContext, MashTestStatus, LogLevel, MessageType} from '../constants/constants.js';
+import { ComponentType, DisplayContext, UpdateMergeStatus, LogLevel, MessageType} from '../constants/constants.js';
 import { DesignComponentMessages } from '../constants/message_texts.js';
 import { Validation } from '../constants/validation_errors.js';
 
@@ -669,6 +669,7 @@ class ClientDesignComponentServices{
             return false;
         }
     };
+
 
 
     getNewAndOldRawText(newText, oldText){

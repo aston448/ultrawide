@@ -179,7 +179,7 @@ export class DesignComponent extends Component{
 
                 // In the update editor open any item that is added to scope
                 if(this.props.updateItem){
-                    if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                    if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE || this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) {
                         //console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
                         ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, true);
                         this.setState({open: true});

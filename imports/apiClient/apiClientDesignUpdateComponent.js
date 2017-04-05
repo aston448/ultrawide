@@ -348,10 +348,11 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 8: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Scenario Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
 
                     this.refreshDesignUpdateSummary(parentComponent);
+
+                    const testDataFlag = store.getState().testDataFlag;
+                    store.dispatch(updateTestDataFlag(!testDataFlag));
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

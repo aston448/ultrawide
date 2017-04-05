@@ -400,6 +400,12 @@ class DesignVersionModules{
             );
 
             this.fixParentIdsForComponent(newComponentId);
+
+            // Need to get the component again to get the latest update merge status
+            const child = DesignVersionComponents.findOne({_id: newComponentId});
+
+            // Flag parents for added item
+            this.setParentsUpdateMergeStatus(child, true);
         }
     }
 
@@ -414,6 +420,9 @@ class DesignVersionModules{
         });
 
         if(designVersionItem){
+
+            // First un-flag parents as necessary
+            this.setParentsUpdateMergeStatus(designVersionItem, false);
 
             DesignVersionComponents.remove({
                 _id: designVersionItem._id
@@ -458,6 +467,12 @@ class DesignVersionModules{
                     }
                 }
             );
+
+            // Need to get the component again to get the latest update merge status
+            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+            // Flag parents
+            this.setParentsUpdateMergeStatus(child, true);
         }
     };
 
@@ -497,6 +512,16 @@ class DesignVersionModules{
                     }
                 }
             );
+
+            // Clear parents if going back to base
+            if(mergeStatus === UpdateMergeStatus.COMPONENT_BASE){
+                // Need to get the component again to get the latest update merge status
+                const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+                // Flag parents
+                this.setParentsUpdateMergeStatus(child, true);
+            }
+
         }
     };
 
@@ -510,6 +535,12 @@ class DesignVersionModules{
                 }
             }
         );
+
+        // Need to get the component again to get the latest update merge status
+        const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+        // Flag parents
+        this.setParentsUpdateMergeStatus(child, true);
     }
 
     logicallyRestoreDesignVersionItem(designVersionItem){
@@ -536,6 +567,98 @@ class DesignVersionModules{
                 }
             }
         );
+
+        // Clear parents if going back to base
+        if(updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE){
+            // Need to get the component again to get the latest update merge status
+            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+            // Flag parents
+            this.setParentsUpdateMergeStatus(child, true);
+        }
+
+    }
+
+    setParentsUpdateMergeStatus(child, set){
+        console.log("In set Parents Update Merge Status... Child has parent: " + child.componentParentIdNew);
+
+        if(child.componentParentIdNew !== 'NONE') {
+            const parent = DesignVersionComponents.findOne({
+                _id: child.componentParentIdNew
+            });
+
+            if(set){
+                // If setting only update if not set already as something
+                if(parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE) {
+                    DesignVersionComponents.update(
+                        {_id: parent._id},
+                        {
+                            $set: {
+                                updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE_PARENT
+                            }
+                        }
+                    );
+                }
+
+                // Carry on up
+                this.setParentsUpdateMergeStatus(parent, set);
+
+            } else {
+
+                // Clearing.  Only clear if set as parent-base and no other children require this flag
+                // Note that original item needs to be cleared before calling this...
+
+                if(!(this.hasUpdateModifiedChildren(parent, child))){
+                    // Revert to base if parent-base
+                    console.log("Checking parent " + parent.componentNameNew);
+                    if(parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT) {
+                        DesignVersionComponents.update(
+                            {_id: parent._id},
+                            {
+                                $set: {
+                                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
+                                }
+                            }
+                        );
+                    }
+
+                    // Carry on up
+                    this.setParentsUpdateMergeStatus(parent, set);
+                }
+            }
+        }
+    }
+
+    hasUpdateModifiedChildren(designVersionComponent, originalChildComponent){
+
+        // Get children that are not the original item
+        const children = DesignVersionComponents.find({
+            designVersionId: designVersionComponent.designVersionId,
+            componentParentIdNew: designVersionComponent._id,
+            _id: {$ne: originalChildComponent._id}
+        }).fetch();
+
+        let found = false;
+
+        if(children.length > 0){
+            children.forEach((child) => {
+                console.log("Checking child " + child.componentNameNew);
+                if(child.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE){
+                    console.log("Modified: " + child.updateMergeStatus);
+                    found = true;
+                }
+
+                if(found){
+                    return true;
+                }
+            });
+
+            // If no children were flagged then their children can't be flagged either
+        }
+
+        console.log("Returning: " + found);
+        return found;
+
     }
 
     removeUpdateItemInDesignVersion(updateItem){
@@ -549,6 +672,9 @@ class DesignVersionModules{
 
             if(updateItem.isNew){
                 // New DU item
+
+                // First un-flag parents as necessary
+                this.setParentsUpdateMergeStatus(designVersionItem, false);
 
                 // Complete delete - this sort of delete does not delete children as only bottom level can be deleted
                 DesignVersionComponents.remove({_id: designVersionItem._id});
@@ -649,6 +775,12 @@ class DesignVersionModules{
                     }
                 }
             );
+
+            // Need to get the component again to get the latest update merge status
+            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+            // Flag parents
+            this.setParentsUpdateMergeStatus(child, true);
         }
     }
 
@@ -683,6 +815,16 @@ class DesignVersionModules{
                     }
                 }
             );
+
+            // Clear parents if going back to base
+            if(updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE){
+                // Need to get the component again to get the latest update merge status
+                const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+                // Flag parents
+                this.setParentsUpdateMergeStatus(child, true);
+            }
+
         }
     }
 
@@ -719,6 +861,12 @@ class DesignVersionModules{
                     }
                 }
             );
+
+            // Need to get the component again to get the latest update merge status
+            const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+            // Flag parents
+            this.setParentsUpdateMergeStatus(child, true);
         }
     }
 
@@ -750,198 +898,18 @@ class DesignVersionModules{
                     }
                 }
             );
+
+            // Clear parents if going back to base
+            if(updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE){
+                // Need to get the component again to get the latest update merge status
+                const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+                // Flag parents
+                this.setParentsUpdateMergeStatus(child, true);
+            }
+
         }
     }
-
-    // mergeUpdates(currentDesignVersionId, finalMerge){
-    //
-    //     // Get the INCLUDE updates for the working DV
-    //     const updatesToMerge = DesignUpdates.find(
-    //         {
-    //             designVersionId: currentDesignVersionId,
-    //             updateMergeAction: DesignUpdateMergeAction.MERGE_INCLUDE
-    //         }
-    //     );
-    //
-    //     let changedComponents = null;
-    //     let removedComponents = null;
-    //     let movedComponents = null;
-    //     let actualParent = null;
-    //     let actualParentId = 'NONE';
-    //     let newComponents = null;
-    //
-    //     updatesToMerge.forEach((update) => {
-    //
-    //         // UPDATES -------------------------------------------------------------------------------------------------
-    //
-    //         // Update all design components that are changed but not new as well
-    //         changedComponents = DesignUpdateComponents.find({
-    //             designUpdateId: update._id,
-    //             isNew:          false,
-    //             $or:[{isChanged: true}, {isTextChanged: true}]
-    //         });
-    //
-    //         changedComponents.forEach((changedComponent) => {
-    //
-    //             // Assume modified unless only the details were changed
-    //             let mergeStatus = UpdateMergeStatus.COMPONENT_MODIFIED;
-    //
-    //             if(changedComponent.isTextChanged && !(changedComponent.isChanged)){
-    //                 mergeStatus = UpdateMergeStatus.COMPONENT_DETAILS_MODIFIED;
-    //             }
-    //
-    //             DesignVersionComponents.update(
-    //                 {
-    //                     designVersionId:        currentDesignVersionId,
-    //                     componentReferenceId:   changedComponent.componentReferenceId
-    //                 },
-    //                 {
-    //                     $set:{
-    //                         componentNameNew:              changedComponent.componentNameNew,
-    //                         componentNameRawNew:           changedComponent.componentNameRawNew,
-    //                         componentNarrativeNew:         changedComponent.componentNarrativeNew,
-    //                         componentNarrativeRawNew:      changedComponent.componentNarrativeRawNew,
-    //                         componentTextRawNew:           changedComponent.componentTextRawNew,
-    //                         updateMergeStatus:          mergeStatus
-    //                     }
-    //                 }
-    //             );
-    //         });
-    //
-    //         // MOVES ---------------------------------------------------------------------------------------------------
-    //
-    //         // Update any existing components that have been moved to have the correct parents and list index
-    //         // TODO - allow components to move levels
-    //         movedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: false, isMoved: true});
-    //
-    //         movedComponents.forEach((movedComponent) => {
-    //
-    //             // Get the actual parent id of the moved component from the existing design
-    //             actualParent = DesignVersionComponents.findOne({componentReferenceId: movedComponent.componentParentReferenceIdNew});
-    //             if(actualParent){
-    //                 actualParentId = actualParent._id;
-    //             } else {
-    //                 actualParentId = 'NONE';
-    //             }
-    //
-    //             // Assume moved unless also changed - in which case mark as changed.  Moving still trumps details text changes
-    //             let mergeStatus = UpdateMergeStatus.COMPONENT_MOVED;
-    //
-    //             if (movedComponent.isChanged) {
-    //                 mergeStatus = UpdateMergeStatus.COMPONENT_MODIFIED;
-    //             }
-    //
-    //             DesignVersionComponents.update(
-    //                 {
-    //                     designVersionId:        currentDesignVersionId,
-    //                     componentReferenceId:   movedComponent.componentReferenceId
-    //                 },
-    //                 {
-    //                     $set:{
-    //                         componentParentIdNew:          actualParentId,
-    //                         componentParentReferenceIdNew: movedComponent.componentParentReferenceIdNew,
-    //                         componentIndexNew:             movedComponent.componentIndexNew,
-    //                         updateMergeStatus:          mergeStatus
-    //                     }
-    //                 }
-    //             );
-    //
-    //         });
-    //
-    //         // REMOVALS ------------------------------------------------------------------------------------------------
-    //
-    //         // Remove any design components that are removed
-    //         // For update previews we want to logically remove then rather than actually so the removal can be seen.
-    //
-    //         removedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isRemoved: true});
-    //
-    //         if(finalMerge){
-    //
-    //             // Creating new version - remove completely from the version
-    //             removedComponents.forEach((removedComponent) => {
-    //
-    //                 DesignVersionComponents.remove(
-    //                     {
-    //                         designVersionId:        currentDesignVersionId,
-    //                         componentReferenceId:   removedComponent.componentReferenceId
-    //                     }
-    //                 );
-    //             });
-    //
-    //         } else {
-    //
-    //             // This is a work progress update - logically delete - just mark as removed
-    //             removedComponents.forEach((removedComponent) => {
-    //                 DesignVersionComponents.update(
-    //                     {
-    //                         designVersionId:        currentDesignVersionId,
-    //                         componentReferenceId:   removedComponent.componentReferenceId
-    //                     },
-    //                     {
-    //                         $set:{
-    //                             isRemoved:          true,
-    //                             updateMergeStatus:  UpdateMergeStatus.COMPONENT_REMOVED
-    //                         }
-    //                     }
-    //                 );
-    //             });
-    //         }
-    //
-    //         // ADDITIONS -----------------------------------------------------------------------------------------------
-    //
-    //         // Add any design components that are new.  They may be changed as well but as new they just need to be inserted
-    //         newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true});
-    //
-    //         newComponents.forEach((newComponent) => {
-    //             DesignVersionComponents.insert(
-    //                 {
-    //                     // Identity
-    //                     componentReferenceId:       newComponent.componentReferenceId,
-    //                     designId:                   newComponent.designId,
-    //                     designVersionId:            currentDesignVersionId,                                 // New design version
-    //                     componentType:              newComponent.componentType,
-    //                     componentLevel:             newComponent.componentLevel,                        // TODO - allow level to change??
-    //                     componentParentIdNew:          newComponent.componentParentIdNew,                  // This will be wrong but updated afterwards
-    //                     componentParentReferenceIdNew: newComponent.componentParentReferenceIdNew,
-    //                     componentFeatureReferenceIdNew:newComponent.componentFeatureReferenceIdNew,
-    //                     componentIndexNew:             newComponent.componentIndexNew,
-    //
-    //                     // Data
-    //                     componentNameNew:              newComponent.componentNameNew,
-    //                     componentNameRawNew:           newComponent.componentNameRawNew,
-    //                     componentNarrativeNew:         newComponent.componentNarrativeNew,
-    //                     componentNarrativeRawNew:      newComponent.componentNarrativeRawNew,
-    //                     componentTextRawNew:           newComponent.componentTextRawNew,
-    //
-    //                     // State
-    //                     isRemovable:                newComponent.isRemovable,
-    //                     isRemoved:                  false,
-    //                     isNew:                      false,
-    //                     isOpen:                     false,
-    //                     updateMergeStatus:          UpdateMergeStatus.COMPONENT_ADDED
-    //                 }
-    //             );
-    //         });
-    //
-    //         // Fix the parent ids
-    //         this.fixParentIdsForDesignVersion(currentDesignVersionId);
-    //
-    //         // Close down the Update if this is not a preview - i.e. if we are creating the next design version
-    //         if(finalMerge) {
-    //
-    //             // Set the update as now merged - no more editing allowed
-    //             DesignUpdates.update(
-    //                 {_id: update._id},
-    //                 {
-    //                     $set: {
-    //                         updateStatus: DesignUpdateStatus.UPDATE_MERGED
-    //                     }
-    //                 }
-    //             );
-    //         }
-    //     });
-    //
-    // };
 
     rollForwardUpdates(currentDesignVersionId, newDesignVersionId){
 
