@@ -90,6 +90,9 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                                 deleted = ' removed-item';
                             }
                         } else {
+                            if(updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+                                modifier = ' greyed-out';
+                            }
                             if(updateItem.isRemoved){
                                 deleted = ' removed-item';
                             }
@@ -100,7 +103,11 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                         if(updateItem) {
                             // For design updates, out of scope things in the update are greyed out
                             if (updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) {
-                                modifier = ' greyed-out';
+                                if(updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE){
+                                    modifier = ' ghosted';
+                                } else {
+                                    modifier = ' greyed-out';
+                                }
                             }
                             // And removed stuff is struck through
                             if (updateItem.isRemoved || updateItem.isRemovedElsewhere) {

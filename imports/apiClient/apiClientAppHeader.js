@@ -8,7 +8,7 @@ import { DesignUpdateComponents } from '../collections/design_update/design_upda
 import { WorkPackageComponents } from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, DisplayContext } from '../constants/constants.js';
+import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, DisplayContext, UpdateScopeType } from '../constants/constants.js';
 import ClientTestIntegrationServices from '../apiClient/apiClientTestIntegration.js';
 
 
@@ -218,11 +218,13 @@ class ClientAppHeaderServices{
 
         const componentArray = [];
 
+        // Only open scoped items
         const designUpdateOpenComponents = DesignUpdateComponents.find(
             {
                 designVersionId: userContext.designVersionId,
                 designUpdateId: userContext.designUpdateId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
             },
             {fields: {_id: 1}}
         );
@@ -242,7 +244,6 @@ class ClientAppHeaderServices{
             {
                 designVersionId: userContext.designVersionId,
                 componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
-
             },
             {fields: {_id: 1, componentReferenceId: 1}}
         ).fetch();
@@ -260,11 +261,13 @@ class ClientAppHeaderServices{
 
         const componentArray = [];
 
+        // Only open scoped items
         const designUpdateOpenComponents = DesignUpdateComponents.find(
             {
                 designVersionId: userContext.designVersionId,
                 designUpdateId: userContext.designUpdateId,
-                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]}
+                componentType: {$in: [ComponentType.APPLICATION, ComponentType.DESIGN_SECTION]},
+                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
             },
             {fields: {_id: 1, componentReferenceId: 1}}
         ).fetch();

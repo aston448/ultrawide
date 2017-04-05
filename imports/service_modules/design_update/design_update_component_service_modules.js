@@ -402,8 +402,42 @@ class DesignUpdateComponentModules{
 
     removeComponentFromUpdateScope(designUpdateComponentId){
 
-        DesignUpdateComponents.remove({_id: designUpdateComponentId});
+        const duComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
+        // Check to see if this component has peers in peer scope AND a peer still in scope - if so don't remove it, just revert to peer scope
+
+        // Get the peer components IN the update
+        let peers = DesignUpdateComponents.find({
+            designUpdateId:                 duComponent.designUpdateId,
+            componentType:                  duComponent.componentType,
+            componentParentReferenceIdNew:  duComponent.componentParentReferenceIdNew,
+            _id:                            {$ne: duComponent._id}
+        }).fetch();
+
+        let peerCount = 0;
+        let scopeCount = 0;
+
+        peers.forEach((peer) => {
+
+            if(peer.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE){
+                peerCount++;
+            } else {
+                scopeCount++;
+            }
+        });
+
+        if(peerCount > 0 && scopeCount > 0){
+            DesignUpdateComponents.update(
+                {_id: designUpdateComponentId},
+                {
+                    $set:{
+                        scopeType: UpdateScopeType.SCOPE_PEER_SCOPE
+                    }
+                }
+            )
+        } else {
+            DesignUpdateComponents.remove({_id: designUpdateComponentId});
+        }
     }
 
     addParentsToScope(childComponent, designUpdateId){
@@ -430,6 +464,15 @@ class DesignUpdateComponentModules{
 
                     // And carry on up the tree
                     this.addParentsToScope(parentComponent, designUpdateId);
+
+                } else {
+                    // If existing component in peer scope convert to parent scope
+                    if(currentUpdateComponent.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE){
+                        this.updateToParentScope(currentUpdateComponent._id);
+
+                        // And carry on up the tree
+                        this.addParentsToScope(parentComponent, designUpdateId);
+                    }
                 }
             }
         }

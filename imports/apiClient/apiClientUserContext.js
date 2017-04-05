@@ -14,7 +14,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide Services
-import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize, DisplayContext } from '../constants/constants.js';
+import { RoleType, ViewType, DesignVersionStatus, DesignUpdateStatus, ComponentType, LogLevel, WorkPackageStatus, WorkPackageType, WindowSize, DisplayContext, UpdateScopeType } from '../constants/constants.js';
 import { log } from '../common/utils.js';
 import TextLookups from '../common/lookups.js'
 
@@ -314,7 +314,7 @@ class ClientUserContextServices {
 
                     //console.log("Opening design update component " + duComponent.componentNameNew);
 
-                    if(duComponent) {
+                    if(duComponent && duComponent.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
 
                         switch(duComponent.componentType){
 

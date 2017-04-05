@@ -1547,6 +1547,10 @@ input {
     color: darkgrey;
 }
 
+.ghosted{
+    color: lavender;
+}
+
 .removed-item{
     text-decoration: line-through;
 }

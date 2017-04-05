@@ -127,8 +127,7 @@ export class DesignComponent extends Component{
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.testDataFlag === this.props.testDataFlag //&&
-                    //nextProps.openItemsFlag === this.props.openItemsFlag
+                    nextProps.testDataFlag === this.props.testDataFlag
                 );
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
@@ -143,8 +142,10 @@ export class DesignComponent extends Component{
                     nextProps.testSummary === this.props.testSummary &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+                    nextProps.currentItem.updateMergeStatus === this.props.currentItem.updateMergeStatus &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
-                    nextProps.mode === this.props.mode
+                    nextProps.mode === this.props.mode &&
+                    nextProps.testDataFlag === this.props.testDataFlag
                 );
                 break;
             case ViewType.DEVELOP_BASE_WP:
@@ -178,9 +179,11 @@ export class DesignComponent extends Component{
 
                 // In the update editor open any item that is added to scope
                 if(this.props.updateItem){
-                    //console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
-                    ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, true);
-                    this.setState({open: true});
+                    if(this.props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                        //console.log("Opening DU item on mount" + this.props.updateItem.componentNameNew);
+                        ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, true);
+                        this.setState({open: true});
+                    }
                 }
 
                 break;
@@ -312,7 +315,9 @@ export class DesignComponent extends Component{
                 if(this.props.displayContext === DisplayContext.UPDATE_SCOPE || this.props.displayContext === DisplayContext.WORKING_VIEW) {
                     ClientDesignComponentServices.setOpenClosed(this.props.currentItem, this.props.openDesignItems, !this.state.open);
                 } else {
-                    ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
+                    if(this.props.updateItem.scopeType !== UpdateScopeType.SCOPE_PEER_SCOPE) {
+                        ClientDesignUpdateComponentServices.setOpenClosed(this.props.updateItem, this.props.openDesignUpdateItems, !this.state.open);
+                    }
                 }
                 break;
 

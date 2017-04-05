@@ -170,9 +170,11 @@ export class DesignComponentHeader extends Component{
                     nextProps.isOpen === this.props.isOpen &&
                     nextProps.currentItem.componentNameNew === this.props.currentItem.componentNameNew &&
                     nextProps.currentItem.isRemovable === this.props.currentItem.isRemovable &&
+                    nextProps.currentItem.updateMergeStatus === this.props.currentItem.updateMergeStatus &&
                     nextProps.isDragDropHovering === this.props.isDragDropHovering &&
                     nextProps.mode === this.props.mode &&
-                    nextProps.isDragging === this.props.isDragging
+                    nextProps.isDragging === this.props.isDragging &&
+                    nextProps.testDataFlag === this.props.testDataFlag
                 );
                 break;
             case ViewType.DEVELOP_BASE_WP:
@@ -345,13 +347,15 @@ export class DesignComponentHeader extends Component{
                 }
 
             } else {
-                // We are not in WP scope context so OK for all Scenarios
-                compositeDecorator = new CompositeDecorator([
-                    {
-                        strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
-                        component: DomainSpan,
-                    }
-                ]);
+                // We are not in WP scope context so OK for all Scenarios as long as not inserted as peers in an update
+                if(!(this.props.updateItem && this.props.updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)) {
+                    compositeDecorator = new CompositeDecorator([
+                        {
+                            strategy: ClientDomainDictionaryServices.getDomainTermDecoratorFunction(item.designVersionId),
+                            component: DomainSpan,
+                        }
+                    ]);
+                }
             }
 
             EditorState.set(this.state.editorState, {decorator: compositeDecorator});
@@ -757,6 +761,9 @@ export class DesignComponentHeader extends Component{
 
         let openStatus = isOpen ? 'open-status-open' : 'open-status-closed';
         if(currentItem.componentType === ComponentType.SCENARIO){
+            openStatus = 'invisible';
+        }
+        if(updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE){
             openStatus = 'invisible';
         }
 

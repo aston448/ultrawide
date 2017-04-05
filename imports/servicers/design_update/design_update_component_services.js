@@ -463,7 +463,7 @@ class DesignUpdateComponentServices{
                             DesignUpdateModules.fixParentIds(baseComponent.designVersionId, designUpdateId);
                         } else {
 
-                            // Component already exists so put in real scope if not in parent scope
+                            // Component already exists so put in real scope
                             DesignUpdateComponentModules.updateToActualScope(currentUpdateComponent._id);
                         }
 

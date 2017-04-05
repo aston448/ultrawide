@@ -5,7 +5,7 @@ import {DesignUpdateComponents}             from '../collections/design_update/d
 import {DesignVersionComponents}            from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
-import { ComponentType, MessageType}        from '../constants/constants.js';
+import { ComponentType, MessageType, UpdateScopeType}        from '../constants/constants.js';
 import { DesignUpdateComponentMessages }    from '../constants/message_texts.js';
 import { Validation }                       from '../constants/validation_errors.js';
 
@@ -731,17 +731,23 @@ class ClientDesignUpdateComponentServices{
 
     openInScopeItems(designUpdateId){
 
+        //console.log("SETTING in scope DU items to open for DU " + designUpdateId);
+
         const designUpdateOpenComponents = DesignUpdateComponents.find(
             {
                 designUpdateId: designUpdateId,
             },
-            {fields: {_id: 1}}
+            {fields: {_id: 1, scopeType: 1}}
         ).fetch();
+
+        //console.log("Got " + designUpdateOpenComponents.length + " DU components");
 
         let openDuItems = [];
 
         designUpdateOpenComponents.forEach((component) => {
-            openDuItems.push(component._id);
+            if(component.scopeType === UpdateScopeType.SCOPE_IN_SCOPE || component.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE) {
+                openDuItems.push(component._id);
+            }
         });
 
         //console.log("SETTING " + openDuItems.length + " DU items as open");
