@@ -1823,13 +1823,34 @@ class ClientContainerServices{
 
     getTestSummaryData(scenario){
 
-        return UserDevTestSummaryData.findOne({scenarioReferenceId: scenario.componentReferenceId});
+        let designUpdateId = 'NONE';
+
+        if(scenario.designUpdateId){
+            designUpdateId = scenario.designUpdateId;
+        }
+
+        return UserDevTestSummaryData.findOne({
+            designVersionId:        scenario.designVersionId,
+            designUpdateId:         designUpdateId,
+            scenarioReferenceId:    scenario.componentReferenceId
+        });
 
     }
 
     getTestSummaryFeatureData(feature){
 
-        return UserDevTestSummaryData.findOne({scenarioReferenceId: 'NONE', featureReferenceId: feature.componentReferenceId});
+        let designUpdateId = 'NONE';
+
+        if(feature.designUpdateId){
+            designUpdateId = feature.designUpdateId;
+        }
+
+        return UserDevTestSummaryData.findOne({
+            designVersionId:        feature.designVersionId,
+            designUpdateId:         designUpdateId,
+            scenarioReferenceId:    'NONE',
+            featureReferenceId:     feature.componentReferenceId
+        });
 
     }
 

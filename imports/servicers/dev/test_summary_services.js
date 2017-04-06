@@ -29,8 +29,8 @@ class TestSummaryServices {
         // Delete data for current user context
         UserDevTestSummaryData.remove({
             userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId,
-            designUpdateId:     userContext.designUpdateId
+            // designVersionId:    userContext.designVersionId,
+            // designUpdateId:     userContext.designUpdateId
         });
 
         // Get the Design Scenario Data
@@ -193,7 +193,11 @@ class TestSummaryServices {
 
         designFeatures.forEach((designFeature) =>{
 
-            let featureScenarios = UserDevTestSummaryData.find({featureReferenceId: designFeature.componentReferenceId}).fetch();
+            let featureScenarios = UserDevTestSummaryData.find({
+                designVersionId:    userContext.designVersionId,
+                designUpdateId:     userContext.designUpdateId,
+                featureReferenceId: designFeature.componentReferenceId
+            }).fetch();
 
             let featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
             let passingTests = 0;
@@ -272,8 +276,8 @@ class TestSummaryServices {
         // And now refresh the Design Summary
         UserDevDesignSummaryData.remove({
             userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId,
-            designUpdateId:     userContext.designUpdateId
+            // designVersionId:    userContext.designVersionId,
+            // designUpdateId:     userContext.designUpdateId
         });
 
 
@@ -294,8 +298,6 @@ class TestSummaryServices {
             accTestFailCount:               totalAccTestsFailing,
             accTestPendingCount:            totalAccTestsPending
         });
-
-
 
     }
 
