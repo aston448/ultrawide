@@ -4,7 +4,7 @@
 import { UserWorkPackageMashData } from '../collections/dev/user_work_package_mash_data.js';
 
 // Ultrawide Services
-import { ViewType, MessageType, TestRunner, LogLevel } from '../constants/constants.js';
+import { ViewType, MessageType, TestRunner, RoleType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { TestIntegrationMessages } from '../constants/message_texts.js'
 
@@ -168,7 +168,7 @@ class ClientTestIntegrationServices {
         }
 
         // Does mash need recalculation?  Only if we are in a Developer screen and mash data showing
-        if(nextView === ViewType.DEVELOP_BASE_WP || nextView === ViewType.DEVELOP_UPDATE_WP) {
+        if(nextView === ViewType.DEVELOP_BASE_WP || nextView === ViewType.DEVELOP_UPDATE_WP || nextView === ViewType.DESIGN_UPDATABLE_VIEW || nextView === ViewType.DESIGN_PUBLISHED_VIEW) {
 
             if (testIntegrationDataContext.mashDataStale) {
 
@@ -332,7 +332,13 @@ class ClientTestIntegrationServices {
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
             case ViewType.DESIGN_UPDATABLE_VIEW:
-                if(viewOptions.designTestSummaryVisible){
+                if(
+                    viewOptions.designTestSummaryVisible ||
+                    viewOptions.devUnitTestsVisible ||
+                    viewOptions.devIntTestsVisible ||
+                    viewOptions.devAccTestsVisible ||
+                    viewOptions.devTestSummaryVisible
+                ){
                     testDataWanted = true;
                 }
                 break;
@@ -381,8 +387,8 @@ class ClientTestIntegrationServices {
 
         let updateSummary = false;
 
-        // Is this a Work Package view?
-        if(view === ViewType.DEVELOP_UPDATE_WP || view === ViewType.DEVELOP_BASE_WP) {
+        // Is this a View with tests visible
+        if(view === ViewType.DEVELOP_UPDATE_WP || view === ViewType.DEVELOP_BASE_WP || (userRole === RoleType.DEVELOPER && (view === ViewType.DESIGN_UPDATABLE_VIEW || view === ViewType.DESIGN_PUBLISHED_VIEW))) {
 
             // If a test summary is showing, update that data too
             if(viewOptions.devTestSummaryVisible){

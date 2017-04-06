@@ -134,7 +134,7 @@ export class UpdateApplicationsList extends Component {
 
         const {baseApplications, updateApplications, workingApplications, userContext, view, mode, viewOptions, testDataFlag} = this.props;
 
-        console.log("RENDER DESIGN UPDATE CONTAINER " + view);
+        //console.log("RENDER DESIGN UPDATE CONTAINER " + view);
 
         // Items -------------------------------------------------------------------------------------------------------
 

@@ -21,7 +21,7 @@ import ClientUserContextServices        from '../apiClient/apiClientUserContext.
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, updateOpenItemsFlag} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, updateOpenItemsFlag, setMashDataStaleTo, setTestDataStaleTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -284,6 +284,8 @@ class ClientDesignVersionServices{
             // Subscribe to the appropriate data for the new DV if DV changing
             if(newDesignVersionId !== userContext.designVersionId) {
                 store.dispatch(setDesignVersionDataLoadedTo(false));
+                store.dispatch(setMashDataStaleTo(true));
+                store.dispatch(setTestDataStaleTo(true));
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 

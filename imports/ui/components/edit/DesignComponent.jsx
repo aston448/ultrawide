@@ -428,7 +428,7 @@ export class DesignComponent extends Component{
         const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext,
             testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag, workPackageScopeItems, workPackageScopeFlag} = this.props;
 
-        console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + " with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem + " and test Summary " + testSummary);
+        //console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + " with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem + " and test Summary " + testSummary);
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
