@@ -11,14 +11,15 @@ import { createContainer } from 'meteor/react-meteor-data';
 import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
 
 // Ultrawide Services
-import {MenuType, RoleType, ViewType, ViewMode, DisplayContext} from '../../../constants/constants.js';
+import {MenuType, RoleType, ViewType, ViewMode, DisplayContext, DetailsViewType} from '../../../constants/constants.js';
 
 import ClientAppHeaderServices      from '../../../apiClient/apiClientAppHeader.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
 import {Grid, Col, Row} from 'react-bootstrap';
-import {Button, ButtonGroup} from 'react-bootstrap';
+import {Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -35,6 +36,21 @@ export class DesignEditorHeader extends Component {
     constructor(props) {
         super(props);
 
+    }
+
+    onClose(detailsType, view, userContext, userRole, userViewOptions, currentViewDataValue){
+
+        let viewOptionType = '';
+
+        const currentOption = ClientContainerServices.getCurrentOptionForDetailsView(view, userViewOptions, detailsType);
+
+        console.log("Closing " + currentOption.option);
+
+        // Only close if really open
+        if(currentOption.value) {
+            console.log("Really Closing " + currentOption.option);
+            ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, currentOption.option, userViewOptions, currentViewDataValue, false, null)
+        }
     }
 
     onSetEditViewMode(newMode, view, viewOptions){
@@ -57,7 +73,7 @@ export class DesignEditorHeader extends Component {
 
     render() {
 
-        const {displayContext, view, mode, userContext, userViewOptions} = this.props;
+        const {displayContext, view, mode, userContext, userRole, userViewOptions, currentViewDataValue} = this.props;
 
         // Items -------------------------------------------------------------------------------------------------------
 
@@ -154,6 +170,8 @@ export class DesignEditorHeader extends Component {
         }
 
         let options = '';
+        let closable = false;
+        let detailsType = '';
 
         switch(view){
             case ViewType.SELECT:
@@ -186,6 +204,8 @@ export class DesignEditorHeader extends Component {
                         break;
 
                     case DisplayContext.UPDATE_SUMMARY:
+                        closable = true;
+                        detailsType = DetailsViewType.VIEW_UPD_SUMM;
                         options = '';
                         break;
 
@@ -195,7 +215,9 @@ export class DesignEditorHeader extends Component {
                                 {zoomFeaturesOption}
                                 {zoomSectionsOption}
                             </div>;
-
+                        closable = true;
+                        detailsType = DetailsViewType.VIEW_VERSION_PROGRESS;
+                        break;
                     default:
                         if(mode === ViewMode.MODE_VIEW){
                             options =
@@ -258,32 +280,73 @@ export class DesignEditorHeader extends Component {
         }
 
         if(options === ''){
-            return (
-                <div className="design-editor-header">
-                    <Grid>
-                        <Row>
-                            <Col md={12}>
-                                <div className="header-description">{description}</div>
-                            </Col>
-                        </Row>
-                    </Grid>
-                </div>
-            );
+            if(closable){
+                return (
+                    <div className="design-editor-header">
+                        <Grid>
+                            <Row>
+                                <Col md={11}>
+                                    <div className="header-description">{description}</div>
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <div className="details-close" onClick={() => this.onClose(detailsType, view, userContext, userRole, userViewOptions, currentViewDataValue)}>
+                                        <Glyphicon glyph="remove"/>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="design-editor-header">
+                        <Grid>
+                            <Row>
+                                <Col md={12}>
+                                    <div className="header-description">{description}</div>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </div>
+                );
+            }
         } else {
-            return (
-                <div className="design-editor-header">
-                    <Grid>
-                        <Row>
-                            <Col md={7}>
-                                <div className="header-description">{description}</div>
-                            </Col>
-                            <Col md={5}>
-                                {options}
-                            </Col>
-                        </Row>
-                    </Grid>
-                </div>
-            );
+            if(closable){
+                return (
+                    <div className="design-editor-header">
+                        <Grid>
+                            <Row>
+                                <Col md={7}>
+                                    <div className="header-description">{description}</div>
+                                </Col>
+                                <Col md={4}>
+                                    {options}
+                                </Col>
+                                <Col md={1} className="close-col">
+                                    <div className="details-close" onClick={() => this.onClose(detailsType, view, userContext, userRole, userViewOptions, currentViewDataValue)}>
+                                        <Glyphicon glyph="remove"/>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="design-editor-header">
+                        <Grid>
+                            <Row>
+                                <Col md={7}>
+                                    <div className="header-description">{description}</div>
+                                </Col>
+                                <Col md={5}>
+                                    {options}
+                                </Col>
+                            </Row>
+                        </Grid>
+                    </div>
+                );
+            }
         }
     }
 }
@@ -300,6 +363,7 @@ function mapStateToProps(state) {
         userContext:            state.currentUserItemContext,
         userRole:               state.currentUserRole,
         userViewOptions:        state.currentUserViewOptions,
+        currentViewDataValue:   state.currentViewOptionsDataValue
     }
 }
 

@@ -53,8 +53,11 @@ class UserContextServices{
                 designDomainDictVisible:        userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:           userViewOptions.updateDetailsVisible,
-                updateTestSummaryVisible:       userViewOptions.updateTestSummaryVisible,
+                updateProgressVisible:          userViewOptions.updateProgressVisible,
+                updateSummaryVisible:           userViewOptions.updateSummaryVisible,
                 updateDomainDictVisible:        userViewOptions.updateDomainDictVisible,
+                updateTestSummaryVisible:       userViewOptions.updateTestSummaryVisible,
+
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:               userViewOptions.wpDetailsVisible,
                 wpDomainDictVisible:            userViewOptions.wpDomainDictVisible,

@@ -103,7 +103,7 @@ export class DesignUpdateSummaryList extends Component {
         }
 
 
-        if(userContext.designUpdateId != 'NONE') {
+        if(userContext.designUpdateId !== 'NONE') {
 
             return (
                 <div id="updateSummary" className="design-editor-container">

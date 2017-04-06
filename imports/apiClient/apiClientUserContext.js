@@ -106,8 +106,10 @@ class ClientUserContextServices {
                 designDomainDictVisible:    userViewOptions.designDomainDictVisible,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       userViewOptions.updateDetailsVisible,
-                updateTestSummaryVisible:   userViewOptions.updateTestSummaryVisible,
+                updateProgressVisible:      userViewOptions.updateProgressVisible,
+                updateSummaryVisible:       userViewOptions.updateSummaryVisible,
                 updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
+                updateTestSummaryVisible:   userViewOptions.updateTestSummaryVisible,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:           userViewOptions.wpDetailsVisible,
                 wpDomainDictVisible:        userViewOptions.wpDomainDictVisible,
@@ -132,8 +134,10 @@ class ClientUserContextServices {
                 designDomainDictVisible:    true,
                 // Design Update Screen - Scope and Design always visible
                 updateDetailsVisible:       true,
-                updateTestSummaryVisible:   false,
+                updateProgressVisible:      true,
+                updateSummaryVisible:       true,
                 updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
                 // Work package editor - Scope and Design always visible
                 wpDetailsVisible:           true,
                 wpDomainDictVisible:        false,
@@ -573,7 +577,7 @@ class ClientUserContextServices {
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "Developer Context WP is {}", userContext.workPackageId);
 
-                if(userContext.workPackageId != 'NONE'){
+                if(userContext.workPackageId !== 'NONE'){
 
                     const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
@@ -585,7 +589,7 @@ class ClientUserContextServices {
                                 // Development
 
                                 // If a Design Component is selected then we are IN the work package...
-                                if(userContext.designComponentId != 'NONE') {
+                                if(userContext.designComponentId !== 'NONE') {
                                     ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, testDataFlag, testIntegrationDataContext);
                                 } else {
                                     // Just go to WP selection
@@ -613,7 +617,7 @@ class ClientUserContextServices {
                 return;
             case RoleType.MANAGER:
                 // If a manager go to a WP if being edited
-                if(userContext.workPackageId != 'NONE'){
+                if(userContext.workPackageId !== 'NONE'){
 
                     const workPackage = WorkPackages.findOne({_id: userContext.workPackageId});
 
@@ -628,7 +632,7 @@ class ClientUserContextServices {
                                 // New or Development so still editable
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
-                                        if(userContext.designComponentId != 'NONE') {
+                                        if(userContext.designComponentId !== 'NONE') {
                                             ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
                                         } else {
                                             store.dispatch(setCurrentView(ViewType.SELECT));
@@ -636,7 +640,7 @@ class ClientUserContextServices {
                                         return;
 
                                     case WorkPackageType.WP_UPDATE:
-                                        if(userContext.designComponentId != 'NONE') {
+                                        if(userContext.designComponentId !== 'NONE') {
                                             ClientWorkPackageServices.editWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_UPDATE);
                                         } else {
                                             store.dispatch(setCurrentView(ViewType.SELECT));
@@ -649,7 +653,7 @@ class ClientUserContextServices {
                                 // View Only
                                 switch(workPackage.workPackageType){
                                     case WorkPackageType.WP_BASE:
-                                        if(userContext.designComponentId != 'NONE') {
+                                        if(userContext.designComponentId !== 'NONE') {
                                             ClientWorkPackageServices.viewWorkPackage(userRole, userContext, userContext.workPackageId, WorkPackageType.WP_BASE);
                                         } else {
                                             store.dispatch(setCurrentView(ViewType.SELECT));

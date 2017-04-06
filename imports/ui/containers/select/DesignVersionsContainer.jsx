@@ -65,11 +65,11 @@ export class DesignVersionsList extends Component {
         let col1Size = 4;
         let col2Size = 8;
 
-        if(userContext.designVersionId != 'NONE'){
+        if(userContext.designVersionId !== 'NONE'){
             const dvStatus = this.getCurrentVersionStatus(userContext.designVersionId);
             if( dvStatus === DesignVersionStatus.VERSION_UPDATABLE || dvStatus === DesignVersionStatus.VERSION_UPDATABLE_COMPLETE){
-                col1Size = 3;
-                col2Size = 9;
+                col1Size = 2;
+                col2Size = 10;
             }
         }
 

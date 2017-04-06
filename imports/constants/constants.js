@@ -50,7 +50,9 @@ export const DetailsViewType = {
     VIEW_INT_TESTS:             'VIEW_INT_TESTS',
     VIEW_UNIT_TESTS:            'VIEW_UNIT_TESTS',
     VIEW_ACC_FILES:             'VIEW_ACC_FILES',
-    VIEW_DOM_DICT:              'VIEW_DOM_DICT'
+    VIEW_UPD_SUMM:              'VIEW_UPD_SUMM',
+    VIEW_DOM_DICT:              'VIEW_DOM_DICT',
+    VIEW_VERSION_PROGRESS:      'VIEW_VERSION_PROGRESS'
 };
 
 export const MenuType = {
@@ -70,6 +72,8 @@ export const MenuAction = {
     MENU_ACTION_GOTO_CONFIG:        'MENU_ACTION_GOTO_CONFIG',
     MENU_ACTION_GOTO_TEST_CONFIG:   'MENU_ACTION_GOTO_TEST_CONFIG',
     MENU_ACTION_VIEW_DETAILS:       'MENU_ACTION_VIEW_DETAILS',
+    MENU_ACTION_VIEW_PROGRESS:      'MENU_ACTION_VIEW_PROGRESS',
+    MENU_ACTION_VIEW_UPD_SUMM:      'MENU_ACTION_VIEW_UPD_SUMM',
     MENU_ACTION_VIEW_DICT:          'MENU_ACTION_VIEW_DICT',
     MENU_ACTION_VIEW_ACC_TESTS:     'MENU_ACTION_VIEW_ACC_TESTS',
     MENU_ACTION_VIEW_INT_TESTS:     'MENU_ACTION_VIEW_INT_TESTS',
@@ -91,7 +95,9 @@ export const ViewOptionType = {
     DESIGN_TEST_SUMMARY:'designTestSummaryVisible',
     DESIGN_DICT:        'designDomainDictVisible',
     UPDATE_DETAILS:     'updateDetailsVisible',
+    UPDATE_PROGRESS:    'updateProgressVisible',
     UPDATE_DICT:        'updateDomainDictVisible',
+    UPDATE_SUMMARY:     'updateSummaryVisible',
     UPDATE_TEST_SUMMARY:'updateTestSummaryVisible',
     WP_DETAILS:         'wpDetailsVisible',
     WP_DICT:            'wpDomainDictVisible',

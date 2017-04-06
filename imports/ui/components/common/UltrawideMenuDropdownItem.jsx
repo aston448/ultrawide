@@ -83,6 +83,8 @@ export class UltrawideMenuDropdownItem extends Component {
             case MenuAction.MENU_ACTION_VIEW_ACC_TESTS:
             case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:
             case MenuAction.MENU_ACTION_VIEW_DETAILS:
+            case MenuAction.MENU_ACTION_VIEW_PROGRESS:
+            case MenuAction.MENU_ACTION_VIEW_UPD_SUMM:
                 ClientAppHeaderServices.toggleViewOption(
                     view, userContext, userRole, viewOptionType, userViewOptions,
                     currentViewDataValue, testDataFlag, this.getTestIntegrationDataContext()

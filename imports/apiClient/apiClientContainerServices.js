@@ -1859,6 +1859,10 @@ class ClientContainerServices{
 
         let detailsOption= '';
         let detailsValue = false;
+        let progressOption = '';
+        let progressValue = false;
+        let updSummaryOption = '';
+        let updSummaryValue = false;
         let testSummaryOption = '';
         let testSummaryValue = false;
         let accTestOption = '';
@@ -1894,6 +1898,17 @@ class ClientContainerServices{
                 intTestValue = userViewOptions.devIntTestsVisible;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
+                detailsOption = ViewOptionType.UPDATE_DETAILS;
+                detailsValue = userViewOptions.updateDetailsVisible;
+                progressOption = ViewOptionType.UPDATE_PROGRESS;
+                progressValue = userViewOptions.updateProgressVisible;
+                updSummaryOption = ViewOptionType.UPDATE_SUMMARY;
+                updSummaryValue = userViewOptions.updateSummaryVisible;
+                dictOption = ViewOptionType.UPDATE_DICT;
+                dictValue = userViewOptions.updateDomainDictVisible;
+                testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
+                testSummaryValue = userViewOptions.updateTestSummaryVisible;
+                break;
             case ViewType.DESIGN_UPDATE_VIEW:
                 detailsOption = ViewOptionType.UPDATE_DETAILS;
                 detailsValue = userViewOptions.updateDetailsVisible;
@@ -1937,6 +1952,8 @@ class ClientContainerServices{
 
         return{
             details:        {option: detailsOption, value: detailsValue},
+            progress:       {option: progressOption, value: progressValue},
+            updateSummary:  {option: updSummaryOption, value: updSummaryValue},
             testSummary:    {option: testSummaryOption, value: testSummaryValue},
             dictionary:     {option: dictOption, value: dictValue},
             accTests:       {option: accTestOption, value: accTestValue},
@@ -1958,6 +1975,9 @@ class ClientContainerServices{
             case DetailsViewType.VIEW_DETAILS_NEW:
                 return currentOptions.details;
 
+            case DetailsViewType.VIEW_UPD_SUMM:
+                return currentOptions.updateSummary;
+
             case DetailsViewType.VIEW_INT_TESTS:
                return currentOptions.intTests;
 
@@ -1969,6 +1989,9 @@ class ClientContainerServices{
 
             case DetailsViewType.VIEW_ACC_FILES:
                 return currentOptions.accFiles;
+
+            case DetailsViewType.VIEW_VERSION_PROGRESS:
+                return currentOptions.progress;
         }
     }
     getDropdownMenuItems(menuType, view, mode, userRole, userViewOptions){
@@ -2023,6 +2046,24 @@ class ClientContainerServices{
             hasCheckbox: true,
             checkboxValue: currentOptions.details.value,
             viewOptionType: currentOptions.details.option
+        };
+
+        const viewProgress = {
+            key: MenuAction.MENU_ACTION_VIEW_PROGRESS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_PROGRESS),
+            action: MenuAction.MENU_ACTION_VIEW_PROGRESS,
+            hasCheckbox: true,
+            checkboxValue: currentOptions.progress.value,
+            viewOptionType: currentOptions.progress.option
+        };
+
+        const viewUpdateSummary = {
+            key: MenuAction.MENU_ACTION_VIEW_UPD_SUMM,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_UPD_SUMM),
+            action: MenuAction.MENU_ACTION_VIEW_UPD_SUMM,
+            hasCheckbox: true,
+            checkboxValue: currentOptions.updateSummary.value,
+            viewOptionType: currentOptions.updateSummary.option
         };
 
         const viewTestSummary = {
@@ -2234,12 +2275,16 @@ class ClientContainerServices{
                         if (mode === ViewMode.MODE_VIEW) {
                             return [
                                     viewDetails,
+                                    viewProgress,
+                                    viewUpdateSummary,
                                     viewDomainDict,
                                     viewTestSummary
                                 ];
                         } else {
                             return [
                                     viewDetails,
+                                    viewProgress,
+                                    viewUpdateSummary,
                                     viewDomainDict,
                                 ];
                         }

@@ -181,6 +181,10 @@ class TextLookups {
                 return 'Test Output Config';
             case MenuAction.MENU_ACTION_VIEW_DETAILS:
                 return 'Details';
+            case MenuAction.MENU_ACTION_VIEW_PROGRESS:
+                return 'Version Merge';
+            case MenuAction.MENU_ACTION_VIEW_UPD_SUMM:
+                return 'Update Summary';
             case MenuAction.MENU_ACTION_VIEW_TEST_SUMM:
                 return 'Test Summary';
             case MenuAction.MENU_ACTION_VIEW_ACC_TESTS:

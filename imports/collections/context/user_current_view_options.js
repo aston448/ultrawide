@@ -13,8 +13,10 @@ let Schema = new SimpleSchema({
     designDomainDictVisible:    {type: Boolean, defaultValue: true},        // Domain Dictionary pane
     // Design Update Screen - Scope and Design always visible
     updateDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
-    updateTestSummaryVisible:   {type: Boolean, defaultValue: false},       // Test Summary add-on
+    updateProgressVisible:      {type: Boolean, defaultValue: true},        // The merged version pane
     updateDomainDictVisible:    {type: Boolean, defaultValue: false},       // Domain Dictionary pane
+    updateSummaryVisible:       {type: Boolean, defaultValue: false},       // Update Summary pane
+    updateTestSummaryVisible:   {type: Boolean, defaultValue: false},       // Test Summary add-on
     // Work package editor - Scope and Design always visible
     wpDetailsVisible:           {type: Boolean, defaultValue: true},        // The details pane
     wpDomainDictVisible:        {type: Boolean, defaultValue: false},       // Domain Dictionary pane
