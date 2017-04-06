@@ -64,31 +64,35 @@ class DesignSectionsList extends Component {
     }
 
     // A list of top level headings in the design
-    renderDesignSections() {
-        const {components, displayContext, view, mode, viewOptions, userContext} = this.props;
+    renderDesignSections(components, displayContext, view, mode, viewOptions, userContext, testSummary) {
 
         if(components.length > 0) {
 
             // Get the appropriate test summary flag for the view
-            let testSummary = false;
+            let actualTestSummary = false;
 
-            switch(view){
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
-                    testSummary = viewOptions.designTestSummaryVisible;
-                    break;
-                case ViewType.DESIGN_UPDATE_EDIT:
-                case ViewType.DESIGN_UPDATE_VIEW:
-                    testSummary = viewOptions.updateTestSummaryVisible;
-                    break;
-                case ViewType.DEVELOP_BASE_WP:
-                case ViewType.DEVELOP_UPDATE_WP:
-                case ViewType.WORK_PACKAGE_BASE_VIEW:
-                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                    testSummary = viewOptions.devTestSummaryVisible;
-                    break;
+            if(testSummary) {
+
+                switch (view) {
+                    case ViewType.DESIGN_NEW_EDIT:
+                    case ViewType.DESIGN_PUBLISHED_VIEW:
+                    case ViewType.DESIGN_UPDATABLE_VIEW:
+                        actualTestSummary = viewOptions.designTestSummaryVisible;
+                        break;
+                    case ViewType.DESIGN_UPDATE_EDIT:
+                    case ViewType.DESIGN_UPDATE_VIEW:
+                        actualTestSummary = viewOptions.updateTestSummaryVisible;
+                        break;
+                    case ViewType.DEVELOP_BASE_WP:
+                    case ViewType.DEVELOP_UPDATE_WP:
+                    case ViewType.WORK_PACKAGE_BASE_VIEW:
+                    case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                        actualTestSummary = viewOptions.devTestSummaryVisible;
+                        break;
+                }
             }
+
+            console.log("Render DESIGN SECTION in context " + displayContext + " with testSummary " + testSummary + " and actual " + actualTestSummary);
 
             return components.map((designSection) => {
 
@@ -101,7 +105,7 @@ class DesignSectionsList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
-                        testSummary={testSummary}
+                        testSummary={actualTestSummary}
                     />
                 );
             });
@@ -113,9 +117,12 @@ class DesignSectionsList extends Component {
     }
 
     render() {
+
+        const {components, displayContext, view, mode, viewOptions, userContext, testSummary} = this.props;
+
         return (
             <div>
-                {this.renderDesignSections()}
+                {this.renderDesignSections(components, displayContext, view, mode, viewOptions, userContext, testSummary)}
             </div>
         );
     }
@@ -123,7 +130,8 @@ class DesignSectionsList extends Component {
 
 DesignSectionsList.propTypes = {
     components: PropTypes.array.isRequired,
-    displayContext: PropTypes.string.isRequired
+    displayContext: PropTypes.string.isRequired,
+    testSummary: PropTypes.bool.isRequired,
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -142,7 +150,7 @@ DesignSectionsList = connect(mapStateToProps)(DesignSectionsList);
 export default DesignSectionsContainer = createContainer(({params}) => {
 
     // Get all the Design Sections under this Application or Design Section
-    return ClientContainerServices.getComponentDataForParentComponent(
+    const components =  ClientContainerServices.getComponentDataForParentComponent(
         ComponentType.DESIGN_SECTION,
         params.view,
         params.designVersionId,
@@ -151,6 +159,12 @@ export default DesignSectionsContainer = createContainer(({params}) => {
         params.parentId,
         params.displayContext
     );
+
+    return{
+        components: components,
+        displayContext: params.displayContext,
+        testSummary: params.testSummary
+    }
 
 
 }, DesignSectionsList);

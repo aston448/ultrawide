@@ -715,6 +715,7 @@ class ClientContainerServices{
         let workingApplicationsArr = workingApplications.fetch();
 
         log((msg) => console.log(msg), LogLevel.INFO, "Found {} base applications.", baseApplicationsArr.length);
+        log((msg) => console.log(msg), LogLevel.INFO, "Found {} working applications.", workingApplicationsArr.length);
 
         // Get Update Apps if update Id provided
         let updateApplicationsArr = [];
@@ -804,14 +805,14 @@ class ClientContainerServices{
                 return{
                     baseApplications:       baseApplicationsArr,
                     updateApplications:     updateApplicationsArr,
-                    workingApplications:    workingApplicationsArr,
+                    workingApplications:    workingApplicationsArr
                 };
             case ViewType.DESIGN_UPDATE_VIEW:
                 // Need design update apps only
                 return{
                     baseApplications:       [],
                     updateApplications:     updateApplicationsArr,
-                    workingApplications:    []
+                    workingApplications:    workingApplicationsArr
                 };
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -861,10 +862,8 @@ class ClientContainerServices{
                     {sort:{componentIndexNew: 1}}
                 ).fetch();
 
-                return {
-                    components: currentComponents,
-                    displayContext: displayContext
-                };
+                return currentComponents;
+
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
 
@@ -878,10 +877,7 @@ class ClientContainerServices{
                     {sort:{componentIndexNew: 1}}
                 ).fetch();
 
-                return {
-                    components: currentComponents,
-                    displayContext: displayContext
-                };
+                return  currentComponents;
 
                 break;
 
@@ -940,10 +936,7 @@ class ClientContainerServices{
 
                 //console.log("Design update components found: " + currentComponents.length);
 
-                return {
-                    components: currentComponents,
-                    displayContext: displayContext
-                };
+                return currentComponents;
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:
@@ -992,15 +985,9 @@ class ClientContainerServices{
                 //console.log("Found " + currentComponents.length + " components of type " + componentType + " for display context " + displayContext);
 
                 if(currentComponents.length > 0){
-                    return {
-                        components: currentComponents,
-                        displayContext: displayContext
-                    };
+                    return currentComponents;
                 } else {
-                    return {
-                        components: [],
-                        displayContext: displayContext
-                    };
+                    return  [];
                 }
 
                 break;
@@ -1053,15 +1040,9 @@ class ClientContainerServices{
                 }
 
                 if(currentComponents.length > 0){
-                    return {
-                        components: currentComponents,
-                        displayContext: displayContext
-                    };
+                    return currentComponents;
                 } else {
-                    return {
-                        components: [],
-                        displayContext: displayContext
-                    };
+                    return [];
                 }
 
                 break;
@@ -1886,6 +1867,10 @@ class ClientContainerServices{
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
                 testSummaryValue = userViewOptions.designTestSummaryVisible;
+                intTestOption = ViewOptionType.DEV_INT_TESTS;
+                intTestValue = userViewOptions.devIntTestsVisible;
+                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
+                unitTestValue = userViewOptions.devUnitTestsVisible;
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
@@ -1896,22 +1881,17 @@ class ClientContainerServices{
                 testSummaryValue = userViewOptions.designTestSummaryVisible;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
                 intTestValue = userViewOptions.devIntTestsVisible;
+                unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
+                unitTestValue = userViewOptions.devUnitTestsVisible;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
                 detailsOption = ViewOptionType.UPDATE_DETAILS;
                 detailsValue = userViewOptions.updateDetailsVisible;
                 progressOption = ViewOptionType.UPDATE_PROGRESS;
                 progressValue = userViewOptions.updateProgressVisible;
                 updSummaryOption = ViewOptionType.UPDATE_SUMMARY;
                 updSummaryValue = userViewOptions.updateSummaryVisible;
-                dictOption = ViewOptionType.UPDATE_DICT;
-                dictValue = userViewOptions.updateDomainDictVisible;
-                testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
-                testSummaryValue = userViewOptions.updateTestSummaryVisible;
-                break;
-            case ViewType.DESIGN_UPDATE_VIEW:
-                detailsOption = ViewOptionType.UPDATE_DETAILS;
-                detailsValue = userViewOptions.updateDetailsVisible;
                 dictOption = ViewOptionType.UPDATE_DICT;
                 dictValue = userViewOptions.updateDomainDictVisible;
                 testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
@@ -2178,7 +2158,6 @@ class ClientContainerServices{
 
             case ViewType.DESIGN_NEW_EDIT:
             case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATE_VIEW:
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
@@ -2189,16 +2168,37 @@ class ClientContainerServices{
                             ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
-                        return [
-                                viewDetails,
-                                viewDomainDict,
-                                viewTestSummary
-                            ];
+
+                        switch(userRole){
+                            // Developer can access test results on this screen
+                            case RoleType.DEVELOPER:
+                                return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewIntTests,
+                                    viewUnitTests,
+                                    viewTestSummary
+                                ];
+                            default:
+                                return [
+                                    viewDetails,
+                                    viewDomainDict,
+                                    viewTestSummary
+                                ];
+                        }
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
-                        return [
-                                refreshTestData
-                            ];
+                        switch(userRole) {
+                            case RoleType.DEVELOPER:
+                                return [
+                                    refreshTestData,
+                                    refreshDesignData
+                                ];
+                            default:
+                                return [
+                                    refreshTestData,
+                                ];
+                        }
                 }
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
@@ -2220,6 +2220,7 @@ class ClientContainerServices{
                                     viewDetails,
                                     viewDomainDict,
                                     viewIntTests,
+                                    viewUnitTests,
                                     viewTestSummary
                                 ];
                             default:
@@ -2231,9 +2232,17 @@ class ClientContainerServices{
                         }
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
-                        return [
-                            refreshTestData
-                        ];
+                        switch(userRole) {
+                            case RoleType.DEVELOPER:
+                                return [
+                                    refreshTestData,
+                                    refreshDesignData
+                                ];
+                            default:
+                                return [
+                                    refreshTestData,
+                                ];
+                        }
                 }
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -2295,6 +2304,36 @@ class ClientContainerServices{
                             return [
                                     refreshTestData
                                 ];
+                        }
+                }
+                break;
+
+            case ViewType.DESIGN_UPDATE_VIEW:
+
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return [
+                            gotoSelection,
+                            gotoConfig,
+                            gotoDesigns
+                        ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+
+                        return [
+                            viewDetails,
+                            viewProgress,
+                            viewUpdateSummary,
+                            viewDomainDict,
+                            viewTestSummary
+                        ];
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+
+                        if (mode === ViewMode.MODE_VIEW) {
+                            return [
+                                refreshTestData
+                            ];
                         }
                 }
                 break;

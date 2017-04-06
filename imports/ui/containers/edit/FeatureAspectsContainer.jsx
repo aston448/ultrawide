@@ -65,29 +65,32 @@ class FeatureAspectsList extends Component {
 
     // A list of Feature Aspects in a Feature
     renderFeatureAspects() {
-        const {components, displayContext, view, mode, userContext, viewOptions} = this.props;
+        const {components, displayContext, view, mode, userContext, viewOptions, testSummary} = this.props;
 
         if (components) {
 
             // Get the appropriate test summary flag for the view
-            let testSummary = false;
+            let actualTestSummary = false;
 
-            switch(view){
-                case ViewType.DESIGN_NEW_EDIT:
-                case ViewType.DESIGN_PUBLISHED_VIEW:
-                case ViewType.DESIGN_UPDATABLE_VIEW:
-                    testSummary = viewOptions.designTestSummaryVisible;
-                    break;
-                case ViewType.DESIGN_UPDATE_EDIT:
-                case ViewType.DESIGN_UPDATE_VIEW:
-                    testSummary = viewOptions.updateTestSummaryVisible;
-                    break;
-                case ViewType.DEVELOP_BASE_WP:
-                case ViewType.DEVELOP_UPDATE_WP:
-                case ViewType.WORK_PACKAGE_BASE_VIEW:
-                case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                    testSummary = viewOptions.devTestSummaryVisible;
-                    break;
+            if(testSummary) {
+
+                switch (view) {
+                    case ViewType.DESIGN_NEW_EDIT:
+                    case ViewType.DESIGN_PUBLISHED_VIEW:
+                    case ViewType.DESIGN_UPDATABLE_VIEW:
+                        actualTestSummary = viewOptions.designTestSummaryVisible;
+                        break;
+                    case ViewType.DESIGN_UPDATE_EDIT:
+                    case ViewType.DESIGN_UPDATE_VIEW:
+                        actualTestSummary = viewOptions.updateTestSummaryVisible;
+                        break;
+                    case ViewType.DEVELOP_BASE_WP:
+                    case ViewType.DEVELOP_UPDATE_WP:
+                    case ViewType.WORK_PACKAGE_BASE_VIEW:
+                    case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                        actualTestSummary = viewOptions.devTestSummaryVisible;
+                        break;
+                }
             }
 
             return components.map((featureAspect) => {
@@ -101,7 +104,7 @@ class FeatureAspectsList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
-                        testSummary={testSummary}
+                        testSummary={actualTestSummary}
                     />
                 );
             });
@@ -121,7 +124,8 @@ class FeatureAspectsList extends Component {
 
 FeatureAspectsList.propTypes = {
     components: PropTypes.array.isRequired,
-    displayContext: PropTypes.string.isRequired
+    displayContext: PropTypes.string.isRequired,
+    testSummary: PropTypes.bool.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -139,7 +143,7 @@ FeatureAspectsList = connect(mapStateToProps)(FeatureAspectsList);
 
 export default FeatureAspectsContainer = createContainer(({params}) => {
 
-    return ClientContainerServices.getComponentDataForParentComponent(
+    const components =  ClientContainerServices.getComponentDataForParentComponent(
         ComponentType.FEATURE_ASPECT,
         params.view,
         params.designVersionId,
@@ -148,5 +152,11 @@ export default FeatureAspectsContainer = createContainer(({params}) => {
         params.parentId,
         params.displayContext
     );
+
+    return{
+        components: components,
+        displayContext: params.displayContext,
+        testSummary: params.testSummary
+    }
 
 }, FeatureAspectsList);

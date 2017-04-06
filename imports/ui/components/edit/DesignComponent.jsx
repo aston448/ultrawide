@@ -428,7 +428,7 @@ export class DesignComponent extends Component{
         const {currentItem, updateItem, wpItem, displayContext, isDragDropHovering, mode, view, userContext,
             testSummary, testSummaryData, testDataFlag, currentViewDataValue, updateScopeItems, updateScopeFlag, workPackageScopeItems, workPackageScopeFlag} = this.props;
 
-        //console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + "with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem);
+        console.log("Render " + currentItem.componentType + "  Design Component in context " + displayContext + " with current item " + currentItem.componentNameNew +  " and updateItem " + updateItem + " and test Summary " + testSummary);
 
         let highlightStyle = (this.state.highlighted || isDragDropHovering) ? 'highlight' : '';
 
@@ -488,7 +488,8 @@ export class DesignComponent extends Component{
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
-                    workPackageId: userContext.workPackageId
+                    workPackageId: userContext.workPackageId,
+                    testSummary: this.props.testSummary
                 }}/>;
 
             let featuresContainer =
@@ -498,7 +499,8 @@ export class DesignComponent extends Component{
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
-                    workPackageId: userContext.workPackageId
+                    workPackageId: userContext.workPackageId,
+                    testSummary: testSummary
                 }}/>;
 
 
@@ -522,7 +524,8 @@ export class DesignComponent extends Component{
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
-                    workPackageId: userContext.workPackageId
+                    workPackageId: userContext.workPackageId,
+                    testSummary: testSummary
                 }}/>;
 
             let featureAspectsContainer =
@@ -532,7 +535,8 @@ export class DesignComponent extends Component{
                     displayContext: displayContext,
                     view: view,
                     updateId: userContext.designUpdateId,
-                    workPackageId: userContext.workPackageId
+                    workPackageId: userContext.workPackageId,
+                    testSummary: testSummary
                 }}/>;
 
             // Adding stuff is not allowed in these contexts

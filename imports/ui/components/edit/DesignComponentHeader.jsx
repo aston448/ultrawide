@@ -422,6 +422,13 @@ export class DesignComponentHeader extends Component{
                                 existingRawText = props.updateItem.componentNameRawNew;
                             }
                             break;
+                        case DisplayContext.WORKING_VIEW:
+                            // The editor shows the New DV Values
+                            if((item.componentNameOld !== item.componentNameNew)  && item.updateMergeStatus === UpdateMergeStatus.COMPONENT_MODIFIED) {
+                                existingRawText = this.getNewAndOldRawText(item.componentNameNew, item.componentNameOld);
+                            } else {
+                                existingRawText = item.componentNameRawNew;
+                            }
                     }
                     break;
 
@@ -790,7 +797,7 @@ export class DesignComponentHeader extends Component{
         let updateStatusGlyph = '';
         let updateTextClass = '';
 
-        if(view === ViewType.DESIGN_UPDATABLE_VIEW || (view === ViewType.DESIGN_UPDATE_EDIT && displayContext === DisplayContext.WORKING_VIEW)) {
+        if(view === ViewType.DESIGN_UPDATABLE_VIEW || ((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && displayContext === DisplayContext.WORKING_VIEW)) {
 
             // Get status for working views - display as a tooltip over the status icon
 

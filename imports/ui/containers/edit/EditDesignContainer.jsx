@@ -16,7 +16,7 @@ import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 import WorkPackageFeatureMashContainer  from '../dev/WorkPackageFeatureMashContainer.jsx';
 
 // Ultrawide Services
-import { ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
+import { ViewType, ViewMode, DisplayContext, RoleType } from '../../../constants/constants.js';
 
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
@@ -100,7 +100,7 @@ export class DesignApplicationsList extends Component {
 
     render() {
 
-        const {baseApplications, workingApplications, designSummaryData, userContext, view, mode, viewOptions} = this.props;
+        const {baseApplications, workingApplications, designSummaryData, userContext, userRole, view, mode, viewOptions} = this.props;
 
         let layout = '';
 
@@ -108,6 +108,7 @@ export class DesignApplicationsList extends Component {
         let designDetails = '';
         let domainDictionary = '';
         let intTests = '';
+        let unitTests = '';
         let displayedItems = 1;
 
         // Get the correct display context
@@ -173,11 +174,14 @@ export class DesignApplicationsList extends Component {
 
         // WHAT COMPONENTS ARE VISIBLE (Besides Design)
 
+        // DESIGN (+summ) | DETAILS (o) | DICT (o) | INT TESTS (o) | UNIT TESTS (o)
+
         // Start by assuming only 2 cols
         let col1width = 6;
         let col2width = 6;
         let col3width = 6;
         let col4width = 6;
+        let col5width = 6;
 
         // Details
         if(viewOptions.designDetailsVisible){
@@ -204,12 +208,13 @@ export class DesignApplicationsList extends Component {
                 col1width = 4;
                 col2width = 4;
                 col3width = 4;
+                col5width = 4;
             }
 
             displayedItems++;
         }
 
-        if(viewOptions.devIntTestsVisible){
+        if(viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER){
             intTests =
                 <WorkPackageFeatureMashContainer params={{
                     userContext: userContext,
@@ -223,6 +228,7 @@ export class DesignApplicationsList extends Component {
                     col2width = 6;
                     col3width = 6;
                     col4width = 6;
+                    col5width = 6;
                     break;
                 case 2:
                     // Now 3 items
@@ -230,6 +236,7 @@ export class DesignApplicationsList extends Component {
                     col2width = 4;
                     col3width = 4;
                     col4width = 4;
+                    col5width = 4;
                     break;
                 case 3:
                     // Now 4 items
@@ -237,6 +244,52 @@ export class DesignApplicationsList extends Component {
                     col2width = 3;
                     col3width = 3;
                     col4width = 3;
+                    col5width = 3;
+                    break;
+            }
+
+            displayedItems++;
+        }
+
+        if(viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER){
+            unitTests =
+                <WorkPackageFeatureMashContainer params={{
+                    userContext: userContext,
+                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                }}/>;
+
+            switch(displayedItems){
+                case 1:
+                    // Now 2 items
+                    col1width = 6;
+                    col2width = 6;
+                    col3width = 6;
+                    col4width = 6;
+                    col5width = 6;
+                    break;
+                case 2:
+                    // Now 3 items
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    break;
+                case 3:
+                    // Now 4 items
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 3;
+                    col4width = 3;
+                    col5width = 3;
+                    break;
+                case 4:
+                    // Now 5 items
+                    col1width = 3;
+                    col2width = 3;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 2;
                     break;
             }
 
@@ -253,6 +306,7 @@ export class DesignApplicationsList extends Component {
                     col2width = 0;
                     col3width = 0;
                     col4width = 0;
+                    col5width = 0;
                     break;
                 case 2:
                     // Col 1 gets bigger
@@ -260,6 +314,7 @@ export class DesignApplicationsList extends Component {
                     col2width = 4;
                     col3width = 4;
                     col4width = 4;
+                    col5width = 4;
                     break;
                 case 3:
                     // Col 1 gets bigger
@@ -267,6 +322,7 @@ export class DesignApplicationsList extends Component {
                     col2width = 3;
                     col3width = 3;
                     col4width = 3;
+                    col5width = 3;
                     break;
                 case 4:
                     // Col 1 gets bigger
@@ -274,6 +330,15 @@ export class DesignApplicationsList extends Component {
                     col2width = 2;
                     col3width = 2;
                     col4width = 2;
+                    col5width = 2;
+                    break;
+                case 5:
+                    // Col 1 gets bigger
+                    col1width = 4;
+                    col2width = 2;
+                    col3width = 2;
+                    col4width = 2;
+                    col5width = 2;
                     break;
             }
         }
@@ -308,10 +373,18 @@ export class DesignApplicationsList extends Component {
             }
 
             let col4 = '';
-            if(viewOptions.devIntTestsVisible){
+            if(viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER){
                 col4 =
                     <Col id="column4" md={col4width} className="close-col">
                         {intTests}
+                    </Col>;
+            }
+
+            let col5 = '';
+            if(viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER){
+                col5 =
+                    <Col id="column5" md={col5width} className="close-col">
+                        {unitTests}
                     </Col>;
             }
 
@@ -326,6 +399,7 @@ export class DesignApplicationsList extends Component {
                         {col2}
                         {col3}
                         {col4}
+                        {col5}
                     </Row>
                 </Grid>;
 
@@ -361,6 +435,7 @@ function mapStateToProps(state) {
         userContext:            state.currentUserItemContext,
         view:                   state.currentAppView,
         mode:                   state.currentViewMode,
+        userRole:               state.currentUserRole,
         viewOptions:            state.currentUserViewOptions,
         currentViewDataValue:   state.currentViewDataValue
     }

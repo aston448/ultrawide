@@ -237,17 +237,43 @@ export class DesignEditorHeader extends Component {
                 }
                 break;
 
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-            case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.DESIGN_UPDATE_VIEW:
 
-                if(displayContext !== DisplayContext.UPDATE_SUMMARY) {
-                    options =
-                        <div className="details-menu-bar">
-                            {zoomFeaturesOption}
-                            {zoomSectionsOption}
-                        </div>;
+                switch(displayContext) {
+                    case DisplayContext.UPDATE_VIEW:
+                        options =
+                            <div className="details-menu-bar">
+                                {zoomFeaturesOption}
+                                {zoomSectionsOption}
+                            </div>;
+                        break;
+
+                    case DisplayContext.UPDATE_SUMMARY:
+                        closable = true;
+                        detailsType = DetailsViewType.VIEW_UPD_SUMM;
+                        options = '';
+                        break;
+
+                    case DisplayContext.WORKING_VIEW:
+                        options =
+                            <div className="details-menu-bar">
+                                {zoomFeaturesOption}
+                                {zoomSectionsOption}
+                            </div>;
+                        closable = true;
+                        detailsType = DetailsViewType.VIEW_VERSION_PROGRESS;
+                        break;
                 }
+                break;
+
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+
+                options =
+                    <div className="details-menu-bar">
+                        {zoomFeaturesOption}
+                        {zoomSectionsOption}
+                    </div>;
                 break;
 
             case ViewType.DEVELOP_BASE_WP:

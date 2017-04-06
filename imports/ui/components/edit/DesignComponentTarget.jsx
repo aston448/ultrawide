@@ -54,7 +54,7 @@ export class DesignComponentTarget extends Component{
             updateItemScope = updateItem.scopeType;
         }
 
-        //console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " display context " + displayContext);
+        console.log("Rendering design component target: " + this.props.currentItem.componentType + " - " + currentItem.componentNameNew + " display context " + displayContext + "testSummary " + testSummary);
 
         if(!(Meteor.isTest) && canDrop && (this.props.displayContext === DisplayContext.UPDATE_EDIT || this.props.displayContext === DisplayContext.BASE_EDIT) && this.props.mode === ViewMode.MODE_EDIT) {
             // Only can be droppable if in Edit mode and if the edit section of the view
@@ -122,7 +122,7 @@ const componentTarget = {
         // Only updates have an in Scope property - for design edits assume all is in scope
         let inScope = true;
         if(props.view === ViewType.DESIGN_UPDATE_EDIT){
-            inScope = props.currentItem.isInScope;
+            inScope = props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE;
         }
 
         // Validate if a drop would be allowed...
