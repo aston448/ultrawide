@@ -283,6 +283,10 @@ export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newS
             }
         }
 
+        newItems.forEach((item) => {
+            console.log("Open DU Item: " + item);
+        });
+
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS, newUserOpenDesignUpdateItems: newItems});
     }
 
@@ -447,7 +451,12 @@ export function updateViewOptionsData(newValue) {
 
 export function updateOpenItemsFlag(itemId) {
 
+    let newFlag = store.getState().openItemsFlag.flag + 1
+    if(newFlag > 100){
+        newFlag = 0;
+    }
+
     return function (dispatch) {
-        dispatch({type: UPDATE_OPEN_ITEMS_FLAG, newFlagValue: {item: itemId, flag:!store.getState().openItemsFlag.flag}});
+        dispatch({type: UPDATE_OPEN_ITEMS_FLAG, newFlagValue: {item: itemId, flag: newFlag}});
     };
 }

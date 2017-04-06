@@ -11,6 +11,7 @@ import React, { Component, PropTypes } from 'react';
 import {MenuType, RoleType} from '../../../constants/constants.js'
 
 // Bootstrap
+import {Glyphicon}  from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -73,9 +74,32 @@ export class UltrawideMenuItem extends Component {
                 className = this.state.isHighlighted ? 'editor-menu-item editor-menu-highlight' : 'editor-menu-item';
         }
 
-        return(
-            <div className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}>{itemName}</div>
-        )
+        let menuGlyph = 'star';
+
+        switch(itemName){
+            case 'FFF':
+                menuGlyph = 'th';
+                break;
+            case 'SSS':
+                menuGlyph = 'th-large';
+                break;
+            case 'VIEW':
+                menuGlyph = 'eye-open';
+                break;
+            case 'EDIT':
+                menuGlyph = 'edit';
+        }
+
+        if(menuType === MenuType.MENU_TOP){
+            return(
+                <div className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}>{itemName}</div>
+            )
+        } else {
+            return(
+                <div className={className} onMouseEnter={() => this.highlightMe()} onMouseLeave={() => this.unhighlightMe()} onClick={() => this.action()}><Glyphicon id={itemName} glyph={menuGlyph}/></div>
+            )
+        }
+
     }
 }
 

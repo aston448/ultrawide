@@ -140,11 +140,11 @@ class TextLookups {
 
         switch(mergeAction){
             case DesignUpdateMergeAction.MERGE_INCLUDE:
-                return 'Include in new version';
+                return 'Include';
             case DesignUpdateMergeAction.MERGE_ROLL:
                 return 'Roll forward';
             case DesignUpdateMergeAction.MERGE_IGNORE:
-                return 'Ignore (Discard)';
+                return 'Ignore';
         }
     };
 

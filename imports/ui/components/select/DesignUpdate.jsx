@@ -146,15 +146,15 @@ export class DesignUpdate extends Component {
         const mergeOptions =
             <div className="merge-options">
                 <FormGroup id="mergeOptions">
-                    <Radio id="optionMerge" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
+                    <Radio inline id="optionMerge" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_INCLUDE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_INCLUDE)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_INCLUDE)}
                     </Radio>
-                    <Radio id="optionRoll" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
+                    <Radio inline id="optionRoll" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_ROLL}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_ROLL)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_ROLL)}
                     </Radio>
-                    <Radio id="optionIgnore" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
+                    <Radio inline id="optionIgnore" checked={this.state.mergeAction === DesignUpdateMergeAction.MERGE_IGNORE}
                            onChange={() => this.onMergeActionChange(userRole, designUpdate, DesignUpdateMergeAction.MERGE_IGNORE)}>
                         {TextLookups.updateMergeActions(DesignUpdateMergeAction.MERGE_IGNORE)}
                     </Radio>
