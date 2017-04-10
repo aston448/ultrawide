@@ -88,6 +88,9 @@ export class UltrawideMenuItem extends Component {
                 break;
             case 'EDIT':
                 menuGlyph = 'edit';
+                break;
+            case 'Export':
+                menuGlyph = 'upload';
         }
 
         if(menuType === MenuType.MENU_TOP){

@@ -26,7 +26,7 @@ Meteor.methods({
 
         if(UserRoles.find({}).count() === 0) {
 
-            console.log('Inserting data...');
+             console.log('Inserting data...');
 
 
             // Import the last saved data

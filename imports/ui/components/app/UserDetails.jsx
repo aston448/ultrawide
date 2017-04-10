@@ -43,11 +43,11 @@ export class UserDetails extends Component {
 
     }
 
-    onSave(){
+    onSave(userContext){
         event.preventDefault();
 
         // Validate that it is the admin user doing this edit
-        const actionUserId = Meteor.userId();
+        const actionUserId = userContext.userId;
 
         const user = {
             _id:            this.props.user._id,
@@ -67,9 +67,9 @@ export class UserDetails extends Component {
         this.setState({editing: false});
     }
 
-    onToggleActive(user){
+    onToggleActive(user, userContext){
 
-        const actionUserId = Meteor.userId();
+        const actionUserId = userContext.userId;
 
         if(user.isActive){
             // Set inactive
@@ -122,134 +122,141 @@ export class UserDetails extends Component {
 
 
     render() {
-        const {user, currentUserId} = this.props;
+        try {
+            const {user, currentUserId, userContext} = this.props;
 
-        const selectedClass = (user.userId === currentUserId ? ' user-selected' : ' user-not-selected');
-        const activeClass = (user.isActive ? ' user-active' : ' user-inactive');
-        const activateButtonText = (user.isActive ? 'De-Activate' : 'Activate');
+            const selectedClass = (user.userId === currentUserId ? ' user-selected' : ' user-not-selected');
+            const activeClass = (user.isActive ? ' user-active' : ' user-inactive');
+            const activateButtonText = (user.isActive ? 'De-Activate' : 'Activate');
 
-        const viewInstance = (
-            <div onClick={() => this.setCurrentUser(user)}>
-                <Grid>
-                    <Row className={activeClass}>
-                        <Col sm={3}>
-                            {user.displayName}
+            const viewInstance = (
+                <div onClick={() => this.setCurrentUser(user)}>
+                    <Grid>
+                        <Row className={activeClass}>
+                            <Col sm={3}>
+                                {user.displayName}
+                            </Col>
+                            <Col sm={2}>
+                                {user.userName}
+                            </Col>
+                            <Col sm={2}>
+                                <Checkbox readOnly checked={this.state.isDesignerValue}>
+                                    Designer
+                                </Checkbox>
+                            </Col>
+                            <Col sm={2}>
+                                <Checkbox readOnly checked={this.state.isDeveloperValue}>
+                                    Developer
+                                </Checkbox>
+                            </Col>
+                            <Col sm={2}>
+                                <Checkbox readOnly checked={this.state.isManagerValue}>
+                                    Manager
+                                </Checkbox>
+                            </Col>
+                        </Row>
+                    </Grid>
+                    <div className="user-buttons">
+                        <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit(user)}>Edit</Button>
+                        <Button id="butRemove" bsSize="xs"
+                                onClick={() => this.onToggleActive(user, userContext)}>{activateButtonText}</Button>
+                    </div>
+                </div>
+            );
+
+            const formInstance = (
+                <Form horizontal>
+                    <FormGroup controlId="formUserName">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            User Name (Login)
                         </Col>
-                        <Col sm={2}>
-                            {user.userName}
+                        <Col sm={10}>
+                            <FormControl type="text" placeholder={user.userName} value={this.state.userNameValue}
+                                         onChange={(e) => this.onUserNameChange(e)}/>
                         </Col>
-                        <Col sm={2}>
-                            <Checkbox readOnly checked={this.state.isDesignerValue}>
-                                Designer
+                    </FormGroup>
+
+                    <FormGroup controlId="formPassword">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            Password (Login)
+                        </Col>
+                        <Col sm={10}>
+                            <FormControl type="text" placeholder={user.password} value={this.state.passwordValue}
+                                         onChange={(e) => this.onPasswordChange(e)}/>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="formDisplayName">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            Display Name
+                        </Col>
+                        <Col sm={10}>
+                            <FormControl type="text" placeholder={user.displayName} value={this.state.displayNameValue}
+                                         onChange={(e) => this.onDisplayNameChange(e)}/>
+                        </Col>
+                    </FormGroup>
+
+                    <FormGroup controlId="formIsDesigner">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            User is Designer
+                        </Col>
+                        <Col sm={10}>
+                            <Checkbox checked={this.state.isDesignerValue}
+                                      onChange={(e) => this.onIsDesignerChange(e)}>
                             </Checkbox>
                         </Col>
-                        <Col sm={2}>
-                            <Checkbox readOnly checked={this.state.isDeveloperValue}>
-                                Developer
+                    </FormGroup>
+
+                    <FormGroup controlId="formIsDeveloper">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            User is Developer
+                        </Col>
+                        <Col sm={10}>
+                            <Checkbox checked={this.state.isDeveloperValue}
+                                      onChange={(e) => this.onIsDeveloperChange(e)}>
                             </Checkbox>
                         </Col>
-                        <Col sm={2}>
-                            <Checkbox readOnly checked={this.state.isManagerValue}>
-                                Manager
+                    </FormGroup>
+
+                    <FormGroup controlId="formIsManager">
+                        <Col componentClass={ControlLabel} sm={2}>
+                            User is Manager
+                        </Col>
+                        <Col sm={10}>
+                            <Checkbox checked={this.state.isManagerValue}
+                                      onChange={(e) => this.onIsManagerChange(e)}>
                             </Checkbox>
                         </Col>
-                    </Row>
-                </Grid>
-                <div className="user-buttons">
-                    <Button id="butEdit" bsSize="xs" onClick={() => this.onEdit(user)}>Edit</Button>
-                    <Button id="butRemove" bsSize="xs" onClick={() => this.onToggleActive(user)}>{activateButtonText}</Button>
-                </div>
-            </div>
-        );
+                    </FormGroup>
 
-        const formInstance = (
-            <Form horizontal>
-                <FormGroup controlId="formUserName">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        User Name (Login)
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl type="text" placeholder={user.userName} value={this.state.userNameValue} onChange={(e) => this.onUserNameChange(e)}/>
-                    </Col>
-                </FormGroup>
+                    <Button bsSize="xs" onClick={() => this.onSave(userContext)}>
+                        Save
+                    </Button>
+                    <Button bsSize="xs" onClick={() => this.onCancel()}>
+                        Cancel
+                    </Button>
 
-                <FormGroup controlId="formPassword">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Password (Login)
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl type="text" placeholder={user.password} value={this.state.passwordValue} onChange={(e) => this.onPasswordChange(e)}/>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup controlId="formDisplayName">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        Display Name
-                    </Col>
-                    <Col sm={10}>
-                        <FormControl type="text" placeholder={user.displayName} value={this.state.displayNameValue} onChange={(e) => this.onDisplayNameChange(e)}/>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup controlId="formIsDesigner">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        User is Designer
-                    </Col>
-                    <Col sm={10}>
-                        <Checkbox checked={this.state.isDesignerValue}
-                                  onChange={(e) => this.onIsDesignerChange(e)}>
-                        </Checkbox>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup controlId="formIsDeveloper">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        User is Developer
-                    </Col>
-                    <Col sm={10}>
-                        <Checkbox checked={this.state.isDeveloperValue}
-                                  onChange={(e) => this.onIsDeveloperChange(e)}>
-                        </Checkbox>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup controlId="formIsManager">
-                    <Col componentClass={ControlLabel} sm={2}>
-                        User is Manager
-                    </Col>
-                    <Col sm={10}>
-                        <Checkbox checked={this.state.isManagerValue}
-                                  onChange={(e) => this.onIsManagerChange(e)}>
-                        </Checkbox>
-                    </Col>
-                </FormGroup>
-
-                <Button bsSize="xs" onClick={() => this.onSave()}>
-                    Save
-                </Button>
-                <Button bsSize="xs" onClick={() => this.onCancel()}>
-                    Cancel
-                </Button>
-
-            </Form>
+                </Form>
 
 
-        );
+            );
 
-        if(this.state.editing) {
-            return (
-                <div className="user-edit">
-                    {formInstance}
-                </div>
-            )
-        } else {
-            return (
-                <div className={'user-view' + selectedClass}>
-                    {viewInstance}
-                </div>
-            )
+            if (this.state.editing) {
+                return (
+                    <div className="user-edit">
+                        {formInstance}
+                    </div>
+                )
+            } else {
+                return (
+                    <div className={'user-view' + selectedClass}>
+                        {viewInstance}
+                    </div>
+                )
+            }
+        } catch (error) {
+            alert('Unexpected error: ' + error + '.  Contact support if persists!');
         }
-
     }
 }
 
@@ -260,7 +267,8 @@ UserDetails.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        currentUserId:  state.currentUserId
+        currentUserId:  state.currentUserId,
+        userContext:    state.currentUserItemContext
     }
 }
 

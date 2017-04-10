@@ -1061,6 +1061,8 @@ class ImpExServices{
 
     getBackupPath(){
 
+        return '/ultrawide_data/';
+
         const iniFile = process.env["PWD"] + '/ultrawide.ini';
 
         if(fs.existsSync(iniFile)){
@@ -1195,7 +1197,8 @@ class ImpExServices{
         let path = this.getBackupPath();
 
         if(path === 'NONE' || path.length === 0){
-            log((msg) => console.log(msg), LogLevel.ERROR, "Export location not found.  Aborting");
+            this.createAdminUser();
+            //log((msg) => console.log(msg), LogLevel.ERROR, "Export location not found.  Aborting");
             return;
         }
 
@@ -1231,7 +1234,7 @@ class ImpExServices{
         if(users.length > 0){
 
             // Recreate admin
-            this.createAdminUser();
+            //this.createAdminUser();
 
             users.forEach((user) => {
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Processing User : {}", user.displayName);

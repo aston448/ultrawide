@@ -158,7 +158,7 @@ class ChimpMochaTestServices{
                 return [];
             }
 
-            log((msg) => console.log(msg), LogLevel.TRACE, "Cleaned file text is:\n {}", cleanText);
+            //log((msg) => console.log(msg), LogLevel.TRACE, "Cleaned file text is:\n {}", cleanText);
 
 
             // Parse ---------------------------------------------------------------------------------------------------

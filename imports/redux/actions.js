@@ -283,9 +283,9 @@ export function setCurrentUserOpenDesignUpdateItems(openItems, componentId, newS
             }
         }
 
-        newItems.forEach((item) => {
-            console.log("Open DU Item: " + item);
-        });
+        // newItems.forEach((item) => {
+        //     console.log("Open DU Item: " + item);
+        // });
 
         dispatch({type: SET_CURRENT_USER_OPEN_DESIGN_UPDATE_ITEMS, newUserOpenDesignUpdateItems: newItems});
     }

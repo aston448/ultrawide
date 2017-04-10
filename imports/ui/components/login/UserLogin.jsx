@@ -76,15 +76,15 @@ export class UserLogin extends Component {
                     <Button onClick={() => this.onLogin()}>
                         Submit
                     </Button>
-                    <Button onClick={() => this.onLoginUser('gloria', 'gloria')}>
-                        Login Gloria
-                    </Button>
-                    <Button onClick={() => this.onLoginUser('hugh', 'hugh')}>
-                        Login Hugh
-                    </Button>
-                    <Button onClick={() => this.onLoginUser('miles', 'miles')}>
-                        Login Miles
-                    </Button>
+                    {/*<Button onClick={() => this.onLoginUser('gloria', 'gloria')}>*/}
+                        {/*Login Gloria*/}
+                    {/*</Button>*/}
+                    {/*<Button onClick={() => this.onLoginUser('hugh', 'hugh')}>*/}
+                        {/*Login Hugh*/}
+                    {/*</Button>*/}
+                    {/*<Button onClick={() => this.onLoginUser('miles', 'miles')}>*/}
+                        {/*Login Miles*/}
+                    {/*</Button>*/}
                 </form>
             </Well>
         )

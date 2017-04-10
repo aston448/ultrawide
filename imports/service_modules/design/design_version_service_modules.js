@@ -580,7 +580,6 @@ class DesignVersionModules{
     }
 
     setParentsUpdateMergeStatus(child, set){
-        console.log("In set Parents Update Merge Status... Child has parent: " + child.componentParentIdNew);
 
         if(child.componentParentIdNew !== 'NONE') {
             const parent = DesignVersionComponents.findOne({

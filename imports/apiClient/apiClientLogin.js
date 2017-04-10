@@ -56,6 +56,9 @@ class ClientLoginServices{
                                 // Special case - can only access the user admin view
                                 store.dispatch(setCurrentView(ViewType.ADMIN));
 
+                                // Set user context - will find no data but save the user id
+                                ClientUserContextServices.getUserContext(userId);
+
                             } else {
 
                                 // Properly logged in as normal user so retrieve user settings - stored to REDUX

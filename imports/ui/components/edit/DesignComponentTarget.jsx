@@ -121,9 +121,9 @@ const componentTarget = {
 
         // Only updates have an in Scope property - for design edits assume all is in scope
         let inScope = true;
-        if(props.view === ViewType.DESIGN_UPDATE_EDIT){
-            inScope = props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE;
-        }
+        // if(props.view === ViewType.DESIGN_UPDATE_EDIT){
+        //     inScope = props.updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE;
+        // }
 
         // Validate if a drop would be allowed...
         return (locationMoveDropAllowed(item.component.componentType, props.currentItem.componentType, props.view, inScope));
