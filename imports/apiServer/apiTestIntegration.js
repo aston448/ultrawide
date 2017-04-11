@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 
 import {
     populateWorkPackageMashData,
-    updateTestData,
+    updateTestResults,
     updateTestSummaryData,
     exportIntegrationTests
 
@@ -28,9 +28,9 @@ class ServerTestIntegrationApi {
         );
     };
 
-    updateTestData(userContext, viewOptions, callback){
+    updateTestResults(userContext, viewOptions, callback){
 
-        updateTestData.call(
+        updateTestResults.call(
             {
                 userContext: userContext,
                 viewOptions: viewOptions

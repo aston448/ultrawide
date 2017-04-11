@@ -28,7 +28,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 mode={mode}
                 view={view}
                 viewOptions={viewOptions}
-                testDataFlag={false}
+                testDataFlag={0}
             />
         );
     }

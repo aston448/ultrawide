@@ -500,7 +500,7 @@ class ClientWorkPackageServices {
         }
 
         // Load dev data - will update test data once loaded and switch the view
-        ClientTestIntegrationServices.loadUserDevData(updatedContext.userContext, userRole, viewOptions, view, testDataFlag, updatedContext.testIntegrationDataContext);
+        //ClientTestIntegrationServices.loadUserDevData(updatedContext.userContext, userRole, viewOptions, view, testDataFlag, updatedContext.testIntegrationDataContext);
 
         return {success: true, message: ''};
 

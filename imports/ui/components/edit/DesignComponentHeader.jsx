@@ -879,12 +879,12 @@ export class DesignComponentHeader extends Component{
 
         let viewOnlyHeader =
             <div id="editorHeaderItem">
-                <InputGroup onClick={ () => this.setCurrentComponent()}>
+                <InputGroup>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
                         <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} >
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
                         <Editor
                             editorState={this.state.editorState}
                             spellCheck={false}
@@ -1032,7 +1032,7 @@ export class DesignComponentHeader extends Component{
 
         let viewOnlyVersionProgressHeader =
             <div id="workingHeaderItem">
-                <InputGroup onClick={ () => this.setCurrentComponent()}>
+                <InputGroup>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
                             <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
@@ -1042,7 +1042,7 @@ export class DesignComponentHeader extends Component{
                         <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
                     </InputGroup.Addon>
                     <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle + updateTextClass} >
+                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle + updateTextClass} onClick={ () => this.setCurrentComponent()}>
                         <Editor
                             editorState={this.state.editorState}
                             customStyleMap={ClientTextEditorServices.getColourMap()}
@@ -1199,7 +1199,7 @@ export class DesignComponentHeader extends Component{
 
                     return(
                         <Grid id="featureTestSummary">
-                            <Row className={featureRowClass}>
+                            <Row className={featureRowClass} onClick={ () => this.setCurrentComponent()}>
                                 <Col md={7} className="close-col">
                                     <div id="headerItem">
                                         {designComponentElement}
@@ -1234,7 +1234,7 @@ export class DesignComponentHeader extends Component{
 
                     return(
                         <Grid id="scenarioTestSummary">
-                            <Row className={rowClass}>
+                            <Row className={rowClass} onClick={ () => this.setCurrentComponent()}>
                                 <Col md={7} className="close-col">
                                     <div id="headerItem">
                                         {designComponentElement}
@@ -1290,7 +1290,7 @@ DesignComponentHeader.propTypes = {
     testSummary: PropTypes.bool.isRequired,
     testSummaryData: PropTypes.object,
     isOpen: PropTypes.bool.isRequired,
-    testDataFlag: PropTypes.bool.isRequired,
+    testDataFlag: PropTypes.number.isRequired,
     updateScopeItems: PropTypes.object.isRequired,
     updateScopeFlag: PropTypes.number.isRequired,
     workPackageScopeItems: PropTypes.object.isRequired,

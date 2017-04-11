@@ -47,18 +47,9 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        const testIntegrationDataContext = {
-            designVersionDataLoaded:        true,
-            testIntegrationDataLoaded:      true,
-            testSummaryDataLoaded:          true,
-            mashDataStale:                  false,
-            testDataStale:                  false
-        };
-
-        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, viewOptions, userContext, designVersion._id, false, testIntegrationDataContext);
+        const outcome = ClientDesignVersionServices.editDesignVersion(userRole, userContext, designVersion._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Edit Design Version');
     },
@@ -68,18 +59,9 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
         const designVersion = TestDataHelpers.getDesignVersion(userContext.designId, designVersionName);
 
-        const testIntegrationDataContext = {
-            designVersionDataLoaded:        true,
-            testIntegrationDataLoaded:      true,
-            testSummaryDataLoaded:          true,
-            mashDataStale:                  false,
-            testDataStale:                  false
-        };
-
-        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, viewOptions, userContext, designVersion._id, false, testIntegrationDataContext);
+        const outcome = ClientDesignVersionServices.viewDesignVersion(userRole, userContext, designVersion._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'View Design Version');
     },

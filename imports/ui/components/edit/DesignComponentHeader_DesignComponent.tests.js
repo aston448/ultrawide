@@ -21,7 +21,7 @@ describe('JSX: DesignComponentHeader', () => {
         const userContext = {designVersionId: 'ABC'};
         const testSummaryData = {};
         const isOpen = true;
-        const testDataFlag = false;
+        const testDataFlag = 0;
 
         return shallow(
             <DesignComponentHeader
@@ -1162,7 +1162,7 @@ describe('JSX: DesignComponentHeader', () => {
         const testSummary = false;
         const testSummaryData = {};
         const isOpen = true;
-        const testDataFlag = false;
+        const testDataFlag = 0;
         const viewOptions = {};
 
 

@@ -27,6 +27,7 @@ import { UserAccTestResults }               from '../collections/dev/user_acc_te
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
 import { UserTestTypeLocations }            from '../collections/configure/user_test_type_locations.js';
+import { UserDesignVersionMashScenarios }   from '../collections/mash/user_dv_mash_scenarios.js';
 
 // Ultrawide GUI Components
 
@@ -118,18 +119,32 @@ class ClientContainerServices{
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
 
-                let dsHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
+                let dusHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
                 let dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 let ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 let fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
                 let ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 let ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
+                let dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
+
+                // const dfHandle = Meteor.subscribe('userDevFeatures', userId);
+                // const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
+                // const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
+                // const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
+                // const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
+                // const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
+                const mmHandle = Meteor.subscribe('userUnitTestMashData', userContext.userId);
+                const arHandle = Meteor.subscribe('userAccTestResults', userContext.userId);
+                const irHandle = Meteor.subscribe('userIntTestResults', userContext.userId);
+                const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
+                const tsHandle = Meteor.subscribe('userDevTestSummaryData', userContext.userId);
+                const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
 
 
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dsHandle.ready() || !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready()
+                        !dusHandle.ready() || !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() || !dsHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -867,16 +882,36 @@ class ClientContainerServices{
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
 
-                // Do include removed components in the current updates view
-                currentComponents = DesignVersionComponents.find(
-                    {
-                        designVersionId:        designVersionId,
-                        componentType:          componentType,
-                        componentParentIdNew:   parentId
-                    },
-                    {sort:{componentIndexNew: 1}}
-                ).fetch();
+                switch(displayContext) {
+                    case DisplayContext.MASH_UNIT_TESTS:
+                    case DisplayContext.MASH_INT_TESTS:
 
+                        // Don't include removed components in this view for test results
+                        currentComponents = DesignVersionComponents.find(
+                            {
+                                designVersionId:        designVersionId,
+                                componentType:          componentType,
+                                componentParentIdNew:   parentId,
+                                updateMergeStatus:      {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                            },
+                            {sort:{componentIndexNew: 1}}
+                        ).fetch();
+
+                        break;
+
+                    default:
+
+                    // Do include removed components in the current updates view
+                    currentComponents = DesignVersionComponents.find(
+                        {
+                            designVersionId: designVersionId,
+                            componentType: componentType,
+                            componentParentIdNew: parentId
+                        },
+                        {sort: {componentIndexNew: 1}}
+                    ).fetch();
+
+                }
                 return  currentComponents;
 
                 break;
@@ -931,7 +966,7 @@ class ClientContainerServices{
                         ).fetch();
 
                         break;
-
+                    //TODO - test data for Design Updates?
                 }
 
                 //console.log("Design update components found: " + currentComponents.length);
@@ -958,6 +993,8 @@ class ClientContainerServices{
 
                     case DisplayContext.WP_VIEW:
                     case DisplayContext.DEV_DESIGN:
+                    case DisplayContext.MASH_UNIT_TESTS:
+                    case DisplayContext.MASH_INT_TESTS:
 
                         // Get only the Design Components that are in the WP
 
@@ -1014,6 +1051,8 @@ class ClientContainerServices{
 
                     case DisplayContext.WP_VIEW:
                     case DisplayContext.DEV_DESIGN:
+                    case DisplayContext.MASH_UNIT_TESTS:
+                    case DisplayContext.MASH_INT_TESTS:
 
                         // Get only the Update Components that are in the WP
 
@@ -1357,6 +1396,20 @@ class ClientContainerServices{
         }
     };
 
+    getScenarioMashData(userContext, featureAspectReferenceId){
+
+        // Return all scenario mash data for the current Feature Aspect
+
+        return UserDesignVersionMashScenarios.find(
+            {
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId,
+                designFeatureAspectReferenceId: featureAspectReferenceId
+            },
+            {sort:{mashItemIndex : 1}}
+        ).fetch();
+
+    }
 
     getDesignDevMashData(userContext, mashCurrentItem){
 
@@ -1703,6 +1756,8 @@ class ClientContainerServices{
     // Get all unit test results relating to a specific Design Scenario
     getMashScenarioUnitTestResults(userContext, scenario){
 
+        console.log("getting unit tests with user id: " + userContext.userId + " and scenario ref " + scenario.designScenarioReferenceId);
+
         return UserUnitTestMashData.find({
             userId:                         userContext.userId,
             designScenarioReferenceId:      scenario.designScenarioReferenceId,
@@ -1711,6 +1766,7 @@ class ClientContainerServices{
     }
 
     getMashUnlinkedUnitTestResults(userContext){
+
 
         return UserUnitTestMashData.find({
             userId:                         userContext.userId,

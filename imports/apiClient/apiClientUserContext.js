@@ -26,6 +26,7 @@ import ClientDesignUpdateComponentServices  from '../apiClient/apiClientDesignUp
 import ClientWorkPackageServices            from '../apiClient/apiClientWorkPackage.js';
 import ClientWorkPackageComponentServices   from '../apiClient/apiClientWorkPackageComponent.js';
 import ClientAppHeaderServices              from '../apiClient/apiClientAppHeader.js';
+import ClientTestIntegrationServices        from '../apiClient/apiClientTestIntegration.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -173,41 +174,48 @@ class ClientUserContextServices {
         } else {
 
             // Need to load data
-            if(userContext.designVersionId != 'NONE'){
+            if(userContext.designVersionId !== 'NONE'){
                 log((msg) => console.log(msg), LogLevel.TRACE, "Loading data for DV {}", userContext.designVersionId);
 
                 // Show wait screen
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
-                // If there is a current WP, load data for that too once DV data is loaded
-                if(userContext.workPackageId != 'NONE'){
-
-                    // Load DV data and when done load WP data
-                    ClientContainerServices.getDesignVersionData(userContext, this.onDesignVersionDataLoaded(userContext));
-
-                } else {
+                // // If there is a current WP, load data for that too once DV data is loaded
+                // if(userContext.workPackageId !== 'NONE'){
+                //
+                //     // Load DV data and when done load WP data
+                //     ClientContainerServices.getDesignVersionData(userContext, this.onDesignVersionDataLoaded);
+                //
+                // } else {
 
                     // Just load the DV data and continue
                     ClientContainerServices.getDesignVersionData(userContext, this.onAllDataLoaded);
-                }
+                // }
 
             } else {
 
                 log((msg) => console.log(msg), LogLevel.TRACE, "No DV set");
                 // Will have to wait for a DV to be selected to get data
-                this.onAllDataLoaded();
+                this.onAllDataLoaded(userContext);
             }
         }
 
     }
 
-    onDesignVersionDataLoaded(userContext){
+    onDesignVersionDataLoaded(){
+
+        const userContext = store.getState().currentUserItemContext;
 
         // Load WP data and then continue
         ClientContainerServices.getWorkPackageData(userContext, this.onAllDataLoaded)
     }
 
     onAllDataLoaded(){
+
+        const userContext = store.getState().currentUserItemContext;
+
+        // Refresh the test mash for the design version.  Also loads test results
+        ClientTestIntegrationServices.reloadScenarioMashData(userContext, null);
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));
@@ -507,7 +515,7 @@ class ClientUserContextServices {
 
                             // Straight to edit of new update - set mash data stale so test data loaded if Test Summary is showing
                             if(userContext.designComponentId !== 'NONE'){
-                                ClientDesignVersionServices.editDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, testDataFlag, testIntegrationDataContext);
+                                ClientDesignVersionServices.editDesignVersion(userRole, userContext, userContext.designVersionId);
                             } else {
                                 store.dispatch(setCurrentView(ViewType.SELECT));
                             }
@@ -559,7 +567,7 @@ class ClientUserContextServices {
 
                             // View that final design version if user had selected something in it
                             if(userContext.designComponentId !== 'NONE') {
-                                ClientDesignVersionServices.viewDesignVersion(userRole, userViewOptions, userContext, userContext.designVersionId, testDataFlag, testIntegrationDataContext);
+                                ClientDesignVersionServices.viewDesignVersion(userRole, userContext, userContext.designVersionId);
                             } else {
                                 store.dispatch(setCurrentView(ViewType.SELECT));
                             }

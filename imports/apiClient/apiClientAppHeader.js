@@ -62,7 +62,7 @@ class ClientAppHeaderServices{
             case ViewOptionType.DEV_TEST_SUMMARY:
                 if(newOptions[optionType]){
                     // Item is being switched on so load up the data
-                    ClientTestIntegrationServices.updateTestSummaryData(view, userContext, userRole, newOptions, testDataFlag, testIntegrationDataContext);
+                    //ClientTestIntegrationServices.updateTestSummaryData(view, userContext, userRole, newOptions, testDataFlag, testIntegrationDataContext);
                 }
                 break;
             case ViewOptionType.DEV_ACC_TESTS:
@@ -70,7 +70,7 @@ class ClientAppHeaderServices{
             case ViewOptionType.DEV_UNIT_TESTS:
                 if(newOptions[optionType]){
                     // Item is being switched on so load up the data
-                    ClientTestIntegrationServices.updateWorkPackageTestData(userContext, userRole, newOptions, testDataFlag, testIntegrationDataContext);
+                    //ClientTestIntegrationServices.updateWorkPackageTestData(userContext, userRole, newOptions, testDataFlag, testIntegrationDataContext);
                 }
                 break;
             default:

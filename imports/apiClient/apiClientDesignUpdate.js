@@ -398,14 +398,15 @@ class ClientDesignUpdateServices {
         // View mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
-        // Get dev data and the latest test results if summary showing - and switch to the view when loaded
-        if(viewOptions.updateTestSummaryVisible) {
-            ClientTestIntegrationServices.loadUserDevData(newContext, userRole, viewOptions, ViewType.DESIGN_UPDATE_VIEW, testDataFlag, testIntegrationDataContext);
-        } else {
+        // Get relevant test data for a design update
+        ClientTestIntegrationServices.reloadScenarioMashData(userContext);
+        // if(viewOptions.updateTestSummaryVisible) {
+        //     ClientTestIntegrationServices.loadUserDevData(newContext, userRole, viewOptions, ViewType.DESIGN_UPDATE_VIEW, testDataFlag, testIntegrationDataContext);
+        // } else {
 
             // Just switch to the design editor view
             store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
-        }
+        // }
 
 
 

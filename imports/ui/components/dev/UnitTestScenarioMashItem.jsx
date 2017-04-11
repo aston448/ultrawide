@@ -48,6 +48,7 @@ export class UnitTestScenarioMashItem extends Component {
         const { mashItem, userContext } = this.props;
 
         const testStyle = mashItem.unitMashTestStatus;
+
         let resultStyle = 'scenario-test-row-untested';
         if(mashItem.unitMashTestStatus === MashTestStatus.MASH_PASS){
             resultStyle = 'scenario-test-row-pass';
@@ -66,7 +67,7 @@ export class UnitTestScenarioMashItem extends Component {
                                     <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
                                 </InputGroup.Addon>
                                 <div className="mash-scenario">
-                                    {mashItem.designComponentName}
+                                    {mashItem.scenarioName}
                                 </div>
                             </InputGroup>
                         </Col>

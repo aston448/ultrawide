@@ -125,8 +125,7 @@ class ClientDesignUpdateComponentServices{
                 alert('Unexpected error 3: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Add Application Actions:
-                const testDataFlag = store.getState().testDataFlag;
-                store.dispatch(updateTestDataFlag(!testDataFlag));
+                store.dispatch(updateTestDataFlag());
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -168,8 +167,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -216,8 +214,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -260,8 +257,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 6: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(parentComponent);
 
@@ -305,8 +301,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Aspect Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -351,8 +346,7 @@ class ClientDesignUpdateComponentServices{
 
                     this.refreshDesignUpdateSummary(parentComponent);
 
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -394,8 +388,8 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 9: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(designUpdateComponent);
 
@@ -441,8 +435,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 10: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Remove Design Component Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(designUpdateComponent);
 
@@ -573,8 +566,8 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 12: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Move Component Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(movingComponent);
 
@@ -619,8 +612,7 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 13: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Reorder Component Actions:
-                    const testDataFlag = store.getState().testDataFlag;
-                    store.dispatch(updateTestDataFlag(!testDataFlag));
+                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -759,8 +751,6 @@ class ClientDesignUpdateComponentServices{
             true
         ));
 
-        //const testDataFlag = store.getState().testDataFlag;
-        //store.dispatch(updateTestDataFlag(!testDataFlag));
     }
 
     // Call this after a change that might need the summary updating.  It wil only actually update if the data has been

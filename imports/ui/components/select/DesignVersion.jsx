@@ -38,38 +38,22 @@ export class DesignVersion extends Component {
         };
     }
 
-    getTestIntegrationDataContext(){
 
-        return {
-            designVersionDataLoaded:        this.props.dvDataLoaded,
-            testIntegrationDataLoaded:      this.props.testDataLoaded,
-            testSummaryDataLoaded:          this.props.summaryDataLoaded,
-            mashDataStale:                  this.props.mashDataStale,
-            testDataStale:                  this.props.testDataStale
-        };
-    }
-
-    onEditDesignVersion(userRole, viewOptions, userContext, dv, testDataFlag){
+    onEditDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.editDesignVersion(
             userRole,
-            viewOptions,
             userContext,
             dv._id,
-            testDataFlag,
-            this.getTestIntegrationDataContext()
         );
     }
 
-    onViewDesignVersion(userRole, viewOptions, userContext, dv, testDataFlag){
+    onViewDesignVersion(userRole, userContext, dv){
 
         ClientDesignVersionServices.viewDesignVersion(
             userRole,
-            viewOptions,
             userContext,
-            dv._id,
-            testDataFlag,
-            this.getTestIntegrationDataContext()
+            dv._id
         );
     }
 
@@ -177,10 +161,10 @@ export class DesignVersion extends Component {
         let buttons = '';
 
         const editButton =
-            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>Edit</Button>;
+            <Button id="butEdit" bsSize="xs" onClick={ () => this.onEditDesignVersion(userRole, userContext, designVersion)}>Edit</Button>;
 
         const viewButton =
-            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, viewOptions, userContext, designVersion, testDataFlag)}>View</Button>;
+            <Button id="butView" bsSize="xs" onClick={ () => this.onViewDesignVersion(userRole, userContext, designVersion)}>View</Button>;
 
         const publishButton =
             <Button id="butPublish" bsSize="xs" onClick={ () => this.onPublishDesignVersion(userRole, userContext, designVersion)}>Publish</Button>;

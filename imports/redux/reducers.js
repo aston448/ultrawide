@@ -36,7 +36,7 @@ const initialState = {
     currentDesignComponentName:         'No Component',
     currentDesignComponentRawName:      null,
     currentUserMessage:                 {messageType: MessageType.INFO, messageText: 'Please log in...' },
-    testDataFlag:                       false,
+    testDataFlag:                       0,
     designVersionDataLoaded:            false,      // True when data for the current DV is subscribed to
     workPackageDataLoaded:              false,      // True when data for current WP is subscribed to
     testIntegrationDataLoaded:          false,      // True when the test integration data for the current user is subscribed to

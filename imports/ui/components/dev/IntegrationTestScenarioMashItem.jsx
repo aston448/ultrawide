@@ -59,7 +59,7 @@ export default class IntegrationTestScenarioMashItem extends Component {
                                     <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
                                 </InputGroup.Addon>
                                 <div className={'mash-scenario ' + testStyle}>
-                                    {mashItem.designComponentName}
+                                    {mashItem.scenarioName}
                                 </div>
                             </InputGroup>
                         </Col>
@@ -88,7 +88,7 @@ export default class IntegrationTestScenarioMashItem extends Component {
                                     <div className={'mash-unit-scenario-glyph ' + testStyle}><Glyphicon glyph='th'/></div>
                                 </InputGroup.Addon>
                                 <div className={'mash-scenario ' + testStyle}>
-                                    {mashItem.designComponentName}
+                                    {mashItem.scenarioName}
                                 </div>
                             </InputGroup>
                         </Col>

@@ -284,8 +284,8 @@ class ClientDesignVersionServices{
             // Subscribe to the appropriate data for the new DV if DV changing
             if(newDesignVersionId !== userContext.designVersionId) {
                 store.dispatch(setDesignVersionDataLoadedTo(false));
-                store.dispatch(setMashDataStaleTo(true));
-                store.dispatch(setTestDataStaleTo(true));
+                // store.dispatch(setMashDataStaleTo(true));
+                // store.dispatch(setTestDataStaleTo(true));
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 
@@ -311,6 +311,9 @@ class ClientDesignVersionServices{
         designVersionApplications.forEach((app) => {
             store.dispatch((updateOpenItemsFlag(app._id)));
         });
+
+        // Recalculate the test data
+        ClientTestIntegrationServices.reloadScenarioMashData(userContext);
 
         // if(userContext.designUpdateId !== 'NONE'){
         //
@@ -342,7 +345,7 @@ class ClientDesignVersionServices{
     }
 
     // User chose to edit a design version.  ---------------------------------------------------------------------------
-    editDesignVersion(userRole, viewOptions, userContext, designVersionToEditId, testDataFlag, testIntegrationDataContext){
+    editDesignVersion(userRole, userContext, designVersionToEditId){
 
         // Validation
         let result = DesignVersionValidationApi.validateEditDesignVersion(userRole, designVersionToEditId);
@@ -359,16 +362,7 @@ class ClientDesignVersionServices{
         // Ensure that the current version is the version we chose to edit.  Reset User Context
         let updatedContext = this.setDesignVersion(userContext, userRole, designVersionToEditId, true);
 
-
-        // Get dev data and the latest test results if summary showing - and switch to the edit view when loaded
-        if(viewOptions.designTestSummaryVisible) {
-
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, ViewType.DESIGN_NEW_EDIT, testDataFlag, testIntegrationDataContext);
-        } else {
-
-            // Just switch to the design editor view
-            store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
-        }
+        store.dispatch(setCurrentView(ViewType.DESIGN_NEW_EDIT));
 
         // Put the view in edit mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
@@ -379,7 +373,7 @@ class ClientDesignVersionServices{
 
 
     // User chose to view a design version. ----------------------------------------------------------------------------
-    viewDesignVersion(userRole, viewOptions, userContext, designVersionId, testDataFlag, testIntegrationDataContext){
+    viewDesignVersion(userRole, userContext, designVersionId){
 
         // Validation
         let result = DesignVersionValidationApi.validateViewDesignVersion(userRole, designVersionId);
@@ -436,15 +430,7 @@ class ClientDesignVersionServices{
                 break;
         }
 
-        // Get dev data and the latest test results if summary showing - and switch to the view when loaded
-        if(viewOptions.designTestSummaryVisible || (userRole === RoleType.DEVELOPER && (viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible || viewOptions.devAccTestsVisible))) {
-
-            ClientTestIntegrationServices.loadUserDevData(updatedContext, userRole, viewOptions, view, testDataFlag, testIntegrationDataContext);
-        } else {
-
-            // Just switch to the design editor view
-            store.dispatch(setCurrentView(view));
-        }
+        store.dispatch(setCurrentView(view));
 
         return {success: true, message: ''};
     };

@@ -670,7 +670,12 @@ class ClientDesignComponentServices{
         }
     };
 
+    getCurrentItem(userContext){
 
+        return DesignVersionComponents.findOne({
+            _id: userContext.designComponentId
+        });
+    }
 
     getNewAndOldRawText(newText, oldText){
 

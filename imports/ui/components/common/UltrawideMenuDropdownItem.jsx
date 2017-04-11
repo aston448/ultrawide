@@ -91,10 +91,10 @@ export class UltrawideMenuDropdownItem extends Component {
                 );
                 break;
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
-                ClientTestIntegrationServices.refreshTestData(view, userContext, userRole, userViewOptions, testDataFlag, this.getTestIntegrationDataContext());
+                ClientTestIntegrationServices.refreshTestData(userContext, userViewOptions);
                 break;
             case MenuAction.MENU_ACTION_REFRESH_DATA:
-                ClientTestIntegrationServices.refreshDesignMashData(view, userContext, userRole, userViewOptions, testDataFlag, this.getTestIntegrationDataContext());
+                ClientTestIntegrationServices.refreshDesignMashData(userContext);
                 break;
         }
 

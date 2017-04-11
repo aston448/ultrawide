@@ -16,7 +16,7 @@ describe('JSX: AppHeader', () => {
         const userContext = {};
         const userViewOptions = {};
         const message = 'No message';
-        const testDataFlag = false;
+        const testDataFlag = 0;
         const currentViewDataValue = false;
 
         return shallow(

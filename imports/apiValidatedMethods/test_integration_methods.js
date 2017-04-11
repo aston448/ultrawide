@@ -29,19 +29,19 @@ export const populateWorkPackageMashData = new ValidatedMethod({
     }
 });
 
-export const updateTestData = new ValidatedMethod({
+export const updateTestResults = new ValidatedMethod({
 
-    name: 'testIntegration.updateTestData',
+    name: 'testIntegration.updateTestResults',
 
     validate: new SimpleSchema({
         userContext:    {type: Object, blackbox: true},
-        viewOptions:    {type: Object, blackbox: true}
+        viewOptions:    {type: Object, blackbox: true, optional: true}
     }).validator(),
 
     run({userContext, viewOptions}){
 
         try {
-            TestIntegrationServices.updateTestMashData(userContext, viewOptions);
+            TestIntegrationServices.updateDesignDevMashResults(userContext, viewOptions);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)

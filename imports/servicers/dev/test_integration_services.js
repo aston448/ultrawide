@@ -38,47 +38,73 @@ class TestIntegrationServices{
 
     populateDesignDevMashData(userContext){
 
-        // To be called when a Work Package or Updatable Design Version Developer View is opened to get the basic mash data ready
+        // To be called when the Design Version data is loaded or the Design Version changes or user requests a data refresh
 
         if(Meteor.isServer){
 
-            // Recalculate the Design Mash data and add in the latest results
-            MashDataModules.calculateDesignDevMash(userContext)
+            // Recalculate the Design Mash Scenarios
+            MashDataModules.createUserMashScenariosForDesignVersion(userContext);
+            // MashDataModules.calculateDesignDevMash(userContext)
 
+            // And load current test results
+            MashDataModules.updateIntTestScenarioResults(userContext);
+            MashDataModules.updateUnitTestScenarioResults(userContext);
+
+            // And update the test summary data
+            this.updateTestSummaryData(userContext);
         }
     }
 
-    updateTestMashData(userContext, viewOptions){
+    updateDesignDevMashResults(userContext, viewOptions){
 
         // User has chosen to update the test mash data with latest test results
 
         if(Meteor.isServer){
 
-            if(viewOptions.devAccTestsVisible){
-                // Get the latest feature files
-                MashFeatureFileModules.loadUserFeatureFileData(userContext);
+            if(!viewOptions || viewOptions.devTestSummaryVisible || viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible){
 
-                // Calculate the linkages between the actual files and the work package design
-                MashDataModules.linkAcceptanceFilesToDesign(userContext);
+                // Refresh all results.
 
-                // Get latest Acc Tests Results
-                MashDataModules.getAcceptanceTestResults(userContext);
-
-            }
-
-            if(viewOptions.devIntTestsVisible){
-                // Get latest Int Test Results
+                // Get latest results
                 MashDataModules.getIntegrationTestResults(userContext);
-            }
-
-            if(viewOptions.devUnitTestsVisible){
-                // Get latest Unit Test Results
                 MashDataModules.getUnitTestResults(userContext);
-            }
 
-            if(viewOptions.devAccTestsVisible || viewOptions.devIntTestsVisible || viewOptions.devUnitTestsVisible){
-                // Add in the latest results
-                MashDataModules.updateMashResults(userContext, viewOptions)
+                // Update the scenarios
+                MashDataModules.updateIntTestScenarioResults(userContext);
+                MashDataModules.updateUnitTestScenarioResults(userContext);
+
+                this.updateTestSummaryData(userContext);
+
+            } else {
+
+                if (viewOptions.devAccTestsVisible) {
+                    // Get the latest feature files
+                    //MashFeatureFileModules.loadUserFeatureFileData(userContext);
+
+                    // Calculate the linkages between the actual files and the work package design
+                    //MashDataModules.linkAcceptanceFilesToDesign(userContext);
+
+                    // Get latest Acc Tests Results
+                    //MashDataModules.getAcceptanceTestResults(userContext);
+
+                }
+
+                if (viewOptions.devIntTestsVisible) {
+                    // Get latest Int Test Results
+                    MashDataModules.getIntegrationTestResults(userContext);
+                    MashDataModules.updateIntTestScenarioResults(userContext);
+                }
+
+                if (viewOptions.devUnitTestsVisible) {
+                    // Get latest Unit Test Results
+                    MashDataModules.getUnitTestResults(userContext);
+                    MashDataModules.updateUnitTestScenarioResults(userContext);
+                }
+
+                // if(viewOptions.devTestSummaryVisible || viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible){
+                //     this.updateTestSummaryData(userContext);
+                // }
+
             }
 
         }
@@ -90,9 +116,9 @@ class TestIntegrationServices{
 
         if(Meteor.isServer){
 
-            MashDataModules.getAcceptanceTestResults(userContext);
-            MashDataModules.getIntegrationTestResults(userContext);
-            MashDataModules.getUnitTestResults(userContext);
+            //MashDataModules.getAcceptanceTestResults(userContext);
+            //MashDataModules.getIntegrationTestResults(userContext);
+            //MashDataModules.getUnitTestResults(userContext);
 
             // Recreate the summary mash
             TestSummaryServices.refreshTestSummaryData(userContext);
