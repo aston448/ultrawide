@@ -647,9 +647,9 @@ class DesignVersionModules{
 
         if(children.length > 0){
             children.forEach((child) => {
-                console.log("Checking child " + child.componentNameNew);
+
                 if(child.updateMergeStatus !== UpdateMergeStatus.COMPONENT_BASE){
-                    console.log("Modified: " + child.updateMergeStatus);
+
                     found = true;
                 }
 
@@ -661,7 +661,6 @@ class DesignVersionModules{
             // If no children were flagged then their children can't be flagged either
         }
 
-        console.log("Returning: " + found);
         return found;
 
     }
