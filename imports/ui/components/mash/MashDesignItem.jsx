@@ -7,9 +7,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import MashSelectedItemContainer        from '../../containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioTestResultsContainer     from '../../containers/mash/ScenarioTestResultsContainer.jsx';
-import AcceptanceTestScenarioMashItem   from '../../components/dev/AcceptanceTestScenarioMashItem.jsx';
-import IntegrationTestScenarioMashItem  from '../../components/dev/IntegrationTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem         from '../../components/dev/UnitTestScenarioMashItem.jsx';
+import AcceptanceTestScenarioMashItem   from './AcceptanceTestScenarioMashItem.jsx';
+import IntegrationTestScenarioMashItem  from './IntegrationTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem         from './UnitTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import {ViewType, DisplayContext, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';

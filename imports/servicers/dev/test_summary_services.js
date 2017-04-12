@@ -2,13 +2,14 @@
 // Ultrawide Collections
 import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_test_summary_data.js';
 import { UserDevDesignSummaryData }     from '../../collections/dev/user_dev_design_summary_data.js';
-import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
+import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
+import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
 import { UserIntTestResults }           from '../../collections/dev/user_int_test_results.js';
 import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
 
 // Ultrawide services
-import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, LogLevel }   from '../../constants/constants.js';
+import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
@@ -37,23 +38,61 @@ class TestSummaryServices {
         let designScenarios = [];
         if(userContext.designUpdateId === 'NONE'){
 
-            // In a base Design Version context
-            designScenarios = DesignVersionComponents.find({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.SCENARIO
-            }).fetch();
+            if(userContext.workPackageId === 'NONE') {
+                // In a base Design Version context
+                designScenarios = DesignVersionComponents.find({
+                    designId: userContext.designId,
+                    designVersionId: userContext.designVersionId,
+                    componentType: ComponentType.SCENARIO
+                }).fetch();
+            } else {
+                // Only DV components in the WP
+                const wpComponents = WorkPackageComponents.find(
+                    {
+                        workPackageId: userContext.workPackageId,
+                        componentType: ComponentType.SCENARIO,
+                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+                    }
+                ).fetch();
+
+                wpComponents.forEach((wpComponent) => {
+
+                    let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
+
+                    designScenarios.push(dvComponent);
+                });
+            }
 
         } else {
 
             // In a Design Update context
-            designScenarios = DesignUpdateComponents.find({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                componentType: ComponentType.SCENARIO,
-                isRemoved: false
-            }).fetch();
+            if(userContext.workPackageId === 'NONE') {
+                designScenarios = DesignUpdateComponents.find({
+                    designId: userContext.designId,
+                    designVersionId: userContext.designVersionId,
+                    designUpdateId: userContext.designUpdateId,
+                    componentType: ComponentType.SCENARIO,
+                    scopeType: UpdateScopeType.SCOPE_IN_SCOPE,
+                    isRemoved: false
+                }).fetch();
+            } else {
+
+                // Only DU components in the WP
+                const wpComponents = WorkPackageComponents.find(
+                    {
+                        workPackageId: userContext.workPackageId,
+                        componentType: ComponentType.SCENARIO,
+                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+                    }
+                ).fetch();
+
+                wpComponents.forEach((wpComponent) => {
+
+                    let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
+
+                    designScenarios.push(duComponent);
+                });
+            }
         }
 
         const totalScenarioCount = designScenarios.length;

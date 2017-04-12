@@ -636,7 +636,7 @@ export class DesignComponentHeader extends Component{
             </Tooltip>
         );
 
-        console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with WP item " + wpItem);
+        //console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with WP item " + wpItem);
 
         // Determine the look of the item ------------------------------------------------------------------------------
 

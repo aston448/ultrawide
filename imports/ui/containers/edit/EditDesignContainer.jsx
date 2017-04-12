@@ -14,7 +14,6 @@ import DesignComponentAdd               from '../../components/common/DesignComp
 import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 import MashSelectedItemContainer        from '../mash/MashSelectedItemContainer.jsx';
-import MashDesignItem                   from '../../components/mash/MashDesignItem.jsx';
 
 // Ultrawide Services
 import { ViewType, ViewMode, DisplayContext, RoleType, ComponentType, DetailsViewType } from '../../../constants/constants.js';

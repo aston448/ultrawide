@@ -1,7 +1,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Ultrawide Collections
-import { DesignVersionComponents } from '../collections/design/design_version_components.js';
+import { DesignVersionComponents }  from '../collections/design/design_version_components.js';
+import { DesignUpdateComponents }   from '../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import { ViewType, MessageType, TestRunner, RoleType, ComponentType, LogLevel } from '../constants/constants.js';
@@ -149,11 +150,22 @@ class ClientTestIntegrationServices {
 
         let scenarioCount = 0;
 
-        scenarioCount = DesignVersionComponents.find({
-            designVersionId:        featureAspect.designVersionId,
-            componentType:          ComponentType.SCENARIO,
-            componentParentIdNew:   featureAspect._id
-        }).count();
+        if(userContext.designUpdateId === 'NONE') {
+
+            scenarioCount = DesignVersionComponents.find({
+                designVersionId: featureAspect.designVersionId,
+                componentType: ComponentType.SCENARIO,
+                componentParentIdNew: featureAspect._id
+            }).count();
+
+        } else {
+
+            scenarioCount = DesignUpdateComponents.find({
+                designUpdateId: featureAspect.designUpdateId,
+                componentType: ComponentType.SCENARIO,
+                componentParentIdNew: featureAspect._id
+            }).count();
+        }
 
         return(scenarioCount > 0);
     }

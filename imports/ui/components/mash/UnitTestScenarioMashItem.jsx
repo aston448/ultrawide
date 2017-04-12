@@ -5,17 +5,15 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import MashUnitTestContainer from '../../containers/dev/MashUnitTestContainer.jsx';
+import MashUnitTestContainer from '../../containers/mash/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
-import TextLookups from '../../../common/lookups.js';
 import { DisplayContext, MashTestStatus } from '../../../constants/constants.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -71,11 +69,6 @@ export class UnitTestScenarioMashItem extends Component {
                                 </div>
                             </InputGroup>
                         </Col>
-                        {/*<Col md={2}>*/}
-                            {/*<div className={'mash-scenario-result ' + testStyle}>*/}
-                                {/*{TextLookups.mashTestStatus(mashItem.unitMashTestStatus)}*/}
-                            {/*</div>*/}
-                        {/*</Col>*/}
                     </Row>
                 </Grid>
 

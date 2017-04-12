@@ -5,34 +5,20 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-import IntegrationTestFeatureMashItem               from './WorkPackageFeatureMashItem.jsx';
-import IntegrationTestFeatureAspectMashContainer    from '../../containers/dev/WorkPackageFeatureAspectMashContainer.jsx';
-import IntegrationTestScenarioMashContainer         from '../../containers/dev/WorkPackageScenarioMashContainer.jsx';
 
 // Ultrawide Services
-import {RoleType, DisplayContext, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
+import {}    from '../../../constants/constants.js';
 import {log} from '../../../common/utils.js';
 
 import TextLookups                  from '../../../common/lookups.js';
-import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
-import UserContextServices          from '../../../apiClient/apiClientUserContext.js';
-import ClientMashDataServices       from '../../../apiClient/apiClientMashData.js';
-
-
 
 // Bootstrap
-import {Panel} from 'react-bootstrap';
-import {InputGroup} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
-import {connect} from 'react-redux';
 
 // =====================================================================================================================
 

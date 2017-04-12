@@ -119,14 +119,14 @@ class ClientContainerServices{
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
 
-                let dusHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
-                let dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
-                let ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
-                let fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
-                let ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
-                let ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
-                let dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
+                const dusHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
+                const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
+                const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
+                const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
+                const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
+                const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
 
+                const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
                 // const dfHandle = Meteor.subscribe('userDevFeatures', userId);
                 // const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
                 // const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
@@ -239,65 +239,65 @@ class ClientContainerServices{
         }
     }
 
-    getTestIntegrationData(userId, callback){
-
-        if(Meteor.isClient) {
-
-            // See if we have already got the data subscribed...
-            if (!(store.getState().testIntegrationDataLoaded)) {
-
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.WARNING,
-                    messageText: 'Fetching your test data from server...  Please wait...'
-                }));
-
-                // Subscribe to dev data
-                const dfHandle = Meteor.subscribe('userDevFeatures', userId);
-                const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
-                const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
-                const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
-                const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
-                const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
-                const mmHandle = Meteor.subscribe('userUnitTestMashData', userId);
-                const arHandle = Meteor.subscribe('userAccTestResults', userId);
-                const irHandle = Meteor.subscribe('userIntTestResults', userId);
-                const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
-                const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
-                const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userId);
-
-                Tracker.autorun((loader) => {
-
-                    let loading = (
-                        !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() || !dsHandle.ready()
-                    );
-
-                    log((msg) => console.log(msg), LogLevel.DEBUG, "loading dev data = {}", loading);
-
-                    if (!loading) {
-
-                        store.dispatch(setTestIntegrationDataLoadedTo(true));
-
-                        store.dispatch(updateUserMessage({
-                            messageType: MessageType.INFO,
-                            messageText: 'Test Data loaded'
-                        }));
-
-                        if(callback){
-                            callback();
-                        }
-
-                        // Stop this checking once we are done or there will be random chaos
-                        loader.stop();
-                    }
-
-                });
-            } else {
-                if(callback){
-                    callback();
-                }
-            }
-        }
-    }
+    // getTestIntegrationData(userId, callback){
+    //
+    //     if(Meteor.isClient) {
+    //
+    //         // See if we have already got the data subscribed...
+    //         if (!(store.getState().testIntegrationDataLoaded)) {
+    //
+    //             store.dispatch(updateUserMessage({
+    //                 messageType: MessageType.WARNING,
+    //                 messageText: 'Fetching your test data from server...  Please wait...'
+    //             }));
+    //
+    //             // Subscribe to dev data
+    //             const dfHandle = Meteor.subscribe('userDevFeatures', userId);
+    //             const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
+    //             const fsHandle = Meteor.subscribe('userDevFeatureScenarios', userId);
+    //             const ssHandle = Meteor.subscribe('userDevFeatureScenarioSteps', userId);
+    //             const wmHandle = Meteor.subscribe('userWorkPackageMashData', userId);
+    //             const wsHandle = Meteor.subscribe('userWorkPackageFeatureStepData', userId);
+    //             const mmHandle = Meteor.subscribe('userUnitTestMashData', userId);
+    //             const arHandle = Meteor.subscribe('userAccTestResults', userId);
+    //             const irHandle = Meteor.subscribe('userIntTestResults', userId);
+    //             const mrHandle = Meteor.subscribe('userUnitTestResults', userId);
+    //             const tsHandle = Meteor.subscribe('userDevTestSummaryData', userId);
+    //             const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userId);
+    //
+    //             Tracker.autorun((loader) => {
+    //
+    //                 let loading = (
+    //                     !dfHandle.ready() || !dbHandle.ready() || !fsHandle.ready() || !ssHandle.ready() || !wmHandle.ready() || !wsHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() || !dsHandle.ready()
+    //                 );
+    //
+    //                 log((msg) => console.log(msg), LogLevel.DEBUG, "loading dev data = {}", loading);
+    //
+    //                 if (!loading) {
+    //
+    //                     store.dispatch(setTestIntegrationDataLoadedTo(true));
+    //
+    //                     store.dispatch(updateUserMessage({
+    //                         messageType: MessageType.INFO,
+    //                         messageText: 'Test Data loaded'
+    //                     }));
+    //
+    //                     if(callback){
+    //                         callback();
+    //                     }
+    //
+    //                     // Stop this checking once we are done or there will be random chaos
+    //                     loader.stop();
+    //                 }
+    //
+    //             });
+    //         } else {
+    //             if(callback){
+    //                 callback();
+    //             }
+    //         }
+    //     }
+    // }
 
     // Ultrawide Users
     getUltrawideUsers(){
@@ -702,7 +702,7 @@ class ClientContainerServices{
     // Get top level editor data (i.e Applications)
     getEditorApplicationData(userContext, view){
 
-        console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
+        //console.log("Getting Application data for " + view + " and DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
 
         const designVersion = DesignVersions.findOne({_id: userContext.designVersionId});
 
@@ -742,8 +742,8 @@ class ClientContainerServices{
         let baseApplicationsArr = baseApplications.fetch();
         let workingApplicationsArr = workingApplications.fetch();
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Found {} base applications.", baseApplicationsArr.length);
-        log((msg) => console.log(msg), LogLevel.INFO, "Found {} working applications.", workingApplicationsArr.length);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} base applications.", baseApplicationsArr.length);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Found {} working applications.", workingApplicationsArr.length);
 
         // Get Update Apps if update Id provided
         let updateApplicationsArr = [];
@@ -937,7 +937,6 @@ class ClientContainerServices{
 
                 switch(displayContext){
                     case DisplayContext.UPDATE_EDIT:
-                    case DisplayContext.UPDATE_VIEW:
 
                         // Display all DU components.  Only in-scope components exist.
                         currentComponents = DesignUpdateComponents.find(
@@ -946,6 +945,22 @@ class ClientContainerServices{
                                 designUpdateId:         designUpdateId,
                                 componentType:          componentType,
                                 componentParentIdNew:   parentId,
+                            },
+                            {sort:{componentIndexNew: 1}}
+                        ).fetch();
+
+                        break;
+
+                    case DisplayContext.UPDATE_VIEW:
+
+                        // Display all DU components.  Don't include peer scope.
+                        currentComponents = DesignUpdateComponents.find(
+                            {
+                                designVersionId:        designVersionId,
+                                designUpdateId:         designUpdateId,
+                                componentType:          componentType,
+                                componentParentIdNew:   parentId,
+                                scopeType:              {$ne: UpdateScopeType.SCOPE_PEER_SCOPE}
                             },
                             {sort:{componentIndexNew: 1}}
                         ).fetch();
@@ -1015,21 +1030,23 @@ class ClientContainerServices{
                         const parent = DesignVersionComponents.findOne({_id: parentId});
 
                         // Get the possible WP components
-                        wpComponents = WorkPackageComponents.find(
-                            {
-                                workPackageId: workPackageId,
-                                componentParentReferenceId: parent.componentReferenceId,
-                                componentType: componentType
-                            },
-                            {sort: {componentIndex: 1}}
-                        ).fetch();
+                        if(parent) {
+                            wpComponents = WorkPackageComponents.find(
+                                {
+                                    workPackageId: workPackageId,
+                                    componentParentReferenceId: parent.componentReferenceId,
+                                    componentType: componentType
+                                },
+                                {sort: {componentIndex: 1}}
+                            ).fetch();
 
-                        wpComponents.forEach((wpComponent) => {
+                            wpComponents.forEach((wpComponent) => {
 
-                            let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
+                                let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
 
-                            currentComponents.push(dvComponent);
-                        });
+                                currentComponents.push(dvComponent);
+                            });
+                        }
                         break;
                 }
 
@@ -1053,11 +1070,11 @@ class ClientContainerServices{
                         // Get all Update Components for the scope.  Ignore Peer scope for Update WPs
                         currentComponents = DesignUpdateComponents.find(
                             {
-                                designVersionId:        designVersionId,
-                                designUpdateId:         designUpdateId,
-                                componentParentIdNew:   parentId,
-                                componentType:          componentType,
-                                scopeType:              {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
+                                designVersionId: designVersionId,
+                                designUpdateId: designUpdateId,
+                                componentParentIdNew: parentId,
+                                componentType: componentType,
+                                scopeType: {$in: [UpdateScopeType.SCOPE_IN_SCOPE, UpdateScopeType.SCOPE_PARENT_SCOPE]}
                             },
                             {sort: {componentIndexNew: 1}}
                         ).fetch();
@@ -1074,20 +1091,22 @@ class ClientContainerServices{
                         const parent = DesignUpdateComponents.findOne({_id: parentId});
 
                         // Get the possible WP components
-                        wpComponents = WorkPackageComponents.find(
-                            {
-                                workPackageId: workPackageId,
-                                componentParentReferenceId: parent.componentReferenceId,
-                                componentType: componentType
-                            },
-                            {sort: {componentIndex: 1}});
+                        if (parent) {
+                            wpComponents = WorkPackageComponents.find(
+                                {
+                                    workPackageId: workPackageId,
+                                    componentParentReferenceId: parent.componentReferenceId,
+                                    componentType: componentType
+                                },
+                                {sort: {componentIndex: 1}});
 
-                        wpComponents.forEach((wpComponent) => {
+                            wpComponents.forEach((wpComponent) => {
 
-                            let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
+                                let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
 
-                            currentComponents.push(duComponent);
-                        });
+                                currentComponents.push(duComponent);
+                            });
+                        }
 
                         break;
                 }
@@ -1414,25 +1433,71 @@ class ClientContainerServices{
 
         // Return all scenario mash data for the current Feature Aspect or Scenario
 
-        if(scenarioReferenceId === 'NONE') {
-            return UserDesignVersionMashScenarios.find(
-                {
-                    userId: userContext.userId,
-                    designVersionId: userContext.designVersionId,
-                    designFeatureAspectReferenceId: featureAspectReferenceId
-                },
-                {sort: {mashItemIndex: 1}}
-            ).fetch();
+        if(userContext.workPackageId === 'NONE') {
+
+            // Get all scenarios
+
+            if (scenarioReferenceId === 'NONE') {
+                return UserDesignVersionMashScenarios.find(
+                    {
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        designFeatureAspectReferenceId: featureAspectReferenceId
+                    },
+                    {sort: {mashItemIndex: 1}}
+                ).fetch();
+            } else {
+                return UserDesignVersionMashScenarios.find(
+                    {
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        designFeatureAspectReferenceId: featureAspectReferenceId,
+                        designScenarioReferenceId: scenarioReferenceId
+                    },
+                    {sort: {mashItemIndex: 1}}
+                ).fetch();
+            }
         } else {
-            return UserDesignVersionMashScenarios.find(
-                {
+
+            // Return only scenarios in the WP
+            let scenarios = [];
+
+            // Get the possible WP components
+            let wpComponents = [];
+
+            if(scenarioReferenceId === 'NONE') {
+                wpComponents = WorkPackageComponents.find(
+                    {
+                        workPackageId: userContext.workPackageId,
+                        componentType: ComponentType.SCENARIO,
+                        componentParentReferenceId: featureAspectReferenceId,
+                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+                    }
+                );
+            } else {
+                wpComponents = WorkPackageComponents.find(
+                    {
+                        workPackageId: userContext.workPackageId,
+                        componentType: ComponentType.SCENARIO,
+                        componentReferenceId: scenarioReferenceId,
+                        componentParentReferenceId: featureAspectReferenceId,
+                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+                    }
+                );
+            }
+
+            wpComponents.forEach((wpComponent) => {
+
+                let mashScenario = UserDesignVersionMashScenarios.findOne({
                     userId: userContext.userId,
                     designVersionId: userContext.designVersionId,
-                    designFeatureAspectReferenceId: featureAspectReferenceId,
-                    designScenarioReferenceId: scenarioReferenceId
-                },
-                {sort: {mashItemIndex: 1}}
-            ).fetch();
+                    designScenarioReferenceId: wpComponent.componentReferenceId
+                });
+
+                scenarios.push(mashScenario);
+            });
+
+            return scenarios;
         }
     }
 

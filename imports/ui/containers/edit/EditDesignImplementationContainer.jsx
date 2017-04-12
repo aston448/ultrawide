@@ -12,11 +12,10 @@ import { createContainer } from 'meteor/react-meteor-data';
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
 import DesignComponentTextContainer         from '../edit/DesignComponentTextContainer.jsx';
 import DevFilesContainer                    from '../dev/DevFilesContainer.jsx';
-import WorkPackageFeatureMashContainer      from '../dev/WorkPackageFeatureMashContainer.jsx';
 import DomainDictionaryContainer            from './DomainDictionaryContainer.jsx';
 import DesignEditorHeader                   from '../../components/common/DesignEditorHeader.jsx';
 import DesignEditorFooter                   from '../../components/common/DesignEditorFooter.jsx';
-
+import MashSelectedItemContainer            from '../mash/MashSelectedItemContainer.jsx';
 
 // Ultrawide Services
 import { ItemType, ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
@@ -142,20 +141,7 @@ class DevApplicationsList extends Component {
 
         // Acceptance (Feature) Tests
         if(viewOptions.devAccTestsVisible){
-            featureTests =
-                <Panel header="Acceptance Test Implementation" className="panel-update panel-update-body">
-                    <Grid>
-                        <Row>
-                            <Col md={12} className="close-col">
-                                <WorkPackageFeatureMashContainer params={{
-                                    userContext: userContext,
-                                    displayContext: DisplayContext.MASH_ACC_TESTS
-                                }}/>
-                            </Col>
-                        </Row>
-                    </Grid>
-
-                </Panel>;
+            featureTests = <div></div>;
 
             switch(displayedItems){
                 case 1:
@@ -228,11 +214,53 @@ class DevApplicationsList extends Component {
         // Integration Tests
         if(viewOptions.devIntTestsVisible){
 
-            intTests =
-                <WorkPackageFeatureMashContainer params={{
-                    userContext: userContext,
-                    displayContext: DisplayContext.MASH_INT_TESTS
-                }}/>;
+            if(userContext.designComponentType !== 'NONE'){
+                switch(userContext.designComponentType){
+                    case ComponentType.APPLICATION:
+                    case ComponentType.DESIGN_SECTION:
+                        // Tests not displayed for these items
+                        intTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: 'NONE',
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_INT_TESTS
+                            }}/>;
+                        break;
+                    case ComponentType.FEATURE:
+                        intTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.FEATURE_ASPECT,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_INT_TESTS
+                            }}/>;
+                        break;
+                    case ComponentType.FEATURE_ASPECT:
+                    case ComponentType.SCENARIO:
+                        intTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.SCENARIO,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_INT_TESTS
+                            }}/>;
+
+                        break;
+                }
+            } else {
+                intTests =
+                    <MashSelectedItemContainer params={{
+                        componentType: 'NONE',
+                        designItemId: 'NONE',
+                        userContext: userContext,
+                        view: view,
+                        displayContext: DisplayContext.MASH_INT_TESTS
+                    }}/>;
+            }
 
             switch(displayedItems){
                 case 2:
@@ -272,11 +300,53 @@ class DevApplicationsList extends Component {
         // Module Tests
         if(viewOptions.devUnitTestsVisible){
 
-            unitTests =
-                <WorkPackageFeatureMashContainer params={{
-                    userContext: userContext,
-                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                }}/>;
+            if(userContext.designComponentType !== 'NONE'){
+                switch(userContext.designComponentType){
+                    case ComponentType.APPLICATION:
+                    case ComponentType.DESIGN_SECTION:
+                        // Tests not displayed for these items
+                        unitTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: 'NONE',
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_UNIT_TESTS
+                            }}/>;
+                        break;
+                    case ComponentType.FEATURE:
+                        unitTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.FEATURE_ASPECT,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_UNIT_TESTS
+                            }}/>;
+                        break;
+                    case ComponentType.FEATURE_ASPECT:
+                    case ComponentType.SCENARIO:
+                        unitTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.SCENARIO,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_UNIT_TESTS
+                            }}/>;
+
+                        break;
+                }
+            } else {
+                unitTests =
+                    <MashSelectedItemContainer params={{
+                        componentType: 'NONE',
+                        designItemId: 'NONE',
+                        userContext: userContext,
+                        view: view,
+                        displayContext: DisplayContext.MASH_UNIT_TESTS
+                    }}/>;
+            }
 
             switch(displayedItems){
                 case 2:

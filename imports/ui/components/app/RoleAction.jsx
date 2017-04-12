@@ -70,7 +70,7 @@ class RoleAction extends Component {
             testDataStale:                  this.props.testDataStale
         };
 
-        console.log("TEST SUMMARY DATA LOADED: " + this.props.summaryDataLoaded);
+        //console.log("TEST SUMMARY DATA LOADED: " + this.props.summaryDataLoaded);
 
         // Now go where the user wanted...
         switch(roleAction){

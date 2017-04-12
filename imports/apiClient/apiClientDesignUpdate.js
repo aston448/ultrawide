@@ -295,9 +295,9 @@ class ClientDesignUpdateServices {
 
         let newContext = userContext;
 
-        if(newDesignUpdateId !== userContext.designUpdateId) {
+        //if(newDesignUpdateId !== userContext.designUpdateId) {
 
-            // Also clears current WP selection when DU changes
+            // Also clears current WP selection when DU selected if not changing
             newContext = {
                 userId: userContext.userId,
                 designId: userContext.designId,           // Must be the same design
@@ -314,7 +314,7 @@ class ClientDesignUpdateServices {
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
-        }
+        //}
 
         // Open default items
         newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);

@@ -180,17 +180,8 @@ class ClientUserContextServices {
                 // Show wait screen
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
-                // If there is a current WP, load data for that too once DV data is loaded
-                // if(userContext.workPackageId !== 'NONE'){
-                //
-                //     // Load DV data and when done load WP data
-                //     ClientContainerServices.getDesignVersionData(userContext, this.onDesignVersionDataLoaded);
-                //
-                // } else {
-                //
-                //     // Just load the DV data and continue.  This also loads WP data if needed
-                    ClientContainerServices.getDesignVersionData(userContext, this.onAllDataLoaded);
-                // }
+                // Also gets WP data if a WP is current
+                ClientContainerServices.getDesignVersionData(userContext, this.onAllDataLoaded);
 
             } else {
 
@@ -202,17 +193,10 @@ class ClientUserContextServices {
 
     }
 
-    // onDesignVersionDataLoaded(){
-    //     console.log("called onDesignVersionDataLoaded");
-    //     const userContext = store.getState().currentUserItemContext;
-    //
-    //     // Load WP data and then continue
-    //     ClientContainerServices.getWorkPackageData(userContext, this.onAllDataLoaded)
-    // }
 
     onAllDataLoaded(){
 
-        console.log("called onAllDataLoaded");
+        //console.log("called onAllDataLoaded");
         const userContext = store.getState().currentUserItemContext;
 
         // Refresh the test mash for the design version.  Also loads test results

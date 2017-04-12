@@ -5,7 +5,7 @@ import React, { Component, PropTypes, ReactDOM } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import TestResultOverlay from '../../components/dev/TestResultOverlay.jsx';
+import TestResultOverlay from '../dev/TestResultOverlay.jsx';
 
 // Ultrawide Services
 import {TestType} from '../../../constants/constants.js';

@@ -34,7 +34,6 @@ import '../imports/collections/dev/user_int_test_results.js';
 import '../imports/collections/dev/user_unit_test_results.js';
 
 import '../imports/collections/mash/user_dv_mash_scenarios.js';
-import '../imports/collections/mash/user_du_mash_scenarios.js';
 
 // Modules
 import '../imports/startup/server/fixtures.js';

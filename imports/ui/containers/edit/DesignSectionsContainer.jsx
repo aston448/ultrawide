@@ -120,7 +120,7 @@ class DesignSectionsList extends Component {
 
         const {components, displayContext, view, mode, viewOptions, userContext, testSummary} = this.props;
 
-        console.log("rendering " + displayContext +  " design sections with list length " + components.length + " and component 0 is " + components[0]);
+        //console.log("rendering " + displayContext +  " design sections with list length " + components.length + " and component 0 is " + components[0]);
         return (
             <div>
                 {this.renderDesignSections(components, displayContext, view, mode, viewOptions, userContext, testSummary)}

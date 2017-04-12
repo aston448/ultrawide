@@ -8,9 +8,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import AcceptanceTestScenarioMashItem       from '../../components/dev/AcceptanceTestScenarioMashItem.jsx';
-import IntegrationTestScenarioMashItem      from '../../components/dev/IntegrationTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem           from '../../components/dev/UnitTestScenarioMashItem.jsx';
+import AcceptanceTestScenarioMashItem       from '../../components/mash/AcceptanceTestScenarioMashItem.jsx';
+import IntegrationTestScenarioMashItem      from '../../components/mash/IntegrationTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem           from '../../components/mash/UnitTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import { DisplayContext }    from '../../../constants/constants.js';
