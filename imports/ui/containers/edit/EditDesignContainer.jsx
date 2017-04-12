@@ -224,33 +224,16 @@ export class DesignApplicationsList extends Component {
             if(userContext.designComponentType !== 'NONE'){
                 switch(userContext.designComponentType){
                     case ComponentType.APPLICATION:
+                    case ComponentType.DESIGN_SECTION:
+                        // Tests not displayed for these items
                         intTests =
                             <MashSelectedItemContainer params={{
-                                componentType: ComponentType.DESIGN_SECTION,
+                                componentType: 'NONE',
                                 designItemId: 'NONE',
                                 userContext: userContext,
                                 view: view,
                                 displayContext: DisplayContext.MASH_INT_TESTS
                             }}/>;
-                        break;
-                    case ComponentType.DESIGN_SECTION:
-                        intTests =
-                            <div>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.FEATURE,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>
-                            </div>;
                         break;
                     case ComponentType.FEATURE:
                         intTests =
@@ -261,6 +244,18 @@ export class DesignApplicationsList extends Component {
                                 view: view,
                                 displayContext: DisplayContext.MASH_INT_TESTS
                             }}/>;
+                        break;
+                    case ComponentType.FEATURE_ASPECT:
+                    case ComponentType.SCENARIO:
+                        intTests =
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.SCENARIO,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_INT_TESTS
+                            }}/>;
+
                         break;
                 }
             } else {
@@ -309,33 +304,16 @@ export class DesignApplicationsList extends Component {
             if(userContext.designComponentType !== 'NONE'){
                 switch(userContext.designComponentType){
                     case ComponentType.APPLICATION:
+                    case ComponentType.DESIGN_SECTION:
+                        // Tests not displayed for these items
                         unitTests =
                             <MashSelectedItemContainer params={{
-                                componentType: ComponentType.DESIGN_SECTION,
+                                componentType: 'NONE',
                                 designItemId: 'NONE',
                                 userContext: userContext,
                                 view: view,
                                 displayContext: DisplayContext.MASH_UNIT_TESTS
                             }}/>;
-                        break;
-                    case ComponentType.DESIGN_SECTION:
-                        unitTests =
-                            <div>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.FEATURE,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>
-                            </div>;
                         break;
                     case ComponentType.FEATURE:
                         unitTests =
@@ -348,26 +326,15 @@ export class DesignApplicationsList extends Component {
                             }}/>;
                         break;
                     case ComponentType.FEATURE_ASPECT:
-
-                        // TODO replace this with a SelectedItemContainer that selects from Sceario mash
+                    case ComponentType.SCENARIO:
                         unitTests =
-                            <div className="design-editor-container">
-                                <DetailsViewHeader
-                                    detailsType={DetailsViewType.VIEW_UNIT_TESTS}
-                                    isClosable={true}
-                                    titleText={panelHeader}
-                                />
-                                <div className={editorClass}>
-                                    <MashDesignItem
-                                        designItem={this.getDesignVersionCurrentItem(userContext)}
-                                        displayContext={DisplayContext.MASH_UNIT_TESTS}
-                                    />
-                                </div>
-                                <DetailsViewFooter
-                                    detailsType={DetailsViewType.VIEW_UNIT_TESTS}
-                                    actionsVisible={false}
-                                />
-                            </div>;
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.SCENARIO,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_UNIT_TESTS
+                            }}/>;
 
                         break;
                 }
@@ -515,9 +482,6 @@ export class DesignApplicationsList extends Component {
             // Make up the layout based on the view options
             layout =
                 <Grid >
-                    {/*<Row>*/}
-                        {/*{designSummary}*/}
-                    {/*</Row>*/}
                     <Row>
                         {col1}
                         {col2}

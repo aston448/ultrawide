@@ -7,6 +7,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import MashSelectedItemContainer        from '../../containers/mash/MashSelectedItemContainer.jsx';
 import ScenarioTestResultsContainer     from '../../containers/mash/ScenarioTestResultsContainer.jsx';
+import AcceptanceTestScenarioMashItem   from '../../components/dev/AcceptanceTestScenarioMashItem.jsx';
+import IntegrationTestScenarioMashItem  from '../../components/dev/IntegrationTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem         from '../../components/dev/UnitTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import {ViewType, DisplayContext, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
@@ -50,29 +53,36 @@ class MashDesignItem extends Component {
     render(){
         const { designItem, displayContext, view, userContext } = this.props;
 
-        // What is rendered depends on the item type
+        // What is rendered depends on the item type.  Assume its a Scenario if not a Design Version component
+        // with a specified type
 
-        switch(designItem.componentType){
-            case ComponentType.DESIGN_SECTION:
-                // Just get more items.  Could be Features or more Sections
-                return(
-                    <div>
-                        <MashSelectedItemContainer params={{
-                            componentType: ComponentType.FEATURE,
-                            designItemId: designItem._id,
-                            userContext: userContext,
-                            view: view,
-                            displayContext: displayContext
-                        }}/>
-                        <MashSelectedItemContainer params={{
-                            componentType: ComponentType.DESIGN_SECTION,
-                            designItemId: designItem._id,
-                            userContext: userContext,
-                            view: view,
-                            displayContext: displayContext
-                        }}/>
-                    </div>
-                );
+        let componentType = ComponentType.SCENARIO;
+
+        if(designItem.componentType){
+            componentType = designItem.componentType;
+        }
+
+        switch(componentType){
+            // case ComponentType.DESIGN_SECTION:
+                // // Just get more items.  Could be Features or more Sections
+                // return(
+                //     <div>
+                //         <MashSelectedItemContainer params={{
+                //             componentType: ComponentType.FEATURE,
+                //             designItemId: designItem._id,
+                //             userContext: userContext,
+                //             view: view,
+                //             displayContext: displayContext
+                //         }}/>
+                //         <MashSelectedItemContainer params={{
+                //             componentType: ComponentType.DESIGN_SECTION,
+                //             designItemId: designItem._id,
+                //             userContext: userContext,
+                //             view: view,
+                //             displayContext: displayContext
+                //         }}/>
+                //     </div>
+                // );
 
             case ComponentType.FEATURE:
                 // Header and then get more items
@@ -117,6 +127,34 @@ class MashDesignItem extends Component {
 
                 } else {
                     return(<div></div>);
+                }
+
+            case ComponentType.SCENARIO:
+
+                // For a scenario there is no further list of Design items and we have the mash data in designItem
+                // so display the test results...
+
+                switch(displayContext){
+                    case DisplayContext.MASH_ACC_TESTS:
+                        return(
+                            <AcceptanceTestScenarioMashItem
+                                mashItem={designItem}
+                            />
+                        );
+
+                    case DisplayContext.MASH_INT_TESTS:
+                        return (
+                            <IntegrationTestScenarioMashItem
+                                mashItem={designItem}
+                            />
+                        );
+
+                    case DisplayContext.MASH_UNIT_TESTS:
+                        return (
+                            <UnitTestScenarioMashItem
+                                mashItem={designItem}
+                            />
+                        );
                 }
 
         }

@@ -52,6 +52,11 @@ class MashSelectedItemList extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
+
+        // if(nextProps.userContext.designComponentId !== this.props.userContext.designComponentId){
+        //     return true;
+        // }
+
         return true;
     }
 
@@ -94,50 +99,53 @@ class MashSelectedItemList extends Component {
         let itemHeader = '';
         let secondPanel = <div></div>;
 
-        const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
+        if(isTopParent || userContext.designComponentId === 'NONE') {
 
-        switch(displayContext){
-            case DisplayContext.MASH_INT_TESTS:
-                detailsType = DetailsViewType.VIEW_INT_TESTS;
-                break;
-            case DisplayContext.MASH_UNIT_TESTS:
-                detailsType = DetailsViewType.VIEW_UNIT_TESTS;
-                break;
+            const nameData = ClientUserContextServices.getContextNameData(userContext, displayContext);
+
+            switch (displayContext) {
+                case DisplayContext.MASH_INT_TESTS:
+                    detailsType = DetailsViewType.VIEW_INT_TESTS;
+                    break;
+                case DisplayContext.MASH_UNIT_TESTS:
+                    detailsType = DetailsViewType.VIEW_UNIT_TESTS;
+                    break;
+            }
+
+            switch (itemType) {
+                case ComponentType.APPLICATION:
+                case ComponentType.DESIGN_SECTION:
+                    // Tests not currently displayed for these as slow to render
+                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+                    break;
+                case ComponentType.FEATURE:
+                    switch (displayContext) {
+                        case DisplayContext.MASH_ACC_TESTS:
+
+                            break;
+                        case DisplayContext.MASH_INT_TESTS:
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                            // Allow feature export to int test file
+                            menuVisible = true;
+                            break;
+                        case DisplayContext.MASH_UNIT_TESTS:
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                            break;
+                    }
+
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                    panelHeader = nameData.featureAspect + ' ' + TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
+                    itemHeader = 'Scenario';
+                    break;
+                case ComponentType.SCENARIO:
+                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for ' + nameData.scenario;
+                    break;
+
+                default:
+                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+            }
         }
-
-        switch(itemType){
-            case ComponentType.APPLICATION:
-                // User has selected an Application so this is a list of Design Sections in it.  But we are not actually displaying anything
-                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.application;
-                break;
-            case ComponentType.DESIGN_SECTION:
-                panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests in ' + nameData.designSection;
-                break;
-            case ComponentType.FEATURE:
-                switch(displayContext){
-                    case DisplayContext.MASH_ACC_TESTS:
-
-                        break;
-                    case DisplayContext.MASH_INT_TESTS:
-                        panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                        // Allow feature export to int test file
-                        menuVisible = true;
-                        break;
-                    case DisplayContext.MASH_UNIT_TESTS:
-                        panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                        break;
-                }
-
-                break;
-            case ComponentType.FEATURE_ASPECT:
-                panelHeader = nameData.featureAspect + ' ' + TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
-                itemHeader = 'Scenario';
-                break;
-            case ComponentType.SCENARIO:
-                panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for ' + nameData.scenario;
-                break;
-        }
-
 
         let mainPanel = <div></div>;
 
@@ -149,10 +157,14 @@ class MashSelectedItemList extends Component {
                 </div>;
 
         } else {
-            if(userContext.designComponentId === 'NONE') {
+            if(
+                userContext.designComponentId === 'NONE' ||
+                userContext.designComponentType === ComponentType.APPLICATION ||
+                userContext.designComponentType === ComponentType.DESIGN_SECTION
+            ) {
 
-                // No data because no item selected
-                mainPanel = <div className="design-item-note">Select a Design item</div>;
+                // No data because no item or non-display item selected
+                mainPanel = <div className="design-item-note">Select a Feature, Feature Aspect or Scenario to see test results</div>;
 
             }
         }
@@ -161,7 +173,7 @@ class MashSelectedItemList extends Component {
         const editorClass = this.getEditorClass();
 
         // Show the main item box if we have a list of items for the original parent or no parent is selected
-        if((isTopParent && designItems.length > 0 ) || userContext.designComponentId === 'NONE') {
+        if(isTopParent || userContext.designComponentId === 'NONE') {
             return (
 
                 <div className="design-editor-container">
@@ -220,6 +232,11 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
 
     // The parent design item is either the original user context or the next item down passed in
     let designItemId = params.userContext.designComponentId;
+
+    const featureAspectReferenceId = params.userContext.featureAspectReferenceId;
+    const scenarioReferenceId = params.userContext.scenarioReferenceId;
+    const itemType = params.userContext.designComponentType;
+
     let isTopParent = true;
 
     if(params.designItemId !== 'NONE'){
@@ -227,24 +244,50 @@ export default MashSelectedItemContainer = createContainer(({params}) => {
         isTopParent = false;
     }
 
+    let designItems = [];
 
+    switch(itemType){
+        case ComponentType.SCENARIO:
 
-    const designItems = ClientContainerServices.getComponentDataForParentComponent(
-        params.componentType,
-        params.view,
-        params.userContext.designVersionId,
-        params.userContext.designUpdateId,
-        params.userContext.workPackageId,
-        designItemId,
-        params.displayContext
-    );
-    // TODO - Add get Scenario items so can display Feature aspects
+            // User has selected a Scenario in the design
+            designItems = ClientContainerServices.getScenarioMashData(
+                params.userContext,
+                featureAspectReferenceId,
+                scenarioReferenceId,
+            );
 
-    console.log("Found " + designItems.length + " items of type " + params.userContext.designComponentType);
+            break;
+
+        case ComponentType.FEATURE_ASPECT:
+
+            // User has selected a Feature Aspect in the design
+            designItems = ClientContainerServices.getScenarioMashData(
+                params.userContext,
+                featureAspectReferenceId
+            );
+
+            break;
+
+        default:
+
+            // Anything else we get the actual design items, not the scenario mash
+            designItems = ClientContainerServices.getComponentDataForParentComponent(
+                params.componentType,
+                params.view,
+                params.userContext.designVersionId,
+                params.userContext.designUpdateId,
+                params.userContext.workPackageId,
+                designItemId,
+                params.displayContext
+            );
+
+    }
+
+    //console.log("Found " + designItems.length + " items of type " + params.componentType);
 
     return{
         designItems:    designItems,
-        itemType:       params.userContext.designComponentType,
+        itemType:       itemType,
         displayContext: params.displayContext,
         isTopParent:    isTopParent
     }

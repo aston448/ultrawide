@@ -1396,19 +1396,30 @@ class ClientContainerServices{
         }
     };
 
-    getScenarioMashData(userContext, featureAspectReferenceId){
+    getScenarioMashData(userContext, featureAspectReferenceId, scenarioReferenceId = 'NONE'){
 
-        // Return all scenario mash data for the current Feature Aspect
+        // Return all scenario mash data for the current Feature Aspect or Scenario
 
-        return UserDesignVersionMashScenarios.find(
-            {
-                userId: userContext.userId,
-                designVersionId: userContext.designVersionId,
-                designFeatureAspectReferenceId: featureAspectReferenceId
-            },
-            {sort:{mashItemIndex : 1}}
-        ).fetch();
-
+        if(scenarioReferenceId === 'NONE') {
+            return UserDesignVersionMashScenarios.find(
+                {
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    designFeatureAspectReferenceId: featureAspectReferenceId
+                },
+                {sort: {mashItemIndex: 1}}
+            ).fetch();
+        } else {
+            return UserDesignVersionMashScenarios.find(
+                {
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    designFeatureAspectReferenceId: featureAspectReferenceId,
+                    designScenarioReferenceId: scenarioReferenceId
+                },
+                {sort: {mashItemIndex: 1}}
+            ).fetch();
+        }
     }
 
     getDesignDevMashData(userContext, mashCurrentItem){

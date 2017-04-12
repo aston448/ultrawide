@@ -19,6 +19,7 @@ import { UserTestTypeLocations }            from '../../collections/configure/us
 import { TestOutputLocations }              from '../../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../../collections/configure/test_output_location_files.js';
 import { UserDesignVersionMashScenarios }   from '../../collections/mash/user_dv_mash_scenarios.js';
+import { UserDesignUpdateMashScenarios }    from '../../collections/mash/user_du_mash_scenarios.js';
 
 // Ultrawide Services
 import { TestType, TestRunner, ComponentType, MashStatus, MashTestStatus, DevTestTag, StepContext, WorkPackageScopeType,
@@ -334,14 +335,11 @@ class TestIntegrationModules{
         // Clear all data for user
         UserDesignVersionMashScenarios.remove({userId: userContext.userId});
 
-        // What do we actually want to calculate?
-
-
         // Get all non-removed Scenarios for current DV
         const dvScenarios = DesignVersionComponents.find({
-            designVersionId: userContext.designVersionId,
-            componentType: ComponentType.SCENARIO,
-            updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            designVersionId:    userContext.designVersionId,
+            componentType:      ComponentType.SCENARIO,
+            updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
         }).fetch();
 
         dvScenarios.forEach((scenario) => {
@@ -349,6 +347,50 @@ class TestIntegrationModules{
             UserDesignVersionMashScenarios.insert({
                 userId:                         userContext.userId,
                 designVersionId:                userContext.designVersionId,
+                scenarioName:                   scenario.componentNameNew,
+                designFeatureReferenceId:       scenario.componentFeatureReferenceIdNew,
+                designFeatureAspectReferenceId: scenario.componentParentReferenceIdNew,
+                designScenarioReferenceId:      scenario.componentReferenceId,
+                mashItemIndex:                  scenario.componentIndexNew,
+                // Test Data
+                mashItemName:                   scenario.componentNameNew,
+                mashItemTag:                    DevTestTag.TEST_TEST,
+                // Test Results
+                accMashStatus:                  MashStatus.MASH_NOT_LINKED,
+                accMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                intMashStatus:                  MashStatus.MASH_NOT_LINKED,
+                intMashTestStatus:              MashTestStatus.MASH_NOT_LINKED,
+                unitMashStatus:                 MashStatus.MASH_NOT_LINKED,
+                unitMashTestStatus:             MashTestStatus.MASH_NOT_LINKED,
+                accErrorMessage:                '',
+                intErrorMessage:                '',
+                accStackTrace:                  '',
+                intStackTrace:                  '',
+                accDuration:                    0,
+                intDuration:                    0,
+            });
+        });
+    };
+
+    createUserMashScenariosForDesignUpdate(userContext){
+
+        // Clear all data for user
+        UserDesignUpdateMashScenarios.remove({userId: userContext.userId});
+
+        // Get all non-removed Scenarios for current DU
+        const duScenarios = DesignUpdateComponents.find({
+            designVersionId:    userContext.designVersionId,
+            designUpdateId:     userContext.designUpdateId,
+            componentType:      ComponentType.SCENARIO,
+            isRemoved:          false
+        }).fetch();
+
+        duScenarios.forEach((scenario) => {
+
+            UserDesignUpdateMashScenarios.insert({
+                userId:                         userContext.userId,
+                designVersionId:                userContext.designVersionId,
+                designUpdateId:                 userContext.designUpdateId,
                 scenarioName:                   scenario.componentNameNew,
                 designFeatureReferenceId:       scenario.componentFeatureReferenceIdNew,
                 designFeatureAspectReferenceId: scenario.componentParentReferenceIdNew,
