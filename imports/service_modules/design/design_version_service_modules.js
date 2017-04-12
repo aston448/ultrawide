@@ -282,6 +282,8 @@ class DesignVersionModules{
             this.addUpdateItemToDesignVersion(newComponent);
 
         });
+
+        this.fixParentIdsForDesignVersion(update.designVersionId);
     }
 
     unmergeDesignUpdate(designUpdateId){
@@ -291,7 +293,7 @@ class DesignVersionModules{
 
         // ADDITIONS ---------------------------------------------------------------------------------------------------
 
-        const newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true});
+        const newComponents = DesignUpdateComponents.find({designUpdateId: update._id, isNew: true}).fetch();
 
         newComponents.forEach((newComponent) => {
 
@@ -303,7 +305,7 @@ class DesignVersionModules{
 
         // Restore any design components that are removed
 
-        const removedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isRemoved: true});
+        const removedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isRemoved: true}).fetch();
 
         // This is a work progress update - logically delete - just mark as removed
         removedComponents.forEach((removedComponent) => {
@@ -317,7 +319,7 @@ class DesignVersionModules{
         // Put moved components back to where they were.  As only new components can be moved there cannot be
         // a combination of moves of an existing item by various updates
 
-        const movedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isMoved: true});
+        const movedComponents = DesignUpdateComponents.find({designUpdateId: update._id, isMoved: true}).fetch();
 
         movedComponents.forEach((movedComponent) => {
 
@@ -332,7 +334,7 @@ class DesignVersionModules{
             designUpdateId: update._id,
             isNew:          false,
             $or:[{isChanged: true}, {isTextChanged: true}]
-        });
+        }).fetch();
 
         changedComponents.forEach((changedComponent) => {
 
@@ -582,40 +584,21 @@ class DesignVersionModules{
     setParentsUpdateMergeStatus(child, set){
 
         if(child.componentParentIdNew !== 'NONE') {
+
             const parent = DesignVersionComponents.findOne({
                 _id: child.componentParentIdNew
             });
 
-            if(set){
-                // If setting only update if not set already as something
-                if(parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE) {
-                    DesignVersionComponents.update(
-                        {_id: parent._id},
-                        {
-                            $set: {
-                                updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE_PARENT
-                            }
-                        }
-                    );
-                }
+            if(parent) {
 
-                // Carry on up
-                this.setParentsUpdateMergeStatus(parent, set);
-
-            } else {
-
-                // Clearing.  Only clear if set as parent-base and no other children require this flag
-                // Note that original item needs to be cleared before calling this...
-
-                if(!(this.hasUpdateModifiedChildren(parent, child))){
-                    // Revert to base if parent-base
-                    console.log("Checking parent " + parent.componentNameNew);
-                    if(parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT) {
+                if (set) {
+                    // If setting only update if not set already as something
+                    if (parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE) {
                         DesignVersionComponents.update(
                             {_id: parent._id},
                             {
                                 $set: {
-                                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
+                                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE_PARENT
                                 }
                             }
                         );
@@ -623,6 +606,29 @@ class DesignVersionModules{
 
                     // Carry on up
                     this.setParentsUpdateMergeStatus(parent, set);
+
+                } else {
+
+                    // Clearing.  Only clear if set as parent-base and no other children require this flag
+                    // Note that original item needs to be cleared before calling this...
+
+                    if (!(this.hasUpdateModifiedChildren(parent, child))) {
+                        // Revert to base if parent-base
+                        console.log("Checking parent " + parent.componentNameNew);
+                        if (parent.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE_PARENT) {
+                            DesignVersionComponents.update(
+                                {_id: parent._id},
+                                {
+                                    $set: {
+                                        updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
+                                    }
+                                }
+                            );
+                        }
+
+                        // Carry on up
+                        this.setParentsUpdateMergeStatus(parent, set);
+                    }
                 }
             }
         }

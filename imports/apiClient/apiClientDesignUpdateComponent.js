@@ -493,10 +493,10 @@ class ClientDesignUpdateComponentServices{
                         designVersionId:        item.designVersionId,
                         componentReferenceId:   item.componentReferenceId
                     });
+
+                    // The design item won't exist if a new item in a non-merged update
                     if(designItem) {
                         currentItems.push(designItem._id);
-                    } else {
-                        console.log("Update Component " + item.componentNameNew + " not found in Design Version Components");
                     }
                 });
 
