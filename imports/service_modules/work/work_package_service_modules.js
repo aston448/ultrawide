@@ -43,7 +43,7 @@ class WorkPackageModules {
 
             if (!otherWp) {
 
-                console.log("Adding component " + component.componentNameNew + " to scope");
+                //console.log("Adding component " + component.componentNameNew + " to scope");
 
                 WorkPackageComponents.insert(
                     {
@@ -177,7 +177,7 @@ class WorkPackageModules {
             // Add as parent component
             this.addWorkPackageComponent(userContext, wpType, parent, WorkPackageScopeType.SCOPE_PARENT);
 
-            console.log("Adding component " + parent.componentNameNew + " as parent scope");
+            //console.log("Adding component " + parent.componentNameNew + " as parent scope");
 
             // And carry on up
             this.addComponentParentsToWp(userContext, wpType, parent)

@@ -493,7 +493,11 @@ class ClientDesignUpdateComponentServices{
                         designVersionId:        item.designVersionId,
                         componentReferenceId:   item.componentReferenceId
                     });
-                    currentItems.push(designItem._id);
+                    if(designItem) {
+                        currentItems.push(designItem._id);
+                    } else {
+                        console.log("Update Component " + item.componentNameNew + " not found in Design Version Components");
+                    }
                 });
 
                 const updateScopeItems = store.getState().currentUpdateScopeItems;

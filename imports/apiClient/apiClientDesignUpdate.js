@@ -365,7 +365,11 @@ class ClientDesignUpdateServices {
                 designVersionId:        item.designVersionId,
                 componentReferenceId:   item.componentReferenceId
             });
-            updateItemsArr.push(designItem._id);
+            if(designItem) {
+                updateItemsArr.push(designItem._id);
+            } else {
+                console.log("Update Component " + item.componentNameNew + " not found in Design Version Components");
+            }
         });
 
         store.dispatch(setUpdateScopeItems(
