@@ -636,7 +636,7 @@ export class DesignComponentHeader extends Component{
             </Tooltip>
         );
 
-        //console.log("Render Design Version Header for " + currentItem.componentNameNew + " in context " + displayContext);
+        console.log("Render Design Component Header for " + currentItem.componentNameNew + " in context " + displayContext + " with WP item " + wpItem);
 
         // Determine the look of the item ------------------------------------------------------------------------------
 
@@ -723,12 +723,12 @@ export class DesignComponentHeader extends Component{
                     inScopeElsewhere = true;
                 }
 
-                if(view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
-                    if (updateItem && updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) {
-                        // We don't want to allow scoping of items that are not actually in scope in the update (i.e. parent items)
-                        updateParentOnly = true;
-                    }
-                }
+                // if(view === ViewType.WORK_PACKAGE_UPDATE_EDIT) {
+                //     if (updateItem && updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) {
+                //         // We don't want to allow scoping of items that are not actually in scope in the update (i.e. parent items)
+                //         updateParentOnly = true;
+                //     }
+                // }
 
                 nextScope = !inScope;
                 break;

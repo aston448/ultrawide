@@ -42,6 +42,9 @@ class WorkPackageModules {
             }
 
             if (!otherWp) {
+
+                console.log("Adding component " + component.componentNameNew + " to scope");
+
                 WorkPackageComponents.insert(
                     {
                         designVersionId:                userContext.designVersionId,
@@ -174,6 +177,8 @@ class WorkPackageModules {
             // Add as parent component
             this.addWorkPackageComponent(userContext, wpType, parent, WorkPackageScopeType.SCOPE_PARENT);
 
+            console.log("Adding component " + parent.componentNameNew + " as parent scope");
+
             // And carry on up
             this.addComponentParentsToWp(userContext, wpType, parent)
         }
@@ -235,6 +240,7 @@ class WorkPackageModules {
             case WorkPackageType.WP_UPDATE:
                 parent = DesignUpdateComponents.findOne({
                     designVersionId:    userContext.designVersionId,
+                    designUpdateId:     userContext.designUpdateId,
                     _id:                childComponent.componentParentIdNew
                 });
                 break;

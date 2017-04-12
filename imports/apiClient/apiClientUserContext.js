@@ -180,15 +180,15 @@ class ClientUserContextServices {
                 // Show wait screen
                 store.dispatch(setCurrentView(ViewType.WAIT));
 
-                // // If there is a current WP, load data for that too once DV data is loaded
+                // If there is a current WP, load data for that too once DV data is loaded
                 // if(userContext.workPackageId !== 'NONE'){
                 //
                 //     // Load DV data and when done load WP data
                 //     ClientContainerServices.getDesignVersionData(userContext, this.onDesignVersionDataLoaded);
                 //
                 // } else {
-
-                    // Just load the DV data and continue
+                //
+                //     // Just load the DV data and continue.  This also loads WP data if needed
                     ClientContainerServices.getDesignVersionData(userContext, this.onAllDataLoaded);
                 // }
 
@@ -202,16 +202,17 @@ class ClientUserContextServices {
 
     }
 
-    onDesignVersionDataLoaded(){
-
-        const userContext = store.getState().currentUserItemContext;
-
-        // Load WP data and then continue
-        ClientContainerServices.getWorkPackageData(userContext, this.onAllDataLoaded)
-    }
+    // onDesignVersionDataLoaded(){
+    //     console.log("called onDesignVersionDataLoaded");
+    //     const userContext = store.getState().currentUserItemContext;
+    //
+    //     // Load WP data and then continue
+    //     ClientContainerServices.getWorkPackageData(userContext, this.onAllDataLoaded)
+    // }
 
     onAllDataLoaded(){
 
+        console.log("called onAllDataLoaded");
         const userContext = store.getState().currentUserItemContext;
 
         // Refresh the test mash for the design version.  Also loads test results
@@ -397,7 +398,7 @@ class ClientUserContextServices {
             if(userContext.designUpdateId === 'NONE'){
                 wpArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
             } else {
-                wpArr = ClientAppHeaderServices.getDesignVersionFeatures(userContext);
+                wpArr = ClientAppHeaderServices.getDesignUpdateFeatures(userContext);
             }
 
             // Plus for the actual open item context, open all the way down to that item

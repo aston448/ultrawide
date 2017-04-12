@@ -2,6 +2,8 @@
 // Ultrawide Collections
 import { WorkPackages }             from '../../collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../collections/work/work_package_components.js';
+import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
+import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 
 // Ultrawide Services
 import { WorkPackageStatus }        from '../../constants/constants.js';
@@ -180,6 +182,27 @@ class WorkPackageServices{
             );
 
             if(removedComponents >= 0){
+
+                // Clear any design components associated with this WP
+                DesignVersionComponents.update(
+                    {
+                        workPackageId: workPackageId
+                    },
+                    {
+                        $set: {workPackageId: 'NONE'}
+                    },
+                    {multi: true}
+                );
+
+                DesignUpdateComponents.update(
+                    {
+                        workPackageId: workPackageId
+                    },
+                    {
+                        $set: {workPackageId: 'NONE'}
+                    },
+                    {multi: true}
+                );
 
                 // OK so delete the WP itself
                 WorkPackages.remove({_id: workPackageId});

@@ -137,6 +137,8 @@ class ClientWorkPackageComponentServices {
 
     getWorkPackageComponent(componentId, workPackageId){
 
+        console.log("looking for wp component for WP " + workPackageId + " and component " + componentId);
+
         return WorkPackageComponents.findOne({workPackageId: workPackageId, componentId: componentId});
     }
 

@@ -35,9 +35,9 @@ class WorkPackageComponentValidationServices{
             }
         }
 
-        // An update WP item can't be scoped if it is not in specific scope in the update
+        // An update WP item can't be scoped if it is not in scope of the update (i.e. in scope or a parent of in scope)
         if(view === ViewType.WORK_PACKAGE_UPDATE_EDIT){
-            if(designComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+            if((designComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) && (designComponent.scopeType !== UpdateScopeType.SCOPE_PARENT_SCOPE)){
                 return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE;
             }
         }

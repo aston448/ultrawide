@@ -140,11 +140,19 @@ class ClientContainerServices{
                 const tsHandle = Meteor.subscribe('userDevTestSummaryData', userContext.userId);
                 const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
 
+                // Load current WP data if WP is known
+                let wcHandle = null;
+                if(userContext.workPackageId !== 'NONE'){
+                    wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
+                }
 
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dusHandle.ready() || !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() || !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() || !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() || !dsHandle.ready()
+                        !dusHandle.ready() || !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
+                        !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() ||
+                        !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() ||
+                        !dsHandle.ready() || (wcHandle && !wcHandle.ready())
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -159,6 +167,9 @@ class ClientContainerServices{
                         }));
 
                         // Set open items now that data is loaded
+                        if(userContext.workPackageId !== 'NONE'){
+                            ClientUserContextServices.setOpenWorkPackageItems(userContext);
+                        }
                         // ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
                         // If an action wanted after loading call it...
@@ -178,6 +189,8 @@ class ClientContainerServices{
     getWorkPackageData(userContext, callback){
 
         if(Meteor.isClient) {
+
+            console.log("In getWorkPackageData with callback " + callback);
 
             if (store.getState().workPackageDataLoaded) {
 
@@ -1008,7 +1021,8 @@ class ClientContainerServices{
                                 componentParentReferenceId: parent.componentReferenceId,
                                 componentType: componentType
                             },
-                            {sort: {componentIndex: 1}});
+                            {sort: {componentIndex: 1}}
+                        ).fetch();
 
                         wpComponents.forEach((wpComponent) => {
 

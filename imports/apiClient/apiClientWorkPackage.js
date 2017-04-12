@@ -427,7 +427,9 @@ class ClientWorkPackageServices {
                     componentReferenceId: item.componentReferenceId
                 });
             }
-            wpItemsArr.push(designItem._id);
+            if(designItem) {
+                wpItemsArr.push(designItem._id);
+            }
         });
 
         store.dispatch(setWorkPackageScopeItems(
@@ -498,6 +500,8 @@ class ClientWorkPackageServices {
         } else {
             view = ViewType.DEVELOP_UPDATE_WP;
         }
+
+        store.dispatch(setCurrentView(view));
 
         // Load dev data - will update test data once loaded and switch the view
         //ClientTestIntegrationServices.loadUserDevData(updatedContext.userContext, userRole, viewOptions, view, testDataFlag, updatedContext.testIntegrationDataContext);
