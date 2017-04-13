@@ -176,6 +176,7 @@ export class AppHeader extends Component {
             case ViewType.DESIGN_UPDATABLE_VIEW:
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+            case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
 
                 appHeaderMenuContent =
@@ -187,33 +188,6 @@ export class AppHeader extends Component {
                         <UltrawideMenuDropdown itemName="Refresh" menuType={MenuDropdown.MENU_DROPDOWN_REFRESH}/>
                         {logoutItem}
                     </div>;
-                break;
-
-            case ViewType.DESIGN_UPDATE_EDIT:
-
-                if(mode === ViewMode.MODE_VIEW){
-
-                    appHeaderMenuContent =
-                        <div className="top-menu-bar">
-                            {homeItem}
-                            {selectItem}
-                            <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-                            <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
-                            <UltrawideMenuDropdown itemName="Refresh" menuType={MenuDropdown.MENU_DROPDOWN_REFRESH}/>
-                            {logoutItem}
-                        </div>;
-
-                } else {
-
-                    appHeaderMenuContent =
-                        <div className="top-menu-bar">
-                            {homeItem}
-                            {selectItem}
-                            <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
-                            <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
-                            {logoutItem}
-                        </div>;
-                }
                 break;
 
             case ViewType.WORK_PACKAGE_BASE_EDIT:

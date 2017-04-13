@@ -1950,15 +1950,15 @@ class ClientContainerServices{
 
     getTestSummaryData(scenario){
 
-        let designUpdateId = 'NONE';
-
-        if(scenario.designUpdateId){
-            designUpdateId = scenario.designUpdateId;
-        }
+        // let designUpdateId = 'NONE';
+        //
+        // if(scenario.designUpdateId){
+        //     designUpdateId = scenario.designUpdateId;
+        // }
 
         return UserDevTestSummaryData.findOne({
             designVersionId:        scenario.designVersionId,
-            designUpdateId:         designUpdateId,
+            //designUpdateId:         designUpdateId,
             scenarioReferenceId:    scenario.componentReferenceId
         });
 
@@ -1966,15 +1966,15 @@ class ClientContainerServices{
 
     getTestSummaryFeatureData(feature){
 
-        let designUpdateId = 'NONE';
-
-        if(feature.designUpdateId){
-            designUpdateId = feature.designUpdateId;
-        }
+        // let designUpdateId = 'NONE';
+        //
+        // if(feature.designUpdateId){
+        //     designUpdateId = feature.designUpdateId;
+        // }
 
         return UserDevTestSummaryData.findOne({
             designVersionId:        feature.designVersionId,
-            designUpdateId:         designUpdateId,
+            //designUpdateId:         designUpdateId,
             scenarioReferenceId:    'NONE',
             featureReferenceId:     feature.componentReferenceId
         });
@@ -2416,6 +2416,7 @@ class ClientContainerServices{
                 break;
 
             case ViewType.DESIGN_UPDATE_EDIT:
+            case ViewType.DESIGN_UPDATE_VIEW:
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
@@ -2427,60 +2428,20 @@ class ClientContainerServices{
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
 
-                        if (mode === ViewMode.MODE_VIEW) {
-                            return [
-                                    viewDetails,
-                                    viewProgress,
-                                    viewUpdateSummary,
-                                    viewDomainDict,
-                                    viewTestSummary
-                                ];
-                        } else {
-                            return [
-                                    viewDetails,
-                                    viewProgress,
-                                    viewUpdateSummary,
-                                    viewDomainDict,
-                                ];
-                        }
+                        return [
+                                viewDetails,
+                                viewProgress,
+                                viewUpdateSummary,
+                                viewDomainDict,
+                                viewTestSummary
+                            ];
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
 
-                        if (mode === ViewMode.MODE_VIEW) {
-                            return [
-                                    refreshTestData
-                                ];
-                        }
-                }
-                break;
-
-            case ViewType.DESIGN_UPDATE_VIEW:
-
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return [
-                            gotoSelection,
-                            gotoConfig,
-                            gotoDesigns
-                        ];
-
-                    case MenuDropdown.MENU_DROPDOWN_VIEW:
-
-                        return [
-                            viewDetails,
-                            viewProgress,
-                            viewUpdateSummary,
-                            viewDomainDict,
-                            viewTestSummary
-                        ];
-
-                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
-
-                        if (mode === ViewMode.MODE_VIEW) {
-                            return [
                                 refreshTestData
                             ];
-                        }
+
                 }
                 break;
 

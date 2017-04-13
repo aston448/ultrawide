@@ -167,7 +167,7 @@ export class UpdateApplicationsList extends Component {
                     displayContext={DisplayContext.UPDATE_SCOPE}
                 />
                 <div className={editorClass}>
-                    {this.renderScopeApplications(baseApplications, DisplayContext.UPDATE_SCOPE, view, mode, userContext, false)}
+                    {this.renderScopeApplications(baseApplications, DisplayContext.UPDATE_SCOPE, view, mode, userContext, viewOptions.updateTestSummaryVisible)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.UPDATE_SCOPE}
@@ -413,6 +413,52 @@ export class UpdateApplicationsList extends Component {
                         col6width = 2;
                 }
                 displayedItems++;
+            }
+
+            if(viewOptions.updateTestSummaryVisible){
+
+                switch(displayedItems){
+                    case 2:
+                        col1width = 6;
+                        col2width = 6;
+                        col3width = 6;
+                        col4width = 6;
+                        col5width = 6;
+                        col6width = 6;
+                        break;
+                    case 3:
+                        col1width = 6;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        break;
+                    case 4:
+                        col1width = 6;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        break;
+                    case 5:
+                        col1width = 4;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        break;
+                    case 6:
+                        col1width = 2;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                }
+
             }
 
             let col1 =

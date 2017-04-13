@@ -35,65 +35,73 @@ class TestSummaryServices {
         });
 
         // Get the Design Scenario Data
-        let designScenarios = [];
-        if(userContext.designUpdateId === 'NONE'){
+        //let designScenarios = [];
 
-            if(userContext.workPackageId === 'NONE') {
-                // In a base Design Version context
-                designScenarios = DesignVersionComponents.find({
-                    designId: userContext.designId,
-                    designVersionId: userContext.designVersionId,
-                    componentType: ComponentType.SCENARIO
-                }).fetch();
-            } else {
-                // Only DV components in the WP
-                const wpComponents = WorkPackageComponents.find(
-                    {
-                        workPackageId: userContext.workPackageId,
-                        componentType: ComponentType.SCENARIO,
-                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    }
-                ).fetch();
+        const designScenarios = DesignVersionComponents.find({
+            designId: userContext.designId,
+            designVersionId: userContext.designVersionId,
+            componentType: ComponentType.SCENARIO
+        }).fetch();
 
-                wpComponents.forEach((wpComponent) => {
 
-                    let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
-
-                    designScenarios.push(dvComponent);
-                });
-            }
-
-        } else {
-
-            // In a Design Update context
-            if(userContext.workPackageId === 'NONE') {
-                designScenarios = DesignUpdateComponents.find({
-                    designId: userContext.designId,
-                    designVersionId: userContext.designVersionId,
-                    designUpdateId: userContext.designUpdateId,
-                    componentType: ComponentType.SCENARIO,
-                    scopeType: UpdateScopeType.SCOPE_IN_SCOPE,
-                    isRemoved: false
-                }).fetch();
-            } else {
-
-                // Only DU components in the WP
-                const wpComponents = WorkPackageComponents.find(
-                    {
-                        workPackageId: userContext.workPackageId,
-                        componentType: ComponentType.SCENARIO,
-                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    }
-                ).fetch();
-
-                wpComponents.forEach((wpComponent) => {
-
-                    let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
-
-                    designScenarios.push(duComponent);
-                });
-            }
-        }
+        // if(userContext.designUpdateId === 'NONE'){
+        //
+        //     if(userContext.workPackageId === 'NONE') {
+        //         // In a base Design Version context
+        //         designScenarios = DesignVersionComponents.find({
+        //             designId: userContext.designId,
+        //             designVersionId: userContext.designVersionId,
+        //             componentType: ComponentType.SCENARIO
+        //         }).fetch();
+        //     } else {
+        //         // Only DV components in the WP
+        //         const wpComponents = WorkPackageComponents.find(
+        //             {
+        //                 workPackageId: userContext.workPackageId,
+        //                 componentType: ComponentType.SCENARIO,
+        //                 scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+        //             }
+        //         ).fetch();
+        //
+        //         wpComponents.forEach((wpComponent) => {
+        //
+        //             let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
+        //
+        //             designScenarios.push(dvComponent);
+        //         });
+        //     }
+        //
+        // } else {
+        //
+        //     // In a Design Update context
+        //     if(userContext.workPackageId === 'NONE') {
+        //         designScenarios = DesignUpdateComponents.find({
+        //             designId: userContext.designId,
+        //             designVersionId: userContext.designVersionId,
+        //             designUpdateId: userContext.designUpdateId,
+        //             componentType: ComponentType.SCENARIO,
+        //             scopeType: UpdateScopeType.SCOPE_IN_SCOPE,
+        //             isRemoved: false
+        //         }).fetch();
+        //     } else {
+        //
+        //         // Only DU components in the WP
+        //         const wpComponents = WorkPackageComponents.find(
+        //             {
+        //                 workPackageId: userContext.workPackageId,
+        //                 componentType: ComponentType.SCENARIO,
+        //                 scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+        //             }
+        //         ).fetch();
+        //
+        //         wpComponents.forEach((wpComponent) => {
+        //
+        //             let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
+        //
+        //             designScenarios.push(duComponent);
+        //         });
+        //     }
+        // }
 
         const totalScenarioCount = designScenarios.length;
         let totalUnitTestsPassing = 0;
@@ -123,13 +131,13 @@ class TestSummaryServices {
             // See if we have any test results
 
             // Get Scenario Name
-            if(userContext.designUpdateId === 'NONE'){
+            // if(userContext.designUpdateId === 'NONE'){
+            //     scenarioName = designScenario.componentNameNew;
+            //     featureReferenceId = designScenario.componentFeatureReferenceIdNew;
+            // } else {
                 scenarioName = designScenario.componentNameNew;
                 featureReferenceId = designScenario.componentFeatureReferenceIdNew;
-            } else {
-                scenarioName = designScenario.componentNameNew;
-                featureReferenceId = designScenario.componentFeatureReferenceIdNew;
-            }
+            // }
 
             // TODO Acceptance Tests
 
@@ -206,27 +214,27 @@ class TestSummaryServices {
         });
 
         // Populate the Feature summary data
-        let designFeatures = [];
-        if(userContext.designUpdateId === 'NONE'){
+        //let designFeatures = [];
+        // if(userContext.designUpdateId === 'NONE'){
 
             // In a base Design Version context
-            designFeatures = DesignVersionComponents.find({
+        const designFeatures = DesignVersionComponents.find({
                 designId: userContext.designId,
                 designVersionId: userContext.designVersionId,
                 componentType: ComponentType.FEATURE
             }).fetch();
 
-        } else {
-
-            // In a Design Update context
-            designFeatures = DesignUpdateComponents.find({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                designUpdateId: userContext.designUpdateId,
-                componentType: ComponentType.FEATURE,
-                isRemoved: false
-            }).fetch();
-        }
+        // } else {
+        //
+        //     // In a Design Update context
+        //     designFeatures = DesignUpdateComponents.find({
+        //         designId: userContext.designId,
+        //         designVersionId: userContext.designVersionId,
+        //         designUpdateId: userContext.designUpdateId,
+        //         componentType: ComponentType.FEATURE,
+        //         isRemoved: false
+        //     }).fetch();
+        // }
 
         const totalFeatureCount = designFeatures.length;
 

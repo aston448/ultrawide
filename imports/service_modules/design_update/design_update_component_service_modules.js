@@ -58,6 +58,34 @@ class DesignUpdateComponentModules{
         });
     };
 
+    updateCurrentDesignVersionWithScopedScenario(designUpdateId, scenario){
+
+
+        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+        console.log("Query scoped scenario... " + designUpdate.updateMergeAction);
+        // Add this item to the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.setDesignVersionScenarioAsQueried(scenario);
+        }
+    }
+
+    updateCurrentDesignVersionWithUnscopedScenario(duScenario){
+
+        const designUpdate = DesignUpdates.findOne({_id: duScenario.designUpdateId});
+
+        const baseScenario = DesignVersionComponents.findOne({
+            designVersionId:        designUpdate.designVersionId,
+            componentReferenceId:   duScenario.componentReferenceId
+        });
+
+        // Add this item to the working design if we are merging this update
+        if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
+
+            DesignVersionModules.setDesignVersionScenarioAsBase(baseScenario);
+        }
+    }
+
     updateCurrentDesignVersionWithNewUpdateItem(designUpdateId, newUpdateComponentId){
 
         const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
@@ -369,6 +397,12 @@ class DesignUpdateComponentModules{
             // Set the correct parent IDs
             this.fixParentIds(designUpdateComponentId);
 
+            // If it is a Scenario set the base design component as queried if DU is set to merge
+            // This could get overridden by subsequent actions...
+            if(baseComponent.componentType === ComponentType.SCENARIO) {
+                this.updateCurrentDesignVersionWithScopedScenario(designUpdateId, baseComponent);
+            }
+
             return designUpdateComponentId;
         } else {
             return null;
@@ -410,6 +444,8 @@ class DesignUpdateComponentModules{
 
     updateToActualScope(designUpdateComponentId){
 
+        const updateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+
         DesignUpdateComponents.update(
             {_id: designUpdateComponentId},
             {
@@ -417,7 +453,19 @@ class DesignUpdateComponentModules{
                     scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                 }
             }
-        )
+        );
+
+        // If it was a scenario and in peer scope (could not be in any other type) mark as now queried
+        if(updateComponent && updateComponent.componentType === ComponentType.SCENARIO){
+
+            const baseScenario = DesignVersionComponents.findOne({
+                designVersionId:        updateComponent.designVersionId,
+                componentReferenceId:   updateComponent.componentReferenceId
+            });
+
+            this.updateCurrentDesignVersionWithScopedScenario(updateComponent.designUpdateId, baseScenario);
+        }
+
     }
 
     updateToParentScope(designUpdateComponentId){
@@ -469,6 +517,11 @@ class DesignUpdateComponentModules{
             )
         } else {
             DesignUpdateComponents.remove({_id: designUpdateComponentId});
+        }
+
+        // If a Scenario, update the Design Version scenario as no longer queried
+        if(duComponent.componentType === ComponentType.SCENARIO){
+            this.updateCurrentDesignVersionWithUnscopedScenario(duComponent);
         }
     }
 

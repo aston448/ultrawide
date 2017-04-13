@@ -7,7 +7,7 @@ import { DesignUpdateComponents }   from '../../collections/design_update/design
 import { DomainDictionary }         from '../../collections/design/domain_dictionary.js';
 
 // Ultrawide Services
-import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, UpdateMergeStatus, ComponentType } from '../../constants/constants.js';
+import { DesignUpdateMergeAction, DesignVersionStatus, DesignUpdateStatus, UpdateMergeStatus, ComponentType, UpdateScopeType } from '../../constants/constants.js';
 
 //======================================================================================================================
 //
@@ -224,6 +224,35 @@ class DesignVersionModules{
         // An update previously not merged is now merged so add all its changes to the current design version
         const update = DesignUpdates.findOne({_id: designUpdateId});
 
+        // QUERIES -----------------------------------------------------------------------------------------------------
+
+        // Update any Scenarios that are in scope but not changed to queried status
+        const queriedScenarios = DesignUpdateComponents.find({
+            designUpdateId: update._id,
+            componentType:  ComponentType.SCENARIO,
+            isNew:          false,
+            isRemoved:      false,
+            isRemovedElsewhere: false,
+            isMoved:        false,
+            isChanged:      false,
+            isTextChanged:  false,
+            scopeType:      UpdateScopeType.SCOPE_IN_SCOPE
+        });
+
+        queriedScenarios.forEach((scenario) => {
+
+            let baseScenario = DesignVersionComponents.findOne({
+                designVersionId:        update.designVersionId,
+                componentReferenceId:   scenario.componentReferenceId
+            });
+
+            // Only set stuff that is BASE
+            if(baseScenario.updateMergeStatus === UpdateMergeStatus.COMPONENT_BASE) {
+                this.setDesignVersionScenarioAsQueried(baseScenario)
+            }
+
+        });
+
         // UPDATES -----------------------------------------------------------------------------------------------------
 
         // Update all design components that are changed but not new as well
@@ -298,7 +327,6 @@ class DesignVersionModules{
         newComponents.forEach((newComponent) => {
 
             this.undoAddUpdateItemToDesignVersion(newComponent);
-
         });
 
         // REMOVALS ----------------------------------------------------------------------------------------------------
@@ -311,7 +339,6 @@ class DesignVersionModules{
         removedComponents.forEach((removedComponent) => {
 
             this.restoreUpdateItemInDesignVersion(removedComponent);
-
         });
 
         // MOVES -------------------------------------------------------------------------------------------------------
@@ -324,7 +351,6 @@ class DesignVersionModules{
         movedComponents.forEach((movedComponent) => {
 
             this.undoMoveUpdateItemInDesignVersion(movedComponent);
-
         });
 
         // UPDATES -----------------------------------------------------------------------------------------------------
@@ -345,9 +371,56 @@ class DesignVersionModules{
 
                 this.undoUpdateItemNameInDesignVersion(changedComponent);
             }
-
         });
 
+        // QUERIES -----------------------------------------------------------------------------------------------------
+
+        // Update any Scenarios that are in scope but not changed from queried back to base
+        const queriedScenarios = DesignUpdateComponents.find({
+            designUpdateId: update._id,
+            componentType:  ComponentType.SCENARIO,
+            isNew:          false,
+            isRemoved:      false,
+            isRemovedElsewhere: false,
+            isMoved:        false,
+            isChanged:      false,
+            isTextChanged:  false,
+            scopeType:      UpdateScopeType.SCOPE_IN_SCOPE
+        });
+
+        queriedScenarios.forEach((scenario) => {
+
+            let baseScenario = DesignVersionComponents.findOne({
+                designVersionId:        update.designVersionId,
+                componentReferenceId:   scenario.componentReferenceId
+            });
+
+            // Only set stuff that is QUERIED
+            if(baseScenario.updateMergeStatus === UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED) {
+                this.setDesignVersionScenarioAsBase(baseScenario)
+            }
+        });
+
+    }
+
+    setDesignVersionScenarioAsQueried(scenario){
+
+        DesignVersionComponents.update(
+            {_id: scenario._id},
+            {
+                $set:{ updateMergeStatus: UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED}
+            }
+        );
+    }
+
+    setDesignVersionScenarioAsBase(scenario){
+
+        DesignVersionComponents.update(
+            {_id: scenario._id},
+            {
+                $set:{ updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE}
+            }
+        );
     }
 
     addUpdateItemToDesignVersion(updateItem){
@@ -547,7 +620,7 @@ class DesignVersionModules{
 
     logicallyRestoreDesignVersionItem(designVersionItem){
 
-        // Mark the item as no longer deleted
+        // Mark the item as no longer deleted.
         let updateMergeStatus = UpdateMergeStatus.COMPONENT_BASE;
 
         // Check for previous changes

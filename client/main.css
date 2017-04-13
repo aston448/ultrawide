@@ -1441,6 +1441,11 @@ input {
     width: 18px;
     height: 18px;
 }
+
+.component-hidden{
+    color: transparent;
+}
+
 .component-base{
     color: lightgrey;
 }
@@ -1467,6 +1472,10 @@ input {
 
 .component-moved{
     color: lightblue;
+}
+
+.component-scenario-queried{
+    color: lightseagreen;
 }
 
 .step-type-col{

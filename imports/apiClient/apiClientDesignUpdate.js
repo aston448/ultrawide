@@ -341,12 +341,6 @@ class ClientDesignUpdateServices {
         // Ensure that the current update is the update we chose to edit
         const newContext = this.setDesignUpdate(userContext, designUpdateToEditId);
 
-        // Test summary must not be shown when editing update
-        const newOptions = viewOptions;
-        newOptions.updateTestSummaryVisible = false;
-
-        store.dispatch(setCurrentUserViewOptions(newOptions, true));
-
         // Edit mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_EDIT));
 

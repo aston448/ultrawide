@@ -480,12 +480,12 @@ export const toggleScope = new ValidatedMethod({
         }
 
         // Server action
-        try {
+        // try {
             DesignUpdateComponentServices.toggleScope(baseComponentId, designUpdateId, newScope);
-        } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
-        }
+        // } catch (e) {
+        //     console.log(e);
+        //     throw new Meteor.Error(e.error, e.message)
+        // }
     }
 
 });
