@@ -190,11 +190,11 @@ class WorkPackageModules {
 
         if(parent){
 
-            // See if this item has any other children that are still in scope
+            // See if this item has any other children that are still in scope or parents of in-scope
             const children = this.getChildren(userContext, wpType, parent._id);
 
             let wpComponent = null;
-            let activeChild = false;
+            let wpChild = false;
 
             children.forEach((child) => {
 
@@ -204,13 +204,12 @@ class WorkPackageModules {
                 });
 
                 if(wpComponent){
-                    if(wpComponent.scopeType === WorkPackageScopeType.SCOPE_ACTIVE){
-                        activeChild = true;
-                    }
+                    // The fact of finding a component means that there is valid stuff here
+                    wpChild = true;
                 }
             });
 
-            if(!activeChild){
+            if(!wpChild){
                 this.removeWorkPackageComponent(userContext, parent._id);
 
                 // And carry on up

@@ -48,7 +48,8 @@ class FeaturesList extends Component {
                 // See if this item is in scope - i.e. in the DU
                 return ClientDesignVersionServices.getDesignUpdateItemForUpdate(feature, designUpdateId);
             case DisplayContext.WP_SCOPE:
-                // For WP scoping get the update item if WP is based on an update
+            case DisplayContext.DEV_DESIGN:
+                // For WP scoping or Development get the update item if WP is based on an update
                 if(designUpdateId !== 'NONE'){
                     return ClientDesignVersionServices.getDesignUpdateItemForUpdate(feature, designUpdateId);
                 } else {

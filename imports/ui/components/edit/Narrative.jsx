@@ -131,7 +131,8 @@ export default class Narrative extends React.Component {
                 ((props.displayContext === DisplayContext.UPDATE_SCOPE) && (!props.updateComponent || props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
                 ((props.displayContext === DisplayContext.WP_VIEW) && props.wpComponent.scopeType === WorkPackageScopeType.SCOPE_PARENT)) ||
                 ((props.displayContext === DisplayContext.UPDATE_EDIT && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
-                ((props.displayContext === DisplayContext.UPDATE_VIEW && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
+                ((props.displayContext === DisplayContext.UPDATE_VIEW && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)) ||
+                ((props.displayContext === DisplayContext.DEV_DESIGN && props.updateComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE))
             ) {
                 // The narrative will be decorated as greyed out and no syntax highlighting...
                 compositeDecorator = new CompositeDecorator([
@@ -292,7 +293,7 @@ export default class Narrative extends React.Component {
     render() {
         const {designComponent, updateComponent, wpComponent, mode, displayContext, view, testSummary} = this.props;
 
-        //console.log("Rendering Narrative with context " + displayContext);
+        //console.log("Rendering Narrative for " + designComponent.componentNameNew + " with context " + displayContext + " and updateComponent " + updateComponent);
 
         let itemStyle = getComponentClass(designComponent, updateComponent, wpComponent, view, displayContext, true);
 

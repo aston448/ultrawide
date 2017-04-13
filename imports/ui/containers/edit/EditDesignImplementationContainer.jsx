@@ -23,6 +23,8 @@ import { ItemType, ComponentType, ViewType, ViewMode, DisplayContext } from '../
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
+
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
@@ -44,22 +46,30 @@ class DevApplicationsList extends Component {
 
     }
 
-    getDesignItem(application){
-        return ClientWorkPackageComponentServices.getDesignItem(application.componentId, application.workPackageType)
+    getUpdateItem(application, designUpdateId){
+
+        return ClientDesignVersionServices.getDesignUpdateItemForUpdate(application, designUpdateId);
+    }
+
+    getWpItem(application, workPackageId){
+
+        return ClientWorkPackageComponentServices.getWorkPackageComponent(application._id, workPackageId);
     }
 
     getEditorClass(){
+
         return ClientUserContextServices.getWindowSizeClass();
     }
 
     // A list of top level applications in the work package(s)
-    renderApplications(wpApplications, view, mode, context, testSummary) {
+    renderApplications(wpApplications, view, mode, context, testSummary, userContext) {
         return wpApplications.map((application) => {
             return (
                 <DesignComponentTarget
                     key={application._id}
                     currentItem={application}
-                    designItem={this.getDesignItem(application)}
+                    updateItem={this.getUpdateItem(application, userContext.designUpdateId)}
+                    wpItem={this.getWpItem(application, userContext.workPackageId)}
                     displayContext={context}
                     view={view}
                     mode={mode}
@@ -119,7 +129,7 @@ class DevApplicationsList extends Component {
                     displayContext={DisplayContext.DEV_DESIGN}
                 />
                 <div className={editorClass}>
-                    {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible)}
+                    {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible, userContext)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.DEV_DESIGN}

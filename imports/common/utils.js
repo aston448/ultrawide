@@ -151,6 +151,25 @@ export function getComponentClass(currentItem, updateItem, wpItem, view, context
                 }
 
                 break;
+
+            case ViewType.DEVELOP_BASE_WP:
+                if(wpItem){
+                    if(wpItem.scopeType !== WorkPackageScopeType.SCOPE_ACTIVE){
+                        modifier = ' greyed-out';
+                    }
+                }
+                break;
+
+            case ViewType.DEVELOP_UPDATE_WP:
+                if(updateItem){
+                    if(updateItem.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE){
+                        modifier = ' greyed-out';
+                    }
+                    if(updateItem.isRemoved){
+                        deleted = ' removed-item';
+                    }
+                }
+                break;
         }
 
         // Final format class:

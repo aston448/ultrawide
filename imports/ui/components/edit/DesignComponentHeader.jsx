@@ -706,6 +706,7 @@ export class DesignComponentHeader extends Component{
                 break;
 
             case DisplayContext.UPDATE_EDIT:
+            case DisplayContext.UPDATE_VIEW:
                 if(updateItem) {
                     inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
                     inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
@@ -739,6 +740,20 @@ export class DesignComponentHeader extends Component{
                     inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
                 }
                 break;
+
+            case DisplayContext.DEV_DESIGN:
+                // Work package implementation
+                if(updateItem){
+                    // Must be an update WP
+                    inScope = (updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE);
+                    inParentScope = (updateItem.scopeType === UpdateScopeType.SCOPE_PARENT_SCOPE);
+                } else {
+                    // Go with the WP scoping
+                    if(wpItem) {
+                        inScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_ACTIVE);
+                        inParentScope = (wpItem.scopeType === WorkPackageScopeType.SCOPE_PARENT);
+                    }
+                }
         }
 
         // Determine how the check box is shown

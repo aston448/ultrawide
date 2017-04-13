@@ -244,10 +244,16 @@ Meteor.methods({
         if(workPackage.workPackageType === WorkPackageType.WP_BASE){
             throw new Meteor.Error("FAIL", "This test is only expected to apply to Update WPs");
         } else {
-            designComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+            try {
+                designComponent = TestDataHelpers.getDesignUpdateComponentWithParent(userContext.designVersionId, userContext.designUpdateId, componentType, componentParentName, componentName);
+            } catch (error){
+                // Expecting error outcome - means component is not scopable because its not there!
+                designComponent = null;
+            }
         }
 
-        if((designComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE)){
+        // If not scopable then not in Update or is in as peer scope
+        if(!designComponent || (designComponent.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE)){
             return true;
         }else {
             throw new Meteor.Error("FAIL", "Work Package component " + componentName + " with parent: " + componentParentName + " was expected not to have an in-scope update item");
