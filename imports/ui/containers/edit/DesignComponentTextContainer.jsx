@@ -159,58 +159,58 @@ class DesignComponentText extends Component {
 
             // Define panel 2 for Feature background steps if a Feature (could be for an update or base version)
             //console.log("PANEL 2: componentType: " + mainComponent.componentType + " current component: " + mainComponent);
-            if(mainComponent && mainComponent.componentType === ComponentType.FEATURE) {
-                panel2 =
-                    <div className="design-editor-container">
-                        <DetailsViewHeader
-                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            isClosable={false}
-                            titleText={'Feature Background Steps'}
-                        />
-                        <div className="details-editor">
-                            <ScenarioStepsContainer params={{
-                                view: view,
-                                displayContext: displayContext,
-                                stepContext: StepContext.STEP_FEATURE,
-                                designId: mainComponent.designId,
-                                designVersionId: mainComponent.designVersionId,
-                                updateId: mainComponent.designUpdateId,
-                                parentReferenceId: mainComponentFeatureReference
-                            }}/>
-                        </div>
-                        <DetailsViewFooter
-                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            actionsVisible={true}
-                        />
-                    </div>;
-            }
+            // if(mainComponent && mainComponent.componentType === ComponentType.FEATURE) {
+            //     panel2 =
+            //         <div className="design-editor-container">
+            //             <DetailsViewHeader
+            //                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+            //                 isClosable={false}
+            //                 titleText={'Feature Background Steps'}
+            //             />
+            //             <div className="details-editor">
+            //                 <ScenarioStepsContainer params={{
+            //                     view: view,
+            //                     displayContext: displayContext,
+            //                     stepContext: StepContext.STEP_FEATURE,
+            //                     designId: mainComponent.designId,
+            //                     designVersionId: mainComponent.designVersionId,
+            //                     updateId: mainComponent.designUpdateId,
+            //                     parentReferenceId: mainComponentFeatureReference
+            //                 }}/>
+            //             </div>
+            //             <DetailsViewFooter
+            //                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+            //                 actionsVisible={true}
+            //             />
+            //         </div>;
+            // }
 
             // Define panel 2 for scenario steps if a Scenario (could be for an update or base version).  Shows both background and scenario steps.  Background here is always read only.
-            if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && (mainComponentFeatureReference != 'NONE')) {
-                panel2 =
-                    <div className="design-editor-container">
-                        <DetailsViewHeader
-                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            isClosable={false}
-                            titleText={'Scenario Steps: ' + titleName}
-                        />
-                        <div className="details-editor">
-                            <ScenarioStepsContainer params={{
-                                view: view,
-                                displayContext: displayContext,
-                                stepContext: StepContext.STEP_SCENARIO,
-                                designId: mainComponent.designId,
-                                designVersionId: mainComponent.designVersionId,
-                                updateId: mainComponent.designUpdateId,
-                                parentReferenceId: mainComponent.componentReferenceId
-                            }}/>
-                        </div>
-                        <DetailsViewFooter
-                            detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                            actionsVisible={true}
-                        />
-                    </div>;
-            }
+            // if(mainComponent && mainComponent.componentType === ComponentType.SCENARIO && (mainComponentFeatureReference != 'NONE')) {
+            //     panel2 =
+            //         <div className="design-editor-container">
+            //             <DetailsViewHeader
+            //                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+            //                 isClosable={false}
+            //                 titleText={'Scenario Steps: ' + titleName}
+            //             />
+            //             <div className="details-editor">
+            //                 <ScenarioStepsContainer params={{
+            //                     view: view,
+            //                     displayContext: displayContext,
+            //                     stepContext: StepContext.STEP_SCENARIO,
+            //                     designId: mainComponent.designId,
+            //                     designVersionId: mainComponent.designVersionId,
+            //                     updateId: mainComponent.designUpdateId,
+            //                     parentReferenceId: mainComponent.componentReferenceId
+            //                 }}/>
+            //             </div>
+            //             <DetailsViewFooter
+            //                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+            //                 actionsVisible={true}
+            //             />
+            //         </div>;
+            // }
 
             // Define panel 3 for updates - base item text - only shown if a current component exists
             if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW || view === ViewType.DESIGN_UPDATABLE_VIEW) && baseComponent){
@@ -236,41 +236,41 @@ class DesignComponentText extends Component {
 
 
                 // And define panel 4 for Base version scenario steps if a Scenario in an update
-                if(baseComponent && baseComponent.componentType === ComponentType.SCENARIO) {
-                    panel4 =
-                        <div className="design-editor-container">
-                            <DetailsViewHeader
-                                detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                                isClosable={false}
-                                titleText={'OLD Scenario Steps: ' + titleNameOld}
-                            />
-                            <div className="details-editor">
-                                <ScenarioStepsContainer params={{
-                                    view: view,
-                                    displayContext: DisplayContext.BASE_VIEW,
-                                    stepContext: StepContext.STEP_FEATURE_SCENARIO,
-                                    designId: baseComponent.designId,
-                                    designVersionId: baseComponent.designVersionId,
-                                    updateId: baseComponent.designUpdateId,
-                                    parentReferenceId: baseComponentFeatureReference
-                                }}/>
-                                <ScenarioStepsContainer params={{
-                                    view: view,
-                                    displayContext: DisplayContext.BASE_VIEW,
-                                    stepContext: StepContext.STEP_SCENARIO,
-                                    designId: baseComponent.designId,
-                                    designVersionId: baseComponent.designVersionId,
-                                    updateId: 'NONE',
-                                    scenarioReferenceId: baseComponent.componentReferenceId,
-                                    parentReferenceId: baseComponentFeatureReference
-                                }}/>
-                            </div>
-                            <DetailsViewFooter
-                                detailsType={DetailsViewType.VIEW_STEPS_NEW}
-                                actionsVisible={true}
-                            />
-                        </div>;
-                }
+                // if(baseComponent && baseComponent.componentType === ComponentType.SCENARIO) {
+                //     panel4 =
+                //         <div className="design-editor-container">
+                //             <DetailsViewHeader
+                //                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                //                 isClosable={false}
+                //                 titleText={'OLD Scenario Steps: ' + titleNameOld}
+                //             />
+                //             <div className="details-editor">
+                //                 <ScenarioStepsContainer params={{
+                //                     view: view,
+                //                     displayContext: DisplayContext.BASE_VIEW,
+                //                     stepContext: StepContext.STEP_FEATURE_SCENARIO,
+                //                     designId: baseComponent.designId,
+                //                     designVersionId: baseComponent.designVersionId,
+                //                     updateId: baseComponent.designUpdateId,
+                //                     parentReferenceId: baseComponentFeatureReference
+                //                 }}/>
+                //                 <ScenarioStepsContainer params={{
+                //                     view: view,
+                //                     displayContext: DisplayContext.BASE_VIEW,
+                //                     stepContext: StepContext.STEP_SCENARIO,
+                //                     designId: baseComponent.designId,
+                //                     designVersionId: baseComponent.designVersionId,
+                //                     updateId: 'NONE',
+                //                     scenarioReferenceId: baseComponent.componentReferenceId,
+                //                     parentReferenceId: baseComponentFeatureReference
+                //                 }}/>
+                //             </div>
+                //             <DetailsViewFooter
+                //                 detailsType={DetailsViewType.VIEW_STEPS_NEW}
+                //                 actionsVisible={true}
+                //             />
+                //         </div>;
+                // }
             }
 
             return (

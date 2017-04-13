@@ -63,26 +63,37 @@ class MashDesignItem extends Component {
         }
 
         switch(componentType){
-            // case ComponentType.DESIGN_SECTION:
-                // // Just get more items.  Could be Features or more Sections
-                // return(
-                //     <div>
-                //         <MashSelectedItemContainer params={{
-                //             componentType: ComponentType.FEATURE,
-                //             designItemId: designItem._id,
-                //             userContext: userContext,
-                //             view: view,
-                //             displayContext: displayContext
-                //         }}/>
-                //         <MashSelectedItemContainer params={{
-                //             componentType: ComponentType.DESIGN_SECTION,
-                //             designItemId: designItem._id,
-                //             userContext: userContext,
-                //             view: view,
-                //             displayContext: displayContext
-                //         }}/>
-                //     </div>
-                // );
+            // case ComponentType.APPLICATION:
+            //     return(
+            //         <MashSelectedItemContainer params={{
+            //             componentType: ComponentType.DESIGN_SECTION,
+            //             designItemId: designItem._id,
+            //             userContext: userContext,
+            //             view: view,
+            //             displayContext: displayContext
+            //         }}/>
+            //     );
+
+            case ComponentType.DESIGN_SECTION:
+                // Just get more items.  Could be Features or more Sections
+                return(
+                    <div>
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.FEATURE,
+                            designItemId: designItem._id,
+                            userContext: userContext,
+                            view: view,
+                            displayContext: displayContext
+                        }}/>
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.DESIGN_SECTION,
+                            designItemId: designItem._id,
+                            userContext: userContext,
+                            view: view,
+                            displayContext: displayContext
+                        }}/>
+                    </div>
+                );
 
             case ComponentType.FEATURE:
                 // Header and then get more items

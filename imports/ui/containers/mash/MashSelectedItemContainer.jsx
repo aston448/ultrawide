@@ -15,7 +15,7 @@ import DetailsViewHeader    from '../../components/common/DetailsViewHeader.jsx'
 import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
-import {DetailsViewType, RoleType, DisplayContext, UserDevFeatureStatus, MashStatus, ComponentType, LogLevel}    from '../../../constants/constants.js';
+import {DetailsViewType, ViewType, DisplayContext, ComponentType, LogLevel}    from '../../../constants/constants.js';
 import {log} from '../../../common/utils.js';
 import TextLookups from '../../../common/lookups.js';
 
@@ -26,11 +26,6 @@ import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIn
 
 
 // Bootstrap
-import {Panel} from 'react-bootstrap';
-import {InputGroup} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
-import {Grid, Row, Col} from 'react-bootstrap';
-import {ButtonGroup, ButtonToolbar, Button, } from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -89,7 +84,7 @@ class MashSelectedItemList extends Component {
 
     render() {
 
-        const {designItems, itemType, displayContext, isTopParent, userContext} = this.props;
+        const {designItems, itemType, displayContext, isTopParent, userContext, view} = this.props;
 
         let panelHeader = '';
         let secondPanelHeader = '';
@@ -114,9 +109,26 @@ class MashSelectedItemList extends Component {
 
             switch (itemType) {
                 case ComponentType.APPLICATION:
+                    // Tests not currently displayed for these unless in WP development
+                    switch(view){
+                        case ViewType.DEVELOP_BASE_WP:
+                        case ViewType.DEVELOP_UPDATE_WP:
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.application;
+                            break;
+                        default:
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+                    }
+                    break;
                 case ComponentType.DESIGN_SECTION:
-                    // Tests not currently displayed for these as slow to render
-                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+                    // Tests not currently displayed for these unless in WP development
+                    switch(view){
+                        case ViewType.DEVELOP_BASE_WP:
+                        case ViewType.DEVELOP_UPDATE_WP:
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.designSection;
+                            break;
+                        default:
+                            panelHeader = TextLookups.mashTestTypes(displayContext) + ' tests';
+                    }
                     break;
                 case ComponentType.FEATURE:
                     switch (displayContext) {
@@ -139,7 +151,7 @@ class MashSelectedItemList extends Component {
                     itemHeader = 'Scenario';
                     break;
                 case ComponentType.SCENARIO:
-                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for ' + nameData.scenario;
+                    panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for SCENARIO:';
                     break;
 
                 default:
@@ -148,6 +160,7 @@ class MashSelectedItemList extends Component {
         }
 
         let mainPanel = <div></div>;
+        let noData = false;
 
         if(designItems.length > 0 ) {
 
@@ -159,13 +172,18 @@ class MashSelectedItemList extends Component {
         } else {
             if(
                 userContext.designComponentId === 'NONE' ||
-                userContext.designComponentType === ComponentType.APPLICATION ||
-                userContext.designComponentType === ComponentType.DESIGN_SECTION
+                (userContext.designComponentType === ComponentType.APPLICATION && view === ViewType.DESIGN_UPDATABLE_VIEW)||
+                (userContext.designComponentType === ComponentType.DESIGN_SECTION && view === ViewType.DESIGN_UPDATABLE_VIEW)
             ) {
 
                 // No data because no item or non-display item selected
-                mainPanel = <div className="design-item-note">Select a Feature, Feature Aspect or Scenario to see test results</div>;
+                if(view === ViewType.DESIGN_UPDATABLE_VIEW){
+                    mainPanel = <div className="design-item-note">Select a Feature or Feature item to see test results</div>;
+                } else {
+                    mainPanel = <div className="design-item-note">Select a Design item to see test results</div>;
+                }
 
+                noData = true;
             }
         }
 
@@ -173,7 +191,7 @@ class MashSelectedItemList extends Component {
         const editorClass = this.getEditorClass();
 
         // Show the main item box if we have a list of items for the original parent or no parent is selected
-        if(isTopParent || userContext.designComponentId === 'NONE') {
+        if((isTopParent && designItems.length > 0) || userContext.designComponentId === 'NONE' || noData) {
             return (
 
                 <div className="design-editor-container">

@@ -655,6 +655,9 @@ class DesignUpdateComponentServices{
                         )
                     }
 
+                    // Remove peers if they are no longer necessary
+                    DesignUpdateComponentModules.removeUnwantedPeers(designUpdateComponent, parentId);
+
                     // Remove component from any related work packages
                     DesignUpdateComponentModules.removeWorkPackageItems(designUpdateComponent._id, designUpdateComponent.designVersionId, designUpdateComponent.designUpdateId);
 

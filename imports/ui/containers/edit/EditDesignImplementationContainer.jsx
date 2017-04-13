@@ -217,16 +217,33 @@ class DevApplicationsList extends Component {
             if(userContext.designComponentType !== 'NONE'){
                 switch(userContext.designComponentType){
                     case ComponentType.APPLICATION:
-                    case ComponentType.DESIGN_SECTION:
-                        // Tests not displayed for these items
                         intTests =
                             <MashSelectedItemContainer params={{
-                                componentType: 'NONE',
+                                componentType: ComponentType.DESIGN_SECTION,
                                 designItemId: 'NONE',
                                 userContext: userContext,
                                 view: view,
                                 displayContext: DisplayContext.MASH_INT_TESTS
                             }}/>;
+                        break;
+                    case ComponentType.DESIGN_SECTION:
+                        intTests =
+                            <div>
+                                <MashSelectedItemContainer params={{
+                                    componentType: ComponentType.FEATURE,
+                                    designItemId: 'NONE',
+                                    userContext: userContext,
+                                    view: view,
+                                    displayContext: DisplayContext.MASH_INT_TESTS
+                                }}/>
+                                <MashSelectedItemContainer params={{
+                                    componentType: ComponentType.DESIGN_SECTION,
+                                    designItemId: 'NONE',
+                                    userContext: userContext,
+                                    view: view,
+                                    displayContext: DisplayContext.MASH_INT_TESTS
+                                }}/>
+                            </div>;
                         break;
                     case ComponentType.FEATURE:
                         intTests =
@@ -303,16 +320,33 @@ class DevApplicationsList extends Component {
             if(userContext.designComponentType !== 'NONE'){
                 switch(userContext.designComponentType){
                     case ComponentType.APPLICATION:
-                    case ComponentType.DESIGN_SECTION:
-                        // Tests not displayed for these items
                         unitTests =
                             <MashSelectedItemContainer params={{
-                                componentType: 'NONE',
+                                componentType: ComponentType.DESIGN_SECTION,
                                 designItemId: 'NONE',
                                 userContext: userContext,
                                 view: view,
                                 displayContext: DisplayContext.MASH_UNIT_TESTS
                             }}/>;
+                        break;
+                    case ComponentType.DESIGN_SECTION:
+                        unitTests =
+                            <div>
+                                <MashSelectedItemContainer params={{
+                                    componentType: ComponentType.FEATURE,
+                                    designItemId: 'NONE',
+                                    userContext: userContext,
+                                    view: view,
+                                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                                }}/>
+                                <MashSelectedItemContainer params={{
+                                    componentType: ComponentType.DESIGN_SECTION,
+                                    designItemId: 'NONE',
+                                    userContext: userContext,
+                                    view: view,
+                                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                                }}/>
+                            </div>;
                         break;
                     case ComponentType.FEATURE:
                         unitTests =

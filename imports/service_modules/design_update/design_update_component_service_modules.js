@@ -274,6 +274,38 @@ class DesignUpdateComponentModules{
         });
     }
 
+    removeUnwantedPeers(removedComponent, parentId){
+
+        const parent = DesignUpdateComponents.findOne({_id: parentId});
+
+        // If there are no longer any New components under the parent, set any peer scope items out of scope
+        const peers = DesignUpdateComponents.find({
+            designUpdateId:                 removedComponent.designUpdateId,
+            componentType:                  removedComponent.componentType,
+            componentParentIdNew:           parent._id
+        });
+
+        let newComponents = false;
+
+        peers.forEach((peer) => {
+            if(peer.isNew){
+                newComponents = true;
+            }
+        });
+
+        if(!newComponents){
+            // Set all peer scope peers out of scope (i.e. remove them)
+            DesignUpdateComponents.remove(
+                {
+                    designUpdateId:                 removedComponent.designUpdateId,
+                    componentType:                  removedComponent.componentType,
+                    componentParentIdNew:           parent._id,
+                    scopeType:                      UpdateScopeType.SCOPE_PEER_SCOPE
+                }
+            );
+        }
+    }
+
     insertComponentToUpdateScope(baseComponent, designUpdateId, scopeType){
 
         // Only insert if not already existing

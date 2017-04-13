@@ -40,42 +40,45 @@ Meteor.methods({
 
         const data = ClientContainerServices.getComponentDataForParentComponent(componentType, view, userContext.designVersionId, userContext.designUpdateId, userContext.workPackageId, component._id, displayContext);
 
+        if(data) {
+            switch (testCase) {
+                case 'VALIDATE_NO_COMPONENT_RETURNED':
 
-        switch(testCase){
-            case 'VALIDATE_NO_COMPONENT_RETURNED':
-
-                if(data.components.length > 0){
-                    throw new Meteor.Error("FAIL", "Expecting no " + componentType + " components to be returned");
-                }
-                break;
-
-            case 'VALIDATE_COMPONENT_RETURNED':
-
-                if(data.components.length > 0){
-                    let found = false;
-                    data.components.forEach((component) => {
-
-                        if(userContext.designUpdateId === 'NONE'){
-                            if(component.componentNameNew === componentName){
-                                found = true;
-                            }
-                        } else {
-                            if(component.componentNameNew === componentName){
-                                found = true;
-                            }
-                        }
-                    });
-
-                    if(!found){
-                        throw new Meteor.Error("FAIL", "Component " + componentName + " was not returned");
+                    if (data.length > 0) {
+                        throw new Meteor.Error("FAIL", "Expecting no " + componentType + " components to be returned");
                     }
+                    break;
 
-                } else {
-                    throw new Meteor.Error("FAIL", "No " + componentType + " components were returned");
-                }
-                break;
-            default:
-                throw new Meteor.Error("FAIL", "No test case defined");
+                case 'VALIDATE_COMPONENT_RETURNED':
+
+                    if (data.length > 0) {
+                        let found = false;
+                        data.forEach((component) => {
+
+                            if (userContext.designUpdateId === 'NONE') {
+                                if (component.componentNameNew === componentName) {
+                                    found = true;
+                                }
+                            } else {
+                                if (component.componentNameNew === componentName) {
+                                    found = true;
+                                }
+                            }
+                        });
+
+                        if (!found) {
+                            throw new Meteor.Error("FAIL", "Component " + componentName + " was not returned");
+                        }
+
+                    } else {
+                        throw new Meteor.Error("FAIL", "No " + componentType + " components were returned");
+                    }
+                    break;
+                default:
+                    throw new Meteor.Error("FAIL", "No test case defined");
+            }
+        } else {
+            throw new Meteor.Error("FAIL", "No data found");
         }
     },
 
