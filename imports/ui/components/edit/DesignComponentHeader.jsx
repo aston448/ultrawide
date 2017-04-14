@@ -817,61 +817,68 @@ export class DesignComponentHeader extends Component{
         updateStatusGlyph = 'th-large';
 
 
-        if(view === ViewType.DESIGN_UPDATABLE_VIEW || ((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && displayContext === DisplayContext.WORKING_VIEW)) {
+        switch(displayContext){
+            case DisplayContext.WORKING_VIEW:
+                // Get status for working views - display as a tooltip over the status icon
 
-            // Get status for working views - display as a tooltip over the status icon
+                switch (currentItem.updateMergeStatus) {
+                    case UpdateMergeStatus.COMPONENT_REMOVED:
+                        updateStatusGlyph = 'trash';
+                        break;
+                    case UpdateMergeStatus.COMPONENT_ADDED:
+                        updateStatusGlyph = 'plus-sign';
+                        break;
+                    case UpdateMergeStatus.COMPONENT_MODIFIED:
+                        updateStatusGlyph = 'adjust';
+                        break;
+                    case UpdateMergeStatus.COMPONENT_BASE_PARENT:
+                        // Set a flag if changed items below
+                        updateStatusGlyph = 'flag';
+                        break;
+                    case UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED:
+                        updateStatusGlyph = 'question-sign';
+                        break;
+                }
 
-            switch (currentItem.updateMergeStatus) {
-                case UpdateMergeStatus.COMPONENT_REMOVED:
-                    updateStatusGlyph = 'trash';
-                    break;
-                case UpdateMergeStatus.COMPONENT_ADDED:
-                    updateStatusGlyph = 'plus-sign';
-                    break;
-                case UpdateMergeStatus.COMPONENT_MODIFIED:
-                    updateStatusGlyph = 'adjust';
-                    break;
-                case UpdateMergeStatus.COMPONENT_BASE_PARENT:
-                    // Set a flag if changed items below
-                    updateStatusGlyph = 'flag';
-                    break;
-                case UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED:
-                    updateStatusGlyph = 'question-sign';
-                    break;
-            }
+                if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
+                    updateTextClass = ' removed-item';
+                }
 
-            if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
-                updateTextClass = ' removed-item';
-            }
+                break;
+
+            case DisplayContext.UPDATE_VIEW:
+            case DisplayContext.UPDATE_EDIT:
+            case DisplayContext.WP_VIEW:
+            case DisplayContext.DEV_DESIGN:
+
+                // Set status tags in Design Update itself
+                updateStatusClass = 'update-merge-status component-hidden';
+
+                if(updateItem){
+                    if(updateItem.componentType === ComponentType.SCENARIO && updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
+                        // Just in scope its a query
+                        updateStatusGlyph = 'question-sign';
+                        updateStatusClass = 'update-merge-status component-scenario-queried'
+                    }
+                    // Override for other statuses
+                    if(updateItem.isChanged){
+                        updateStatusGlyph = 'adjust';
+                        updateStatusClass = 'update-merge-status component-modified'
+                    }
+                    if(updateItem.isNew){
+                        updateStatusGlyph = 'plus-sign';
+                        updateStatusClass = 'update-merge-status component-added'
+                    }
+                    if(updateItem.isRemoved){
+                        updateStatusGlyph = 'trash';
+                        updateStatusClass = 'update-merge-status component-removed'
+                    }
+                }
+                break;
 
         }
 
-        if((view === ViewType.DESIGN_UPDATE_EDIT || view === ViewType.DESIGN_UPDATE_VIEW) && displayContext !== DisplayContext.WORKING_VIEW){
 
-            // Set status tags in Design Update itself
-            updateStatusClass = 'update-merge-status component-hidden';
-
-            if(updateItem){
-                if(updateItem.componentType === ComponentType.SCENARIO && updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
-                    // Just in scope its a query
-                    updateStatusGlyph = 'question-sign';
-                    updateStatusClass = 'update-merge-status component-scenario-queried'
-                }
-                // Override for other statuses
-                if(updateItem.isChanged){
-                    updateStatusGlyph = 'adjust';
-                    updateStatusClass = 'update-merge-status component-modified'
-                }
-                if(updateItem.isNew){
-                    updateStatusGlyph = 'plus-sign';
-                    updateStatusClass = 'update-merge-status component-added'
-                }
-                if(updateItem.isRemoved){
-                    updateStatusGlyph = 'trash';
-                    updateStatusClass = 'update-merge-status component-removed'
-                }
-            }
-        }
 
         const tooltipUpdateStatus = (
             <Tooltip id="modal-tooltip">
@@ -1298,9 +1305,16 @@ export class DesignComponentHeader extends Component{
                 designComponentElement = headerWithCheckbox;
                 break;
             case DisplayContext.BASE_VIEW:
-            case DisplayContext.WP_VIEW:
                 // View only
                 designComponentElement = viewOnlyHeader;
+                break;
+            case DisplayContext.WP_VIEW:
+                // View only
+                if(updateItem){
+                    designComponentElement = updateViewOnlyHeader;
+                } else {
+                    designComponentElement = viewOnlyHeader;
+                }
                 break;
             case DisplayContext.WORKING_VIEW:
                 // Progress view
@@ -1374,7 +1388,12 @@ export class DesignComponentHeader extends Component{
                 switch (mode){
                     case  ViewMode.MODE_VIEW:
                         // View only
-                        designComponentElement = viewOnlyHeader;
+                        if(updateItem){
+                            designComponentElement = updateViewOnlyHeader;
+                        } else {
+                            designComponentElement = viewOnlyHeader;
+                        }
+
                         break;
 
                     case ViewMode.MODE_EDIT:
@@ -1387,11 +1406,19 @@ export class DesignComponentHeader extends Component{
 
                             } else {
                                 // Not being edited now
-                                designComponentElement = nonDraggableHeader;
+                                if(updateItem){
+                                    designComponentElement = updateNonDraggableHeader;
+                                } else {
+                                    designComponentElement = nonDraggableHeader;
+                                }
                             }
                         } else {
                             // Item is out of scope so cannot be edited or dragged
-                            designComponentElement = viewOnlyHeader;
+                            if(updateItem){
+                                designComponentElement = updateViewOnlyHeader;
+                            } else {
+                                designComponentElement = viewOnlyHeader;
+                            }
                         }
                         break;
                 }

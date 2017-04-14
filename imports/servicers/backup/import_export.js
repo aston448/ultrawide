@@ -10,7 +10,7 @@ import { TestOutputLocationFiles }      from '../../collections/configure/test_o
 import { Designs }                      from '../../collections/design/designs.js';
 import { DesignVersions }               from '../../collections/design/design_versions.js';
 import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
-import { DesignUpdateSummaries }        from '../../collections/design_update/design_update_summaries.js';
+import { DesignUpdateSummary }          from '../../collections/design_update/design_update_summary.js';
 import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { DomainDictionary }             from '../../collections/design/domain_dictionary.js'
 import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
@@ -56,7 +56,7 @@ class ImpExServices{
             DesignUpdates.remove({designVersionId: designVersion._id});
 
             // All DU Summaries for this version
-            DesignUpdateSummaries.remove({designVersionId: designVersion._id});
+            DesignUpdateSummary.remove({designVersionId: designVersion._id});
 
             // All Work packages in this version
             let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
@@ -119,7 +119,7 @@ class ImpExServices{
                 });
 
                 // All update summaries in this Version
-                let designUpdateSummaryData = DesignUpdateSummaries.find({designVersionId: designVersion._id}).fetch();
+                let designUpdateSummaryData = DesignUpdateSummary.find({designVersionId: designVersion._id}).fetch();
                 designUpdateSummaryData.forEach((designUpdateSummary) => {
                     designUpdateSummaries.push(designUpdateSummary);
                 });
@@ -312,7 +312,7 @@ class ImpExServices{
                 DesignUpdates.remove({designVersionId: designVersion._id});
 
                 // All update summaries in this Version
-                DesignUpdateSummaries.remove({designVersionId: designVersion._id});
+                DesignUpdateSummary.remove({designVersionId: designVersion._id});
 
                 let workPackages = WorkPackages.find({designVersionId: designVersion._id}).fetch();
                 workPackages.forEach((workPackage) => {
@@ -1061,7 +1061,7 @@ class ImpExServices{
 
     getBackupPath(){
 
-        return '/ultrawide_data/';
+        //return '/ultrawide_data/';
 
         const iniFile = process.env["PWD"] + '/ultrawide.ini';
 
@@ -1126,7 +1126,7 @@ class ImpExServices{
             this.produceExportFile(DesignUpdates, path, doubleBackupPath, ExportFileName.DESIGN_UPDATES);
 
             // Design Update Summaries
-            this.produceExportFile(DesignUpdateSummaries, path, doubleBackupPath, ExportFileName.DESIGN_UPDATE_SUMMARIES);
+            this.produceExportFile(DesignUpdateSummary, path, doubleBackupPath, ExportFileName.DESIGN_UPDATE_SUMMARIES);
 
             // Work Packages
             this.produceExportFile(WorkPackages, path, doubleBackupPath, ExportFileName.WORK_PACKAGES);

@@ -1,11 +1,14 @@
 
 // Ultrawide Collections
+import { Designs }                  from '../../collections/design/designs.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignUpdateSummaries }    from '../../collections/design_update/design_update_summaries.js';
+import { DesignUpdateSummary }      from '../../collections/design_update/design_update_summary.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
+import { UserDevTestSummaryData }   from '../../collections/dev/user_dev_test_summary_data.js';
 
 // Ultrawide Services
-import { ComponentType, DesignUpdateSummaryType, DesignUpdateSummaryItem } from '../../constants/constants.js';
+import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, DesignUpdateSummaryItem, UpdateScopeType, MashTestStatus, LogLevel } from '../../constants/constants.js';
+import { log } from '../../common/utils.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 
 import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
@@ -34,17 +37,21 @@ class DesignUpdateSummaryServices {
 
         if (Meteor.isServer) {
 
-            let designUpdateSummaryId = DesignUpdateSummaries.insert(
+            let designUpdateSummaryId = DesignUpdateSummary.insert(
                 {
                     designVersionId:            designVersionId,
                     designUpdateId:             designUpdateId,
+                    summaryCategory:            designUpdateSummary.summaryCategory,
                     summaryType:                designUpdateSummary.summaryType,
-                    summaryComponentType:       designUpdateSummary.summaryComponentType,
                     itemType:                   designUpdateSummary.itemType,
                     itemName:                   designUpdateSummary.itemName,
                     itemNameOld:                designUpdateSummary.itemNameOld,
-                    itemParentName:             designUpdateSummary.itemParentName,
-                    itemFeatureName:            designUpdateSummary.itemFeatureName
+                    itemFeatureName:            designUpdateSummary.itemFeatureName,
+                    itemHeaderId:               designUpdateSummary.itemHeaderId,
+                    headerComponentId:          designUpdateSummary.headerComponentId,
+                    itemIndex:                  designUpdateSummary.itemIndex,
+                    itemHeaderName:             designUpdateSummary.itemHeaderName,
+                    scenarioTestStatus:         designUpdateSummary.scenarioTestStatus
                 }
             );
 
@@ -52,157 +59,246 @@ class DesignUpdateSummaryServices {
         }
     };
 
-    refreshDesignUpdateSummary(designUpdateId){
+    recreateDesignUpdateSummaryData(designUpdateId){
 
         if (Meteor.isServer) {
+
+            log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {}', designUpdateId);
 
             const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
 
             // If a DU has just been deleted there is nothing to refresh
             if(!designUpdate){
+                log((message) => console.log(message), LogLevel.DEBUG, 'No design update found');
                 return;
             }
 
-            const designVersionId = designUpdate.designVersionId;
+            log((message) => console.log(message), LogLevel.DEBUG, 'Data stale is {}', designUpdate.summaryDataStale);
+
+            //const designVersionId = designUpdate.designVersionId;
 
             // No action unless data is stale
             if(designUpdate.summaryDataStale){
 
-                DesignUpdateSummaries.remove({designUpdateId: designUpdateId});
+                // Clear the data for this update
+                DesignUpdateSummary.remove({designUpdateId: designUpdateId});
 
-
-                // Get Stuff Added or Removed---------------------------------------------------------------------------
-
-                const newRemovedDesignComponents = DesignUpdateComponents.find({
+                // Get all significant items in the update.  Anything added, removed or changed must be in scope.
+                const updateItems = DesignUpdateComponents.find({
                     designUpdateId: designUpdateId,
-                    componentType: {$in:[ComponentType.FEATURE, ComponentType.SCENARIO]},
-                    $or:[{isNew: true}, {isRemoved: true}]
+                    scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                 });
 
-                let parentComponent = null;
-                let itemFeature = null;
-                let summaryType = '';
-                let summaryComponentType = '';
+                let summaryCategory = '';
+                let parentItem = null;
+                let featureItem = null;
+                let headerId = 'NONE';
+                let testStatus = MashTestStatus.MASH_NOT_LINKED;
 
-                newRemovedDesignComponents.forEach((component) => {
+                // Process new items
+                updateItems.forEach((item) => {
 
-                    switch (component.componentType) {
-                        case ComponentType.FEATURE:
-                            if (component.isNew) {
-                                summaryType = DesignUpdateSummaryType.SUMMARY_ADD;
-                            } else {
-                                summaryType = DesignUpdateSummaryType.SUMMARY_REMOVE;
-                            }
-                            summaryComponentType = DesignUpdateSummaryItem.SUMMARY_FEATURE;
-                            break;
-                        case ComponentType.SCENARIO:
-                            if (component.isNew) {
-                                summaryType = DesignUpdateSummaryType.SUMMARY_ADD_TO;
-                            } else {
-                                summaryType = DesignUpdateSummaryType.SUMMARY_REMOVE_FROM;
-                            }
-                            summaryComponentType = DesignUpdateSummaryItem.SUMMARY_SCENARIO_IN_ASPECT;
-                            break;
+                    log((message) => console.log(message), LogLevel.DEBUG, 'Processing update item {}', item.componentNameNew);
 
-                    }
-
-                    parentComponent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
-
-                    itemFeature = DesignUpdateComponents.findOne({
-                        designUpdateId: designUpdateId,
-                        componentReferenceId: component.componentFeatureReferenceIdNew
-                    });
-
-                    let parentName = 'NONE';
                     let featureName = 'NONE';
 
-                    if(parentComponent){
-                        parentName = parentComponent.componentNameNew;
-                    }
-
-                    if(itemFeature){
-                       featureName = itemFeature.componentNameNew;
-                    }
-
-                    DesignUpdateSummaries.insert({
-                        designVersionId:        designVersionId,
-                        designUpdateId:         designUpdateId,
-                        summaryType:            summaryType,
-                        summaryComponentType:   summaryComponentType,
-                        itemName:               component.componentNameNew,
-                        itemNameOld:            component.componentNameNew,
-                        itemType:               component.componentType,
-                        itemParentName:         parentName,
-                        itemFeatureName:        featureName
-                    });
-                });
-
-
-                // Get changed stuff -------------------------------------------------------------------------------------------
-
-                const changedDesignComponents = DesignUpdateComponents.find({
-                    designUpdateId: designUpdateId,
-                    componentType: {$in:[ComponentType.FEATURE, ComponentType.SCENARIO]},
-                    isNew: false,
-                    isRemoved: false,
-                    isChanged: true});
-
-                changedDesignComponents.forEach((component) => {
-
-                    switch (component.componentType) {
+                    // Determine the category for the change
+                    switch(item.componentType){
+                        case ComponentType.APPLICATION:
+                        case ComponentType.DESIGN_SECTION:
+                        case ComponentType.FEATURE_ASPECT:
+                            summaryCategory = DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL;
+                            break;
                         case ComponentType.FEATURE:
-
-                            summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
-                            summaryComponentType = DesignUpdateSummaryItem.SUMMARY_FEATURE;
-                            break;
-
                         case ComponentType.SCENARIO:
-
-                            summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE_IN;
-                            summaryComponentType = DesignUpdateSummaryItem.SUMMARY_SCENARIO_IN_ASPECT;
-                            break;
+                            summaryCategory = DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL;
                     }
 
-                    parentComponent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
-                    itemFeature = DesignUpdateComponents.findOne({
+                    // Get its parent
+                    parentItem = DesignUpdateComponents.findOne({
+                        _id: item.componentParentIdNew
+                    });
+
+                    log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', item.componentNameNew);
+
+                    // If no parent must be a new Application so create a dummy project item as a placeholder
+                    if(!parentItem){
+
+                        const design = Designs.findOne({_id: item.designId});
+
+                        parentItem = {
+                            componentType: ComponentType.DESIGN,
+                            componentNameNew: design.designName,
+                            componentIndexNew: 0,
+                        }
+                    } else {
+                        log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', parentItem.componentNameNew);
+                    }
+
+                    featureItem = DesignUpdateComponents.findOne({
                         designUpdateId: designUpdateId,
-                        componentReferenceId: component.componentFeatureReferenceIdNew
+                        componentReferenceId: item.componentFeatureReferenceIdNew
                     });
 
-                    let parentName = 'NONE';
-                    let featureName = 'NONE';
-
-                    if(parentComponent){
-                        parentName = parentComponent.componentNameNew;
+                    if(featureItem){
+                        featureName = featureItem.componentNameNew;
                     }
 
-                    if(itemFeature){
-                        featureName = itemFeature.componentNameNew;
+                    let headerSummaryType = '';
+                    let summaryType = '';
+                    let recordChange = false;
+
+                    // Determine the summary action --------------------------------------------------------------------
+
+                    if(item.isNew){
+
+                        // An added item...
+                        headerSummaryType = DesignUpdateSummaryType.SUMMARY_ADD_TO;
+                        summaryType = DesignUpdateSummaryType.SUMMARY_ADD;
+                        recordChange = true;
+
+                    } else {
+
+                        // Not new...
+                        if(item.isRemoved){
+
+                            // A removed item...
+                            headerSummaryType = DesignUpdateSummaryType.SUMMARY_REMOVE_FROM;
+                            summaryType = DesignUpdateSummaryType.SUMMARY_REMOVE;
+                            recordChange = true;
+
+                        } else {
+
+                            if(item.isChanged || item.isTextChanged){
+
+                                // A modified item
+                                headerSummaryType = DesignUpdateSummaryType.SUMMARY_CHANGE_IN;
+                                summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+                                recordChange = true;
+
+                            } else {
+
+                                if(item.isMoved){
+
+                                    // A moved item
+                                    headerSummaryType = DesignUpdateSummaryType.SUMMARY_MOVE_FROM;
+                                    summaryType = DesignUpdateSummaryType.SUMMARY_MOVE;
+                                    recordChange = true;
+
+                                } else {
+
+                                    // An in scope item that is none of the above - is a query only
+                                    // IF it is a Scenario.  Otherwise ignore it as a scoped item to add other stuff to
+                                    if (item.componentType === ComponentType.SCENARIO){
+                                        headerSummaryType = DesignUpdateSummaryType.SUMMARY_QUERY_IN;
+                                        summaryType = DesignUpdateSummaryType.SUMMARY_QUERY;
+                                        recordChange = true;
+                                    }
+                                }
+                            }
+                        }
                     }
 
-                    DesignUpdateSummaries.insert({
-                        designVersionId:        designVersionId,
-                        designUpdateId:         designUpdateId,
-                        summaryType:            summaryType,
-                        summaryComponentType:   summaryComponentType,
-                        itemName:               component.componentNameNew,
-                        itemNameOld:            component.componentNameOld,
-                        itemType:               component.componentType,
-                        itemParentName:         parentName,
-                        itemFeatureName:        featureName
-                    });
+                    // If the item is a Scenario - get its test status
+                    if(item.componentType === ComponentType.SCENARIO){
 
+                        const testSummary = UserDevTestSummaryData.findOne({
+                            designVersionId: item.designVersionId,
+                            scenarioReferenceId: item.componentReferenceId
+                        });
+
+                        if(testSummary){
+
+                            // Any fails its bad
+                            if (
+                                testSummary.accTestStatus === MashTestStatus.MASH_FAIL ||
+                                testSummary.intTestStatus === MashTestStatus.MASH_FAIL ||
+                                testSummary.unitTestFailCount > 0
+                            ){
+                                testStatus = MashTestStatus.MASH_FAIL;
+                            } else {
+                                // No fails so any passes is good
+                                if (
+                                    testSummary.accTestStatus === MashTestStatus.MASH_PASS ||
+                                    testSummary.intTestStatus === MashTestStatus.MASH_PASS ||
+                                    testSummary.unitTestPassCount > 0
+                                ){
+                                    testStatus = MashTestStatus.MASH_PASS;
+                                }
+                            }
+                        }
+                    }
+
+                    // Populate ----------------------------------------------------------------------------------------
+
+                    // If we want to add this item
+                    if(recordChange) {
+
+                        // Add the action header item if not already existing
+                        const actionHeader = DesignUpdateSummary.findOne({
+                            designUpdateId: item.designUpdateId,
+                            summaryCategory: DesignUpdateSummaryCategory.SUMMARY_UPDATE_HEADER,
+                            summaryType: headerSummaryType,
+                            headerComponentId: item.componentParentIdNew
+                        });
+
+
+                        if (!actionHeader) {
+
+                            // Get the name that will be prominent in the header so we can sort by it
+                            let itemHeaderName = parentItem.componentNameNew;
+
+                            if(parentItem.componentType === ComponentType.FEATURE_ASPECT){
+                                itemHeaderName = featureName;
+                            }
+                            headerId = DesignUpdateSummary.insert({
+                                designVersionId: item.designVersionId,
+                                designUpdateId: item.designUpdateId,
+                                summaryCategory: DesignUpdateSummaryCategory.SUMMARY_UPDATE_HEADER,
+                                summaryType: headerSummaryType,
+                                itemType: parentItem.componentType,
+                                itemName: parentItem.componentNameNew,
+                                itemFeatureName: featureName,
+                                itemIndex: parentItem.componentIndexNew,
+                                headerComponentId: item.componentParentIdNew,
+                                itemHeaderName: itemHeaderName
+                            });
+                        } else {
+                            headerId = actionHeader._id;
+                        }
+
+                        let scenarioTestStatus = 'NONE';
+
+                        if(item.componentType === ComponentType.SCENARIO){
+                            scenarioTestStatus = testStatus;
+                        }
+
+                        log((message) => console.log(message), LogLevel.DEBUG, 'Adding ' + summaryType + ' item with test status ' + scenarioTestStatus);
+
+                        // Add the item
+                        DesignUpdateSummary.insert({
+                            designVersionId: item.designVersionId,
+                            designUpdateId: item.designUpdateId,
+                            summaryCategory: summaryCategory,
+                            summaryType: summaryType,
+                            itemType: item.componentType,
+                            itemName: item.componentNameNew,
+                            itemNameOld: item.componentNameOld,
+                            itemParentType: parentItem.componentType,
+                            itemParentName: parentItem.componentNameNew,
+                            itemFeatureName: featureName,
+                            itemHeaderId: headerId,
+                            itemIndex: item.componentIndexNew,
+                            scenarioTestStatus: scenarioTestStatus
+                        });
+                    }
                 });
-
 
                 // No longer stale
                 DesignUpdates.update({_id: designUpdateId}, {$set: {summaryDataStale: false}});
             }
-
         }
     }
-
-
 }
 
 export default new DesignUpdateSummaryServices();

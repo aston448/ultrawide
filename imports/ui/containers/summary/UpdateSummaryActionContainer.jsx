@@ -1,0 +1,86 @@
+// == IMPORTS ==========================================================================================================
+
+// Meteor / React Services
+import React, { Component, PropTypes } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+
+// Ultrawide Collections
+
+// Ultrawide GUI Components
+import UpdateSummaryAction          from '../../components/summary/UpdateSummaryAction.jsx';
+
+// Ultrawide Services
+import {DisplayContext} from '../../../constants/constants.js';
+
+import ClientDesignUpdateSummary    from '../../../apiClient/apiClientDesignUpdateSummary.js';
+
+// Bootstrap
+
+// REDUX services
+
+// =====================================================================================================================
+
+// -- CLASS ------------------------------------------------------------------------------------------------------------
+//
+// Design Update Summary Action Container - lists of changes under a common item header
+//
+// ---------------------------------------------------------------------------------------------------------------------
+
+
+// Export for unit tests
+export class UpdateSummaryActionList extends Component {
+
+    constructor(props) {
+        super(props);
+
+    }
+
+    // A list of Actions under an Update Summary header
+
+    renderActions(headerActions) {
+
+        if(headerActions) {
+
+            return headerActions.map((action) => {
+                return(
+                    <UpdateSummaryAction
+                        key={action._id}
+                        actionItem={action}
+                    />
+                )
+            });
+        } else {
+            return(<div>No actions</div>);
+        }
+    }
+
+    render() {
+
+        const {headerActions} = this.props;
+
+        // There must be actions or we would not have rendered a header...
+        return(
+            <div>
+                {this.renderActions(headerActions)}
+            </div>
+        )
+    }
+
+}
+
+UpdateSummaryActionList.propTypes = {
+    headerActions:  PropTypes.array.isRequired
+};
+
+export default UpdateSummaryActionContainer = createContainer(({params}) => {
+
+    const headerActions = ClientDesignUpdateSummary.getDesignUpdateSummaryHeaderActions(params.headerId);
+
+    // console.log("Found " + headerActions.length + " actions for header " +params.headerId);
+    return(
+        {
+            headerActions: headerActions
+        }
+    )
+
+}, UpdateSummaryActionList);

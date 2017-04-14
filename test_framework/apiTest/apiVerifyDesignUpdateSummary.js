@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { DesignUpdateSummaries }    from '../../imports/collections/design_update/design_update_summaries.js'
+import { DesignUpdateSummary }      from '../../imports/collections/design_update/design_update_summary.js'
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
@@ -14,24 +14,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        let summaryItem = null;
-
-        switch(itemType){
-            case ComponentType.FEATURE:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_ADD,
-                    itemName:       itemName
-                });
-                break;
-            case ComponentType.SCENARIO:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_ADD_TO,
-                    itemName:       itemName
-                });
-                break;
-        }
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_ADD,
+            itemType: itemType,
+            itemName: itemName
+        });
 
         if(summaryItem){
             return true;
@@ -44,24 +32,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        let summaryItem = null;
-
-        switch(itemType){
-            case ComponentType.FEATURE:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_ADD,
-                    itemName:       itemName
-                });
-                break;
-            case ComponentType.SCENARIO:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_ADD_TO,
-                    itemName:       itemName
-                });
-                break;
-        }
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_ADD,
+            itemType: itemType,
+            itemName: itemName
+        });
 
         if(summaryItem){
             throw new Meteor.Error("FAIL", "Expected NOT to find Design Update Summary item " + itemName + " in the additions list");
@@ -74,24 +50,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        let summaryItem = null;
-
-        switch(itemType){
-            case ComponentType.FEATURE:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE,
-                    itemName:       itemName
-                });
-                break;
-            case ComponentType.SCENARIO:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE_FROM,
-                    itemName:       itemName
-                });
-                break;
-        }
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_REMOVE,
+            itemType: itemType,
+            itemName: itemName
+        });
 
         if(summaryItem){
             return true;
@@ -104,24 +68,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        let summaryItem = null;
-
-        switch(itemType){
-            case ComponentType.FEATURE:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE,
-                    itemName:       itemName
-                });
-                break;
-            case ComponentType.SCENARIO:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE_FROM,
-                    itemName:       itemName
-                });
-                break;
-        }
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_REMOVE,
+            itemType: itemType,
+            itemName: itemName
+        });
 
         if(summaryItem){
             throw new Meteor.Error("FAIL", "Expected NOT to find Design Update Summary item " + itemName + " in the removals list");
@@ -134,26 +86,13 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        let summaryItem = null;
-
-        switch(itemType){
-            case ComponentType.FEATURE:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE,
-                    itemNameOld:    itemName,
-                    itemName:       itemNameNew
-                });
-                break;
-            case ComponentType.SCENARIO:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE_IN,
-                    itemNameOld:    itemName,
-                    itemName:       itemNameNew
-                });
-                break;
-        }
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_CHANGE,
+            itemType: itemType,
+            itemNameOld: itemName,
+            itemName: itemNameNew
+        });
 
         if(summaryItem){
             return true;
@@ -166,26 +105,13 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        let summaryItem = null;
-
-        switch(itemType){
-            case ComponentType.FEATURE:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE,
-                    itemNameOld:    itemName,
-                    itemName:       itemNameNew
-                });
-                break;
-            case ComponentType.SCENARIO:
-                summaryItem = DesignUpdateSummaries.findOne({
-                    designUpdateId: userContext.designUpdateId,
-                    summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE_IN,
-                    itemNameOld:    itemName,
-                    itemName:       itemNameNew
-                });
-                break;
-        }
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_CHANGE,
+            itemType: itemType,
+            itemNameOld: itemName,
+            itemName: itemNameNew
+        });
 
         if(summaryItem){
             throw new Meteor.Error("FAIL", "Expected NOT to find Design Update Summary item " + itemName + " in the changes list with new name " + itemNameNew);
@@ -194,4 +120,75 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdateSummary.movesListContains'(itemType, itemName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_MOVE,
+            itemType: itemType,
+            itemName: itemName
+        });
+
+        if(summaryItem){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected to find Design Update Summary item " + itemName + " in the moves list with name " + itemName);
+        }
+    },
+
+    'verifyDesignUpdateSummary.movesListDoesNotContain'(itemType, itemName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_MOVE,
+            itemType: itemType,
+            itemName: itemName,
+        });
+
+        if(summaryItem){
+            throw new Meteor.Error("FAIL", "Expected NOT to find Design Update Summary item " + itemName + " in the moves list with name " + itemName);
+        } else {
+            return true;
+        }
+    },
+
+    'verifyDesignUpdateSummary.queriesListContains'(itemType, itemName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_QUERY,
+            itemType: itemType,
+            itemName: itemName
+        });
+
+        if(summaryItem){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected to find Design Update Summary item " + itemName + " in the queries list with name " + itemName);
+        }
+    },
+
+    'verifyDesignUpdateSummary.queriesListDoesNotContain'(itemType, itemName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const summaryItem = DesignUpdateSummary.findOne({
+            designUpdateId: userContext.designUpdateId,
+            summaryType: DesignUpdateSummaryType.SUMMARY_QUERY,
+            itemType: itemType,
+            itemName: itemName,
+        });
+
+        if(summaryItem){
+            throw new Meteor.Error("FAIL", "Expected NOT to find Design Update Summary item " + itemName + " in the queries list with name " + itemName);
+        } else {
+            return true;
+        }
+    },
 });

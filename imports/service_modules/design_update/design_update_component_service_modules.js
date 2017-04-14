@@ -31,10 +31,10 @@ import {setCurrentUserOpenDesignUpdateItems, updateOpenItemsFlag} from '../../re
 class DesignUpdateComponentModules{
 
     addDefaultFeatureAspects(designVersionId, designUpdateId, featureId, defaultRawText, view){
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, true, view, true);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, true, view, true);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, true, view, true);
-        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, true, view, true);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Interface', DesignComponentModules.getRawTextFor('Interface'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Actions', DesignComponentModules.getRawTextFor('Actions'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Conditions', DesignComponentModules.getRawTextFor('Conditions'), defaultRawText, false, view);
+        DesignUpdateComponentServices.addNewComponent(designVersionId, designUpdateId, featureId, ComponentType.FEATURE_ASPECT, 0, 'Consequences', DesignComponentModules.getRawTextFor('Consequences'), defaultRawText, false, view);
     }
 
     updateWorkPackagesWithNewUpdateItem(designVersionId, designUpdateId, newUpdateComponentId){
@@ -62,7 +62,7 @@ class DesignUpdateComponentModules{
 
 
         const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
-        console.log("Query scoped scenario... " + designUpdate.updateMergeAction);
+
         // Add this item to the working design if we are merging this update
         if(designUpdate.updateMergeAction === DesignUpdateMergeAction.MERGE_INCLUDE){
 

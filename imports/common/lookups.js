@@ -64,6 +64,8 @@ class TextLookups {
     componentTypeName(componentType){
 
         switch(componentType){
+            case ComponentType.DESIGN:
+                return 'Design';
             case ComponentType.APPLICATION:
                 return 'Application';
             case ComponentType.DESIGN_SECTION:
@@ -79,6 +81,25 @@ class TextLookups {
         }
     };
 
+    componentTypeHeader(componentType){
+
+        switch(componentType){
+            case ComponentType.DESIGN:
+                return 'DESIGN:';
+            case ComponentType.APPLICATION:
+                return 'APPLICATION:';
+            case ComponentType.DESIGN_SECTION:
+                return 'SECTION:';
+            case ComponentType.FEATURE:
+                return 'FEATURE:';
+            case ComponentType.FEATURE_ASPECT:
+                return 'ASPECT:';
+            case ComponentType.SCENARIO:
+                return 'SCENARIO:';
+            default:
+                return 'Text not defined';
+        }
+    };
 
     mashStatus(mashStatus){
 

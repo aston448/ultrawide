@@ -5,7 +5,7 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
-import DesignItemHeader from './DesignItemHeader.jsx';
+import DesignItemHeader from '../select/DesignItemHeader.jsx';
 
 // Ultrawide Services
 import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';

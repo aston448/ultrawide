@@ -107,9 +107,9 @@ export class DesignEditorHeader extends Component {
         switch(view){
             case ViewType.SELECT:
                 if(displayContext === DisplayContext.UPDATE_SUMMARY){
-                    description = 'Design Update Summary';
+                    description = 'UPDATE SUMMARY';
                     if(nameData.designUpdate !== 'NONE'){
-                        description += ' for ' + nameData.designUpdate
+                        description += ': ' + nameData.designUpdate
                     }
                 }
                 break;
@@ -132,9 +132,9 @@ export class DesignEditorHeader extends Component {
                         description = nameData.designUpdate + ' - CHANGES';
                         break;
                     case DisplayContext.UPDATE_SUMMARY:
-                        description = 'Design Update Summary';
+                        description = 'UPDATE SUMMARY';
                         if(nameData.designUpdate !== 'NONE'){
-                            description += ' for ' + nameData.designUpdate
+                            description += ': ' + nameData.designUpdate
                         }
                         break;
                     case DisplayContext.WORKING_VIEW:

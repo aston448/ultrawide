@@ -52,7 +52,7 @@ class ClientDesignUpdateComponentServices{
                 // This allows the text area to immediately display any updates to current component name
                 store.dispatch(updateDesignComponentName(newPlainText));
 
-                this.refreshDesignUpdateSummary(designUpdateComponent);
+                this.refreshDesignUpdateSummary(designUpdateComponent.designUpdateId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -125,6 +125,8 @@ class ClientDesignUpdateComponentServices{
                 alert('Unexpected error 3: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Add Application Actions:
+                this.refreshDesignUpdateSummary(designUpdateId);
+
                 store.dispatch(updateTestDataFlag());
 
                 // Show action success on screen
@@ -167,6 +169,8 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
+
                     store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
@@ -214,6 +218,8 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
+
                     store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
@@ -259,7 +265,7 @@ class ClientDesignUpdateComponentServices{
                     // Add Feature Actions:
                     store.dispatch(updateTestDataFlag());
 
-                    this.refreshDesignUpdateSummary(parentComponent);
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -301,6 +307,8 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Aspect Actions:
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
+
                     store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
@@ -344,7 +352,7 @@ class ClientDesignUpdateComponentServices{
                 } else {
                     // Add Scenario Actions:
 
-                    this.refreshDesignUpdateSummary(parentComponent);
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
 
                     store.dispatch(updateTestDataFlag());
 
@@ -391,7 +399,7 @@ class ClientDesignUpdateComponentServices{
 
                     store.dispatch(updateTestDataFlag());
 
-                    this.refreshDesignUpdateSummary(designUpdateComponent);
+                    this.refreshDesignUpdateSummary(designUpdateComponent.designUpdateId);
 
                     // No need to remove from user context as only a logical delete and still visible
 
@@ -437,7 +445,7 @@ class ClientDesignUpdateComponentServices{
                     // Remove Design Component Actions:
                     store.dispatch(updateTestDataFlag());
 
-                    this.refreshDesignUpdateSummary(designUpdateComponent);
+                    this.refreshDesignUpdateSummary(designUpdateComponent.designUpdateId);
 
                     // No need to remove from user context as only a logical delete and still visible
 
@@ -524,6 +532,8 @@ class ClientDesignUpdateComponentServices{
                 const updateScopeFlag = store.getState().currentUpdateScopeFlag;
                 store.dispatch(setUpdateScopeFlag(updateScopeFlag));
 
+                this.refreshDesignUpdateSummary(designUpdateId);
+
                 // Show action success on screen
                 if(newScope) {
                     store.dispatch(updateUserMessage({
@@ -573,7 +583,7 @@ class ClientDesignUpdateComponentServices{
 
                     store.dispatch(updateTestDataFlag());
 
-                    this.refreshDesignUpdateSummary(movingComponent);
+                    this.refreshDesignUpdateSummary(movingComponent.designUpdateId);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -759,9 +769,9 @@ class ClientDesignUpdateComponentServices{
 
     // Call this after a change that might need the summary updating.  It wil only actually update if the data has been
     // marked as stale on the server...
-    refreshDesignUpdateSummary(designUpdateComponent){
+    refreshDesignUpdateSummary(designUpdateId){
 
-        ClientDesignUpdateServices.getDesignUpdateSummary(designUpdateComponent.designUpdateId);
+        ClientDesignUpdateServices.getDesignUpdateSummary(designUpdateId);
 
     }
 

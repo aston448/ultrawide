@@ -167,6 +167,7 @@ export const ItemType = {
 
 // Types of components in a design
 export const ComponentType = {
+    DESIGN:             'AAAA',
     APPLICATION:        'APPLICATION',
     DESIGN_SECTION:     'DESIGN_SECTION',
     FEATURE:            'FEATURE',
@@ -240,13 +241,23 @@ export const DesignUpdateMergeAction = {
     MERGE_IGNORE:           'MERGE_IGNORE'
 };
 
+export const DesignUpdateSummaryCategory = {
+    SUMMARY_UPDATE_HEADER:          'SUMMARY_UPDATE_HEADER',
+    SUMMARY_UPDATE_FUNCTIONAL:      'SUMMARY_UPDATE_FUNCTIONAL',
+    SUMMARY_UPDATE_ORGANISATIONAL:  'SUMMARY_UPDATE_ORGANISATIONAL',
+};
+
 export const DesignUpdateSummaryType = {
-    SUMMARY_ADD:                    'Add',
-    SUMMARY_ADD_TO:                 'Add To',
-    SUMMARY_REMOVE:                 'Remove',
-    SUMMARY_REMOVE_FROM:            'Remove From',
-    SUMMARY_CHANGE:                 'Change',
-    SUMMARY_CHANGE_IN:              'Change In'
+    SUMMARY_ADD:                    'SUMMARY_ADD',
+    SUMMARY_ADD_TO:                 'SUMMARY_ADD_TO',
+    SUMMARY_REMOVE:                 'SUMMARY_REMOVE',
+    SUMMARY_REMOVE_FROM:            'SUMMARY_REMOVE_FROM',
+    SUMMARY_CHANGE:                 'SUMMARY_CHANGE',
+    SUMMARY_CHANGE_IN:              'SUMMARY_CHANGE_IN',
+    SUMMARY_MOVE:                   'SUMMARY_MOVE',
+    SUMMARY_MOVE_FROM:              'SUMMARY_MOVE_FROM',
+    SUMMARY_QUERY:                  'SUMMARY_QUERY',
+    SUMMARY_QUERY_IN:               'SUMMARY_QUERY_IN',
 };
 
 export const DesignUpdateSummaryItem = {

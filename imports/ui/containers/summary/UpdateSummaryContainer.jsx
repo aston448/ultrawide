@@ -7,7 +7,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UpdateSummaryItem            from '../../components/select/UpdateSummaryItem.jsx';
+import UpdateSummaryHeader          from '../../components/summary/UpdateSummaryHeader.jsx';
 import DesignEditorHeader           from '../../components/common/DesignEditorHeader.jsx';
 import DesignEditorFooter           from '../../components/common/DesignEditorFooter.jsx';
 
@@ -46,62 +46,84 @@ export class DesignUpdateSummaryList extends Component {
     // A list of Feature Aspects in a Feature
     renderChanges(changeData) {
 
-
         if(changeData) {
-            //console.log("Rendering functional Additions");
-            return changeData.map((changeItem) => {
+
+            return changeData.map((changeHeader) => {
                 return(
-                    <UpdateSummaryItem
-                        key={changeItem._id}
-                        updateSummaryData={changeItem}
+                    <UpdateSummaryHeader
+                        key={changeHeader._id}
+                        headerItem={changeHeader}
                     />
                 )
             });
         } else {
-            return(<div></div>);
+            return(<div>No summary data</div>);
         }
     }
 
     render() {
 
-        const {functionalAdditions, functionalRemovals, functionalChanges, designUpdateName, userContext} = this.props;
+        const {addHeaders, removeHeaders, changeHeaders, moveHeaders, queryHeaders, userContext} = this.props;
+
+        //console.log("Rendering Update Summary with " + addHeaders.length + " additions and " + changeHeaders.length + " changes");
 
         // Get correct window height
         const editorClass = this.getEditorClass();
 
         let additions = <div></div>;
-        if(functionalAdditions.length > 0){
+        if(addHeaders.length > 0){
             additions =
                 <div id="summaryAdditions" className="update-summary-change-container">
-                    <div className="update-summary-change-header change-add">Functional Additions</div>
+                    <div className="update-summary-change-header change-add">Additions</div>
                     <div className="scroll-col">
-                        {this.renderChanges(functionalAdditions)}
+                        {this.renderChanges(addHeaders)}
                     </div>
                 </div>;
         }
 
         let removals = <div></div>;
-        if(functionalRemovals.length > 0){
+        if(removeHeaders.length > 0){
             removals =
                 <div id="summaryRemovals" className="update-summary-change-container">
-                    <div className="update-summary-change-header change-remove">Functional Removals</div>
+                    <div className="update-summary-change-header change-remove">Removals</div>
                     <div className="scroll-col">
-                        {this.renderChanges(functionalRemovals)}
+                        {this.renderChanges(removeHeaders)}
                     </div>
                 </div>;
         }
 
         let changes = <div></div>;
-        if(functionalChanges.length > 0){
+        if(changeHeaders.length > 0){
             changes =
                 <div id="summaryChanges" className="update-summary-change-container">
-                    <div className="update-summary-change-header change-modify">Functional Changes</div>
+                    <div className="update-summary-change-header change-modify">Changes</div>
                     <div className="scroll-col">
-                        {this.renderChanges(functionalChanges)}
+                        {this.renderChanges(changeHeaders)}
                     </div>
                 </div>;
         }
 
+        let moves = <div></div>;
+        if(moveHeaders.length > 0){
+            moves =
+                <div id="summaryChanges" className="update-summary-change-container">
+                    <div className="update-summary-change-header change-modify">Moves</div>
+                    <div className="scroll-col">
+                        {this.renderChanges(moveHeaders)}
+                    </div>
+                </div>;
+        }
+
+        let queries = <div></div>;
+        if(queryHeaders.length > 0){
+            queries =
+                <div id="summaryChanges" className="update-summary-change-container">
+                    <div className="update-summary-change-header change-modify">Test Checks</div>
+                    <div className="scroll-col">
+                        {this.renderChanges(queryHeaders)}
+                    </div>
+                </div>;
+        }
 
         if(userContext.designUpdateId !== 'NONE') {
 
@@ -114,6 +136,8 @@ export class DesignUpdateSummaryList extends Component {
                         {additions}
                         {removals}
                         {changes}
+                        {moves}
+                        {queries}
                     </div>
                     <DesignEditorFooter
                         displayContext={DisplayContext.UPDATE_SUMMARY}
@@ -144,10 +168,11 @@ export class DesignUpdateSummaryList extends Component {
 }
 
 DesignUpdateSummaryList.propTypes = {
-    functionalAdditions: PropTypes.array.isRequired,
-    functionalRemovals: PropTypes.array.isRequired,
-    functionalChanges: PropTypes.array.isRequired,
-    designUpdateName: PropTypes.string.isRequired
+    addHeaders:     PropTypes.array.isRequired,
+    removeHeaders:  PropTypes.array.isRequired,
+    changeHeaders:  PropTypes.array.isRequired,
+    moveHeaders:    PropTypes.array.isRequired,
+    queryHeaders:   PropTypes.array.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.
@@ -160,6 +185,6 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default DesignUpdateSummaryContainer = createContainer(({params}) => {
 
-    return ClientDesignUpdateSummary.getDesignUpdateSummaryData(params.designUpdateId);
+    return ClientDesignUpdateSummary.getDesignUpdateSummaryHeaders(params.designUpdateId);
 
 }, connect(mapStateToProps)(DesignUpdateSummaryList));

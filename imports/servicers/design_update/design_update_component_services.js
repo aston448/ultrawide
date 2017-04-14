@@ -502,12 +502,10 @@ class DesignUpdateComponentServices{
                                 DesignUpdateComponentModules.updateToParentScope(currentUpdateComponent._id);
                             }
                         }
-
-
-
-
                     }
                 }
+
+                DesignUpdates.update({_id: designUpdateId}, {$set: {summaryDataStale: true}});
             }
         }
     }
@@ -635,7 +633,20 @@ class DesignUpdateComponentServices{
 
             let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-            if (designUpdateComponent.isNew) {
+            // For Feature aspects added as default items and not marked as new as such (so they don't appear as user changes)
+            // treat them as new so if deleted they go completely...
+
+            let newDefaultAspect = false;
+
+            if(designUpdateComponent.componentType === ComponentType.FEATURE_ASPECT){
+                const feature = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+
+                if(feature.isNew && !designUpdateComponent.isNew){
+                    newDefaultAspect = true;
+                }
+            }
+
+            if (designUpdateComponent.isNew || newDefaultAspect) {
 
                 // Remove from the Design Version
                 DesignUpdateComponentModules.updateCurrentDesignVersionWithRemoval(designUpdateComponent);
@@ -770,6 +781,8 @@ class DesignUpdateComponentServices{
             // Restore the component and its children - which effectively just means removing it from scope
             // Use force remove option to remove everything
             this.toggleScope(baseComponent._id, thisComponent.designUpdateId, false, true);
+
+            DesignUpdates.update({_id: thisComponent.designUpdateId}, {$set: {summaryDataStale: true}});
         }
     }
 

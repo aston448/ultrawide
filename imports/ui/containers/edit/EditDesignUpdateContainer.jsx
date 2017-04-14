@@ -15,7 +15,7 @@ import DesignComponentTarget        from '../../components/edit/DesignComponentT
 import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
 import DesignComponentTextContainer from './DesignComponentTextContainer.jsx';
 import DomainDictionaryContainer    from './DomainDictionaryContainer.jsx';
-import UpdateSummaryContainer       from '../../containers/select/UpdateSummaryContainer.jsx';
+import UpdateSummaryContainer       from '../summary/UpdateSummaryContainer.jsx';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
 // Ultrawide Services

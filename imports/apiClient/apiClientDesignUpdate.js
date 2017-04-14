@@ -320,6 +320,7 @@ class ClientDesignUpdateServices {
         newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
 
         // Load or refresh DU Summary data
+        console.log('Calling update DU summary...');
         ClientDesignUpdateSummary.getDesignUpdateSummary(newDesignUpdateId);
 
         return newContext;

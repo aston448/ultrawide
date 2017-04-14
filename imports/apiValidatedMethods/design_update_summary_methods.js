@@ -21,7 +21,7 @@ export const refreshDesignUpdateSummary = new ValidatedMethod({
     run({designUpdateId}){
 
         try {
-            DesignUpdateSummaryServices.refreshDesignUpdateSummary(designUpdateId);
+            DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(designUpdateId);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)

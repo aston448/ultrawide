@@ -68,7 +68,6 @@ class ClientContainerServices{
             const urHandle = Meteor.subscribe('userRoles');
             const ucHandle = Meteor.subscribe('userCurrentEditContext');
             const uvHandle = Meteor.subscribe('userCurrentViewOptions');
-            const uuHandle = Meteor.subscribe('userCurrentDevUpdates');
             const tlHandle = Meteor.subscribe('testOutputLocations');
             const tfHandle = Meteor.subscribe('testOutputLocationFiles');
             const utHandle = Meteor.subscribe('userTestTypeLocations');
@@ -78,7 +77,7 @@ class ClientContainerServices{
             const wpHandle = Meteor.subscribe('workPackages');
 
             const loading = (
-                !urHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !uuHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
+                !urHandle.ready() || !ucHandle.ready() || !uvHandle.ready() || !tlHandle.ready() || !tfHandle.ready() || !utHandle.ready() || !dHandle.ready() || !dvHandle.ready() || !duHandle.ready() || !wpHandle.ready()
             );
 
             return {isLoading: loading};
@@ -119,7 +118,7 @@ class ClientContainerServices{
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
 
-                const dusHandle = Meteor.subscribe('designUpdateSummaries', userContext.designVersionId);
+                const dusHandle = Meteor.subscribe('designUpdateSummary', userContext.designVersionId);
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
@@ -149,7 +148,8 @@ class ClientContainerServices{
                 Tracker.autorun((loader) => {
 
                     let loading = (
-                        !dusHandle.ready() || !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
+                        !dusHandle.ready() ||
+                        !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() ||
                         !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() ||
                         !dsHandle.ready() || (wcHandle && !wcHandle.ready())

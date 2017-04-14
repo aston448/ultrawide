@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
-import { DesignUpdateSummaries }    from '../collections/design_update/design_update_summaries.js';
+import { DesignUpdateSummary }      from '../collections/design_update/design_update_summary.js';
 
 // Ultrawide GUI Components
 
@@ -28,7 +28,8 @@ class ClientDesignUpdateSummary{
 
     getDesignUpdateSummary(designUpdateId){
 
-        // Refresh data if required
+        //DesignUpdates.update({_id: designUpdateId}, {$set: {summaryDataStale: true}});
+
         DesignUpdateSummaryServices.refreshDesignUpdateSummary(designUpdateId, (err, result) => {
 
             if (err) {
@@ -40,46 +41,59 @@ class ClientDesignUpdateSummary{
         });
     };
 
-    getDesignUpdateSummaryData(designUpdateId){
+    getDesignUpdateSummaryHeaders(designUpdateId){
 
         // Nothing if no Design Update is set
         if(designUpdateId === 'NONE'){
+
             return {
-                functionalAdditions: [],
-                functionalRemovals: [],
-                functionalChanges: [],
-                designUpdateName: 'NONE'
+                addHeaders:     [],
+                removeHeaders:  [],
+                changeHeaders:  [],
+                moveHeaders:    [],
+                queryHeaders:   []
             };
         }
 
-        const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
-        let designUpdateName = 'NONE';
-
-        if(designUpdate){
-            designUpdateName = designUpdate.updateName;
-        }
-
-        let functionalAdditions = DesignUpdateSummaries.find({
+        const addHeaders = DesignUpdateSummary.find({
             designUpdateId: designUpdateId,
-            summaryType:    {$in:[DesignUpdateSummaryType.SUMMARY_ADD, DesignUpdateSummaryType.SUMMARY_ADD_TO]}
-        }).fetch();
+            summaryType:    DesignUpdateSummaryType.SUMMARY_ADD_TO
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
-        let functionalRemovals = DesignUpdateSummaries.find({
+        const removeHeaders = DesignUpdateSummary.find({
             designUpdateId: designUpdateId,
-            summaryType:    {$in:[DesignUpdateSummaryType.SUMMARY_REMOVE, DesignUpdateSummaryType.SUMMARY_REMOVE_FROM]}
-        }).fetch();
+            summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
-        let functionalChanges = DesignUpdateSummaries.find({
+        const changeHeaders = DesignUpdateSummary.find({
             designUpdateId: designUpdateId,
-            summaryType:    {$in:[DesignUpdateSummaryType.SUMMARY_CHANGE, DesignUpdateSummaryType.SUMMARY_CHANGE_IN]}
-        }).fetch();
+            summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE_IN
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+
+        const moveHeaders = DesignUpdateSummary.find({
+            designUpdateId: designUpdateId,
+            summaryType:    DesignUpdateSummaryType.SUMMARY_MOVE_FROM
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
+
+        const queryHeaders = DesignUpdateSummary.find({
+            designUpdateId: designUpdateId,
+            summaryType:    DesignUpdateSummaryType.SUMMARY_QUERY_IN
+        }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
         return {
-            functionalAdditions: functionalAdditions,
-            functionalRemovals: functionalRemovals,
-            functionalChanges: functionalChanges,
-            designUpdateName: designUpdateName
+            addHeaders:     addHeaders,
+            removeHeaders:  removeHeaders,
+            changeHeaders:  changeHeaders,
+            moveHeaders:    moveHeaders,
+            queryHeaders:   queryHeaders
         };
+    }
+
+    getDesignUpdateSummaryHeaderActions(headerId){
+
+        return DesignUpdateSummary.find({
+            itemHeaderId: headerId
+        }, {sort: {itemIndex: 1}}).fetch();
     }
 
 }

@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
 import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
-import UpdateSummaryContainer       from './UpdateSummaryContainer.jsx';
+import UpdateSummaryContainer       from '../summary/UpdateSummaryContainer.jsx';
 import WorkPackagesContainer        from './WorkPackagesContainer.jsx';
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
