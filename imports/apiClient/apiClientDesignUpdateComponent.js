@@ -689,7 +689,7 @@ class ClientDesignUpdateComponentServices{
                     setOpen
                 ));
 
-                console.log("item " + designComponent.componentNameNew + " set to OPEN");
+                //console.log("item " + designComponent.componentNameNew + " set to OPEN");
                 store.dispatch((updateOpenItemsFlag(designComponent._id)));
             } else {
 

@@ -68,7 +68,7 @@ export class DesignUpdateSummaryList extends Component {
         // Get correct window height
         const editorClass = this.getEditorClass();
 
-        console.log("Render summary headrs with add org: " + addOrgHeaders.length + " and add fnc: " + addFncHeaders.length)
+        //console.log("Render summary headrs with add org: " + addOrgHeaders.length + " and add fnc: " + addFncHeaders.length)
 
         let orgAdditions = <div></div>;
         if(addOrgHeaders.length > 0){

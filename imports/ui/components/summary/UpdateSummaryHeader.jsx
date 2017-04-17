@@ -88,7 +88,7 @@ class UpdateSummaryHeader extends Component {
                 break;
         }
 
-        console.log("Rendering header item: " + itemHeader);
+        //console.log("Rendering header item: " + itemHeader);
 
         return(
             <div className="summary-header-group">

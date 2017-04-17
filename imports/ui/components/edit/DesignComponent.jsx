@@ -278,7 +278,7 @@ export class DesignComponent extends Component{
                     this.setState({open: props.openDesignItems.includes(props.currentItem._id)});
                 } else {
                     if(props.updateItem) {
-                        console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + openUpdateItems.includes(props.updateItem._id));
+                        //console.log("Setting open state for " + props.updateItem.componentNameNew + " to " + openUpdateItems.includes(props.updateItem._id));
                         this.setState({open: openUpdateItems.includes(props.updateItem._id)});
                     }
                 }

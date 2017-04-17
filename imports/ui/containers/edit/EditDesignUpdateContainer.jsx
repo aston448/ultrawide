@@ -111,7 +111,7 @@ export class UpdateApplicationsList extends Component {
 
     // A list of top level applications in the working design version
     renderWorkingVersionApplications(workingApplications, context, view, mode, testSummary) {
-        console.log("RENDER TARGET for  " + workingApplications.length + " apps ");
+        //console.log("RENDER TARGET for  " + workingApplications.length + " apps ");
         return workingApplications.map((application) => {
             // All applications are shown even in update edit view even if not in scope so that new items can be added to them
             return (

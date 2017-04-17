@@ -132,10 +132,10 @@ class ClientDesignUpdateSummary{
             // See if there is anything to go under this header
             const children = this.getDesignUpdateSummaryHeaderActionsForWp(updateAddHeader._id, userContext.workPackageId);
 
-            console.log("header " + updateAddHeader.itemName + " has " + children.length + " children and wpItem is " + wpItem);
+            //console.log("header " + updateAddHeader.itemName + " has " + children.length + " children and wpItem is " + wpItem);
 
             if((wpItem !== null) && (children.length > 0)){
-                console.log(" adding header " + updateAddHeader.itemName);
+                //console.log(" adding header " + updateAddHeader.itemName);
                 wpAddOrgHeaders.push(updateAddHeader);
             }
         });
@@ -159,10 +159,10 @@ class ClientDesignUpdateSummary{
             // See if there is anything to go under this header
             const children = this.getDesignUpdateSummaryHeaderActionsForWp(updateAddHeader._id, userContext.workPackageId);
 
-            console.log("header " + updateAddHeader.itemName + " has " + children.length + " children and wpItem is " + wpItem);
+            //console.log("header " + updateAddHeader.itemName + " has " + children.length + " children and wpItem is " + wpItem);
 
             if((wpItem !== null) && (children.length > 0)){
-                console.log(" adding header " + updateAddHeader.itemName);
+                //console.log(" adding header " + updateAddHeader.itemName);
                 wpAddFncHeaders.push(updateAddHeader);
             }
         });
@@ -255,7 +255,7 @@ class ClientDesignUpdateSummary{
     }
 
     getDesignUpdateSummaryHeaderActionsForWp(headerId, workPackageId){
-        console.log("Getting items for header with headerId " + headerId + " and wpId: " + workPackageId);
+        //console.log("Getting items for header with headerId " + headerId + " and wpId: " + workPackageId);
 
         const headerItems = DesignUpdateSummary.find({
             itemHeaderId: headerId
@@ -266,7 +266,7 @@ class ClientDesignUpdateSummary{
 
         headerItems.forEach((headerItem) => {
 
-            console.log("Header item " + headerItem.itemName + " with ref " + headerItem.itemComponentReferenceId);
+            //console.log("Header item " + headerItem.itemName + " with ref " + headerItem.itemComponentReferenceId);
 
             let wpItem = WorkPackageComponents.find({
                 workPackageId: workPackageId,
@@ -289,7 +289,7 @@ class ClientDesignUpdateSummary{
 
 
             if(wpItem.length > 0 || wpChildItem.length > 0 || wpFeatureChildItem.length > 0){
-                console.log("Adding...")
+                //console.log("Adding...")
                 wpHeaderItems.push(headerItem);
             }
         });
