@@ -687,14 +687,18 @@ class DesignUpdateComponentServices{
                 // An existing component so Logically delete it for this update ad mark as removed elswhere for other updates
                 let thisComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
 
-                // Set removed component removed
+                // Set removed component removed.  Undo any name modifications made in this update
                 let deletedComponents = DesignUpdateComponents.update(
                     {
                         _id: designUpdateComponentId
                     },
                     {
                         $set: {
-                            isRemoved: true
+                            isRemoved:              true,
+                            isChanged:              false,
+                            isTextChanged:          false,
+                            componentNameNew:       thisComponent.componentNameOld,
+                            componentNameRawNew:    thisComponent.componentNameRawOld
                             // Keep isRemovable as is so that restore can work
                         }
                     }

@@ -72,7 +72,9 @@ class ClientWorkPackageComponentServices {
                             componentReferenceId: item.componentReferenceId
                         });
                     }
-                    currentItems.push(designItem._id);
+                    if(designItem) {
+                        currentItems.push(designItem._id);
+                    }
                 });
 
                 const wpScopeItems = store.getState().currentWorkPackageScopeItems;

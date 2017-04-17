@@ -1044,7 +1044,9 @@ class ClientContainerServices{
 
                                 let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
 
-                                currentComponents.push(dvComponent);
+                                if(dvComponent) {
+                                    currentComponents.push(dvComponent);
+                                }
                             });
                         }
                         break;
@@ -1098,13 +1100,16 @@ class ClientContainerServices{
                                     componentParentReferenceId: parent.componentReferenceId,
                                     componentType: componentType
                                 },
-                                {sort: {componentIndex: 1}});
+                                {sort: {componentIndex: 1}}
+                            ).fetch();
 
                             wpComponents.forEach((wpComponent) => {
 
                                 let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
 
-                                currentComponents.push(duComponent);
+                                if(duComponent) {
+                                    currentComponents.push(duComponent);
+                                }
                             });
                         }
 

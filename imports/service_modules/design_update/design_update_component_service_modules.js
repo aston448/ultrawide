@@ -238,7 +238,7 @@ class DesignUpdateComponentModules{
                     componentReferenceId: {$ne: updateComponent.componentReferenceId},
                     componentType: componentType,
                     componentParentReferenceIdNew: updateComponent.componentParentReferenceIdNew,
-                    updateMergeStatus: UpdateMergeStatus.COMPONENT_BASE
+                    updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_ADDED}
                 },
                 {sort: {componentIndexNew: -1}}
             ).fetch();
@@ -262,10 +262,12 @@ class DesignUpdateComponentModules{
             let maxPeer = 0;
             if(existingPeerComponents.length > 0){
                 maxPeer = existingPeerComponents[0].componentIndexNew;
+                //console.log("Max existing peer is " + existingPeerComponents[0].componentNameNew + " with index " + existingPeerComponents[0].componentIndexNew);
             }
             if(newPeerComponents.length > 0){
                 if(newPeerComponents[0].componentIndexNew > maxPeer){
                     maxPeer = newPeerComponents[0].componentIndexNew;
+                    //console.log("Max new peer is " + newPeerComponents[0].componentNameNew + " with index " + newPeerComponents[0].componentIndexNew);
                 }
             }
 

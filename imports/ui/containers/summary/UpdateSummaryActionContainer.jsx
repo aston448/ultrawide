@@ -74,7 +74,17 @@ UpdateSummaryActionList.propTypes = {
 
 export default UpdateSummaryActionContainer = createContainer(({params}) => {
 
-    const headerActions = ClientDesignUpdateSummary.getDesignUpdateSummaryHeaderActions(params.headerId);
+    let headerActions = [];
+
+    if(params.userContext.workPackageId !== 'NONE'){
+        // Just get actions relevant to current WP
+        headerActions = ClientDesignUpdateSummary.getDesignUpdateSummaryHeaderActionsForWp(params.headerId, params.userContext.workPackageId);
+        console.log("Got " + headerActions.length + " header actions for WP");
+    } else {
+        // Get all Update actions
+        headerActions = ClientDesignUpdateSummary.getDesignUpdateSummaryHeaderActions(params.headerId);
+        console.log("Got " + headerActions.length + " header actions for Update");
+    }
 
     // console.log("Found " + headerActions.length + " actions for header " +params.headerId);
     return(

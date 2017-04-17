@@ -771,7 +771,9 @@ class ClientDesignUpdateComponentServices{
     // marked as stale on the server...
     refreshDesignUpdateSummary(designUpdateId){
 
-        ClientDesignUpdateServices.getDesignUpdateSummary(designUpdateId);
+        const userContext = store.getState().currentUserItemContext;
+
+        ClientDesignUpdateServices.getDesignUpdateSummary(userContext);
 
     }
 

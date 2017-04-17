@@ -93,10 +93,11 @@ class DesignSectionsList extends Component {
                 }
             }
 
-            //console.log("Render DESIGN SECTION in context " + displayContext + " with testSummary " + testSummary + " and actual " + actualTestSummary);
+            console.log("Render DESIGN SECTION in context " + displayContext + " with testSummary " + testSummary + " and actual " + actualTestSummary);
 
             return components.map((designSection) => {
 
+                console.log("Design section: " + designSection._id);
                 return (
                     <DesignComponentTarget
                         key={designSection._id}

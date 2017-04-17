@@ -10,7 +10,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Ultrawide GUI Components
 import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
 import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
-import UpdateSummaryContainer       from '../summary/UpdateSummaryContainer.jsx';
+import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
 import WorkPackagesContainer        from './WorkPackagesContainer.jsx';
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
@@ -105,8 +105,8 @@ export class DesignUpdatesList extends Component {
         // Design Update Summary
         const updateSummary =
               <div id="updateSummary">
-                  <UpdateSummaryContainer params={{
-                      designUpdateId: userContext.designUpdateId
+                  <DesignUpdateSummaryContainer params={{
+                      userContext: userContext
                   }}/>
               </div>;
 

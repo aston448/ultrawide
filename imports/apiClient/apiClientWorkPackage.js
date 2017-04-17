@@ -358,8 +358,6 @@ class ClientWorkPackageServices {
                 scenarioStepId:                 'NONE'
             };
 
-            store.dispatch(setCurrentUserItemContext(newContext, true));
-
             // If we are changing WP as DEVELOPER, set the Design Mash and Test data as stale as we need to reload a new lot
             if(userRole === RoleType.DEVELOPER && testIntegrationDataContext) {
                 store.dispatch(setMashDataStaleTo(true));
@@ -372,6 +370,8 @@ class ClientWorkPackageServices {
             store.dispatch(setWorkPackageDataLoadedTo(false));
             ClientContainerServices.getWorkPackageData(newContext);
 
+            store.dispatch(setCurrentUserItemContext(newContext, true));
+
             return {userContext: newContext, testIntegrationDataContext: testIntegrationDataContext};
         }
 
@@ -379,6 +379,9 @@ class ClientWorkPackageServices {
         return {userContext: userContext, testIntegrationDataContext: testIntegrationDataContext};
     };
 
+    afterWpDataLoaded(newContext){
+
+    }
     // Manager chose to edit a Work Package ----------------------------------------------------------------------------
     editWorkPackage(userRole, userContext, workPackageToEditId, wpType){
 

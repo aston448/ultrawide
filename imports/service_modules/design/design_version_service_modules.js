@@ -602,11 +602,16 @@ class DesignVersionModules{
 
     logicallyDeleteDesignVersionItem(designVersionItem){
 
+        const dvComponent = DesignVersionComponents.findOne({_id: designVersionItem._id});
+
+        // Set as removed and revert any name modifications
         DesignVersionComponents.update(
             {_id: designVersionItem._id},
             {
                 $set: {
-                    updateMergeStatus: UpdateMergeStatus.COMPONENT_REMOVED
+                    updateMergeStatus: UpdateMergeStatus.COMPONENT_REMOVED,
+                    componentNameNew: dvComponent.componentNameOld,
+                    componentNameRawNew: dvComponent.componentNameRawOld
                 }
             }
         );

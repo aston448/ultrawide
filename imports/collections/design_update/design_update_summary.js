@@ -9,6 +9,7 @@ let Schema = new SimpleSchema({
     summaryCategory:            {type: String},                                 // Functional Changes, Organisational changes
     summaryType:                {type: String},                                 // ADD_TO ADD, REMOVE_FROM, REMOVE, MODIFY_IN, MODIFY
     itemType:                   {type: String},                                 // Component type of changed item
+    itemComponentReferenceId:   {type: String},                                 // Component ref in Design
     itemName:                   {type: String},
     itemNameOld:                {type: String, defaultValue: 'NONE'},
     itemFeatureName:            {type: String, defaultValue: 'NONE'},

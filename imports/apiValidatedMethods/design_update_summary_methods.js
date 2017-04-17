@@ -15,13 +15,13 @@ export const refreshDesignUpdateSummary = new ValidatedMethod({
     name: 'designUpdateSummary.refreshDesignUpdateSummary',
 
     validate: new SimpleSchema({
-        designUpdateId:     {type: String}
+        userContext:     {type: Object, blackbox: true}
     }).validator(),
 
-    run({designUpdateId}){
+    run({userContext}){
 
         try {
-            DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(designUpdateId);
+            DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
         } catch (e) {
             console.log(e);
             throw new Meteor.Error(e.error, e.message)

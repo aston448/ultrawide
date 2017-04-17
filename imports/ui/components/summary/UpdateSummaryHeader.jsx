@@ -13,7 +13,7 @@ import {DesignUpdateSummaryType, ComponentType} from '../../../constants/constan
 // Bootstrap
 
 // REDUX services
-
+import {connect} from 'react-redux';
 
 // =====================================================================================================================
 
@@ -29,7 +29,7 @@ class UpdateSummaryHeader extends Component {
     }
 
     render(){
-        const {headerItem} = this.props;
+        const {headerItem, userContext} = this.props;
 
         let itemHeader = <div></div>;
         let item = <div></div>;
@@ -88,11 +88,14 @@ class UpdateSummaryHeader extends Component {
                 break;
         }
 
+        console.log("Rendering header item: " + itemHeader);
+
         return(
             <div className="summary-header-group">
                 {itemHeader}
                 <UpdateSummaryActionContainer params={{
-                    headerId: headerItem._id
+                    headerId: headerItem._id,
+                    userContext: userContext
                 }}/>
             </div>
         )
@@ -104,4 +107,11 @@ UpdateSummaryHeader.propTypes = {
     headerItem: PropTypes.object.isRequired
 };
 
-export default UpdateSummaryHeader;
+// Redux function which maps state from the store to specific props this component is interested in.
+function mapStateToProps(state) {
+    return {
+        userContext: state.currentUserItemContext
+    }
+}
+
+export default connect(mapStateToProps)(UpdateSummaryHeader);

@@ -321,7 +321,7 @@ class ClientDesignUpdateServices {
 
         // Load or refresh DU Summary data
         console.log('Calling update DU summary...');
-        ClientDesignUpdateSummary.getDesignUpdateSummary(newDesignUpdateId);
+        ClientDesignUpdateSummary.getDesignUpdateSummary(userContext);
 
         return newContext;
 
@@ -413,11 +413,11 @@ class ClientDesignUpdateServices {
 
     };
 
-    // User chose to refresh the Update Summary ------------------------------------------------------------------------
-    refreshSummary(designUpdateId){
-
-        ClientDesignUpdateSummary.getDesignUpdateSummary(designUpdateId);
-    }
+    // // User chose to refresh the Update Summary ------------------------------------------------------------------------
+    // refreshSummary(designUpdateId){
+    //
+    //     ClientDesignUpdateSummary.getDesignUpdateSummary(designUpdateId);
+    // }
 
 }
 

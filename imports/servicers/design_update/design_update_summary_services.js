@@ -44,6 +44,7 @@ class DesignUpdateSummaryServices {
                     summaryCategory:            designUpdateSummary.summaryCategory,
                     summaryType:                designUpdateSummary.summaryType,
                     itemType:                   designUpdateSummary.itemType,
+                    itemComponentReferenceId:   designUpdateSummary.itemComponentReferenceId,
                     itemName:                   designUpdateSummary.itemName,
                     itemNameOld:                designUpdateSummary.itemNameOld,
                     itemFeatureName:            designUpdateSummary.itemFeatureName,
@@ -59,13 +60,13 @@ class DesignUpdateSummaryServices {
         }
     };
 
-    recreateDesignUpdateSummaryData(designUpdateId){
+    recreateDesignUpdateSummaryData(userContext){
 
         if (Meteor.isServer) {
 
-            log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {}', designUpdateId);
+            log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {}', userContext.designUpdateId);
 
-            const designUpdate = DesignUpdates.findOne({_id: designUpdateId});
+            const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
             // If a DU has just been deleted there is nothing to refresh
             if(!designUpdate){
@@ -81,22 +82,22 @@ class DesignUpdateSummaryServices {
             if(designUpdate.summaryDataStale){
 
                 // Clear the data for this update
-                DesignUpdateSummary.remove({designUpdateId: designUpdateId});
+                DesignUpdateSummary.remove({designUpdateId: userContext.designUpdateId});
 
                 // Get all significant items in the update.  Anything added, removed or changed must be in scope.
                 const updateItems = DesignUpdateComponents.find({
-                    designUpdateId: designUpdateId,
+                    designUpdateId: userContext.designUpdateId,
                     scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                 });
 
-                let summaryCategory = '';
-                let parentItem = null;
-                let featureItem = null;
-                let headerId = 'NONE';
-                let testStatus = MashTestStatus.MASH_NOT_LINKED;
-
                 // Process new items
                 updateItems.forEach((item) => {
+
+                    let summaryCategory = '';
+                    let parentItem = null;
+                    let featureItem = null;
+                    let headerId = 'NONE';
+                    let testStatus = MashTestStatus.MASH_NOT_LINKED;
 
                     log((message) => console.log(message), LogLevel.DEBUG, 'Processing update item {}', item.componentNameNew);
 
@@ -130,13 +131,14 @@ class DesignUpdateSummaryServices {
                             componentType: ComponentType.DESIGN,
                             componentNameNew: design.designName,
                             componentIndexNew: 0,
+                            componentReferenceId: item.componentReferenceId
                         }
                     } else {
                         log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', parentItem.componentNameNew);
                     }
 
                     featureItem = DesignUpdateComponents.findOne({
-                        designUpdateId: designUpdateId,
+                        designUpdateId: userContext.designUpdateId,
                         componentReferenceId: item.componentFeatureReferenceIdNew
                     });
 
@@ -226,6 +228,8 @@ class DesignUpdateSummaryServices {
                                     testStatus = MashTestStatus.MASH_PASS;
                                 }
                             }
+                        } else {
+                            testStatus = MashTestStatus.MASH_NOT_LINKED;
                         }
                     }
 
@@ -237,7 +241,6 @@ class DesignUpdateSummaryServices {
                         // Add the action header item if not already existing
                         const actionHeader = DesignUpdateSummary.findOne({
                             designUpdateId: item.designUpdateId,
-                            summaryCategory: DesignUpdateSummaryCategory.SUMMARY_UPDATE_HEADER,
                             summaryType: headerSummaryType,
                             headerComponentId: item.componentParentIdNew
                         });
@@ -254,9 +257,10 @@ class DesignUpdateSummaryServices {
                             headerId = DesignUpdateSummary.insert({
                                 designVersionId: item.designVersionId,
                                 designUpdateId: item.designUpdateId,
-                                summaryCategory: DesignUpdateSummaryCategory.SUMMARY_UPDATE_HEADER,
+                                summaryCategory: summaryCategory,
                                 summaryType: headerSummaryType,
                                 itemType: parentItem.componentType,
+                                itemComponentReferenceId: parentItem.componentReferenceId,
                                 itemName: parentItem.componentNameNew,
                                 itemFeatureName: featureName,
                                 itemIndex: parentItem.componentIndexNew,
@@ -282,6 +286,7 @@ class DesignUpdateSummaryServices {
                             summaryCategory: summaryCategory,
                             summaryType: summaryType,
                             itemType: item.componentType,
+                            itemComponentReferenceId: item.componentReferenceId,
                             itemName: item.componentNameNew,
                             itemNameOld: item.componentNameOld,
                             itemParentType: parentItem.componentType,
@@ -295,7 +300,7 @@ class DesignUpdateSummaryServices {
                 });
 
                 // No longer stale
-                DesignUpdates.update({_id: designUpdateId}, {$set: {summaryDataStale: false}});
+                DesignUpdates.update({_id: userContext.designUpdateId}, {$set: {summaryDataStale: false}});
             }
         }
     }

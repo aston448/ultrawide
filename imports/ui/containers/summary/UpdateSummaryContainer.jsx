@@ -63,20 +63,31 @@ export class DesignUpdateSummaryList extends Component {
 
     render() {
 
-        const {addHeaders, removeHeaders, changeHeaders, moveHeaders, queryHeaders, userContext} = this.props;
-
-        //console.log("Rendering Update Summary with " + addHeaders.length + " additions and " + changeHeaders.length + " changes");
+        const {addOrgHeaders, addFncHeaders, removeHeaders, changeHeaders, moveHeaders, queryHeaders, userContext} = this.props;
 
         // Get correct window height
         const editorClass = this.getEditorClass();
 
-        let additions = <div></div>;
-        if(addHeaders.length > 0){
-            additions =
+        console.log("Render summary headrs with add org: " + addOrgHeaders.length + " and add fnc: " + addFncHeaders.length)
+
+        let orgAdditions = <div></div>;
+        if(addOrgHeaders.length > 0){
+            orgAdditions =
                 <div id="summaryAdditions" className="update-summary-change-container">
-                    <div className="update-summary-change-header change-add">Additions</div>
+                    <div className="update-summary-change-header change-add">Organisational Additions</div>
                     <div className="scroll-col">
-                        {this.renderChanges(addHeaders)}
+                        {this.renderChanges(addOrgHeaders)}
+                    </div>
+                </div>;
+        }
+
+        let fncAdditions = <div></div>;
+        if(addFncHeaders.length > 0){
+            fncAdditions =
+                <div id="summaryAdditions" className="update-summary-change-container">
+                    <div className="update-summary-change-header change-add">Functional Additions</div>
+                    <div className="scroll-col">
+                        {this.renderChanges(addFncHeaders)}
                     </div>
                 </div>;
         }
@@ -133,7 +144,8 @@ export class DesignUpdateSummaryList extends Component {
                         displayContext={DisplayContext.UPDATE_SUMMARY}
                     />
                     <div className={editorClass}>
-                        {additions}
+                        {orgAdditions}
+                        {fncAdditions}
                         {removals}
                         {changes}
                         {moves}
@@ -168,7 +180,8 @@ export class DesignUpdateSummaryList extends Component {
 }
 
 DesignUpdateSummaryList.propTypes = {
-    addHeaders:     PropTypes.array.isRequired,
+    addOrgHeaders:  PropTypes.array.isRequired,
+    addFncHeaders:  PropTypes.array.isRequired,
     removeHeaders:  PropTypes.array.isRequired,
     changeHeaders:  PropTypes.array.isRequired,
     moveHeaders:    PropTypes.array.isRequired,
@@ -185,6 +198,12 @@ function mapStateToProps(state) {
 // Default export including REDUX
 export default DesignUpdateSummaryContainer = createContainer(({params}) => {
 
-    return ClientDesignUpdateSummary.getDesignUpdateSummaryHeaders(params.designUpdateId);
+    if(params.userContext.workPackageId !== 'NONE'){
+        // Show summary for current WP only
+        return ClientDesignUpdateSummary.getDesignUpdateSummaryHeadersForWp(params.userContext)
+    } else {
+        // Summary for whole update
+        return ClientDesignUpdateSummary.getDesignUpdateSummaryHeaders(params.userContext.designUpdateId);
+    }
 
 }, connect(mapStateToProps)(DesignUpdateSummaryList));
