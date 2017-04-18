@@ -20,12 +20,12 @@ export const refreshDesignUpdateSummary = new ValidatedMethod({
 
     run({userContext}){
 
-        try {
+        //try {
             DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
-        } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
-        }
+        //} catch (e) {
+       //     console.log(e);
+       //     throw new Meteor.Error(e.error, e.details)
+       // }
     }
 
 });
