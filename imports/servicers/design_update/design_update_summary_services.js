@@ -99,6 +99,7 @@ class DesignUpdateSummaryServices {
                     let featureItem = null;
                     let headerId = 'NONE';
                     let testStatus = MashTestStatus.MASH_NOT_LINKED;
+                    let ignoreItem = false;
 
                     log((message) => console.log(message), LogLevel.DEBUG, 'Processing update item {}', item.componentNameNew);
 
@@ -116,10 +117,10 @@ class DesignUpdateSummaryServices {
                             summaryCategory = DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL;
                     }
 
-                    // Get its parent - look in the DV as may not be in the DU
-                    parentItem = DesignVersionComponents.findOne({
-                        designVersionId: item.designVersionId,
-                        componentReferenceId: item.componentParentReferenceIdNew
+                    // Get its parent
+                    parentItem = DesignUpdateComponents.findOne({
+                        designUpdateId: item.designUpdateId,
+                        _id: item.componentParentIdNew
                     });
 
                     log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', item.componentNameNew);
@@ -127,178 +128,187 @@ class DesignUpdateSummaryServices {
                     // If no parent must be a new Application so create a dummy project item as a placeholder
                     if(!parentItem){
 
-                        const design = Designs.findOne({_id: item.designId});
+                        if(item.componentType !== ComponentType.APPLICATION){
+                            // Anything that is not an Application and has no parent is not fully formed yet so skip this update
+                            // Its likely that two updates have both triggered a refresh of the data
+                            ignoreItem = true;
+                        } else {
+                            const design = Designs.findOne({_id: item.designId});
 
-                        console.log("Item " + item.componentType + " - " + item.componentNameNew + "has no parent. Design is " + design);
-                        parentItem = {
-                            componentType: ComponentType.DESIGN,
-                            componentNameNew: design.designName,
-                            componentIndexNew: 0,
-                            componentReferenceId: item.componentReferenceId
+                            console.log("Item " + item.componentType + " - " + item.componentNameNew + "has no parent. Design is " + design);
+                            parentItem = {
+                                componentType: ComponentType.DESIGN,
+                                componentNameNew: design.designName,
+                                componentIndexNew: 0,
+                                componentReferenceId: item.componentReferenceId
+                            }
                         }
                     } else {
                         log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', parentItem.componentNameNew);
                     }
 
-                    featureItem = DesignUpdateComponents.findOne({
-                        designUpdateId: userContext.designUpdateId,
-                        componentReferenceId: item.componentFeatureReferenceIdNew
-                    });
+                    if(!ignoreItem) {
 
-                    if(featureItem){
-                        featureName = featureItem.componentNameNew;
-                    }
+                        featureItem = DesignUpdateComponents.findOne({
+                            designUpdateId: userContext.designUpdateId,
+                            componentReferenceId: item.componentFeatureReferenceIdNew
+                        });
 
-                    let headerSummaryType = '';
-                    let summaryType = '';
-                    let recordChange = false;
+                        if (featureItem) {
+                            featureName = featureItem.componentNameNew;
+                        }
 
-                    // Determine the summary action --------------------------------------------------------------------
+                        let headerSummaryType = '';
+                        let summaryType = '';
+                        let recordChange = false;
 
-                    if(item.isNew){
+                        // Determine the summary action --------------------------------------------------------------------
 
-                        // An added item...
-                        headerSummaryType = DesignUpdateSummaryType.SUMMARY_ADD_TO;
-                        summaryType = DesignUpdateSummaryType.SUMMARY_ADD;
-                        recordChange = true;
+                        if (item.isNew) {
 
-                    } else {
-
-                        // Not new...
-                        if(item.isRemoved){
-
-                            // A removed item...
-                            headerSummaryType = DesignUpdateSummaryType.SUMMARY_REMOVE_FROM;
-                            summaryType = DesignUpdateSummaryType.SUMMARY_REMOVE;
+                            // An added item...
+                            headerSummaryType = DesignUpdateSummaryType.SUMMARY_ADD_TO;
+                            summaryType = DesignUpdateSummaryType.SUMMARY_ADD;
                             recordChange = true;
 
                         } else {
 
-                            if(item.isChanged || item.isTextChanged){
+                            // Not new...
+                            if (item.isRemoved) {
 
-                                // A modified item
-                                headerSummaryType = DesignUpdateSummaryType.SUMMARY_CHANGE_IN;
-                                summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
+                                // A removed item...
+                                headerSummaryType = DesignUpdateSummaryType.SUMMARY_REMOVE_FROM;
+                                summaryType = DesignUpdateSummaryType.SUMMARY_REMOVE;
                                 recordChange = true;
 
                             } else {
 
-                                if(item.isMoved){
+                                if (item.isChanged || item.isTextChanged) {
 
-                                    // A moved item
-                                    headerSummaryType = DesignUpdateSummaryType.SUMMARY_MOVE_FROM;
-                                    summaryType = DesignUpdateSummaryType.SUMMARY_MOVE;
+                                    // A modified item
+                                    headerSummaryType = DesignUpdateSummaryType.SUMMARY_CHANGE_IN;
+                                    summaryType = DesignUpdateSummaryType.SUMMARY_CHANGE;
                                     recordChange = true;
 
                                 } else {
 
-                                    // An in scope item that is none of the above - is a query only
-                                    // IF it is a Scenario.  Otherwise ignore it as a scoped item to add other stuff to
-                                    if (item.componentType === ComponentType.SCENARIO){
-                                        headerSummaryType = DesignUpdateSummaryType.SUMMARY_QUERY_IN;
-                                        summaryType = DesignUpdateSummaryType.SUMMARY_QUERY;
+                                    if (item.isMoved) {
+
+                                        // A moved item
+                                        headerSummaryType = DesignUpdateSummaryType.SUMMARY_MOVE_FROM;
+                                        summaryType = DesignUpdateSummaryType.SUMMARY_MOVE;
                                         recordChange = true;
+
+                                    } else {
+
+                                        // An in scope item that is none of the above - is a query only
+                                        // IF it is a Scenario.  Otherwise ignore it as a scoped item to add other stuff to
+                                        if (item.componentType === ComponentType.SCENARIO) {
+                                            headerSummaryType = DesignUpdateSummaryType.SUMMARY_QUERY_IN;
+                                            summaryType = DesignUpdateSummaryType.SUMMARY_QUERY;
+                                            recordChange = true;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    // If the item is a Scenario - get its test status
-                    if(item.componentType === ComponentType.SCENARIO){
+                        // If the item is a Scenario - get its test status
+                        if (item.componentType === ComponentType.SCENARIO) {
 
-                        const testSummary = UserDevTestSummaryData.findOne({
-                            designVersionId: item.designVersionId,
-                            scenarioReferenceId: item.componentReferenceId
-                        });
+                            const testSummary = UserDevTestSummaryData.findOne({
+                                designVersionId: item.designVersionId,
+                                scenarioReferenceId: item.componentReferenceId
+                            });
 
-                        if(testSummary){
+                            if (testSummary) {
 
-                            // Any fails its bad
-                            if (
-                                testSummary.accTestStatus === MashTestStatus.MASH_FAIL ||
-                                testSummary.intTestStatus === MashTestStatus.MASH_FAIL ||
-                                testSummary.unitTestFailCount > 0
-                            ){
-                                testStatus = MashTestStatus.MASH_FAIL;
-                            } else {
-                                // No fails so any passes is good
+                                // Any fails its bad
                                 if (
-                                    testSummary.accTestStatus === MashTestStatus.MASH_PASS ||
-                                    testSummary.intTestStatus === MashTestStatus.MASH_PASS ||
-                                    testSummary.unitTestPassCount > 0
-                                ){
-                                    testStatus = MashTestStatus.MASH_PASS;
+                                    testSummary.accTestStatus === MashTestStatus.MASH_FAIL ||
+                                    testSummary.intTestStatus === MashTestStatus.MASH_FAIL ||
+                                    testSummary.unitTestFailCount > 0
+                                ) {
+                                    testStatus = MashTestStatus.MASH_FAIL;
+                                } else {
+                                    // No fails so any passes is good
+                                    if (
+                                        testSummary.accTestStatus === MashTestStatus.MASH_PASS ||
+                                        testSummary.intTestStatus === MashTestStatus.MASH_PASS ||
+                                        testSummary.unitTestPassCount > 0
+                                    ) {
+                                        testStatus = MashTestStatus.MASH_PASS;
+                                    }
                                 }
+                            } else {
+                                testStatus = MashTestStatus.MASH_NOT_LINKED;
                             }
-                        } else {
-                            testStatus = MashTestStatus.MASH_NOT_LINKED;
                         }
-                    }
 
-                    // Populate ----------------------------------------------------------------------------------------
+                        // Populate ----------------------------------------------------------------------------------------
 
-                    // If we want to add this item
-                    if(recordChange) {
+                        // If we want to add this item
+                        if (recordChange) {
 
-                        // Add the action header item if not already existing
-                        const actionHeader = DesignUpdateSummary.findOne({
-                            designUpdateId: item.designUpdateId,
-                            summaryType: headerSummaryType,
-                            headerComponentId: item.componentParentIdNew
-                        });
+                            // Add the action header item if not already existing
+                            const actionHeader = DesignUpdateSummary.findOne({
+                                designUpdateId: item.designUpdateId,
+                                summaryType: headerSummaryType,
+                                headerComponentId: item.componentParentIdNew
+                            });
 
 
-                        if (!actionHeader) {
+                            if (!actionHeader) {
 
-                            // Get the name that will be prominent in the header so we can sort by it
-                            let itemHeaderName = parentItem.componentNameNew;
+                                // Get the name that will be prominent in the header so we can sort by it
+                                let itemHeaderName = parentItem.componentNameNew;
 
-                            if(parentItem.componentType === ComponentType.FEATURE_ASPECT){
-                                itemHeaderName = featureName;
+                                if (parentItem.componentType === ComponentType.FEATURE_ASPECT) {
+                                    itemHeaderName = featureName;
+                                }
+                                headerId = DesignUpdateSummary.insert({
+                                    designVersionId: item.designVersionId,
+                                    designUpdateId: item.designUpdateId,
+                                    summaryCategory: summaryCategory,
+                                    summaryType: headerSummaryType,
+                                    itemType: parentItem.componentType,
+                                    itemComponentReferenceId: parentItem.componentReferenceId,
+                                    itemName: parentItem.componentNameNew,
+                                    itemFeatureName: featureName,
+                                    itemIndex: parentItem.componentIndexNew,
+                                    headerComponentId: item.componentParentIdNew,
+                                    itemHeaderName: itemHeaderName
+                                });
+                            } else {
+                                headerId = actionHeader._id;
                             }
-                            headerId = DesignUpdateSummary.insert({
+
+                            let scenarioTestStatus = 'NONE';
+
+                            if (item.componentType === ComponentType.SCENARIO) {
+                                scenarioTestStatus = testStatus;
+                            }
+
+                            log((message) => console.log(message), LogLevel.DEBUG, 'Adding ' + summaryType + ' item with test status ' + scenarioTestStatus);
+
+                            // Add the item
+                            DesignUpdateSummary.insert({
                                 designVersionId: item.designVersionId,
                                 designUpdateId: item.designUpdateId,
                                 summaryCategory: summaryCategory,
-                                summaryType: headerSummaryType,
-                                itemType: parentItem.componentType,
-                                itemComponentReferenceId: parentItem.componentReferenceId,
-                                itemName: parentItem.componentNameNew,
+                                summaryType: summaryType,
+                                itemType: item.componentType,
+                                itemComponentReferenceId: item.componentReferenceId,
+                                itemName: item.componentNameNew,
+                                itemNameOld: item.componentNameOld,
+                                itemParentType: parentItem.componentType,
+                                itemParentName: parentItem.componentNameNew,
                                 itemFeatureName: featureName,
-                                itemIndex: parentItem.componentIndexNew,
-                                headerComponentId: item.componentParentIdNew,
-                                itemHeaderName: itemHeaderName
+                                itemHeaderId: headerId,
+                                itemIndex: item.componentIndexNew,
+                                scenarioTestStatus: scenarioTestStatus
                             });
-                        } else {
-                            headerId = actionHeader._id;
                         }
-
-                        let scenarioTestStatus = 'NONE';
-
-                        if(item.componentType === ComponentType.SCENARIO){
-                            scenarioTestStatus = testStatus;
-                        }
-
-                        log((message) => console.log(message), LogLevel.DEBUG, 'Adding ' + summaryType + ' item with test status ' + scenarioTestStatus);
-
-                        // Add the item
-                        DesignUpdateSummary.insert({
-                            designVersionId: item.designVersionId,
-                            designUpdateId: item.designUpdateId,
-                            summaryCategory: summaryCategory,
-                            summaryType: summaryType,
-                            itemType: item.componentType,
-                            itemComponentReferenceId: item.componentReferenceId,
-                            itemName: item.componentNameNew,
-                            itemNameOld: item.componentNameOld,
-                            itemParentType: parentItem.componentType,
-                            itemParentName: parentItem.componentNameNew,
-                            itemFeatureName: featureName,
-                            itemHeaderId: headerId,
-                            itemIndex: item.componentIndexNew,
-                            scenarioTestStatus: scenarioTestStatus
-                        });
                     }
                 });
 

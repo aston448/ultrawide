@@ -146,7 +146,7 @@ class DesignUpdateComponentServices{
                     );
                 }
 
-                // Peer components are also added in parent scope if not already added so that new component can be placed by user
+                // Peer components are also added in peer scope if not already added so that new component can be placed by user
                 DesignUpdateComponentModules.addComponentPeers(designVersionId, designUpdateId, parentRefId, componentType, newUpdateComponentId);
 
                 // And the Design Update Summary is now stale
