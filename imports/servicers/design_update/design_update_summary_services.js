@@ -3,6 +3,7 @@
 import { Designs }                  from '../../collections/design/designs.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
 import { DesignUpdateSummary }      from '../../collections/design_update/design_update_summary.js';
+import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { UserDevTestSummaryData }   from '../../collections/dev/user_dev_test_summary_data.js';
 
@@ -115,9 +116,10 @@ class DesignUpdateSummaryServices {
                             summaryCategory = DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL;
                     }
 
-                    // Get its parent
-                    parentItem = DesignUpdateComponents.findOne({
-                        _id: item.componentParentIdNew
+                    // Get its parent - look in the DV as may not be in the DU
+                    parentItem = DesignVersionComponents.findOne({
+                        designVersionId: item.designVersionId,
+                        componentReferenceId: item.componentParentReferenceIdNew
                     });
 
                     log((message) => console.log(message), LogLevel.DEBUG, 'Parent item is {}', item.componentNameNew);
@@ -126,6 +128,7 @@ class DesignUpdateSummaryServices {
                     if(!parentItem){
 
                         const design = Designs.findOne({_id: item.designId});
+
                         console.log("Item " + item.componentType + " - " + item.componentNameNew + "has no parent. Design is " + design);
                         parentItem = {
                             componentType: ComponentType.DESIGN,
