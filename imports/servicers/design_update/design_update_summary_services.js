@@ -126,7 +126,7 @@ class DesignUpdateSummaryServices {
                     if(!parentItem){
 
                         const design = Designs.findOne({_id: item.designId});
-
+                        console.log("Item " + item.componentType + " - " + item.componentNameNew + "has no parent. Design is " + design);
                         parentItem = {
                             componentType: ComponentType.DESIGN,
                             componentNameNew: design.designName,
