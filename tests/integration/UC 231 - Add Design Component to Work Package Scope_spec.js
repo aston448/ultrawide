@@ -804,9 +804,10 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate2');
 
-        // Edit Update - add a Scenario that is not in DU1
+        // Edit Update - add a new scenario so others in peer scope
         DesignUpdateActions.designerEditsUpdate('DesignUpdate2');
-        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario7');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // Add another WP based on the update
         DesignActions.managerWorksOnDesign('Design1');
@@ -816,7 +817,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage2');
 
 
-        // Execute - Try to add a non-Update item to the scope
+        // Execute - Try to add a peer scope item to the scope
         const expectation = {success: false, message: WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE};
         WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario1', expectation);
 
