@@ -280,4 +280,25 @@ describe('UC 541 - Remove Design Item from Update Scope', function(){
         // Verify now in parent scope
         expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application1'));
     });
+
+    it('When a Design Update Component is removed from Design Update Scope it reverts to peer scope if its peers are in peer scope', function(){
+
+        // Setup  Add Feature1 to scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        // Add a new Feature aspect to Feature 1
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateFeature('Section1', 'Feature1');
+        // Check - Actions should now be in peer scope
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+        // Add Scenario1 (in Actions) to DU scope
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        // Check - Actions is now in Parent scope
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+
+        // Execute - remove Scenario1 from scope again
+        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
+
+        // Verify - Actions should be ack in peer scope
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+    });
 });

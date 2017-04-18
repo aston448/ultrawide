@@ -100,7 +100,7 @@ class UpdateSummaryItem extends Component {
                 iconClassName += ' item-old';
                 break;
             case DesignUpdateSummaryType.SUMMARY_CHANGE:
-                if(updateSummaryData.itemNameOld != updateSummaryData.itemName){
+                if(updateSummaryData.itemNameOld !== updateSummaryData.itemName){
                     itemHeader =
                         <div>
                             <span className="summary-modify">MODIFY:</span>
@@ -119,7 +119,7 @@ class UpdateSummaryItem extends Component {
                 }
                 break;
             case DesignUpdateSummaryType.SUMMARY_CHANGE_IN:
-                if(updateSummaryData.itemNameOld != updateSummaryData.itemName){
+                if(updateSummaryData.itemNameOld !== updateSummaryData.itemName){
                     itemHeader =
                         <div>
                             <span className="summary-modify">MODIFY:</span>

@@ -9,7 +9,7 @@ import { UserIntTestResults }           from '../../collections/dev/user_int_tes
 import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
 
 // Ultrawide services
-import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
+import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
@@ -40,7 +40,8 @@ class TestSummaryServices {
         const designScenarios = DesignVersionComponents.find({
             designId: userContext.designId,
             designVersionId: userContext.designVersionId,
-            componentType: ComponentType.SCENARIO
+            componentType: ComponentType.SCENARIO,
+            updateMergeStatus : {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
         }).fetch();
 
 

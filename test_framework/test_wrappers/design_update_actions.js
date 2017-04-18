@@ -117,10 +117,10 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.removeDesignUpdate',  updateName, RoleType.MANAGER, 'miles', expectation);
     }
 
-    // Refresh Summary
-    designerRefreshesUpdateSummary(){
-        server.call('testDesignUpdates.refreshUpdateSummary', 'gloria');
-    }
+    // // Refresh Summary
+    // designerRefreshesUpdateSummary(){
+    //     server.call('testDesignUpdates.refreshUpdateSummary', 'gloria');
+    // }
 
 
 }

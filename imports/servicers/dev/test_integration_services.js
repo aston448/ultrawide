@@ -2,19 +2,13 @@
 import fs from 'fs';
 
 // Ultrawide Collections
-import {DesignVersionComponents}               from '../../collections/design/design_version_components.js';
-import {DesignUpdateComponents}         from '../../collections/design_update/design_update_components.js';
-import {FeatureBackgroundSteps}         from '../../collections/design/feature_background_steps.js';
-import {ScenarioSteps}                  from '../../collections/design/scenario_steps.js';
-import {WorkPackages}                   from '../../collections/work/work_packages.js';
-import {WorkPackageComponents}          from '../../collections/work/work_package_components.js';
-import {UserDevFeatures}                from '../../collections/dev/user_dev_features.js';
-import {UserDevFeatureScenarios}        from '../../collections/dev/user_dev_feature_scenarios.js';
-import {UserDevFeatureScenarioSteps}    from '../../collections/dev/user_dev_feature_scenario_steps.js';
+import {DesignUpdates}                  from '../../collections/design_update/design_updates.js';
 //import {UserAccTestMashData}          from '../../collections/dev/user_acc_test_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 
 // Ultrawide Services
+import DesignUpdateSummaryServices      from '../../servicers/design_update/design_update_summary_services.js';
+
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
     UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, TestRunner, ViewOptionType, LogLevel} from '../../constants/constants.js';
 import {log}                            from '../../common/utils.js';
@@ -22,7 +16,6 @@ import {log}                            from '../../common/utils.js';
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from '../design/scenario_services.js';
 import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
-import MashFeatureFileModules           from '../../service_modules/dev/mash_feature_file_service_modules.js';
 import TestSummaryServices              from '../../servicers/dev/test_summary_services.js';
 import ChimpMochaTestServices           from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
@@ -106,6 +99,16 @@ class TestIntegrationServices{
                 // }
 
             }
+
+            // Mark design update summary data as stale so that results are updated
+            DesignUpdates.update(
+                {_id: userContext.designUpdateId},
+                {
+                    $set: {summaryDataStale: true}
+                }
+            );
+
+            DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
 
         }
     };

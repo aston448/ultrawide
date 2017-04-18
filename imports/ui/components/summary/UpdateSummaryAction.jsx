@@ -51,28 +51,32 @@ class UpdateSummaryAction extends Component {
                     <div className="summary-action">
                         <InputGroup>
                             <InputGroup.Addon>
-                                <div className={testStatus}><Glyphicon glyph="th-large"/></div>
+                                <div className="summary-icon invisible"><Glyphicon glyph="th-large"/></div>
                             </InputGroup.Addon>
-                            <span className="summary-item-type item-old">OLD:</span>
-                            <span className="summary-item">{actionItem.itemNameOld}</span>
+                            <InputGroup.Addon>
+                                <div className="summary-item-type item-old">FROM:</div>
+                            </InputGroup.Addon>
+                            <div className="summary-item">{actionItem.itemNameOld}</div>
                         </InputGroup>
                         <InputGroup>
                             <InputGroup.Addon>
                                 <div className={testStatus}><Glyphicon glyph="th-large"/></div>
                             </InputGroup.Addon>
-                            <span className="summary-item-type item-new">NEW:</span>
-                            <span className="summary-item">{actionItem.itemName}</span>
+                            <InputGroup.Addon>
+                                <div className="summary-item-type item-new">TO:</div>
+                            </InputGroup.Addon>
+                            <div className="summary-item">{actionItem.itemName}</div>
                         </InputGroup>
                     </div>
             } else {
                 item =
                     <div className="summary-action">
                         <InputGroup>
-                            <span className="summary-item-type item-old">OLD:</span>
+                            <span className="summary-item-type item-old">FROM:</span>
                             <span className="summary-item">{actionItem.itemNameOld}</span>
                         </InputGroup>
                         <InputGroup>
-                            <span className="summary-item-type item-new">NEW:</span>
+                            <span className="summary-item-type item-new">TO:</span>
                             <span className="summary-item">{actionItem.itemName}</span>
                         </InputGroup>
                     </div>

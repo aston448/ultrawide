@@ -45,6 +45,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       true,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -57,7 +59,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
         it('is shown editable in edit', () => {
@@ -70,6 +72,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       true,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -78,11 +82,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
-            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 1, 'Details Edit pane is not visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
         it('is shown view only in edit with view mode', () => {
@@ -95,6 +99,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       true,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -107,7 +113,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
     });
 
@@ -123,6 +129,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -135,7 +143,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
         it('is not shown in edit', () => {
@@ -148,6 +156,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -156,11 +166,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
-            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
         it('is not shown in edit with view mode', () => {
@@ -173,6 +183,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -185,7 +197,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
     });
 
@@ -201,6 +213,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    true,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -226,6 +240,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    true,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -234,7 +250,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
-            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
@@ -251,6 +267,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    true,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -279,6 +297,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -291,7 +311,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
         it('is not shown in edit', () => {
@@ -304,6 +324,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -312,11 +334,11 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
-            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
         it('is not shown in edit with view mode', () => {
@@ -329,6 +351,8 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -341,257 +365,937 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
     });
 
-    describe('When the Domain Dictionary is hidden the Design Update Summary is visible', () => {
+    describe('The Design Update Summary pane may be shown for a Design Update', () => {
 
-        it('summary shown if dictionary hidden in view', () => {
+        it('is shown in view', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
+                updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting UPDATE VIEW | DETAILS VIEW | UPDATE SUMMARY
+            // Expecting UPDATE VIEW | DOMAIN DICTIONARY
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
             chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
-            chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
             chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
         });
 
-        it('summary shown if dictionary hidden in edit', () => {
+        it('is shown in edit', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
+                updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DETAILS EDIT | UPDATE SUMMARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DOMAIN DICTIONARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
-            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
-            chai.assert.equal(item.find('#detailsPaneEdit').length, 1, 'Details Edit pane is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
+        });
+
+        it('is shown in edit with view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting UPDATE VIEW | DOMAIN DICTIONARY
+            chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is not visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
             chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
             chai.assert.equal(item.find('#updateSummary').length, 1, 'Update summary is not visible');
         });
     });
 
-    describe('When the Domain Dictionary is showing the Design Update Summary is hidden', () => {
+    describe('The Design Update Summary pane may be hidden for a Design Update', () => {
 
-        it('summary not shown if dictionary visible in view', () => {
+        it('is not shown in view', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    true,
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting UPDATE VIEW | DETAILS VIEW | DICTIONARY
+            // Expecting UPDATE VIEW | UPDATE SUMMARY
             chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
             chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
             chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
             chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
-            chai.assert.equal(item.find('#detailsPaneView').length, 1, 'Details view is not visible');
-            chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
             chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
 
-        it('summary not shown if dictionary visible in edit', () => {
+        it('is not shown in edit', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    true,
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DETAILS EDIT | DICTIONARY
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | UPDATE SUMMARY
+            chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+
+        it('is not shown in edit with view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting UPDATE VIEW | UPDATE SUMMARY
+            chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+    });
+
+    describe('The working Design Version pane may be shown for a Design Update', () => {
+
+        it('is shown in view', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting UPDATE VIEW | DOMAIN DICTIONARY
+            chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+
+        it('is shown in edit', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | DOMAIN DICTIONARY
             chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
             chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
             chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
             chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
-            chai.assert.equal(item.find('#detailsPaneEdit').length, 1, 'Details Edit pane is not visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
             chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
-            chai.assert.equal(item.find('#domainDictionary').length, 1, 'Domain Dictionary is not visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+
+        it('is shown in edit with view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting UPDATE VIEW | DOMAIN DICTIONARY
+            chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 1, 'Working view is not visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
             chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
         });
     });
+
+    describe('The working Design Version pane may be hidden for a Design Update', () => {
+
+        it('is not shown in view', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting UPDATE VIEW | UPDATE SUMMARY
+            chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+
+        it('is not shown in edit', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting SCOPE | UPDATE EDIT | WORKING VERSION | UPDATE SUMMARY
+            chai.assert.equal(item.find('#scopePane').length, 1, 'Scope is not visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 1, 'Edit pane is not visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 0, 'Update view is visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+
+        it('is not shown in edit with view mode', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            // No extra stuff selected
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            // Expecting UPDATE VIEW | UPDATE SUMMARY
+            chai.assert.equal(item.find('#scopePane').length, 0, 'Scope is visible');
+            chai.assert.equal(item.find('#editorPaneEdit').length, 0, 'Edit pane is visible');
+            chai.assert.equal(item.find('#editorPaneView').length, 1, 'Update view is not visible');
+            chai.assert.equal(item.find('#editorPaneWorking').length, 0, 'Working view is visible');
+            chai.assert.equal(item.find('#detailsPaneEdit').length, 0, 'Details Edit pane is visible');
+            chai.assert.equal(item.find('#detailsPaneView').length, 0, 'Details view is visible');
+            chai.assert.equal(item.find('#domainDictionary').length, 0, 'Domain Dictionary is visible');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update summary is visible');
+        });
+    });
+
+    // describe('The Test Summary may be displayed on the Scope pane for a Design Update', function(){
+    //
+    //     it('is displayed in edit mode', function(){
+    //
+    //         const mode = ViewMode.MODE_EDIT;
+    //         const view = ViewType.DESIGN_UPDATE_EDIT;
+    //
+    //         // No extra stuff selected
+    //         const viewOptions = {
+    //             updateDetailsVisible:       false,
+    //             updateDomainDictVisible:    false,
+    //             updateTestSummaryVisible:   true,
+    //             updateSummaryVisible:       false,
+    //             updateProgressVisible:      false
+    //         };
+    //
+    //         const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+    //
+    //         const targets = item.find('DesignComponentTarget');
+    //         let testSummary = false;
+    //         targets.forEach((target) => {
+    //             if(target.props.testSummary){
+    //                 testSummary = true;
+    //             }
+    //         });
+    //
+    //         chai.assert.isTrue(testSummary, 'Expected test summary to be true');
+    //     });
+    //
+    //     it('is displayed in edit with view mode', function(){
+    //
+    //         const mode = ViewMode.MODE_VIEW;
+    //         const view = ViewType.DESIGN_UPDATE_EDIT;
+    //
+    //         // No extra stuff selected
+    //         const viewOptions = {
+    //             updateDetailsVisible:       false,
+    //             updateDomainDictVisible:    false,
+    //             updateTestSummaryVisible:   true,
+    //             updateSummaryVisible:       false,
+    //             updateProgressVisible:      false
+    //         };
+    //
+    //         const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+    //
+    //         const targets = item.find('DropTarget(DesignComponentTarget)');
+    //         console.log("found " + targets.length + " targets")
+    //         let testSummary = false;
+    //         targets.forEach((target) => {
+    //             if(target.props.testSummary){
+    //                 testSummary = true;
+    //             }
+    //         });
+    //
+    //         chai.assert.isTrue(testSummary, 'Expected test summary to be true');
+    //     });
+    //
+    //     it('is displayed in view', function(){
+    //
+    //         const mode = ViewMode.MODE_VIEW;
+    //         const view = ViewType.DESIGN_UPDATE_VIEW;
+    //
+    //         // No extra stuff selected
+    //         const viewOptions = {
+    //             updateDetailsVisible:       false,
+    //             updateDomainDictVisible:    false,
+    //             updateTestSummaryVisible:   true,
+    //             updateSummaryVisible:       false,
+    //             updateProgressVisible:      false
+    //         };
+    //
+    //         const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+    //
+    //         const targets = item.find('DesignComponentTarget');
+    //         let testSummary = false;
+    //         targets.forEach((target) => {
+    //             if(target.props.testSummary){
+    //                 testSummary = true;
+    //             }
+    //         });
+    //
+    //         chai.assert.isTrue(testSummary, 'Expected test summary to be true');
+    //     });
+    // });
 
     describe('The width of each Design Update pane changes to accommodate the number of panes displayed', () => {
 
-        it('in view with no details, design takes up half the screen', () => {
+        // View mode ---------------------------------------------------------------------------------------------------
+
+        it('view: VIEW:  6 ', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
-            // No extra stuff selected
             const viewOptions = {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
-            chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
 
-            chai.assert.equal(item.find('#designCol').props().md, 6, 'Expecting width 6 for Design');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 6, 'Expecting width 6 for Summary');
+            chai.assert.equal(item.find('#viewCol').props().md, 6, 'Expecting width 6 for Update view');
         });
 
-        it('in view with details, design takes up a third of the screen', () => {
+        it('view: VIEW + TEST SUMM:  12 ', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
-            // No extra stuff selected
-            const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
-            };
-
-            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
-
-            chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
-            chai.assert.equal(item.find('#detailsCol').length, 1, 'Details not found');
-            chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
-
-            chai.assert.equal(item.find('#designCol').props().md, 4, 'Expecting width 4 for Design');
-            chai.assert.equal(item.find('#detailsCol').props().md, 4, 'Expecting width 4 for Details');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 4, 'Expecting width 4 for Summary');
-        });
-
-        it('in edit with no details, scope and design take up a third of the screen each', () => {
-
-            const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_UPDATE_EDIT;
-
-            // No extra stuff selected
-            const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
-            };
-
-            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
-
-            chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope not found');
-            chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
-            chai.assert.equal(item.find('#workingCol').length, 1, 'Working not found');
-            chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
-
-            chai.assert.equal(item.find('#scopeCol').props().md, 3, 'Expecting width 3 for Scope');
-            chai.assert.equal(item.find('#designCol').props().md, 3, 'Expecting width 3 for Design');
-            chai.assert.equal(item.find('#workingCol').props().md, 3, 'Expecting width 3 for Working');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 3, 'Expecting width 3 for Summary');
-        });
-
-        it('in edit with details scope, design and details take up a quarter of the screen each', () => {
-
-            const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_UPDATE_EDIT;
-
-            // No extra stuff selected
-            const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
-            };
-
-            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
-
-            chai.assert.equal(item.find('#scopeCol').length, 1, 'Scope not found');
-            chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
-            chai.assert.equal(item.find('#workingCol').length, 1, 'Working not found');
-            chai.assert.equal(item.find('#detailsCol').length, 1, 'Details not found');
-            chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
-
-            chai.assert.equal(item.find('#scopeCol').props().md, 2, 'Expecting width 2 for Design');
-            chai.assert.equal(item.find('#designCol').props().md, 3, 'Expecting width 3 for Design');
-            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Working');
-            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Details');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 3, 'Expecting width 3 for Summary');
-        });
-
-        it('in view with test summary, design takes up two thirds of screen', () => {
-
-            const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_UPDATE_VIEW;
-
-            // No extra stuff selected
             const viewOptions = {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   true,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
-            chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
 
-            chai.assert.equal(item.find('#designCol').props().md, 8, 'Expecting width 4 for Design');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 4, 'Expecting width 4 for Summary');
+            chai.assert.equal(item.find('#viewCol').props().md, 12, 'Expecting width 12 for Update view with test summary');
         });
 
-        it('in view with test summary and details, design takes up half of screen', () => {
+        it('view: VIEW | DETAILS:  6 | 6 ', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
-            // No extra stuff selected
             const viewOptions = {
                 updateDetailsVisible:       true,
                 updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            chai.assert.equal(item.find('#designCol').length, 1, 'Design not found');
-            chai.assert.equal(item.find('#detailsCol').length, 1, 'Details not found');
-            chai.assert.equal(item.find('#dictSummCol').length, 1, 'Summary not found');
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
 
-            chai.assert.equal(item.find('#designCol').props().md, 6, 'Expecting width 4 for Design');
-            chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 4 for Details');
-            chai.assert.equal(item.find('#dictSummCol').props().md, 3, 'Expecting width 4 for Summary');
+            chai.assert.equal(item.find('#viewCol').props().md, 6, 'Expecting width 6 for Update view');
+            chai.assert.equal(item.find('#detailsCol').props().md, 6, 'Expecting width 6 for Update details');
         });
+
+        it('view: VIEW + TEST SUMM | DETAILS:  8 | 4 ', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 8, 'Expecting width 6 for Update view with test summary');
+            chai.assert.equal(item.find('#detailsCol').props().md, 4, 'Expecting width 6 for Update details');
+        });
+
+        it('view: VIEW | DETAILS | WORKING :  4 | 4 | 4 ', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 4, 'Expecting width 4 for Update view');
+            chai.assert.equal(item.find('#detailsCol').props().md, 4, 'Expecting width 4 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 4, 'Expecting width 4 for Update working view');
+        });
+
+        it('view: VIEW + TEST SUMM | DETAILS | WORKING:  6 | 3 | 3 ', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 6, 'Expecting width 6 for Update view with test summary');
+            chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 3 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 3, 'Expecting width 3 for Update working view');
+        });
+
+        it('view: VIEW | DETAILS | WORKING | SUMMARY :  3 | 3 | 3 | 3 ', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 3, 'Expecting width 3 for Update view');
+            chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 3 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 3, 'Expecting width 3 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 3, 'Expecting width 3 for Update summary');
+        });
+
+        it('view: VIEW + TEST SUMM | DETAILS | WORKING | SUMMARY:  6 | 2 | 2 | 2', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 6, 'Expecting width 6 for Update view with test summary');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 2, 'Expecting width 2 for Update summary view');
+        });
+
+        it('view: VIEW | DETAILS | WORKING | SUMMARY | DICT :  3 | 2 | 2 | 3 | 2', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    true,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+            chai.assert.equal(item.find('#dictCol').length, 1, 'Domain Dictionary not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 3, 'Expecting width 3 for Update view');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 3, 'Expecting width 3 for Update summary view');
+            chai.assert.equal(item.find('#dictCol').props().md, 2, 'Expecting width 2 for Domain Dictionary view');
+        });
+
+        it('view: VIEW + TEST SUMM | DETAILS | WORKING | SUMMARY | DICT :  4 | 2 | 2 | 2 | 2', () => {
+
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    true,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#viewCol').length, 1, 'Update view not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+            chai.assert.equal(item.find('#dictCol').length, 1, 'Domain Dictionary not found');
+
+            chai.assert.equal(item.find('#viewCol').props().md, 4, 'Expecting width 4 for Update view with test summary');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#dictCol').props().md, 2, 'Expecting width 2 for Domain Dictionary view');
+        });
+
+        // Edit mode ---------------------------------------------------------------------------------------------------
+
+        it('edit: SCOPE | EDIT:  6 | 6', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 6, 'Expecting width 6 for Update scope');
+            chai.assert.equal(item.find('#editCol').props().md, 6, 'Expecting width 6 for Update edit');
+        });
+
+        it('edit: SCOPE + TEST SUMM | EDIT:  6 | 6 ', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       false,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 6, 'Expecting width 6 for Update scope with test summary');
+            chai.assert.equal(item.find('#editCol').props().md, 6, 'Expecting width 6 for Update edit');
+        });
+
+        it('edit: SCOPE | EDIT | DETAILS:  4 | 4 | 4', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 4, 'Expecting width 4 for Update scope');
+            chai.assert.equal(item.find('#editCol').props().md, 4, 'Expecting width 4 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 4, 'Expecting width 4 for Update details');
+        });
+
+        it('edit: VIEW + TEST SUMM | EDIT | DETAILS:  6 | 3 | 3', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      false
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 6, 'Expecting width 6 for Update scope with test summary');
+            chai.assert.equal(item.find('#editCol').props().md, 3, 'Expecting width 3 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 3 for Update details');
+        });
+
+        it('edit: SCOPE | EDIT | DETAILS | WORKING:  3 | 3 | 3 | 3', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 3, 'Expecting width 3 for Update scope');
+            chai.assert.equal(item.find('#editCol').props().md, 3, 'Expecting width 3 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 3, 'Expecting width 3 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 3, 'Expecting width 3 for Update working view');
+        });
+
+        it('edit: VIEW + TEST SUMM | EDIT | DETAILS | WORKING:  6 | 2 | 2 | 2', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       false,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 6, 'Expecting width 6 for Update scope with test summary');
+            chai.assert.equal(item.find('#editCol').props().md, 2, 'Expecting width 2 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+        });
+
+        it('edit: SCOPE | EDIT | DETAILS | WORKING | SUMMARY:  2 | 3 | 2 | 2 | 3', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 2, 'Expecting width 2 for Update scope');
+            chai.assert.equal(item.find('#editCol').props().md, 3, 'Expecting width 3 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 3, 'Expecting width 3 for Update summary view');
+        });
+
+        it('edit: VIEW + TEST SUMM | EDIT | DETAILS | WORKING | SUMMARY:  4 | 2 | 2 | 2 | 2', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    false,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 4, 'Expecting width 4 for Update scope with test summary');
+            chai.assert.equal(item.find('#editCol').props().md, 2, 'Expecting width 2 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 2, 'Expecting width 2 for Update summary view');
+        });
+
+        it('edit: SCOPE | EDIT | DETAILS | WORKING | SUMMARY | DICT:  2 | 2 | 2 | 2 | 2 | 2', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    true,
+                updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+            chai.assert.equal(item.find('#dictCol').length, 1, 'Domain Dictionary not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 2, 'Expecting width 2 for Update scope');
+            chai.assert.equal(item.find('#editCol').props().md, 2, 'Expecting width 2 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 2, 'Expecting width 2 for Update summary view');
+            chai.assert.equal(item.find('#dictCol').props().md, 2, 'Expecting width 2 for Domain Dictionary view');
+        });
+
+        it('edit: VIEW + TEST SUMM | EDIT | DETAILS | WORKING | SUMMARY | DICT:  2 | 2 | 2 | 2 | 2 | 2', () => {
+
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const viewOptions = {
+                updateDetailsVisible:       true,
+                updateDomainDictVisible:    true,
+                updateTestSummaryVisible:   true,
+                updateSummaryVisible:       true,
+                updateProgressVisible:      true
+            };
+
+            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
+
+            chai.assert.equal(item.find('#scopeCol').length, 1, 'Update scope not found');
+            chai.assert.equal(item.find('#editCol').length, 1, 'Update edit not found');
+            chai.assert.equal(item.find('#detailsCol').length, 1, 'Update details not found');
+            chai.assert.equal(item.find('#workingCol').length, 1, 'Update working view not found');
+            chai.assert.equal(item.find('#summaryCol').length, 1, 'Update summary not found');
+            chai.assert.equal(item.find('#dictCol').length, 1, 'Domain Dictionary not found');
+
+            chai.assert.equal(item.find('#scopeCol').props().md, 2, 'Expecting width 2 for Update scope');
+            chai.assert.equal(item.find('#editCol').props().md, 2, 'Expecting width 2 for Update edit');
+            chai.assert.equal(item.find('#detailsCol').props().md, 2, 'Expecting width 2 for Update details');
+            chai.assert.equal(item.find('#workingCol').props().md, 2, 'Expecting width 2 for Update working view');
+            chai.assert.equal(item.find('#summaryCol').props().md, 2, 'Expecting width 2 for Update summary view');
+            chai.assert.equal(item.find('#dictCol').props().md, 2, 'Expecting width 2 for Domain Dictionary view');
+        });
+
     });
 
     describe('There is an option to add a new Application in the Design Update editor', () => {

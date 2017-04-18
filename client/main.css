@@ -1124,7 +1124,7 @@ input {
 }
 
 .summary-header-item{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: bold;
@@ -1132,7 +1132,7 @@ input {
 }
 
 .summary-modify{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: bold;
@@ -1140,7 +1140,7 @@ input {
 }
 
 .summary-add{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: bold;
@@ -1148,7 +1148,7 @@ input {
 }
 
 .summary-remove{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: bold;
@@ -1156,7 +1156,7 @@ input {
 }
 
 .summary-to-from{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  13px;
     font-weight: normal;
@@ -1169,7 +1169,7 @@ input {
 }
 
 .summary-item-type{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
     font-weight: bold;
@@ -1177,7 +1177,7 @@ input {
 }
 
 .summary-item{
-    margin: 0 5px 0 10px;
+    margin: 0 5px 0 5px;
     padding: 3px 0 0 0;
     font-family: 'Geneva', 'Gill Sans', Arial, sans-serif;
     font-size:  12px;
@@ -1192,11 +1192,15 @@ input {
 }
 
 .item-old{
-    color: red;
+    color: blue;
+    width: 40px;
+    text-align: right;
 }
 
 .item-new{
-    color: green;
+    color: blue;
+    width: 40px;
+    text-align: right;
 }
 
 /* -- Design Editor ------------------------------------------------------------------------------------------------- */

@@ -227,8 +227,90 @@ describe('API: ClientContainer', () => {
         });
     });
 
+    describe('The Design Update editor has an option to show or hide the working Design Version', () => {
 
-    describe('The Design Update editor has an option to show or hide the Test Summary when in View Only mode', () => {
+        it('is available when editing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_PROGRESS), 'Working design option not found');
+        });
+
+        it('is available when in view only mode', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_PROGRESS), 'Working design option not found');
+        });
+
+        it('is available when viewing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_PROGRESS), 'Working design option not found');
+        });
+    });
+
+    describe('The Design Update editor has an option to show or hide the Design Update Summary', () => {
+
+        it('is available when editing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_UPD_SUMM), 'Update summary option not found');
+        });
+
+        it('is available when in view only mode', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_UPD_SUMM), 'Update summary option not found');
+        });
+
+        it('is available when viewing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_UPD_SUMM), 'Update summary option not found');
+        });
+    });
+
+    describe('The Design Update editor has an option to show or hide the Test Summary', () => {
+
+        it('is available when editing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_VIEW_TEST_SUMM), 'Test Summary option not found');
+        });
 
         it('is available when viewing a design update', () => {
 
@@ -253,19 +335,6 @@ describe('API: ClientContainer', () => {
         });
     });
 
-    describe('The Test Summary cannot be displayed in edit mode', () => {
-
-        it('is not available when editing a design update', () => {
-
-            const menuType = MenuDropdown.MENU_DROPDOWN_VIEW;
-            const mode = ViewMode.MODE_EDIT;
-            const view = ViewType.DESIGN_UPDATE_EDIT;
-
-            const menu = testGetDropdownMenuItems(menuType, view, mode);
-
-            chai.assert.isFalse(menuContains(menu, MenuAction.MENU_ACTION_VIEW_TEST_SUMM), 'Test Summary option was found');
-        });
-    });
 
 
 });

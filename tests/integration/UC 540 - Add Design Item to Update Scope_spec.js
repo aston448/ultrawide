@@ -452,4 +452,24 @@ describe('UC 540 - Add Design Item to Update Scope', function(){
         expect(UpdateComponentVerifications.componentIsInScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario8'));
     });
 
+    it('When a child of a Design Component in peer scope is added to the Design Update scope the peer scope parent is converted to parent scope', function(){
+
+        // Setup  Add Feature1 to scope
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
+        // Add a new Feature aspect to Feature 1
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateFeature('Section1', 'Feature1');
+
+        // Check - Actions should now be in peer scope
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'));
+
+        // Execute - add Scenario1 (in Actions) to DU scope
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+
+        // Verify - Actions is now in Parent scope
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions'))
+    });
+
+
+
 });

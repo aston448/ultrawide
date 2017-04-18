@@ -462,13 +462,13 @@ export class UpdateApplicationsList extends Component {
             }
 
             let col1 =
-                <Col md={col1width} className="close-col">
+                <Col id="scopeCol" md={col1width} className="close-col">
                     {updateScopeComponent}
                 </Col>;
 
 
             let col2 =
-                <Col md={col2width} className="close-col">
+                <Col id="editCol" md={col2width} className="close-col">
                     {updateEditComponent}
                 </Col>;
 
@@ -476,7 +476,7 @@ export class UpdateApplicationsList extends Component {
             let col3 = '';
             if(viewOptions.updateDetailsVisible){
                 col3 =
-                    <Col md={col3width} className="close-col">
+                    <Col id="detailsCol" md={col3width} className="close-col">
                         {updateTextComponent}
                     </Col>;
             }
@@ -485,7 +485,7 @@ export class UpdateApplicationsList extends Component {
             if(viewOptions.updateProgressVisible){
                 console.log("RENDER PROGRESS " + view);
                 col4 =
-                    <Col md={col4width} className="close-col">
+                    <Col id="workingCol" md={col4width} className="close-col">
                         {workingVersionComponent}
                     </Col>;
             }
@@ -493,7 +493,7 @@ export class UpdateApplicationsList extends Component {
             let col5 = '';
             if(viewOptions.updateSummaryVisible){
                 col5 =
-                    <Col md={col5width} className="close-col">
+                    <Col id="summaryCol" md={col5width} className="close-col">
                         {updateSummary}
                     </Col>;
             }
@@ -501,7 +501,7 @@ export class UpdateApplicationsList extends Component {
             let col6 = '';
             if(viewOptions.updateDomainDictVisible){
                 col6 =
-                    <Col md={col6width} className="close-col">
+                    <Col id="dictCol" md={col6width} className="close-col">
                         {domainDictionary}
                     </Col>;
             }
@@ -680,7 +680,7 @@ export class UpdateApplicationsList extends Component {
             }
 
             let col1 =
-                <Col md={col1width} className="close-col">
+                <Col id="viewCol" md={col1width} className="close-col">
                     {updateViewComponent}
                 </Col>;
 
@@ -688,7 +688,7 @@ export class UpdateApplicationsList extends Component {
             let col2 = '';
             if (viewOptions.updateDetailsVisible) {
                 col2 =
-                    <Col md={col2width} className="close-col">
+                    <Col id="detailsCol" md={col2width} className="close-col">
                         {updateViewTextComponent}
                     </Col>;
             }
@@ -696,7 +696,7 @@ export class UpdateApplicationsList extends Component {
             let col3 = '';
             if (viewOptions.updateProgressVisible) {
                 col3 =
-                    <Col md={col3width} className="close-col">
+                    <Col id="workingCol" md={col3width} className="close-col">
                         {workingVersionComponent}
                     </Col>;
             }
@@ -704,7 +704,7 @@ export class UpdateApplicationsList extends Component {
             let col4 = '';
             if (viewOptions.updateSummaryVisible) {
                 col4 =
-                    <Col md={col4width} className="close-col">
+                    <Col id="summaryCol" md={col4width} className="close-col">
                         {updateSummary}
                     </Col>;
             }
@@ -712,7 +712,7 @@ export class UpdateApplicationsList extends Component {
             let col5 = '';
             if (viewOptions.updateDomainDictVisible) {
                 col5 =
-                    <Col md={col5width} className="close-col">
+                    <Col id="dictCol" md={col5width} className="close-col">
                         {domainDictionary}
                     </Col>;
             }
