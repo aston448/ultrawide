@@ -795,7 +795,7 @@ describe('UC 231 - Add Design Component to Work Package Scope - Design Update', 
 
     });
 
-    it('Only Design Components that are in Scope for a Design Update can be added to the Scope of a Design Update Work Package', function(){
+    it('Only Design Components that are in Scope or parent Scope for a Design Update can be added to the Scope of a Design Update Work Package', function(){
 
         // Setup
         // Add another update that just contains Feature1 - Actions - Scenario7

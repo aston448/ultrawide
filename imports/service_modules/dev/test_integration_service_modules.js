@@ -445,7 +445,7 @@ class TestIntegrationModules{
                     subSuite: testResult.testName
                 };
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "Unit Test Result: {}", testResult.testFullName);
+                //log((msg) => console.log(msg), LogLevel.TRACE, "Unit Test Result: {}", testResult.testFullName);
 
                 let testError = '';
                 let testStack = '';
@@ -467,8 +467,6 @@ class TestIntegrationModules{
                     if(testResult.testFullName.includes(designScenario.scenarioName)){
 
                         log((msg) => console.log(msg), LogLevel.TRACE, "  Matched Scenario: {}", designScenario.scenarioName);
-
-
 
                         // Update the Mash
                         UserDesignVersionMashScenarios.update(
@@ -501,8 +499,6 @@ class TestIntegrationModules{
                             }
                         );
 
-                        log((msg) => console.log(msg), LogLevel.TRACE, "  Updated Scenario: {}", designScenario.scenarioName);
-
                         if(updated === 0){
 
                             testIdentity = this.getUnitTestIdentity(testResult.testFullName, designScenario.scenarioName, testResult.testName);
@@ -530,6 +526,10 @@ class TestIntegrationModules{
                             );
 
                             log((msg) => console.log(msg), LogLevel.TRACE, "  Inserted Scenario: {}", designScenario.scenarioName);
+
+                        } else {
+
+                            log((msg) => console.log(msg), LogLevel.TRACE, "  Updated Scenario: {}", designScenario.scenarioName);
                         }
 
                         linked = true;

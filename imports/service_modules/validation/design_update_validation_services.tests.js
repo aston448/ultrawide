@@ -6,16 +6,7 @@ import DesignUpdateValidationServices from '../../service_modules/validation/des
 import { RoleType, DesignVersionStatus, DesignUpdateStatus }     from '../../constants/constants.js';
 import { Validation, DesignUpdateValidationErrors }   from '../../constants/validation_errors.js';
 
-import StubCollections from 'meteor/hwillson:stub-collections';
 import { chai } from 'meteor/practicalmeteor:chai';
-
-beforeEach(function(){
-
-});
-
-afterEach(function(){
-
-});
 
 describe('VAL: Design Update', function () {
 

@@ -6,7 +6,6 @@ import DesignUpdateComponentValidationServices from '../../service_modules/valid
 import { RoleType, ViewType, ViewMode, ComponentType, DesignVersionStatus, UpdateScopeType }     from '../../constants/constants.js';
 import { Validation, DesignUpdateComponentValidationErrors }   from '../../constants/validation_errors.js';
 
-import StubCollections from 'meteor/hwillson:stub-collections';
 import { chai } from 'meteor/practicalmeteor:chai';
 
 

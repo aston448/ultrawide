@@ -26,7 +26,7 @@ class WorkPackageComponentValidationServices{
         }
 
         // A Scenario cannot be scoped if already in another WP
-        if(designComponent.componentType === ComponentType.SCENARIO){
+        if(designComponent && designComponent.componentType === ComponentType.SCENARIO){
 
             if(designComponent.workPackageId !== 'NONE'){
                 if(designComponent.workPackageId !== userContext.workPackageId){
@@ -37,6 +37,9 @@ class WorkPackageComponentValidationServices{
 
         // An update WP item can't be scoped if it is not in scope of the update (i.e. in scope or a parent of in scope)
         if(view === ViewType.WORK_PACKAGE_UPDATE_EDIT){
+            if(!designComponent){
+                return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE;
+            }
             if((designComponent.scopeType !== UpdateScopeType.SCOPE_IN_SCOPE) && (designComponent.scopeType !== UpdateScopeType.SCOPE_PARENT_SCOPE)){
                 return WorkPackageComponentValidationErrors.WORK_PACKAGE_COMPONENT_NOT_SCOPABLE;
             }
