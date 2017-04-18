@@ -34,8 +34,8 @@ export const addWorkPackage = new ValidatedMethod({
         try {
             WorkPackageServices.addNewWorkPackage(designVersionId, designUpdateId, workPackageType, true);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -63,8 +63,8 @@ export const updateWorkPackageName = new ValidatedMethod({
         try {
             WorkPackageServices.updateWorkPackageName(workPackageId, newName);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -91,8 +91,8 @@ export const publishWorkPackage = new ValidatedMethod({
         try {
             WorkPackageServices.publishWorkPackage(workPackageId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -119,8 +119,8 @@ export const withdrawWorkPackage = new ValidatedMethod({
         try {
             WorkPackageServices.withdrawWorkPackage(workPackageId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -148,8 +148,8 @@ export const adoptWorkPackage = new ValidatedMethod({
         try {
             WorkPackageServices.adoptWorkPackage(workPackageId, userId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -177,8 +177,8 @@ export const releaseWorkPackage = new ValidatedMethod({
         try {
             WorkPackageServices.releaseWorkPackage(workPackageId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -205,8 +205,8 @@ export const removeWorkPackage = new ValidatedMethod({
         try {
             WorkPackageServices.removeWorkPackage(workPackageId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });

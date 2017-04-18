@@ -30,8 +30,8 @@ export const addLocation = new ValidatedMethod({
         try {
             TestOutputLocationServices.addLocation(userId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -57,8 +57,8 @@ export const saveLocation = new ValidatedMethod({
         try {
             TestOutputLocationServices.saveLocation(location);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -85,8 +85,8 @@ export const removeLocation = new ValidatedMethod({
         try {
             TestOutputLocationServices.removeLocation(locationId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -112,8 +112,8 @@ export const addLocationFile = new ValidatedMethod({
         try {
             TestOutputLocationServices.addLocationFile(locationId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -139,8 +139,8 @@ export const saveLocationFile = new ValidatedMethod({
         try {
             TestOutputLocationServices.saveLocationFile(locationFile);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -167,8 +167,8 @@ export const removeLocationFile = new ValidatedMethod({
         try {
             TestOutputLocationServices.removeLocationFile(locationFileId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -193,8 +193,8 @@ export const saveUserConfiguration = new ValidatedMethod({
         try {
             TestOutputLocationServices.saveUserConfiguration(userConfiguration);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -213,8 +213,8 @@ export const updateUserConfiguration = new ValidatedMethod({
         try {
             TestOutputLocationServices.updateUserConfiguration(userId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 

@@ -31,8 +31,8 @@ export const updateDesignVersionName = new ValidatedMethod({
         try {
             DesignVersionServices.updateDesignVersionName(designVersionId, newName);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -59,8 +59,8 @@ export const updateDesignVersionNumber = new ValidatedMethod({
         try {
             DesignVersionServices.updateDesignVersionNumber(designVersionId, newNumber);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -87,8 +87,8 @@ export const publishDesignVersion = new ValidatedMethod({
         try {
             DesignVersionServices.publishDesignVersion(designVersionId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -114,8 +114,8 @@ export const withdrawDesignVersion = new ValidatedMethod({
         try {
             DesignVersionServices.withdrawDesignVersion(designVersionId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -141,8 +141,8 @@ export const createNextDesignVersion = new ValidatedMethod({
         try {
             DesignVersionServices.createNextDesignVersion(designVersionId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 

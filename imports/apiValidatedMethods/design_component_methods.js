@@ -46,8 +46,8 @@ export const addApplicationToDesignVersion = new ValidatedMethod({
                 view
             );
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -86,8 +86,8 @@ export const addDesignSectionToApplication = new ValidatedMethod({
                 view
             );
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -127,8 +127,8 @@ export const addDesignSectionToDesignSection = new ValidatedMethod({
                 view
             );
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -167,8 +167,8 @@ export const addFeatureToDesignSection = new ValidatedMethod({
                 view
             );
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -207,8 +207,8 @@ export const addFeatureAspectToFeature = new ValidatedMethod({
                 view
             );
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -251,8 +251,8 @@ export const addScenario = new ValidatedMethod({
                 workPackageId
             );
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -283,8 +283,8 @@ export const updateComponentName = new ValidatedMethod({
         try {
             DesignComponentServices.updateComponentName(designComponentId, newPlainText, newRawText);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -315,8 +315,8 @@ export const updateFeatureNarrative = new ValidatedMethod({
         try {
             DesignComponentServices.updateFeatureNarrative(designComponentId, newPlainText, newRawText);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -346,8 +346,8 @@ export const removeDesignComponent = new ValidatedMethod({
         try {
             DesignComponentServices.removeDesignComponent(designComponentId, parentId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -378,8 +378,8 @@ export const moveDesignComponent = new ValidatedMethod({
         try {
             DesignComponentServices.moveDesignComponent(movingComponentId, targetComponentId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -409,8 +409,8 @@ export const reorderDesignComponent = new ValidatedMethod({
         try {
             DesignComponentServices.reorderDesignComponent(movingComponentId, targetComponentId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });

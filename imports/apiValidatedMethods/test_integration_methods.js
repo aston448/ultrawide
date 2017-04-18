@@ -23,8 +23,8 @@ export const populateWorkPackageMashData = new ValidatedMethod({
         try {
             TestIntegrationServices.populateDesignDevMashData(userContext);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -43,8 +43,8 @@ export const updateTestResults = new ValidatedMethod({
         try {
             TestIntegrationServices.updateDesignDevMashResults(userContext, viewOptions);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -62,8 +62,8 @@ export const updateTestSummaryData = new ValidatedMethod({
         try {
             TestIntegrationServices.updateTestSummaryData(userContext);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -89,8 +89,8 @@ export const exportIntegrationTests = new ValidatedMethod({
         try {
             TestIntegrationServices.exportIntegrationTestFile(userContext, testRunner);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });

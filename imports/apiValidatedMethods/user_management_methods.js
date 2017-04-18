@@ -29,8 +29,8 @@ export const addUser = new ValidatedMethod({
         try {
             UserManagementServices.addUser();
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -55,8 +55,8 @@ export const saveUser = new ValidatedMethod({
         try {
             UserManagementServices.saveUser(user);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -81,8 +81,8 @@ export const activateUser = new ValidatedMethod({
         try {
             UserManagementServices.setUserActive(userId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -107,8 +107,8 @@ export const deactivateUser = new ValidatedMethod({
         try {
             UserManagementServices.setUserInactive(userId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });

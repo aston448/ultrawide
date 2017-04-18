@@ -48,12 +48,18 @@ class DesignUpdateComponentModules{
         }).fetch();
 
         const component = DesignUpdateComponents.findOne({_id: newUpdateComponentId});
+
+        // Application will not have parent
+        let componentParentId = 'NONE';
         const componentParent = DesignUpdateComponents.findOne({_id: component.componentParentIdNew});
+        if(componentParent){
+            componentParentId = componentParent._id;
+        }
 
         // If the parent is in the WP actual scope, add in this component too
         workPackages.forEach((wp) => {
 
-            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParent._id, designVersionId);
+            WorkPackageModules.addNewDesignComponentToWorkPackage(wp, component, componentParentId, designVersionId);
 
         });
     };
@@ -308,11 +314,18 @@ class DesignUpdateComponentModules{
 
         const parent = DesignUpdateComponents.findOne({_id: parentId});
 
+        // Might be an Application with no parent
+        let duParentId = 'NONE';
+
+        if(parent){
+            duParentId = parent._id;
+        }
+
         // If there are no longer any New components under the parent, set any peer scope items out of scope
         const peers = DesignUpdateComponents.find({
             designUpdateId:                 removedComponent.designUpdateId,
             componentType:                  removedComponent.componentType,
-            componentParentIdNew:           parent._id
+            componentParentIdNew:           duParentId
         });
 
         let newComponents = false;
@@ -329,7 +342,7 @@ class DesignUpdateComponentModules{
                 {
                     designUpdateId:                 removedComponent.designUpdateId,
                     componentType:                  removedComponent.componentType,
-                    componentParentIdNew:           parent._id,
+                    componentParentIdNew:           duParentId,
                     scopeType:                      UpdateScopeType.SCOPE_PEER_SCOPE
                 }
             );

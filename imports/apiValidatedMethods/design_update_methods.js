@@ -30,8 +30,8 @@ export const addDesignUpdate = new ValidatedMethod({
         try {
             DesignUpdateServices.addNewDesignUpdate(designVersionId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -58,8 +58,8 @@ export const updateDesignUpdateName = new ValidatedMethod({
         try {
             DesignUpdateServices.updateDesignUpdateName(designUpdateId, newName);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -86,8 +86,8 @@ export const updateDesignUpdateRef = new ValidatedMethod({
         try {
             DesignUpdateServices.updateDesignUpdateRef(designUpdateId, newRef);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -113,8 +113,8 @@ export const publishDesignUpdate = new ValidatedMethod({
         try {
             DesignUpdateServices.publishUpdate(designUpdateId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -140,8 +140,8 @@ export const withdrawDesignUpdate = new ValidatedMethod({
         try {
             DesignUpdateServices.withdrawUpdate(designUpdateId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -167,8 +167,8 @@ export const removeDesignUpdate = new ValidatedMethod({
         try {
             DesignUpdateServices.removeUpdate(designUpdateId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -195,8 +195,8 @@ export const updateMergeAction = new ValidatedMethod({
         try {
             DesignUpdateServices.updateMergeAction(designUpdateId, newAction);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 

@@ -35,8 +35,8 @@ export const addNewTerm = new ValidatedMethod({
         try {
             DomainDictionaryServices.addNewTerm(designId, designVersionId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -66,8 +66,8 @@ export const updateTermName = new ValidatedMethod({
         try {
             DomainDictionaryServices.updateTermName(termId, newName, null);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -97,8 +97,8 @@ export const updateTermDefinition = new ValidatedMethod({
         try {
             DomainDictionaryServices.updateTermDefinition(termId, newDefinitionRaw);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });
@@ -127,8 +127,8 @@ export const removeTerm = new ValidatedMethod({
         try {
             DomainDictionaryServices.removeTerm(termId);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 });

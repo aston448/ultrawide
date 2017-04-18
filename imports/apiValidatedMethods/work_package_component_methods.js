@@ -35,8 +35,8 @@ export const toggleInScope = new ValidatedMethod({
         try {
             WorkPackageComponentServices.toggleScope(designComponentId, view, userContext, newScope);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 

@@ -30,8 +30,8 @@ export const saveDesignComponentText = new ValidatedMethod({
         try {
             TextEditorServices.saveText(designComponentId, newRawText);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
@@ -58,8 +58,8 @@ export const saveDesignUpdateComponentText = new ValidatedMethod({
         try {
             TextEditorServices.saveUpdateText(designUpdateComponentId, newRawText);
         } catch (e) {
-            console.log(e);
-            throw new Meteor.Error(e.error, e.message)
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
         }
     }
 
