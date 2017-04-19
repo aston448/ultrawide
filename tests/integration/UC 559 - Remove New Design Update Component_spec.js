@@ -235,4 +235,23 @@ describe('UC 559 - Remove New Design Update Component', function(){
         // Verify not in DV any more
         expect(DesignComponentVerifications.componentOfType_Called_DoesNotExistInDesign_Version_(ComponentType.APPLICATION, 'Application2', 'Design1', 'DesignVersion2'));
     });
+
+    it('When a new Design Update Component is removed any peer scope components for that component are removed if no other new peer components still exist', function(){
+
+        // Setup - add a new Scenario to Feature1 Actions
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
+
+        // Check - Scenario1, Scenario7 now in peer scope
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario7'));
+
+        // Execute - remove new Scenario
+        UpdateComponentActions.designerRemovesUpdateScenario('Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+
+        // Verify - Scenario1, Scenario7 not in update at all
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Scenario1'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Scenario7'));
+    });
 });

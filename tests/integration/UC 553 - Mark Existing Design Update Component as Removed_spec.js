@@ -753,7 +753,7 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         // Setup - modify a scenario then remove it
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
-        UpdateComponentActions.designerSelectsUpdateComponent('Actions', 'Scenario1');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario');
 
         // Execute

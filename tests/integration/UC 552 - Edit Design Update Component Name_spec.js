@@ -433,8 +433,8 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
         // Execute - expect failure
-        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED}
-        UpdateComponentActions.designerSelectsUpdateComponent('Actions', 'Scenario1');
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED};
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Removed Scenario', expectation);
     });
 
