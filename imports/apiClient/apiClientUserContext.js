@@ -583,7 +583,7 @@ class ClientUserContextServices {
 
                                 // If a Design Component is selected then we are IN the work package...
                                 if(userContext.designComponentId !== 'NONE') {
-                                    ClientWorkPackageServices.developWorkPackage(userRole, userContext, userViewOptions, userContext.workPackageId, testDataFlag, testIntegrationDataContext);
+                                    ClientWorkPackageServices.developWorkPackage(userRole, userContext, userContext.workPackageId);
                                 } else {
                                     // Just go to WP selection
                                     store.dispatch(setCurrentView(ViewType.SELECT));

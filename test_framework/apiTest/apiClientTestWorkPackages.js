@@ -106,9 +106,8 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
 
-        const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.removeWorkPackage(userRole, userContext, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove WP');
     },
@@ -119,9 +118,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-
-        const outcome = ClientWorkPackageServices.adoptWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.adoptWorkPackage(userRole, userContext, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Adopt WP');
     },
@@ -132,9 +129,7 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-
-        const outcome = ClientWorkPackageServices.releaseWorkPackage(userRole, userContext, workPackage._id);
+        const outcome = ClientWorkPackageServices.releaseWorkPackage(userRole, userContext, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Release WP');
     },
@@ -144,19 +139,8 @@ Meteor.methods({
         expectation = TestDataHelpers.getExpectation(expectation);
 
         const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
 
-        const testIntegrationDataContext = {
-            designVersionDataLoaded:        true,
-            testIntegrationDataLoaded:      true,
-            testSummaryDataLoaded:          true,
-            mashDataStale:                  false,
-            testDataStale:                  false
-        };
-
-        const workPackage = TestDataHelpers.getContextWorkPackage(userContext.workPackageId);
-
-        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, viewOptions, workPackage._id, false, testIntegrationDataContext);
+        const outcome = ClientWorkPackageServices.developWorkPackage(userRole, userContext, userContext.workPackageId);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Develop WP');
     }

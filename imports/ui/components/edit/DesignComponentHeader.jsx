@@ -625,6 +625,15 @@ export class DesignComponentHeader extends Component{
 
     };
 
+    onGotoWorkPackage(workPackageId) {
+
+        if(workPackageId !== 'NONE'){
+
+            ClientDesignComponentServices.gotoWorkPackage(workPackageId);
+        }
+    };
+
+
     // Render the header of the design component - has tools in it depending on context
     render(){
         const {currentItem, updateItem, wpItem, displayContext, connectDragSource, connectDragPreview, isDragging, view, mode, userContext, testSummary, testSummaryData, isOpen} = this.props;
@@ -811,6 +820,8 @@ export class DesignComponentHeader extends Component{
         let updateStatusText = '';
         let updateStatusGlyph = '';
         let updateTextClass = '';
+        let wpStatusClass = 'update-merge-status invisible';
+        let wpStatusGlyph = 'tasks';
 
         updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
         updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
@@ -842,6 +853,11 @@ export class DesignComponentHeader extends Component{
 
                 if(currentItem.updateMergeStatus === UpdateMergeStatus.COMPONENT_REMOVED){
                     updateTextClass = ' removed-item';
+                }
+
+                // Mark Scenarios that are in a Work Package
+                if(currentItem.workPackageId !== 'NONE'){
+                    wpStatusClass = 'update-merge-status item-in-wp';
                 }
 
                 break;
@@ -883,6 +899,12 @@ export class DesignComponentHeader extends Component{
         const tooltipUpdateStatus = (
             <Tooltip id="modal-tooltip">
                 {updateStatusText}
+            </Tooltip>
+        );
+
+        const tooltipGotoWp = (
+            <Tooltip id="modal-tooltip">
+                Go to Work Package
             </Tooltip>
         );
 
@@ -1261,6 +1283,11 @@ export class DesignComponentHeader extends Component{
         let viewOnlyVersionProgressHeader =
             <div id="workingHeaderItem">
                 <InputGroup>
+                    <InputGroup.Addon>
+                        <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
+                            <div id="updateStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
+                        </OverlayTrigger>
+                    </InputGroup.Addon>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
                             <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>

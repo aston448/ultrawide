@@ -108,36 +108,21 @@ export class WorkPackage extends Component {
         ClientWorkPackageServices.selectWorkPackage(
             userRole,
             userContext,
-            wp,
-            this.getTestIntegrationDataContext()
+            wp
         );
     };
 
-    onDevelopWorkPackage(userRole, userContext, viewOptions, wp){
+    onDevelopWorkPackage(userRole, userContext, wp){
 
         ClientWorkPackageServices.developWorkPackage(
             userRole,
             userContext,
-            viewOptions,
-            wp._id,
-            this.props.testDataFlag,
-            this.getTestIntegrationDataContext()
+            wp._id
         );
     };
 
     getAdopterName(userId){
         return ClientWorkPackageServices.getAdopterName(userId)
-    }
-
-    getTestIntegrationDataContext(){
-
-        return {
-            designVersionDataLoaded:        this.props.dvDataLoaded,
-            testIntegrationDataLoaded:      this.props.testDataLoaded,
-            testSummaryDataLoaded:          this.props.summaryDataLoaded,
-            mashDataStale:                  this.props.mashDataStale,
-            testDataStale:                  this.props.testDataStale
-        };
     }
 
     render() {
@@ -206,7 +191,7 @@ export class WorkPackage extends Component {
             <Button id="butRelease" bsSize="xs" onClick={ () => this.onReleaseWorkPackage(userRole, userContext, workPackage)}>Release</Button>;
 
         const buttonDevelop =
-            <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, viewOptions, workPackage)}>Develop</Button>;
+            <Button id="butDevelop" bsSize="xs" onClick={ () => this.onDevelopWorkPackage(userRole, userContext, workPackage)}>Develop</Button>;
 
 
         // Layout ------------------------------------------------------------------------------------------------------

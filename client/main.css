@@ -1472,6 +1472,10 @@ input {
     height: 18px;
 }
 
+.item-in-wp{
+    color: black;
+}
+
 .component-hidden{
     color: transparent;
 }

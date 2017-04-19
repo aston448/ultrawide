@@ -3,23 +3,23 @@
 // Ultrawide collections
 import {DesignVersionComponents}        from '../collections/design/design_version_components.js';
 import {DesignUpdateComponents}         from '../collections/design_update/design_update_components.js';
-import {UserUnitTestMashData}           from '../collections/dev/user_unit_test_mash_data.js';
-import {UserWorkPackageMashData}        from '../collections/dev/user_work_package_mash_data.js';
+import {WorkPackages}                   from '../collections/work/work_packages.js';
 
 // Ultrawide Services
-import { ComponentType, DisplayContext, UpdateMergeStatus, LogLevel, MessageType} from '../constants/constants.js';
+import { ComponentType, DisplayContext, ViewType, LogLevel, MessageType} from '../constants/constants.js';
 import { DesignComponentMessages } from '../constants/message_texts.js';
 import { Validation } from '../constants/validation_errors.js';
 
 import ServerDesignComponentApi      from '../apiServer/apiDesignComponent.js';
 import DesignComponentValidationApi  from '../apiValidation/apiDesignComponentValidation.js';
 import ClientUserContextServices     from '../apiClient/apiClientUserContext.js';
+import ClientWorkPackageServices     from '../apiClient/apiClientWorkPackage.js';
 
 import {log} from '../common/utils.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage, updateOpenItemsFlag} from '../redux/actions'
+import {setCurrentUserItemContext, setCurrentUserOpenDesignItems, updateDesignComponentName, updateUserMessage, updateOpenItemsFlag, setCurrentView} from '../redux/actions'
 
 // =====================================================================================================================
 // Client API for Design Components
@@ -563,6 +563,38 @@ class ClientDesignComponentServices{
         // Not an error - just indicates no change
         return userContext;
     };
+
+    // User has clicked on the WP icon for a Scenario in the DV working view
+    gotoWorkPackage(workPackageId){
+
+        const wp = WorkPackages.findOne({_id: workPackageId});
+
+        const currentUserContext = store.getState().currentUserItemContext;
+
+        // Set the context to indicate the DV or DU that contains the WP
+        const newContext = {
+            userId:                         currentUserContext.userId,
+            designId:                       currentUserContext.designId,
+            designVersionId:                currentUserContext.designVersionId,
+            designUpdateId:                 wp.designUpdateId,
+            workPackageId:                  'NONE',
+            designComponentId:              'NONE',
+            designComponentType:            'NONE',
+            featureReferenceId:             'NONE',
+            featureAspectReferenceId:       'NONE',
+            scenarioReferenceId:            'NONE',
+            scenarioStepId:                 'NONE'
+        };
+
+        store.dispatch(setCurrentUserItemContext(newContext, true));
+
+        // And switch to the selection view
+        store.dispatch(setCurrentView(ViewType.SELECT));
+
+        // And select the WP wanted
+        ClientWorkPackageServices.setWorkPackage(newContext, workPackageId)
+
+    }
 
     // User opened or closed a design component ------------------------------------------------------------------------
     setOpenClosed(designComponent, currentList, setOpen){

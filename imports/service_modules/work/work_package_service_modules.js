@@ -76,6 +76,17 @@ class WorkPackageModules {
                                 $set: {workPackageId: userContext.workPackageId}
                             }
                         );
+
+                        // Also set the WP in the base design version
+                        DesignVersionComponents.update(
+                            {
+                                designVersionId: userContext.designVersionId,
+                                componentReferenceId: component.componentReferenceId
+                            },
+                            {
+                                $set: {workPackageId: userContext.workPackageId}
+                            }
+                        );
                     }
                 }
             }
@@ -124,6 +135,17 @@ class WorkPackageModules {
                 } else {
                     DesignUpdateComponents.update(
                         {_id: designComponentId},
+                        {
+                            $set: {workPackageId: 'NONE'}
+                        }
+                    );
+
+                    // Also clear the WP in the base design version
+                    DesignVersionComponents.update(
+                        {
+                            designVersionId: userContext.designVersionId,
+                            componentReferenceId: wpComponent.componentReferenceId
+                        },
                         {
                             $set: {workPackageId: 'NONE'}
                         }

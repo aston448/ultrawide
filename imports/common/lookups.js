@@ -186,6 +186,8 @@ class TextLookups {
                 return 'Removed in this version';
             case UpdateMergeStatus.COMPONENT_BASE_PARENT:
                 return 'Has updated children...';
+            case UpdateMergeStatus.COMPONENT_SCENARIO_QUERIED:
+                return 'Check tests for this Scenario';
         }
     }
 

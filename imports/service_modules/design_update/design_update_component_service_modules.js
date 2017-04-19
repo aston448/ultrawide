@@ -414,7 +414,7 @@ class DesignUpdateComponentModules{
 
             // If it is a Scenario set the base design component as queried if DU is set to merge
             // This could get overridden by subsequent actions...
-            if(baseComponent.componentType === ComponentType.SCENARIO) {
+            if(baseComponent.componentType === ComponentType.SCENARIO && scopeType !== UpdateScopeType.SCOPE_PEER_SCOPE) {
                 this.updateCurrentDesignVersionWithScopedScenario(designUpdateId, baseComponent);
             }
 
