@@ -29,6 +29,14 @@ class UpdateComponentVerifications{
         );
     }
 
+    componentDoesNotExistWithParentForDesignerCurrentUpdate(type, parentName, name){
+        server.call('verifyDesignUpdateComponents.componentDoesNotExistInDesignUpdateWithParentCalled', type, parentName, name, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     componentIsAvailableForDesignerCurrentUpdate(type, parentName, name){
         server.call('verifyDesignUpdateComponents.componentIsAvailable', type, parentName, name, 'gloria',
             (function(error, result){
@@ -175,6 +183,14 @@ class UpdateComponentVerifications{
 
     componentIsChangedForDesigner(componentType, parentName, componentName){
         server.call('verifyDesignUpdateComponents.componentIsChanged', componentType, parentName, componentName, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    componentIsExistingForDesigner(componentType, parentName, componentName){
+        server.call('verifyDesignUpdateComponents.componentIsExisting', componentType, parentName, componentName, 'gloria',
             (function(error, result){
                 return(error === null);
             })

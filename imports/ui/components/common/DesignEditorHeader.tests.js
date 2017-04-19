@@ -39,8 +39,6 @@ describe('JSX: DesignEditorHeader', () => {
 
         it('has a view button not highlighted when editing', () => {
 
-            this.timeout(5000);
-
             const view = ViewType.DESIGN_NEW_EDIT;
             const mode = ViewMode.MODE_EDIT;
             const displayContext = DisplayContext.BASE_EDIT;

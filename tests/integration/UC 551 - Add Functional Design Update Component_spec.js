@@ -180,7 +180,7 @@ describe('UC 551 - Add Functional Design Update Component', function(){
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_ADDED));
     });
 
-    it('When a Feature is added to a Design Update default Feature Aspects are also added as new Design Update Components', function(){
+    it('When a Feature is added to a Design Update default Feature Aspects are also added as existing Design Update Components', function(){
 
         // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
@@ -195,20 +195,16 @@ describe('UC 551 - Add Functional Design Update Component', function(){
 
         // And new Aspects are there with status New and Changed - i.e. new but already have names set
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
-        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
-        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
+        expect(UpdateComponentVerifications.componentIsExistingForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Interface'));
 
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
-        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
-        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
+        expect(UpdateComponentVerifications.componentIsExistingForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Actions'));
 
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
-        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
+        expect(UpdateComponentVerifications.componentIsExistingForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Conditions'));
 
         expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
-        expect(UpdateComponentVerifications.componentIsNewForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
-        expect(UpdateComponentVerifications.componentIsChangedForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
+        expect(UpdateComponentVerifications.componentIsExistingForDesigner(ComponentType.FEATURE_ASPECT, DefaultComponentNames.NEW_FEATURE_NAME, 'Consequences'));
 
     });
 

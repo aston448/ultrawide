@@ -1,53 +1,27 @@
-import {Designs} from '../../collections/design/designs.js';
 
 import DesignValidationServices from '../../service_modules/validation/design_validation_services.js';
 
 import { RoleType, DesignStatus }     from '../../constants/constants.js';
-import { Validation }   from '../../constants/validation_errors.js';
+import { Validation, DesignValidationErrors }   from '../../constants/validation_errors.js';
 
-//import StubCollections from 'meteor/hwillson:stub-collections';
+
 import { chai } from 'meteor/practicalmeteor:chai';
-
-//
-// beforeEach(function(){
-//
-//     StubCollections.add([Designs]);
-//     StubCollections.stub();
-//
-//     Designs.insert({
-//         designName: 'New Design',
-//         isRemovable: true
-//     });
-//
-//     Designs.insert({
-//         designName: 'Active Design',
-//         isRemovable: false
-//     });
-//
-// });
-//
-// afterEach(function(){
-//
-//     StubCollections.restore();
-//
-// });
 
 describe('VAL: Design', function () {
 
     const activeDesign = {
         _id: 'DDD',
-        designName:             'Design1',
+        designName:             'Active Design',
         isRemovable:            false,
         designStatus:           DesignStatus.DESIGN_LIVE
     };
 
     const newDesign = {
         _id: 'DDD',
-        designName:             'Design2',
+        designName:             'New Design',
         isRemovable:            true,
         designStatus:           DesignStatus.DESIGN_LIVE
     };
-
 
 
     describe('A new Design can only be added by a Designer', function () {
@@ -55,21 +29,33 @@ describe('VAL: Design', function () {
         it('returns VALID when a Designer adds a Design', function () {
 
             const role = RoleType.DESIGNER;
-            chai.assert.equal(DesignValidationServices.validateAddDesign(role), Validation.VALID, 'Attempt to add a design by a Designer returned INVALID!');
+            const expectation = Validation.VALID;
+
+            const result = DesignValidationServices.validateAddDesign(role);
+
+            chai.assert.equal(result, expectation);
 
         });
 
         it('returns INVALID when a Developer adds a Design', function () {
 
             const role = RoleType.DEVELOPER;
-            chai.assert.notEqual(DesignValidationServices.validateAddDesign(role), Validation.VALID, 'Attempt to add a design by a Developer returned VALID!');
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_ADD;
+
+            const result = DesignValidationServices.validateAddDesign(role);
+
+            chai.assert.equal(result, expectation);
 
         });
 
         it('returns INVALID when a Manager adds a Design', function () {
 
             const role = RoleType.MANAGER;
-            chai.assert.notEqual(DesignValidationServices.validateAddDesign(role), Validation.VALID, 'Attempt to add a design by a Manager returned VALID!');
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_ADD;
+
+            const result = DesignValidationServices.validateAddDesign(role);
+
+            chai.assert.equal(result, expectation);
 
         });
     });
@@ -80,21 +66,33 @@ describe('VAL: Design', function () {
 
             const otherDesigns = [activeDesign];
             const role = RoleType.DESIGNER;
-            chai.assert.equal(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), Validation.VALID, 'Attempt to add a design by a Designer returned INVALID!');
+            const expectation = Validation.VALID;
+
+            const result = DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns);
+
+            chai.assert.equal(result, expectation);
         });
 
         it('returns INVALID when a Developer updates a Design name', function () {
 
             const otherDesigns = [activeDesign];
             const role = RoleType.DEVELOPER;
-            chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), Validation.VALID, 'Attempt to add a design by a Developer returned VALID!');
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_UPDATE;
+
+            const result = DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns);
+
+            chai.assert.equal(result, expectation);
         });
 
         it('returns INVALID when a Manager updates a Design name', function () {
 
             const otherDesigns = [activeDesign];
             const role = RoleType.MANAGER;
-            chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), Validation.VALID, 'Attempt to add a design by a Manager returned VALID!');
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_UPDATE;
+
+            const result = DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns);
+
+            chai.assert.equal(result, expectation);
         });
     });
 
@@ -104,14 +102,22 @@ describe('VAL: Design', function () {
 
             const otherDesigns = [activeDesign];
             const role = RoleType.DESIGNER;
-            chai.assert.equal(DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns), Validation.VALID, 'Attempt to update name to new name returned INVALID!');
+            const expectation = Validation.VALID;
+
+            const result = DesignValidationServices.validateUpdateDesignName(role, 'New Name', otherDesigns);
+
+            chai.assert.equal(result, expectation);
         });
 
         it('returns INVALID when a Designer updates a Design name to an existing name', function () {
 
             const otherDesigns = [activeDesign];
             const role = RoleType.DESIGNER;
-            chai.assert.notEqual(DesignValidationServices.validateUpdateDesignName(role, 'Active Design', otherDesigns), Validation.VALID, 'Attempt to update name to existing name returned VALID!');
+            const expectation = DesignValidationErrors.DESIGN_INVALID_NAME_DUPLICATE;
+
+            const result = DesignValidationServices.validateUpdateDesignName(role, 'Active Design', otherDesigns);
+
+            chai.assert.equal(result, expectation);
         });
     });
 
@@ -121,16 +127,22 @@ describe('VAL: Design', function () {
 
             const design = newDesign;
             const role = RoleType.DESIGNER;
-            chai.assert.equal(DesignValidationServices.validateRemoveDesign(role, design), Validation.VALID, 'Attempt to remove a removable design by a Designer returned INVALID!');
+            const expectation = Validation.VALID;
 
+            const result = DesignValidationServices.validateRemoveDesign(role, design);
+
+            chai.assert.equal(result, expectation);
         });
 
         it('returns INVALID for a Designer if the Design is NOT removable', function () {
 
             const design = activeDesign;
             const role = RoleType.DESIGNER;
-            chai.assert.notEqual(DesignValidationServices.validateRemoveDesign(role, design), Validation.VALID, 'Attempt to remove a non-removable design by a Designer returned VALID!');
+            const expectation = DesignValidationErrors.DESIGN_NOT_REMOVABLE;
 
+            const result = DesignValidationServices.validateRemoveDesign(role, design);
+
+            chai.assert.equal(result, expectation);
         });
     });
 
@@ -140,16 +152,22 @@ describe('VAL: Design', function () {
 
             const design = newDesign;
             const role = RoleType.MANAGER;
-            chai.assert.notEqual(DesignValidationServices.validateRemoveDesign(role, design), Validation.VALID, 'Attempt to remove a removable design by a Manager returned VALID!')
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_REMOVE;
 
+            const result = DesignValidationServices.validateRemoveDesign(role, design);
+
+            chai.assert.equal(result, expectation);
         });
 
         it('returns INVALID for a Developer if the Design is removable', function () {
 
             const design = newDesign;
             const role = RoleType.DEVELOPER;
-            chai.assert.notEqual(DesignValidationServices.validateRemoveDesign(role, design), Validation.VALID, 'Attempt to remove a removable design by a Developer returned VALID!')
+            const expectation = DesignValidationErrors.DESIGN_INVALID_ROLE_REMOVE;
 
+            const result = DesignValidationServices.validateRemoveDesign(role, design);
+
+            chai.assert.equal(result, expectation);
         });
     });
 

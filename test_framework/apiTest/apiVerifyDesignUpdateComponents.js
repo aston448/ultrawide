@@ -46,6 +46,26 @@ Meteor.methods({
         return true;
     },
 
+    'verifyDesignUpdateComponents.componentDoesNotExistInDesignUpdateWithParentCalled'(componentType, parentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // This will throw an error if the component is not found - which is what we want
+        try {
+            const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+                userContext.designVersionId,
+                userContext.designUpdateId,
+                componentType,
+                parentName,
+                componentName
+            );
+        } catch(e){
+            return true;
+        }
+
+        throw new Meteor.Error("FAIL", "Design Update Component of type " + componentType + " exists with name " + componentName + " and parent " + parentName + " in Design Update " + designUpdate.updateName);
+    },
+
     'verifyDesignUpdateComponents.componentHasFeatureReference'(componentType, parentName, componentName, featureName, userName){
 
         const userContext = TestDataHelpers.getUserContext(userName);
@@ -469,6 +489,25 @@ Meteor.methods({
             return true;
         } else {
             throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be Changed");
+        }
+    },
+
+    'verifyDesignUpdateComponents.componentIsExisting'(componentType, componentParentName, componentName, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        const designUpdateComponent = TestDataHelpers.getDesignUpdateComponentWithParent(
+            userContext.designVersionId,
+            userContext.designUpdateId,
+            componentType,
+            componentParentName,
+            componentName
+        );
+
+        if(designUpdateComponent.isChanged || designUpdateComponent.isNew || designUpdateComponent.isRemoved){
+            throw new Meteor.Error("FAIL", "Expecting component " + componentName + " to be unchanged");
+        } else {
+            return true
         }
     },
 

@@ -115,6 +115,26 @@ describe('UC 559 - Remove New Design Update Component', function(){
         expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Aspect1'));
     });
 
+    it('A default Feature Aspect added with a new Feature can be removed if it has no children', function(){
+
+        // Setup - add new Feature - creates default feature aspects
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
+        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+
+        // Execute
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Interface');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Conditions');
+        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Consequences');
+
+        // Verify
+        expect(UpdateComponentVerifications.componentDoesNotExistWithParentForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3', 'Interface'));
+        expect(UpdateComponentVerifications.componentDoesNotExistWithParentForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3', 'Actions'));
+        expect(UpdateComponentVerifications.componentDoesNotExistWithParentForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3', 'Conditions'));
+        expect(UpdateComponentVerifications.componentDoesNotExistWithParentForDesignerCurrentUpdate(ComponentType.FEATURE_ASPECT, 'Feature3', 'Consequences'));
+    });
+
     it('A new Scenario with no Scenario Steps in a Design Update can be removed');
 
 
