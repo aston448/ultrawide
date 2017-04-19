@@ -1463,15 +1463,67 @@ export class DesignComponentHeader extends Component{
                     let featureRowClass = 'scenario-test-row-untested';
 
                     if(testSummaryData) {
-                        // Any failures at all it's a fail
-                        if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
-                            featureRowClass = 'scenario-test-row-fail'
-                        } else {
-                            // No failures so any passes its a pass for now
-                            if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
-                                featureRowClass = 'scenario-test-row-pass'
-                            }
+                        switch(view){
+                            case ViewType.DESIGN_PUBLISHED_VIEW:
+                            case ViewType.DESIGN_UPDATABLE_VIEW:
+                            case ViewType.DESIGN_UPDATE_EDIT:
+                                // Whole DV
+                                // Any failures at all it's a fail
+                                if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                                    featureRowClass = 'scenario-test-row-fail'
+                                } else {
+                                    // No failures so any passes its a pass for now
+                                    if (testSummaryData.featureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                                        featureRowClass = 'scenario-test-row-pass'
+                                    }
+                                }
+                                break;
+                            case ViewType.DESIGN_UPDATE_VIEW:
+                                // DU Only
+                                // Any failures at all it's a fail
+                                if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                                    featureRowClass = 'scenario-test-row-fail'
+                                } else {
+                                    // No failures so any passes its a pass for now
+                                    if (testSummaryData.duFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                                        featureRowClass = 'scenario-test-row-pass'
+                                    }
+                                }
+                                break;
+                            case ViewType.WORK_PACKAGE_BASE_VIEW:
+                            case ViewType.WORK_PACKAGE_UPDATE_VIEW:
+                            case ViewType.DEVELOP_BASE_WP:
+                            case ViewType.DEVELOP_UPDATE_WP:
+                                // WP Only
+                                // Any failures at all it's a fail
+                                if (testSummaryData.wpFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_FAILING_TESTS) {
+                                    featureRowClass = 'scenario-test-row-fail'
+                                } else {
+                                    // No failures so any passes its a pass for now
+                                    if (testSummaryData.wpFeatureSummaryStatus === FeatureTestSummaryStatus.FEATURE_PASSING_TESTS) {
+                                        featureRowClass = 'scenario-test-row-pass'
+                                    }
+                                }
+                                break;
+
                         }
+
+                        switch(displayContext){
+                            case DisplayContext.WORKING_VIEW:
+                            case DisplayContext.BASE_VIEW:
+                            case DisplayContext.UPDATE_SCOPE:
+                                // Whole DV view
+
+
+                                break;
+                            case DisplayContext.UPDATE_VIEW:
+                                // Update Scenarios only
+
+
+                            case DisplayContext.WP_VIEW:
+                            case DisplayContext.DEV_DESIGN:
+                        }
+
                     }
 
                     return(

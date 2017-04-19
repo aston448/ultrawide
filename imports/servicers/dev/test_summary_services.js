@@ -30,79 +30,15 @@ class TestSummaryServices {
         // Delete data for current user context
         UserDevTestSummaryData.remove({
             userId:             userContext.userId,
-            // designVersionId:    userContext.designVersionId,
-            // designUpdateId:     userContext.designUpdateId
         });
 
         // Get the Design Scenario Data
-        //let designScenarios = [];
-
         const designScenarios = DesignVersionComponents.find({
             designId: userContext.designId,
             designVersionId: userContext.designVersionId,
             componentType: ComponentType.SCENARIO,
             updateMergeStatus : {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
         }).fetch();
-
-
-        // if(userContext.designUpdateId === 'NONE'){
-        //
-        //     if(userContext.workPackageId === 'NONE') {
-        //         // In a base Design Version context
-        //         designScenarios = DesignVersionComponents.find({
-        //             designId: userContext.designId,
-        //             designVersionId: userContext.designVersionId,
-        //             componentType: ComponentType.SCENARIO
-        //         }).fetch();
-        //     } else {
-        //         // Only DV components in the WP
-        //         const wpComponents = WorkPackageComponents.find(
-        //             {
-        //                 workPackageId: userContext.workPackageId,
-        //                 componentType: ComponentType.SCENARIO,
-        //                 scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-        //             }
-        //         ).fetch();
-        //
-        //         wpComponents.forEach((wpComponent) => {
-        //
-        //             let dvComponent = DesignVersionComponents.findOne({_id: wpComponent.componentId});
-        //
-        //             designScenarios.push(dvComponent);
-        //         });
-        //     }
-        //
-        // } else {
-        //
-        //     // In a Design Update context
-        //     if(userContext.workPackageId === 'NONE') {
-        //         designScenarios = DesignUpdateComponents.find({
-        //             designId: userContext.designId,
-        //             designVersionId: userContext.designVersionId,
-        //             designUpdateId: userContext.designUpdateId,
-        //             componentType: ComponentType.SCENARIO,
-        //             scopeType: UpdateScopeType.SCOPE_IN_SCOPE,
-        //             isRemoved: false
-        //         }).fetch();
-        //     } else {
-        //
-        //         // Only DU components in the WP
-        //         const wpComponents = WorkPackageComponents.find(
-        //             {
-        //                 workPackageId: userContext.workPackageId,
-        //                 componentType: ComponentType.SCENARIO,
-        //                 scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-        //             }
-        //         ).fetch();
-        //
-        //         wpComponents.forEach((wpComponent) => {
-        //
-        //             let duComponent = DesignUpdateComponents.findOne({_id: wpComponent.componentId});
-        //
-        //             designScenarios.push(duComponent);
-        //         });
-        //     }
-        // }
 
         const totalScenarioCount = designScenarios.length;
         let totalUnitTestsPassing = 0;
@@ -130,15 +66,8 @@ class TestSummaryServices {
             let testsFound = false;
 
             // See if we have any test results
-
-            // Get Scenario Name
-            // if(userContext.designUpdateId === 'NONE'){
-            //     scenarioName = designScenario.componentNameNew;
-            //     featureReferenceId = designScenario.componentFeatureReferenceIdNew;
-            // } else {
-                scenarioName = designScenario.componentNameNew;
-                featureReferenceId = designScenario.componentFeatureReferenceIdNew;
-            // }
+            scenarioName = designScenario.componentNameNew;
+            featureReferenceId = designScenario.componentFeatureReferenceIdNew;
 
             // TODO Acceptance Tests
 
@@ -204,7 +133,9 @@ class TestSummaryServices {
                 intTestStatus:                  integrationTestDisplay,
                 unitTestPassCount:              unitTestPasses,
                 unitTestFailCount:              unitTestFails,
-                featureSummaryStatus:           FeatureTestSummaryStatus.FEATURE_NO_TESTS
+                featureSummaryStatus:           FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                duFeatureSummaryStatus:         FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                wpFeatureSummaryStatus:         FeatureTestSummaryStatus.FEATURE_NO_TESTS,
             });
 
 
@@ -215,27 +146,12 @@ class TestSummaryServices {
         });
 
         // Populate the Feature summary data
-        //let designFeatures = [];
-        // if(userContext.designUpdateId === 'NONE'){
-
-            // In a base Design Version context
         const designFeatures = DesignVersionComponents.find({
-                designId: userContext.designId,
-                designVersionId: userContext.designVersionId,
-                componentType: ComponentType.FEATURE
-            }).fetch();
+            designId: userContext.designId,
+            designVersionId: userContext.designVersionId,
+            componentType: ComponentType.FEATURE
+        }).fetch();
 
-        // } else {
-        //
-        //     // In a Design Update context
-        //     designFeatures = DesignUpdateComponents.find({
-        //         designId: userContext.designId,
-        //         designVersionId: userContext.designVersionId,
-        //         designUpdateId: userContext.designUpdateId,
-        //         componentType: ComponentType.FEATURE,
-        //         isRemoved: false
-        //     }).fetch();
-        // }
 
         const totalFeatureCount = designFeatures.length;
 
@@ -243,7 +159,6 @@ class TestSummaryServices {
 
             let featureScenarios = UserDevTestSummaryData.find({
                 designVersionId:    userContext.designVersionId,
-                designUpdateId:     userContext.designUpdateId,
                 featureReferenceId: designFeature.componentReferenceId
             }).fetch();
 
@@ -252,17 +167,25 @@ class TestSummaryServices {
             let failingTests = 0;
             let featureNoTestScenarios = 0;
 
+            let duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
+            let duPassingTests = 0;
+            let duFailingTests = 0;
+            let duFeatureNoTestScenarios = 0;
+
+            let wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
+            let wpPassingTests = 0;
+            let wpFailingTests = 0;
+            let wpFeatureNoTestScenarios = 0;
+
             featureScenarios.forEach((featureScenario)=>{
-                //console.log("  Has Scenario " + featureScenario.scenarioReferenceId);
+
                 let hasResult = false;
 
                 if(featureScenario.accTestStatus === MashTestStatus.MASH_FAIL){
-                    //console.log("    FAIL");
                     failingTests++;
                     hasResult = true;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_FAIL){
-                    //console.log("    FAIL");
                     failingTests++;
                     hasResult = true;
                 }
@@ -273,7 +196,6 @@ class TestSummaryServices {
                 }
 
                 if(featureScenario.accTestStatus === MashTestStatus.MASH_PASS){
-                    //console.log("    PASS");
                     passingTests++;
                     hasResult = true;
                 }
@@ -301,6 +223,98 @@ class TestSummaryServices {
                     featureNoTestScenarios++;
                 }
 
+                // Get stats for DU if this feature scenario in DU
+                if(userContext.designUpdateId !== 'NONE') {
+                    const inDu = DesignUpdateComponents.findOne({
+                        designUpdateId: userContext.designUpdateId,
+                        componentReferenceId: featureScenario.scenarioReferenceId,
+                        scopeType: UpdateScopeType.SCOPE_IN_SCOPE
+                    });
+
+                    if (inDu) {
+                        if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
+                            duFailingTests++;
+                        }
+                        if (featureScenario.intTestStatus === MashTestStatus.MASH_FAIL) {
+                            duFailingTests++;
+                        }
+
+                        if (featureScenario.unitTestFailCount > 0) {
+                            duFailingTests += featureScenario.unitTestFailCount;
+                        }
+
+                        if (featureScenario.accTestStatus === MashTestStatus.MASH_PASS) {
+                            duPassingTests++;
+                        }
+                        if (featureScenario.intTestStatus === MashTestStatus.MASH_PASS) {
+                            duPassingTests++;
+                        }
+
+                        if (featureScenario.unitTestPassCount > 0) {
+                            duPassingTests += featureScenario.unitTestPassCount;
+                        }
+
+                        // Any fails is a fail even if passes.  Any passes and no fails is a pass
+                        if (failingTests > 0) {
+                            duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+                        } else {
+                            if (passingTests > 0) {
+                                duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                            }
+                        }
+
+                        if (hasResult === false) {
+                            duFeatureNoTestScenarios++;
+                        }
+                    }
+                }
+
+                // Get stats for WP if this feature scenario in WP
+                if(userContext.workPackageId !== 'NONE') {
+                    const inWp = WorkPackageComponents.findOne({
+                        workPackageId: userContext.workPackageId,
+                        componentReferenceId: featureScenario.scenarioReferenceId,
+                        scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+                    });
+
+                    if (inWp) {
+                        if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
+                            wpFailingTests++;
+                        }
+                        if (featureScenario.intTestStatus === MashTestStatus.MASH_FAIL) {
+                            wpFailingTests++;
+                        }
+
+                        if (featureScenario.unitTestFailCount > 0) {
+                            wpFailingTests += featureScenario.unitTestFailCount;
+                        }
+
+                        if (featureScenario.accTestStatus === MashTestStatus.MASH_PASS) {
+                            wpPassingTests++;
+                        }
+                        if (featureScenario.intTestStatus === MashTestStatus.MASH_PASS) {
+                            wpPassingTests++;
+                        }
+
+                        if (featureScenario.unitTestPassCount > 0) {
+                            wpPassingTests += featureScenario.unitTestPassCount;
+                        }
+
+                        // Any fails is a fail even if passes.  Any passes and no fails is a pass
+                        if (failingTests > 0) {
+                            wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+                        } else {
+                            if (passingTests > 0) {
+                                wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                            }
+                        }
+
+                        if (hasResult === false) {
+                            wpFeatureNoTestScenarios++;
+                        }
+                    }
+                }
+
             });
 
             UserDevTestSummaryData.insert({
@@ -316,7 +330,15 @@ class TestSummaryServices {
                 featureSummaryStatus:           featureTestStatus,
                 featureTestPassCount:           passingTests,
                 featureTestFailCount:           failingTests,
-                featureNoTestCount:             featureNoTestScenarios
+                featureNoTestCount:             featureNoTestScenarios,
+                duFeatureSummaryStatus:         duFeatureTestStatus,
+                duFeatureTestPassCount:         duPassingTests,
+                duFeatureTestFailCount:         duFailingTests,
+                duFeatureNoTestCount:           duFeatureNoTestScenarios,
+                wpFeatureSummaryStatus:         wpFeatureTestStatus,
+                wpFeatureTestPassCount:         wpPassingTests,
+                wpFeatureTestFailCount:         wpFailingTests,
+                wpFeatureNoTestCount:           wpFeatureNoTestScenarios,
             });
 
         });

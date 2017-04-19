@@ -12,12 +12,20 @@ let Schema = new SimpleSchema({
     featureReferenceId:             {type: String, defaultValue: 'NONE'},   // Set if known in Design
     accTestStatus:                  {type: String},                         // If linked, latest acceptance test results status
     intTestStatus:                  {type: String},                         // If linked, latest integration test results status
-    unitTestPassCount:               {type: Number, defaultValue: 0},        // Number of module tests passing
-    unitTestFailCount:               {type: Number, defaultValue: 0},        // Number of module tests failing
+    unitTestPassCount:              {type: Number, defaultValue: 0},        // Number of module tests passing
+    unitTestFailCount:              {type: Number, defaultValue: 0},        // Number of module tests failing
     featureSummaryStatus:           {type: String},                         // Summary of all tests in Feature
     featureTestPassCount:           {type: Number, defaultValue: 0},        // Number of tests passing in whole feature
     featureTestFailCount:           {type: Number, defaultValue: 0},        // Number of tests failing in whole feature
     featureNoTestCount:             {type: Number, defaultValue: 0},        // Number of scenarios with no tests
+    duFeatureSummaryStatus:         {type: String},                         // Summary of all tests in Feature for current DU
+    duFeatureTestPassCount:         {type: Number, defaultValue: 0},        // Number of tests passing in whole feature for current DU
+    duFeatureTestFailCount:         {type: Number, defaultValue: 0},        // Number of tests failing in whole feature for current DU
+    duFeatureNoTestCount:           {type: Number, defaultValue: 0},        // Number of scenarios with no tests for current DU
+    wpFeatureSummaryStatus:         {type: String},                         // Summary of all tests in Feature for current WP
+    wpFeatureTestPassCount:         {type: Number, defaultValue: 0},        // Number of tests passing in whole feature for current WP
+    wpFeatureTestFailCount:         {type: Number, defaultValue: 0},        // Number of tests failing in whole feature for current WP
+    wpFeatureNoTestCount:           {type: Number, defaultValue: 0},        // Number of scenarios with no tests for current WP
 });
 
 UserDevTestSummaryData.attachSchema(Schema);
