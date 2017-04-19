@@ -653,8 +653,8 @@ class DesignVersionModules{
             // Need to get the component again to get the latest update merge status
             const child = DesignVersionComponents.findOne({_id: designVersionItem._id});
 
-            // Flag parents
-            this.setParentsUpdateMergeStatus(child, true);
+            // Clear parents
+            this.setParentsUpdateMergeStatus(child, false);
         }
 
     }

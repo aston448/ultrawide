@@ -425,6 +425,18 @@ describe('UC 552 - Edit Design Update Component Name', function(){
         expect(UpdateComponentVerifications.countOf_ComponentsCalled_InDesignerCurrentUpdateIs_(ComponentType.SCENARIO, DefaultComponentNames.NEW_SCENARIO_NAME, 1));
     });
 
+    it('A Design Component name may not be edited if that Design Component has been removed in the Design Update', function(){
+
+        // Setup - remove Scenario1
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
+
+        // Execute - expect failure
+        const expectation = {success: false, message: DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED}
+        UpdateComponentActions.designerSelectsUpdateComponent('Actions', 'Scenario1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Removed Scenario', expectation);
+    });
 
     // Consequences
     it('Updating the name of a Design Update Component updates it in any Work Package that includes the Design Update Component', function(){

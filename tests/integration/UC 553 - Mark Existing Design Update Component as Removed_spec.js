@@ -746,5 +746,22 @@ describe('UC 553 - Mark Existing Design Update Component as Removed', function()
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
         DesignComponentActions.designerSelectsApplication('Application99');
         expect(DesignComponentVerifications.designerSelectedComponentMergeStatusIs_(UpdateMergeStatus.COMPONENT_BASE));
-    })
+    });
+
+    it('If an existing Design Component is removed after its name has been modified the name modification is discarded', function(){
+
+        // Setup - modify a scenario then remove it
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
+        UpdateComponentActions.designerSelectsUpdateComponent('Actions', 'Scenario1');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario');
+
+        // Execute
+        UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'New Scenario');
+
+        // Verify - removed component is Scenario1
+        expect(UpdateComponentVerifications.componentExistsForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+        expect(UpdateComponentVerifications.componentDoesNotExistForDesignerCurrentUpdate(ComponentType.SCENARIO, 'Actions', 'New Scenario'));
+        expect(UpdateComponentVerifications.componentIsRemovedForDesigner(ComponentType.SCENARIO, 'Actions', 'Scenario1'));
+    });
 });

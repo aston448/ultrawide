@@ -219,7 +219,7 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
 
     it('When a new organisational Design Component is added to a Design Update its peer components are added as placeholders if not already in scope', function(){
 
-        // Setup - Publish DU so that additions to it are merged
+        // Setup
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
 
         // Execute
@@ -236,12 +236,12 @@ describe('UC 550 - Add Organisational Design Update Component', function(){
         UpdateComponentActions.designerAddsFeatureAspectTo_Feature_Called('Section1', 'Feature1', 'Aspect1');
 
         // Verify
-        // Peer Apps added
+        // Peer Apps added - not App 1 because in actual scope
         expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application88'));
         expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.APPLICATION, 'NONE', 'Application99'));
 
-        // Peer Sections added
-        expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
+        // Peer Sections added - not section 1 because in parent scope for Feature1
+        expect(UpdateComponentVerifications.componentIsInParentScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section1'));
         expect(UpdateComponentVerifications.componentIsInPeerScopeForDesignerCurrentUpdate(ComponentType.DESIGN_SECTION, 'Application1', 'Section2'));
 
         // Peer Feature Aspects added as peers - except for Actions which is in scope

@@ -4,6 +4,7 @@ import { DesignUpdateComponents }   from '../collections/design_update/design_up
 import { DesignVersionComponents }         from '../collections/design/design_version_components.js';
 
 // Ultrawide Services
+import {ComponentType} from '../constants/constants.js';
 import { DesignUpdateComponentValidationErrors } from '../constants/validation_errors.js';
 
 import DesignUpdateComponentValidationServices  from '../service_modules/validation/design_update_component_validation_services.js';
@@ -38,8 +39,18 @@ class DesignUpdateComponentValidationApi{
     validateRemoveDesignUpdateComponent(view, mode, designUpdateComponentId){
 
         let designUpdateComponent = DesignUpdateComponents.findOne({_id: designUpdateComponentId});
+        let newDefaultAspect = false;
 
-        if(designUpdateComponent.isNew){
+        // When a new Feature is added, new default Aspects are not flagged as New items - only aspects deliberately added by user
+        if(designUpdateComponent.componentType === ComponentType.FEATURE_ASPECT){
+            const feature = DesignUpdateComponents.findOne({_id: designUpdateComponent.componentParentIdNew});
+
+            if(feature.isNew && !designUpdateComponent.isNew){
+                newDefaultAspect = true;
+            }
+        }
+
+        if(designUpdateComponent.isNew || newDefaultAspect){
 
             // Added in this Design Update
 

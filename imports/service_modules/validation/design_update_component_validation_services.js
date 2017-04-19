@@ -131,6 +131,11 @@ class DesignUpdateComponentValidationServices{
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_MODE_EDIT;
         }
 
+        // Component must not be removed already in this update
+        if(updateComponent.isRemoved){
+            return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED;
+        }
+
         // Component must not be removed elsewhere
         if(updateComponent.isRemovedElsewhere){
             return DesignUpdateComponentValidationErrors.DESIGN_UPDATE_COMPONENT_INVALID_EDIT_REMOVED;
