@@ -131,7 +131,10 @@ export class WorkPackage extends Component {
 
         // Items -------------------------------------------------------------------------------------------------------
 
-        let itemStyle = (workPackage._id === userContext.workPackageId ? 'design-item di-active' : 'design-item');
+        // Active if this work package is the current context work package
+        let active = workPackage._id === userContext.workPackageId;
+
+        let itemStyle = (active ? 'design-item di-active' : 'design-item');
 
         let buttons = '';
         let options = '';
@@ -155,6 +158,11 @@ export class WorkPackage extends Component {
                 adopter = ' by ' + this.getAdopterName(workPackage.adoptingUserId);
                 break;
         }
+
+        const summary =
+            <div id="workPackageSummary" className={statusClass}>
+                {workPackage.workPackageName}
+            </div>;
 
         const status =
             <div className={statusClass}>{workPackage.workPackageStatus + adopter}</div>;
@@ -285,13 +293,23 @@ export class WorkPackage extends Component {
                 break;
         }
 
-        return (
-            <div id="workPackageItem" className={itemStyle}  onClick={() => this.onSelectWorkPackage(userRole, userContext, workPackage)}>
-                {status}
-                {header}
-                {buttons}
-            </div>
-        );
+        if(active) {
+            return (
+                <div id="workPackageItem" className={itemStyle}
+                     onClick={() => this.onSelectWorkPackage(userRole, userContext, workPackage)}>
+                    {status}
+                    {header}
+                    {buttons}
+                </div>
+            );
+        } else {
+            return (
+                <div id="workPackageItem" className={itemStyle}
+                     onClick={() => this.onSelectWorkPackage(userRole, userContext, workPackage)}>
+                    {summary}
+                </div>
+            );
+        }
     }
 }
 

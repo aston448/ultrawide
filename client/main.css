@@ -688,10 +688,10 @@ input {
     margin: 0;
     padding: 3px 3px 3px 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
-    font-size:  12px;
+    font-size:  13px;
     font-weight: bold;
-    border-bottom: 1px solid lightgrey;
-    color: darkgrey;
+    /*border-bottom: 1px solid lightgrey;*/
+    color: darkslateblue;
     width: 100%;
 }
 
@@ -700,7 +700,7 @@ input {
 }
 
 .item-status-draft{
-    background-color: #EEEEFF;
+    background-color: #EEFFEE;
 }
 
 .item-status-complete{
@@ -725,6 +725,7 @@ input {
 
 
 .design-item-header{
+    border-top: 1px solid lightgrey;
     margin: 0;
     padding: 10px 10px 0 10px;
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;

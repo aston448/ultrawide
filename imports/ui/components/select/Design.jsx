@@ -60,6 +60,9 @@ export class Design extends Component {
     render() {
         const {design, userContext, userRole} = this.props;
 
+        // Active if this design is the current context design
+        let active = design._id === userContext.designId;
+
         // Items -------------------------------------------------------------------------------------------------------
 
         let buttons = '';
@@ -77,7 +80,9 @@ export class Design extends Component {
         const backupButton =
             <Button id="butBackup" bsSize="xs" onClick={ () => this.onBackupDesign(userRole, design._id)}>Backup Design</Button>;
 
+
         let statusClass = 'design-item-status';
+
 
         switch(design.designStatus){
             case DesignStatus.DESIGN_LIVE:
@@ -87,6 +92,11 @@ export class Design extends Component {
                 statusClass = 'design-item-status item-status-complete';
                 break;
         }
+
+        const summary =
+            <div id="designSummary" className={statusClass}>
+                {design.designName}
+            </div>;
 
         const status =
             <div id="designStatus" className={statusClass}>{design.designStatus}</div>;
@@ -104,8 +114,8 @@ export class Design extends Component {
 
         if(userContext && userRole) {
 
-            // Active if this design is the current context design
-            let itemStyle = (design._id === userContext.designId ? 'design-item di-active' : 'design-item');
+
+            let itemStyle = (active ? 'design-item di-active' : 'design-item');
 
             if(userRole === RoleType.DESIGNER) {
                 // Designer has various options
@@ -116,7 +126,7 @@ export class Design extends Component {
                             {removeButton}
                         </ButtonGroup>
                 } else {
-                    if(design.designName != 'Ultrawide Project'){
+                    if(design.designName !== 'Ultrawide Project'){
                         buttons =
                             <ButtonGroup className="button-group-left">
                                 {workButton}
@@ -138,13 +148,21 @@ export class Design extends Component {
                     </ButtonGroup>
             }
 
-            return (
-                <div className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
-                    {status}
-                    {header}
-                    {buttons}
-                </div>
-            )
+            if(active) {
+                return (
+                    <div className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
+                        {status}
+                        {header}
+                        {buttons}
+                    </div>
+                );
+            } else {
+                return (
+                    <div className={itemStyle} onClick={() => this.onSelectDesign(userContext, design._id)}>
+                        {summary}
+                    </div>
+                );
+            }
         } else {
             return(<div></div>);
         }

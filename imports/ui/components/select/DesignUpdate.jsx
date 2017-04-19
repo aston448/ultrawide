@@ -124,6 +124,12 @@ export class DesignUpdate extends Component {
     render() {
         const {designUpdate, userRole, userContext, viewOptions} = this.props;
 
+        // Active if this design update is the current context design update
+        let active = designUpdate._id === userContext.designUpdateId;
+
+        // Display as selected if this is the current DU in the user context
+        let itemStyle = (active ? 'design-item di-active' : 'design-item');
+
         // Items -------------------------------------------------------------------------------------------------------
 
         const header =
@@ -163,9 +169,6 @@ export class DesignUpdate extends Component {
 
         // Layout ------------------------------------------------------------------------------------------------------
 
-        // Display as selected if this is the current DU in the user context
-        let itemStyle = (designUpdate._id === userContext.designUpdateId ? 'design-item di-active' : 'design-item');
-
         let buttons = '';
         let options = '';
         let statusClass = 'design-item-status';
@@ -185,7 +188,12 @@ export class DesignUpdate extends Component {
                 break;
         }
 
-        let status =
+        const summary =
+            <div id="designUpdateSummary" className={statusClass}>
+                {designUpdate.updateReference + ' - ' + designUpdate.updateName}
+            </div>;
+
+        const status =
             <div id="designUpdateStatus" className={statusClass}>{designUpdate.updateStatus}</div>;
 
         switch(designUpdate.updateStatus){
@@ -256,14 +264,24 @@ export class DesignUpdate extends Component {
                 break;
         }
 
-        return (
-            <div id="designUpdate" className={itemStyle} onClick={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }>
-                {status}
-                {header}
-                {options}
-                {buttons}
-            </div>
-        )
+        if(active) {
+            return (
+                <div id="designUpdate" className={itemStyle}
+                     onClick={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }>
+                    {status}
+                    {header}
+                    {options}
+                    {buttons}
+                </div>
+            );
+        } else {
+            return (
+                <div id="designUpdate" className={itemStyle}
+                     onClick={ () => this.setNewDesignUpdateActive(userContext, designUpdate) }>
+                    {summary}
+                </div>
+            );
+        }
     }
 }
 

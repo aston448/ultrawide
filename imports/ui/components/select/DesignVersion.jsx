@@ -134,7 +134,10 @@ export class DesignVersion extends Component {
     render() {
         const {designVersion, userRole, viewOptions, userContext, testDataFlag} = this.props;
 
-        let itemStyle = (designVersion._id === userContext.designVersionId ? 'design-item di-active' : 'design-item');
+        // Active if this design version is the current context design version
+        let active = designVersion._id === userContext.designVersionId;
+
+        let itemStyle = (active ? 'design-item di-active' : 'design-item');
 
         // Items -------------------------------------------------------------------------------------------------------
         let statusClass = 'design-item-status';
@@ -155,7 +158,12 @@ export class DesignVersion extends Component {
                 break;
         }
 
-        let status =
+        const summary =
+            <div id="designVersionSummary" className={statusClass}>
+                {designVersion.designVersionNumber + ' - ' + designVersion.designVersionName}
+            </div>;
+
+        const status =
             <div id="designVersionStatus" className={statusClass}>{TextLookups.designVersionStatus(designVersion.designVersionStatus)}</div>;
 
         let buttons = '';
@@ -350,14 +358,24 @@ export class DesignVersion extends Component {
 
         }
 
-        return (
-            <div className={itemStyle} onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
-                {status}
-                {header}
-                {buttons}
-                {confirmNextModal}
-            </div>
-        )
+        if(active) {
+            return (
+                <div className={itemStyle}
+                     onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
+                    {status}
+                    {header}
+                    {buttons}
+                    {confirmNextModal}
+                </div>
+            );
+        } else {
+            return (
+                <div className={itemStyle}
+                     onClick={() => this.setNewDesignVersionActive(userRole, userContext, designVersion)}>
+                    {summary}
+                </div>
+            );
+        }
     }
 }
 

@@ -648,7 +648,7 @@ class ClientContainerServices{
                     designVersionId: currentDesignVersionId,
                     updateStatus: DesignUpdateStatus.UPDATE_NEW
                 },
-                {sort: {updateName: 1}}
+                {sort: {updateReference:1, updateName: 1}}
             ).fetch();
 
             const draftUpdates = DesignUpdates.find(
@@ -656,7 +656,7 @@ class ClientContainerServices{
                     designVersionId: currentDesignVersionId,
                     updateStatus: DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT
                 },
-                {sort: {updateName: 1}}
+                {sort: {updateReference:1, updateName: 1}}
             ).fetch();
 
             const mergedUpdates = DesignUpdates.find(
@@ -664,7 +664,7 @@ class ClientContainerServices{
                     designVersionId: currentDesignVersionId,
                     updateStatus: DesignUpdateStatus.UPDATE_MERGED
                 },
-                {sort: {updateName: 1}}
+                {sort: {updateReference:1, updateName: 1}}
             ).fetch();
 
             const ignoredUpdates = DesignUpdates.find(
@@ -672,7 +672,7 @@ class ClientContainerServices{
                     designVersionId: currentDesignVersionId,
                     updateStatus: DesignUpdateStatus.UPDATE_IGNORED
                 },
-                {sort: {updateName: 1}}
+                {sort: {updateReference:1, updateName: 1}}
             ).fetch();
 
             // Get the status of the current design version
