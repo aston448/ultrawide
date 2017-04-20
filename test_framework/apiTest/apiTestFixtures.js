@@ -11,7 +11,7 @@ import { DesignUpdates }            from '../../imports/collections/design_updat
 import { DesignUpdateSummary }      from '../../imports/collections/design_update/design_update_summary.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
-import { DesignVersionComponents }         from '../../imports/collections/design/design_version_components.js';
+import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../imports/collections/design_update/design_update_components.js';
 import { FeatureBackgroundSteps }   from '../../imports/collections/design/feature_background_steps.js';
 import { ScenarioSteps }            from '../../imports/collections/design/scenario_steps.js';
@@ -19,6 +19,7 @@ import { DomainDictionary }         from '../../imports/collections/design/domai
 import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
+import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 
 import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
@@ -46,7 +47,7 @@ Meteor.methods({
         //console.log('Test Fixtures: CLEAR DB!');
 
         // Abort reset if not the test instance of Ultrawide
-        if(ClientIdentityServices.getApplicationName() != 'ULTRAWIDE TEST'){
+        if(ClientIdentityServices.getApplicationName() !== 'ULTRAWIDE TEST'){
 
             console.log('Test Fixtures: NOT TEST INSTANCE!!!');
 
@@ -68,6 +69,8 @@ Meteor.methods({
             UserTestTypeLocations.remove({});
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
+
+            UserDesignVersionMashScenarios.remove({userId: userContext.userId});
 
             UserCurrentEditContext.remove({});
             UserCurrentViewOptions.remove({});
