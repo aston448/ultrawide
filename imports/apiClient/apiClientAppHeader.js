@@ -46,7 +46,7 @@ class ClientAppHeaderServices{
         return true;
     };
 
-    toggleViewOption(view, userContext, userRole, optionType, currentOptions, currentDataValue, testDataFlag, testIntegrationDataContext){
+    toggleViewOption(optionType, currentOptions, currentDataValue){
         // Toggles a particular view option
         let newOptions = currentOptions;
 
@@ -54,28 +54,6 @@ class ClientAppHeaderServices{
 
         store.dispatch(setCurrentUserViewOptions(newOptions, true));
         store.dispatch(updateViewOptionsData(!currentDataValue));
-
-        // Special action require for view options:
-        switch(optionType){
-            case ViewOptionType.DESIGN_TEST_SUMMARY:
-            case ViewOptionType.UPDATE_TEST_SUMMARY:
-            case ViewOptionType.DEV_TEST_SUMMARY:
-                if(newOptions[optionType]){
-                    // Item is being switched on so load up the data
-                    //ClientTestIntegrationServices.updateTestSummaryData(view, userContext, userRole, newOptions, testDataFlag, testIntegrationDataContext);
-                }
-                break;
-            case ViewOptionType.DEV_ACC_TESTS:
-            case ViewOptionType.DEV_INT_TESTS:
-            case ViewOptionType.DEV_UNIT_TESTS:
-                if(newOptions[optionType]){
-                    // Item is being switched on so load up the data
-                    //ClientTestIntegrationServices.updateWorkPackageTestData(userContext, userRole, newOptions, testDataFlag, testIntegrationDataContext);
-                }
-                break;
-            default:
-              // No action
-        }
 
         return {success: true, message: ''};
     }

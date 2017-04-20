@@ -86,10 +86,7 @@ export class UltrawideMenuDropdownItem extends Component {
             case MenuAction.MENU_ACTION_VIEW_DETAILS:
             case MenuAction.MENU_ACTION_VIEW_PROGRESS:
             case MenuAction.MENU_ACTION_VIEW_UPD_SUMM:
-                ClientAppHeaderServices.toggleViewOption(
-                    view, userContext, userRole, viewOptionType, userViewOptions,
-                    currentViewDataValue, testDataFlag, this.getTestIntegrationDataContext()
-                );
+                ClientAppHeaderServices.toggleViewOption(viewOptionType, userViewOptions, currentViewDataValue);
                 break;
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
                 ClientTestIntegrationServices.refreshTestData(userContext, userViewOptions);
@@ -99,17 +96,6 @@ export class UltrawideMenuDropdownItem extends Component {
                 break;
         }
 
-    }
-
-    getTestIntegrationDataContext(){
-
-        return {
-            designVersionDataLoaded:        this.props.dvDataLoaded,
-            testIntegrationDataLoaded:      this.props.testDataLoaded,
-            testSummaryDataLoaded:          this.props.summaryDataLoaded,
-            mashDataStale:                  this.props.mashDataStale,
-            testDataStale:                  this.props.testDataStale
-        };
     }
 
     render() {

@@ -48,7 +48,7 @@ export class DesignEditorHeader extends Component {
         // Only close if really open
         if(currentOption.value) {
             console.log("Really Closing " + currentOption.option);
-            ClientAppHeaderServices.toggleViewOption(view, userContext, userRole, currentOption.option, userViewOptions, currentViewDataValue, false, null)
+            ClientAppHeaderServices.toggleViewOption(currentOption.option, userViewOptions, currentViewDataValue)
         }
     }
 
