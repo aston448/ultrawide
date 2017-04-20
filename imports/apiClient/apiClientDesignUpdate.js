@@ -323,6 +323,12 @@ class ClientDesignUpdateServices {
         //console.log('Calling update DU summary...');
         ClientDesignUpdateSummary.getDesignUpdateSummary(userContext);
 
+        if(newDesignUpdateId !== userContext.designUpdateId) {
+
+            // Update test summary if changing DU
+            ClientTestIntegrationServices.updateTestSummaryData(newContext, false);
+        }
+
         return newContext;
 
     };
@@ -397,17 +403,8 @@ class ClientDesignUpdateServices {
         // View mode
         store.dispatch(setCurrentViewMode(ViewMode.MODE_VIEW));
 
-        // Get relevant test data for a design update
-        ClientTestIntegrationServices.reloadScenarioMashData(userContext);
-        // if(viewOptions.updateTestSummaryVisible) {
-        //     ClientTestIntegrationServices.loadUserDevData(newContext, userRole, viewOptions, ViewType.DESIGN_UPDATE_VIEW, testDataFlag, testIntegrationDataContext);
-        // } else {
-
-            // Just switch to the design editor view
-            store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
-        // }
-
-
+        // Just switch to the design editor view
+        store.dispatch(setCurrentView(ViewType.DESIGN_UPDATE_VIEW));
 
         return {success: true, message: ''};
 

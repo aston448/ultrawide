@@ -1,17 +1,16 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
-
 
 // Ultrawide GUI Components
 import TestSummary          from '../dev/TestSummary.jsx';
 import FeatureTestSummary   from '../dev/FeatureTestSummary.jsx';
 
 // Ultrawide Services
-
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
@@ -20,12 +19,11 @@ import ClientTextEditorServices             from '../../../apiClient/apiClientTe
 
 import {ViewType, ComponentType, ViewMode, DisplayContext, WorkPackageType, WorkPackageScopeType, LogLevel,
     MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType} from '../../../constants/constants.js';
-import {DefaultComponentNames} from '../../../constants/default_names.js';
-import {getComponentClass, log} from '../../../common/utils.js';
-import TextLookups from '../../../common/lookups.js'
+import {DefaultComponentNames}          from '../../../constants/default_names.js';
+import {getComponentClass, log}         from '../../../common/utils.js';
+import TextLookups                      from '../../../common/lookups.js'
 
 // Bootstrap
-import {Checkbox}   from 'react-bootstrap';
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon}  from 'react-bootstrap';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
@@ -1506,22 +1504,6 @@ export class DesignComponentHeader extends Component{
                                 }
                                 break;
 
-                        }
-
-                        switch(displayContext){
-                            case DisplayContext.WORKING_VIEW:
-                            case DisplayContext.BASE_VIEW:
-                            case DisplayContext.UPDATE_SCOPE:
-                                // Whole DV view
-
-
-                                break;
-                            case DisplayContext.UPDATE_VIEW:
-                                // Update Scenarios only
-
-
-                            case DisplayContext.WP_VIEW:
-                            case DisplayContext.DEV_DESIGN:
                         }
 
                     }

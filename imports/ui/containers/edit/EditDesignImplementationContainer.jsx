@@ -1,12 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
-
 
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
@@ -18,7 +17,7 @@ import DesignEditorFooter                   from '../../components/common/Design
 import MashSelectedItemContainer            from '../mash/MashSelectedItemContainer.jsx';
 
 // Ultrawide Services
-import { ItemType, ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
+import { ComponentType, ViewType, DisplayContext } from '../../../constants/constants.js';
 
 import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';

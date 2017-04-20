@@ -1,7 +1,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
@@ -9,10 +10,11 @@ import React, { Component, PropTypes } from 'react';
 
 // Ultrawide Services
 import {ViewMode, ViewType, DisplayContext, UpdateScopeType, WorkPackageScopeType, LogLevel} from '../../../constants/constants.js';
+
 import ClientDesignComponentServices            from '../../../apiClient/apiClientDesignComponent.js';
 import ClientDesignUpdateComponentServices      from '../../../apiClient/apiClientDesignUpdateComponent.js';
 import ClientDomainDictionaryApi                from '../../../apiClient/apiClientDomainDictionary.js';
-import {getComponentClass, log}                      from '../../../common/utils.js';
+import {getComponentClass, log}                 from '../../../common/utils.js';
 
 // Bootstrap
 import {InputGroup} from 'react-bootstrap';
@@ -20,8 +22,6 @@ import {Glyphicon} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
-
-// React DnD
 
 // Draft JS - Narrative is text editable
 import {Editor, EditorState, ContentState, RichUtils, DefaultDraftBlockRenderMap, convertFromRaw, convertToRaw, getDefaultKeyBinding, KeyBindingUtil, CompositeDecorator} from 'draft-js';

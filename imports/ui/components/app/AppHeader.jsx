@@ -1,18 +1,17 @@
  // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
 
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import UltrawideMenuItem from '../common/UltrawideMenuItem.jsx';
-import UltrawideMenuDropdown from '../common/UltrawideMenuDropdown.jsx';
-import HeaderMessage from '../app/HeaderMessage.jsx';
+import UltrawideMenuItem        from '../common/UltrawideMenuItem.jsx';
+import UltrawideMenuDropdown    from '../common/UltrawideMenuDropdown.jsx';
+import HeaderMessage            from '../app/HeaderMessage.jsx';
 
 // Ultrawide Services
-import {MenuType, MenuDropdown, ViewType, ViewMode, RoleType, LogLevel} from '../../../constants/constants.js';
+import {MenuType, MenuDropdown, ViewType, RoleType, LogLevel} from '../../../constants/constants.js';
 
 import TextLookups                      from '../../../common/lookups.js';
 import { log }                          from '../../../common/utils.js'

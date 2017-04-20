@@ -1,23 +1,22 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import DesignItemHeader from '../select/DesignItemHeader.jsx';
-import MoveTarget from '../../components/edit/MoveTarget.jsx';
-import SuggestedStepsContainer from '../../containers/edit/SuggestedStepsContainer.jsx';
+import MoveTarget               from '../../components/edit/MoveTarget.jsx';
+import SuggestedStepsContainer  from '../../containers/edit/SuggestedStepsContainer.jsx';
 
 // Ultrawide Services
 import {ViewType, ComponentType, ViewMode, DisplayContext, ScenarioStepStatus, ScenarioStepType, StepContext, MashTestStatus } from '../../../constants/constants.js';
-import ClientScenarioStepServices from '../../../apiClient/apiClientScenarioStep.js';
-import ClientDomainDictionaryServices from '../../../apiClient/apiClientDomainDictionary.js';
-import ClientMashDataServices from '../../../apiClient/apiClientMashData.js';
+
+import ClientScenarioStepServices       from '../../../apiClient/apiClientScenarioStep.js';
+import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientMashDataServices           from '../../../apiClient/apiClientMashData.js';
 
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
 import {InputGroup, FormControl} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';

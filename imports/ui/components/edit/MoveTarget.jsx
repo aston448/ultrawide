@@ -1,13 +1,12 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-
 
 // Ultrawide Services
 import {ComponentType, ViewMode, DisplayContext, LogLevel} from '../../../constants/constants.js';
@@ -15,9 +14,7 @@ import {reorderDropAllowed, mashMoveDropAllowed, log} from '../../../common/util
 
 // Bootstrap
 
-
 // REDUX services
-import {connect} from 'react-redux';
 
 // React DnD
 import { DropTarget } from 'react-dnd';

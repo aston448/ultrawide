@@ -1,12 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
-
 
 // Ultrawide GUI Components
 import DesignEditorHeader           from '../../components/common/DesignEditorHeader.jsx';
@@ -20,14 +19,13 @@ import ClientUserContextServices    from '../../../apiClient/apiClientUserContex
 
 // Ultrawide Services
 import { ComponentType, ViewType, ViewMode, DisplayContext } from '../../../constants/constants.js';
-import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js'
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
+
+import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js'
+import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';

@@ -54,13 +54,14 @@ export const updateTestSummaryData = new ValidatedMethod({
     name: 'testIntegration.updateTestSummaryData',
 
     validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true}
+        userContext:    {type: Object, blackbox: true},
+        updateTestData: {type: Boolean}
     }).validator(),
 
-    run({userContext}){
+    run({userContext, updateTestData}){
 
         try {
-            TestIntegrationServices.updateTestSummaryData(userContext);
+            TestIntegrationServices.updateTestSummaryData(userContext, updateTestData);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.error, e.stack)

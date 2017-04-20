@@ -9,7 +9,7 @@ import { UserIntTestResults }           from '../../collections/dev/user_int_tes
 import { UserUnitTestResults }          from '../../collections/dev/user_unit_test_results.js';
 
 // Ultrawide services
-import { ComponentType, MashStatus, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
+import { ComponentType, ViewType, MashTestStatus, FeatureTestSummaryStatus, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, LogLevel }   from '../../constants/constants.js';
 import {log}        from '../../common/utils.js'
 
 import ClientIdentityServices       from '../../apiClient/apiIdentity.js';
@@ -25,22 +25,11 @@ import ChimpMochaTestServices       from '../../service_modules/dev/test_process
 
 class TestSummaryServices {
 
-    refreshTestSummaryData(userContext){
+    refreshTestSummaryData(userContext, updateTestData){
 
-        // Delete data for current user context
-        UserDevTestSummaryData.remove({
-            userId:             userContext.userId,
-        });
+        log((msg) => console.log(msg), LogLevel.INFO, "Refreshing test summary data...");
 
-        // Get the Design Scenario Data
-        const designScenarios = DesignVersionComponents.find({
-            designId: userContext.designId,
-            designVersionId: userContext.designVersionId,
-            componentType: ComponentType.SCENARIO,
-            updateMergeStatus : {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-        }).fetch();
-
-        const totalScenarioCount = designScenarios.length;
+        let totalScenarioCount = 0;
         let totalUnitTestsPassing = 0;
         let totalUnitTestsFailing = 0;
         let totalUnitTestsPending = 0;
@@ -52,106 +41,129 @@ class TestSummaryServices {
         let totalAccTestsPending = 0;
         let totalScenariosWithoutTests = 0;
 
-        // Populate the Scenario summary data
-        designScenarios.forEach((designScenario) =>{
+        // If the test data needs refreshing...
+        if(updateTestData) {
 
-            let integrationTestResult = null;
-            let scenarioName = '';
-            let featureReferenceId = '';
-
-            let acceptanceTestDisplay = MashTestStatus.MASH_NOT_LINKED;
-            let integrationTestDisplay = MashTestStatus.MASH_NOT_LINKED;
-            let unitTestPasses = 0;
-            let unitTestFails = 0;
-            let testsFound = false;
-
-            // See if we have any test results
-            scenarioName = designScenario.componentNameNew;
-            featureReferenceId = designScenario.componentFeatureReferenceIdNew;
-
-            // TODO Acceptance Tests
-
-            // Integration Tests
-            integrationTestResult = UserIntTestResults.findOne(
-                {
-                    userId:     userContext.userId,
-                    testName:   scenarioName
-                }
-            );
-
-            if(integrationTestResult){
-                integrationTestDisplay = integrationTestResult.testResult;
-
-                switch(integrationTestResult.testResult){
-                    case MashTestStatus.MASH_PASS:
-                        totalIntTestsPassing++;
-                        testsFound = true;
-                        break;
-                    case MashTestStatus.MASH_FAIL:
-                        totalIntTestsFailing++;
-                        testsFound = true;
-                        break;
-                    case MashTestStatus.MASH_PENDING:
-                        totalIntTestsPending++;
-                }
-            } else{
-
-            }
-
-            // Unit Tests - tests related to a Scenario
-            let searchRegex = new RegExp(scenarioName);
-
-            unitTestPasses = UserUnitTestResults.find({
-                userId:         userContext.userId,
-                testFullName:   {$regex: searchRegex},
-                testResult:     MashTestStatus.MASH_PASS
-            }).count();
-
-            if(unitTestPasses > 0){
-                testsFound = true;
-            }
-            totalUnitTestsPassing += unitTestPasses;
-
-            unitTestFails= UserUnitTestResults.find({
-                userId:         userContext.userId,
-                testFullName:   {$regex: searchRegex},
-                testResult:     MashTestStatus.MASH_FAIL
-            }).count();
-
-            if(unitTestFails > 0){
-                testsFound = true;
-            }
-            totalUnitTestsFailing += unitTestFails;
-
-            UserDevTestSummaryData.insert({
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                scenarioReferenceId:            designScenario.componentReferenceId,
-                featureReferenceId:             featureReferenceId,
-                accTestStatus:                  acceptanceTestDisplay,
-                intTestStatus:                  integrationTestDisplay,
-                unitTestPassCount:              unitTestPasses,
-                unitTestFailCount:              unitTestFails,
-                featureSummaryStatus:           FeatureTestSummaryStatus.FEATURE_NO_TESTS,
-                duFeatureSummaryStatus:         FeatureTestSummaryStatus.FEATURE_NO_TESTS,
-                wpFeatureSummaryStatus:         FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+            // Delete data for current user context
+            UserDevTestSummaryData.remove({
+                userId: userContext.userId,
             });
 
+            log((msg) => console.log(msg), LogLevel.INFO, "Data removed");
 
-            if(!testsFound){
-                totalScenariosWithoutTests++;
-            }
+            // Get the Design Scenario Data
+            const designScenarios = DesignVersionComponents.find({
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId,
+                componentType: ComponentType.SCENARIO,
+                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            }).fetch();
 
-        });
+            totalScenarioCount = designScenarios.length;
+
+            log((msg) => console.log(msg), LogLevel.INFO, "Got Scenarios");
+
+            // Populate the Scenario summary data
+            designScenarios.forEach((designScenario) => {
+
+                let integrationTestResult = null;
+                let scenarioName = '';
+                let featureReferenceId = '';
+
+                let acceptanceTestDisplay = MashTestStatus.MASH_NOT_LINKED;
+                let integrationTestDisplay = MashTestStatus.MASH_NOT_LINKED;
+                let unitTestPasses = 0;
+                let unitTestFails = 0;
+                let testsFound = false;
+
+                // See if we have any test results
+                scenarioName = designScenario.componentNameNew;
+                featureReferenceId = designScenario.componentFeatureReferenceIdNew;
+
+                // TODO Acceptance Tests
+
+                // Integration Tests
+                integrationTestResult = UserIntTestResults.findOne(
+                    {
+                        userId: userContext.userId,
+                        testName: scenarioName
+                    }
+                );
+
+                if (integrationTestResult) {
+                    integrationTestDisplay = integrationTestResult.testResult;
+
+                    switch (integrationTestResult.testResult) {
+                        case MashTestStatus.MASH_PASS:
+                            totalIntTestsPassing++;
+                            testsFound = true;
+                            break;
+                        case MashTestStatus.MASH_FAIL:
+                            totalIntTestsFailing++;
+                            testsFound = true;
+                            break;
+                        case MashTestStatus.MASH_PENDING:
+                            totalIntTestsPending++;
+                    }
+                } else {
+
+                }
+
+                // Unit Tests - tests related to a Scenario
+                let searchRegex = new RegExp(scenarioName);
+
+                unitTestPasses = UserUnitTestResults.find({
+                    userId: userContext.userId,
+                    testFullName: {$regex: searchRegex},
+                    testResult: MashTestStatus.MASH_PASS
+                }).count();
+
+                if (unitTestPasses > 0) {
+                    testsFound = true;
+                }
+                totalUnitTestsPassing += unitTestPasses;
+
+                unitTestFails = UserUnitTestResults.find({
+                    userId: userContext.userId,
+                    testFullName: {$regex: searchRegex},
+                    testResult: MashTestStatus.MASH_FAIL
+                }).count();
+
+                if (unitTestFails > 0) {
+                    testsFound = true;
+                }
+                totalUnitTestsFailing += unitTestFails;
+
+                UserDevTestSummaryData.insert({
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    scenarioReferenceId: designScenario.componentReferenceId,
+                    featureReferenceId: featureReferenceId,
+                    accTestStatus: acceptanceTestDisplay,
+                    intTestStatus: integrationTestDisplay,
+                    unitTestPassCount: unitTestPasses,
+                    unitTestFailCount: unitTestFails,
+                    featureSummaryStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                    duFeatureSummaryStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                    wpFeatureSummaryStatus: FeatureTestSummaryStatus.FEATURE_NO_TESTS,
+                });
+
+
+                if (!testsFound) {
+                    totalScenariosWithoutTests++;
+                }
+
+            });
+
+            log((msg) => console.log(msg), LogLevel.INFO, "Scenarios populated");
+        }
 
         // Populate the Feature summary data
         const designFeatures = DesignVersionComponents.find({
-            designId: userContext.designId,
-            designVersionId: userContext.designVersionId,
-            componentType: ComponentType.FEATURE
-        }).fetch();
-
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId,
+                componentType: ComponentType.FEATURE
+            }).fetch();
 
         const totalFeatureCount = designFeatures.length;
 
@@ -223,23 +235,33 @@ class TestSummaryServices {
                     featureNoTestScenarios++;
                 }
 
+                let duComponent = null;
+                let wpComponent = null;
+
+
                 // Get stats for DU if this feature scenario in DU
                 if(userContext.designUpdateId !== 'NONE') {
-                    const inDu = DesignUpdateComponents.findOne({
+
+                    duComponent = DesignUpdateComponents.findOne({
                         designUpdateId: userContext.designUpdateId,
                         componentReferenceId: featureScenario.scenarioReferenceId,
                         scopeType: UpdateScopeType.SCOPE_IN_SCOPE
                     });
 
-                    if (inDu) {
+                    if (duComponent && userContext.workPackageId === 'NONE') {
+
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Adding DU scenario {}", duComponent.componentNameNew);
+
                         if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
                             duFailingTests++;
                         }
                         if (featureScenario.intTestStatus === MashTestStatus.MASH_FAIL) {
                             duFailingTests++;
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Failed INT test.  Count: {}", duFailingTests);
                         }
 
                         if (featureScenario.unitTestFailCount > 0) {
+                            log((msg) => console.log(msg), LogLevel.TRACE, "Failed UNIT tests {}", featureScenario.unitTestFailCount);
                             duFailingTests += featureScenario.unitTestFailCount;
                         }
 
@@ -271,13 +293,23 @@ class TestSummaryServices {
 
                 // Get stats for WP if this feature scenario in WP
                 if(userContext.workPackageId !== 'NONE') {
-                    const inWp = WorkPackageComponents.findOne({
+
+                    wpComponent = WorkPackageComponents.findOne({
                         workPackageId: userContext.workPackageId,
                         componentReferenceId: featureScenario.scenarioReferenceId,
                         scopeType: WorkPackageScopeType.SCOPE_ACTIVE
                     });
 
-                    if (inWp) {
+                    let nonRemovedComponent = true;
+
+                    if(duComponent && duComponent.isRemoved){
+                        nonRemovedComponent = false;
+                    }
+
+                    if (wpComponent && nonRemovedComponent) {
+
+                        log((msg) => console.log(msg), LogLevel.TRACE, "Adding WP scenario {}", duComponent.componentNameNew);
+
                         if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
                         }
@@ -312,63 +344,103 @@ class TestSummaryServices {
                         if (hasResult === false) {
                             wpFeatureNoTestScenarios++;
                         }
+
+                        log((msg) => console.log(msg), LogLevel.TRACE, "WP Passing Tests =  {}", wpPassingTests);
                     }
                 }
 
             });
 
-            UserDevTestSummaryData.insert({
-                userId:                         userContext.userId,
-                designVersionId:                userContext.designVersionId,
-                designUpdateId:                 userContext.designUpdateId,
-                scenarioReferenceId:            'NONE',
-                featureReferenceId:             designFeature.componentReferenceId,
-                accTestStatus:                  MashTestStatus.MASH_NOT_LINKED,
-                intTestStatus:                  MashTestStatus.MASH_NOT_LINKED,
-                unitTestPassCount:               0,
-                unitTestFailCount:               0,
-                featureSummaryStatus:           featureTestStatus,
-                featureTestPassCount:           passingTests,
-                featureTestFailCount:           failingTests,
-                featureNoTestCount:             featureNoTestScenarios,
-                duFeatureSummaryStatus:         duFeatureTestStatus,
-                duFeatureTestPassCount:         duPassingTests,
-                duFeatureTestFailCount:         duFailingTests,
-                duFeatureNoTestCount:           duFeatureNoTestScenarios,
-                wpFeatureSummaryStatus:         wpFeatureTestStatus,
-                wpFeatureTestPassCount:         wpPassingTests,
-                wpFeatureTestFailCount:         wpFailingTests,
-                wpFeatureNoTestCount:           wpFeatureNoTestScenarios,
-            });
+            if(updateTestData) {
+                UserDevTestSummaryData.insert({
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    scenarioReferenceId: 'NONE',
+                    featureReferenceId: designFeature.componentReferenceId,
+                    accTestStatus: MashTestStatus.MASH_NOT_LINKED,
+                    intTestStatus: MashTestStatus.MASH_NOT_LINKED,
+                    unitTestPassCount: 0,
+                    unitTestFailCount: 0,
+                    featureSummaryStatus: featureTestStatus,
+                    featureTestPassCount: passingTests,
+                    featureTestFailCount: failingTests,
+                    featureNoTestCount: featureNoTestScenarios,
+                    duFeatureSummaryStatus: duFeatureTestStatus,
+                    duFeatureTestPassCount: duPassingTests,
+                    duFeatureTestFailCount: duFailingTests,
+                    duFeatureNoTestCount: duFeatureNoTestScenarios,
+                    wpFeatureSummaryStatus: wpFeatureTestStatus,
+                    wpFeatureTestPassCount: wpPassingTests,
+                    wpFeatureTestFailCount: wpFailingTests,
+                    wpFeatureNoTestCount: wpFeatureNoTestScenarios,
+                });
+
+                // And now refresh the Design Summary
+                UserDevDesignSummaryData.remove({
+                    userId:             userContext.userId,
+                });
+
+                UserDevDesignSummaryData.insert({
+                    userId:                         userContext.userId,
+                    designVersionId:                userContext.designVersionId,
+                    featureCount:                   totalFeatureCount,
+                    scenarioCount:                  totalScenarioCount,
+                    untestedScenarioCount:          totalScenariosWithoutTests,
+                    unitTestPassCount:              totalUnitTestsPassing,
+                    unitTestFailCount:              totalUnitTestsFailing,
+                    unitTestPendingCount:           totalUnitTestsPending,
+                    intTestPassCount:               totalIntTestsPassing,
+                    intTestFailCount:               totalIntTestsFailing,
+                    intTestPendingCount:            totalIntTestsPending,
+                    accTestPassCount:               totalAccTestsPassing,
+                    accTestFailCount:               totalAccTestsFailing,
+                    accTestPendingCount:            totalAccTestsPending
+                });
+
+            } else {
+
+                // Just update the feature data to reflect a change in WP / DU...
+                log((msg) => console.log(msg), LogLevel.TRACE, "Updating feature {} setting du failed test count to {} ", designFeature.componentReferenceId, duFailingTests);
+
+                const updated = UserDevTestSummaryData.update(
+                    {
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        scenarioReferenceId: 'NONE',
+                        featureReferenceId: designFeature.componentReferenceId
+                    },
+                    {
+                        $set:{
+                            accTestStatus: MashTestStatus.MASH_NOT_LINKED,
+                            intTestStatus: MashTestStatus.MASH_NOT_LINKED,
+                            unitTestPassCount: 0,
+                            unitTestFailCount: 0,
+                            featureSummaryStatus: featureTestStatus,
+                            featureTestPassCount: passingTests,
+                            featureTestFailCount: failingTests,
+                            featureNoTestCount: featureNoTestScenarios,
+                            duFeatureSummaryStatus: duFeatureTestStatus,
+                            duFeatureTestPassCount: duPassingTests,
+                            duFeatureTestFailCount: duFailingTests,
+                            duFeatureNoTestCount: duFeatureNoTestScenarios,
+                            wpFeatureSummaryStatus: wpFeatureTestStatus,
+                            wpFeatureTestPassCount: wpPassingTests,
+                            wpFeatureTestFailCount: wpFailingTests,
+                            wpFeatureNoTestCount: wpFeatureNoTestScenarios
+                        }
+                    }
+                );
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "{} row updated", updated);
+            }
 
         });
 
-        // And now refresh the Design Summary
-        UserDevDesignSummaryData.remove({
-            userId:             userContext.userId,
-            // designVersionId:    userContext.designVersionId,
-            // designUpdateId:     userContext.designUpdateId
-        });
+        log((msg) => console.log(msg), LogLevel.INFO, "Features calculated");
 
 
-        UserDevDesignSummaryData.insert({
-            userId:                         userContext.userId,
-            designVersionId:                userContext.designVersionId,
-            designUpdateId:                 userContext.designUpdateId,
-            featureCount:                   totalFeatureCount,
-            scenarioCount:                  totalScenarioCount,
-            untestedScenarioCount:          totalScenariosWithoutTests,
-            unitTestPassCount:              totalUnitTestsPassing,
-            unitTestFailCount:              totalUnitTestsFailing,
-            unitTestPendingCount:           totalUnitTestsPending,
-            intTestPassCount:               totalIntTestsPassing,
-            intTestFailCount:               totalIntTestsFailing,
-            intTestPendingCount:            totalIntTestsPending,
-            accTestPassCount:               totalAccTestsPassing,
-            accTestFailCount:               totalAccTestsFailing,
-            accTestPendingCount:            totalAccTestsPending
-        });
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Refreshing test summary data complete");
     }
 
 }

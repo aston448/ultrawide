@@ -1,8 +1,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
 import TestResultOverlay from '../dev/TestResultOverlay.jsx';
@@ -13,12 +13,10 @@ import {TestType}   from '../../../constants/constants.js'
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
-import {InputGroup} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
+import {InputGroup}     from 'react-bootstrap';
+import {Glyphicon}      from 'react-bootstrap';
 
 // REDUX services
-import {connect} from 'react-redux';
-
 
 // =====================================================================================================================
 

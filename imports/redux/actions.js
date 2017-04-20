@@ -386,9 +386,10 @@ export function updateUserMessage(newMessage) {
 }
 
 // Toggle between true and false to trigger re-renders of design when data is updated
-export function updateTestDataFlag(newValue) {
+export function updateTestDataFlag() {
 
     let newFlag = store.getState().testDataFlag + 1;
+
     if(newFlag > 100){
         newFlag = 0;
     }

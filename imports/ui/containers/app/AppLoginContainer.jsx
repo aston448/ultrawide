@@ -2,7 +2,7 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
@@ -11,7 +11,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 import UserLogin                from '../../components/login/UserLogin.jsx';
 
 // Ultrawide Services
-import {ViewType}               from '../../../constants/constants.js'
 
 // Bootstrap
 

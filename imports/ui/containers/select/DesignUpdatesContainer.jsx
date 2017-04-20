@@ -1,28 +1,27 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
 import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
-import DesignComponentAdd           from '../../components/common/DesignComponentAdd.jsx';
 import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
 import WorkPackagesContainer        from './WorkPackagesContainer.jsx';
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
 
 // Ultrawide Services
 import {DesignVersionStatus, RoleType, WorkPackageType, LogLevel} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
-import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';
+
+import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
+import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
 import { log } from '../../../common/utils.js';
 
 // Bootstrap
-import {Grid, Row, Col, Button, ButtonGroup} from 'react-bootstrap';
-import {Panel} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';

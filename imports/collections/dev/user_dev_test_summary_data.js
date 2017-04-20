@@ -7,7 +7,6 @@ let Schema = new SimpleSchema({
     // Design Identity
     userId:                         {type: String},                         // Meteor user id - must be a user
     designVersionId:                {type: String},                         // Must be a design version
-    designUpdateId:                 {type: String, defaultValue: 'NONE'},
     scenarioReferenceId:            {type: String, defaultValue: 'NONE'},   // Set if known in Design
     featureReferenceId:             {type: String, defaultValue: 'NONE'},   // Set if known in Design
     accTestStatus:                  {type: String},                         // If linked, latest acceptance test results status

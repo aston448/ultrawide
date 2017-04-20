@@ -1,29 +1,19 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {ViewType, ComponentType, ViewMode, ScenarioStepStatus, ScenarioStepType, StepContext, MashStatus, MashTestStatus} from '../../../constants/constants.js';
-import ClientFeatureFileServices from  '../../../apiClient/apiClientFeatureFiles.js';
-import ClientMashDataServices from  '../../../apiClient/apiClientMashData.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
 import {InputGroup, Panel, FormControl} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-
-// React DnD - Component is draggable
-
-
-// Draft JS
 
 
 // =====================================================================================================================

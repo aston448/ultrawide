@@ -1,29 +1,22 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
-import SuggestedStep from '../../components/edit/SuggestedStep.jsx';
+import SuggestedStep        from '../../components/edit/SuggestedStep.jsx';
 
 // Ultrawide Services
-import { DisplayContext, ViewMode} from '../../../constants/constants.js';
-import ClientContainerServices from '../../../apiClient/apiClientContainerServices.js';
 import ClientScenarioStepServices from '../../../apiClient/apiClientScenarioStep.js';
 
 // Bootstrap
 
-
 // REDUX services
 import {connect} from 'react-redux';
-
-// React DnD
-
 
 // =====================================================================================================================
 

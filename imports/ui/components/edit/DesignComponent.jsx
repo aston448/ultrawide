@@ -1,11 +1,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes} from 'react';
-import { Meteor } from 'meteor/meteor';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
-
 
 // Ultrawide GUI Components
 import DesignSectionsContainer  from '../../containers/edit/DesignSectionsContainer.jsx';
@@ -20,9 +19,10 @@ import DesignComponentHeader    from './DesignComponentHeader.jsx';
 
 // Ultrawide Services
 import {ComponentType, ViewMode, ViewType, DisplayContext, WorkPackageType, UpdateScopeType, LogLevel} from '../../../constants/constants.js';
-import ClientDesignComponentServices from '../../../apiClient/apiClientDesignComponent.js';
-import ClientDesignUpdateComponentServices from '../../../apiClient/apiClientDesignUpdateComponent.js';
-import ClientWorkPackageComponentServices from '../../../apiClient/apiClientWorkPackageComponent.js';
+
+import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';
+import ClientDesignUpdateComponentServices  from '../../../apiClient/apiClientDesignUpdateComponent.js';
+import ClientWorkPackageComponentServices   from '../../../apiClient/apiClientWorkPackageComponent.js';
 
 import { log }              from '../../../common/utils.js';
 
@@ -30,8 +30,6 @@ import { log }              from '../../../common/utils.js';
 import {Panel} from 'react-bootstrap';
 
 // REDUX services
-import store from '../../../redux/store'
-import {setCurrentUserItemContext} from '../../../redux/actions';
 import {connect} from 'react-redux';
 
 // React DnD

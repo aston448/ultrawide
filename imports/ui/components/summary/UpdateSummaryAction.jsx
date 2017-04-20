@@ -1,24 +1,20 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import DesignItemHeader from '../select/DesignItemHeader.jsx';
 
 // Ultrawide Services
-import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';
-import {DesignUpdateSummaryType, ComponentType, DesignUpdateSummaryItem} from '../../../constants/constants.js';
+import {DesignUpdateSummaryType, ComponentType} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js'
 
 // Bootstrap
-import {Button, ButtonGroup, FormGroup, Radio} from 'react-bootstrap';
 import {InputGroup} from 'react-bootstrap';
 import {Glyphicon} from 'react-bootstrap';
 
 // REDUX services
-import {connect} from 'react-redux';
 
 // =====================================================================================================================
 

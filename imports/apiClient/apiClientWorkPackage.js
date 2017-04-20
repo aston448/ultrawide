@@ -364,6 +364,9 @@ class ClientWorkPackageServices {
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
+            // Update the test summary data to reflect the WP.  No need to recalc data
+            ClientTestIntegrationServices.updateTestSummaryData(newContext, false);
+
             return newContext;
         }
 

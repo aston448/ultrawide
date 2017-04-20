@@ -1,16 +1,16 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
 // Ultrawide GUI Components
 import AcceptanceTestScenarioMashItem       from '../../components/mash/AcceptanceTestScenarioMashItem.jsx';
 import IntegrationTestScenarioMashItem      from '../../components/mash/IntegrationTestScenarioMashItem.jsx';
-import UnitTestScenarioMashItem           from '../../components/mash/UnitTestScenarioMashItem.jsx';
+import UnitTestScenarioMashItem             from '../../components/mash/UnitTestScenarioMashItem.jsx';
 
 // Ultrawide Services
 import { DisplayContext }    from '../../../constants/constants.js';

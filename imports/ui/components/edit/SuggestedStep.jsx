@@ -1,26 +1,19 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
 
-
 // Ultrawide Services
-import { ItemType } from '../../../constants/constants.js';
-import ClientDesignServices from '../../../apiClient/apiClientDesign.js';
 
 // Bootstrap
-import {InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
-
-// React DnD
 
 
 // =====================================================================================================================
@@ -57,7 +50,7 @@ class SuggestedStep extends Component {
     render() {
         const {stepText} = this.props;
 
-        let suggestedStepClass = (this.state.highlighted ? 'suggested-step suggested-highlight' : 'suggested-step')
+        let suggestedStepClass = (this.state.highlighted ? 'suggested-step suggested-highlight' : 'suggested-step');
 
         return (
             <div className={suggestedStepClass} onMouseUp={ () => this.onAcceptStepText()} onMouseEnter={ () => this.setActive()} onMouseLeave={ () => this.setInactive()}>

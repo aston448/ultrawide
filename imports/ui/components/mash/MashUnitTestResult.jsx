@@ -1,24 +1,20 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes, ReactDOM } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import TestResultOverlay from '../dev/TestResultOverlay.jsx';
+import TestResultOverlay    from '../dev/TestResultOverlay.jsx';
 
 // Ultrawide Services
-import {TestType} from '../../../constants/constants.js';
-import TextLookups from '../../../common/lookups.js';
+import {TestType}       from '../../../constants/constants.js';
+import TextLookups      from '../../../common/lookups.js';
 
 // Bootstrap
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
-
-// React DnD - Component is draggable
-
-// Draft JS
 
 // =====================================================================================================================
 

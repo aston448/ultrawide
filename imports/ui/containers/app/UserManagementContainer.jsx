@@ -2,7 +2,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
@@ -13,12 +14,11 @@ import UserDetails              from '../../components/app/UserDetails.jsx';
 
 
 // Ultrawide Services
-import {ViewType}                           from '../../../constants/constants.js'
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 import ClientUserManagementServices         from '../../../apiClient/apiClientUserManagement.js';
 
 // Bootstrap
-import {Panel} from 'react-bootstrap';
+import {Panel}          from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services

@@ -1,11 +1,10 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import MashUnitTestContainer from '../../containers/mash/MashUnitTestContainer.jsx';
 
 // Ultrawide Services
 import {MashTestStatus, TestType} from '../../../constants/constants.js';
@@ -13,11 +12,6 @@ import {MashTestStatus, TestType} from '../../../constants/constants.js';
 // Bootstrap
 
 // REDUX services
-
-// React DnD - Component is draggable
-
-// Draft JS
-
 
 // =====================================================================================================================
 

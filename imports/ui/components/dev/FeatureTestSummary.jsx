@@ -1,26 +1,22 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
-
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-
 
 // Ultrawide Services
 import {FeatureTestSummaryStatus, ViewType}    from '../../../constants/constants.js';
-import {log} from '../../../common/utils.js';
 
 // Bootstrap
 import {Glyphicon} from 'react-bootstrap';
 import {Grid, Row, Col} from 'react-bootstrap';
 
 // REDUX services
+import {connect} from 'react-redux';
 
 // =====================================================================================================================
 
@@ -30,7 +26,7 @@ import {Grid, Row, Col} from 'react-bootstrap';
 //
 // ---------------------------------------------------------------------------------------------------------------------
 
-class TestSummary extends Component {
+export class TestSummary extends Component {
     constructor(props) {
         super(props);
 
@@ -43,7 +39,9 @@ class TestSummary extends Component {
 
     render() {
 
-        const {testSummaryData, view, userContext} = this.props;
+        const {testSummaryData, view} = this.props;
+
+        //console.log("Rendering Feature Test Summary data with view = " + view + " and summary data = " + testSummaryData);
 
         if(testSummaryData){
 
@@ -83,6 +81,8 @@ class TestSummary extends Component {
                     break;
 
             }
+
+            //console.log("Pass count = " + passCount);
 
             // If no Scenarios at all indicate design deficit
             if(noTestCount === 0 && failCount === 0 && passCount === 0){
@@ -158,9 +158,8 @@ TestSummary.propTypes = {
 // Redux function which maps state from the store to specific props this component is interested in.
 function mapStateToProps(state) {
     return {
-        userContext:        state.currentUserItemContext,
         view:               state.currentAppView
     }
 }
 
-export default TestSummary;
+export default connect(mapStateToProps)(TestSummary);

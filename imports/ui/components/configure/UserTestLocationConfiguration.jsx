@@ -1,20 +1,18 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
-
 
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import {RoleType, LocationType, ViewType} from '../../../constants/constants.js'
-import ClientTestOutputLocationServices from '../../../apiClient/apiClientTestOutputLocations.js';
+import ClientTestOutputLocationServices     from '../../../apiClient/apiClientTestOutputLocations.js';
 
 // Bootstrap
-import {Grid, Row, Col, FormControl, Checkbox} from 'react-bootstrap';
+import {Grid, Row, Col, Checkbox} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';

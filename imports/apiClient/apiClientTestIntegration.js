@@ -93,6 +93,31 @@ class ClientTestIntegrationServices {
     };
 
 
+    // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
+    updateTestSummaryData(userContext, updateTestData){
+
+        store.dispatch(updateUserMessage({
+            messageType: MessageType.WARNING,
+            messageText: 'Updating test summary data'
+        }));
+
+        ServerTestIntegrationApi.updateTestSummaryData(userContext, updateTestData, (err, result) => {
+
+            if(err){
+
+                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+            } else {
+
+                store.dispatch(updateTestDataFlag());
+
+                store.dispatch(updateUserMessage({
+                    messageType: MessageType.INFO,
+                    messageText: 'Summary updated'
+                }));
+            }
+        });
+
+    }
     // Reload all test data and results
     reloadScenarioMashData(userContext){
 

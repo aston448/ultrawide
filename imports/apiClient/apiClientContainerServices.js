@@ -1851,7 +1851,7 @@ class ClientContainerServices{
     // Get all unit test results relating to a specific Design Scenario
     getMashScenarioUnitTestResults(userContext, scenario){
 
-        console.log("getting unit tests with user id: " + userContext.userId + " and scenario ref " + scenario.designScenarioReferenceId);
+        //console.log("getting unit tests with user id: " + userContext.userId + " and scenario ref " + scenario.designScenarioReferenceId);
 
         return UserUnitTestMashData.find({
             userId:                         userContext.userId,
@@ -1955,15 +1955,9 @@ class ClientContainerServices{
 
     getTestSummaryData(scenario){
 
-        // let designUpdateId = 'NONE';
-        //
-        // if(scenario.designUpdateId){
-        //     designUpdateId = scenario.designUpdateId;
-        // }
 
         return UserDevTestSummaryData.findOne({
             designVersionId:        scenario.designVersionId,
-            //designUpdateId:         designUpdateId,
             scenarioReferenceId:    scenario.componentReferenceId
         });
 
@@ -1971,15 +1965,8 @@ class ClientContainerServices{
 
     getTestSummaryFeatureData(feature){
 
-        // let designUpdateId = 'NONE';
-        //
-        // if(feature.designUpdateId){
-        //     designUpdateId = feature.designUpdateId;
-        // }
-
         return UserDevTestSummaryData.findOne({
             designVersionId:        feature.designVersionId,
-            //designUpdateId:         designUpdateId,
             scenarioReferenceId:    'NONE',
             featureReferenceId:     feature.componentReferenceId
         });

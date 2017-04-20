@@ -1,7 +1,7 @@
 /**
  * Created by aston on 08/09/2016.
  */
-import React, { Component, PropTypes } from 'react';
+//import React, { Component} from 'react';
 
 import {ComponentType, UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType} from '../constants/constants.js';
 import {DesignVersionComponents} from '../collections/design/design_version_components.js';

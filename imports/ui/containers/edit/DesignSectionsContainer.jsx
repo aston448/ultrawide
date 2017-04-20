@@ -1,11 +1,11 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
-
 
 // Ultrawide GUI Components
 import DesignComponentTarget                from '../../components/edit/DesignComponentTarget.jsx';
@@ -19,12 +19,8 @@ import { ViewType, ComponentType, DisplayContext } from '../../../constants/cons
 
 // Bootstrap
 
-
 // REDUX services
 import {connect} from 'react-redux';
-
-// React DnD
-
 
 // =====================================================================================================================
 

@@ -1,9 +1,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
@@ -11,7 +10,6 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Services
 import {}    from '../../../constants/constants.js';
-import {log} from '../../../common/utils.js';
 
 import TextLookups                  from '../../../common/lookups.js';
 

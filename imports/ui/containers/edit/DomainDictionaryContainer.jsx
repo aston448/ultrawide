@@ -1,20 +1,20 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createContainer } from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-import DesignComponentAdd from '../../components/common/DesignComponentAdd.jsx';
-import DomainDictionaryTerm from '../../components/edit/DomainDictionaryTerm.jsx';
-import DetailsViewHeader    from '../../components/common/DetailsViewHeader.jsx';
-import DetailsViewFooter    from '../../components/common/DetailsViewFooter.jsx';
+import DomainDictionaryTerm     from '../../components/edit/DomainDictionaryTerm.jsx';
+import DetailsViewHeader        from '../../components/common/DetailsViewHeader.jsx';
+import DetailsViewFooter        from '../../components/common/DetailsViewFooter.jsx';
 
 // Ultrawide Services
-import { DetailsViewType, ViewMode} from '../../../constants/constants.js';
+import { DetailsViewType } from '../../../constants/constants.js';
+
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 import ClientUserContextServices    from '../../../apiClient/apiClientUserContext.js';
 
@@ -22,9 +22,6 @@ import ClientUserContextServices    from '../../../apiClient/apiClientUserContex
 
 // REDUX services
 import {connect} from 'react-redux';
-
-// React DnD
-
 
 // =====================================================================================================================
 

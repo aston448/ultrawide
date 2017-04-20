@@ -1,7 +1,8 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
@@ -9,9 +10,10 @@ import React, { Component, PropTypes } from 'react';
 
 // Ultrawide Services
 import {ViewMode, ViewType, DisplayContext, ComponentType, LogLevel} from '../../../constants/constants.js';
+
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
 import ClientTextEditorServices         from '../../../apiClient/apiClientTextEditor.js';
-import { log } from '../../../common/utils.js'
+import { log }                          from '../../../common/utils.js'
 
 // Bootstrap
 import {Glyphicon} from 'react-bootstrap';

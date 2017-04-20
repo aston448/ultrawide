@@ -1,26 +1,25 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes} from 'react';
-import { Meteor } from 'meteor/meteor';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide Collections
 
-
 // Ultrawide GUI Components
-
 
 // Ultrawide Services
 import {RoleType, ItemType, DesignVersionStatus, DesignUpdateStatus} from '../../../constants/constants.js';
-import ClientDesignServices from '../../../apiClient/apiClientDesign.js';
-import ClientDesignVersionServices from '../../../apiClient/apiClientDesignVersion.js';
-import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';
-import ClientWorkPackageServices from '../../../apiClient/apiClientWorkPackage.js';
+
+import ClientDesignServices             from '../../../apiClient/apiClientDesign.js';
+import ClientDesignVersionServices      from '../../../apiClient/apiClientDesignVersion.js';
+import ClientDesignUpdateServices       from '../../../apiClient/apiClientDesignUpdate.js';
+import ClientWorkPackageServices        from '../../../apiClient/apiClientWorkPackage.js';
 
 // Bootstrap
-import {InputGroup} from 'react-bootstrap';
-import {Glyphicon} from 'react-bootstrap';
-import {FormControl, ControlLabel} from 'react-bootstrap';
+import {InputGroup}                 from 'react-bootstrap';
+import {Glyphicon}                  from 'react-bootstrap';
+import {FormControl, ControlLabel}  from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';

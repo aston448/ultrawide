@@ -1,9 +1,9 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
@@ -15,7 +15,7 @@ import DesignComponentTextContainer     from './DesignComponentTextContainer.jsx
 import DomainDictionaryContainer        from './DomainDictionaryContainer.jsx';
 
 // Ultrawide Services
-import { ComponentType, ViewType, ViewMode, DisplayContext, LogLevel } from '../../../constants/constants.js';
+import { ViewType, DisplayContext, LogLevel } from '../../../constants/constants.js';
 import { log } from '../../../common/utils.js'
 
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';

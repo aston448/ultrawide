@@ -41,11 +41,12 @@ class ServerTestIntegrationApi {
         );
     };
 
-    updateTestSummaryData(userContext, callback){
+    updateTestSummaryData(userContext, updateTestData, callback){
 
         updateTestSummaryData.call(
             {
-                userContext: userContext
+                userContext:    userContext,
+                updateTestData: updateTestData
             },
             (err, result) => {
                 callback(err, result);

@@ -1,17 +1,17 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import MashUnitTestResult         from '../../components/mash/MashUnitTestResult.jsx';
+import MashUnitTestResult           from '../../components/mash/MashUnitTestResult.jsx';
 
 // Ultrawide Services
-import {DisplayContext}    from '../../../constants/constants.js';
+import {DisplayContext}             from '../../../constants/constants.js';
 
 import ClientContainerServices      from '../../../apiClient/apiClientContainerServices.js';
 
@@ -94,7 +94,7 @@ export default MashUnitTestContainer = createContainer(({params}) => {
     switch(params.displayContext){
         case DisplayContext.VIEW_UNIT_MASH:
             testResults = ClientContainerServices.getMashScenarioUnitTestResults(params.userContext, params.scenario);
-            console.log("Found " + testResults.length + " unit tests for " + params.scenario.scenarioName) ;
+            //console.log("Found " + testResults.length + " unit tests for " + params.scenario.scenarioName) ;
             break;
 
         case DisplayContext.VIEW_UNIT_UNLINKED:

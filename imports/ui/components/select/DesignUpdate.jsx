@@ -1,14 +1,15 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
-import DesignItemHeader from './DesignItemHeader.jsx';
+import DesignItemHeader             from './DesignItemHeader.jsx';
 
 // Ultrawide Services
-import ClientDesignUpdateServices from '../../../apiClient/apiClientDesignUpdate.js';
+import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpdate.js';
+
 import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType} from '../../../constants/constants.js';
 import TextLookups from '../../../common/lookups.js';
 

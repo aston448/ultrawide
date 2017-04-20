@@ -44,7 +44,7 @@ class TestIntegrationServices{
             MashDataModules.updateUnitTestScenarioResults(userContext);
 
             // And update the test summary data
-            this.updateTestSummaryData(userContext);
+            this.updateTestSummaryData(userContext, true);
         }
     }
 
@@ -66,7 +66,7 @@ class TestIntegrationServices{
                 MashDataModules.updateIntTestScenarioResults(userContext);
                 MashDataModules.updateUnitTestScenarioResults(userContext);
 
-                this.updateTestSummaryData(userContext);
+                this.updateTestSummaryData(userContext, true);
 
             } else {
 
@@ -113,7 +113,7 @@ class TestIntegrationServices{
         }
     };
 
-    updateTestSummaryData(userContext){
+    updateTestSummaryData(userContext, updateTestData){
 
         // Called if the test summary needs a refresh
 
@@ -124,7 +124,7 @@ class TestIntegrationServices{
             //MashDataModules.getUnitTestResults(userContext);
 
             // Recreate the summary mash
-            TestSummaryServices.refreshTestSummaryData(userContext);
+            TestSummaryServices.refreshTestSummaryData(userContext, updateTestData);
         }
     }
 

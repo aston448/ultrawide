@@ -1,19 +1,18 @@
 // == IMPORTS ==========================================================================================================
 
 // Meteor / React Services
-import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'meteor/react-meteor-data';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Ultrawide GUI Components
 
 // Ultrawide Services
 
-import {DesignUpdateMergeAction} from '../../../constants/constants.js';
+import {DesignUpdateMergeAction}    from '../../../constants/constants.js';
 
 // Bootstrap
 
 // REDUX services
-
 
 // =====================================================================================================================
 
