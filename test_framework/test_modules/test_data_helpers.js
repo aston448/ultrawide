@@ -702,6 +702,9 @@ class TestDataHelpers {
 
     getMashTestResult(userContext, scenarioName){
 
+        const testScenarios = UserDesignVersionMashScenarios.find({}).fetch();
+        console.log("Test Mash Scenarios: " + testScenarios.length);
+
         const testResult = UserDesignVersionMashScenarios.findOne({
             userId:             userContext.userId,
             designVersionId:    userContext.designVersionId,
@@ -711,7 +714,7 @@ class TestDataHelpers {
         if(testResult) {
             return testResult
         } else {
-            throw new Meteor.Error("FAIL", "Test Result not found  for Scenario " + scenarioName + " in user context DV: " + userContext.designVersionId + " DU: " + userContext.designUpdateId + " WP: " + userContext.workPackageId);
+            throw new Meteor.Error("FAIL", "Test Result not found  for Scenario " + scenarioName + " in user context DV: " + userContext.designVersionId);
         }
     };
 
