@@ -558,7 +558,7 @@ Meteor.methods({
             // Add in the screen scrape garbage
             const fileText = headerBollox + jsonData;
 
-            fs.writeFile(fileName, fileText);
+            fs.writeFileSync(fileName, fileText);
 
         } else {
 
@@ -668,7 +668,7 @@ Meteor.methods({
 
             const jsonData = JSON.stringify(outputData, null, 2);
 
-            fs.writeFile(fileName, jsonData);
+            fs.writeFileSync(fileName, jsonData);
 
         } else {
             // Support for multipe files here
