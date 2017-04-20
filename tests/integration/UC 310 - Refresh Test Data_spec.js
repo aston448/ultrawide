@@ -2,24 +2,14 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
 import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
 import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
-import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
-import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
-import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
-import DesignVerifications          from '../../test_framework/test_wrappers/design_verifications.js';
-import DesignUpdateVerifications    from '../../test_framework/test_wrappers/design_update_verifications.js';
-import DesignVersionVerifications   from '../../test_framework/test_wrappers/design_version_verifications.js';
-import DesignComponentVerifications from '../../test_framework/test_wrappers/design_component_verifications.js';
-import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
 import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
-import WorkPackageVerifications     from '../../test_framework/test_wrappers/work_package_verifications.js';
 import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
-import WpComponentVerifications     from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import OutputLocationsActions       from '../../test_framework/test_wrappers/output_locations_actions.js';
-import OutputLocationsVerifications from '../../test_framework/test_wrappers/output_locations_verifications.js';
 import TestResultActions            from '../../test_framework/test_wrappers/test_integration_actions.js';
 import TestResultVerifications      from '../../test_framework/test_wrappers/test_result_verifications.js';
 import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
 import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
+import TestIntegrationActions       from '../../test_framework/test_wrappers/test_integration_actions.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
@@ -140,6 +130,7 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        TestIntegrationActions.developerRefreshesTestData();
 
         // Current Results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
