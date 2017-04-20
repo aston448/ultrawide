@@ -76,11 +76,17 @@ class TestFixtures{
     }
 
     writeIntegrationTestResults_ChimpMocha(locationName, results){
-        server.call('testFixtures.writeIntegrationTestResults_ChimpMocha', locationName, results);
+        // Need an async call otherwise there is random chaos...
+        server.call('testFixtures.writeIntegrationTestResults_ChimpMocha', locationName, results, (result, error) => {
+            done();
+        });
     }
 
     writeUnitTestResults_MeteorMocha(locationName, results){
-        server.call('testFixtures.writeUnitTestResults_MeteorMocha', locationName, results);
+        // Need an async call otherwise there is random chaos...
+        server.call('testFixtures.writeUnitTestResults_MeteorMocha', locationName, results,  (result, error) => {
+            done();
+        });
     }
 
 }
