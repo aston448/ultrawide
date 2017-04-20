@@ -134,7 +134,6 @@ describe('UC 310 - Refresh Test Data', function(){
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         TestIntegrationActions.developerRefreshesTestData();
-        TestIntegrationActions.developerRefreshesTestResults();
 
         // Current Results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
@@ -227,6 +226,7 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        TestIntegrationActions.developerRefreshesTestData();
 
         // Current Results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
