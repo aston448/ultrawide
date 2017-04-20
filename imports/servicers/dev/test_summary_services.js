@@ -308,8 +308,6 @@ class TestSummaryServices {
 
                     if (wpComponent && nonRemovedComponent) {
 
-                        log((msg) => console.log(msg), LogLevel.TRACE, "Adding WP scenario {}", duComponent.componentNameNew);
-
                         if (featureScenario.accTestStatus === MashTestStatus.MASH_FAIL) {
                             wpFailingTests++;
                         }
