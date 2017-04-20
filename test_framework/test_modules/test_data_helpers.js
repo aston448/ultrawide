@@ -16,7 +16,7 @@ import { UserRoles }                from '../../imports/collections/users/user_r
 import { TestOutputLocations }      from '../../imports/collections/configure/test_output_locations.js'
 import { TestOutputLocationFiles }  from '../../imports/collections/configure/test_output_location_files.js'
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
-import { UserWorkPackageMashData }  from '../../imports/collections/dev/user_work_package_mash_data.js';
+import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
@@ -702,12 +702,10 @@ class TestDataHelpers {
 
     getMashTestResult(userContext, scenarioName){
 
-        const testResult = UserWorkPackageMashData.findOne({
+        const testResult = UserDesignVersionMashScenarios.findOne({
             userId:             userContext.userId,
             designVersionId:    userContext.designVersionId,
-            designUpdateId:     userContext.designUpdateId,
-            workPackageId:      userContext.workPackageId,
-            mashItemName:       scenarioName
+            scenarioName:       scenarioName
         });
 
         if(testResult) {

@@ -17,7 +17,7 @@ Meteor.methods({
         const testResult = TestDataHelpers.getMashTestResult(userContext, scenarioName);
 
 
-        if (testResult.intMashTestStatus != result) {
+        if (testResult.intMashTestStatus !== result) {
             throw new Meteor.Error("FAIL", "Expecting test result " + result + " but got " + testResult.intMashTestStatus + " for Scenario " + scenarioName);
         } else {
             return true;
