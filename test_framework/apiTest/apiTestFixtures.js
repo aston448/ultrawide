@@ -70,7 +70,7 @@ Meteor.methods({
             TestOutputLocationFiles.remove({});
             TestOutputLocations.remove({});
 
-            UserDesignVersionMashScenarios.remove({userId: userContext.userId});
+            UserDesignVersionMashScenarios.remove({});
 
             UserCurrentEditContext.remove({});
             UserCurrentViewOptions.remove({});
