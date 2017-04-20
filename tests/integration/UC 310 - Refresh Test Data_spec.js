@@ -20,6 +20,15 @@ describe('UC 310 - Refresh Test Data', function(){
     before(function(){
         TestFixtures.logTestSuite('UC 310 - Refresh Test Data');
 
+
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();
 
@@ -76,13 +85,6 @@ describe('UC 310 - Refresh Test Data', function(){
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
