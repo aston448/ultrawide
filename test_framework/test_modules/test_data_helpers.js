@@ -703,6 +703,10 @@ class TestDataHelpers {
     getMashTestResult(userContext, scenarioName){
 
         const testScenarios = UserDesignVersionMashScenarios.find({}).fetch();
+
+        testScenarios.forEach((mashScenario) => {
+            console.log("    Scenario: " + mashScenario.scenarioName + "  Result: " + mashScenario.intMashTestStatus);
+        });
         console.log("Test Mash Scenarios: " + testScenarios.length);
 
         const testResult = UserDesignVersionMashScenarios.findOne({
