@@ -378,9 +378,18 @@ class TestIntegrationModules{
             userId: userContext.userId
         });
 
+
+
         intResults.forEach((result) => {
-            UserDesignVersionMashScenarios.update(
-                {scenarioName: result.testName},
+
+            console.log("Integration test result for Scenario " + result.testName + " is " + result.testResult);
+
+            const updates = UserDesignVersionMashScenarios.update(
+                {
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    scenarioName: result.testName
+                },
                 {
                     $set: {
                         intMashStatus: MashStatus.MASH_LINKED,
@@ -389,8 +398,11 @@ class TestIntegrationModules{
                         intStackTrace: result.stackTrace,
                         intDuration: result.testDuration
                     }
-                }
+                },
+                {multi: true}
             );
+
+            console.log("Updated " + updates + " mash item");
         });
 
     };

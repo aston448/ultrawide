@@ -37,7 +37,6 @@ class TestIntegrationServices{
 
             // Recalculate the Design Mash Scenarios
             MashDataModules.createUserMashScenariosForDesignVersion(userContext);
-            // MashDataModules.calculateDesignDevMash(userContext)
 
             // And load current test results
             MashDataModules.updateIntTestScenarioResults(userContext);
