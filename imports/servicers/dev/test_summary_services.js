@@ -49,7 +49,7 @@ class TestSummaryServices {
                 userId: userContext.userId,
             });
 
-            log((msg) => console.log(msg), LogLevel.INFO, "Data removed");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Data removed");
 
             // Get the Design Scenario Data
             const designScenarios = DesignVersionComponents.find({
@@ -61,7 +61,7 @@ class TestSummaryServices {
 
             totalScenarioCount = designScenarios.length;
 
-            log((msg) => console.log(msg), LogLevel.INFO, "Got Scenarios");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Got Scenarios");
 
             // Populate the Scenario summary data
             designScenarios.forEach((designScenario) => {
@@ -155,7 +155,7 @@ class TestSummaryServices {
 
             });
 
-            log((msg) => console.log(msg), LogLevel.INFO, "Scenarios populated");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Scenarios populated");
         }
 
         // Populate the Feature summary data
@@ -434,7 +434,7 @@ class TestSummaryServices {
 
         });
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Features calculated");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Features calculated");
 
 
 
