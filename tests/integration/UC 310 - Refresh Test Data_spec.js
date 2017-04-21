@@ -355,6 +355,7 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DESIGN_TEST_SUMMARY));
         ViewOptionsActions.developerTogglesDesignVersionTestSummary();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DESIGN_TEST_SUMMARY));
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Expect summary to show untested items - note totals for feature will include everything in the design - not just what's in the test results
         // Check Feature 1 details
