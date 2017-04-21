@@ -331,6 +331,8 @@ class TestIntegrationModules{
 
     createUserMashScenariosForDesignVersion(userContext){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Recreating user mash scenarios... {}", userContext.userId);
+
         // Clear all data for user
         UserDesignVersionMashScenarios.remove({userId: userContext.userId});
 
@@ -369,6 +371,8 @@ class TestIntegrationModules{
                 intDuration:                    0,
             });
         });
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Recreating user mash scenarios - DONE {}", userContext.userId);
     };
 
 
@@ -382,7 +386,7 @@ class TestIntegrationModules{
 
         intResults.forEach((result) => {
 
-            console.log("Integration test result for Scenario " + result.testName + " is " + result.testResult);
+            //console.log("Integration test result for Scenario " + result.testName + " is " + result.testResult);
 
             const updates = UserDesignVersionMashScenarios.update(
                 {
@@ -410,7 +414,7 @@ class TestIntegrationModules{
     updateUnitTestScenarioResults(userContext){
 
         // Get the Module test results for current user
-        log((msg) => console.log(msg), LogLevel.INFO, "Getting Unit Test Results for User {}", userContext.userId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Test Results for User {}", userContext.userId);
 
         UserUnitTestMashData.remove({userId: userContext.userId});
 
@@ -724,7 +728,7 @@ class TestIntegrationModules{
         //     log((msg) => console.log(msg), LogLevel.INFO, "No unit test results data");
         // }
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Unit test data complete");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Unit test data complete");
     }
 
 

@@ -35,6 +35,8 @@ class TestIntegrationServices{
 
         if(Meteor.isServer){
 
+            log((msg) => console.log(msg), LogLevel.INFO, "REFRESH MASH DATA...");
+
             // Recalculate the Design Mash Scenarios
             MashDataModules.createUserMashScenariosForDesignVersion(userContext);
 
@@ -44,6 +46,8 @@ class TestIntegrationServices{
 
             // And update the test summary data
             this.updateTestSummaryData(userContext, true);
+
+            log((msg) => console.log(msg), LogLevel.INFO, "REFRESH MASH DATA - DONE");
         }
     }
 
@@ -57,6 +61,8 @@ class TestIntegrationServices{
 
                 // Refresh all results.
 
+                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH ALL TEST RESULTS...");
+
                 // Get latest results
                 MashDataModules.getIntegrationTestResults(userContext);
                 MashDataModules.getUnitTestResults(userContext);
@@ -67,7 +73,11 @@ class TestIntegrationServices{
 
                 this.updateTestSummaryData(userContext, true);
 
+                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH ALL TEST RESULTS - DONE");
+
             } else {
+
+                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH VISIBLE TEST RESULTS");
 
                 if (viewOptions.devAccTestsVisible) {
                     // Get the latest feature files
@@ -97,6 +107,7 @@ class TestIntegrationServices{
                 //     this.updateTestSummaryData(userContext);
                 // }
 
+                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH VISIBLE TEST RESULTS - DONE");
             }
 
             // Mark design update summary data as stale so that results are updated
