@@ -769,14 +769,15 @@ class TestDataHelpers {
 
     getTestSummaryFeatureData(userId, designVersionId, featureReferenceId, featureName){
 
-        const summaryData = UserDevTestSummaryData.findOne({
+        const summaryData = UserDevTestSummaryData.find({
             userId:             userId,
             designVersionId:    designVersionId,
             featureReferenceId: featureReferenceId
-        });
+        }).fetch();
 
         if(summaryData){
-            console.log("Feature Summary Data: " + featureReferenceId + " Pass: " +  summaryData.featureTestPassCount + " Fail: " + summaryData.featureTestFailCount + " No Test: " + summaryData.featureNoTestCount);
+            console.log("Feature Summary Data " + summaryData.length + " rows");
+            //console.log("Feature Summary Data: " + featureReferenceId + " Pass: " +  summaryData.featureTestPassCount + " Fail: " + summaryData.featureTestFailCount + " No Test: " + summaryData.featureNoTestCount);
             return summaryData;
         } else {
             throw new Meteor.Error("FAIL", "Test Summary Data not found for Feature " + featureName);
