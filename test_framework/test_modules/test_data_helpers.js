@@ -776,6 +776,7 @@ class TestDataHelpers {
         });
 
         if(summaryData){
+            console.log("Feature Summary Data: Pass: " + summaryData.featureTestPassCount + " Fail: " + summaryData.featureTestFailCount + " No Test: " + summaryData.featureNoTestCount);
             return summaryData;
         } else {
             throw new Meteor.Error("FAIL", "Test Summary Data not found for Feature " + featureName);
