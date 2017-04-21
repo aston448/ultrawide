@@ -177,6 +177,7 @@ describe('UC 310 - Refresh Test Data', function(){
         // Developer sets up location config
         OutputLocationsActions.developerEditsTestLocationConfig();
         OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
+        OutputLocationsActions.developerSelectsUnitTestsInConfigForLocation('Location1');
 
         // Make sure WP is adopted for Developer
         DesignActions.developerWorksOnDesign('Design1');
