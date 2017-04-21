@@ -296,7 +296,39 @@ describe('UC 310 - Refresh Test Data', function(){
 
     });
 
-    //it('Test data from a new test run can be updated for a Test Summary');
+    it('Test data from a new test run can be updated for the Developer unit test view for a Design Version', function(){
+
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', oldUnitResults);
+
+        // Go to Version View and look at test results
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
+
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsPane();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        TestIntegrationActions.developerRefreshesTestData();
+        TestIntegrationActions.developerRefreshesTestResults();
+
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+
+        // New test run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
+
+        TestIntegrationActions.developerRefreshesTestData();
+
+        // Result is now a fail
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_FAIL));
+    });
+
+    it('Test data from a new test run can be updated for a Test Summary');
 
 
     // Conditions
@@ -347,7 +379,66 @@ describe('UC 310 - Refresh Test Data', function(){
 
 
     // Consequences
-    //it('When test data is updated by a Developer any modifications to Scenarios made by that Developer are included in the update');
+    it('When test data is updated by a Developer any modifications to Scenarios made by that Developer are included in the update', function(){
+
+        // Setup
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
+
+        // Go to WP and look at results
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsPane();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+
+        TestIntegrationActions.developerRefreshesTestData();
+        TestIntegrationActions.developerRefreshesTestResults();
+
+        // Current Results
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
+
+        WpComponentActions.developerSelectsWorkPackageComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
+        WpComponentActions.developerUpdatesSelectedComponentNameTo('NewScenario');
+
+        // Developer writes a test for NewScenario and runs it...
+        const modifiedIntResults = [
+            {
+                featureName: 'Feature1',
+                scenarioName: 'NewScenario',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature1',
+                scenarioName: 'Scenario2',
+                result: MashTestStatus.MASH_FAIL
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario3',
+                result: MashTestStatus.MASH_PASS
+            },
+            {
+                featureName: 'Feature2',
+                scenarioName: 'Scenario4',
+                result: MashTestStatus.MASH_FAIL
+            }
+        ];
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', modifiedIntResults);
+
+        // Execute - refresh data
+        TestResultActions.developerRefreshesTestResults();
+
+        // Verify - new results
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('NewScenario', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_FAIL));
+
+    });
 
 });
 
