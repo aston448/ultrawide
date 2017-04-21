@@ -72,26 +72,6 @@ class ClientTestIntegrationServices {
 
     // API Methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    // User has requested a refresh of everything because another user might have changed stuff ------------------------
-    // refreshDesignMashData(userContext){
-    //
-    //     this.refreshTestData(userContext);
-    //
-    //     // Return default outcome for test purposes
-    //     return {success: true, message: ''};
-    //
-    // };
-
-    // User has requested a complete refresh of test data --------------------------------------------------------------
-    // refreshTestData(userContext, viewOptions){
-    //
-    //     this.updateTestResults(userContext, viewOptions);
-    //
-    //     // Return default outcome for test purposes
-    //     return {success: true, message: ''};
-    //
-    // };
-
 
     // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
     updateTestSummaryData(userContext, updateTestData){
@@ -118,7 +98,8 @@ class ClientTestIntegrationServices {
         });
 
     }
-    // Reload all test data and results
+
+    // User has requested a complete refresh of test data --------------------------------------------------------------
     refreshTestData(userContext){
 
         store.dispatch(updateUserMessage({
@@ -131,6 +112,7 @@ class ClientTestIntegrationServices {
             if(err){
 
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+                return {success: false, message: 'err.reason'};
             } else {
 
                 // Mash is populated to carry on with test data if needed
@@ -141,34 +123,36 @@ class ClientTestIntegrationServices {
                     messageType: MessageType.INFO,
                     messageText: 'Test data and results loaded'
                 }));
+
+                return {success: true, message: ''};
             }
         });
     }
 
     // Get latest test results required for current view options
-    updateTestResults(userContext, viewOptions){
-
-        store.dispatch(updateUserMessage({
-            messageType: MessageType.WARNING,
-            messageText: 'Synchronising server test results data...'
-        }));
-
-        ServerTestIntegrationApi.updateTestResults(userContext, viewOptions, (err, result) => {
-
-            if(err){
-
-                alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-            } else {
-
-                store.dispatch(updateUserMessage({
-                    messageType: MessageType.INFO,
-                    messageText: 'Test results loaded'
-                }));
-
-                store.dispatch(updateTestDataFlag())
-            }
-        });
-    };
+    // updateTestResults(userContext, viewOptions){
+    //
+    //     store.dispatch(updateUserMessage({
+    //         messageType: MessageType.WARNING,
+    //         messageText: 'Synchronising server test results data...'
+    //     }));
+    //
+    //     ServerTestIntegrationApi.updateTestResults(userContext, viewOptions, (err, result) => {
+    //
+    //         if(err){
+    //
+    //             alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
+    //         } else {
+    //
+    //             store.dispatch(updateUserMessage({
+    //                 messageType: MessageType.INFO,
+    //                 messageText: 'Test results loaded'
+    //             }));
+    //
+    //             store.dispatch(updateTestDataFlag())
+    //         }
+    //     });
+    // };
 
 
     // LOCAL CLIENT ACTIONS ============================================================================================

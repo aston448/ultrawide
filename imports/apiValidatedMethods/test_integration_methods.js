@@ -29,25 +29,6 @@ export const refreshTestData = new ValidatedMethod({
     }
 });
 
-export const updateTestResults = new ValidatedMethod({
-
-    name: 'testIntegration.updateTestResults',
-
-    validate: new SimpleSchema({
-        userContext:    {type: Object, blackbox: true},
-        viewOptions:    {type: Object, blackbox: true, optional: true}
-    }).validator(),
-
-    run({userContext, viewOptions}){
-
-        try {
-            TestIntegrationServices.updateDesignDevMashResults(userContext, viewOptions);
-        } catch (e) {
-            console.log(e.stack);
-            throw new Meteor.Error(e.error, e.stack)
-        }
-    }
-});
 
 export const updateTestSummaryData = new ValidatedMethod({
 

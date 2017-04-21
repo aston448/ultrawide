@@ -69,87 +69,12 @@ class TestIntegrationServices{
         }
     }
 
-    updateDesignDevMashResults(userContext, viewOptions){
-
-        // User has chosen to update the test mash data with latest test results
-
-        if(Meteor.isServer){
-
-            if(!viewOptions || viewOptions.devTestSummaryVisible || viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible){
-
-                // Refresh all results.
-
-                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH ALL TEST RESULTS...");
-
-                // Get latest results
-                MashDataModules.getIntegrationTestResults(userContext);
-                MashDataModules.getUnitTestResults(userContext);
-
-                // Update the scenarios
-                MashDataModules.updateIntTestScenarioResults(userContext);
-                MashDataModules.updateUnitTestScenarioResults(userContext);
-
-                this.updateTestSummaryData(userContext, true);
-
-                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH ALL TEST RESULTS - DONE");
-
-            } else {
-
-                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH VISIBLE TEST RESULTS");
-
-                if (viewOptions.devAccTestsVisible) {
-                    // Get the latest feature files
-                    //MashFeatureFileModules.loadUserFeatureFileData(userContext);
-
-                    // Calculate the linkages between the actual files and the work package design
-                    //MashDataModules.linkAcceptanceFilesToDesign(userContext);
-
-                    // Get latest Acc Tests Results
-                    //MashDataModules.getAcceptanceTestResults(userContext);
-
-                }
-
-                if (viewOptions.devIntTestsVisible) {
-                    // Get latest Int Test Results
-                    MashDataModules.getIntegrationTestResults(userContext);
-                    MashDataModules.updateIntTestScenarioResults(userContext);
-                }
-
-                if (viewOptions.devUnitTestsVisible) {
-                    // Get latest Unit Test Results
-                    MashDataModules.getUnitTestResults(userContext);
-                    MashDataModules.updateUnitTestScenarioResults(userContext);
-                }
-
-                // if(viewOptions.devTestSummaryVisible || viewOptions.designTestSummaryVisible || viewOptions.updateTestSummaryVisible){
-                //     this.updateTestSummaryData(userContext);
-                // }
-
-                log((msg) => console.log(msg), LogLevel.INFO, "REFRESH VISIBLE TEST RESULTS - DONE");
-            }
-
-            // Mark design update summary data as stale so that results are updated
-            DesignUpdates.update(
-                {_id: userContext.designUpdateId},
-                {
-                    $set: {summaryDataStale: true}
-                }
-            );
-
-            DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
-
-        }
-    };
 
     updateTestSummaryData(userContext, updateTestData){
 
         // Called if the test summary needs a refresh
 
         if(Meteor.isServer){
-
-            //MashDataModules.getAcceptanceTestResults(userContext);
-            //MashDataModules.getIntegrationTestResults(userContext);
-            //MashDataModules.getUnitTestResults(userContext);
 
             // Recreate the summary mash
             TestSummaryServices.refreshTestSummaryData(userContext, updateTestData);
