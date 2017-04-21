@@ -480,14 +480,29 @@ Meteor.methods({
     },
 
     'testFixtures.clearTestFiles'(locationName){
-        const location = TestDataHelpers.getTestOutputLocation(locationName);
-        const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
 
-        filesExpected.forEach((file) => {
-            if(fs.existsSync(location.locationPath + file.fileName)) {
-                fs.unlinkSync(location.locationPath + file.fileName);
+        let location = null;
+        try {
+            location = TestDataHelpers.getTestOutputLocation(locationName);
+        } catch (e){
+            // If no location no need to act
+            if(e.error = 'FAIL_NO_LOCATION'){
+                return;
+            } else {
+                throw e;
             }
-        })
+
+        }
+
+        if(location) {
+            const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
+
+            filesExpected.forEach((file) => {
+                if (fs.existsSync(location.locationPath + file.fileName)) {
+                    fs.unlinkSync(location.locationPath + file.fileName);
+                }
+            })
+        }
 
     },
 

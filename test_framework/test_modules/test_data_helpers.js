@@ -627,7 +627,7 @@ class TestDataHelpers {
         const location = TestOutputLocations.findOne({locationName: locationName});
 
         if(!location){
-            throw new Meteor.Error("FAIL", "Test Output Location " + locationName + " not found");
+            throw new Meteor.Error("FAIL_NO_LOCATION", "Test Output Location " + locationName + " not found");
         } else {
             return location;
         }
