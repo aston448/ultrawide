@@ -29,7 +29,7 @@ import ChimpMochaTestServices           from '../../service_modules/dev/test_pro
 
 class TestIntegrationServices{
 
-    populateDesignDevMashData(userContext){
+    refreshTestData(userContext){
 
         // To be called when the Design Version data is loaded or the Design Version changes or user requests a data refresh
 
@@ -50,6 +50,20 @@ class TestIntegrationServices{
 
             // And update the test summary data
             this.updateTestSummaryData(userContext, true);
+
+            // Update DU Summary if a DU selected
+            if(userContext.designUpdateId !== 'NONE') {
+
+                // Mark design update summary data as stale so that results are updated
+                DesignUpdates.update(
+                    {_id: userContext.designUpdateId},
+                    {
+                        $set: {summaryDataStale: true}
+                    }
+                );
+
+                DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
+            }
 
             log((msg) => console.log(msg), LogLevel.INFO, "REFRESH MASH DATA - DONE");
         }

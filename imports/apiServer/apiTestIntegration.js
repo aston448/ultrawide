@@ -2,7 +2,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import {
-    populateWorkPackageMashData,
+    refreshTestData,
     updateTestResults,
     updateTestSummaryData,
     exportIntegrationTests
@@ -16,9 +16,9 @@ import {
 // =====================================================================================================================
 class ServerTestIntegrationApi {
 
-    populateWorkPackageMashData(userContext, callback){
+    refreshTestData(userContext, callback){
 
-        populateWorkPackageMashData.call(
+        refreshTestData.call(
             {
                 userContext: userContext
             },

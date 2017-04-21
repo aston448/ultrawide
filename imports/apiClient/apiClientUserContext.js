@@ -200,7 +200,7 @@ class ClientUserContextServices {
         const userContext = store.getState().currentUserItemContext;
 
         // Refresh the test mash for the design version.  Also loads test results
-        ClientTestIntegrationServices.reloadScenarioMashData(userContext, null);
+        ClientTestIntegrationServices.refreshTestData(userContext);
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));

@@ -208,7 +208,6 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
-        TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
         // Current Results
@@ -240,7 +239,6 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
-        TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
         // Current Results
@@ -273,7 +271,6 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
-        TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
@@ -285,7 +282,7 @@ describe('UC 310 - Refresh Test Data', function(){
         // New test run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
 
-        TestIntegrationActions.developerRefreshesTestData();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Result is now a fail
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
@@ -306,7 +303,6 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
-        TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
@@ -318,7 +314,7 @@ describe('UC 310 - Refresh Test Data', function(){
         // New test run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
 
-        TestIntegrationActions.developerRefreshesTestData();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Result is now a fail
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
@@ -330,52 +326,6 @@ describe('UC 310 - Refresh Test Data', function(){
 
     it('Test data from a new test run can be updated for a Test Summary');
 
-
-    // Conditions
-    it('Acceptance test data is not updated if the acceptance test view is not visible and the test summary is not visible');
-
-    it('Integration test data is not updated if the integration test view is not visible and the test summary is not visible', function(){
-
-        // Setup
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
-
-        // Go to WP and look at results
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsPane();
-        TestIntegrationActions.developerRefreshesTestData();
-
-        // Current Results
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
-
-        // New Test Run after Scenario4 test added and Scenario3 run...
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
-
-        // Not changed in Ultrawide yet...
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
-
-        // Execute - refresh data but with Int Tests NOT showing
-        ViewOptionsActions.developerTogglesIntTestsPane();
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        TestResultActions.developerRefreshesTestResults();
-
-        // Verify - data is not updated
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
-    });
-
-    //it('Unit test data is not updated if the unit test view is not visible and the test summary is not visible');
-
-    //it('Modifications to the Design made by other users are not included when test data is refreshed');
 
 
     // Consequences
@@ -391,7 +341,6 @@ describe('UC 310 - Refresh Test Data', function(){
         ViewOptionsActions.developerTogglesIntTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
 
-        TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
         // Current Results

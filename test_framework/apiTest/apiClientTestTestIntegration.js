@@ -20,16 +20,16 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Refresh Test Results');
     },
 
-    'testIntegration.refreshTestData'(view, role, userName, expectation){
-
-        expectation = TestDataHelpers.getExpectation(expectation);
-
-        const userContext = TestDataHelpers.getUserContext(userName);
-        const viewOptions = TestDataHelpers.getViewOptions(userName);
-
-        const outcome = ClientTestIntegrationServices.refreshDesignMashData(userContext);
-
-        TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Refresh Test Results');
-    },
+    // 'testIntegration.refreshTestData'(view, role, userName, expectation){
+    //
+    //     expectation = TestDataHelpers.getExpectation(expectation);
+    //
+    //     const userContext = TestDataHelpers.getUserContext(userName);
+    //     const viewOptions = TestDataHelpers.getViewOptions(userName);
+    //
+    //     const outcome = ClientTestIntegrationServices.refreshDesignMashData(userContext);
+    //
+    //     TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Refresh Test Results');
+    // },
 
 });

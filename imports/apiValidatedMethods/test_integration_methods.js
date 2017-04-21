@@ -10,9 +10,9 @@ import TestIntegrationServices              from '../servicers/dev/test_integrat
 //
 //======================================================================================================================
 
-export const populateWorkPackageMashData = new ValidatedMethod({
+export const refreshTestData = new ValidatedMethod({
 
-    name: 'testIntegration.populateWorkPackageMashData',
+    name: 'testIntegration.refreshTestData',
 
     validate: new SimpleSchema({
         userContext: {type: Object, blackbox: true}
@@ -21,7 +21,7 @@ export const populateWorkPackageMashData = new ValidatedMethod({
     run({userContext}){
 
         try {
-            TestIntegrationServices.populateDesignDevMashData(userContext);
+            TestIntegrationServices.refreshTestData(userContext);
         } catch (e) {
             console.log(e.stack);
             throw new Meteor.Error(e.error, e.stack)

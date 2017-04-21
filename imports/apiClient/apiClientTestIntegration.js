@@ -73,24 +73,24 @@ class ClientTestIntegrationServices {
     // API Methods +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     // User has requested a refresh of everything because another user might have changed stuff ------------------------
-    refreshDesignMashData(userContext){
-
-        this.reloadScenarioMashData(userContext);
-
-        // Return default outcome for test purposes
-        return {success: true, message: ''};
-
-    };
+    // refreshDesignMashData(userContext){
+    //
+    //     this.refreshTestData(userContext);
+    //
+    //     // Return default outcome for test purposes
+    //     return {success: true, message: ''};
+    //
+    // };
 
     // User has requested a complete refresh of test data --------------------------------------------------------------
-    refreshTestData(userContext, viewOptions){
-
-        this.updateTestResults(userContext, viewOptions);
-
-        // Return default outcome for test purposes
-        return {success: true, message: ''};
-
-    };
+    // refreshTestData(userContext, viewOptions){
+    //
+    //     this.updateTestResults(userContext, viewOptions);
+    //
+    //     // Return default outcome for test purposes
+    //     return {success: true, message: ''};
+    //
+    // };
 
 
     // Test Summary data needs refreshing - flag says if we need to recalculate all results or not
@@ -119,14 +119,14 @@ class ClientTestIntegrationServices {
 
     }
     // Reload all test data and results
-    reloadScenarioMashData(userContext){
+    refreshTestData(userContext){
 
         store.dispatch(updateUserMessage({
             messageType: MessageType.WARNING,
-            messageText: 'Synchronising server test design data...'
+            messageText: 'Loading test definitions and results...'
         }));
 
-        ServerTestIntegrationApi.populateWorkPackageMashData(userContext, (err, result) => {
+        ServerTestIntegrationApi.refreshTestData(userContext, (err, result) => {
 
             if(err){
 
@@ -139,7 +139,7 @@ class ClientTestIntegrationServices {
 
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
-                    messageText: 'Test mash loaded'
+                    messageText: 'Test data and results loaded'
                 }));
             }
         });

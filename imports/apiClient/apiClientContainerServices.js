@@ -2248,15 +2248,6 @@ class ClientContainerServices{
             viewOptionType: ViewOptionType.NONE
         };
 
-        const refreshDesignData = {
-            key: MenuAction.MENU_ACTION_REFRESH_DATA,
-            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_REFRESH_DATA),
-            action: MenuAction.MENU_ACTION_REFRESH_DATA,
-            hasCheckbox: false,
-            checkboxValue: false,
-            viewOptionType: ViewOptionType.NONE
-        };
-
         switch(view) {
 
             case ViewType.ADMIN:
@@ -2326,17 +2317,11 @@ class ClientContainerServices{
                         }
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
-                        switch(userRole) {
-                            case RoleType.DEVELOPER:
-                                return [
-                                    refreshTestData,
-                                    refreshDesignData
-                                ];
-                            default:
-                                return [
-                                    refreshTestData,
-                                ];
-                        }
+
+                        return [
+                            refreshTestData
+                        ];
+
                 }
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
@@ -2370,17 +2355,10 @@ class ClientContainerServices{
                         }
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
-                        switch(userRole) {
-                            case RoleType.DEVELOPER:
-                                return [
-                                    refreshTestData,
-                                    refreshDesignData
-                                ];
-                            default:
-                                return [
-                                    refreshTestData,
-                                ];
-                        }
+
+                        return [
+                            refreshTestData
+                        ];
                 }
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
@@ -2481,8 +2459,7 @@ class ClientContainerServices{
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
                         return [
-                                refreshTestData,
-                                refreshDesignData
+                                refreshTestData
                             ];
                 }
                 break;

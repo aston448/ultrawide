@@ -313,34 +313,7 @@ class ClientDesignVersionServices{
         });
 
         // Recalculate the test data
-        ClientTestIntegrationServices.reloadScenarioMashData(userContext);
-
-        // if(userContext.designUpdateId !== 'NONE'){
-        //
-        //     // Set up the scope items as the current in scope items
-        //     const updateItems = DesignUpdateComponents.find({designUpdateId: userContext.designUpdateId}).fetch();
-        //
-        //     let updateItemsArr = [];
-        //     let designItem = null;
-        //
-        //     updateItems.forEach((item) => {
-        //         designItem = DesignVersionComponents.findOne({
-        //             designVersionId:        item.designVersionId,
-        //             componentReferenceId:   item.componentReferenceId
-        //         });
-        //         updateItemsArr.push(designItem._id);
-        //     });
-        //
-        //     console.log("SETTING CURRENT ITEMS for DU");
-        //
-        //     store.dispatch(setUpdateScopeItems(
-        //         {
-        //             current:    updateItemsArr,
-        //             added:      [],
-        //             removed:    []
-        //         }
-        //     ));
-        // }
+        ClientTestIntegrationServices.refreshTestData(userContext);
 
     }
 

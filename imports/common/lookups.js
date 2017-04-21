@@ -222,8 +222,6 @@ class TextLookups {
                 return 'Domain Dictionary';
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
                 return 'Test Data';
-            case MenuAction.MENU_ACTION_REFRESH_DATA:
-                return 'Design and Test Data';
         }
     }
 

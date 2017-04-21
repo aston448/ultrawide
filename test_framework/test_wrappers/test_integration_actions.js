@@ -11,11 +11,5 @@ class TestIntegrationActions {
         server.call('testIntegration.refreshTestResults', ViewType.DEVELOP_BASE_WP, RoleType.DEVELOPER, 'hugh', expectation);
     };
 
-    developerRefreshesTestData(expectation){
-
-        server.call('testIntegration.refreshTestData', ViewType.DEVELOP_BASE_WP, RoleType.DEVELOPER, 'hugh', expectation)
-    }
-
-
 }
  export default new TestIntegrationActions();
