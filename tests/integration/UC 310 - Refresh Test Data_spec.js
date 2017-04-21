@@ -237,9 +237,9 @@ describe('UC 310 - Refresh Test Data', function(){
         // Go to Version View and look at test results
         DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
 
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsPane();
-        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsPane();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
