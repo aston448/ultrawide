@@ -351,7 +351,7 @@ class TestSummaryServices {
 
             if(updateTestData) {
 
-                log((msg) => console.log(msg), LogLevel.INFO, "Adding Feature {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, passingTests, failingTests, featureNoTestScenarios);
+                log((msg) => console.log(msg), LogLevel.INFO, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, passingTests, failingTests, featureNoTestScenarios);
 
                 UserDevTestSummaryData.insert({
                     userId: userContext.userId,
