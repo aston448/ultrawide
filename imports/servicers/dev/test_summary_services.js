@@ -351,7 +351,7 @@ class TestSummaryServices {
 
             if(updateTestData) {
 
-                log((msg) => console.log(msg), LogLevel.INFO, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, passingTests, failingTests, featureNoTestScenarios);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Adding Feature {} {} with Pass {} Fail {}, Untested {}", designFeature.componentNameNew, designFeature.componentReferenceId, passingTests, failingTests, featureNoTestScenarios);
 
                 UserDevTestSummaryData.insert({
                     userId: userContext.userId,
@@ -401,7 +401,7 @@ class TestSummaryServices {
             } else {
 
                 // Just update the feature data to reflect a change in WP / DU...
-                log((msg) => console.log(msg), LogLevel.INFO, "Updating feature {} setting no test count to {} ", designFeature.componentReferenceId, featureNoTestScenarios);
+                log((msg) => console.log(msg), LogLevel.TRACE, "Updating feature {} setting no test count to {} ", designFeature.componentReferenceId, featureNoTestScenarios);
 
                 const updated = UserDevTestSummaryData.update(
                     {

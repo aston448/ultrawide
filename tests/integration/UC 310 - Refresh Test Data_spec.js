@@ -1,6 +1,7 @@
 import TestFixtures                     from '../../test_framework/test_wrappers/test_fixtures.js';
 import DesignActions                from '../../test_framework/test_wrappers/design_actions.js';
 import DesignVersionActions         from '../../test_framework/test_wrappers/design_version_actions.js';
+import DesignComponentActions       from '../../test_framework/test_wrappers/design_component_actions.js';
 import WorkPackageActions           from '../../test_framework/test_wrappers/work_package_actions.js';
 import WpComponentActions           from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import OutputLocationsActions       from '../../test_framework/test_wrappers/output_locations_actions.js';
@@ -46,6 +47,29 @@ describe('UC 310 - Refresh Test Data', function(){
         {
             featureName: 'Feature1',
             scenarioName: 'Scenario1',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario2',
+            result: MashTestStatus.MASH_FAIL
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario3',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario4',
+            result: MashTestStatus.MASH_FAIL
+        }
+    ];
+
+    const modifiedIntResults = [
+        {
+            featureName: 'Feature1',
+            scenarioName: 'NewScenario',
             result: MashTestStatus.MASH_PASS
         },
         {
@@ -427,29 +451,6 @@ describe('UC 310 - Refresh Test Data', function(){
         WpComponentActions.developerUpdatesSelectedComponentNameTo('NewScenario');
 
         // Developer writes a test for NewScenario and runs it...
-        const modifiedIntResults = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'NewScenario',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_FAIL
-            }
-        ];
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', modifiedIntResults);
 
         // Execute - refresh data
@@ -461,6 +462,44 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PASS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_FAIL));
 
+    });
+
+    it('Modifications to the Design made by other users are included when test data is refreshed', function() {
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
+
+        // Go to Version View and look at test results
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
+
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
+        ViewOptionsActions.developerTogglesIntTestsPane();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
+        TestIntegrationActions.developerRefreshesTestResults();
+
+        // Check - expected results
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_FAIL));
+
+        // A Designer now edits one of the Scenarios
+        DesignActions.designerWorksOnDesign('Design1');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
+        DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
+        DesignComponentActions.designerUpdatesSelectedUpdateComponentNameTo('NewScenario');
+
+        // Tests are run again
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', modifiedIntResults);
+
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
+        TestResultActions.developerRefreshesTestResults();
+
+        // Verify - new results with new Scenario name
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('NewScenario', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_FAIL));
     });
 
 });
