@@ -395,7 +395,7 @@ describe('UC 310 - Refresh Test Data', function(){
 
         // Check Scenario 2 details
         expect(TestSummaryVerifications.developerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_FAIL));
-        expect(TestSummaryVerifications.developerTestSummaryScenarioStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_FAIL));
         expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 0));
         expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Conditions', 'Scenario2', 0));
     });
