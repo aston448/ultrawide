@@ -13,7 +13,7 @@ import TestSummaryVerifications     from '../../test_framework/test_wrappers/tes
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType} from '../../imports/constants/constants.js';
+import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType, FeatureTestSummaryStatus} from '../../imports/constants/constants.js';
 
 describe('UC 310 - Refresh Test Data', function(){
 
@@ -359,7 +359,7 @@ describe('UC 310 - Refresh Test Data', function(){
 
         // Expect summary to show untested items - note totals for feature will include everything in the design - not just what's in the test results
         // Check Feature 1 details
-        expect(TestSummaryVerifications.developerTestSummaryFeatureStatusIs('Section1', 'Feature1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureStatusIs('Section1', 'Feature1', FeatureTestSummaryStatus.FEATURE_NO_TESTS));
         expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 4));
         expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 0));
         expect(TestSummaryVerifications.developerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 0));
@@ -382,7 +382,7 @@ describe('UC 310 - Refresh Test Data', function(){
         TestIntegrationActions.developerRefreshesTestResults();
 
         // Check Feature 1 details - Failed because one failing unit test and Scenario2 integration test
-        expect(TestSummaryVerifications.developerTestSummaryFeatureStatusIs('Section1', 'Feature1', MashTestStatus.MASH_FAIL));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureStatusIs('Section1', 'Feature1', FeatureTestSummaryStatus.FEATURE_FAILING_TESTS));
         expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 2));
         expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 0));
         expect(TestSummaryVerifications.developerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 2));

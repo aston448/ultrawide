@@ -356,7 +356,7 @@ export const MashTestStatus = {
 export const FeatureTestSummaryStatus = {
     FEATURE_FAILING_TESTS:      'feature-failing-tests',
     FEATURE_PASSING_TESTS:      'feature-passing-tests',
-    FEATURE_NO_TESTS:           'feature-no_tests',
+    FEATURE_NO_TESTS:           'feature-no-tests',
     FEATURE_NO_HIGHLIGHT:       'feature-no-highlight',
     FEATURE_HIGHLIGHT_FAIL:     'feature-highlight-fail',
     FEATURE_HIGHLIGHT_PASS:     'feature-highlight-pass',
