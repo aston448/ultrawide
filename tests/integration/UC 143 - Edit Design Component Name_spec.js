@@ -51,7 +51,7 @@ describe('UC 143 - Edit Design Component Name', function(){
 
         // Execute
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', 'Application1');
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('My App');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('My App');
 
         // Verify
         expect(DesignComponentVerifications.componentOfType_Called_ExistsInDesign_Version_(ComponentType.APPLICATION, 'My App', 'Design1', 'DesignVersion1'));
@@ -76,7 +76,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.APPLICATION, 'NONE', DefaultComponentNames.NEW_APPLICATION_NAME);
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Application1', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Application1', expectation);
 
         // Verify - not changed to Application1 - should still be the default
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.APPLICATION, 'Application1', 'Design1', 'DesignVersion1', 1));
@@ -95,7 +95,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute - try to update Feature2 to Feature1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE, 'Section2', 'Feature2');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Feature1', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Feature1', expectation);
 
         // Verify - not changed to Feature1 - should still be Feature2
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE, 'Feature1', 'Design1', 'DesignVersion1', 1));
@@ -114,7 +114,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute - try to update Scenario2 to Scenario1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenario1', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Scenario1', expectation);
 
         // Verify - not changed to Scenario1 - should still be Scenario2
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
@@ -133,7 +133,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute - try to update Section2 to Section1
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section2');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Section1', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Section1', expectation);
 
         // Verify - not changed to Section1 - should still be Section2
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 1));
@@ -154,7 +154,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute - try to update Actions to Conditions
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', 'Actions');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_DUPLICATE_FOR_PARENT};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Conditions', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Conditions', expectation);
 
         // Verify - not changed
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Actions', 'Design1', 'DesignVersion1', 3));
@@ -171,7 +171,7 @@ describe('UC 143 - Edit Design Component Name', function(){
 
         // Execute - update Section1 to Section99
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.DESIGN_SECTION, 'Application1', 'Section1');
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Section99');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Section99');
 
         // Verify - now 2 Section99s
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.DESIGN_SECTION, 'Section1', 'Design1', 'DesignVersion1', 0));
@@ -187,14 +187,14 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Add a new Feature Aspect to Feature 1
         DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Aspect1');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Aspect1');
 
         // Add a new Feature Aspect to Feature 2
         DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature2');
 
         // Execute - And call it the same name
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature2', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Aspect1');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Aspect1');
 
         // Verify - now 2 Aspect1s
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.FEATURE_ASPECT, 'Aspect1', 'Design1', 'DesignVersion1', 2));
@@ -212,7 +212,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute - try to update Scenario2 to Scenar
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_SUBSET};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenar', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Scenar', expectation);
 
         // Verify - not changed to Scenar - should still be Scenario2
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
@@ -231,7 +231,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         // Execute - try to update Scenario2 to Scenario1 Extra
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Conditions', 'Scenario2');
         const expectation = {success: false, message: DesignComponentValidationErrors.DESIGN_COMPONENT_INVALID_NAME_SUPERSET};
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenario1 Extra', expectation);
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Scenario1 Extra', expectation);
 
         // Verify - not changed to Scenario1 Extra - should still be Scenario2
         expect(DesignComponentVerifications.componentOfType_Called_InDesign_Version_CountIs_(ComponentType.SCENARIO, 'Scenario1', 'Design1', 'DesignVersion1', 1));
@@ -266,7 +266,7 @@ describe('UC 143 - Edit Design Component Name', function(){
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerSelectsFeature('Section1', 'Feature1');
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Feature11');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Feature11');
 
         // Validate - both WPs have Feature11, neither has Feature1 and Feature11 in scope in WP1
         DesignActions.managerWorksOnDesign('Design1');

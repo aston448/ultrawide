@@ -170,7 +170,7 @@ describe('UC 141 - Add Organisational Design Component', function(){
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddsFeatureAspectToFeature_('Feature1');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.FEATURE_ASPECT, 'Feature1', DefaultComponentNames.NEW_FEATURE_ASPECT_NAME);
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('NewAspect');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('NewAspect');
 
         // Verify - NewAspect now in WP1 in scope and in WP2 not in scope
         DesignActions.managerWorksOnDesign('Design1');

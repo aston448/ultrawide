@@ -85,7 +85,7 @@ class DesignComponentActions{
     }
 
     // Edit Name
-    designerEditsSelectedComponentNameTo_(newName, expectation){
+    designerUpdatesSelectedComponentNameTo(newName, expectation){
         server.call('testDesignComponents.updateSelectedComponentName', newName, 'gloria', expectation);
     }
 

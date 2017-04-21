@@ -135,7 +135,7 @@ describe('UC 142 - Add Functional Design Component', function(){
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerAddsScenarioToFeatureAspect('Feature1', 'Actions');
         DesignComponentActions.designerSelectsComponentType_WithParent_Called_(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
-        DesignComponentActions.designerEditsSelectedComponentNameTo_('Scenario5');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('Scenario5');
 
         // Verify - Scenario5 now in WP1 and WP2 and in scope for WP1 only
         DesignActions.managerWorksOnDesign('Design1');

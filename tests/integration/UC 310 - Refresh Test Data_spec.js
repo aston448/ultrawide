@@ -487,7 +487,7 @@ describe('UC 310 - Refresh Test Data', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         DesignVersionActions.designerEditsDesignVersion('DesignVersion1');
         DesignComponentActions.designerSelectsScenario('Feature1', 'Actions', 'Scenario1');
-        DesignComponentActions.designerUpdatesSelectedUpdateComponentNameTo('NewScenario');
+        DesignComponentActions.designerUpdatesSelectedComponentNameTo('NewScenario');
 
         // Tests are run again
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', modifiedIntResults);
