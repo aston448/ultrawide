@@ -401,7 +401,7 @@ class TestSummaryServices {
             } else {
 
                 // Just update the feature data to reflect a change in WP / DU...
-                log((msg) => console.log(msg), LogLevel.TRACE, "Updating feature {} setting du failed test count to {} ", designFeature.componentReferenceId, duFailingTests);
+                log((msg) => console.log(msg), LogLevel.INFO, "Updating feature {} setting no test count to {} ", designFeature.componentReferenceId, featureNoTestScenarios);
 
                 const updated = UserDevTestSummaryData.update(
                     {
