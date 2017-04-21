@@ -12,7 +12,7 @@ import TestIntegrationActions       from '../../test_framework/test_wrappers/tes
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType} from '../../imports/constants/constants.js';
+import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType} from '../../imports/constants/constants.js';
 
 describe('UC 310 - Refresh Test Data', function(){
 
@@ -389,7 +389,7 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
-        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
 
         TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
