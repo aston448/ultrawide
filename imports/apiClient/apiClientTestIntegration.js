@@ -112,7 +112,6 @@ class ClientTestIntegrationServices {
             if(err){
 
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
-                return {success: false, message: 'err.reason'};
             } else {
 
                 // Mash is populated to carry on with test data if needed
@@ -124,9 +123,11 @@ class ClientTestIntegrationServices {
                     messageText: 'Test data and results loaded'
                 }));
 
-                return {success: true, message: ''};
+
             }
         });
+
+        return {success: true, message: ''};
     }
 
     // Get latest test results required for current view options
