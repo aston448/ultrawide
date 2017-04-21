@@ -209,6 +209,8 @@ class TestIntegrationModules{
 
     getIntegrationTestResults(userContext){
 
+        log((msg) => console.log(msg), LogLevel.INFO, "Getting Integration test results...");
+
         // Clear existing results for user
         UserIntTestResults.remove({userId: userContext.userId});
 
@@ -382,7 +384,7 @@ class TestIntegrationModules{
             userId: userContext.userId
         });
 
-
+        log((msg) => console.log(msg), LogLevel.INFO, "Updating Scenarios with Integration test results...");
 
         intResults.forEach((result) => {
 
