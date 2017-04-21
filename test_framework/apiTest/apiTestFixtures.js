@@ -471,6 +471,18 @@ Meteor.methods({
         ClientDesignComponentServices.updateComponentName(view, mode, scenario4Component._id, 'Scenario4', rawName);
     },
 
+    'testFixtures.clearTestFiles'(locationName){
+        const location = TestDataHelpers.getTestOutputLocation(locationName);
+        const filesExpected = TestDataHelpers.getIntegrationResultsOutputFiles_ChimpMocha(locationName);
+
+        filesExpected.forEach((file) => {
+            if(fs.existsSync(location.locationPath + file.fileName)) {
+                fs.unlinkSync(location.locationPath + file.fileName);
+            }
+        })
+
+    },
+
     'testFixtures.writeIntegrationTestResults_ChimpMocha'(locationName, results){
 
         // Expected input is
