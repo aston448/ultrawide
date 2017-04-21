@@ -73,6 +73,25 @@ describe('UC 310 - Refresh Test Data', function(){
                 unitResults: [
                     {
                         resultName: 'Unit Test 11',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                    {
+                        resultName: 'Unit Test 12',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                ]
+            }
+        ]
+    };
+
+    const noUnitResults = {
+        scenarios: [
+            {
+                scenarioName: 'Scenario1',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 11',
                         resultOutcome: MashTestStatus.MASH_NOT_LINKED
                     },
                     {
@@ -276,9 +295,9 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
 
         // New test run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
@@ -308,9 +327,9 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
 
         // New test run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
@@ -328,7 +347,7 @@ describe('UC 310 - Refresh Test Data', function(){
     it('Test data from a new test run can be updated for a Test Summary', function(){
 
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
-        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', oldUnitResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', noUnitResults);
 
         // Go to Version View and look at test results
         DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
