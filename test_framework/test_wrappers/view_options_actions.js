@@ -21,6 +21,11 @@ class ViewOptionsActions {
         server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_UNIT_TESTS, 'hugh', expectation)
     }
 
+    // TEST SUMMARY
+    developerTogglesDesignVersionTestSummary(expectation){
+        server.call('testViewOptions.toggleViewOption', ViewOptionType.DESIGN_TEST_SUMMARY, 'hugh', expectation)
+    }
+
 }
 
 export default new ViewOptionsActions();

@@ -18,6 +18,7 @@ import { TestOutputLocationFiles }  from '../../imports/collections/configure/te
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
+import { UserDevTestSummaryData }   from '../../imports/collections/dev/user_dev_test_summary_data.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
@@ -763,6 +764,36 @@ class TestDataHelpers {
             }
         } else {
             throw new Meteor.Error("FAIL", "Test Scenario " + scenarioName + " not found in design");
+        }
+    }
+
+    getTestSummaryFeatureData(userId, designVersionId, featureReferenceId, featureName){
+
+        const summaryData = UserDevTestSummaryData.findOne({
+            userId:             userId,
+            designVersionId:    designVersionId,
+            featureReferenceId: featureReferenceId
+        });
+
+        if(summaryData){
+            return summaryData;
+        } else {
+            throw new Meteor.Error("FAIL", "Test Summary Data not found for Feature " + featureName);
+        }
+    }
+
+    getTestSummaryScenarioData(userId, designVersionId, scenarioReferenceId, scenarioName){
+
+        const summaryData = UserDevTestSummaryData.findOne({
+            userId:             userId,
+            designVersionId:    designVersionId,
+            scenarioReferenceId: scenarioReferenceId
+        });
+
+        if(summaryData){
+            return summaryData;
+        } else {
+            throw new Meteor.Error("FAIL", "Test Summary Data not found for Scenario " + scenarioName);
         }
     }
 

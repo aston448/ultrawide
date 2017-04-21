@@ -9,6 +9,7 @@ import TestResultVerifications      from '../../test_framework/test_wrappers/tes
 import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
 import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
 import TestIntegrationActions       from '../../test_framework/test_wrappers/test_integration_actions.js';
+import TestSummaryVerifications     from '../../test_framework/test_wrappers/test_summary_verifications.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
@@ -72,11 +73,11 @@ describe('UC 310 - Refresh Test Data', function(){
                 unitResults: [
                     {
                         resultName: 'Unit Test 11',
-                        resultOutcome: MashTestStatus.MASH_PASS
+                        resultOutcome: MashTestStatus.MASH_NOT_LINKED
                     },
                     {
                         resultName: 'Unit Test 12',
-                        resultOutcome: MashTestStatus.MASH_PASS
+                        resultOutcome: MashTestStatus.MASH_NOT_LINKED
                     },
                 ]
             }
@@ -275,9 +276,9 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_PASS));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
 
         // New test run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
@@ -307,9 +308,9 @@ describe('UC 310 - Refresh Test Data', function(){
 
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
         expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_PASS));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
-        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
 
         // New test run
         TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
@@ -324,7 +325,60 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_FAIL));
     });
 
-    it('Test data from a new test run can be updated for a Test Summary');
+    it('Test data from a new test run can be updated for a Test Summary', function(){
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', oldUnitResults);
+
+        // Go to Version View and look at test results
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
+
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DESIGN_TEST_SUMMARY));
+        ViewOptionsActions.developerTogglesDesignVersionTestSummary();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DESIGN_TEST_SUMMARY));
+
+        // Expect summary to show untested items - note totals for feature will include everything in the design - not just what's in the test results
+        // Check Feature 1 details
+        expect(TestSummaryVerifications.developerTestSummaryFeatureStatusIs('Section1', 'Feature1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 4));
+        expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 0));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 0));
+        // Check Scenario 1 details
+        expect(TestSummaryVerifications.developerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario1', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Actions', 'Scenario1', 0));
+        // Check Scenario 2 details
+        expect(TestSummaryVerifications.developerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Conditions', 'Scenario2', 0));
+
+        // Get new test results...
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
+
+        // Execute - refresh the data
+        TestIntegrationActions.developerRefreshesTestResults();
+
+        // Check Feature 1 details - Failed because one failing unit test and Scenario2 integration test
+        expect(TestSummaryVerifications.developerTestSummaryFeatureStatusIs('Section1', 'Feature1', MashTestStatus.MASH_FAIL));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 2));
+        expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 0));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 2));
+
+        // Check Scenario 1 details
+        expect(TestSummaryVerifications.developerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_PASS));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_FAIL));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario1', 1));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Actions', 'Scenario1', 1));
+
+        // Check Scenario 2 details
+        expect(TestSummaryVerifications.developerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Conditions', 'Scenario2', 0));
+    });
 
 
 
