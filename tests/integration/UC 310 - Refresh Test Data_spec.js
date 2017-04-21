@@ -16,6 +16,92 @@ import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunn
 
 describe('UC 310 - Refresh Test Data', function(){
 
+    // Test results outside ULTRAWIDE
+
+    const oldIntResults = [
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario1',
+            result: MashTestStatus.MASH_NOT_LINKED
+        },
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario2',
+            result: MashTestStatus.MASH_NOT_LINKED
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario3',
+            result: MashTestStatus.MASH_NOT_LINKED
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario4',
+            result: MashTestStatus.MASH_NOT_LINKED
+        }
+    ];
+
+    const newIntResults = [
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario1',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario2',
+            result: MashTestStatus.MASH_FAIL
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario3',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario4',
+            result: MashTestStatus.MASH_FAIL
+        }
+    ];
+
+    const oldUnitResults = {
+        scenarios: [
+            {
+                scenarioName: 'Scenario1',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 11',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                    {
+                        resultName: 'Unit Test 12',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                ]
+            }
+        ]
+    };
+
+    const newUnitResults = {
+        scenarios: [
+            {
+                scenarioName: 'Scenario1',
+                scenarioGroup: 'JSX Test',
+                unitResults: [
+                    {
+                        resultName: 'Unit Test 11',
+                        resultOutcome: MashTestStatus.MASH_FAIL
+                    },
+                    {
+                        resultName: 'Unit Test 12',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
+                ]
+            }
+        ]
+    };
+
     before(function(){
         TestFixtures.logTestSuite('UC 310 - Refresh Test Data');
 
@@ -65,7 +151,7 @@ describe('UC 310 - Refresh Test Data', function(){
         // And an integration test file
         OutputLocationsActions.developerAddsFileToLocation('Location1');
 
-        const newFile = {
+        const newIntFile = {
             fileAlias:      'IntegrationOutput',
             fileType:       TestLocationFileType.INTEGRATION,
             testRunner:     TestRunner.CHIMP_MOCHA,
@@ -73,7 +159,20 @@ describe('UC 310 - Refresh Test Data', function(){
             allFilesOfType: 'NONE'
         };
 
-        OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newFile);
+        OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newIntFile);
+
+        // And a unit test file
+        OutputLocationsActions.developerAddsFileToLocation('Location1');
+
+        const newUnitFile = {
+            fileAlias:      'UnitOutput',
+            fileType:       TestLocationFileType.UNIT,
+            testRunner:     TestRunner.METEOR_MOCHA,
+            fileName:       'test_unit_test.json',
+            allFilesOfType: 'NONE'
+        };
+
+        OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newUnitFile);
 
         // Developer sets up location config
         OutputLocationsActions.developerEditsTestLocationConfig();
@@ -91,39 +190,16 @@ describe('UC 310 - Refresh Test Data', function(){
     });
 
     afterEach(function(){
-        //TestFixtures.clearTestResultsFiles('Location1');
+
     });
 
 
     // Actions
-    //it('Test data from a new test run can be updated for the acceptance test view for a Work Package');
+    it('Test data from a new test run can be updated for the acceptance test view for a Work Package');
 
     it('Test data from a new test run can be updated for the integration test view for a Work Package', function(){
 
-        const results = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_NOT_LINKED
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_NOT_LINKED
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_NOT_LINKED
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_NOT_LINKED
-            }
-        ];
-
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
 
         // Go to WP and look at results
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
@@ -134,8 +210,6 @@ describe('UC 310 - Refresh Test Data', function(){
         TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
 
-
-
         // Current Results
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_NOT_LINKED));
@@ -143,36 +217,7 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
 
         // New Test Run after Scenario4 test added and Scenario3 run...
-        const newResults = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_FAIL
-            }
-        ];
-
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newResults);
-
-        // // Not changed in Ultrawide yet...
-        // expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
-        // expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
-        // expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PENDING));
-        // expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
 
         // Execute - refresh data
         TestResultActions.developerRefreshesTestResults();
@@ -187,7 +232,38 @@ describe('UC 310 - Refresh Test Data', function(){
 
     });
 
-    //it('Test data from a new test run can be updated for the unit test view for a Work Package');
+    it('Test data from a new test run can be updated for the unit test view for a Work Package', function(){
+
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', oldUnitResults);
+
+        // Go to WP and look at results
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
+
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        TestIntegrationActions.developerRefreshesTestData();
+        TestIntegrationActions.developerRefreshesTestResults();
+
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+
+        // New test run
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', newUnitResults);
+
+        TestIntegrationActions.developerRefreshesTestData();
+
+        // Result is now a fail
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
+        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 11', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_UnitTest_Is('Scenario1', 'Unit Test 12', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerUnitTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_FAIL));
+
+    });
 
     //it('Test data from a new test run can be updated for a Test Summary');
 
@@ -198,30 +274,7 @@ describe('UC 310 - Refresh Test Data', function(){
     it('Integration test data is not updated if the integration test view is not visible and the test summary is not visible', function(){
 
         // Setup
-        const results = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_NOT_LINKED
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_NOT_LINKED
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_NOT_LINKED
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_NOT_LINKED
-            }
-        ];
-
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
 
         // Go to WP and look at results
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
@@ -237,30 +290,7 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
 
         // New Test Run after Scenario4 test added and Scenario3 run...
-        const newResults = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_FAIL
-            }
-        ];
-
-        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newResults);
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
 
         // Not changed in Ultrawide yet...
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));

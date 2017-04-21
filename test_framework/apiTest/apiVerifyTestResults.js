@@ -31,7 +31,7 @@ Meteor.methods({
         const testResult = TestDataHelpers.getMashTestResult(userContext, scenarioName);
 
 
-        if (testResult.unitMashTestStatus != result) {
+        if (testResult.unitMashTestStatus !== result) {
             throw new Meteor.Error("FAIL", "Expecting test result " + result + " but got " + testResult.unitMashTestStatus + " for Scenario " + scenarioName);
         } else {
             return true;
@@ -44,7 +44,7 @@ Meteor.methods({
 
         const testResult = TestDataHelpers.getUnitTestResult(userContext, scenarioName, unitTestName);
 
-        if (testResult.testOutcome != result) {
+        if (testResult.testOutcome !== result) {
             throw new Meteor.Error("FAIL", "Expecting unit test result " + result + " but got " + testResult.testOutcome + " for Scenario " + scenarioName + " unit test " + unitTestName);
         } else {
             return true;

@@ -140,7 +140,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         OutputLocationsActions.developerSavesLocation(DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_NAME, newDetails);
 
-        // And an integration test file
+        // And a unit test file
         OutputLocationsActions.developerAddsFileToLocation('Location1');
 
         const newFile = {
