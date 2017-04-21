@@ -188,7 +188,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Execute
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
@@ -200,11 +200,11 @@ describe('UC 312 - View Unit Test Results', function(){
         // Developer goes to WP
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
 
         // Execute
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
@@ -223,7 +223,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects plus the unit tests available
         expect(TestResultVerifications.developerUnitTestsWindowContainsFeature('Feature1'));
@@ -258,7 +258,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify - does not contain Scenario 444 and its unit tests
         expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainScenario('Scenario7'));
@@ -277,7 +277,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify - does not contain Feature 1 Interface and Consequences
         expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainFeatureAspect('Feature1', 'Interface'));
@@ -295,7 +295,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify - scenario 4 is not tested as no tests
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
@@ -315,7 +315,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify - scenario 2 and 3 both failed as have 1 failure
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
@@ -335,7 +335,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
 
         // Verify - scenario 1 passed as all tests passed
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));

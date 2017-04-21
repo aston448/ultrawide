@@ -114,7 +114,7 @@ describe('UC 311 - Refresh Design Test Mash Data', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects
         expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));

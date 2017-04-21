@@ -112,7 +112,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Execute
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -124,11 +124,11 @@ describe('UC 313 - View Integration Test Results', function(){
         // Developer goes to WP
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
 
         // Execute
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
@@ -144,7 +144,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects
         expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));
@@ -168,7 +168,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify - Feature444 and Scenario7 are not included
         expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeature('Feature444'));
@@ -183,7 +183,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify - Feature1 Interface, Consequences are not shown as no Scenarios
         expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));
@@ -225,7 +225,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -266,7 +266,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -308,7 +308,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -350,7 +350,7 @@ describe('UC 313 - View Integration Test Results', function(){
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));

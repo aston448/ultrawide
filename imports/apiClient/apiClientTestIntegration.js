@@ -135,6 +135,8 @@ class ClientTestIntegrationServices {
 
                 // Mash is populated to carry on with test data if needed
 
+                store.dispatch(updateTestDataFlag());
+
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
                     messageText: 'Test mash loaded'

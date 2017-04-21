@@ -206,7 +206,7 @@ describe('UC 310 - Refresh Test Data', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
         TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
@@ -228,10 +228,40 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PASS));
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_FAIL));
-
-
-
     });
+
+    it('Test data from a new test run can be updated for the Developer integration test view for a Design Version', function(){
+
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', oldIntResults);
+
+        // Go to Version View and look at test results
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
+
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsPane();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+        TestIntegrationActions.developerRefreshesTestData();
+        TestIntegrationActions.developerRefreshesTestResults();
+
+        // Current Results
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
+
+        // New Test Run after Scenario4 test added and Scenario3 run...
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', newIntResults);
+
+        // Execute - refresh data
+        TestResultActions.developerRefreshesTestResults();
+
+        // Verify - new results
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario1', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario3', MashTestStatus.MASH_PASS));
+        expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_FAIL));
+    });
+
 
     it('Test data from a new test run can be updated for the unit test view for a Work Package', function(){
 
@@ -241,7 +271,7 @@ describe('UC 310 - Refresh Test Data', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesUnitTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
         TestIntegrationActions.developerRefreshesTestData();
         TestIntegrationActions.developerRefreshesTestResults();
@@ -281,7 +311,7 @@ describe('UC 310 - Refresh Test Data', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
         TestIntegrationActions.developerRefreshesTestData();
 
         // Current Results
@@ -300,7 +330,7 @@ describe('UC 310 - Refresh Test Data', function(){
         expect(TestResultVerifications.developerIntegrationTestResultForScenario_Is('Scenario4', MashTestStatus.MASH_NOT_LINKED));
 
         // Execute - refresh data but with Int Tests NOT showing
-        ViewOptionsActions.developerTogglesIntTestsInNewWorkPackageDevelopmentView();
+        ViewOptionsActions.developerTogglesIntTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         TestResultActions.developerRefreshesTestResults();
 

@@ -9,27 +9,18 @@ class ViewOptionsActions {
 
     // INT TESTS -------------------------------------------------------------------------------------------------------
 
-    // Switch on/off Int tests for WP where mash data already loaded
-    developerTogglesIntTestsInWorkPackageDevelopmentView(expectation){
-        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_INT_TESTS, 'hugh', RoleType.DEVELOPER, ViewType.DEVELOP_BASE_WP, false, expectation)
-    }
-
-    // Switch on/off Int tests for WP where mash data not yet loaded
-    developerTogglesIntTestsInNewWorkPackageDevelopmentView(expectation){
-        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_INT_TESTS, 'hugh', RoleType.DEVELOPER, ViewType.DEVELOP_BASE_WP, true, expectation)
+    // Switch on/off Int tests for Developer
+    developerTogglesIntTestsPane(expectation) {
+        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_INT_TESTS, 'hugh', expectation);
     }
 
     // UNIT TESTS ------------------------------------------------------------------------------------------------------
 
-    // Switch on/off Unit tests for WP where mash data already loaded
-    developerTogglesUnitTestsInWorkPackageDevelopmentView(expectation){
-        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_UNIT_TESTS, 'hugh', RoleType.DEVELOPER, ViewType.DEVELOP_BASE_WP, false, expectation)
+    // Switch on/off Unit tests for Developer
+    developerTogglesUnitTestsPane(expectation){
+        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_UNIT_TESTS, 'hugh', expectation)
     }
 
-    // Switch on/off Unit tests for WP where mash data not yet loaded
-    developerTogglesUnitTestsInNewWorkPackageDevelopmentView(expectation){
-        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_UNIT_TESTS, 'hugh', RoleType.DEVELOPER, ViewType.DEVELOP_BASE_WP, true, expectation)
-    }
 }
 
 export default new ViewOptionsActions();
