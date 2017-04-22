@@ -246,59 +246,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
 
     // Conditions
-    it('Work Package unit test results include all Features and Scenarios in the Work Package scope', function(){
-
-        // Setup
-        // Developer goes to WP
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Tests are run
-        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
-
-        // Open the Unit Tests window - this should load the expected data
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsPane();
-
-        // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects plus the unit tests available
-        expect(TestResultVerifications.developerUnitTestsWindowContainsFeature('Feature1'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature1', 'Actions'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario1'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 11'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario1', 'Unit Test 12'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature1', 'Conditions'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario2'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario2', 'Unit Test 21'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario2', 'Unit Test 22'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsFeature('Feature2'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature2', 'Actions'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario3'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario3', 'Unit Test 31'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsUnitTest('Scenario3', 'Unit Test 32'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsFeatureAspect('Feature2', 'Conditions'));
-        expect(TestResultVerifications.developerUnitTestsWindowContainsScenario('Scenario4'));
-        // But non tested tests are not there
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario4', 'Unit Test 41'));
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario4', 'Unit Test 42'));
-    });
-
-    it('Work Package unit test results do not include Features or Scenarios outside the Work Package', function(){
-
-        // Setup
-        // Developer goes to WP
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Tests are run
-        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
-
-        // Open the Unit Tests window - this should load the expected data
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsPane();
-
-        // Verify - does not contain Scenario 444 and its unit tests
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainScenario('Scenario7'));
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario7', 'Unit Test 71'));
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario7', 'Unit Test 72'));
-    });
 
     it('A Feature Aspect is not shown in the unit test results if it contains no Scenarios', function(){
 

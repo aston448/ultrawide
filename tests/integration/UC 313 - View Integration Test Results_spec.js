@@ -20,6 +20,8 @@ import TestResultActions            from '../../test_framework/test_wrappers/tes
 import TestResultVerifications      from '../../test_framework/test_wrappers/test_result_verifications.js';
 import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
 import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
+import TestIntegrationActions       from '../../test_framework/test_wrappers/test_integration_actions.js';
+import TestSummaryVerifications     from '../../test_framework/test_wrappers/test_summary_verifications.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
@@ -27,8 +29,38 @@ import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunn
 
 describe('UC 313 - View Integration Test Results', function(){
 
+    const results = [
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario1',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario2',
+            result: MashTestStatus.MASH_FAIL
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario3',
+            result: MashTestStatus.MASH_PENDING
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario4',
+            result: MashTestStatus.MASH_NOT_LINKED
+        }
+    ];
+
     before(function(){
         TestFixtures.logTestSuite('UC 313 - View Integration Test Results');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();
@@ -86,13 +118,6 @@ describe('UC 313 - View Integration Test Results', function(){
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
@@ -136,45 +161,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
 
     // Conditions
-    it('Integration test results include all Features and Scenarios in the Work Package scope', function(){
-
-        // Setup
-        // Developer goes to WP
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Open the Int Tests window - this should load the expected data
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsPane();
-
-        // Verify - should contain Feature1, Feature2, Scenarios 1,2,3,4 and their parent Feature Aspects
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature1', 'Actions'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario1'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature1', 'Conditions'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario2'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature2'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature2', 'Actions'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario3'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeatureAspect('Feature2', 'Conditions'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsScenario('Scenario4'));
-
-    });
-
-    it('Integration test results do not include Features or Scenarios outside the Work Package', function(){
-
-        // Setup
-        // Developer goes to WP
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Open the Int Tests window - this should load the expected data
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsPane();
-
-        // Verify - Feature444 and Scenario7 are not included
-        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeature('Feature444'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainScenario('Scenario7'));
-    });
-
     it('A Feature Aspect is not shown in the test results if it contains no Scenarios', function(){
 
         // Setup
@@ -198,34 +184,12 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PENDING
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_NOT_LINKED
-            }
-        ];
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -239,34 +203,12 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PENDING
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_NOT_LINKED
-            }
-        ];
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -281,34 +223,12 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PENDING
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_NOT_LINKED
-            }
-        ];
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));
@@ -323,34 +243,12 @@ describe('UC 313 - View Integration Test Results', function(){
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Execute - Run Tests - outside of ULTRAWIDE
-        const results = [
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario1',
-                result: MashTestStatus.MASH_PASS
-            },
-            {
-                featureName: 'Feature1',
-                scenarioName: 'Scenario2',
-                result: MashTestStatus.MASH_FAIL
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario3',
-                result: MashTestStatus.MASH_PENDING
-            },
-            {
-                featureName: 'Feature2',
-                scenarioName: 'Scenario4',
-                result: MashTestStatus.MASH_NOT_LINKED
-            }
-        ];
-
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', results);
 
         // Open the Int Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
         ViewOptionsActions.developerTogglesIntTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_INT_TESTS));

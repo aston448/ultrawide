@@ -55,11 +55,9 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const mashComponent = UserWorkPackageMashData.findOne({
+        const mashComponent = UserDesignVersionMashScenarios.findOne({
             userId:                 userContext.userId,
             designVersionId:        userContext.designVersionId,
-            designUpdateId:         userContext.designUpdateId,
-            workPackageId:          userContext.workPackageId,
             mashComponentType:      componentType,
             designComponentName:    componentName
         });

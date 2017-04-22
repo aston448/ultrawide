@@ -90,6 +90,7 @@ class MashSelectedItemList extends Component {
         let menuVisible = false;
 
         let itemHeader = '';
+        let panelId = '';
         let secondPanel = <div></div>;
 
         if(isTopParent || userContext.designComponentId === 'NONE') {
@@ -105,9 +106,12 @@ class MashSelectedItemList extends Component {
                     break;
             }
 
+
+
             switch (itemType) {
                 case ComponentType.APPLICATION:
                     // Tests not currently displayed for these unless in WP development
+                    panelId = 'featureList';
                     switch(view){
                         case ViewType.DEVELOP_BASE_WP:
                         case ViewType.DEVELOP_UPDATE_WP:
@@ -119,6 +123,7 @@ class MashSelectedItemList extends Component {
                     break;
                 case ComponentType.DESIGN_SECTION:
                     // Tests not currently displayed for these unless in WP development
+                    panelId = 'featureList';
                     switch(view){
                         case ViewType.DEVELOP_BASE_WP:
                         case ViewType.DEVELOP_UPDATE_WP:
@@ -129,6 +134,7 @@ class MashSelectedItemList extends Component {
                     }
                     break;
                 case ComponentType.FEATURE:
+                    panelId = 'featureAspectList';
                     switch (displayContext) {
                         case DisplayContext.MASH_ACC_TESTS:
 
@@ -145,10 +151,12 @@ class MashSelectedItemList extends Component {
 
                     break;
                 case ComponentType.FEATURE_ASPECT:
+                    panelId = 'scenarioList';
                     panelHeader = nameData.featureAspect + ' ' + TextLookups.mashTestTypes(displayContext) + ' tests for ' + nameData.feature;
                     itemHeader = 'Scenario';
                     break;
                 case ComponentType.SCENARIO:
+                    panelId = 'scenarioTestList';
                     panelHeader = TextLookups.mashTestTypes(displayContext) + ' test for SCENARIO:';
                     break;
 
@@ -163,7 +171,7 @@ class MashSelectedItemList extends Component {
         if(designItems.length > 0 ) {
 
             mainPanel =
-                <div>
+                <div id={panelId}>
                     {this.renderDesignItems(designItems, displayContext)}
                 </div>;
 
