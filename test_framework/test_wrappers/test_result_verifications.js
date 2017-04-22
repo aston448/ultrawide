@@ -18,60 +18,60 @@ class TestResultVerifications {
     };
 
     // Check for Mash Present
-    developerIntegrationTestsWindowContainsFeature(featureName){
+    // developerIntegrationTestsWindowContainsFeature(featureName){
+    //
+    //     server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.FEATURE, featureName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerIntegrationTestsWindowContainsFeatureAspect(featureName, aspectName){
+    //
+    //     server.call('verifyTestResults.testMashWindowContainsFeatureAspect', featureName, aspectName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
 
-        server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.FEATURE, featureName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
+    // developerIntegrationTestsWindowContainsScenario(scenarioName){
+    //
+    //     server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
 
-    developerIntegrationTestsWindowContainsFeatureAspect(featureName, aspectName){
-
-        server.call('verifyTestResults.testMashWindowContainsFeatureAspect', featureName, aspectName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerIntegrationTestsWindowContainsScenario(scenarioName){
-
-        server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    // Check for Mash Not Present
-    developerIntegrationTestsWindowDoesNotContainFeature(featureName){
-
-        server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.FEATURE, featureName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerIntegrationTestsWindowDoesNotContainFeatureAspect(featureName, aspectName){
-
-        server.call('verifyTestResults.testMashWindowDoesNotContainFeatureAspect', featureName, aspectName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerIntegrationTestsWindowDoesNotContainScenario(scenarioName){
-
-        server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
+    // // Check for Mash Not Present
+    // developerIntegrationTestsWindowDoesNotContainFeature(featureName){
+    //
+    //     server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.FEATURE, featureName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerIntegrationTestsWindowDoesNotContainFeatureAspect(featureName, aspectName){
+    //
+    //     server.call('verifyTestResults.testMashWindowDoesNotContainFeatureAspect', featureName, aspectName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerIntegrationTestsWindowDoesNotContainScenario(scenarioName){
+    //
+    //     server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
 
     // UNIT ------------------------------------------------------------------------------------------------------------
     // Check scenario result
@@ -95,32 +95,32 @@ class TestResultVerifications {
     };
 
     // Check for Mash Present
-    developerUnitTestsWindowContainsFeature(featureName){
-
-        server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.FEATURE, featureName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerUnitTestsWindowContainsFeatureAspect(featureName, aspectName){
-
-        server.call('verifyTestResults.testMashWindowContainsFeatureAspect', featureName, aspectName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerUnitTestsWindowContainsScenario(scenarioName){
-
-        server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
+    // developerUnitTestsWindowContainsFeature(featureName){
+    //
+    //     server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.FEATURE, featureName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerUnitTestsWindowContainsFeatureAspect(featureName, aspectName){
+    //
+    //     server.call('verifyTestResults.testMashWindowContainsFeatureAspect', featureName, aspectName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerUnitTestsWindowContainsScenario(scenarioName){
+    //
+    //     server.call('verifyTestResults.testMashWindowContainsComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
 
     developerUnitTestsWindowContainsUnitTest(scenarioName, unitTestName){
 
@@ -132,32 +132,32 @@ class TestResultVerifications {
     }
 
     // Check for Mash Not Present
-    developerUnitTestsWindowDoesNotContainFeature(featureName){
-
-        server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.FEATURE, featureName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerUnitTestsWindowDoesNotContainFeatureAspect(featureName, aspectName){
-
-        server.call('verifyTestResults.testMashWindowDoesNotContainFeatureAspect', featureName, aspectName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
-
-    developerUnitTestsWindowDoesNotContainScenario(scenarioName){
-
-        server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
-            (function (error, result) {
-                return (error === null);
-            })
-        );
-    }
+    // developerUnitTestsWindowDoesNotContainFeature(featureName){
+    //
+    //     server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.FEATURE, featureName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerUnitTestsWindowDoesNotContainFeatureAspect(featureName, aspectName){
+    //
+    //     server.call('verifyTestResults.testMashWindowDoesNotContainFeatureAspect', featureName, aspectName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
+    //
+    // developerUnitTestsWindowDoesNotContainScenario(scenarioName){
+    //
+    //     server.call('verifyTestResults.testMashWindowDoesNotContainComponent', ComponentType.SCENARIO, scenarioName, 'hugh',
+    //         (function (error, result) {
+    //             return (error === null);
+    //         })
+    //     );
+    // }
 
     developerUnitTestsWindowDoesNotContainUnitTest(scenarioName, unitTestName){
 

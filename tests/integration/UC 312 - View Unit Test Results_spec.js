@@ -246,25 +246,6 @@ describe('UC 312 - View Unit Test Results', function(){
 
 
     // Conditions
-
-    it('A Feature Aspect is not shown in the unit test results if it contains no Scenarios', function(){
-
-        // Setup
-        // Developer goes to WP
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Tests are run
-        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', results);
-
-        // Open the Unit Tests window - this should load the expected data
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
-        ViewOptionsActions.developerTogglesUnitTestsPane();
-
-        // Verify - does not contain Feature 1 Interface and Consequences
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainFeatureAspect('Feature1', 'Interface'));
-        expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainFeatureAspect('Feature1', 'Consequences'));
-    });
-
     it('A Scenario with no unit results is shown as Not Tested', function(){
 
         // Setup

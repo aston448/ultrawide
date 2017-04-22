@@ -161,22 +161,6 @@ describe('UC 313 - View Integration Test Results', function(){
 
 
     // Conditions
-    it('A Feature Aspect is not shown in the test results if it contains no Scenarios', function(){
-
-        // Setup
-        // Developer goes to WP
-        WorkPackageActions.developerDevelopsSelectedWorkPackage();
-
-        // Open the Int Tests window - this should load the expected data
-        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_INT_TESTS));
-        ViewOptionsActions.developerTogglesIntTestsPane();
-
-        // Verify - Feature1 Interface, Consequences are not shown as no Scenarios
-        expect(TestResultVerifications.developerIntegrationTestsWindowContainsFeature('Feature1'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeatureAspect('Feature1', 'Interface'));
-        expect(TestResultVerifications.developerIntegrationTestsWindowDoesNotContainFeatureAspect('Feature1', 'Consequences'));
-    });
-
     it('A Scenario not included in an integration test file results is shown as Not Tested', function(){
 
         // Setup
