@@ -122,6 +122,59 @@ describe('API: ClientContainer', () => {
         });
     });
 
+    describe('An option exists to refresh test data when a Design Version is being edited', () => {
+
+        it('is available when in edit mode', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_NEW_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+
+        it('is available when in view only mode', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_NEW_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
+
+    describe('An option exists to refresh test data when a Design Version is being viewed', () => {
+
+        it('is available when in view mode', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_PUBLISHED_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
+
+    describe('An option exists to refresh test data when an Updatable Design Version is being viewed', () => {
+
+        it('is available when in the design progress view', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATABLE_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
+
     describe('The Design Version editor does not have options to show or hide Developer test results', () => {
 
         it('test results not available when editing a design', () => {
@@ -335,6 +388,106 @@ describe('API: ClientContainer', () => {
         });
     });
 
+    describe('An option exists to refresh test data when a Design Update is being viewed', () => {
 
+        it('is available when viewing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DESIGN_UPDATE_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
+
+    describe('An option exists to refresh test data when a Design Update is being edited', () => {
+
+        it('is available when editing a design update', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DESIGN_UPDATE_EDIT;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
+
+    // Work Package Editor ---------------------------------------------------------------------------------------------
+
+    describe('An option exists to refresh Ultrawide test data when a Work Package is being developed', function(){
+
+        it('is available when developing a base work package', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DEVELOP_BASE_WP;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+
+        it('is available when developing an update work package', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.DEVELOP_UPDATE_WP;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+
+        it('is available when developing a base work package with edit', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DEVELOP_BASE_WP;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+
+        it('is available when developing an update work package with edit', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_EDIT;
+            const view = ViewType.DEVELOP_UPDATE_WP;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
+
+    describe('An option exists to refresh test data when a Work Package is being viewed', () => {
+
+        it('is available when viewing a base work package', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.WORK_PACKAGE_BASE_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+
+        it('is available when viewing an update work package', () => {
+
+            const menuType = MenuDropdown.MENU_DROPDOWN_REFRESH;
+            const mode = ViewMode.MODE_VIEW;
+            const view = ViewType.WORK_PACKAGE_UPDATE_VIEW;
+
+            const menu = testGetDropdownMenuItems(menuType, view, mode);
+
+            chai.assert.isTrue(menuContains(menu, MenuAction.MENU_ACTION_REFRESH_TESTS), 'Refresh Test Data option not found');
+        });
+    });
 
 });

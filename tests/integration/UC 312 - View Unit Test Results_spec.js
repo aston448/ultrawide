@@ -194,12 +194,43 @@ describe('UC 312 - View Unit Test Results', function(){
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
     });
 
+    it('The unit tests results panel may be displayed by a Developer for a Design Version', function(){
+
+        // Setup
+        // Developer goes to DV View
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
+
+        // Execute
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsPane();
+
+        // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+    });
+
     it('The unit test results panel may be hidden for a Work Package that is being developed by a Developer', function(){
 
         // Setup
         // Developer goes to WP
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+        ViewOptionsActions.developerTogglesUnitTestsPane();
+        expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
+
+        // Execute
+        ViewOptionsActions.developerTogglesUnitTestsPane();
+
+        // Verify
+        expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
+    });
+
+    it('The unit tests results panel may be hidden by a Developer for a Design Version', function(){
+
+        // Setup
+        // Developer goes to DV View
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        DesignVersionActions.developerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.developerTogglesUnitTestsPane();
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
 

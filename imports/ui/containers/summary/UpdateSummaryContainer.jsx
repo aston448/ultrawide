@@ -147,10 +147,10 @@ export class DesignUpdateSummaryList extends Component {
                     <div className={editorClass}>
                         {orgAdditions}
                         {fncAdditions}
-                        {removals}
                         {changes}
                         {moves}
                         {queries}
+                        {removals}
                     </div>
                     <DesignEditorFooter
                         displayContext={DisplayContext.UPDATE_SUMMARY}
