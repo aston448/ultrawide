@@ -4,9 +4,11 @@
 import {DesignUpdates}              from '../collections/design_update/design_updates.js';
 import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
 import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
+import {WorkPackageComponents}      from '../collections/work/work_package_components.js';
+import {UserDesignVersionMashScenarios} from '../collections/mash/user_dv_mash_scenarios.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, ComponentType, MessageType, DesignUpdateStatus } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, ComponentType, MessageType, DesignUpdateWpStatus, DesignUpdateTestStatus, MashTestStatus } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignUpdateMessages } from '../constants/message_texts.js';
 
@@ -416,6 +418,92 @@ class ClientDesignUpdateServices {
     //     ClientDesignUpdateSummary.getDesignUpdateSummary(designUpdateId);
     // }
 
+    // Called when Design Update list is displayed ---------------------------------------------------------------------
+    updateDesignUpdateStatuses(userContext){
+
+        const designUpdates = DesignUpdates.find({designVersionId: userContext.designVersionId});
+
+        designUpdates.forEach((du) => {
+
+            let duScenarios = DesignUpdateComponents.find({designUpdateId: du._id, componentType: ComponentType.SCENARIO});
+            let allInWp = true;
+            let someInWp = false;
+            let noneInWp = true;
+            let noFails = true;
+            let noPasses = false;
+            let allPassing = true;
+            let somePassing = false;
+
+            duScenarios.forEach((duScenario) => {
+
+                let wpScenario = WorkPackageComponents.findOne({
+                    designVersionId:            userContext.designVersionId,
+                    componentReferenceId:       duScenario.componentReferenceId
+                });
+
+                let scenarioTestResult = UserDesignVersionMashScenarios.findOne({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    designScenarioReferenceId:  duScenario.componentReferenceId
+                });
+
+                if(wpScenario){
+                    someInWp = true;
+                    noneInWp = false;
+                } else {
+                    allInWp = false;
+                }
+
+                if(scenarioTestResult){
+                    if(scenarioTestResult.accMashTestStatus === MashTestStatus.MASH_FAIL || scenarioTestResult.intMashTestStatus === MashTestStatus.MASH_FAIL || scenarioTestResult.unitMashTestStatus === MashTestStatus.MASH_FAIL){
+                        noFails = false;
+                    } else {
+                        if(scenarioTestResult.accMashTestStatus === MashTestStatus.MASH_PASS || scenarioTestResult.intMashTestStatus === MashTestStatus.MASH_PASS || scenarioTestResult.unitMashTestStatus === MashTestStatus.MASH_PASS){
+                            noPasses = false;
+                        }
+                    }
+                } else {
+                    allPassing = false;
+                }
+            });
+
+            let duWpStatus = DesignUpdateWpStatus.DU_NO_WP_SCENARIOS;
+
+            if(allInWp){
+                duWpStatus = DesignUpdateWpStatus.DU_ALL_WP_SCENARIOS;
+            } else {
+                if(someInWp) {
+                    duWpStatus = DesignUpdateWpStatus.DU_SOME_WP_SCENARIOS;
+                }
+            }
+
+            let duTestStatus = DesignUpdateTestStatus.DU_SOME_SCENARIOS_PASSING;
+
+            if(!noFails){
+                duTestStatus = DesignUpdateTestStatus.DU_SCENARIOS_FAILING;
+            } else {
+                if(allPassing){
+                    duTestStatus = DesignUpdateTestStatus.DU_ALL_SCENARIOS_PASSING;
+                } else {
+                    if(noPasses){
+                        duTestStatus = DesignUpdateTestStatus.DU_NO_SCENARIOS_PASSING;
+                    }
+                }
+            }
+
+            DesignUpdates.update(
+                {
+                    _id: du._id
+                },
+                {
+                    $set: {
+                        updateWpStatus:     duWpStatus,
+                        updateTestStatus:   duTestStatus
+                    }
+                }
+            );
+        });
+    }
 }
 
 export default new ClientDesignUpdateServices();

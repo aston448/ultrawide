@@ -209,6 +209,19 @@ export const DesignUpdateStatus = {
     UPDATE_IGNORED:         'IGNORED'           // Neither merged nor carried forward in a change to the next design version
 };
 
+export const DesignUpdateWpStatus = {
+    DU_NO_WP_SCENARIOS:     'du-no-wp-scenarios',
+    DU_SOME_WP_SCENARIOS:   'du-some-wp-scenarios',
+    DU_ALL_WP_SCENARIOS:    'du-all-wp-scenarios'
+};
+
+export const DesignUpdateTestStatus = {
+    DU_SCENARIOS_FAILING:       'du-scenarios-failing',
+    DU_NO_SCENARIOS_PASSING:    'du-no-scenarios-passing',
+    DU_SOME_SCENARIOS_PASSING:  'du-some-scenarios-passing',
+    DU_ALL_SCENARIOS_PASSING:   'du-all-scenarios-passing'
+};
+
 export const UpdateScopeType = {
     SCOPE_IN_SCOPE:         'SCOPE_IN_SCOPE',
     SCOPE_PARENT_SCOPE:     'SCOPE_PARENT_SCOPE',

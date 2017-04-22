@@ -50,7 +50,9 @@ class DesignUpdateServices{
                     updateRawText:      designUpdate.updateRawText,
                     updateStatus:       designUpdate.updateStatus,
                     updateMergeAction:  designUpdate.updateMergeAction,
-                    summaryDataStale:   designUpdate.summaryDataStale
+                    summaryDataStale:   designUpdate.summaryDataStale,
+                    updateWpStatus:     designUpdate.updateWpStatus,
+                    updateTestStatus:   designUpdate.updateTestStatus
                 }
             );
 

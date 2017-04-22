@@ -792,7 +792,7 @@ export class DesignComponentHeader extends Component{
         if(currentItem.componentType === ComponentType.SCENARIO){
             openStatus = 'invisible';
         }
-        if(updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE){
+        if(updateItem && updateItem.scopeType === UpdateScopeType.SCOPE_PEER_SCOPE && displayContext === DisplayContext.UPDATE_EDIT){
             openStatus = 'invisible';
         }
 

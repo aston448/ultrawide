@@ -14,7 +14,7 @@ import {ItemType, DesignUpdateStatus, DesignUpdateMergeAction, RoleType} from '.
 import TextLookups from '../../../common/lookups.js';
 
 // Bootstrap
-import {Button, ButtonGroup, FormGroup, Radio, Checkbox} from 'react-bootstrap';
+import {Button, ButtonGroup, FormGroup, Radio, InputGroup, Glyphicon} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -191,11 +191,30 @@ export class DesignUpdate extends Component {
 
         const summary =
             <div id="designUpdateSummary" className={statusClass}>
-                {designUpdate.updateReference + ' - ' + designUpdate.updateName}
+                <InputGroup>
+                    <div>{designUpdate.updateReference + ' - ' + designUpdate.updateName}</div>
+                    <InputGroup.Addon >
+                        <div id="updateWpSummary" className={designUpdate.updateWpStatus}><Glyphicon glyph='tasks'/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon >
+                        <div id="updateTestSummary" className={designUpdate.updateTestStatus}><Glyphicon glyph='th-large'/></div>
+                    </InputGroup.Addon>
+                </InputGroup>
             </div>;
 
         const status =
-            <div id="designUpdateStatus" className={statusClass}>{designUpdate.updateStatus}</div>;
+            <div id="designUpdateStatus" className={statusClass}>
+                <InputGroup>
+                    <div id="designUpdateStatus">{designUpdate.updateStatus}</div>
+                    <InputGroup.Addon >
+                        <div id="updateWpSummary" className={designUpdate.updateWpStatus}><Glyphicon glyph='tasks'/></div>
+                    </InputGroup.Addon>
+                    <InputGroup.Addon >
+                        <div id="updateTestSummary" className={designUpdate.updateTestStatus}><Glyphicon glyph='th-large'/></div>
+                    </InputGroup.Addon>
+                </InputGroup>
+            </div>;
+
 
         switch(designUpdate.updateStatus){
             case DesignUpdateStatus.UPDATE_NEW:

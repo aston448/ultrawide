@@ -767,6 +767,34 @@ input {
     background-color: pink;
 }
 
+.du-no-wp-scenarios{
+    color: lightgrey;
+}
+
+.du-some-wp-scenarios{
+    color: orangered;
+}
+
+.du-all-wp-scenarios{
+    color: green;
+}
+
+.du-scenarios-failing{
+    color: red;
+}
+
+.du-no-scenarios-passing{
+    color: lightgrey;
+}
+
+.du-some-scenarios-passing{
+    color: seagreen;
+}
+
+.du-all-scenarios-passing{
+    color: lime;
+}
+
 /* -- Design Version Modal ------------------------------------------------------------------------------------------ */
 
 .merge-alert{
