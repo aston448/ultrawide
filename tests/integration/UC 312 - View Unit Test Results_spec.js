@@ -20,6 +20,8 @@ import TestResultActions            from '../../test_framework/test_wrappers/tes
 import TestResultVerifications      from '../../test_framework/test_wrappers/test_result_verifications.js';
 import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
 import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
+import TestIntegrationActions       from '../../test_framework/test_wrappers/test_integration_actions.js';
+import TestSummaryVerifications     from '../../test_framework/test_wrappers/test_summary_verifications.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
@@ -244,7 +246,7 @@ describe('UC 312 - View Unit Test Results', function(){
 
 
     // Conditions
-    it('Unit test results include all Features and Scenarios in the Work Package scope', function(){
+    it('Work Package unit test results include all Features and Scenarios in the Work Package scope', function(){
 
         // Setup
         // Developer goes to WP
@@ -279,7 +281,7 @@ describe('UC 312 - View Unit Test Results', function(){
         expect(TestResultVerifications.developerUnitTestsWindowDoesNotContainUnitTest('Scenario4', 'Unit Test 42'));
     });
 
-    it('Unit test results do not include Features or Scenarios outside the Work Package', function(){
+    it('Work Package unit test results do not include Features or Scenarios outside the Work Package', function(){
 
         // Setup
         // Developer goes to WP
@@ -328,6 +330,7 @@ describe('UC 312 - View Unit Test Results', function(){
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - scenario 4 is not tested as no tests
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
@@ -348,6 +351,7 @@ describe('UC 312 - View Unit Test Results', function(){
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - scenario 2 and 3 both failed as have 1 failure
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));
@@ -368,6 +372,7 @@ describe('UC 312 - View Unit Test Results', function(){
         // Open the Unit Tests window - this should load the expected data
         expect(ViewOptionsVerifications.developerViewOption_IsHidden(ViewOptionType.DEV_UNIT_TESTS));
         ViewOptionsActions.developerTogglesUnitTestsPane();
+        TestIntegrationActions.developerRefreshesTestResults();
 
         // Verify - scenario 1 passed as all tests passed
         expect(ViewOptionsVerifications.developerViewOption_IsVisible(ViewOptionType.DEV_UNIT_TESTS));

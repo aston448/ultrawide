@@ -705,10 +705,10 @@ class TestDataHelpers {
 
         const testScenarios = UserDesignVersionMashScenarios.find({}).fetch();
 
-        console.log("Current Results are:");
-        testScenarios.forEach((mashScenario) => {
-            console.log("    Scenario: " + mashScenario.scenarioName + "  Result: " + mashScenario.intMashTestStatus);
-        });
+        // console.log("Current Results are:");
+        // testScenarios.forEach((mashScenario) => {
+        //     console.log("    Scenario: " + mashScenario.scenarioName + "  Result: " + mashScenario.intMashTestStatus);
+        // });
         // console.log("Test Mash Scenarios: " + testScenarios.length);
 
         const testResult = UserDesignVersionMashScenarios.findOne({
