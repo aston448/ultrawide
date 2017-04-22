@@ -106,6 +106,14 @@ describe('UC 312 - View Unit Test Results', function(){
     before(function(){
         TestFixtures.logTestSuite('UC 312 - View Unit Test Results');
 
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
+
         TestFixtures.clearAllData();
         TestFixtures.addDesignWithDefaultData();
 
@@ -162,13 +170,6 @@ describe('UC 312 - View Unit Test Results', function(){
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
         WorkPackageActions.developerAdoptsSelectedWorkPackage();
-    });
-
-    after(function(){
-
-    });
-
-    beforeEach(function(){
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();

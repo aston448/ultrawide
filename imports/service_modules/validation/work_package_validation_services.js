@@ -178,17 +178,17 @@ class WorkPackageValidationServices{
     validateDevelopWorkPackage(userRole, userId, wp){
 
         // To develop a WP, user must be a Developer
-        if(userRole != RoleType.DEVELOPER){
+        if(userRole !== RoleType.DEVELOPER){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_ROLE_DEVELOP;
         }
 
         //Work Package must be Adopted
-        if(wp.workPackageStatus != WorkPackageStatus.WP_ADOPTED){
+        if(wp.workPackageStatus !== WorkPackageStatus.WP_ADOPTED){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_STATE_DEVELOP;
         }
 
         // And the Adoption must be by the current user
-        if(wp.adoptingUserId != userId){
+        if(wp.adoptingUserId !== userId){
             return WorkPackageValidationErrors.WORK_PACKAGE_INVALID_USER_DEVELOP;
         }
 
