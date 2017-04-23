@@ -408,7 +408,7 @@ class TestIntegrationModules{
                 {multi: true}
             );
 
-            console.log("Updated " + updates + " mash item");
+            //console.log("Updated " + updates + " mash item");
         });
 
     };
@@ -419,36 +419,6 @@ class TestIntegrationModules{
         log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Unit Test Results for User {}", userContext.userId);
 
         UserUnitTestMashData.remove({userId: userContext.userId});
-
-        // Set all unit tests as stale...  Anything that is not refreshed will be deleted
-        // Set everything to Pending so the screen visually refreshes
-        // UserUnitTestMashData.update(
-        //     {
-        //         userId: userContext.userId
-        //     },
-        //     {
-        //         $set:{
-        //             testOutcome: MashTestStatus.MASH_PENDING,
-        //             isStale: true
-        //         }
-        //     },
-        //     {multi: true}
-        // );
-
-        // UserDesignVersionMashScenarios.update(
-        //     {
-        //         userId: userContext.userId
-        //     },
-        //     {
-        //         $set: {
-        //             unitMashTestStatus: MashTestStatus.MASH_PENDING
-        //         }
-        //     },
-        //     {multi: true}
-        // );
-
-        //const unitResultsData = UserUnitTestResults.find({userId: userContext.userId}).fetch();
-
 
         let mashScenarios =  UserDesignVersionMashScenarios.find({
             userId: userContext.userId,
@@ -467,11 +437,6 @@ class TestIntegrationModules{
             }).fetch();
 
             unitTests.forEach((unitTestResult) => {
-
-                // let testIdentity = {
-                //     suite: unitTestResult.testName,
-                //     subSuite: unitTestResult.testName
-                // };
 
                 const testIdentity = this.getUnitTestIdentity(unitTestResult.testFullName, scenario.scenarioName, unitTestResult.testName);
 
@@ -552,183 +517,6 @@ class TestIntegrationModules{
             );
 
         });
-
-
-        // if(unitResultsData.length > 0) {
-        //
-        //     // Parse Test Results
-        //     unitResultsData.forEach((testResult) => {
-        //
-        //         let testIdentity = {
-        //             suite: testResult.testName,
-        //             subSuite: testResult.testName
-        //         };
-        //
-        //         //log((msg) => console.log(msg), LogLevel.TRACE, "Unit Test Result: {}", testResult.testFullName);
-        //
-        //         let testError = '';
-        //         let testStack = '';
-        //         let testDuration = 0;
-        //         if(testResult.testResult === MashTestStatus.MASH_FAIL){
-        //             testError = testResult.testError;
-        //             testStack = testResult.stackTrace;
-        //         }
-        //         if(testResult.testResult === MashTestStatus.MASH_PASS){
-        //             testDuration = testResult.testDuration;
-        //         }
-        //
-        //         let linked = false;
-        //
-        //
-        //         mashScenarios.forEach((designScenario) => {
-        //
-        //             if(testResult.testFullName.includes(designScenario.scenarioName)){
-        //
-        //                 log((msg) => console.log(msg), LogLevel.TRACE, "  Matched Scenario: {}", designScenario.scenarioName);
-        //
-        //                 // Update the Mash
-        //                 UserDesignVersionMashScenarios.update(
-        //                     {_id: designScenario._id},
-        //                     {
-        //                         $set: {
-        //                             unitMashStatus: MashStatus.MASH_LINKED,
-        //                             //unitMashTestStatus: MashTestStatus.MASH_PENDING // Depends on the sum of all Module tests
-        //                         }
-        //                     }
-        //                 );
-        //
-        //                 // // Update existing module result
-        //                 // let updated = UserUnitTestMashData.update(
-        //                 //     {
-        //                 //         userId:                      userContext.userId,
-        //                 //         suiteName:                   designScenario.scenarioName,
-        //                 //         //testGroupName:               testIdentity.subSuite,
-        //                 //         testName:                    testResult.testName
-        //                 //     },
-        //                 //     {
-        //                 //         $set:{
-        //                 //             mashStatus:         MashStatus.MASH_LINKED,
-        //                 //             testOutcome:        testResult.testResult,
-        //                 //             testErrors:         testError,
-        //                 //             testStack:          testStack,
-        //                 //             testDuration:       testDuration,
-        //                 //             isStale:            false
-        //                 //         }
-        //                 //     }
-        //                 // );
-        //                 //
-        //                 // if(updated === 0){
-        //
-        //                     testIdentity = this.getUnitTestIdentity(testResult.testFullName, designScenario.scenarioName, testResult.testName);
-        //
-        //                     // Insert a new child Module Test record
-        //                     UserUnitTestMashData.insert(
-        //                         {
-        //                             // Identity
-        //                             userId:                      userContext.userId,
-        //                             suiteName:                   designScenario.scenarioName,
-        //                             testGroupName:               testIdentity.subSuite,
-        //                             designScenarioReferenceId:   designScenario.designScenarioReferenceId,
-        //                             designAspectReferenceId:     designScenario.designFeatureAspectReferenceId,
-        //                             designFeatureReferenceId:    designScenario.designFeatureReferenceId,
-        //                             // Data
-        //                             testName:                    testResult.testName,
-        //                             // Status
-        //                             mashStatus:                  MashStatus.MASH_LINKED,
-        //                             testOutcome:                 testResult.testResult,
-        //                             testErrors:                  testError,
-        //                             testStack:                   testStack,
-        //                             testDuration:                testDuration,
-        //                             isStale:                     false
-        //                         }
-        //                     );
-        //
-        //                     log((msg) => console.log(msg), LogLevel.TRACE, "  Inserted Scenario: {}", designScenario.scenarioName);
-        //
-        //                 // } else {
-        //                 //
-        //                 //     log((msg) => console.log(msg), LogLevel.TRACE, "  Updated Scenario: {}", designScenario.scenarioName);
-        //                 // }
-        //
-        //                 linked = true;
-        //             } else {
-        //                 testIdentity = this.getUnitTestIdentity(testResult.testFullName, designScenario.scenarioName, testResult.testName);
-        //             }
-        //         });
-        //
-        //         // If no scenarios matched, insert as non-linked test
-        //         if(!linked){
-        //
-        //             UserUnitTestMashData.insert(
-        //                 {
-        //                     // Identity
-        //                     userId:                      userContext.userId,
-        //                     suiteName:                   testIdentity.suite,
-        //                     testGroupName:               testIdentity.subSuite,
-        //                     designScenarioReferenceId:   'NONE',
-        //                     designAspectReferenceId:     'NONE',
-        //                     designFeatureReferenceId:    'NONE',
-        //                     // Data
-        //                     testName:                    testResult.testName,
-        //                     // Status
-        //                     mashStatus:                  MashStatus.MASH_NOT_DESIGNED,
-        //                     testOutcome:                 testResult.testResult,
-        //                     testErrors:                  testError,
-        //                     testStack:                   testStack,
-        //                     testDuration:                testDuration,
-        //                 }
-        //             );
-        //         }
-        //     });
-        //
-        //     // Remove any stuff that is still stale - tests that have gone or changed
-        //     UserUnitTestMashData.remove({isStale: true});
-        //
-        //     // Now update the mod test status of the scenario:
-        //     // Any failures = FAIL
-        //     // Any passes and no failures = PASS
-        //     // Neither = NO TEST
-        //     mashScenarios.forEach((designScenario) => {
-        //
-        //         const modPassCount = UserUnitTestMashData.find({
-        //             userId:                     userContext.userId,
-        //             designScenarioReferenceId:  designScenario.designScenarioReferenceId,
-        //             mashStatus:                 MashStatus.MASH_LINKED,
-        //             testOutcome:                MashTestStatus.MASH_PASS
-        //         }).count();
-        //
-        //         const modFailCount = UserUnitTestMashData.find({
-        //             userId:                     userContext.userId,
-        //             designScenarioReferenceId:  designScenario.designScenarioReferenceId,
-        //             mashStatus:                 MashStatus.MASH_LINKED,
-        //             testOutcome:                MashTestStatus.MASH_FAIL
-        //         }).count();
-        //
-        //         let scenarioTestStatus = MashTestStatus.MASH_NOT_LINKED;
-        //
-        //         if(modPassCount > 0){
-        //             scenarioTestStatus = MashTestStatus.MASH_PASS;
-        //         }
-        //         // Override if failures
-        //         if(modFailCount > 0){
-        //             scenarioTestStatus = MashTestStatus.MASH_FAIL;
-        //         }
-        //
-        //         // Update the Mash i
-        //         UserDesignVersionMashScenarios.update(
-        //             {_id: designScenario._id},
-        //             {
-        //                 $set: {
-        //                     unitMashTestStatus: scenarioTestStatus
-        //                 }
-        //             }
-        //         );
-        //
-        //     });
-        //
-        // } else {
-        //     log((msg) => console.log(msg), LogLevel.INFO, "No unit test results data");
-        // }
 
         log((msg) => console.log(msg), LogLevel.DEBUG, "Unit test data complete");
     }

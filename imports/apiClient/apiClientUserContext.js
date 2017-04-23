@@ -201,6 +201,8 @@ class ClientUserContextServices {
 
         // Refresh the test mash for the design version.  Also loads test results
         ClientTestIntegrationServices.refreshTestData(userContext);
+        // Get latest status on DUs
+        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));

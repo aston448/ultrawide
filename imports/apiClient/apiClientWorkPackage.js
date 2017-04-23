@@ -12,10 +12,10 @@ import { RoleType, ViewType, ViewMode, ComponentType, WorkPackageType, WorkPacka
 import { Validation } from '../constants/validation_errors.js';
 import { WorkPackageMessages } from '../constants/message_texts.js';
 
-import WorkPackageValidationApi from '../apiValidation/apiWorkPackageValidation.js';
-import ServerWorkPackageApi     from '../apiServer/apiWorkPackage.js';
-import ClientContainerServices  from './apiClientContainerServices.js';
-import ClientTestIntegrationServices   from './apiClientTestIntegration';
+import WorkPackageValidationApi         from '../apiValidation/apiWorkPackageValidation.js';
+import ServerWorkPackageApi             from '../apiServer/apiWorkPackage.js';
+import ClientTestIntegrationServices    from './apiClientTestIntegration';
+import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -359,10 +359,12 @@ class ClientWorkPackageServices {
             };
 
             // Subscribe to the appropriate data for the new WP if WP changing
-            store.dispatch(setWorkPackageDataLoadedTo(false));
-            ClientContainerServices.getWorkPackageData(newContext);
+            //store.dispatch(setWorkPackageDataLoadedTo(false));
+            //ClientContainerServices.getWorkPackageData(newContext);
 
             store.dispatch(setCurrentUserItemContext(newContext, true));
+
+            ClientUserContextServices.setOpenWorkPackageItems(newContext);
 
             // Update the test summary data to reflect the WP.  No need to recalc data
             ClientTestIntegrationServices.updateTestSummaryData(newContext, false);

@@ -772,11 +772,11 @@ input {
 }
 
 .du-some-wp-scenarios{
-    color: orangered;
+    color: darkgrey;
 }
 
 .du-all-wp-scenarios{
-    color: green;
+    color: black;
 }
 
 .du-scenarios-failing{
@@ -788,11 +788,11 @@ input {
 }
 
 .du-some-scenarios-passing{
-    color: seagreen;
+    color: darkseagreen;
 }
 
 .du-all-scenarios-passing{
-    color: lime;
+    color: forestgreen;
 }
 
 /* -- Design Version Modal ------------------------------------------------------------------------------------------ */

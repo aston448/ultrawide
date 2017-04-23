@@ -28,10 +28,9 @@ WorkPackageComponents.attachSchema(Schema);
 
 // Publish Work Package Components wanted
 if(Meteor.isServer){
-    Meteor.publish('workPackageComponents', function workPackageComponentsPublication(designVersionId, workPackageId){
+    Meteor.publish('workPackageComponents', function workPackageComponentsPublication(designVersionId){
         return WorkPackageComponents.find({
-            designVersionId: designVersionId,
-            workPackageId: workPackageId
+            designVersionId: designVersionId
         });
     })
 }

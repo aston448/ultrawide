@@ -133,7 +133,7 @@ class DesignComponentServices{
     };
 
     // Called when restoring data after a reset
-    importComponent(designId, designVersionId, component){
+    importComponent(designId, designVersionId, workPackageId, component){
 
         if(Meteor.isServer) {
 
@@ -169,7 +169,7 @@ class DesignComponentServices{
 
                     // State (shared and persistent only)
                     isNew: component.isNew,
-                    workPackageId: component.workPackageId,
+                    workPackageId: workPackageId,
                     updateMergeStatus: component.updateMergeStatus,
                     isDevUpdated: component.isDevUpdated,
                     isDevAdded: component.isDevAdded,

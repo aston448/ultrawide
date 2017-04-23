@@ -62,6 +62,8 @@ class DesignUpdateComponentServices{
                     componentParentReferenceIdNew:  parentRefId,
                     componentFeatureReferenceIdOld: featureRefId,
                     componentFeatureReferenceIdNew: featureRefId,
+                    componentIndexOld:              999999999,              // Temp - bottom of list
+                    componentIndexNew:              999999999,              // Temp - bottom of list
 
                     // Data is all defaults to start with
                     componentNameOld:               defaultName,
@@ -155,7 +157,7 @@ class DesignUpdateComponentServices{
         }
     };
 
-    importComponent(designId, designVersionId, designUpdateId, component){
+    importComponent(designId, designVersionId, designUpdateId, workPackageId, component){
         if(Meteor.isServer) {
 
             // Fix any missing feature refs
@@ -202,7 +204,7 @@ class DesignUpdateComponentServices{
                     isRemoved: component.isRemoved,
                     isDevUpdated: component.isDevUpdated,
                     isDevAdded: component.isDevAdded,
-                    workPackageId: component.workPackageId,
+                    workPackageId: workPackageId,
 
                     // Editing state (shared and persistent)
                     isRemovable: component.isRemovable,

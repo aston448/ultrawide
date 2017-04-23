@@ -6,7 +6,8 @@ import {
     publishDesignUpdate,
     withdrawDesignUpdate,
     removeDesignUpdate,
-    updateMergeAction
+    updateMergeAction,
+    updateDesignUpdateStatuses
 } from '../apiValidatedMethods/design_update_methods.js'
 
 // =====================================================================================================================
@@ -103,6 +104,18 @@ class ServerDesignUpdateApi {
                 userRole:       userRole,
                 designUpdateId: designUpdateId,
                 newAction:      newAction
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateDesignUpdateStatuses(userContext, callback){
+
+        updateDesignUpdateStatuses.call(
+            {
+                userContext:       userContext
             },
             (err, result) => {
                 callback(err, result);

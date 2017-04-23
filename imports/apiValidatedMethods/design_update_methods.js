@@ -201,3 +201,23 @@ export const updateMergeAction = new ValidatedMethod({
     }
 
 });
+
+export const updateDesignUpdateStatuses = new ValidatedMethod({
+
+    name: 'designUpdate.updateDesignUpdateStatuses',
+
+    validate: new SimpleSchema({
+        userContext:        {type: Object, blackbox: true}
+    }).validator(),
+
+    run({userContext}){
+
+        try {
+            DesignUpdateServices.updateDesignUpdateStatuses(userContext);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+
+});

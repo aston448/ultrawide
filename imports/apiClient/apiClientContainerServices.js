@@ -121,6 +121,7 @@ class ClientContainerServices{
                 const dusHandle = Meteor.subscribe('designUpdateSummary', userContext.designVersionId);
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
+                const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
                 const fbHandle = Meteor.subscribe('featureBackgroundSteps', userContext.designVersionId);
                 const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
@@ -140,10 +141,10 @@ class ClientContainerServices{
                 const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
 
                 // Load current WP data if WP is known
-                let wcHandle = null;
-                if(userContext.workPackageId !== 'NONE'){
-                    wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId, userContext.workPackageId);
-                }
+                //let wcHandle = null;
+                //if(userContext.workPackageId !== 'NONE'){
+
+                //}
 
                 Tracker.autorun((loader) => {
 
@@ -152,7 +153,7 @@ class ClientContainerServices{
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() ||
                         !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() ||
-                        !dsHandle.ready() || (wcHandle && !wcHandle.ready())
+                        !dsHandle.ready() || !wcHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -167,9 +168,8 @@ class ClientContainerServices{
                         }));
 
                         // Set open items now that data is loaded
-                        if(userContext.workPackageId !== 'NONE'){
-                            ClientUserContextServices.setOpenWorkPackageItems(userContext);
-                        }
+                        //ClientUserContextServices.setOpenWorkPackageItems(userContext);
+
                         // ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
                         // If an action wanted after loading call it...

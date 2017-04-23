@@ -125,9 +125,9 @@ class ClientDesignUpdateComponentServices{
                 alert('Unexpected error 3: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Add Application Actions:
-                this.refreshDesignUpdateSummary(designUpdateId);
-
                 store.dispatch(updateTestDataFlag());
+
+                this.refreshDesignUpdateSummary(designUpdateId);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -169,9 +169,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 4: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
-                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
-
                     store.dispatch(updateTestDataFlag());
+
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -218,9 +218,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 5: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Design Section Actions:
-                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
-
                     store.dispatch(updateTestDataFlag());
+
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -307,9 +307,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Feature Aspect Actions:
-                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
-
                     store.dispatch(updateTestDataFlag());
+
+                    this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({
@@ -351,10 +351,9 @@ class ClientDesignUpdateComponentServices{
                     alert('Unexpected error 8: ' + err.reason + '.  Contact support if persists!');
                 } else {
                     // Add Scenario Actions:
+                    store.dispatch(updateTestDataFlag());
 
                     this.refreshDesignUpdateSummary(parentComponent.designUpdateId);
-
-                    store.dispatch(updateTestDataFlag());
 
                     // Show action success on screen
                     store.dispatch(updateUserMessage({

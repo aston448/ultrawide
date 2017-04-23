@@ -869,6 +869,12 @@ export class DesignComponentHeader extends Component{
                 updateStatusClass = 'update-merge-status component-hidden';
 
                 if(updateItem){
+
+                    // Mark Scenarios that are in a Work Package - show on an update view
+                    if(updateItem.workPackageId !== 'NONE'){
+                        wpStatusClass = 'update-merge-status item-in-wp';
+                    }
+
                     if(updateItem.componentType === ComponentType.SCENARIO && updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
                         // Just in scope its a query
                         updateStatusGlyph = 'question-sign';
@@ -971,6 +977,11 @@ export class DesignComponentHeader extends Component{
         let updateViewOnlyHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
+                    <InputGroup.Addon>
+                        <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
+                            <div id="updateStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
+                        </OverlayTrigger>
+                    </InputGroup.Addon>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
                             <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>

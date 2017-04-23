@@ -65,6 +65,8 @@ class DesignUpdateSummaryServices {
 
         if (Meteor.isServer) {
 
+            //DesignUpdates.update({_id: userContext.designUpdateId}, {$set: {summaryDataStale: true}});
+
             log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {}', userContext.designUpdateId);
 
             const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});

@@ -277,9 +277,9 @@ class ImpExServices{
 
             let workPackagesMapping = this.restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasUpdates);
 
-            let designComponentsMapping = this.restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping);
+            let designComponentsMapping = this.restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping, workPackagesMapping);
 
-            let designUpdateComponentsMapping = this.restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping);
+            let designUpdateComponentsMapping = this.restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
 
             let hasDesignComponents = newDesignComponentData.length > 0;
             let hasDesignUpdateComponents = newDesignUpdateComponentData.length > 0;
@@ -842,7 +842,7 @@ class ImpExServices{
         log((msg) => console.log(msg), LogLevel.INFO, "Added {} Dictionary Terms", componentCount);
     };
 
-    restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping){
+    restoreDesignVersionComponentData(newDesignComponentData, designsMapping, designVersionsMapping, workPackagesMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Version Components...");
 
@@ -854,10 +854,12 @@ class ImpExServices{
 
             let designId = getIdFromMap(designsMapping, component.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
+            let workPackageId = getIdFromMap(workPackagesMapping, updateComponent.workPackageId);
 
             let designComponentId = DesignComponentServices.importComponent(
                 designId,
                 designVersionId,
+                workPackageId,
                 component
             );
 
@@ -885,7 +887,7 @@ class ImpExServices{
         return designComponentsMapping;
     };
 
-    restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping){
+    restoreDesignUpdateComponentData(newDesignUpdateComponentData, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping){
 
         log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Components...");
 
@@ -900,11 +902,13 @@ class ImpExServices{
                 let designId = getIdFromMap(designsMapping, updateComponent.designId);
                 let designVersionId = getIdFromMap(designVersionsMapping, updateComponent.designVersionId);
                 let designUpdateId = getIdFromMap(designUpdatesMapping, updateComponent.designUpdateId);
+                let workPackageId = getIdFromMap(workPackagesMapping, updateComponent.workPackageId);
 
                 let designUpdateComponentId = DesignUpdateComponentServices.importComponent(
                     designId,
                     designVersionId,
                     designUpdateId,
+                    workPackageId,
                     updateComponent
                 );
 
@@ -1516,7 +1520,7 @@ class ImpExServices{
         if(designComponents.length > 0) {
 
             let migratedDesignComponents = this.migrateDesignComponentData(designComponents, backupDataVersion, currentDataVersion);
-            designComponentsMapping = this.restoreDesignVersionComponentData(migratedDesignComponents, designsMapping, designVersionsMapping);
+            designComponentsMapping = this.restoreDesignVersionComponentData(migratedDesignComponents, designsMapping, designVersionsMapping, workPackagesMapping);
 
         } else {
             // No Design Components - could be OK
@@ -1542,7 +1546,7 @@ class ImpExServices{
             if (designUpdateComponents.length > 0) {
 
                 let migratedDesignUpdateComponents = this.migrateDesignUpdateComponentData(designUpdateComponents, backupDataVersion, currentDataVersion);
-                designUpdateComponentsMapping = this.restoreDesignUpdateComponentData(migratedDesignUpdateComponents, designsMapping, designVersionsMapping, designUpdatesMapping);
+                designUpdateComponentsMapping = this.restoreDesignUpdateComponentData(migratedDesignUpdateComponents, designsMapping, designVersionsMapping, designUpdatesMapping, workPackagesMapping);
 
             } else {
                 // No Design Update Components - could be OK

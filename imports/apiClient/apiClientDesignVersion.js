@@ -405,6 +405,8 @@ class ClientDesignVersionServices{
 
         store.dispatch(setCurrentView(view));
 
+        ClientTestIntegrationServices.updateTestSummaryData(userContext, false);
+
         return {success: true, message: ''};
     };
 

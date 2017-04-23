@@ -27,7 +27,7 @@ class TestSummaryServices {
 
     refreshTestSummaryData(userContext, updateTestData){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Refreshing test summary data...");
+        log((msg) => console.log(msg), LogLevel.INFO, "Refreshing test summary data with update = {}", updateTestData);
 
         let totalScenarioCount = 0;
         let totalUnitTestsPassing = 0;
@@ -162,16 +162,20 @@ class TestSummaryServices {
         const designFeatures = DesignVersionComponents.find({
                 designId: userContext.designId,
                 designVersionId: userContext.designVersionId,
-                componentType: ComponentType.FEATURE
+                componentType: ComponentType.FEATURE,
+                updateMergeStatus: {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
             }).fetch();
 
         const totalFeatureCount = designFeatures.length;
 
         designFeatures.forEach((designFeature) =>{
 
+            log((msg) => console.log(msg), LogLevel.TRACE, "FEATURE {}", designFeature.componentNameNew);
+
             let featureScenarios = UserDevTestSummaryData.find({
-                designVersionId:    userContext.designVersionId,
-                featureReferenceId: designFeature.componentReferenceId
+                designVersionId:        userContext.designVersionId,
+                featureReferenceId:     designFeature.componentReferenceId,
+                scenarioReferenceId:    {$ne: 'NONE'}
             }).fetch();
 
             let featureTestStatus = FeatureTestSummaryStatus.FEATURE_NO_TESTS;
@@ -232,6 +236,7 @@ class TestSummaryServices {
                 }
 
                 if(hasResult === false) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test {}", featureScenario.scenarioReferenceId);
                     featureNoTestScenarios++;
                 }
 

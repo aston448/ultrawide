@@ -38,7 +38,8 @@ export const DesignUpdateMessages = {
     MSG_DESIGN_UPDATE_PUBLISHED:        'Design Update now Published Draft',
     MSG_DESIGN_UPDATE_WITHDRAWN:        'Design Update reverted to New',
     MSG_DESIGN_UPDATE_REMOVED:          'Design Update removed',
-    MSG_DESIGN_UPDATE_MERGE_ACTION_SET: 'Design update merge action set'
+    MSG_DESIGN_UPDATE_MERGE_ACTION_SET: 'Design update merge action set',
+    MSG_DESIGN_UPDATE_STATUS_REFRESHED: 'Design Update statuses refreshed'
 };
 
 export const WorkPackageMessages = {
