@@ -10,6 +10,7 @@ import { WorkPackageComponents } from '../collections/work/work_package_componen
 // Ultrawide Services
 import { ViewType, ViewMode, ViewOptionType, ComponentType, RoleType, DisplayContext, UpdateScopeType } from '../constants/constants.js';
 import ClientDesignUpdateServices from '../apiClient/apiClientDesignUpdate.js';
+import ClientDesignVersionServices from '../apiClient/apiClientDesignVersion.js';
 
 
 // REDUX services
@@ -311,6 +312,9 @@ class ClientAppHeaderServices{
 
         // Update the DU Statuses
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+
+        // Update Work Progress
+        ClientDesignVersionServices.updateWorkProgress();
 
         store.dispatch(setCurrentView(ViewType.SELECT));
         return true;

@@ -21,13 +21,14 @@ import { UserDevFeatures }                  from '../collections/dev/user_dev_fe
 import { UserWorkPackageMashData }          from '../collections/dev/user_work_package_mash_data.js';
 import { UserWorkPackageFeatureStepData }   from '../collections/dev/user_work_package_feature_step_data.js';
 import { UserUnitTestMashData }             from '../collections/dev/user_unit_test_mash_data.js';
-import { UserDevTestSummaryData }           from '../collections/dev/user_dev_test_summary_data.js';
-import { UserDevDesignSummaryData }         from '../collections/dev/user_dev_design_summary_data.js';
+import { UserDevTestSummaryData }           from '../collections/summary/user_dev_test_summary_data.js';
+import { UserDevDesignSummaryData }         from '../collections/summary/user_dev_design_summary_data.js';
 import { UserAccTestResults }               from '../collections/dev/user_acc_test_results.js';
 import { TestOutputLocations }              from '../collections/configure/test_output_locations.js';
 import { TestOutputLocationFiles }          from '../collections/configure/test_output_location_files.js';
 import { UserTestTypeLocations }            from '../collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios }   from '../collections/mash/user_dv_mash_scenarios.js';
+import { UserWorkProgressSummary }          from '../collections/summary/user_work_progress_summary.js';
 
 // Ultrawide GUI Components
 
@@ -36,7 +37,7 @@ import { UserDesignVersionMashScenarios }   from '../collections/mash/user_dv_ma
 import { RoleType, ComponentType, ViewType, ViewMode, ViewOptionType, DisplayContext, DesignVersionStatus, DesignUpdateStatus,
     StepContext, WorkPackageType, WorkPackageStatus, UserDevFeatureStatus, MashStatus, LogLevel,
     TestLocationType, UltrawideAction, MessageType, MenuDropdown, MenuAction, DetailsViewType,
-    UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType } from '../constants/constants.js';
+    UpdateMergeStatus, UpdateScopeType, WorkPackageScopeType, DesignUpdateMergeAction, WorkSummaryType } from '../constants/constants.js';
 
 import ClientDesignServices             from './apiClientDesign.js';
 import ClientTestOutputLocationServices from '../apiClient/apiClientTestOutputLocations.js';
@@ -126,6 +127,7 @@ class ClientContainerServices{
                 const ssHandle = Meteor.subscribe('scenarioSteps', userContext.designVersionId);
                 const ddHandle = Meteor.subscribe('domainDictionary', userContext.designVersionId);
 
+
                 const dvmHandle = Meteor.subscribe('userDesignVersionMashScenarios', userContext.userId);
                 // const dfHandle = Meteor.subscribe('userDevFeatures', userId);
                 // const dbHandle = Meteor.subscribe('userDevFeatureBackgroundSteps', userId);
@@ -139,6 +141,8 @@ class ClientContainerServices{
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const tsHandle = Meteor.subscribe('userDevTestSummaryData', userContext.userId);
                 const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
+                const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
+
 
                 // Load current WP data if WP is known
                 //let wcHandle = null;
@@ -153,7 +157,7 @@ class ClientContainerServices{
                         !dvcHandle.ready() || !ducHandle.ready() || !fbHandle.ready() ||
                         !ssHandle.ready() || !ddHandle.ready() || !dvmHandle.ready() || !mmHandle.ready() ||
                         !arHandle.ready() || !irHandle.ready() || !mrHandle.ready() || !tsHandle.ready() ||
-                        !dsHandle.ready() || !wcHandle.ready()
+                        !dsHandle.ready() || !wcHandle.ready() || !psHandle.ready()
                     );
 
                     log((msg) => console.log(msg), LogLevel.DEBUG, "loading DV = {}", loading);
@@ -2467,6 +2471,100 @@ class ClientContainerServices{
             default:
                 return  [];
         }
+
+    }
+
+    getWorkProgressDvItems(userContext){
+
+        let dvWorkPackages = [];
+        let dvDesignUpdates = [];
+        let dvItem = null;
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Getting Progress Data for DV {}", userContext.designVersionId);
+
+        if(userContext.designVersionId === 'NONE'){
+            return{
+                dvItem:         dvItem,
+                dvWorkPackages: dvWorkPackages,
+                dvDesignUpdates: dvDesignUpdates
+            }
+        }
+
+        const dv = DesignVersions.findOne({_id: userContext.designVersionId});
+
+        switch(dv.designVersionStatus){
+            case DesignVersionStatus.VERSION_NEW:
+            case DesignVersionStatus.VERSION_DRAFT:
+            case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+
+                // Get item
+                dvItem = UserWorkProgressSummary.findOne(
+                    {
+                        userId:                 userContext.userId,
+                        designVersionId:        userContext.designVersionId,
+                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_BASE_DV
+                    }
+                );
+
+                // Get WPs
+                dvWorkPackages = UserWorkProgressSummary.find(
+                    {
+                        userId:                 userContext.userId,
+                        designVersionId:        userContext.designVersionId,
+                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_BASE_WP
+                    }
+                ).fetch();
+
+                break;
+
+            default:
+
+                // Get item
+                dvItem = UserWorkProgressSummary.findOne(
+                    {
+                        userId:                 userContext.userId,
+                        designVersionId:        userContext.designVersionId,
+                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE_DV
+                    }
+                );
+
+                // Get DUs
+                dvDesignUpdates = UserWorkProgressSummary.find(
+                    {
+                        userId:                 userContext.userId,
+                        designVersionId:        userContext.designVersionId,
+                        workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE
+                    }
+                ).fetch()
+        }
+
+        log((msg) => console.log(msg), LogLevel.INFO, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
+
+        return{
+            dvItem:         dvItem,
+            dvWorkPackages: dvWorkPackages,
+            dvDesignUpdates: dvDesignUpdates
+        }
+    }
+
+    getWorkProgressDuWorkPackages(userContext, designUpdateId){
+
+        let duWorkPackages = [];
+
+        if(designUpdateId === 'NONE'){
+            return{
+                duWorkPackages: duWorkPackages
+            }
+        }
+
+        duWorkPackages = UserWorkProgressSummary.find(
+            {
+                userId:                 userContext.userId,
+                designVersionId:        userContext.designVersionId,
+                designUpdateId:         designUpdateId,
+                workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE_WP
+            }
+        ).fetch();
 
     }
 

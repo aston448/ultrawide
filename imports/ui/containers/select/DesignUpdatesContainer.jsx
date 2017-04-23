@@ -9,9 +9,10 @@ import { createContainer }  from 'meteor/react-meteor-data';
 
 // Ultrawide GUI Components
 import DesignUpdate                 from '../../components/select/DesignUpdate.jsx';
-import DesignUpdateSummaryContainer from '../summary/UpdateSummaryContainer.jsx';
-import WorkPackagesContainer        from './WorkPackagesContainer.jsx';
+import DesignUpdateSummaryContainer from '../../containers/summary/UpdateSummaryContainer.jsx';
+import WorkPackagesContainer        from '../../containers/select/WorkPackagesContainer.jsx';
 import ItemContainer                from '../../components/common/ItemContainer.jsx';
+import WorkProgressSummaryContainer from '../../containers/summary/WorkProgressSummaryContainer.jsx';
 
 // Ultrawide Services
 import {DesignVersionStatus, RoleType, WorkPackageType, LogLevel} from '../../../constants/constants.js';
@@ -109,6 +110,14 @@ export class DesignUpdatesList extends Component {
                   }}/>
               </div>;
 
+        // Work Progress Summary
+        const workProgressSummary =
+            <div id="workProgressSummary">
+                <WorkProgressSummaryContainer params={{
+                    userContext: userContext
+                }}/>
+            </div>;
+
         // DU List Header ----------------------------------------------------------------------------------------------
 
         // A default value...
@@ -167,6 +176,9 @@ export class DesignUpdatesList extends Component {
                                 <Col md={6}>
                                     {baseWorkPackages}
                                 </Col>
+                                <Col md={6}>
+                                    {workProgressSummary}
+                                </Col>
                             </Row>
                         </Grid>;
                     break;
@@ -200,8 +212,11 @@ export class DesignUpdatesList extends Component {
                                 <Col md={3}>
                                     {updateWorkPackages}
                                 </Col>
-                                <Col md={6}>
+                                <Col md={3}>
                                     {updateSummary}
+                                </Col>
+                                <Col md={3}>
+                                    {workProgressSummary}
                                 </Col>
                             </Row>
                         </Grid>;

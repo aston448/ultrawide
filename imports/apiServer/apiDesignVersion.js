@@ -13,8 +13,8 @@ import {
     updateDesignVersionNumber,
     publishDesignVersion,
     withdrawDesignVersion,
-    updateWorkingDesignVersion,
-    createNextDesignVersion
+    createNextDesignVersion,
+    updateWorkProgress
 } from '../apiValidatedMethods/design_version_methods.js'
 
 // =====================================================================================================================
@@ -84,6 +84,18 @@ class ServerDesignVersionApi {
             {
                 userRole: userRole,
                 designVersionId: designVersionId
+            },
+            (err, result) => {
+                callback(err, result);
+            }
+        );
+    };
+
+    updateWorkProgress(userContext, callback){
+
+        updateWorkProgress.call(
+            {
+                userContext: userContext
             },
             (err, result) => {
                 callback(err, result);

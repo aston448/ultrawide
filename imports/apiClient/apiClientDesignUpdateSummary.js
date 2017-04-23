@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../collections/design_update/design_update_summary.js';
+import { DesignUpdateSummary }      from '../collections/summary/design_update_summary.js';
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide GUI Components

@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../../imports/collections/design_update/design_update_summary.js'
+import { DesignUpdateSummary }      from '../../imports/collections/summary/design_update_summary.js'
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 

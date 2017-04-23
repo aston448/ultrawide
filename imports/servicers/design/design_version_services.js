@@ -1,11 +1,18 @@
 
 // Ultrawide Collections
 import {DesignVersions}             from '../../collections/design/design_versions.js';
-import {DesignVersionComponents}           from '../../collections/design/design_version_components.js';
+import {DesignUpdates}              from '../../collections/design_update/design_updates.js';
+import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js';
+import {WorkPackages}               from '../../collections/work/work_packages.js';
+import {WorkPackageComponents}      from '../../collections/work/work_package_components.js';
+import {UserWorkProgressSummary}    from '../../collections/summary/user_work_progress_summary.js';
+import {UserDevDesignSummaryData}   from '../../collections/summary/user_dev_design_summary_data.js';
+import {UserDevTestSummaryData}     from '../../collections/summary/user_dev_test_summary_data.js';
 
 // Ultrawide Services
-import { DesignVersionStatus }      from '../../constants/constants.js';
+import { DesignVersionStatus, WorkSummaryType, WorkPackageStatus, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, LogLevel }      from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
+import { log } from '../../common/utils.js';
 
 import DesignVersionModules         from '../../service_modules/design/design_version_service_modules.js';
 
@@ -173,32 +180,291 @@ class DesignVersionServices{
         }
     };
 
-    // updateWorkingDesignVersion(currentDesignVersionId){
-    //
-    //     if(Meteor.isServer){
-    //         // Here we are creating a temporary preview of what the working DV will look like.  To do this
-    //         // we delete all data for the DV and repopulate it as per creating the next DV: merge any
-    //         // updates that are marked as include.  But we don't create a new DV or move any updates.
-    //
-    //         // This applies only to updatable design versions.
-    //
-    //         // Get the Design Version the working one is based on
-    //         const workingDesignVersion = DesignVersions.findOne({_id: currentDesignVersionId});
-    //         let previousDesignVersionId = 'NONE';
-    //
-    //         if(workingDesignVersion){
-    //             previousDesignVersionId = workingDesignVersion.baseDesignVersionId;
-    //         } else {
-    //             return;
-    //         }
-    //
-    //         if(previousDesignVersionId !== 'NONE'){
-    //             // Recreate the current DV as the previous DV plus current updates
-    //             DesignVersionModules.updateCurrentWorkingDesign(previousDesignVersionId, currentDesignVersionId);
-    //         }
-    //
-    //     }
-    // }
+    updateWorkProgress(userContext){
+
+        if(Meteor.isServer) {
+
+            if(userContext.designVersionId === 'NONE'){
+                return;
+            }
+
+            log((msg) => {console.log(msg)}, LogLevel.INFO, "Refreshing Work Progress Data...");
+
+            // Remove data for DV for this user
+            UserWorkProgressSummary.remove({
+                userId: userContext.userId,
+                designVersionId: userContext.designVersionId
+            });
+
+            // And recalculate it
+            const dv = DesignVersions.findOne({_id: userContext.designVersionId});
+
+            // Get DV stats
+            const dvSummary = UserDevDesignSummaryData.findOne({userId: userContext.userId, designVersionId: userContext.designVersionId});
+
+            if(!dvSummary){
+                // No test summary data yet...
+                return;
+            }
+
+            switch(dv.designVersionStatus){
+                case DesignVersionStatus.VERSION_NEW:
+                case DesignVersionStatus.VERSION_DRAFT:
+                case DesignVersionStatus.VERSION_DRAFT_COMPLETE:
+
+                    // Get any published WPs
+                    const baseWps = WorkPackages.find(
+                        {
+                            designVersionId:    userContext.designVersionId,
+                            workPackageStatus:  {$ne: WorkPackageStatus.WP_NEW}
+                        },
+                        {
+                            $sort: {workPackageName: 1}
+                        }
+                    ).fetch();
+
+                    let dvWpScenarios = 0;
+
+                    baseWps.forEach((wp) => {
+
+                        let wpScenarios = WorkPackageComponents.find({
+                            workPackageId: wp._id,
+                            componentType: ComponentType.SCENARIO,
+                            scopeType: WorkPackageScopeType.SCOPE_ACTIVE
+                        }).fetch();
+
+
+                        let wpTotalScenarios = 0;
+                        if(wpScenarios){
+                            wpTotalScenarios = wpScenarios.length;
+                            dvWpScenarios += wpTotalScenarios;
+                        }
+                        let wpPassingScenarios = 0;
+                        let wpFailingScenarios = 0;
+                        let wpUntestedScenarios = 0;
+
+                        wpScenarios.forEach((wpScenario) =>{
+
+                            let testResult = UserDevTestSummaryData.findOne({
+                                userId:                     userContext.userId,
+                                designVersionId:            userContext.designVersionId,
+                                scenarioReferenceId:        wpScenario.componentReferenceId
+                            });
+
+                            if(testResult) {
+                                if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                    wpFailingScenarios++;
+                                } else {
+                                    if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                        wpPassingScenarios++;
+                                    } else {
+                                        wpUntestedScenarios++;
+                                    }
+                                }
+                            } else {
+                                wpUntestedScenarios++;
+                            }
+                        });
+
+                        // Insert the WP summary details
+                        UserWorkProgressSummary.insert({
+                            userId:                     userContext.userId,
+                            designVersionId:            userContext.designVersionId,
+                            workPackageId:              wp._id,
+                            workSummaryType:            WorkSummaryType.WORK_SUMMARY_BASE_WP,
+                            name:                       wp.workPackageName,
+                            totalScenarios:             wpTotalScenarios,
+                            scenariosPassing:           wpPassingScenarios,
+                            scenariosFailing:           wpFailingScenarios,
+                            scenariosNoTests:           wpUntestedScenarios
+                        });
+                    });
+
+                    // Insert the DV summary details
+                    UserWorkProgressSummary.insert({
+                        userId:                     userContext.userId,
+                        designVersionId:            userContext.designVersionId,
+                        workSummaryType:            WorkSummaryType.WORK_SUMMARY_BASE_DV,
+                        name:                       dv.designVersionName,
+                        totalScenarios:             dvSummary.scenarioCount,
+                        scenariosInWp:              dvWpScenarios,
+                        scenariosPassing:           dvSummary.passingScenarioCount,
+                        scenariosFailing:           dvSummary.failingScenarioCount,
+                        scenariosNoTests:           dvSummary.untestedScenarioCount
+                    });
+                    break;
+
+                case DesignVersionStatus.VERSION_UPDATABLE:
+                case DesignVersionStatus.VERSION_UPDATABLE_COMPLETE:
+
+                    let dvUpdateScenarioCount = 0;
+                    let dvUpdateScenariosInWpCount = 0;
+                    let dvUpdatePassingCount = 0;
+                    let dvUpdateFailingCount = 0;
+                    let dvUpdateUntestedCount = 0;
+
+                    // Here we need to know how many Scenarios are in Updates, then how may of those are in WPs
+                    const designUpdates = DesignUpdates.find(
+                        {
+                            designVersionId:            userContext.designVersionId,
+                            updateStatus:               {$in: [DesignUpdateStatus.UPDATE_PUBLISHED_DRAFT, DesignUpdateStatus.UPDATE_MERGED]},
+                            updateMergeAction:          DesignUpdateMergeAction.MERGE_INCLUDE
+                        },
+                        {
+                            $sort: {updateReference: 1, updateName: 1}
+                        }
+                    );
+
+                    designUpdates.forEach((du) => {
+
+                        let duScenarios = DesignUpdateComponents.find({
+                            designUpdateId: du._id,
+                            componentType: ComponentType.SCENARIO,
+                            isRemoved: false,
+                            scopeType: UpdateScopeType.SCOPE_IN_SCOPE
+                        }).fetch();
+
+                        let duWpScenarios = 0;
+                        let duPassingScenarios = 0;
+                        let duFailingScenarios = 0;
+                        let duUntestedScenarios = 0;
+
+                        duScenarios.forEach((duScenario) => {
+
+                            let wpScenario = WorkPackageComponents.findOne({
+                                designVersionId:            userContext.designVersionId,
+                                componentReferenceId:       duScenario.componentReferenceId,     // A Scenario can only occur in one WP for a Design Version
+                                scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
+                            });
+
+                            if(wpScenario){
+                                duWpScenarios++;
+                            }
+
+                            let testResult = UserDevTestSummaryData.findOne({
+                                userId:                     userContext.userId,
+                                designVersionId:            userContext.designVersionId,
+                                scenarioReferenceId:        duScenario.componentReferenceId
+                            });
+
+                            if(testResult) {
+                                if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                    duFailingScenarios++;
+                                } else {
+                                    if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                        duPassingScenarios++;
+                                    } else {
+                                        duUntestedScenarios++;
+                                    }
+                                }
+                            } else {
+                                duUntestedScenarios++;
+                            }
+                        });
+
+                        // Add to total DV update scenario count
+                        if(duScenarios) {
+                            dvUpdateScenarioCount += duScenarios.length;
+                        }
+                        dvUpdateScenariosInWpCount += duWpScenarios;
+                        dvUpdatePassingCount += duPassingScenarios;
+                        dvUpdateFailingCount += duFailingScenarios;
+                        dvUpdateUntestedCount += duUntestedScenarios;
+
+                        // Insert this update to the summary
+                        UserWorkProgressSummary.insert({
+                            userId:                     userContext.userId,
+                            designVersionId:            userContext.designVersionId,
+                            designUpdateId:             du._id,
+                            workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE,
+                            name:                       du.updateReference + ' - ' + du.updateName,
+                            totalScenarios:             duScenarios.length,
+                            scenariosInWp:              duWpScenarios,
+                            scenariosPassing:           duPassingScenarios,
+                            scenariosFailing:           duFailingScenarios,
+                            scenariosNoTests:           duUntestedScenarios
+                        });
+
+                        // Get the DU Work Packages
+                        let duWorkPackages = WorkPackages.find(
+                            {
+                                designUpdateId: du._id
+                            },
+                            {
+                                $sort: {workPackageName: 1}
+                            }
+                        ).fetch();
+
+                        duWorkPackages.forEach((wp) => {
+
+                            let wpPassingScenarios = 0;
+                            let wpFailingScenarios = 0;
+                            let wpUntestedScenarios = 0;
+
+                            let wpScenarios = WorkPackageComponents.find({
+                                workPackageId:              wp._id,
+                                scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
+                            }).fetch();
+
+                            wpScenarios.forEach((wpScenario) => {
+
+                                let testResult = UserDevTestSummaryData.findOne({
+                                    userId:                     userContext.userId,
+                                    designVersionId:            userContext.designVersionId,
+                                    scenarioReferenceId:        wpScenario.componentReferenceId
+                                });
+
+                                if(testResult) {
+                                    if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                        wpFailingScenarios++;
+                                    } else {
+                                        if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                            wpPassingScenarios++;
+                                        } else {
+                                            wpUntestedScenarios++;
+                                        }
+                                    }
+                                } else {
+                                    wpUntestedScenarios++;
+                                }
+                            });
+
+                            // Insert this WP to the summary
+                            UserWorkProgressSummary.insert({
+                                userId:                     userContext.userId,
+                                designVersionId:            userContext.designVersionId,
+                                designUpdateId:             du._id,
+                                workPackageId:              wp._id,
+                                workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_WP,
+                                name:                       wp.workPackageName,
+                                totalScenarios:             wpScenarios.length,
+                                scenariosPassing:           wpPassingScenarios,
+                                scenariosFailing:           wpFailingScenarios,
+                                scenariosNoTests:           wpUntestedScenarios
+                            });
+                        });
+                    });
+
+                    // Insert the Updatable DV entry now we know the total scenario count
+                    // Insert the DV summary details
+                    UserWorkProgressSummary.insert({
+                        userId:                     userContext.userId,
+                        designVersionId:            userContext.designVersionId,
+                        workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_DV,
+                        name:                       dv.designVersionName,
+                        totalScenarios:             dvUpdateScenarioCount,
+                        scenariosInWp:              dvUpdateScenariosInWpCount,
+                        scenariosPassing:           dvUpdatePassingCount,
+                        scenariosFailing:           dvUpdateFailingCount,
+                        scenariosNoTests:           dvUpdateUntestedCount
+                    });
+
+                    break;
+            }
+        }
+
+        log((msg) => {console.log(msg)}, LogLevel.INFO, "Done Refreshing Work Progress Data...");
+    }
 }
 
 export default new DesignVersionServices();

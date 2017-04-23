@@ -203,6 +203,8 @@ class ClientUserContextServices {
         ClientTestIntegrationServices.refreshTestData(userContext);
         // Get latest status on DUs
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
+        // And latest progress data
+        ClientDesignVersionServices.updateWorkProgress();
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));

@@ -218,6 +218,23 @@ class ClientDesignVersionServices{
         return {success: true, message: ''};
     }
 
+    // Work Progress screen was displayed
+    updateWorkProgress(){
+
+        const userContext = store.getState().currentUserItemContext;
+
+        ServerDesignVersionApi.updateWorkProgress(userContext, (err, result) => {
+
+            if (err) {
+                // Unexpected error as all expected errors already handled - show alert.
+                // Can't update screen here because of error
+                alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
+            } else {
+                // Client actions:
+            }
+        });
+    }
+
     // Pre-validation to decide if we should even show the modal dialog
     validateCreateNextDesignVersion(userRole, baseDesignVersionId){
 
@@ -288,6 +305,8 @@ class ClientDesignVersionServices{
                 // store.dispatch(setTestDataStaleTo(true));
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
+
+            this.updateWorkProgress();
 
         }
 

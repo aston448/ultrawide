@@ -148,4 +148,24 @@ export const createNextDesignVersion = new ValidatedMethod({
 
 });
 
+export const updateWorkProgress = new ValidatedMethod({
+
+    name: 'designVersion.updateWorkProgress',
+
+    validate: new SimpleSchema({
+        userContext:        {type: Object, blackbox: true},
+    }).validator(),
+
+    run({userContext}){
+
+        try {
+            DesignVersionServices.updateWorkProgress(userContext);
+        } catch (e) {
+            console.log(e.stack);
+            throw new Meteor.Error(e.error, e.stack)
+        }
+    }
+
+});
+
 

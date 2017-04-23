@@ -8,7 +8,7 @@ import { UserCurrentViewOptions}    from '../../imports/collections/context/user
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../../imports/collections/design_update/design_update_summary.js';
+import { DesignUpdateSummary }      from '../../imports/collections/summary/design_update_summary.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
@@ -23,7 +23,7 @@ import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/
 import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
 import { UserIntTestResults }       from '../../imports/collections/dev/user_int_test_results.js';
 import { UserUnitTestResults }      from '../../imports/collections/dev/user_unit_test_results.js';
-import { UserDevTestSummaryData }   from '../../imports/collections/dev/user_dev_test_summary_data.js';
+import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 
 import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';

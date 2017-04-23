@@ -1,7 +1,7 @@
 
 // Ultrawide Collections
-import { UserDevTestSummaryData }       from '../../collections/dev/user_dev_test_summary_data.js';
-import { UserDevDesignSummaryData }     from '../../collections/dev/user_dev_design_summary_data.js';
+import { UserDevTestSummaryData }       from '../../collections/summary/user_dev_test_summary_data.js';
+import { UserDevDesignSummaryData }     from '../../collections/summary/user_dev_design_summary_data.js';
 import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
 import { WorkPackageComponents }        from '../../collections/work/work_package_components.js';
@@ -40,6 +40,8 @@ class TestSummaryServices {
         let totalAccTestsFailing = 0;
         let totalAccTestsPending = 0;
         let totalScenariosWithoutTests = 0;
+        let totalPassingScenarioCount = 0;
+        let totalFailingScenarioCount = 0;
 
         // If the test data needs refreshing...
         if(updateTestData) {
@@ -133,6 +135,15 @@ class TestSummaryServices {
                     testsFound = true;
                 }
                 totalUnitTestsFailing += unitTestFails;
+
+                // Update Scenario pass fail count
+                if(acceptanceTestDisplay === MashTestStatus.MASH_FAIL || integrationTestDisplay === MashTestStatus.MASH_FAIL || unitTestFails > 0){
+                    totalFailingScenarioCount++
+                } else {
+                    if(acceptanceTestDisplay === MashTestStatus.MASH_PASS || integrationTestDisplay === MashTestStatus.MASH_PASS || unitTestPasses > 0){
+                        totalPassingScenarioCount++
+                    }
+                }
 
                 UserDevTestSummaryData.insert({
                     userId: userContext.userId,
@@ -392,6 +403,8 @@ class TestSummaryServices {
                     featureCount:                   totalFeatureCount,
                     scenarioCount:                  totalScenarioCount,
                     untestedScenarioCount:          totalScenariosWithoutTests,
+                    passingScenarioCount:           totalPassingScenarioCount,
+                    failingScenarioCount:           totalFailingScenarioCount,
                     unitTestPassCount:              totalUnitTestsPassing,
                     unitTestFailCount:              totalUnitTestsFailing,
                     unitTestPendingCount:           totalUnitTestsPending,

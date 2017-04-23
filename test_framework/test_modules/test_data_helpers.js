@@ -18,7 +18,7 @@ import { TestOutputLocationFiles }  from '../../imports/collections/configure/te
 import { UserTestTypeLocations }    from '../../imports/collections/configure/user_test_type_locations.js';
 import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
-import { UserDevTestSummaryData }   from '../../imports/collections/dev/user_dev_test_summary_data.js';
+import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 

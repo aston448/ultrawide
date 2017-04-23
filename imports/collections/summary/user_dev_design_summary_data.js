@@ -11,6 +11,8 @@ let Schema = new SimpleSchema({
     featureCount:                   {type: Number, defaultValue: 0},        // Number of features in Design
     scenarioCount:                  {type: Number, defaultValue: 0},        // Number of scenarios in Design
     untestedScenarioCount:          {type: Number, defaultValue: 0},        // Number of untested scenarios in Design
+    failingScenarioCount:           {type: Number, defaultValue: 0},        // Number of scenarios with one or more failing tests
+    passingScenarioCount:           {type: Number, defaultValue: 0},        // Number of scenarios with one or more passing tests and no failures
     unitTestPassCount:              {type: Number, defaultValue: 0},        // Number of unit tests passing
     unitTestFailCount:              {type: Number, defaultValue: 0},        // Number of unit tests failing
     unitTestPendingCount:           {type: Number, defaultValue: 0},        // Number of unit tests pending

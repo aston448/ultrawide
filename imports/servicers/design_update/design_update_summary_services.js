@@ -2,10 +2,10 @@
 // Ultrawide Collections
 import { Designs }                  from '../../collections/design/designs.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../../collections/design_update/design_update_summary.js';
+import { DesignUpdateSummary }      from '../../collections/summary/design_update_summary.js';
 import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
-import { UserDevTestSummaryData }   from '../../collections/dev/user_dev_test_summary_data.js';
+import { UserDevTestSummaryData }   from '../../collections/summary/user_dev_test_summary_data.js';
 
 // Ultrawide Services
 import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, DesignUpdateSummaryItem, UpdateScopeType, MashTestStatus, LogLevel } from '../../constants/constants.js';

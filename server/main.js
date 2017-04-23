@@ -3,18 +3,19 @@
 // Collections
 import '../imports/collections/app/app_global_data.js';
 import '../imports/collections/backup/design_backups.js';
+
 import '../imports/collections/design/designs.js';
 import '../imports/collections/design/design_versions.js';
 import '../imports/collections/design_update/design_updates.js';
-//import '../imports/collections/design_update/design_update_summaries.js';
-import '../imports/collections/design_update/design_update_summary.js';
 import '../imports/collections/design/design_version_components.js';
 import '../imports/collections/design/feature_background_steps.js';
 import '../imports/collections/design/scenario_steps.js';
+import '../imports/collections/design/domain_dictionary.js';
+
 import '../imports/collections/users/user_roles.js';
 import '../imports/collections/context/user_current_edit_context.js';
 import '../imports/collections/context/user_current_view_options.js';
-import '../imports/collections/design/domain_dictionary.js';
+
 import '../imports/collections/work/work_packages.js';
 import '../imports/collections/work/work_package_components.js';
 
@@ -23,8 +24,10 @@ import '../imports/collections/dev/user_dev_feature_background_steps.js';
 import '../imports/collections/dev/user_dev_feature_scenarios.js';
 import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
 
-import '../imports/collections/dev/user_dev_test_summary_data.js';
-import '../imports/collections/dev/user_dev_design_summary_data.js';
+import '../imports/collections/summary/design_update_summary.js';
+import '../imports/collections/summary/user_dev_test_summary_data.js';
+import '../imports/collections/summary/user_dev_design_summary_data.js';
+import '../imports/collections/summary/user_work_progress_summary.js';
 
 import '../imports/collections/dev/user_work_package_mash_data.js';
 import '../imports/collections/dev/user_work_package_feature_step_data.js';

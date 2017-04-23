@@ -10,7 +10,7 @@ import { TestOutputLocationFiles }      from '../../collections/configure/test_o
 import { Designs }                      from '../../collections/design/designs.js';
 import { DesignVersions }               from '../../collections/design/design_versions.js';
 import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
-import { DesignUpdateSummary }          from '../../collections/design_update/design_update_summary.js';
+import { DesignUpdateSummary }          from '../../collections/summary/design_update_summary.js';
 import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { DomainDictionary }             from '../../collections/design/domain_dictionary.js'
 import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
