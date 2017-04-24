@@ -40,23 +40,27 @@ export class DesignEditorFooter extends Component {
 
         const nameData = this.getNameData(userContext);
 
-        if(userContext.workPackageId !== 'NONE'){
-            if(userContext.designUpdateId !== 'NONE'){
-                return nameData.design + ' - ' + nameData.designVersion + ' - ' + nameData.designUpdate;
-            } else {
-                return nameData.design + ' - ' + nameData.designVersion
-            }
+        if(displayContext === DisplayContext.PROGRESS_SUMMARY){
+            return 'Progress summary for ' + nameData.designVersion;
         } else {
-            if(userContext.designUpdateId !== 'NONE'){
-                switch(displayContext){
-                    case DisplayContext.UPDATE_EDIT:
-                        return 'Update Action: ' + nameData.designUpdateAction;
-                    default:
-                        return nameData.design + ' - ' + nameData.designVersion;
+            if(userContext.workPackageId !== 'NONE'){
+                if(userContext.designUpdateId !== 'NONE'){
+                    return nameData.design + ' - ' + nameData.designVersion + ' - ' + nameData.designUpdate;
+                } else {
+                    return nameData.design + ' - ' + nameData.designVersion
                 }
-
             } else {
-                return nameData.design
+                if(userContext.designUpdateId !== 'NONE'){
+                    switch(displayContext){
+                        case DisplayContext.UPDATE_EDIT:
+                            return 'Update Action: ' + nameData.designUpdateAction;
+                        default:
+                            return nameData.design + ' - ' + nameData.designVersion;
+                    }
+
+                } else {
+                    return nameData.design
+                }
             }
         }
 

@@ -41,7 +41,7 @@ export class WorkProgressWpList extends Component {
 
 
     // A list of Feature Aspects in a Feature
-    renderProgress(progressData) {
+    renderProgress(progressData, userRoles) {
 
         if(progressData) {
 
@@ -50,6 +50,7 @@ export class WorkProgressWpList extends Component {
                     <WorkProgressItem
                         key={progressItem._id}
                         item={progressItem}
+                        userRoles={userRoles}
                     />
                 )
             });
@@ -60,14 +61,14 @@ export class WorkProgressWpList extends Component {
 
     render() {
 
-        const {duWorkPackages, userContext} = this.props;
+        const {duWorkPackages, userRoles, userContext} = this.props;
 
 
         let progressItems = <div></div>;
         if(duWorkPackages.length > 0){
             progressItems =
                 <div>
-                    {this.renderProgress(duWorkPackages)}
+                    {this.renderProgress(duWorkPackages, userRoles)}
                 </div>
 
         }
@@ -78,7 +79,8 @@ export class WorkProgressWpList extends Component {
 }
 
 WorkProgressWpList.propTypes = {
-    duWorkPackages:  PropTypes.array.isRequired,
+    duWorkPackages:     PropTypes.array.isRequired,
+    userRoles:          PropTypes.object.isRequired
 
 };
 

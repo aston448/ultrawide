@@ -22,7 +22,7 @@ import ClientDesignUpdateServices   from '../../../apiClient/apiClientDesignUpda
 import { log } from '../../../common/utils.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -212,12 +212,13 @@ export class DesignUpdatesList extends Component {
                                 <Col md={3}>
                                     {updateWorkPackages}
                                 </Col>
-                                <Col md={3}>
-                                    {updateSummary}
+                                <Col md={6}>
+                                    <Tabs defaultActiveKey={2} id="summary_tabs">
+                                        <Tab eventKey={1} title="Update Summary">{updateSummary}</Tab>
+                                        <Tab eventKey={2} title="Progress Summary">{workProgressSummary}</Tab>
+                                    </Tabs>
                                 </Col>
-                                <Col md={3}>
-                                    {workProgressSummary}
-                                </Col>
+
                             </Row>
                         </Grid>;
 

@@ -397,35 +397,47 @@ class DesignVersionServices{
 
                         duWorkPackages.forEach((wp) => {
 
+                            let wpTotalScenarios = 0;
                             let wpPassingScenarios = 0;
                             let wpFailingScenarios = 0;
                             let wpUntestedScenarios = 0;
 
                             let wpScenarios = WorkPackageComponents.find({
                                 workPackageId:              wp._id,
+                                componentType:              ComponentType.SCENARIO,
                                 scopeType:                  WorkPackageScopeType.SCOPE_ACTIVE
                             }).fetch();
 
                             wpScenarios.forEach((wpScenario) => {
 
-                                let testResult = UserDevTestSummaryData.findOne({
-                                    userId:                     userContext.userId,
-                                    designVersionId:            userContext.designVersionId,
-                                    scenarioReferenceId:        wpScenario.componentReferenceId
+                                // Ignore removed update items
+                                let wpDuItem = DesignUpdateComponents.findOne({
+                                    _id: wpScenario.componentId
                                 });
 
-                                if(testResult) {
-                                    if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
-                                        wpFailingScenarios++;
-                                    } else {
-                                        if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
-                                            wpPassingScenarios++;
+                                if(wpDuItem && ! wpDuItem.isRemoved) {
+
+                                    wpTotalScenarios++;
+
+                                    let testResult = UserDevTestSummaryData.findOne({
+                                        userId: userContext.userId,
+                                        designVersionId: userContext.designVersionId,
+                                        scenarioReferenceId: wpScenario.componentReferenceId
+                                    });
+
+                                    if (testResult) {
+                                        if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                                            wpFailingScenarios++;
                                         } else {
-                                            wpUntestedScenarios++;
+                                            if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                                                wpPassingScenarios++;
+                                            } else {
+                                                wpUntestedScenarios++;
+                                            }
                                         }
+                                    } else {
+                                        wpUntestedScenarios++;
                                     }
-                                } else {
-                                    wpUntestedScenarios++;
                                 }
                             });
 
@@ -437,7 +449,7 @@ class DesignVersionServices{
                                 workPackageId:              wp._id,
                                 workSummaryType:            WorkSummaryType.WORK_SUMMARY_UPDATE_WP,
                                 name:                       wp.workPackageName,
-                                totalScenarios:             wpScenarios.length,
+                                totalScenarios:             wpTotalScenarios,
                                 scenariosPassing:           wpPassingScenarios,
                                 scenariosFailing:           wpFailingScenarios,
                                 scenariosNoTests:           wpUntestedScenarios

@@ -2482,11 +2482,16 @@ class ClientContainerServices{
 
         log((msg) => console.log(msg), LogLevel.INFO, "Getting Progress Data for DV {}", userContext.designVersionId);
 
+        const userRoles = UserRoles.findOne({
+            userId: userContext.userId
+        });
+
         if(userContext.designVersionId === 'NONE'){
             return{
-                dvItem:         dvItem,
-                dvWorkPackages: dvWorkPackages,
-                dvDesignUpdates: dvDesignUpdates
+                dvItem:             dvItem,
+                dvWorkPackages:     dvWorkPackages,
+                dvDesignUpdates:    dvDesignUpdates,
+                userRoles:          userRoles
             }
         }
 
@@ -2541,9 +2546,10 @@ class ClientContainerServices{
         log((msg) => console.log(msg), LogLevel.INFO, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
 
         return{
-            dvItem:         dvItem,
-            dvWorkPackages: dvWorkPackages,
-            dvDesignUpdates: dvDesignUpdates
+            dvItem:             dvItem,
+            dvWorkPackages:     dvWorkPackages,
+            dvDesignUpdates:    dvDesignUpdates,
+            userRoles:          userRoles
         }
     }
 
@@ -2551,20 +2557,30 @@ class ClientContainerServices{
 
         let duWorkPackages = [];
 
+        const userRoles = UserRoles.findOne({
+            userId: userContext.userId
+        });
+
         if(designUpdateId === 'NONE'){
             return{
-                duWorkPackages: duWorkPackages
+                duWorkPackages:     duWorkPackages,
+                userRoles:          userRoles
             }
         }
 
         duWorkPackages = UserWorkProgressSummary.find(
             {
-                userId:                 userContext.userId,
-                designVersionId:        userContext.designVersionId,
-                designUpdateId:         designUpdateId,
-                workSummaryType:        WorkSummaryType.WORK_SUMMARY_UPDATE_WP
+                userId:             userContext.userId,
+                designVersionId:    userContext.designVersionId,
+                designUpdateId:     designUpdateId,
+                workSummaryType:    WorkSummaryType.WORK_SUMMARY_UPDATE_WP
             }
         ).fetch();
+
+        return{
+            duWorkPackages:     duWorkPackages,
+            userRoles:          userRoles
+        }
 
     }
 

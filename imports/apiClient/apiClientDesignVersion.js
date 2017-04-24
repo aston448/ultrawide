@@ -6,9 +6,10 @@ import {DesignVersions}             from '../collections/design/design_versions.
 import {DesignUpdates}              from '../collections/design_update/design_updates.js';
 import {DesignVersionComponents}    from '../collections/design/design_version_components.js';
 import {DesignUpdateComponents}     from '../collections/design_update/design_update_components.js';
+import {UserRoles}                  from '../collections/users/user_roles.js';
 
 // Ultrawide Services
-import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, UpdateScopeType, MessageType, LogLevel } from '../constants/constants.js';
+import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, UpdateScopeType, MessageType, WorkSummaryType, LogLevel } from '../constants/constants.js';
 import { Validation } from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
@@ -18,10 +19,12 @@ import ClientContainerServices          from '../apiClient/apiClientContainerSer
 import DesignVersionValidationApi       from '../apiValidation/apiDesignVersionValidation.js';
 import ServerDesignVersionApi           from '../apiServer/apiDesignVersion.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
+import ClientDesignUpdateServices       from '../apiClient/apiClientDesignUpdate.js';
+import ClientWorkPackageServices        from '../apiClient/apiClientWorkPackage.js';
 
 // REDUX services
 import store from '../redux/store'
-import {setCurrentUserItemContext, setCurrentView, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, updateOpenItemsFlag, setMashDataStaleTo, setTestDataStaleTo} from '../redux/actions';
+import {setCurrentUserItemContext, setCurrentView, setCurrentRole, setCurrentViewMode, updateUserMessage, setDesignVersionDataLoadedTo, updateOpenItemsFlag, setMashDataStaleTo, setTestDataStaleTo} from '../redux/actions';
 
 // =====================================================================================================================
 // Client API for Design Version Items
@@ -499,6 +502,60 @@ class ClientDesignVersionServices{
         }
     }
 
+    // User has clicked on the WP icon for a Scenario in the DV working view
+    gotoDesignVersionSummaryItemAsRole(item, role){
+
+        const userContext = store.getState().currentUserItemContext;
+
+
+
+        // Validate that user has this role...
+        const userRole = UserRoles.findOne({userId: userContext.userId});
+        let newContext = {};
+
+        if(role === RoleType.DESIGNER && userRole.isDesigner || role === RoleType.DEVELOPER && userRole.isDeveloper || role === RoleType.MANAGER && userRole.isManager){
+
+            // OK to proceed - reset the user context back to the DV
+
+            newContext = {
+                userId:                         userContext.userId,
+                designId:                       userContext.designId,
+                designVersionId:                item.designVersionId,
+                designUpdateId:                 'NONE',
+                workPackageId:                  'NONE',
+                designComponentId:              'NONE',
+                designComponentType:            'NONE',
+                featureReferenceId:             'NONE',
+                featureAspectReferenceId:       'NONE',
+                scenarioReferenceId:            'NONE',
+                scenarioStepId:                 'NONE'
+            };
+
+            store.dispatch(setCurrentUserItemContext(newContext, true));
+
+            // Set new role
+            store.dispatch(setCurrentRole(role));
+
+            // Select the item wanted
+            if(item.designUpdateId !== 'NONE'){
+                console.log("Setting Design Update... " + item.designUpdateId);
+                newContext = ClientDesignUpdateServices.setDesignUpdate(newContext, item.designUpdateId)
+            }
+
+            if(item.workPackageId !== 'NONE'){
+                console.log("Setting Work package... " + item.workPackageId);
+                ClientWorkPackageServices.setWorkPackage(newContext, item.workPackageId)
+            }
+
+            // Go to Selection screen
+            store.dispatch(setCurrentView(ViewType.SELECT));
+
+        } else {
+            // No action
+            return {success: false, message: 'Invalid role'};
+        }
+
+    }
 }
 
 export default new ClientDesignVersionServices();

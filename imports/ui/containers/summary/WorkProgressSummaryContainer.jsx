@@ -46,7 +46,7 @@ export class WorkProgressSummaryList extends Component {
     }
 
     // A list of Feature Aspects in a Feature
-    renderProgress(progressData) {
+    renderProgress(progressData, userRoles) {
 
         if(progressData) {
 
@@ -55,6 +55,7 @@ export class WorkProgressSummaryList extends Component {
                     <WorkProgressItem
                         key={progressItem._id}
                         item={progressItem}
+                        userRoles={userRoles}
                     />
                 )
             });
@@ -65,7 +66,7 @@ export class WorkProgressSummaryList extends Component {
 
     render() {
 
-        const {dvItem, dvWorkPackages, dvDesignUpdates, userContext} = this.props;
+        const {dvItem, dvWorkPackages, dvDesignUpdates, userRoles, userContext} = this.props;
 
         // Get correct window height
         const editorClass = this.getEditorClass();
@@ -75,6 +76,7 @@ export class WorkProgressSummaryList extends Component {
             dvItemSummary =
                 <WorkProgressItem
                     item={dvItem}
+                    userRoles={userRoles}
                 />
         }
 
@@ -82,14 +84,14 @@ export class WorkProgressSummaryList extends Component {
         if(dvWorkPackages.length > 0){
             progressItems =
                 <div>
-                    {this.renderProgress(dvWorkPackages)}
+                    {this.renderProgress(dvWorkPackages, userRoles)}
                 </div>
 
         } else {
             if(dvDesignUpdates.length > 0){
                 progressItems =
                     <div>
-                        {this.renderProgress(dvDesignUpdates)}
+                        {this.renderProgress(dvDesignUpdates, userRoles)}
                     </div>
             }
         }
@@ -137,7 +139,8 @@ export class WorkProgressSummaryList extends Component {
 WorkProgressSummaryList.propTypes = {
     dvItem:             PropTypes.object,
     dvWorkPackages:     PropTypes.array.isRequired,
-    dvDesignUpdates:    PropTypes.array.isRequired
+    dvDesignUpdates:    PropTypes.array.isRequired,
+    userRoles:          PropTypes.object.isRequired
 };
 
 // Redux function which maps state from the store to specific props this component is interested in.

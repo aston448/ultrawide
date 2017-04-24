@@ -319,6 +319,22 @@ class WorkPackageModules {
                 }
             );
 
+            // And make sure if a Scenario we update the DU WP ID
+            if(component.componentType === ComponentType.SCENARIO){
+
+                DesignUpdateComponents.update(
+                    {
+                        designVersionId:                designVersionId,
+                        componentReferenceId:           component.componentReferenceId,
+                        scopeType:                      UpdateScopeType.SCOPE_IN_SCOPE,
+                        componentType:                  ComponentType.SCENARIO
+                    },
+                    {
+                        $set: {workPackageId: workPackage._id}
+                    }
+                );
+            }
+
         }
     };
 

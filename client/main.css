@@ -1092,6 +1092,85 @@ input {
     color: turquoise;
 }
 
+/* -- Progress Summary ---------------------------------------------------------------------------------------------- */
+
+.role-icon{
+    width: 10px;
+    height: 10px;
+}
+
+.designer-icon{
+    color: mediumseagreen;
+}
+
+.developer-icon{
+    color: indianred;
+}
+
+.manager-icon{
+    color: steelblue;
+}
+
+.no-icon{
+    color: transparent;
+}
+
+.row-progress-1{
+    margin: 0 0 10px 0;
+    background-color: transparent;
+}
+
+.row-progress-2{
+    margin: 10px 0 5px 0;
+    background-color: ghostwhite;
+    border: 1px solid lightgrey;
+}
+
+.row-progress-3{
+    margin: 0 0 2px 0;
+}
+
+.row-progress-du{
+    border-bottom: 1px solid lightgrey;
+}
+
+.progress-highlight-du{
+    border: 1px solid black;
+}
+
+.progress-highlight-wp{
+    background-color: palegoldenrod;
+}
+
+.progress-value{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: normal;
+    padding: 1px 0 0 5px;
+}
+
+.progress-1{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  16px;
+    font-weight: bold;
+    margin: 0 0 0 5px;
+}
+
+.progress-2{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  14px;
+    font-weight: bold;
+    margin: 0 0 0 10px;
+}
+
+.progress-3{
+    font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
+    font-size:  13px;
+    font-weight: normal;
+    color: darkblue;
+    margin: 0 0 0 20px;
+}
+
 /* -- Design Update Summary ----------------------------------------------------------------------------------------- */
 
 /*.update-summary-container{*/
@@ -2113,6 +2192,10 @@ input {
 
 .mash-pass {
     color: green;
+}
+
+.mash-some-pass {
+    color: darkseagreen;
 }
 
 .mash-fail {
