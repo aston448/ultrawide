@@ -67,7 +67,7 @@ class DesignUpdateSummaryServices {
 
             //DesignUpdates.update({_id: userContext.designUpdateId}, {$set: {summaryDataStale: true}});
 
-            log((message) => console.log(message), LogLevel.DEBUG, 'In recreate design update summary for update id {}', userContext.designUpdateId);
+            log((message) => console.log(message), LogLevel.INFO, 'In recreate design update summary for update id {}', userContext.designUpdateId);
 
             const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
@@ -77,12 +77,19 @@ class DesignUpdateSummaryServices {
                 return;
             }
 
-            log((message) => console.log(message), LogLevel.DEBUG, 'Data stale is {}', designUpdate.summaryDataStale);
+            log((message) => console.log(message), LogLevel.INFO, 'Data stale is {}', designUpdate.summaryDataStale);
 
             //const designVersionId = designUpdate.designVersionId;
 
-            // No action unless data is stale
-            if(designUpdate.summaryDataStale){
+            const summaryData = UserDesignUpdateSummary.find({
+                userId:         userContext.userId,
+                designUpdateId: userContext.designUpdateId
+            }).fetch();
+
+            log((message) => console.log(message), LogLevel.INFO, 'Data length is {}', summaryData.length);
+
+            // No action unless data is stale or no data
+            if(designUpdate.summaryDataStale || summaryData.length === 0){
 
                 // Clear the data for this user update
                 UserDesignUpdateSummary.remove({

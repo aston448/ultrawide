@@ -29,8 +29,6 @@ class ClientDesignUpdateSummary{
 
     getDesignUpdateSummary(userContext){
 
-        //DesignUpdates.update({_id: designUpdateId}, {$set: {summaryDataStale: true}});
-
         DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, (err, result) => {
 
             if (err) {
@@ -45,7 +43,7 @@ class ClientDesignUpdateSummary{
     getDesignUpdateSummaryHeaders(userContext){
 
         // Nothing if no Design Update is set
-        if(designUpdateId === 'NONE'){
+        if(userContext.designUpdateId === 'NONE'){
 
             return {
                 addOrgHeaders:  [],

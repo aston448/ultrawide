@@ -345,7 +345,7 @@ class ClientDesignUpdateServices {
 
         // Load or refresh DU Summary data
         //console.log('Calling update DU summary...');
-        ClientDesignUpdateSummary.getDesignUpdateSummary(userContext);
+        ClientDesignUpdateSummary.getDesignUpdateSummary(newContext);
 
         if(newDesignUpdateId !== userContext.designUpdateId) {
 
