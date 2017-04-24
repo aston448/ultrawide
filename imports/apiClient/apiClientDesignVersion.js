@@ -221,7 +221,7 @@ class ClientDesignVersionServices{
         return {success: true, message: ''};
     }
 
-    // Work Progress screen was displayed
+    // Work Progress screen needs a refresh
     updateWorkProgress(){
 
         const userContext = store.getState().currentUserItemContext;
@@ -251,17 +251,6 @@ class ClientDesignVersionServices{
         }
 
         return true;
-    }
-
-    // TODO
-    // Developer user chose to adopt this design version as their working design
-    adoptDesignVersion(){
-
-    }
-
-    // Developer user chose to adopt this design version plus selected updates as their working design
-    adoptDesignVersionWithUpdates(){
-
     }
 
 
@@ -309,8 +298,6 @@ class ClientDesignVersionServices{
                 ClientContainerServices.getDesignVersionData(newContext, this.postDataLoadActions);
             }
 
-            this.updateWorkProgress();
-
         }
 
         return newContext;
@@ -336,6 +323,9 @@ class ClientDesignVersionServices{
 
         // Recalculate the test data
         ClientTestIntegrationServices.refreshTestData(userContext);
+
+        // Recalculate the progress data
+        this.updateWorkProgress();
 
     }
 

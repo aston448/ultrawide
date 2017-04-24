@@ -197,6 +197,14 @@ export class DesignUpdatesList extends Component {
 
                     }
 
+                    let update_wp_title = '';
+                    if(userContext.designUpdateId !== 'NONE' && userContext.workPackageId === 'NONE'){
+                        update_wp_title = 'Design Update Summary';
+                    }
+                    if(userContext.workPackageId !== 'NONE'){
+                        update_wp_title = 'Work Package Summary';
+                    }
+
                     layout =
                         <Grid>
                             <Row>
@@ -214,8 +222,8 @@ export class DesignUpdatesList extends Component {
                                 </Col>
                                 <Col md={6}>
                                     <Tabs defaultActiveKey={2} id="summary_tabs">
-                                        <Tab eventKey={1} title="Update Summary">{updateSummary}</Tab>
-                                        <Tab eventKey={2} title="Progress Summary">{workProgressSummary}</Tab>
+                                        <Tab eventKey={1} title={update_wp_title}>{updateSummary}</Tab>
+                                        <Tab eventKey={2} title="Overall Progress Summary">{workProgressSummary}</Tab>
                                     </Tabs>
                                 </Col>
 
