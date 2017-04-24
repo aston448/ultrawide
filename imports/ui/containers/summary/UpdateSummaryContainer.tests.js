@@ -26,6 +26,12 @@ describe('JSX: DesignUpdateSummaryList', () => {
               functionalChanges={changes}
               designUpdateName={designUpdateName}
               userContext={userContext}
+              addOrgHeaders={[]}
+              addFncHeaders={[]}
+              removeHeaders={[]}
+              changeHeaders={[]}
+              moveHeaders={[]}
+              queryHeaders={[]}
           />
         );
     }

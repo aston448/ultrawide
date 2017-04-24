@@ -22,6 +22,8 @@ describe('JSX: DesignComponentHeader', () => {
         const testSummaryData = {};
         const isOpen = true;
         const testDataFlag = 0;
+        const updateScopeItems = {};
+        const workPackageScopeItems = {};
 
         return shallow(
             <DesignComponentHeader
@@ -39,6 +41,10 @@ describe('JSX: DesignComponentHeader', () => {
                 testSummaryData={testSummaryData}
                 isOpen={isOpen}
                 testDataFlag={testDataFlag}
+                updateScopeFlag={1}
+                updateScopeItems={updateScopeItems}
+                workPackageScopeFlag={1}
+                workPackageScopeItems={workPackageScopeItems}
             />
         );
 

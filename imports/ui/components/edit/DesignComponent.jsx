@@ -775,7 +775,6 @@ export class DesignComponent extends Component{
 DesignComponent.propTypes = {
     currentItem: PropTypes.object.isRequired,
     updateItem: PropTypes.object,
-    updateItemScope: PropTypes.string.isRequired,
     wpItem: PropTypes.object,
     isDragDropHovering: PropTypes.bool.isRequired,
     displayContext: PropTypes.string.isRequired,

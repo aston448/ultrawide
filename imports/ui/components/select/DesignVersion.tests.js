@@ -238,7 +238,7 @@ describe('JSX: DesignVersion', () => {
 
             const userRole = RoleType.DESIGNER;
             const viewOptions = {};
-            const userContext = {designVersionId: designVersionNew._id};
+            const userContext = {designVersionId: designVersionDraft._id};
 
             const item = shallow(
                 <DesignVersion designVersion={designVersionDraft} userContext={userContext} userRole={userRole} viewOptions={viewOptions}/>

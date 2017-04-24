@@ -979,12 +979,12 @@ export class DesignComponentHeader extends Component{
                 <InputGroup>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
-                            <div id="updateStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
+                            <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
-                    <InputGroup.Addon>
+                    <InputGroup.Addon id="updateStatusIcon">
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                            <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
@@ -1144,9 +1144,9 @@ export class DesignComponentHeader extends Component{
             updateDraggableHeader =
                 <div id="editorHeaderItem">
                     <InputGroup>
-                        <InputGroup.Addon>
+                        <InputGroup.Addon id="updateStatusIcon">
                             <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                                <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                                <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                             </OverlayTrigger>
                         </InputGroup.Addon>
                         <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
@@ -1183,9 +1183,9 @@ export class DesignComponentHeader extends Component{
                 connectDragPreview(
                     <div id="editorHeaderItem">
                         <InputGroup>
-                            <InputGroup.Addon>
+                            <InputGroup.Addon id="updateStatusIcon">
                                 <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                                    <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                                    <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                                 </OverlayTrigger>
                             </InputGroup.Addon>
                             <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
@@ -1256,9 +1256,9 @@ export class DesignComponentHeader extends Component{
         let updateNonDraggableHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon>
+                    <InputGroup.Addon id="updateStatusIcon">
                         <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                            <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
                     <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
@@ -1294,7 +1294,7 @@ export class DesignComponentHeader extends Component{
                 <InputGroup>
                     <InputGroup.Addon>
                         <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
-                            <div id="updateStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
+                            <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
                         </OverlayTrigger>
                     </InputGroup.Addon>
                     <InputGroup.Addon>

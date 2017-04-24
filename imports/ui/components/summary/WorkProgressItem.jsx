@@ -161,7 +161,7 @@ class WorkProgressItem extends Component {
                 glyphicon="ok-circle"
                 valueClass={passValueClass}
                 iconClass={passIconClass}
-                tooltip="Passing Tests"
+                tooltip="Passing Scenarios"
             />;
 
         let failValueClass = 'progress-value mash-not-linked';
@@ -176,7 +176,7 @@ class WorkProgressItem extends Component {
                 glyphicon="remove-circle"
                 valueClass={failValueClass}
                 iconClass={failIconClass}
-                tooltip="Failing Tests"
+                tooltip="Failing Scenarios"
             />;
 
         let noTestValueClass = 'progress-value mash-not-linked';
@@ -191,7 +191,7 @@ class WorkProgressItem extends Component {
                 glyphicon="ban-circle"
                 valueClass={noTestValueClass}
                 iconClass={noTestIconClass}
-                tooltip="Not Tested"
+                tooltip="Scenarios Not Tested"
             />;
 
         switch(item.workSummaryType){
@@ -269,19 +269,21 @@ class WorkProgressItem extends Component {
                             <Col md={6} className="close-col">
                                 {workProgressName}
                             </Col>
-                            <Col  md={6}>
+                            <Col  md={6} className="close-col">
                                 <Grid>
                                     <Row>
                                         <Col md={3} className="close-col">
                                             {workProgressScenarios}
                                         </Col>
                                         <Col md={3} className="close-col">
+                                        </Col>
+                                        <Col md={2} className="close-col">
                                             {workProgressPasses}
                                         </Col>
-                                        <Col md={3} className="close-col">
+                                        <Col md={2} className="close-col">
                                             {workProgressFails}
                                         </Col>
-                                        <Col md={3} className="close-col">
+                                        <Col md={2} className="close-col">
                                             {workProgressNoTests}
                                         </Col>
                                     </Row>

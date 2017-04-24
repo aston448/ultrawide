@@ -12,6 +12,7 @@ import { Designs } from '../../../collections/design/designs.js'
 
 describe('JSX: Design', () => {
 
+
     Factory.define('design', Designs, { designName: 'Design1', isRemovable: true, designStatus: DesignStatus.DESIGN_LIVE});
     const design = Factory.create('design');
 
@@ -26,7 +27,7 @@ describe('JSX: Design', () => {
 
         it('has status LIVE if live', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: design._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -39,7 +40,7 @@ describe('JSX: Design', () => {
 
         it('has status ARCHIVED if archived', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: designArchived._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -55,7 +56,7 @@ describe('JSX: Design', () => {
 
         it('has a Remove button if the Design is removable', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: design._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -70,7 +71,7 @@ describe('JSX: Design', () => {
 
         it('does not have a Remove button if the Design is not removable', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: designNonRemovable._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -88,7 +89,7 @@ describe('JSX: Design', () => {
 
         it('does not have a remove button for a Developer', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: design._id};
             const userRole = RoleType.DEVELOPER;
 
             const item = shallow(
@@ -102,7 +103,7 @@ describe('JSX: Design', () => {
 
         it('does not have a remove button for a Manager', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: design._id};
             const userRole = RoleType.MANAGER;
 
             const item = shallow(
@@ -120,7 +121,7 @@ describe('JSX: Design', () => {
 
         it('has a Backup button if the Design is not removable and not archived', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: designNonRemovable._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -134,7 +135,7 @@ describe('JSX: Design', () => {
 
         it('does not have a Backup button if the Design is removable', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: design._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -148,7 +149,7 @@ describe('JSX: Design', () => {
 
         it('does not have a Backup button if the Design is archived', () => {
 
-            const userContext = {designId: 'AAA'};
+            const userContext = {designId: designArchived._id};
             const userRole = RoleType.DESIGNER;
 
             const item = shallow(
@@ -211,21 +212,6 @@ describe('JSX: Design', () => {
 
         });
 
-        it('has a Work on this Design button if the Design is not selected for Designer', () => {
-
-            const userContext = {designId: 'AAA'};
-            const userRole = RoleType.DESIGNER;
-
-            const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
-            );
-
-            // Work Design button should be there for non-selected Design
-            chai.expect(item.find('.di-active')).to.have.length(0);
-            chai.expect(item.find('#butWork')).to.have.length(1);
-
-        });
-
         it('has a Work on this Design button if the Design is selected for Manager', () => {
 
             const userContext = {designId: design._id};
@@ -241,21 +227,6 @@ describe('JSX: Design', () => {
 
         });
 
-        it('has a Work on this Design button if the Design is not selected for Manager', () => {
-
-            const userContext = {designId: 'AAA'};
-            const userRole = RoleType.MANAGER;
-
-            const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
-            );
-
-            // Work Design button should be there for non-selected Design
-            chai.expect(item.find('.di-active')).to.have.length(0);
-            chai.expect(item.find('#butWork')).to.have.length(1);
-
-        });
-
         it('has a Work on this Design button if the Design is selected for Developer', () => {
 
             const userContext = {designId: design._id};
@@ -267,21 +238,6 @@ describe('JSX: Design', () => {
 
             // Work Design button should be there for selected Design
             chai.expect(item.find('.di-active')).to.have.length(1);
-            chai.expect(item.find('#butWork')).to.have.length(1);
-
-        });
-
-        it('has a Work on this Design button if the Design is not selected for Developer', () => {
-
-            const userContext = {designId: 'AAA'};
-            const userRole = RoleType.DEVELOPER;
-
-            const item = shallow(
-                <Design design={design} userContext={userContext} userRole={userRole}/>
-            );
-
-            // Work Design button should be there for non-selected Design
-            chai.expect(item.find('.di-active')).to.have.length(0);
             chai.expect(item.find('#butWork')).to.have.length(1);
 
         });

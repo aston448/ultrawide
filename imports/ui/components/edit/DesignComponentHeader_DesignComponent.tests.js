@@ -22,6 +22,8 @@ describe('JSX: DesignComponentHeader', () => {
         const testSummaryData = {};
         const isOpen = true;
         const testDataFlag = 0;
+        const updateScopeItems = {};
+        const workPackageScopeItems = {};
 
         return shallow(
             <DesignComponentHeader
@@ -39,6 +41,10 @@ describe('JSX: DesignComponentHeader', () => {
                 testSummaryData={testSummaryData}
                 isOpen={isOpen}
                 testDataFlag={testDataFlag}
+                updateScopeFlag={1}
+                updateScopeItems={updateScopeItems}
+                workPackageScopeFlag={1}
+                workPackageScopeItems={workPackageScopeItems}
             />
         );
 
@@ -1162,8 +1168,10 @@ describe('JSX: DesignComponentHeader', () => {
         const testSummary = false;
         const testSummaryData = {};
         const isOpen = true;
-        const testDataFlag = 0;
+        const testDataFlag = 1;
         const viewOptions = {};
+        const updateScopeItems = {};
+        const workPackageScopeItems = {};
 
 
         return shallow(
@@ -1182,6 +1190,10 @@ describe('JSX: DesignComponentHeader', () => {
                 testSummaryData={testSummaryData}
                 isOpen={isOpen}
                 testDataFlag={testDataFlag}
+                updateScopeFlag={1}
+                updateScopeItems={updateScopeItems}
+                workPackageScopeFlag={1}
+                workPackageScopeItems={workPackageScopeItems}
             />
         );
 
@@ -1191,7 +1203,7 @@ describe('JSX: DesignComponentHeader', () => {
 
         it('added application is marked as added', () => {
 
-            const currentItem = {componentType: ComponentType.APPLICATION, updateMergeStatus: UpdateMergeStatus.COMPONENT_ADDED};
+            const currentItem = {componentType: ComponentType.APPLICATION, updateMergeStatus: UpdateMergeStatus.COMPONENT_ADDED, workPackageId: 'NONE'};
             const updateItem = {};
 
             let item = designComponentHeaderVersionUpdateViewTest(currentItem, updateItem);

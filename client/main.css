@@ -1153,14 +1153,14 @@ input {
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  16px;
     font-weight: bold;
-    margin: 0 0 0 5px;
+    padding: 0 0 0 5px;
 }
 
 .progress-2{
     font-family: 'Century Gothic', 'Gill Sans', Arial, sans-serif;
     font-size:  14px;
     font-weight: bold;
-    margin: 0 0 0 10px;
+    padding: 0 0 0 10px;
 }
 
 .progress-3{
@@ -1168,7 +1168,7 @@ input {
     font-size:  13px;
     font-weight: normal;
     color: darkblue;
-    margin: 0 0 0 20px;
+    padding: 0 0 0 20px;
 }
 
 /* -- Design Update Summary ----------------------------------------------------------------------------------------- */

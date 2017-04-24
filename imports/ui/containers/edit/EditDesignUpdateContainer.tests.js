@@ -1354,7 +1354,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
     describe('A Design Update Summary is shown when a Design Update is edited or viewed', () => {
 
-        it('is visible in edit mode when no dictionary', () => {
+        it('is visible in edit mode when selected', () => {
 
             const mode = ViewMode.MODE_EDIT;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -1364,6 +1364,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
                 updateDetailsVisible:       false,
                 updateDomainDictVisible:    false,
                 updateTestSummaryVisible:   false,
+                updateSummaryVisible:       true
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -1371,7 +1372,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
             chai.assert.equal(item.find('#updateSummary').length, 1, 'Update Summary not found');
         });
 
-        it('is visible in view mode when no dictionary', () => {
+        it('is not visible is not selected', () => {
 
             const mode = ViewMode.MODE_VIEW;
             const view = ViewType.DESIGN_UPDATE_EDIT;
@@ -1385,24 +1386,7 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
 
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update Summary not found');
-        });
-
-        it('is visible when viewing with no dictionary', () => {
-
-            const mode = ViewMode.MODE_VIEW;
-            const view = ViewType.DESIGN_UPDATE_VIEW;
-
-            // No extra stuff selected
-            const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
-            };
-
-            const item = testEditDesignUpdateContainer(mode, view, viewOptions);
-
-            chai.assert.equal(item.find('#updateSummary').length, 1, 'Update Summary not found');
+            chai.assert.equal(item.find('#updateSummary').length, 0, 'Update Summary was found');
         });
     })
 
