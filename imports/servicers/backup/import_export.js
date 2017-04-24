@@ -10,10 +10,10 @@ import { TestOutputLocationFiles }      from '../../collections/configure/test_o
 import { Designs }                      from '../../collections/design/designs.js';
 import { DesignVersions }               from '../../collections/design/design_versions.js';
 import { DesignUpdates }                from '../../collections/design_update/design_updates.js';
-import { DesignUpdateSummary }          from '../../collections/summary/design_update_summary.js';
+import { UserDesignUpdateSummary }      from '../../collections/summary/user_design_update_summary.js';
 import { WorkPackages }                 from '../../collections/work/work_packages.js';
 import { DomainDictionary }             from '../../collections/design/domain_dictionary.js'
-import { DesignVersionComponents }             from '../../collections/design/design_version_components.js';
+import { DesignVersionComponents }      from '../../collections/design/design_version_components.js';
 import { ScenarioSteps }                from '../../collections/design/scenario_steps.js';
 import { FeatureBackgroundSteps }       from '../../collections/design/feature_background_steps.js';
 import { DesignUpdateComponents }       from '../../collections/design_update/design_update_components.js';
@@ -56,7 +56,7 @@ class ImpExServices{
             DesignUpdates.remove({designVersionId: designVersion._id});
 
             // All DU Summaries for this version
-            DesignUpdateSummary.remove({designVersionId: designVersion._id});
+            UserDesignUpdateSummary.remove({designVersionId: designVersion._id});
 
             // All Work packages in this version
             let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
@@ -118,11 +118,11 @@ class ImpExServices{
                     designUpdates.push(designUpdate);
                 });
 
-                // All update summaries in this Version
-                let designUpdateSummaryData = DesignUpdateSummary.find({designVersionId: designVersion._id}).fetch();
-                designUpdateSummaryData.forEach((designUpdateSummary) => {
-                    designUpdateSummaries.push(designUpdateSummary);
-                });
+                // // All update summaries in this Version
+                // let designUpdateSummaryData = UserDesignUpdateSummary.find({designVersionId: designVersion._id}).fetch();
+                // designUpdateSummaryData.forEach((designUpdateSummary) => {
+                //     designUpdateSummaries.push(designUpdateSummary);
+                // });
 
                 // All Work packages in this version
                 let workPackageData = WorkPackages.find({designVersionId: designVersion._id}).fetch();
@@ -172,7 +172,7 @@ class ImpExServices{
                 designs: designData,
                 designVersions: designVersions,
                 designUpdates: designUpdates,
-                designUpdateSummaries: designUpdateSummaries,
+                //designUpdateSummaries: designUpdateSummaries,
                 workPackages: workPackages,
                 designComponents: designComponents,
                 designUpdateComponents: designUpdateComponents,
@@ -233,7 +233,7 @@ class ImpExServices{
             let newDesignData = backupData.designs;
             let newDesignVersionData = backup.designVersions;
             let newDesignUpdateData = backup.designUpdates;
-            let newDesignUpdateSummaryData = backup.designUpdateSummaries;
+            //let newDesignUpdateSummaryData = backup.designUpdateSummaries;
             let newWorkPackageData = backup.workPackages;
             let newDesignComponentData = backup.designComponents;
             let newDesignUpdateComponentData = backup.designUpdateComponents;
@@ -247,7 +247,7 @@ class ImpExServices{
                 newDesignData = this.migrateDesignData(backupData.designs, backup.dataVersion, latestDataVersion);
                 newDesignVersionData = this.migrateDesignVersionData(backupData.designVersions, backup.dataVersion, latestDataVersion);
                 newDesignUpdateData = this.migrateDesignUpdateData(backupData.designUpdates, backup.dataVersion, latestDataVersion);
-                newDesignUpdateSummaryData = this.migrateDesignUpdateSummaryData(backupData.designUpdateSummaries, backup.dataVersion, latestDataVersion);
+                //newDesignUpdateSummaryData = this.migrateDesignUpdateSummaryData(backupData.designUpdateSummaries, backup.dataVersion, latestDataVersion);
                 newWorkPackageData = this.migrateWorkPackageData(backupData.workPackages, backup.dataVersion, latestDataVersion);
                 newDesignComponentData = this.migrateDesignComponentData(backupData.designComponents, backup.dataVersion, latestDataVersion);
                 newDesignUpdateComponentData = this.migrateDesignUpdateComponentData(backupData.designUpdateComponents, backup.dataVersion, latestDataVersion);
@@ -264,7 +264,7 @@ class ImpExServices{
 
             let designUpdatesMapping = this.restoreDesignUpdateData(newDesignUpdateData, designVersionsMapping);
 
-            this.restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping);
+            //this.restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping);
 
             let hasUpdates = newDesignUpdateData.length > 0;
 
@@ -311,8 +311,8 @@ class ImpExServices{
                 // All updates in this Version
                 DesignUpdates.remove({designVersionId: designVersion._id});
 
-                // All update summaries in this Version
-                DesignUpdateSummary.remove({designVersionId: designVersion._id});
+                // // All update summaries in this Version
+                // UserDesignUpdateSummary.remove({designVersionId: designVersion._id});
 
                 let workPackages = WorkPackages.find({designVersionId: designVersion._id}).fetch();
                 workPackages.forEach((workPackage) => {
@@ -457,21 +457,21 @@ class ImpExServices{
         return newDesignUpdateData;
     };
 
-    migrateDesignUpdateSummaryData(designUpdateSummaryData, backupVersion, currentVersion){
-        // Add to this function for each release
-        let newDesignUpdateSummaryData = designUpdateSummaryData;
-
-        switch(backupVersion){
-            case 1:
-                switch(currentVersion){
-                    case 2:
-                        // No changes
-                        newDesignUpdateSummaryData = designUpdateSummaryData
-                }
-        }
-
-        return newDesignUpdateSummaryData;
-    };
+    // migrateDesignUpdateSummaryData(designUpdateSummaryData, backupVersion, currentVersion){
+    //     // Add to this function for each release
+    //     let newDesignUpdateSummaryData = designUpdateSummaryData;
+    //
+    //     switch(backupVersion){
+    //         case 1:
+    //             switch(currentVersion){
+    //                 case 2:
+    //                     // No changes
+    //                     newDesignUpdateSummaryData = designUpdateSummaryData
+    //             }
+    //     }
+    //
+    //     return newDesignUpdateSummaryData;
+    // };
 
     migrateWorkPackageData(workPackageData, backupVersion, currentVersion){
         // Add to this function for each release
@@ -753,27 +753,27 @@ class ImpExServices{
         return designUpdatesMapping;
     };
 
-    restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping){
-
-        log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Summaries...");
-
-        newDesignUpdateSummaryData.forEach((designUpdateSummary) => {
-            let designVersionId = getIdFromMap(designVersionsMapping, designUpdateSummary.designVersionId);
-            let designUpdateId = getIdFromMap(designUpdatesMapping, designUpdateSummary.designUpdateId);
-
-            if (designVersionId && designUpdateId) {
-
-                log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Summary to Design Version {}", designVersionId);
-
-                let designUpdateSummaryId = DesignUpdateSummaryServices.importDesignUpdateSummary(
-                    designVersionId,
-                    designUpdateId,
-                    designUpdateSummary
-                );
-
-            }
-        });
-    };
+    // restoreDesignUpdateSummaryData(newDesignUpdateSummaryData, designVersionsMapping, designUpdatesMapping){
+    //
+    //     log((msg) => console.log(msg), LogLevel.INFO, "Restoring Design Update Summaries...");
+    //
+    //     newDesignUpdateSummaryData.forEach((designUpdateSummary) => {
+    //         let designVersionId = getIdFromMap(designVersionsMapping, designUpdateSummary.designVersionId);
+    //         let designUpdateId = getIdFromMap(designUpdatesMapping, designUpdateSummary.designUpdateId);
+    //
+    //         if (designVersionId && designUpdateId) {
+    //
+    //             log((msg) => console.log(msg), LogLevel.DEBUG, "Adding Design Update Summary to Design Version {}", designVersionId);
+    //
+    //             let designUpdateSummaryId = DesignUpdateSummaryServices.importDesignUpdateSummary(
+    //                 designVersionId,
+    //                 designUpdateId,
+    //                 designUpdateSummary
+    //             );
+    //
+    //         }
+    //     });
+    // };
 
     restoreWorkPackageData(newWorkPackageData, designVersionsMapping, designUpdatesMapping, userMapping, hasDesignUpdates){
 
@@ -1129,8 +1129,8 @@ class ImpExServices{
             // Design Updates
             this.produceExportFile(DesignUpdates, path, doubleBackupPath, ExportFileName.DESIGN_UPDATES);
 
-            // Design Update Summaries
-            this.produceExportFile(DesignUpdateSummary, path, doubleBackupPath, ExportFileName.DESIGN_UPDATE_SUMMARIES);
+            // // Design Update Summaries
+            // this.produceExportFile(UserDesignUpdateSummary, path, doubleBackupPath, ExportFileName.DESIGN_UPDATE_SUMMARIES);
 
             // Work Packages
             this.produceExportFile(WorkPackages, path, doubleBackupPath, ExportFileName.WORK_PACKAGES);
@@ -1440,26 +1440,26 @@ class ImpExServices{
             hasDesignUpdates = false;
         }
 
-        // Design Update Summaries -------------------------------------------------------------------------------------
-        let designUpdateSummaryData = '';
-        let designUpdateSummaries = [];
-
-        try{
-            designUpdateSummaryData = fs.readFileSync(path + ExportFileName.DESIGN_UPDATE_SUMMARIES);
-            designUpdateSummaries = JSON.parse(designUpdateSummaryData);
-        } catch (e){
-            log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Update Summaries export file: {}", e);
-        }
-
-        if(designUpdateSummaries.length > 0) {
-
-            let migratedDesignUpdateSummaries = this.migrateDesignUpdateSummaryData(designUpdateSummaries, backupDataVersion, currentDataVersion);
-            this.restoreDesignUpdateSummaryData(migratedDesignUpdateSummaries, designVersionsMapping, designUpdatesMapping);
-
-        } else {
-            // No Design Update Summaries - could be OK
-            log((msg) => console.log(msg), LogLevel.INFO, "No Design Update Summaries found...");
-        }
+        // // Design Update Summaries -------------------------------------------------------------------------------------
+        // let designUpdateSummaryData = '';
+        // let designUpdateSummaries = [];
+        //
+        // try{
+        //     designUpdateSummaryData = fs.readFileSync(path + ExportFileName.DESIGN_UPDATE_SUMMARIES);
+        //     designUpdateSummaries = JSON.parse(designUpdateSummaryData);
+        // } catch (e){
+        //     log((msg) => console.log(msg), LogLevel.ERROR, "Can't open Design Update Summaries export file: {}", e);
+        // }
+        //
+        // if(designUpdateSummaries.length > 0) {
+        //
+        //     let migratedDesignUpdateSummaries = this.migrateDesignUpdateSummaryData(designUpdateSummaries, backupDataVersion, currentDataVersion);
+        //     this.restoreDesignUpdateSummaryData(migratedDesignUpdateSummaries, designVersionsMapping, designUpdatesMapping);
+        //
+        // } else {
+        //     // No Design Update Summaries - could be OK
+        //     log((msg) => console.log(msg), LogLevel.INFO, "No Design Update Summaries found...");
+        // }
 
         // Work Packages -----------------------------------------------------------------------------------------------
         let workPackagesData = '';

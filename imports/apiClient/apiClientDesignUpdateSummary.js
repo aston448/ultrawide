@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 
 // Ultrawide Collections
 import { DesignUpdates }            from '../collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../collections/summary/design_update_summary.js';
+import { UserDesignUpdateSummary }      from '../collections/summary/user_design_update_summary.js';
 import { WorkPackageComponents }    from '../collections/work/work_package_components.js';
 
 // Ultrawide GUI Components
@@ -42,7 +42,7 @@ class ClientDesignUpdateSummary{
         });
     };
 
-    getDesignUpdateSummaryHeaders(designUpdateId){
+    getDesignUpdateSummaryHeaders(userContext){
 
         // Nothing if no Design Update is set
         if(designUpdateId === 'NONE'){
@@ -57,33 +57,38 @@ class ClientDesignUpdateSummary{
             };
         }
 
-        const addOrgHeaders = DesignUpdateSummary.find({
-            designUpdateId:     designUpdateId,
+        const addOrgHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
             summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL,
             summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
-        const addFncHeaders = DesignUpdateSummary.find({
-            designUpdateId:     designUpdateId,
+        const addFncHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
             summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL,
             summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
-        const removeHeaders = DesignUpdateSummary.find({
-            designUpdateId: designUpdateId,
-            summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
+        const removeHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
-        const changeHeaders = DesignUpdateSummary.find({
-            designUpdateId: designUpdateId,
-            summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE_IN
+        const changeHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_CHANGE_IN
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
         const moveHeaders = [];
 
-        const queryHeaders = DesignUpdateSummary.find({
-            designUpdateId: designUpdateId,
-            summaryType:    DesignUpdateSummaryType.SUMMARY_QUERY_IN
+        const queryHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_QUERY_IN
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
         return {
@@ -114,7 +119,8 @@ class ClientDesignUpdateSummary{
         // Add in any headers if their design item features in the WP
 
         // Organisational Additions
-        const addOrgHeaders = DesignUpdateSummary.find({
+        const addOrgHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
             designUpdateId:     userContext.designUpdateId,
             summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_ORGANISATIONAL,
             summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
@@ -141,7 +147,8 @@ class ClientDesignUpdateSummary{
         });
 
         // Functional Additions
-        const addFncHeaders = DesignUpdateSummary.find({
+        const addFncHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
             designUpdateId:     userContext.designUpdateId,
             summaryCategory:    DesignUpdateSummaryCategory.SUMMARY_UPDATE_FUNCTIONAL,
             summaryType:        DesignUpdateSummaryType.SUMMARY_ADD_TO
@@ -168,9 +175,10 @@ class ClientDesignUpdateSummary{
         });
 
         // Removals
-        const removeHeaders = DesignUpdateSummary.find({
-            designUpdateId: userContext.designUpdateId,
-            summaryType:    DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
+        const removeHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_REMOVE_FROM
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
         let wpRemoveHeaders = [];
@@ -191,9 +199,10 @@ class ClientDesignUpdateSummary{
         });
 
         // Changes
-        const changeHeaders = DesignUpdateSummary.find({
-            designUpdateId: userContext.designUpdateId,
-            summaryType:    DesignUpdateSummaryType.SUMMARY_CHANGE_IN
+        const changeHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_CHANGE_IN
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
         let wpChangeHeaders = [];
@@ -214,9 +223,10 @@ class ClientDesignUpdateSummary{
         });
 
         // Queries
-        const queryHeaders = DesignUpdateSummary.find({
-            designUpdateId: userContext.designUpdateId,
-            summaryType:    DesignUpdateSummaryType.SUMMARY_QUERY_IN
+        const queryHeaders = UserDesignUpdateSummary.find({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_QUERY_IN
         }, {sort: {itemType: 1, itemHeaderName: 1, itemIndex: 1}}).fetch();
 
         let wpQueryHeaders = [];
@@ -249,15 +259,15 @@ class ClientDesignUpdateSummary{
 
     getDesignUpdateSummaryHeaderActions(headerId){
 
-        return DesignUpdateSummary.find({
-            itemHeaderId: headerId
+        return UserDesignUpdateSummary.find({
+            itemHeaderId:       headerId
         }, {sort: {itemIndex: 1}}).fetch();
     }
 
     getDesignUpdateSummaryHeaderActionsForWp(headerId, workPackageId){
         //console.log("Getting items for header with headerId " + headerId + " and wpId: " + workPackageId);
 
-        const headerItems = DesignUpdateSummary.find({
+        const headerItems = UserDesignUpdateSummary.find({
             itemHeaderId: headerId
         }, {sort: {itemIndex: 1}}).fetch();
 

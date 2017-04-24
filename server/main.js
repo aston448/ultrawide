@@ -24,7 +24,7 @@ import '../imports/collections/dev/user_dev_feature_background_steps.js';
 import '../imports/collections/dev/user_dev_feature_scenarios.js';
 import '../imports/collections/dev/user_dev_feature_scenario_steps.js';
 
-import '../imports/collections/summary/design_update_summary.js';
+import '../imports/collections/summary/user_design_update_summary.js';
 import '../imports/collections/summary/user_dev_test_summary_data.js';
 import '../imports/collections/summary/user_dev_design_summary_data.js';
 import '../imports/collections/summary/user_work_progress_summary.js';

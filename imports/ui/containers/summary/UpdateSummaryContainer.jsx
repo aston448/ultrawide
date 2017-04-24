@@ -204,7 +204,7 @@ export default DesignUpdateSummaryContainer = createContainer(({params}) => {
         return ClientDesignUpdateSummary.getDesignUpdateSummaryHeadersForWp(params.userContext)
     } else {
         // Summary for whole update
-        return ClientDesignUpdateSummary.getDesignUpdateSummaryHeaders(params.userContext.designUpdateId);
+        return ClientDesignUpdateSummary.getDesignUpdateSummaryHeaders(params.userContext);
     }
 
 }, connect(mapStateToProps)(DesignUpdateSummaryList));

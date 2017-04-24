@@ -1,9 +1,10 @@
 
 import { Mongo } from 'meteor/mongo';
 
-export const DesignUpdateSummary = new Mongo.Collection('designUpdateSummary');
+export const UserDesignUpdateSummary = new Mongo.Collection('userDesignUpdateSummary');
 
 let Schema = new SimpleSchema({
+    userId:                     {type: String},
     designVersionId:            {type: String},
     designUpdateId:             {type: String},                                 // The design update this is the summary for
     summaryCategory:            {type: String},                                 // Functional Changes, Organisational changes
@@ -20,11 +21,11 @@ let Schema = new SimpleSchema({
     scenarioTestStatus:         {type: String, defaultValue: 'NONE'}
 });
 
-DesignUpdateSummary.attachSchema(Schema);
+UserDesignUpdateSummary.attachSchema(Schema);
 
 // Publish Design Updates wanted
 if(Meteor.isServer){
-    Meteor.publish('designUpdateSummary', function designUpdateSummaryPublication(designVersionId){
-        return DesignUpdateSummary.find({designVersionId: designVersionId});
+    Meteor.publish('userDesignUpdateSummary', function userDesignUpdateSummaryPublication(userId){
+        return UserDesignUpdateSummary.find({userId: userId});
     })
 }

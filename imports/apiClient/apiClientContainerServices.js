@@ -119,7 +119,7 @@ class ClientContainerServices{
                 log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Design Version Data for DV {}", userContext.designVersionId);
 
 
-                const dusHandle = Meteor.subscribe('designUpdateSummary', userContext.designVersionId);
+
                 const dvcHandle = Meteor.subscribe('designVersionComponents', userContext.designVersionId);
                 const ducHandle = Meteor.subscribe('designUpdateComponents', userContext.designVersionId);
                 const wcHandle = Meteor.subscribe('workPackageComponents', userContext.designVersionId);
@@ -141,6 +141,7 @@ class ClientContainerServices{
                 const mrHandle = Meteor.subscribe('userUnitTestResults', userContext.userId);
                 const tsHandle = Meteor.subscribe('userDevTestSummaryData', userContext.userId);
                 const dsHandle = Meteor.subscribe('userDevDesignSummaryData', userContext.userId);
+                const dusHandle = Meteor.subscribe('userDesignUpdateSummary', userContext.userId);
                 const psHandle = Meteor.subscribe('userWorkProgressSummary', userContext.userId);
 
 

@@ -2,7 +2,7 @@
 // Ultrawide Collections
 import { Designs }                  from '../../collections/design/designs.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../../collections/summary/design_update_summary.js';
+import { UserDesignUpdateSummary }      from '../../collections/summary/user_design_update_summary.js';
 import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { UserDevTestSummaryData }   from '../../collections/summary/user_dev_test_summary_data.js';
@@ -34,32 +34,32 @@ class DesignUpdateSummaryServices {
         }
     };
 
-    importDesignUpdateSummary(designVersionId, designUpdateId, designUpdateSummary) {
-
-        if (Meteor.isServer) {
-
-            let designUpdateSummaryId = DesignUpdateSummary.insert(
-                {
-                    designVersionId:            designVersionId,
-                    designUpdateId:             designUpdateId,
-                    summaryCategory:            designUpdateSummary.summaryCategory,
-                    summaryType:                designUpdateSummary.summaryType,
-                    itemType:                   designUpdateSummary.itemType,
-                    itemComponentReferenceId:   designUpdateSummary.itemComponentReferenceId,
-                    itemName:                   designUpdateSummary.itemName,
-                    itemNameOld:                designUpdateSummary.itemNameOld,
-                    itemFeatureName:            designUpdateSummary.itemFeatureName,
-                    itemHeaderId:               designUpdateSummary.itemHeaderId,
-                    headerComponentId:          designUpdateSummary.headerComponentId,
-                    itemIndex:                  designUpdateSummary.itemIndex,
-                    itemHeaderName:             designUpdateSummary.itemHeaderName,
-                    scenarioTestStatus:         designUpdateSummary.scenarioTestStatus
-                }
-            );
-
-            return designUpdateSummaryId;
-        }
-    };
+    // importDesignUpdateSummary(designVersionId, designUpdateId, designUpdateSummary) {
+    //
+    //     if (Meteor.isServer) {
+    //
+    //         let designUpdateSummaryId = UserDesignUpdateSummary.insert(
+    //             {
+    //                 designVersionId:            designVersionId,
+    //                 designUpdateId:             designUpdateId,
+    //                 summaryCategory:            designUpdateSummary.summaryCategory,
+    //                 summaryType:                designUpdateSummary.summaryType,
+    //                 itemType:                   designUpdateSummary.itemType,
+    //                 itemComponentReferenceId:   designUpdateSummary.itemComponentReferenceId,
+    //                 itemName:                   designUpdateSummary.itemName,
+    //                 itemNameOld:                designUpdateSummary.itemNameOld,
+    //                 itemFeatureName:            designUpdateSummary.itemFeatureName,
+    //                 itemHeaderId:               designUpdateSummary.itemHeaderId,
+    //                 headerComponentId:          designUpdateSummary.headerComponentId,
+    //                 itemIndex:                  designUpdateSummary.itemIndex,
+    //                 itemHeaderName:             designUpdateSummary.itemHeaderName,
+    //                 scenarioTestStatus:         designUpdateSummary.scenarioTestStatus
+    //             }
+    //         );
+    //
+    //         return designUpdateSummaryId;
+    //     }
+    // };
 
     recreateDesignUpdateSummaryData(userContext){
 
@@ -84,8 +84,11 @@ class DesignUpdateSummaryServices {
             // No action unless data is stale
             if(designUpdate.summaryDataStale){
 
-                // Clear the data for this update
-                DesignUpdateSummary.remove({designUpdateId: userContext.designUpdateId});
+                // Clear the data for this user update
+                UserDesignUpdateSummary.remove({
+                    userId:         userContext.userId,
+                    designUpdateId: userContext.designUpdateId
+                });
 
                 // Get all significant items in the update.  Anything added, removed or changed must be in scope.
                 const updateItems = DesignUpdateComponents.find({
@@ -253,10 +256,11 @@ class DesignUpdateSummaryServices {
                         if (recordChange) {
 
                             // Add the action header item if not already existing
-                            const actionHeader = DesignUpdateSummary.findOne({
-                                designUpdateId: item.designUpdateId,
-                                summaryType: headerSummaryType,
-                                headerComponentId: item.componentParentIdNew
+                            const actionHeader = UserDesignUpdateSummary.findOne({
+                                userId:             userContext.userId,
+                                designUpdateId:     item.designUpdateId,
+                                summaryType:        headerSummaryType,
+                                headerComponentId:  item.componentParentIdNew
                             });
 
 
@@ -268,18 +272,19 @@ class DesignUpdateSummaryServices {
                                 if (parentItem.componentType === ComponentType.FEATURE_ASPECT) {
                                     itemHeaderName = featureName;
                                 }
-                                headerId = DesignUpdateSummary.insert({
-                                    designVersionId: item.designVersionId,
-                                    designUpdateId: item.designUpdateId,
-                                    summaryCategory: summaryCategory,
-                                    summaryType: headerSummaryType,
-                                    itemType: parentItem.componentType,
-                                    itemComponentReferenceId: parentItem.componentReferenceId,
-                                    itemName: parentItem.componentNameNew,
-                                    itemFeatureName: featureName,
-                                    itemIndex: parentItem.componentIndexNew,
-                                    headerComponentId: item.componentParentIdNew,
-                                    itemHeaderName: itemHeaderName
+                                headerId = UserDesignUpdateSummary.insert({
+                                    userId:                     userContext.userId,
+                                    designVersionId:            item.designVersionId,
+                                    designUpdateId:             item.designUpdateId,
+                                    summaryCategory:            summaryCategory,
+                                    summaryType:                headerSummaryType,
+                                    itemType:                   parentItem.componentType,
+                                    itemComponentReferenceId:   parentItem.componentReferenceId,
+                                    itemName:                   parentItem.componentNameNew,
+                                    itemFeatureName:            featureName,
+                                    itemIndex:                  parentItem.componentIndexNew,
+                                    headerComponentId:          item.componentParentIdNew,
+                                    itemHeaderName:             itemHeaderName
                                 });
                             } else {
                                 headerId = actionHeader._id;
@@ -294,21 +299,22 @@ class DesignUpdateSummaryServices {
                             log((message) => console.log(message), LogLevel.DEBUG, 'Adding ' + summaryType + ' item with test status ' + scenarioTestStatus);
 
                             // Add the item
-                            DesignUpdateSummary.insert({
-                                designVersionId: item.designVersionId,
-                                designUpdateId: item.designUpdateId,
-                                summaryCategory: summaryCategory,
-                                summaryType: summaryType,
-                                itemType: item.componentType,
-                                itemComponentReferenceId: item.componentReferenceId,
-                                itemName: item.componentNameNew,
-                                itemNameOld: item.componentNameOld,
-                                itemParentType: parentItem.componentType,
-                                itemParentName: parentItem.componentNameNew,
-                                itemFeatureName: featureName,
-                                itemHeaderId: headerId,
-                                itemIndex: item.componentIndexNew,
-                                scenarioTestStatus: scenarioTestStatus
+                            UserDesignUpdateSummary.insert({
+                                userId:                     userContext.userId,
+                                designVersionId:            item.designVersionId,
+                                designUpdateId:             item.designUpdateId,
+                                summaryCategory:            summaryCategory,
+                                summaryType:                summaryType,
+                                itemType:                   item.componentType,
+                                itemComponentReferenceId:   item.componentReferenceId,
+                                itemName:                   item.componentNameNew,
+                                itemNameOld:                item.componentNameOld,
+                                itemParentType:             parentItem.componentType,
+                                itemParentName:             parentItem.componentNameNew,
+                                itemFeatureName:            featureName,
+                                itemHeaderId:               headerId,
+                                itemIndex:                  item.componentIndexNew,
+                                scenarioTestStatus:         scenarioTestStatus
                             });
                         }
                     }

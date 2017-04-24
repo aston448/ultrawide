@@ -8,7 +8,7 @@ import { UserCurrentViewOptions}    from '../../imports/collections/context/user
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignVersions }           from '../../imports/collections/design/design_versions.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../../imports/collections/summary/design_update_summary.js';
+import { UserDesignUpdateSummary }      from '../../imports/collections/summary/user_design_update_summary.js';
 import { WorkPackages }             from '../../imports/collections/work/work_packages.js';
 import { WorkPackageComponents }    from '../../imports/collections/work/work_package_components.js';
 import { DesignVersionComponents }  from '../../imports/collections/design/design_version_components.js';
@@ -66,7 +66,7 @@ Meteor.methods({
             DesignVersionComponents.remove({});
             WorkPackageComponents.remove({});
             WorkPackages.remove({});
-            DesignUpdateSummary.remove({});
+            UserDesignUpdateSummary.remove({});
             DesignUpdates.remove({});
             DesignVersions.remove({});
             Designs.remove({});

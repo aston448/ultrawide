@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 
 import { Designs }                  from '../../imports/collections/design/designs.js';
 import { DesignUpdates }            from '../../imports/collections/design_update/design_updates.js';
-import { DesignUpdateSummary }      from '../../imports/collections/summary/design_update_summary.js'
+import { UserDesignUpdateSummary }      from '../../imports/collections/summary/user_design_update_summary.js'
 
 import TestDataHelpers              from '../test_modules/test_data_helpers.js'
 
@@ -14,11 +14,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_ADD,
-            itemType: itemType,
-            itemName: itemName
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_ADD,
+            itemType:           itemType,
+            itemName:           itemName
         });
 
         if(summaryItem){
@@ -32,11 +33,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_ADD,
-            itemType: itemType,
-            itemName: itemName
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_ADD,
+            itemType:           itemType,
+            itemName:           itemName
         });
 
         if(summaryItem){
@@ -50,11 +52,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_REMOVE,
-            itemType: itemType,
-            itemName: itemName
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_REMOVE,
+            itemType:           itemType,
+            itemName:           itemName
         });
 
         if(summaryItem){
@@ -68,11 +71,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_REMOVE,
-            itemType: itemType,
-            itemName: itemName
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_REMOVE,
+            itemType:           itemType,
+            itemName:           itemName
         });
 
         if(summaryItem){
@@ -86,12 +90,13 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_CHANGE,
-            itemType: itemType,
-            itemNameOld: itemName,
-            itemName: itemNameNew
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_CHANGE,
+            itemType:           itemType,
+            itemNameOld:        itemName,
+            itemName:           itemNameNew
         });
 
         if(summaryItem){
@@ -105,12 +110,13 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_CHANGE,
-            itemType: itemType,
-            itemNameOld: itemName,
-            itemName: itemNameNew
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_CHANGE,
+            itemType:           itemType,
+            itemNameOld:        itemName,
+            itemName:           itemNameNew
         });
 
         if(summaryItem){
@@ -124,11 +130,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_MOVE,
-            itemType: itemType,
-            itemName: itemName
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_MOVE,
+            itemType:           itemType,
+            itemName:           itemName
         });
 
         if(summaryItem){
@@ -142,11 +149,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_MOVE,
-            itemType: itemType,
-            itemName: itemName,
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_MOVE,
+            itemType:           itemType,
+            itemName:           itemName,
         });
 
         if(summaryItem){
@@ -160,11 +168,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_QUERY,
-            itemType: itemType,
-            itemName: itemName
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_QUERY,
+            itemType:           itemType,
+            itemName:           itemName
         });
 
         if(summaryItem){
@@ -178,11 +187,12 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
-        const summaryItem = DesignUpdateSummary.findOne({
-            designUpdateId: userContext.designUpdateId,
-            summaryType: DesignUpdateSummaryType.SUMMARY_QUERY,
-            itemType: itemType,
-            itemName: itemName,
+        const summaryItem = UserDesignUpdateSummary.findOne({
+            userId:             userContext.userId,
+            designUpdateId:     userContext.designUpdateId,
+            summaryType:        DesignUpdateSummaryType.SUMMARY_QUERY,
+            itemType:           itemType,
+            itemName:           itemName,
         });
 
         if(summaryItem){
