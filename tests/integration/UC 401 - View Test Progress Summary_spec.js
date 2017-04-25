@@ -228,11 +228,62 @@ describe('UC 401 - View Test Progress Summary', function(){
 
     it('A Scenario test summary indicates the result or absence of an Acceptance test for that Scenario');
 
-    it('A Scenario test summary indicates the result or absence of an Integration test for that Scenario');
+    it('A Scenario test summary indicates the result or absence of an Integration test for that Scenario', function(){
 
-    it('A Scenario test summary indicates the number of passing Module tests associated with that Scenario');
+        // Test Results are in...
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', unitResults);
 
-    it('A Scenario test summary indicates the number of failing Module tests associated with that Scenario');
+        // Go to DV and display the Test Summary
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
+        ViewOptionsActions.designerTogglesDesignVersionTestSummary();
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_PASS));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_FAIL));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario7', MashTestStatus.MASH_NOT_LINKED));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'ExtraScenario', MashTestStatus.MASH_PASS));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario3', MashTestStatus.MASH_PASS));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario4', MashTestStatus.MASH_NOT_LINKED));
+    });
+
+    it('A Scenario test summary indicates the number of passing Module tests associated with that Scenario', function(){
+
+        // Test Results are in...
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', unitResults);
+
+        // Go to DV and display the Test Summary
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
+        ViewOptionsActions.designerTogglesDesignVersionTestSummary();
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario1', 1));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 2));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario7', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Actions', 'ExtraScenario', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario3', 2));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario4', 0));
+    });
+
+    it('A Scenario test summary indicates the number of failing Module tests associated with that Scenario', function(){
+
+        // Test Results are in...
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResults);
+        TestFixtures.writeUnitTestResults_MeteorMocha('Location1', unitResults);
+
+        // Go to DV and display the Test Summary
+        DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
+        ViewOptionsActions.designerTogglesDesignVersionTestSummary();
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Actions', 'Scenario1', 1));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Conditions', 'Scenario2', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Actions', 'Scenario7', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Actions', 'ExtraScenario', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Actions', 'Scenario3', 0));
+        expect(TestSummaryVerifications.developerTestSummaryScenarioUnitTestFailCountIs('Conditions', 'Scenario4', 0));
+    });
 
 
     // Actions
