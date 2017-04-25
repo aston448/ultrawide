@@ -185,11 +185,11 @@ class DesignUpdateServices{
 
             const designUpdates = DesignUpdates.find({designVersionId: userContext.designVersionId});
 
-            log((msg) => console.log(msg), LogLevel.INFO, "Updating DU Statuses...");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Updating DU Statuses...");
 
             designUpdates.forEach((du) => {
 
-                log((msg) => console.log(msg), LogLevel.INFO, "  DU: {}", du.updateName);
+                log((msg) => console.log(msg), LogLevel.TRACE, "  DU: {}", du.updateName);
 
                 let duScenarios = DesignUpdateComponents.find({
                     designUpdateId: du._id,
@@ -239,8 +239,8 @@ class DesignUpdateServices{
                     }
                 });
 
-                log((msg) => console.log(msg), LogLevel.INFO, "    All in WP: {}  Some in WP {}", allInWp, someInWp);
-                log((msg) => console.log(msg), LogLevel.INFO, "    No Fails: {}  No Passes {}  All Passes {}", noFails, noPasses, allPassing);
+                log((msg) => console.log(msg), LogLevel.TRACE, "    All in WP: {}  Some in WP {}", allInWp, someInWp);
+                log((msg) => console.log(msg), LogLevel.TRACE, "    No Fails: {}  No Passes {}  All Passes {}", noFails, noPasses, allPassing);
 
                 let duWpStatus = DesignUpdateWpStatus.DU_NO_WP_SCENARIOS;
 
@@ -266,7 +266,7 @@ class DesignUpdateServices{
                     }
                 }
 
-                log((msg) => console.log(msg), LogLevel.INFO, "    WP Status: {}  Test Status: {}", duWpStatus, duTestStatus);
+                log((msg) => console.log(msg), LogLevel.TRACE, "    WP Status: {}  Test Status: {}", duWpStatus, duTestStatus);
 
                 DesignUpdates.update(
                     {

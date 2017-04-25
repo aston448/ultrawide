@@ -2481,7 +2481,7 @@ class ClientContainerServices{
         let dvDesignUpdates = [];
         let dvItem = null;
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Getting Progress Data for DV {}", userContext.designVersionId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Progress Data for DV {}", userContext.designVersionId);
 
         const userRoles = UserRoles.findOne({
             userId: userContext.userId
@@ -2544,7 +2544,7 @@ class ClientContainerServices{
                 ).fetch()
         }
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Returning WPs {}  DUs: {}", dvWorkPackages.length, dvDesignUpdates.length);
 
         return{
             dvItem:             dvItem,

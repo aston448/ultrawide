@@ -27,7 +27,7 @@ class TestSummaryServices {
 
     refreshTestSummaryData(userContext, updateTestData){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Refreshing test summary data with update = {}", updateTestData);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Refreshing test summary data with update = {}", updateTestData);
 
         let totalScenarioCount = 0;
         let totalUnitTestsPassing = 0;
@@ -459,7 +459,7 @@ class TestSummaryServices {
 
 
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Refreshing test summary data complete");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Refreshing test summary data complete");
     }
 
 }

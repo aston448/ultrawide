@@ -209,7 +209,7 @@ class TestIntegrationModules{
 
     getIntegrationTestResults(userContext){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Getting Integration test results...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Getting Integration test results...");
 
         // Clear existing results for user
         UserIntTestResults.remove({userId: userContext.userId});
@@ -333,7 +333,7 @@ class TestIntegrationModules{
 
     createUserMashScenariosForDesignVersion(userContext){
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Recreating user mash scenarios... {}", userContext.userId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios... {}", userContext.userId);
 
         // Clear all data for user
         UserDesignVersionMashScenarios.remove({userId: userContext.userId});
@@ -374,7 +374,7 @@ class TestIntegrationModules{
             });
         });
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Recreating user mash scenarios - DONE {}", userContext.userId);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Recreating user mash scenarios - DONE {}", userContext.userId);
     };
 
 
@@ -384,7 +384,7 @@ class TestIntegrationModules{
             userId: userContext.userId
         });
 
-        log((msg) => console.log(msg), LogLevel.INFO, "Updating Scenarios with Integration test results...");
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Updating Scenarios with Integration test results...");
 
         intResults.forEach((result) => {
 

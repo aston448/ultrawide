@@ -35,7 +35,7 @@ class TestIntegrationServices{
 
         if(Meteor.isServer){
 
-            log((msg) => console.log(msg), LogLevel.INFO, "REFRESH MASH DATA...");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH MASH DATA...");
 
             // Recalculate the Design Mash Scenarios
             MashDataModules.createUserMashScenariosForDesignVersion(userContext);
@@ -65,7 +65,7 @@ class TestIntegrationServices{
                 DesignUpdateSummaryServices.recreateDesignUpdateSummaryData(userContext);
             }
 
-            log((msg) => console.log(msg), LogLevel.INFO, "REFRESH MASH DATA - DONE");
+            log((msg) => console.log(msg), LogLevel.DEBUG, "REFRESH MASH DATA - DONE");
         }
     }
 

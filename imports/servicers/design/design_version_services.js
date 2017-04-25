@@ -188,7 +188,7 @@ class DesignVersionServices{
                 return;
             }
 
-            log((msg) => {console.log(msg)}, LogLevel.INFO, "Refreshing Work Progress Data...");
+            log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Refreshing Work Progress Data...");
 
             // Remove data for DV for this user
             UserWorkProgressSummary.remove({
@@ -475,7 +475,7 @@ class DesignVersionServices{
             }
         }
 
-        log((msg) => {console.log(msg)}, LogLevel.INFO, "Done Refreshing Work Progress Data...");
+        log((msg) => {console.log(msg)}, LogLevel.DEBUG, "Done Refreshing Work Progress Data...");
     }
 }
 
