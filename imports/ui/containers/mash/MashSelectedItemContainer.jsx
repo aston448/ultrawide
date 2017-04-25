@@ -57,9 +57,6 @@ class MashSelectedItemList extends Component {
         ClientMashDataServices.exportFeature(userContext);
     }
 
-    onExportIntegrationTests(userContext, userRole){
-        ClientTestIntegrationServices.exportIntegrationTestFile(userContext, userRole);
-    }
 
     getEditorClass(){
         return ClientUserContextServices.getWindowSizeClass();

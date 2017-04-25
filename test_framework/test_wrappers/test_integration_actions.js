@@ -11,5 +11,10 @@ class TestIntegrationActions {
         server.call('testIntegration.refreshTestResults', ViewType.DEVELOP_BASE_WP, RoleType.DEVELOPER, 'hugh', expectation);
     };
 
+    designerRefreshesTestResultsForBaseDeignVersion(expectation){
+
+        server.call('testIntegration.refreshTestResults', ViewType.DESIGN_PUBLISHED_VIEW, RoleType.DESIGNER, 'gloria', expectation);
+    };
+
 }
  export default new TestIntegrationActions();

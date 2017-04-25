@@ -14,6 +14,7 @@ import UltrawideMenuItem                from '../common/UltrawideMenuItem.jsx';
 import {ViewType, ViewMode, DetailsViewType, MenuType} from '../../../constants/constants.js';
 
 import ClientDomainDictionaryServices   from '../../../apiClient/apiClientDomainDictionary.js';
+import ClientTestIntegrationServices    from '../../../apiClient/apiClientTestIntegration.js';
 
 // Bootstrap
 
@@ -32,6 +33,10 @@ export class DetailsViewFooter extends Component {
     constructor(props) {
         super(props);
 
+    }
+
+    onExportIntTests(){
+        ClientTestIntegrationServices.exportIntegrationTestFile(this.props.userContext, this.props.userRole);
     }
 
     addDomainTerm(userRole, view, mode, designId, designVersionId){
