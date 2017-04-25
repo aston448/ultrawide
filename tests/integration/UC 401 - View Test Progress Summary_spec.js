@@ -90,16 +90,10 @@ describe('UC 401 - View Test Progress Summary', function(){
 
         OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newUnitFile);
 
-        // Developer sets up location config
-        OutputLocationsActions.developerEditsTestLocationConfig();
-        OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
-        OutputLocationsActions.developerSelectsUnitTestsInConfigForLocation('Location1');
-
-        // Make sure WP is adopted for Developer
-        DesignActions.developerWorksOnDesign('Design1');
-        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
-        WorkPackageActions.developerAdoptsSelectedWorkPackage();
+        // Designer sets up location config
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.designerSelectsIntTestsInConfigForLocation('Location1');
+        OutputLocationsActions.designerSelectsUnitTestsInConfigForLocation('Location1');
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();

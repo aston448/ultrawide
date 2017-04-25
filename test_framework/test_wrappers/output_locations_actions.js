@@ -132,22 +132,58 @@ class OutputLocationActions{
     }
 
     // Change Settings
+
+    // Unit Tests
     developerSelectsUnitTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.UNIT, true, expectation);
+    }
+
+    designerSelectsUnitTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.UNIT, true, expectation);
+    }
+
+    managerSelectsUnitTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'miles', locationName, TestType.UNIT, true, expectation);
     }
 
     developerClearsUnitTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.UNIT, false, expectation);
     }
 
+    designerClearsUnitTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.UNIT, false, expectation);
+    }
+
+    managerClearsUnitTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'miles', locationName, TestType.UNIT, false, expectation);
+    }
+
+    // Int Tests
     developerSelectsIntTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.INTEGRATION, true, expectation);
+    }
+
+    designerSelectsIntTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.INTEGRATION, true, expectation);
+    }
+
+    managerSelectsIntTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'miles', locationName, TestType.INTEGRATION, true, expectation);
     }
 
     developerClearsIntTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.INTEGRATION, false, expectation);
     }
 
+    designerClearsIntTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'gloria', locationName, TestType.INTEGRATION, false, expectation);
+    }
+
+    managerClearsIntTestsInConfigForLocation(locationName, expectation){
+        server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'miles', locationName, TestType.INTEGRATION, false, expectation);
+    }
+
+    // Acc tests
     developerSelectsAccTestsInConfigForLocation(locationName, expectation){
         server.call('testOutputLocations.setUserTestLocationConfigTestTypeTo', 'hugh', locationName, TestType.ACCEPTANCE, true, expectation);
     }
