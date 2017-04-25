@@ -7,7 +7,7 @@ import {DesignUpdates}                  from '../../collections/design_update/de
 import { UserWorkPackageFeatureStepData }   from '../../collections/dev/user_work_package_feature_step_data.js';
 
 // Ultrawide Services
-import DesignUpdateSummaryServices      from '../../servicers/design_update/design_update_summary_services.js';
+import DesignUpdateSummaryServices      from '../summary/design_update_summary_services.js';
 
 import {ComponentType, WorkPackageType, UserDevFeatureStatus, UserDevFeatureFileStatus, UserDevScenarioStatus,
     UserDevScenarioStepStatus, StepContext, MashStatus, MashTestStatus, DevTestTag, TestRunner, ViewOptionType, LogLevel} from '../../constants/constants.js';
@@ -16,7 +16,7 @@ import {log}                            from '../../common/utils.js';
 import FeatureFileServices              from './feature_file_services.js'
 import ScenarioServices                 from '../design/scenario_services.js';
 import MashDataModules                  from '../../service_modules/dev/test_integration_service_modules.js';
-import TestSummaryServices              from '../../servicers/dev/test_summary_services.js';
+import TestSummaryServices              from '../summary/test_summary_services.js';
 import ChimpMochaTestServices           from '../../service_modules/dev/test_processor_chimp_mocha.js';
 
 //======================================================================================================================

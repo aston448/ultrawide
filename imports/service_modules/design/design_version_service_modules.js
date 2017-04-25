@@ -310,7 +310,24 @@ class DesignVersionModules{
 
             this.addUpdateItemToDesignVersion(newComponent);
 
+            // And add any default Feature Aspects added to a new Feature
+            if(newComponent.componentType === ComponentType.FEATURE){
+
+                let defaultAspects = DesignUpdateComponents.find({
+                    designUpdateId:                 update._id,
+                    componentFeatureReferenceIdNew: newComponent.componentReferenceId,
+                    componentType:                  ComponentType.FEATURE_ASPECT,
+                    isNew:                          false,
+                });
+
+                defaultAspects.forEach((aspect) => {
+
+                    this.addUpdateItemToDesignVersion(aspect);
+                });
+            }
         });
+
+
 
         this.fixParentIdsForDesignVersion(update.designVersionId);
     }
@@ -327,6 +344,22 @@ class DesignVersionModules{
         newComponents.forEach((newComponent) => {
 
             this.undoAddUpdateItemToDesignVersion(newComponent);
+
+            // And remove any default Feature Aspects added to a new Feature
+            if(newComponent.componentType === ComponentType.FEATURE){
+
+                let defaultAspects = DesignUpdateComponents.find({
+                    designUpdateId:                 update._id,
+                    componentFeatureReferenceIdNew: newComponent.componentReferenceId,
+                    componentType:                  ComponentType.FEATURE_ASPECT,
+                    isNew:                          false,
+                });
+
+                defaultAspects.forEach((aspect) => {
+
+                    this.undoAddUpdateItemToDesignVersion(aspect);
+                });
+            }
         });
 
         // REMOVALS ----------------------------------------------------------------------------------------------------

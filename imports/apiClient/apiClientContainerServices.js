@@ -1960,8 +1960,10 @@ class ClientContainerServices{
 
     getTestSummaryData(scenario){
 
+        const userContext = store.getState().currentUserItemContext;
 
         return UserDevTestSummaryData.findOne({
+            userId:                 userContext.userId,
             designVersionId:        scenario.designVersionId,
             scenarioReferenceId:    scenario.componentReferenceId
         });
@@ -1970,7 +1972,10 @@ class ClientContainerServices{
 
     getTestSummaryFeatureData(feature){
 
+        const userContext = store.getState().currentUserItemContext;
+
         return UserDevTestSummaryData.findOne({
+            userId:                 userContext.userId,
             designVersionId:        feature.designVersionId,
             scenarioReferenceId:    'NONE',
             featureReferenceId:     feature.componentReferenceId

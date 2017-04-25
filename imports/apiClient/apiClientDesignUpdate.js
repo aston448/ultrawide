@@ -18,6 +18,7 @@ import ServerDesignUpdateApi            from '../apiServer/apiDesignUpdate.js';
 import ClientDesignUpdateSummary        from '../apiClient/apiClientDesignUpdateSummary.js';
 import ClientTestIntegrationServices    from '../apiClient/apiClientTestIntegration.js';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
+import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -158,6 +159,9 @@ class ClientDesignUpdateServices {
                 // Ensure that the current update is the update we chose to publish
                 this.setDesignUpdate(userContext, designUpdateToPublishId);
 
+                // Should now appear in Work Progress
+                ClientDesignVersionServices.updateWorkProgress();
+
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
@@ -193,6 +197,9 @@ class ClientDesignUpdateServices {
                 // Client actions:
                 // Ensure that the current update is the update we chose to withdraw
                 this.setDesignUpdate(userContext, designUpdateToWithdrawId);
+
+                // Should now disappear in Work Progress
+                ClientDesignVersionServices.updateWorkProgress();
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -277,6 +284,9 @@ class ClientDesignUpdateServices {
                 alert('Unexpected error 7: ' + err.reason + '.  Contact support if persists!');
             } else {
                 // Client actions:
+
+                // Should now appear or disappear in Work Progress
+                ClientDesignVersionServices.updateWorkProgress();
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({

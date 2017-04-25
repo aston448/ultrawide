@@ -184,6 +184,7 @@ class TestSummaryServices {
             log((msg) => console.log(msg), LogLevel.TRACE, "FEATURE {}", designFeature.componentNameNew);
 
             let featureScenarios = UserDevTestSummaryData.find({
+                userId:                 userContext.userId,
                 designVersionId:        userContext.designVersionId,
                 featureReferenceId:     designFeature.componentReferenceId,
                 scenarioReferenceId:    {$ne: 'NONE'}
@@ -207,42 +208,40 @@ class TestSummaryServices {
             featureScenarios.forEach((featureScenario)=>{
 
                 let hasResult = false;
+                let duHasResult = false;
+                let wpHasResult = false;
 
                 if(featureScenario.accTestStatus === MashTestStatus.MASH_FAIL){
                     failingTests++;
-                    hasResult = true;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_FAIL){
                     failingTests++;
-                    hasResult = true;
                 }
 
                 if(featureScenario.unitTestFailCount > 0) {
                     failingTests += featureScenario.unitTestFailCount;
-                    hasResult = true;
                 }
 
                 if(featureScenario.accTestStatus === MashTestStatus.MASH_PASS){
                     passingTests++;
-                    hasResult = true;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_PASS){
                     //console.log("    PASS");
                     passingTests++;
-                    hasResult = true;
                 }
 
                 if(featureScenario.unitTestPassCount > 0) {
                     passingTests += featureScenario.unitTestPassCount;
-                    hasResult = true;
                 }
 
                 // Any fails is a fail even if passes.  Any passes and no fails is a pass
                 if(failingTests > 0){
                     featureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+                    hasResult = true;
                 } else {
                     if(passingTests > 0){
                         featureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                        hasResult = true;
                     }
                 }
 
@@ -295,13 +294,15 @@ class TestSummaryServices {
                         // Any fails is a fail even if passes.  Any passes and no fails is a pass
                         if (failingTests > 0) {
                             duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+                            duHasResult = true;
                         } else {
                             if (passingTests > 0) {
                                 duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                                duHasResult = true;
                             }
                         }
 
-                        if (hasResult === false) {
+                        if (duHasResult === false) {
                             duFeatureNoTestScenarios++;
                         }
                     }
@@ -349,13 +350,15 @@ class TestSummaryServices {
                         // Any fails is a fail even if passes.  Any passes and no fails is a pass
                         if (failingTests > 0) {
                             wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
+                            wpHasResult = true;
                         } else {
                             if (passingTests > 0) {
                                 wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
+                                wpHasResult = true;
                             }
                         }
 
-                        if (hasResult === false) {
+                        if (wpHasResult === false) {
                             wpFeatureNoTestScenarios++;
                         }
 

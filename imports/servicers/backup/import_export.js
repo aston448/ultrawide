@@ -29,7 +29,7 @@ import TestOutputLocationServices       from '../configure/test_output_location_
 import DesignServices                   from '../design/design_services.js';
 import DesignVersionServices            from '../design/design_version_services.js';
 import DesignUpdateServices             from '../design_update/design_update_services.js';
-import DesignUpdateSummaryServices      from '../design_update/design_update_summary_services.js';
+import DesignUpdateSummaryServices      from '../summary/design_update_summary_services.js';
 import WorkPackageServices              from '../work/work_package_services.js';
 import DomainDictionaryServices         from '../design/domain_dictionary_services.js';
 import DesignComponentServices          from '../design/design_component_services.js';

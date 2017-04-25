@@ -203,7 +203,7 @@ export class DesignUpdate extends Component {
             </div>;
 
         const status =
-            <div id="designUpdateStatus" className={statusClass}>
+            <div className={statusClass}>
                 <InputGroup>
                     <div id="designUpdateStatus">{designUpdate.updateStatus}</div>
                     <InputGroup.Addon >
