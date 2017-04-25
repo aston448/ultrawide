@@ -150,7 +150,8 @@ class TestSummaryServices {
                     }
                 }
 
-                log((msg) => console.log(msg), LogLevel.TRACE, "  -- Inserting Summary data for Scenario {} with id {} and tests found {}", designScenario.componentNameNew, designScenario.componentReferenceId, testsFound);
+                log((msg) => console.log(msg), LogLevel.TRACE, "  -- Inserting Summary data for Scenario {} with id {} scenRef {} featureRef {} and tests found {}",
+                    designScenario.componentNameNew, designScenario.componentReferenceId, designScenario.componentReferenceId, featureReferenceId, testsFound);
 
                 UserDevTestSummaryData.insert({
                     userId: userContext.userId,
@@ -214,6 +215,8 @@ class TestSummaryServices {
             let wpFeatureNoTestScenarios = 0;
 
             featureScenarios.forEach((featureScenario)=>{
+
+                log((msg) => console.log(msg), LogLevel.TRACE, "Processing Summary Scenario: {}", featureScenario.scenarioReferenceId);
 
                 let hasResult = false;
                 let duHasResult = false;
