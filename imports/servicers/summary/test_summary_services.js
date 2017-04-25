@@ -97,14 +97,17 @@ class TestSummaryServices {
 
                     switch (integrationTestResult.testResult) {
                         case MashTestStatus.MASH_PASS:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass for Scenario {}", designScenario.componentNameNew);
                             totalIntTestsPassing++;
                             testsFound = true;
                             break;
                         case MashTestStatus.MASH_FAIL:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail for Scenario {}", designScenario.componentNameNew);
                             totalIntTestsFailing++;
                             testsFound = true;
                             break;
                         case MashTestStatus.MASH_PENDING:
+                            log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pending for Scenario {}", designScenario.componentNameNew);
                             totalIntTestsPending++;
                     }
                 } else {
@@ -121,6 +124,7 @@ class TestSummaryServices {
                 }).count();
 
                 if (unitTestPasses > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- {} Unit Test pass for Scenario {}", unitTestPasses, designScenario.componentNameNew);
                     testsFound = true;
                 }
                 totalUnitTestsPassing += unitTestPasses;
@@ -132,6 +136,7 @@ class TestSummaryServices {
                 }).count();
 
                 if (unitTestFails > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- {} Unit Test fail for Scenario {}", unitTestFails, designScenario.componentNameNew);
                     testsFound = true;
                 }
                 totalUnitTestsFailing += unitTestFails;
@@ -161,6 +166,7 @@ class TestSummaryServices {
 
 
                 if (!testsFound) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- No tests for Scenario {}", designScenario.componentNameNew);
                     totalScenariosWithoutTests++;
                 }
 
@@ -215,10 +221,12 @@ class TestSummaryServices {
                     failingTests++;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_FAIL){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test fail {}", featureScenario.scenarioReferenceId);
                     failingTests++;
                 }
 
                 if(featureScenario.unitTestFailCount > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test fail {}", featureScenario.scenarioReferenceId);
                     failingTests += featureScenario.unitTestFailCount;
                 }
 
@@ -226,11 +234,12 @@ class TestSummaryServices {
                     passingTests++;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_PASS){
-                    //console.log("    PASS");
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Int Test pass {}", featureScenario.scenarioReferenceId);
                     passingTests++;
                 }
 
                 if(featureScenario.unitTestPassCount > 0) {
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Unit Test pass {}", featureScenario.scenarioReferenceId);
                     passingTests += featureScenario.unitTestPassCount;
                 }
 

@@ -189,7 +189,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDeignVersion();
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         // Feature1: Expect Passes = 1 int tests + 3 unit tests
         expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 4));
@@ -206,7 +206,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDeignVersion();
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         // Feature1: Expect Fails = 1 int tests + 1 unit tests
         expect(TestSummaryVerifications.designerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 2));
@@ -223,7 +223,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Go to DV and display the Test Summary
         DesignVersionActions.designerViewsDesignVersion('DesignVersion1');
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
-        TestResultActions.designerRefreshesTestResultsForBaseDeignVersion();
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         // This includes anything with no test result above or not even included in the test run: Scenario7 and ExtraScenario
         expect(TestSummaryVerifications.designerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 2));
