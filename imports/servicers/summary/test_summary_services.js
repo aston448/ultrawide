@@ -150,6 +150,8 @@ class TestSummaryServices {
                     }
                 }
 
+                log((msg) => console.log(msg), LogLevel.TRACE, "  -- Inserting Summary data for Scenario {} with id {} and tests found {}", designScenario.componentNameNew, designScenario.componentReferenceId, testsFound);
+
                 UserDevTestSummaryData.insert({
                     userId: userContext.userId,
                     designVersionId: userContext.designVersionId,
