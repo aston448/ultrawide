@@ -220,6 +220,7 @@ class TestSummaryServices {
                 let wpHasResult = false;
 
                 if(featureScenario.accTestStatus === MashTestStatus.MASH_FAIL){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test fail {}", featureScenario.scenarioReferenceId);
                     failingTests++;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_FAIL){
@@ -233,6 +234,7 @@ class TestSummaryServices {
                 }
 
                 if(featureScenario.accTestStatus === MashTestStatus.MASH_PASS){
+                    log((msg) => console.log(msg), LogLevel.TRACE, "  -- Acc Test pass {}", featureScenario.scenarioReferenceId);
                     passingTests++;
                 }
                 if(featureScenario.intTestStatus === MashTestStatus.MASH_PASS){
@@ -256,7 +258,7 @@ class TestSummaryServices {
                     }
                 }
 
-                if(hasResult === false) {
+                if(!hasResult) {
                     log((msg) => console.log(msg), LogLevel.TRACE, "  -- Scenario with no test {}", featureScenario.scenarioReferenceId);
                     featureNoTestScenarios++;
                 }
