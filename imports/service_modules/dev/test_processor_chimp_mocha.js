@@ -72,7 +72,8 @@ class ChimpMochaTestServices{
             if(userContext.designUpdateId === 'NONE') {
                 featureAspects = DesignVersionComponents.find(
                     {
-                        componentType: ComponentType.FEATURE_ASPECT,
+                        designVersionId:                userContext.designVersionId,
+                        componentType:                  ComponentType.FEATURE_ASPECT,
                         componentFeatureReferenceIdNew: feature.componentReferenceId
                     },
                     {sort: {componentIndexNew: 1}}
@@ -80,7 +81,8 @@ class ChimpMochaTestServices{
             } else {
                 featureAspects = DesignUpdateComponents.find(
                     {
-                        componentType: ComponentType.FEATURE_ASPECT,
+                        designUpdateId:                 userContext.designUpdateId,
+                        componentType:                  ComponentType.FEATURE_ASPECT,
                         componentFeatureReferenceIdNew: feature.componentReferenceId
                     },
                     {sort: {componentIndexNew: 1}}
@@ -95,7 +97,8 @@ class ChimpMochaTestServices{
                 if(userContext.designUpdateId === 'NONE') {
                     scenarios = DesignVersionComponents.find(
                         {
-                            componentType: ComponentType.SCENARIO,
+                            designVersionId:                userContext.designVersionId,
+                            componentType:                  ComponentType.SCENARIO,
                             componentParentReferenceIdNew: aspect.componentReferenceId
                         },
                         {sort: {componentIndexNew: 1}}
@@ -103,8 +106,9 @@ class ChimpMochaTestServices{
                 } else {
                     scenarios = DesignUpdateComponents.find(
                         {
-                            componentType: ComponentType.SCENARIO,
-                            componentParentReferenceIdNew: aspect.componentReferenceId
+                            designUpdateId:                 userContext.designUpdateId,
+                            componentType:                  ComponentType.SCENARIO,
+                            componentParentReferenceIdNew:  aspect.componentReferenceId
                         },
                         {sort: {componentIndexNew: 1}}
                     ).fetch();

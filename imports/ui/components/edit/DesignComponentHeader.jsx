@@ -7,8 +7,8 @@ import PropTypes from 'prop-types';
 // Ultrawide Collections
 
 // Ultrawide GUI Components
-import TestSummary          from '../dev/TestSummary.jsx';
-import FeatureTestSummary   from '../dev/FeatureTestSummary.jsx';
+import TestSummary          from '../summary/TestSummary.jsx';
+import FeatureTestSummary   from '../summary/FeatureTestSummary.jsx';
 
 // Ultrawide Services
 import ClientDesignComponentServices        from '../../../apiClient/apiClientDesignComponent.js';

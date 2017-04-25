@@ -16,5 +16,10 @@ class TestIntegrationActions {
         server.call('testIntegration.refreshTestResults', ViewType.DESIGN_PUBLISHED_VIEW, RoleType.DESIGNER, 'gloria', expectation);
     };
 
+    designerRefreshesTestResultsForDesignUpdateView(expectation){
+
+        server.call('testIntegration.refreshTestResults', ViewType.DESIGN_UPDATE_VIEW, RoleType.DESIGNER, 'gloria', expectation);
+    };
+
 }
  export default new TestIntegrationActions();

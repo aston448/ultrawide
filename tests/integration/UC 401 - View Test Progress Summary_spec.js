@@ -11,8 +11,11 @@ import ViewOptionsActions           from '../../test_framework/test_wrappers/vie
 import ViewOptionsVerifications     from '../../test_framework/test_wrappers/view_options_verifications.js';
 import TestIntegrationActions       from '../../test_framework/test_wrappers/test_integration_actions.js';
 import TestSummaryVerifications     from '../../test_framework/test_wrappers/test_summary_verifications.js';
+import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
+import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
+import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
 import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType, FeatureTestSummaryStatus} from '../../imports/constants/constants.js';
 
@@ -36,17 +39,6 @@ describe('UC 401 - View Test Progress Summary', function(){
         // Create a Work Package with Feature1 and Feature2 in it
         DesignActions.designerWorksOnDesign('Design1');
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
-
-        DesignActions.managerWorksOnDesign('Design1');
-        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
-        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
-        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section1', 'Feature1');
-        WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section2', 'Feature2');
-        // But make sure Scenario7 in Feature1 is not in scope
-        WpComponentActions.managerRemovesScenarioFromScopeForCurrentWp('Actions', 'Scenario7');
-        WorkPackageActions.managerPublishesSelectedWorkPackage();
-
 
         // Set up a location
         OutputLocationsActions.developerAddsNewLocation();
@@ -94,6 +86,11 @@ describe('UC 401 - View Test Progress Summary', function(){
         OutputLocationsActions.designerEditsTestLocationConfig();
         OutputLocationsActions.designerSelectsIntTestsInConfigForLocation('Location1');
         OutputLocationsActions.designerSelectsUnitTestsInConfigForLocation('Location1');
+
+        // Developer sets up location config
+        OutputLocationsActions.developerEditsTestLocationConfig();
+        OutputLocationsActions.developerSelectsIntTestsInConfigForLocation('Location1');
+        OutputLocationsActions.developerSelectsUnitTestsInConfigForLocation('Location1');
 
         // Ensure default view options before each test
         TestFixtures.resetUserViewOptions();
@@ -154,6 +151,10 @@ describe('UC 401 - View Test Progress Summary', function(){
                         resultName: 'Unit Test 22',
                         resultOutcome: MashTestStatus.MASH_PASS
                     },
+                    {
+                        resultName: 'Unit Test 23',
+                        resultOutcome: MashTestStatus.MASH_PASS
+                    },
                 ]
             },
             {
@@ -185,8 +186,8 @@ describe('UC 401 - View Test Progress Summary', function(){
         ViewOptionsActions.designerTogglesDesignVersionTestSummary();
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
-        // Feature1: Expect Passes = 1 int tests + 3 unit tests
-        expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 4));
+        // Feature1: Expect Passes = 1 int tests + 4 unit tests
+        expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 5));
         // Feature2: Expect Passes = 1 int tests + 2 unit tests
         expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section2', 'Feature2', 3));
     });
@@ -242,7 +243,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario1', MashTestStatus.MASH_PASS));
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario2', MashTestStatus.MASH_FAIL));
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario7', MashTestStatus.MASH_NOT_LINKED));
-        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'ExtraScenario', MashTestStatus.MASH_PASS));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'ExtraScenario', MashTestStatus.MASH_NOT_LINKED));
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Actions', 'Scenario3', MashTestStatus.MASH_PASS));
         expect(TestSummaryVerifications.designerTestSummaryScenarioIntTestStatusIs('Conditions', 'Scenario4', MashTestStatus.MASH_NOT_LINKED));
     });
@@ -259,7 +260,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario1', 1));
-        expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 2));
+        expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Conditions', 'Scenario2', 3));
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario7', 0));
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Actions', 'ExtraScenario', 0));
         expect(TestSummaryVerifications.designerTestSummaryScenarioUnitTestPassCountIs('Actions', 'Scenario3', 2));
@@ -287,11 +288,9 @@ describe('UC 401 - View Test Progress Summary', function(){
 
 
     // Actions
-    it('Test summary data can be refreshed to pick up the latest test results');
-
     it('Test summary data may be displayed for a Design Version');
 
-    it('Test summary data may be displayed for a Design Update in View Only mode');
+    it('Test summary data may be displayed for a Design Update');
 
     it('Test summary data may be displayed for a Work Package when it is viewed');
 
@@ -299,30 +298,53 @@ describe('UC 401 - View Test Progress Summary', function(){
 
 
     // Conditions
-    it('Test summary data is not available for a Design Update that is being edited');
-
-    it('Test summary data is not available for a Design Update that is being edited');
-
     it('Test summary data is not available for a Work Package that is being scoped');
 
-    it('Test summary data is not available for a Work Package that is being scoped');
+    it('When a test summary is shown for a Design Update the Feature totals include only Scenarios in the Design Update', function(){
 
-    it('When a test summary is shown for a Design Update the Feature totals include only Scenarios in the Design Update');
+        // Create new Design Version + an update and add Scenario2 to update
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario2');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
 
-    it('When a test summary is shown for a Work Package the Feature totals include only Scenarios in the Work Package');
+        DesignUpdateActions.designerViewsUpdate('DesignUpdate1');
+        ViewOptionsActions.designerTogglesDesignUpdateTestSummary();
+        TestResultActions.designerRefreshesTestResultsForDesignUpdateView();
 
+        // Feature1 totals should only include Scenario2 results
+        expect(TestSummaryVerifications.designerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 3));
+        expect(TestSummaryVerifications.designerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 1));
+        expect(TestSummaryVerifications.designerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 0));
+    });
 
-    // Conditions
-    it('Test summary data is not available for a Design Update that is being edited');
+    it('When a test summary is shown for a Work Package the Feature totals include only Scenarios in the Work Package', function(){
 
-    it('Test summary data is not available for a Design Update that is being edited');
+        // Add a WP to cover Feature1 Scenario1 only
+        DesignActions.managerSelectsDesign('Design1');
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.managerAddsBaseDesignWorkPackageCalled('WorkPackage1');
+        WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage1');
+        WpComponentActions.managerAddsScenarioToScopeForCurrentWp('Actions', 'Scenario1');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
 
-    it('Test summary data is not available for a Work Package that is being scoped');
+        // Developer develops WP1
+        DesignActions.developerSelectsDesign('Design1');
+        DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
+        WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
-    it('Test summary data is not available for a Work Package that is being scoped');
+        // Display the Test Summary
+        ViewOptionsActions.developerTogglesWorkPackageTestSummary();
+        TestResultActions.developerRefreshesTestResults();
 
-    it('When a test summary is shown for a Design Update the Feature totals include only Scenarios in the Design Update');
-
-    it('When a test summary is shown for a Work Package the Feature totals include only Scenarios in the Work Package');
+        // Feature 1 should reflect Scenario1 results only
+        expect(TestSummaryVerifications.developerTestSummaryFeaturePassCountIs('Section1', 'Feature1', 2));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureFailCountIs('Section1', 'Feature1', 1));
+        expect(TestSummaryVerifications.developerTestSummaryFeatureNoTestCountIs('Section1', 'Feature1', 0));
+    });
 
 });

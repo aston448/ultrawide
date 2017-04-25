@@ -26,8 +26,16 @@ class ViewOptionsActions {
         server.call('testViewOptions.toggleViewOption', ViewOptionType.DESIGN_TEST_SUMMARY, 'hugh', expectation)
     }
 
+    developerTogglesWorkPackageTestSummary(expectation){
+        server.call('testViewOptions.toggleViewOption', ViewOptionType.DEV_TEST_SUMMARY, 'hugh', expectation)
+    }
+
     designerTogglesDesignVersionTestSummary(expectation){
         server.call('testViewOptions.toggleViewOption', ViewOptionType.DESIGN_TEST_SUMMARY, 'gloria', expectation)
+    }
+
+    designerTogglesDesignUpdateTestSummary(expectation){
+        server.call('testViewOptions.toggleViewOption', ViewOptionType.UPDATE_TEST_SUMMARY, 'gloria', expectation)
     }
 
 }

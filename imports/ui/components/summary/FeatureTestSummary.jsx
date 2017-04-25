@@ -102,7 +102,7 @@ export class TestSummary extends Component {
                         resultClassNotTested = 'test-summary-result ' + FeatureTestSummaryStatus.FEATURE_HIGHLIGHT_NO_TEST;
                     }
                     if (noTestCount > 0) {
-                        if (testSummaryData.featureTestPassCount > 0) {
+                        if (passCount > 0) {
                             resultFeatureSummary = 'feature-summary-mmm';
                         } else {
                             resultFeatureSummary = 'feature-summary-meh';

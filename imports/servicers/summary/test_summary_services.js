@@ -318,10 +318,10 @@ class TestSummaryServices {
                         }
 
                         // Any fails is a fail even if passes.  Any passes and no fails is a pass
-                        if (failingTests > 0) {
+                        if (duFailingTests > 0) {
                             duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
                         } else {
-                            if (passingTests > 0) {
+                            if (duPassingTests > 0) {
                                 duFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
                             }
                         }
@@ -378,11 +378,11 @@ class TestSummaryServices {
                         }
 
                         // Any fails is a fail even if passes.  Any passes and no fails is a pass
-                        if (failingTests > 0) {
+                        if (wpFailingTests > 0) {
                             wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_FAILING_TESTS;
 
                         } else {
-                            if (passingTests > 0) {
+                            if (wpPassingTests > 0) {
                                 wpFeatureTestStatus = FeatureTestSummaryStatus.FEATURE_PASSING_TESTS;
                             }
                         }
