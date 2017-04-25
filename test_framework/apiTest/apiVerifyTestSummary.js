@@ -15,8 +15,24 @@ Meteor.methods({
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
         const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
-        if (summaryData.featureSummaryStatus !== testStatus) {
-            throw new Meteor.Error("FAIL", "Expecting Feature to be " + testStatus + " but got " + summaryData.featureSummaryStatus + " for Feature " + featureName);
+        let result = true;
+        let actual = '';
+
+        if(userContext.workPackageId !== 'NONE'){
+            actual = summaryData.wpFeatureSummaryStatus;
+            result = (actual === testStatus);
+        } else {
+            if(userContext.designUpdateId !== 'NONE'){
+                actual = summaryData.duFeatureSummaryStatus;
+                result = (actual === testStatus);
+            } else {
+                actual = summaryData.featureSummaryStatus;
+                result = (actual === testStatus);
+            }
+        }
+
+        if (!result) {
+            throw new Meteor.Error("FAIL", "Expecting Feature to be " + testStatus + " but got " + actual + " for Feature " + featureName);
         } else {
             return true;
         }
@@ -28,8 +44,24 @@ Meteor.methods({
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
         const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
-        if (summaryData.featureTestPassCount !== testCount) {
-            throw new Meteor.Error("FAIL", "Expecting Feature to have " + testCount + " passing tests but got " + summaryData.featureTestPassCount + " for Feature " + featureName);
+        let result = true;
+        let actual = 0;
+
+        if(userContext.workPackageId !== 'NONE'){
+            actual = summaryData.wpFeatureTestPassCount;
+            result = (actual === testCount);
+        } else {
+            if(userContext.designUpdateId !== 'NONE'){
+                actual = summaryData.duFeatureTestPassCount;
+                result = (actual === testCount);
+            } else {
+                actual = summaryData.featureTestPassCount;
+                result = (actual === testCount);
+            }
+        }
+
+        if (!result) {
+            throw new Meteor.Error("FAIL", "Expecting Feature to have " + testCount + " passing tests but got " + actual + " for Feature " + featureName);
         } else {
             return true;
         }
@@ -41,8 +73,24 @@ Meteor.methods({
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
         const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
-        if (summaryData.featureTestFailCount !== testCount) {
-            throw new Meteor.Error("FAIL", "Expecting Feature to have " + testCount + " failing tests but got " + summaryData.featureTestFailCount + " for Feature " + featureName);
+        let result = true;
+        let actual = 0;
+
+        if(userContext.workPackageId !== 'NONE'){
+            actual = summaryData.wpFeatureTestFailCount;
+            result = (actual === testCount);
+        } else {
+            if(userContext.designUpdateId !== 'NONE'){
+                actual = summaryData.duFeatureTestFailCount;
+                result = (actual === testCount);
+            } else {
+                actual = summaryData.featureTestFailCount;
+                result = (actual === testCount);
+            }
+        }
+
+        if (!result) {
+            throw new Meteor.Error("FAIL", "Expecting Feature to have " + testCount + " failing tests but got " + actual + " for Feature " + featureName);
         } else {
             return true;
         }
@@ -54,8 +102,24 @@ Meteor.methods({
         const designFeature = TestDataHelpers.getDesignComponentWithParent(userContext.designVersionId, ComponentType.FEATURE, featureParent, featureName);
         const summaryData = TestDataHelpers.getTestSummaryFeatureData(userContext.userId, userContext.designVersionId, designFeature.componentReferenceId, featureName);
 
-        if (summaryData.featureNoTestCount !== testCount) {
-            throw new Meteor.Error("FAIL", "Expecting Feature to have " + testCount + " scenarios not tested but got " + summaryData.featureNoTestCount + " for Feature " + featureName);
+        let result = true;
+        let actual = 0;
+
+        if(userContext.workPackageId !== 'NONE'){
+            actual = summaryData.wpFeatureNoTestCount;
+            result = (actual === testCount);
+        } else {
+            if(userContext.designUpdateId !== 'NONE'){
+                actual = summaryData.duFeatureNoTestCount;
+                result = (actual === testCount);
+            } else {
+                actual = summaryData.featureNoTestCount;
+                result = (actual === testCount);
+            }
+        }
+
+        if (!result) {
+            throw new Meteor.Error("FAIL", "Expecting Feature to have " + testCount + " scenarios not tested but got " + actual + " for Feature " + featureName);
         } else {
             return true;
         }

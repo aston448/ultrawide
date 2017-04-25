@@ -335,6 +335,7 @@ describe('UC 401 - View Test Progress Summary', function(){
         DesignActions.developerSelectsDesign('Design1');
         DesignVersionActions.developerSelectsDesignVersion('DesignVersion1');
         WorkPackageActions.developerSelectsWorkPackage('WorkPackage1');
+        WorkPackageActions.developerAdoptsSelectedWorkPackage();
         WorkPackageActions.developerDevelopsSelectedWorkPackage();
 
         // Display the Test Summary
