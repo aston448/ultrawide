@@ -102,7 +102,22 @@ class DesignUpdateSummaryVerifications {
         );
     };
 
+    // Queries
+    scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner(scenarioName) {
+        server.call('verifyDesignUpdateSummary.queriesListContains', ComponentType.SCENARIO, scenarioName, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
 
+    scenario_IsNotInCurrentDesignUpdateSummaryQueriesForDesigner(scenarioName) {
+        server.call('verifyDesignUpdateSummary.queriesListDoesNotContain', ComponentType.SCENARIO, scenarioName, 'gloria',
+            (function (error, result) {
+                return (error === null);
+            })
+        );
+    };
 }
 
 export default new DesignUpdateSummaryVerifications();

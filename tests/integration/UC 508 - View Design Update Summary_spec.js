@@ -25,6 +25,13 @@ describe('UC 508 - View Design Update Summary', function(){
 
     before(function(){
         TestFixtures.logTestSuite('UC 508 - View Design Update Summary');
+    });
+
+    after(function(){
+
+    });
+
+    beforeEach(function(){
 
         TestFixtures.clearAllData();
 
@@ -35,19 +42,10 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignVersionActions.designerPublishesDesignVersion('DesignVersion1');
         DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
         DesignVersionActions.designerUpdatesDesignVersionNameFrom_To_(DefaultItemNames.NEXT_DESIGN_VERSION_NAME, 'DesignVersion2');
-    });
 
-    after(function(){
-
-    });
-
-    beforeEach(function(){
-
-        // Start again with new Design Update
-        TestFixtures.clearDesignUpdates();
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
-
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
     });
 
     afterEach(function(){
@@ -55,215 +53,131 @@ describe('UC 508 - View Design Update Summary', function(){
     });
 
 
+    // Interface
+    it('A list of Design Components added in the selected Design Update grouped by the item they are added to');
+
+    it('A list of Design Components removed in the selected Design Update grouped by the item they are removed from');
+
+    it('A list of Design Components modified in the selected Design Update grouped by their parent item');
+
+    it('A list of Scenarios to confirm tests for in the selected Design Update grouped by their parent item');
+
+    it('The additions list is not visible if there are no Design Components added');
+
+    it('The removals list is not visible if there are no Design Components removed');
+
+    it('The changes list is not visible if there are no changes to existing Design Components');
+
+    it('The test checks list is not visible if no existing unchanged Scenarios are included');
+
+    it('A new Application added in a Design Update is shown as bing added to the current Design');
+
+    it('Each Scenario in the Design Update Summary shows its current Test Summary status');
+
+
     // Actions
     it('A Design Update Summary is shown when a Design Update is selected');
 
     it('A Design Update Summary is shown when a Design Update is edited or viewed');
 
-    // Conditions
-    it('A new Feature added in the Design Update is listed in the additions list', function(){
+    it('The Design Update Summary is updated when a Design Component is added to a Design Update', function(){
 
-        // Setup
-        // Add a new Feature to Section1
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
-
-
-        // Verify
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
-
-    });
-
-    it('A new Scenario added to an existing Feature in the Design Update is listed in the additions list', function(){
-
-        // Setup
-        // Add a new Scenario to Feature1 Actions - need to Scope Actions
+        // Add a new Scenario
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
-
-        // Verify only scenario in list
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
-        expect(DesignUpdateSummaryVerifications.feature_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature1'));
+        // New Scenario in Update Summary
+        DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME);
     });
 
-    it('A new Scenario added to a new Feature in the Design Update is listed in the additions list', function(){
+    it('The Design Update Summary is updated when a Design Component is removed from a Design Update', function(){
 
-        // Setup
-        // Add a new Feature and Scenario to Section1
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature3', 'Actions', 'Scenario8');
-
-
-        // Verify - both in list
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
-    });
-
-    it('An existing Feature removed in the Design Update is listed in the removals list', function(){
-
-        // Setup - remove Feature444
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature444');
-        UpdateComponentActions.designerLogicallyDeletesUpdateFeature('Section1', 'Feature444');
-
-
-        // Verify
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature444'));
-    });
-
-    it('An existing Scenario removed in the Design Update is listed in the removals list', function(){
-
-        // Setup
-        // Remove Scenario1 from Feature1 Actions - need to Scope Scenario1
+        // Remove existing Scenario
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
-
-        // Verify
+        // Seen in REMOVE list
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario1'));
     });
 
-    it('An existing Feature removed by removing its parent in the Design Update is listed in the removals list', function(){
+    it('The Design Update Summary is updated when a Design Component is modified in a Design Update', function(){
 
-        // Setup
-        // Remove Section2 - Will remove Feature2
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
-        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
-
-
-        // Verify
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature2'));
-    });
-
-    it('An existing Scenario removed by removing its parent in the Design Update is listed in the removals list', function(){
-
-        // Setup
-        // Remove Section2 - Will remove Feature2 + Scenarios 3 and 4
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section2');
-        UpdateComponentActions.designerLogicallyDeletesUpdateSection('Application1', 'Section2');
-
-
-        // Verify
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature2'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario3'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario4'));
-    });
-
-    it('A new Feature added and removed in the Design Update is not listed in the additions or removals list', function(){
-
-        // Setup
-        // Add a new Feature to Section1
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
-
-
-        // Verify
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
-
-        // Then remove it again (have to remove all aspects first)
-        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Interface');
-        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Actions');
-        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Conditions');
-        UpdateComponentActions.designerRemovesUpdateFeatureAspect('Feature3', 'Consequences');
-        UpdateComponentActions.designerRemovesUpdateFeature('Section1', 'Feature3');
-
-
-        // Verify - not in addition or removal
-        expect(DesignUpdateSummaryVerifications.feature_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
-        expect(DesignUpdateSummaryVerifications.feature_IsNotInCurrentDesignUpdateSummaryRemovalsForDesigner('Feature3'));
-    });
-
-    it('A new Scenario added and removed in the Design Update is not listed in the additions or removals list', function(){
-
-        // Setup
-        // Add a new Scenario to Feature1 Actions - need to Scope Actions
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
-
-        // Verify only scenario in list
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
-
-        // Then remove it again
-        UpdateComponentActions.designerRemovesUpdateScenario('Actions', 'Scenario8');
-
-        // Verify - not in addition or removal
-        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario8'));
-    });
-
-    it('An existing Feature that has been modified is listed in the changes list with its old and new text', function(){
-
-        // Setup
-        // Modify Feature1 Name
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsFeatureToCurrentUpdateScope('Section1', 'Feature1');
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature1');
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Feature Name');
-
-        // Verify
-        expect(DesignUpdateSummaryVerifications.feature_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Feature1', 'New Feature Name'));
-    });
-
-    it('An existing Scenario that has been modified is listed in the changes list with its old and new text', function(){
-
-        // Setup
-        // Modify Scenario1 Name
+        // Modify existing Scenario
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario Name');
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario');
 
-        // Verify
-        expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario Name'));
+        // Scenario1 added to Modifications
+        expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'NewScenario'));
     });
 
-    it('A new Feature modified in the Design Update is not shown in the changes list', function(){
+    it('The Design Update Summary is updated when a Scenario is added to the Design Update Scope', function(){
 
-        // Setup
-        // Add a new Feature to Section1
+        // Just select a Sceario to check its tests
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
-        UpdateComponentActions.designerAddsDesignSectionToCurrentUpdateScope('Application1', 'Section1');
-        UpdateComponentActions.designerAddsFeatureTo_Section_Called('Application1', 'Section1', 'Feature3');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Feature3'));
-
-        // Change the name of Feature3
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.FEATURE, 'Section1', 'Feature3');
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Feature Name');
-
-        // Verify - not in changes - still in New as new name
-        expect(DesignUpdateSummaryVerifications.feature_ChangedTo_IsNotInCurrentDesignUpdateSummaryChangesForDesigner('Feature3', 'New Feature Name'));
-        expect(DesignUpdateSummaryVerifications.feature_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('New Feature Name'));
-
+        // Scenario1 in the Queries
+        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
     });
 
-    it('A new Scenario modified in the Design Update is not shown in the changes list', function(){
+    it('The Design Update Summary is updated when a Scenario is removed from the Design Update Scope', function(){
+        // Just select a Sceario to check its tests
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
-        // Setup
-        // Add a new Scenario to Feature1 Actions - need to Scope Actions
+        // Check Scenario1 in the Queries
+        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
+
+        // Remove from scope
+        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
+
+        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
+    });
+
+
+    // Conditions
+    it('A new Design Component added and removed in the Design Update is not listed in the additions or removals list', function(){
+
+        // Add a new Scenario
         DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
-        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature1', 'Actions', 'Scenario8');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario8');
 
+        // New Scenario in Update Summary
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
 
-        // Modify name
-        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario8');
-        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario Name');
+        // Remove it again
+        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario8');
 
-        // Verify - not in changes - still in New as new name
-        expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsNotInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario Name'));
-        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('New Scenario Name'));
+        // Not in additions or removals
+        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
+        expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario8'));
+
+    });
+
+    it('A new Design Component whose name is modified in the Design Update is not shown in the changes list', function(){
+
+        // Add a new Scenario
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
+
+
+        // New Scenario in Update Summary
+        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME));
+
+        // Now give it a proper name
+        UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
+        UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario8');
+
+        // Still a NEW item even though name changed
+        expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
     });
 
 });

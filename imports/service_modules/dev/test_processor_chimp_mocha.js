@@ -83,7 +83,8 @@ class ChimpMochaTestServices{
                     {
                         designUpdateId:                 userContext.designUpdateId,
                         componentType:                  ComponentType.FEATURE_ASPECT,
-                        componentFeatureReferenceIdNew: feature.componentReferenceId
+                        componentFeatureReferenceIdNew: feature.componentReferenceId,
+                        isRemoved:                      false
                     },
                     {sort: {componentIndexNew: 1}}
                 ).fetch();
@@ -108,7 +109,8 @@ class ChimpMochaTestServices{
                         {
                             designUpdateId:                 userContext.designUpdateId,
                             componentType:                  ComponentType.SCENARIO,
-                            componentParentReferenceIdNew:  aspect.componentReferenceId
+                            componentParentReferenceIdNew:  aspect.componentReferenceId,
+                            isRemoved:                      false
                         },
                         {sort: {componentIndexNew: 1}}
                     ).fetch();
