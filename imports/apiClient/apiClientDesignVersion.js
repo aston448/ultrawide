@@ -222,9 +222,7 @@ class ClientDesignVersionServices{
     }
 
     // Work Progress screen needs a refresh
-    updateWorkProgress(){
-
-        const userContext = store.getState().currentUserItemContext;
+    updateWorkProgress(userContext){
 
         ServerDesignVersionApi.updateWorkProgress(userContext, (err, result) => {
 
@@ -325,7 +323,7 @@ class ClientDesignVersionServices{
         ClientTestIntegrationServices.refreshTestData(userContext);
 
         // Recalculate the progress data
-        this.updateWorkProgress();
+        this.updateWorkProgress(userContext);
 
     }
 

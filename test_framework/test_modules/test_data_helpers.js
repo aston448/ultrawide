@@ -799,10 +799,11 @@ class TestDataHelpers {
         }
     }
 
-    getWorkProgressDataFor(userId, itemType, itemName){
+    getWorkProgressDataFor(userContext, itemType, itemName){
 
         const workProgress = UserWorkProgressSummary.findOne({
-            userId:             userId,
+            userId:             userContext.userId,
+            designVersionId:    userContext.designVersionId,
             workSummaryType:    itemType,
             name:               itemName
         });
@@ -810,7 +811,7 @@ class TestDataHelpers {
         if(workProgress){
             return workProgress;
         } else {
-            throw new Meteor.Error("NOT_FOUND", "Work Progress item " + itemType + " called " + itemName + " not found for user " + userId);
+            throw new Meteor.Error("NOT_FOUND", "Work Progress item " + itemType + " called " + itemName + " not found for user " + userContext.userId);
         }
     }
 

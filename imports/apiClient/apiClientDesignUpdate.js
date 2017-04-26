@@ -160,7 +160,7 @@ class ClientDesignUpdateServices {
                 this.setDesignUpdate(userContext, designUpdateToPublishId);
 
                 // Should now appear in Work Progress
-                ClientDesignVersionServices.updateWorkProgress();
+                ClientDesignVersionServices.updateWorkProgress(userContext);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -199,7 +199,7 @@ class ClientDesignUpdateServices {
                 this.setDesignUpdate(userContext, designUpdateToWithdrawId);
 
                 // Should now disappear in Work Progress
-                ClientDesignVersionServices.updateWorkProgress();
+                ClientDesignVersionServices.updateWorkProgress(userContext);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
@@ -286,7 +286,7 @@ class ClientDesignUpdateServices {
                 // Client actions:
 
                 // Should now appear or disappear in Work Progress
-                ClientDesignVersionServices.updateWorkProgress();
+                ClientDesignVersionServices.updateWorkProgress(userContext);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({

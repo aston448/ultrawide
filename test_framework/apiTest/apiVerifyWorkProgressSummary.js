@@ -13,7 +13,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         // This will error if not found
-        const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext.userId, itemType, itemName);
+        const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext, itemType, itemName);
 
         return true;
     },
@@ -24,7 +24,7 @@ Meteor.methods({
 
         // This will error if not found
         try {
-            const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext.userId, itemType, itemName);
+            const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext, itemType, itemName);
         } catch (e){
             if(e.error === 'NOT_FOUND'){
                 return true;
@@ -41,7 +41,7 @@ Meteor.methods({
         const userContext = TestDataHelpers.getUserContext(userName);
 
         // This will error if not found
-        const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext.userId, itemType, itemName);
+        const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext, itemType, itemName);
 
         if(workProgress.totalScenarios === expectedSummary.totalScenarios){
             if(workProgress.scenariosInWp === expectedSummary.scenariosInWp){

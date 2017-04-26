@@ -135,8 +135,16 @@ class DesignVersionActions{
     }
 
     // Update Work Progress
-    workProgressIsUpdated(){
-        server.call('testDesignVersions.updateWorkProgress');
+    workProgressIsUpdatedForDesigner(){
+        server.call('testDesignVersions.updateWorkProgress', 'gloria');
+    }
+
+    workProgressIsUpdatedForDeveloper(){
+        server.call('testDesignVersions.updateWorkProgress', 'hugh');
+    }
+
+    workProgressIsUpdatedForManager(){
+        server.call('testDesignVersions.updateWorkProgress', 'miles');
     }
 
 }

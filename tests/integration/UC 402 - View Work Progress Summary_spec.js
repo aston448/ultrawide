@@ -122,7 +122,7 @@ describe('UC 402 - View Work Progress Summary', function(){
     it('The number of scenarios in the current Design Version is displayed', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify all Scenarios in DV1 are counted
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsInitialDesignVersion('DesignVersion1'));
@@ -140,7 +140,7 @@ describe('UC 402 - View Work Progress Summary', function(){
     it('The number of Scenarios covered by Work Packages in a Base Design Version is displayed', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify all Scenarios in DV1 WPs are counted
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsInitialDesignVersion('DesignVersion1'));
@@ -162,7 +162,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify test pass count
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsInitialDesignVersion('DesignVersion1'));
@@ -185,7 +185,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify test fail count
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsInitialDesignVersion('DesignVersion1'));
@@ -207,7 +207,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         // Verify test fail count
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsInitialDesignVersion('DesignVersion1'));
@@ -237,7 +237,7 @@ describe('UC 402 - View Work Progress Summary', function(){
     it('Each Work Package in a Base Design Version is displayed', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsBaseWp('WorkPackage1'));
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsBaseWp('WorkPackage2'));
@@ -252,7 +252,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
             totalScenarios:             4,
@@ -280,7 +280,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
             totalScenarios:             4,
@@ -308,7 +308,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
             totalScenarios:             4,
@@ -336,7 +336,7 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion1');
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
-        DesignVersionActions.workProgressIsUpdated();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
             totalScenarios:             4,

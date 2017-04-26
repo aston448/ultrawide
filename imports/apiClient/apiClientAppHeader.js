@@ -314,7 +314,7 @@ class ClientAppHeaderServices{
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
 
         // Update Work Progress
-        ClientDesignVersionServices.updateWorkProgress();
+        ClientDesignVersionServices.updateWorkProgress(userContext);
 
         store.dispatch(setCurrentView(ViewType.SELECT));
         return true;

@@ -24,6 +24,7 @@ import { UserUnitTestMashData }     from '../../imports/collections/dev/user_uni
 import { UserIntTestResults }       from '../../imports/collections/dev/user_int_test_results.js';
 import { UserUnitTestResults }      from '../../imports/collections/dev/user_unit_test_results.js';
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
+import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
 import { RoleType, ViewType, ViewMode, DisplayContext, ComponentType, MashTestStatus, LogLevel } from '../../imports/constants/constants.js';
 import { DefaultItemNames, DefaultComponentNames }         from '../../imports/constants/default_names.js';
@@ -79,6 +80,7 @@ Meteor.methods({
             UserUnitTestResults.remove({});
             UserIntTestResults.remove({});
             UserDevTestSummaryData.remove({});
+            UserWorkProgressSummary.remove({});
 
             UserCurrentEditContext.remove({});
             UserCurrentViewOptions.remove({});

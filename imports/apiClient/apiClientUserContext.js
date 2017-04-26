@@ -204,7 +204,7 @@ class ClientUserContextServices {
         // Get latest status on DUs
         ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
         // And latest progress data
-        ClientDesignVersionServices.updateWorkProgress();
+        ClientDesignVersionServices.updateWorkProgress(userContext);
 
         // Go to Home screen
         store.dispatch(setCurrentView(ViewType.HOME));
