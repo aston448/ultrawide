@@ -16,6 +16,7 @@ import WorkPackageVerifications         from '../../test_framework/test_wrappers
 import WpComponentActions               from '../../test_framework/test_wrappers/work_package_component_actions.js';
 import WpComponentVerifications         from '../../test_framework/test_wrappers/work_package_component_verifications.js';
 import UpdateComponentVerifications     from '../../test_framework/test_wrappers/design_update_component_verifications.js';
+import ViewOptionsActions           from '../../test_framework/test_wrappers/view_options_actions.js';
 
 import {RoleType, ViewMode, DesignVersionStatus, DesignUpdateStatus, ComponentType, DesignUpdateMergeAction, WorkPackageStatus} from '../../imports/constants/constants.js'
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
@@ -46,6 +47,10 @@ describe('UC 508 - View Design Update Summary', function(){
         DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
         DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
         DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+
+        // Make sure Update Summary is showing so the data refreshes
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        ViewOptionsActions.designerTogglesDesignUpdateSummary()
     });
 
     afterEach(function(){
@@ -83,7 +88,6 @@ describe('UC 508 - View Design Update Summary', function(){
     it('The Design Update Summary is updated when a Design Component is added to a Design Update', function(){
 
         // Add a new Scenario
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
@@ -94,7 +98,6 @@ describe('UC 508 - View Design Update Summary', function(){
     it('The Design Update Summary is updated when a Design Component is removed from a Design Update', function(){
 
         // Remove existing Scenario
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
@@ -105,7 +108,6 @@ describe('UC 508 - View Design Update Summary', function(){
     it('The Design Update Summary is updated when a Design Component is modified in a Design Update', function(){
 
         // Modify existing Scenario
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', 'Scenario1');
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario');
@@ -117,7 +119,6 @@ describe('UC 508 - View Design Update Summary', function(){
     it('The Design Update Summary is updated when a Scenario is added to the Design Update Scope', function(){
 
         // Just select a Sceario to check its tests
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Scenario1 in the Queries
@@ -126,7 +127,6 @@ describe('UC 508 - View Design Update Summary', function(){
 
     it('The Design Update Summary is updated when a Scenario is removed from the Design Update Scope', function(){
         // Just select a Sceario to check its tests
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Check Scenario1 in the Queries
@@ -143,7 +143,6 @@ describe('UC 508 - View Design Update Summary', function(){
     it('A new Design Component added and removed in the Design Update is not listed in the additions or removals list', function(){
 
         // Add a new Scenario
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
         UpdateComponentActions.designerSelectsUpdateComponent(ComponentType.SCENARIO, 'Actions', DefaultComponentNames.NEW_SCENARIO_NAME);
@@ -164,7 +163,6 @@ describe('UC 508 - View Design Update Summary', function(){
     it('A new Design Component whose name is modified in the Design Update is not shown in the changes list', function(){
 
         // Add a new Scenario
-        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
         UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature1', 'Actions');
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 

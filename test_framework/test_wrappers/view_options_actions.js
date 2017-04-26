@@ -38,6 +38,11 @@ class ViewOptionsActions {
         server.call('testViewOptions.toggleViewOption', ViewOptionType.UPDATE_TEST_SUMMARY, 'gloria', expectation)
     }
 
+    // DESIGN UPDATE SUMMARY
+    designerTogglesDesignUpdateSummary(expectation){
+        server.call('testViewOptions.toggleViewOption', ViewOptionType.UPDATE_SUMMARY, 'gloria', expectation)
+    }
+
 }
 
 export default new ViewOptionsActions();
