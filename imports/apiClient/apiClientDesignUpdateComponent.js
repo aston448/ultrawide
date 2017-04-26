@@ -768,11 +768,9 @@ class ClientDesignUpdateComponentServices{
 
     // Call this after a change that might need the summary updating.  It wil only actually update if the data has been
     // marked as stale on the server...
-    refreshDesignUpdateSummary(forceUpdate){
+    refreshDesignUpdateSummary(updateChanged){
 
-        const userContext = store.getState().currentUserItemContext;
-
-        ClientDesignUpdateServices.getDesignUpdateSummary(userContext, forceUpdate);
+        ClientDesignUpdateServices.getDesignUpdateSummary(updateChanged);
 
     }
 

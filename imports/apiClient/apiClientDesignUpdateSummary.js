@@ -11,7 +11,7 @@ import { WorkPackageComponents }    from '../collections/work/work_package_compo
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import { DesignUpdateSummaryCategory, WorkPackageScopeType, DesignUpdateSummaryType} from '../constants/constants.js';
+import { DesignUpdateSummaryCategory, WorkPackageScopeType, DesignUpdateSummaryType, ViewType} from '../constants/constants.js';
 
 import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js';
 
@@ -26,18 +26,29 @@ import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js'
 
 class ClientDesignUpdateSummary{
 
+    getDesignUpdateSummary(updateChanged){
 
-    getDesignUpdateSummary(userContext, forceUpdate){
+        const userContext = store.getState().currentUserItemContext;
+        const view = store.getState().currentAppView;
+        const viewOptions = store.getState().currentUserViewOptions;
 
-        DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, forceUpdate, (err, result) => {
+        // Only worth refreshing the data if the Update is visible
+        if(
+            (view === ViewType.SELECT && userContext.designUpdateId !== 'NONE') ||
+            (view === ViewType.DESIGN_UPDATE_EDIT && viewOptions.updateSummaryVisible) ||
+            (view === ViewType.DESIGN_UPDATE_VIEW && viewOptions.updateSummaryVisible)
+        ) {
 
-            if (err) {
-                // Unexpected error as all expected errors already handled - show alert.
-                // Can't update screen here because of error
-                alert('Unexpected error 1: ' + err.reason + '.  Contact support if persists!');
+            DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, updateChanged, (err, result) => {
 
-            }
-        });
+                if (err) {
+                    // Unexpected error as all expected errors already handled - show alert.
+                    // Can't update screen here because of error
+                    alert('Unexpected error 1: ' + err.reason + '.  Contact support if persists!');
+
+                }
+            });
+        }
     };
 
     getDesignUpdateSummaryHeaders(userContext){
