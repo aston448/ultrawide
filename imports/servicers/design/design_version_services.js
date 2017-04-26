@@ -212,12 +212,12 @@ class DesignVersionServices{
             let dvFailingScenarios = 0;
             let dvNoTestScenarios = 0;
 
-            dvScenarios.forEach((wpScenario) =>{
+            dvScenarios.forEach((dvScenario) =>{
 
                 let testResult = UserDevTestSummaryData.findOne({
                     userId:                     userContext.userId,
                     designVersionId:            userContext.designVersionId,
-                    scenarioReferenceId:        wpScenario.componentReferenceId
+                    scenarioReferenceId:        dvScenario.componentReferenceId
                 });
 
                 if(testResult) {

@@ -61,6 +61,10 @@ describe('UC 402 - View Work Progress Summary', function(){
 
         OutputLocationsActions.developerSavesLocationFile('Location1', DefaultLocationText.NEW_TEST_OUTPUT_LOCATION_FILE_ALIAS, newIntFile);
 
+        // Designer sets up location config
+        OutputLocationsActions.designerEditsTestLocationConfig();
+        OutputLocationsActions.designerSelectsIntTestsInConfigForLocation('Location1');
+
         // Create WPs for the Initial design version
         // Manager selects DesignVersion1
         DesignActions.managerWorksOnDesign('Design1');
