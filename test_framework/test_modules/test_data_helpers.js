@@ -19,6 +19,7 @@ import { UserTestTypeLocations }    from '../../imports/collections/configure/us
 import { UserDesignVersionMashScenarios }  from '../../imports/collections/mash/user_dv_mash_scenarios.js';
 import { UserUnitTestMashData }     from '../../imports/collections/dev/user_unit_test_mash_data.js';
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
+import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
 import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
@@ -795,6 +796,21 @@ class TestDataHelpers {
             return summaryData;
         } else {
             throw new Meteor.Error("FAIL", "Test Summary Data not found for Scenario " + scenarioName);
+        }
+    }
+
+    getWorkProgressDataFor(userId, itemType, itemName){
+
+        const workProgress = UserWorkProgressSummary.findOne({
+            userId:             userId,
+            workSummaryType:    itemType,
+            name:               itemName
+        });
+
+        if(workProgress){
+            return workProgress;
+        } else {
+            throw new Meteor.Error("NOT_FOUND", "Work Progress item " + itemType + " called " + itemName + " not found for user " + userId);
         }
     }
 

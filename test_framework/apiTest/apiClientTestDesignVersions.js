@@ -112,6 +112,11 @@ Meteor.methods({
         const outcome = ClientDesignVersionServices.updateWorkingDesignVersion(userRole, userContext, designVersion._id);
 
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Update Working Design Version');
-    }
+    },
 
+    'testDesignVersions.updateWorkProgress'(){
+
+        const outcome = ClientDesignVersionServices.updateWorkProgress();
+
+    }
 });

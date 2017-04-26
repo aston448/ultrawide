@@ -134,6 +134,11 @@ class DesignVersionActions{
         server.call('testDesignVersions.updateWorkingDesignVersion', designVersionName, RoleType.MANAGER, 'miles', expectation);
     }
 
+    // Update Work Progress
+    workProgressIsUpdated(){
+        server.call('testDesignVersions.updateWorkProgress');
+    }
+
 }
 
 export default new DesignVersionActions();
