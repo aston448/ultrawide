@@ -2,17 +2,13 @@
 // Ultrawide Collections
 import { Designs }                  from '../../collections/design/designs.js';
 import { DesignUpdates }            from '../../collections/design_update/design_updates.js';
-import { UserDesignUpdateSummary }      from '../../collections/summary/user_design_update_summary.js';
-import { DesignVersionComponents }  from '../../collections/design/design_version_components.js';
+import { UserDesignUpdateSummary }  from '../../collections/summary/user_design_update_summary.js';
 import { DesignUpdateComponents }   from '../../collections/design_update/design_update_components.js';
 import { UserDevTestSummaryData }   from '../../collections/summary/user_dev_test_summary_data.js';
 
 // Ultrawide Services
-import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, DesignUpdateSummaryItem, UpdateScopeType, MashTestStatus, LogLevel } from '../../constants/constants.js';
+import { ComponentType, DesignUpdateSummaryCategory, DesignUpdateSummaryType, UpdateScopeType, MashTestStatus, LogLevel } from '../../constants/constants.js';
 import { log } from '../../common/utils.js';
-import { DefaultItemNames }         from '../../constants/default_names.js';
-
-import DesignUpdateModules          from '../../service_modules/design_update/design_update_service_modules.js';
 
 //======================================================================================================================
 //
@@ -24,50 +20,11 @@ import DesignUpdateModules          from '../../service_modules/design_update/de
 
 class DesignUpdateSummaryServices {
 
-    // Add a new design update
-    addNewDesignUpdateSummary(designVersionId, designUpdateId) {
+    recreateDesignUpdateSummaryData(userContext, forceUpdate){
 
         if (Meteor.isServer) {
 
-
-
-        }
-    };
-
-    // importDesignUpdateSummary(designVersionId, designUpdateId, designUpdateSummary) {
-    //
-    //     if (Meteor.isServer) {
-    //
-    //         let designUpdateSummaryId = UserDesignUpdateSummary.insert(
-    //             {
-    //                 designVersionId:            designVersionId,
-    //                 designUpdateId:             designUpdateId,
-    //                 summaryCategory:            designUpdateSummary.summaryCategory,
-    //                 summaryType:                designUpdateSummary.summaryType,
-    //                 itemType:                   designUpdateSummary.itemType,
-    //                 itemComponentReferenceId:   designUpdateSummary.itemComponentReferenceId,
-    //                 itemName:                   designUpdateSummary.itemName,
-    //                 itemNameOld:                designUpdateSummary.itemNameOld,
-    //                 itemFeatureName:            designUpdateSummary.itemFeatureName,
-    //                 itemHeaderId:               designUpdateSummary.itemHeaderId,
-    //                 headerComponentId:          designUpdateSummary.headerComponentId,
-    //                 itemIndex:                  designUpdateSummary.itemIndex,
-    //                 itemHeaderName:             designUpdateSummary.itemHeaderName,
-    //                 scenarioTestStatus:         designUpdateSummary.scenarioTestStatus
-    //             }
-    //         );
-    //
-    //         return designUpdateSummaryId;
-    //     }
-    // };
-
-    recreateDesignUpdateSummaryData(userContext){
-
-        if (Meteor.isServer) {
-
-            //DesignUpdates.update({_id: userContext.designUpdateId}, {$set: {summaryDataStale: true}});
-
-            log((message) => console.log(message), LogLevel.INFO, 'In recreate design update summary for update id {}', userContext.designUpdateId);
+            log((message) => console.log(message), LogLevel.INFO, 'In recreate design update summary for update id {} and force update = {}', userContext.designUpdateId, forceUpdate);
 
             const designUpdate = DesignUpdates.findOne({_id: userContext.designUpdateId});
 
@@ -79,8 +36,6 @@ class DesignUpdateSummaryServices {
 
             log((message) => console.log(message), LogLevel.INFO, 'Data stale is {}', designUpdate.summaryDataStale);
 
-            //const designVersionId = designUpdate.designVersionId;
-
             const summaryData = UserDesignUpdateSummary.find({
                 userId:         userContext.userId,
                 designUpdateId: userContext.designUpdateId
@@ -88,8 +43,8 @@ class DesignUpdateSummaryServices {
 
             log((message) => console.log(message), LogLevel.DEBUG, 'Data length is {}', summaryData.length);
 
-            // No action unless data is stale or no data
-            if(designUpdate.summaryDataStale || summaryData.length === 0){
+            // No action unless data is definitely changed, stale or no data
+            if(forceUpdate || designUpdate.summaryDataStale || summaryData.length === 0){
 
                 // Clear the data for this user update
                 UserDesignUpdateSummary.remove({

@@ -27,9 +27,9 @@ import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js'
 class ClientDesignUpdateSummary{
 
 
-    getDesignUpdateSummary(userContext){
+    getDesignUpdateSummary(userContext, forceUpdate){
 
-        DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, (err, result) => {
+        DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, forceUpdate, (err, result) => {
 
             if (err) {
                 // Unexpected error as all expected errors already handled - show alert.

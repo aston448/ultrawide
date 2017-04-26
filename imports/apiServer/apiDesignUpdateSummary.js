@@ -9,11 +9,12 @@ import {
 // =====================================================================================================================
 class ServerDesignUpdateSummaryApi {
 
-     refreshDesignUpdateSummary(userContext, callback) {
+     refreshDesignUpdateSummary(userContext, forceUpdate, callback) {
 
         refreshDesignUpdateSummary.call(
             {
-                userContext: userContext
+                userContext:    userContext,
+                forceUpdate:    forceUpdate
             },
             (err, result) => {
                 callback(err, result);
