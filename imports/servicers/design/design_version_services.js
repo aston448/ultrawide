@@ -212,10 +212,10 @@ class DesignVersionServices{
             //     updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
             // }).fetch();
 
-            let dvTotalScenarios = dvSummary.scenarioCount;
-            let dvPassingScenarios = dvSummary.passingScenarioCount;
-            let dvFailingScenarios = dvSummary.failingScenarioCount;
-            let dvNoTestScenarios = dvSummary.untestedScenarioCount;
+            const dvTotalScenarios = dvSummary.scenarioCount;
+            const dvPassingScenarios = dvSummary.passingScenarioCount;
+            const dvFailingScenarios = dvSummary.failingScenarioCount;
+            const dvNoTestScenarios = dvSummary.untestedScenarioCount;
 
             // dvScenarios.forEach((dvScenario) =>{
             //
