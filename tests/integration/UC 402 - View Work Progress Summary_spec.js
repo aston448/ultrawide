@@ -84,6 +84,29 @@ describe('UC 402 - View Work Progress Summary', function(){
         WorkPackageActions.managerEditsBaseWorkPackage('WorkPackage2');
         WpComponentActions.managerAddsFeatureToScopeForCurrentWp('Section2', 'Feature2');
 
+
+        // Create a second Design Version...
+        DesignVersionActions.designerCreatesNextDesignVersionFrom('DesignVersion1');
+        DesignVersionActions.designerSelectsDesignVersion(DefaultItemNames.NEXT_DESIGN_VERSION_NAME);
+        DesignVersionActions.designerUpdatesDesignVersionNameTo('DesignVersion2');
+
+        // Add a design update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate1');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate1');
+        DesignUpdateActions.designerEditsUpdate('DesignUpdate1');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario3');
+        UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Conditions', 'Scenario4');
+        UpdateComponentActions.designerAddsFeatureAspectToCurrentUpdateScope('Feature2', 'Actions');
+        UpdateComponentActions.designerAddsScenarioTo_FeatureAspect_Called('Feature2', 'Actions', 'Scenario9');
+
+        // Add a WP to the update to cover the Scenarios in Actions
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage1');
+        WorkPackageActions.managerPublishesSelectedWorkPackage();
+        WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
+        WpComponentActions.managerAddsFeatureAspectToScopeForCurrentWp('Feature2', 'Actions');
     });
 
     after(function(){
@@ -118,6 +141,34 @@ describe('UC 402 - View Work Progress Summary', function(){
             featureName: 'Feature2',
             scenarioName: 'Scenario4',
             result: MashTestStatus.MASH_NOT_LINKED
+        }
+    ];
+
+    const intResultsDV2 = [
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario1',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature1',
+            scenarioName: 'Scenario2',
+            result: MashTestStatus.MASH_FAIL
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario3',
+            result: MashTestStatus.MASH_PASS
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario4',
+            result: MashTestStatus.MASH_NOT_LINKED
+        },
+        {
+            featureName: 'Feature2',
+            scenarioName: 'Scenario9',
+            result: MashTestStatus.MASH_FAIL
         }
     ];
 
@@ -226,17 +277,117 @@ describe('UC 402 - View Work Progress Summary', function(){
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForInitialDesignVersionIs('DesignVersion1', summary));
     });
 
-    it('Each Design Update to be included in an Updatable Design Version is listed');
+    it('Each Design Update to be included in an Updatable Design Version is listed', function(){
 
-    it('The number of Scenarios in a Design Update is displayed');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
 
-    it('The number of Scenarios covered by Work Packages in a design Update is displayed');
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
 
-    it('The number of Scenarios with passing tests in a Design Update is displayed');
+        // Verify Update is shown
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdateableDesignVersion('DesignVersion2'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdate('DesignUpdate1'));
 
-    it('The number of Scenarios with failing tests in a Design Update is displayed');
+    });
 
-    it('The number of Scenarios with no tests in a Design Update is displayed');
+    it('The number of Scenarios in a Design Update is displayed', function(){
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        const summary = {
+            totalScenarios:             3,
+            scenariosInWp:              2,
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           1
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateIs('DesignUpdate1', summary));
+    });
+
+    it('The number of Scenarios covered by Work Packages in a design Update is displayed', function(){
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        const summary = {
+            totalScenarios:             3,
+            scenariosInWp:              2,
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           1
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateIs('DesignUpdate1', summary));
+    });
+
+    it('The number of Scenarios with passing tests in a Design Update is displayed', function(){
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        const summary = {
+            totalScenarios:             3,
+            scenariosInWp:              2,
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           1
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateIs('DesignUpdate1', summary));
+    });
+
+    it('The number of Scenarios with failing tests in a Design Update is displayed', function(){
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        const summary = {
+            totalScenarios:             3,
+            scenariosInWp:              2,
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           1
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateIs('DesignUpdate1', summary));
+    });
+
+    it('The number of Scenarios with no tests in a Design Update is displayed', function(){
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        const summary = {
+            totalScenarios:             3,
+            scenariosInWp:              2,
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           1
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateIs('DesignUpdate1', summary));
+    });
 
     it('Each Work Package in a Base Design Version is displayed', function(){
 
@@ -247,7 +398,15 @@ describe('UC 402 - View Work Progress Summary', function(){
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsBaseWp('WorkPackage2'));
     });
 
-    it('Each Work Package in a Design Update is displayed');
+    it('Each Work Package in a Design Update is displayed', function() {
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        // Verify WP is shown
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdateWp('UpdateWorkPackage1'));
+    });
 
     it('The number of Scenarios in a Work Package is displayed', function(){
 
@@ -275,6 +434,25 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage2', summary));
+
+        // Move to DV2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        summary = {
+            totalScenarios:             2,
+            scenariosInWp:              0, // Not shown
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           0
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
+
     });
 
     it('The number of Scenarios with passing tests in a Work Package is displayed', function(){
@@ -303,6 +481,24 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage2', summary));
+
+        // Move to DV2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        summary = {
+            totalScenarios:             2,
+            scenariosInWp:              0, // Not shown
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           0
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
     });
 
     it('The number of Scenarios with failing tests in a Work Package is displayed', function(){
@@ -331,6 +527,24 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage2', summary));
+
+        // Move to DV2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        summary = {
+            totalScenarios:             2,
+            scenariosInWp:              0, // Not shown
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           0
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
     });
 
     it('The number of Scenarios with no tests in a Work Package is displayed', function(){
@@ -359,6 +573,24 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage2', summary));
+
+        // Move to DV2
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        // Run the tests
+        TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResultsDV2);
+
+        TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        summary = {
+            totalScenarios:             2,
+            scenariosInWp:              0, // Not shown
+            scenariosPassing:           1,
+            scenariosFailing:           1,
+            scenariosNoTests:           0
+        };
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
     });
 
 
