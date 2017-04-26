@@ -212,10 +212,25 @@ class DesignVersionServices{
             //     updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
             // }).fetch();
 
-            const dvTotalScenarios = dvSummary.scenarioCount;
-            const dvPassingScenarios = dvSummary.passingScenarioCount;
-            const dvFailingScenarios = dvSummary.failingScenarioCount;
-            const dvNoTestScenarios = dvSummary.untestedScenarioCount;
+
+            let dvTotalScenarios = 0;
+            let dvPassingScenarios = 0;
+            let dvFailingScenarios = 0;
+            let dvNoTestScenarios = 0;
+
+            if(dvSummary) {
+                dvTotalScenarios = dvSummary.scenarioCount;
+                dvPassingScenarios = dvSummary.passingScenarioCount;
+                dvFailingScenarios = dvSummary.failingScenarioCount;
+                dvNoTestScenarios = dvSummary.untestedScenarioCount;
+            } else {
+                // No test data yet - set all as no test
+                dvNoTestScenarios = DesignVersionComponents.find({
+                        designVersionId:    userContext.designVersionId,
+                        componentType:      ComponentType.SCENARIO,
+                        updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+                    }).count();
+            }
 
             // dvScenarios.forEach((dvScenario) =>{
             //
