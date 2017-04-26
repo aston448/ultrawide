@@ -21,7 +21,7 @@ import { UserUnitTestMashData }     from '../../imports/collections/dev/user_uni
 import { UserDevTestSummaryData }   from '../../imports/collections/summary/user_dev_test_summary_data.js';
 import { UserWorkProgressSummary }  from '../../imports/collections/summary/user_work_progress_summary.js';
 
-import {RoleType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
+import {RoleType, WorkSummaryType, ViewType, ViewMode, DisplayContext, ComponentType, TestLocationFileType, TestRunner} from '../../imports/constants/constants.js';
 
 class TestDataHelpers {
 
@@ -801,18 +801,61 @@ class TestDataHelpers {
 
     getWorkProgressDataFor(userContext, itemType, itemName){
 
-        const workProgress = UserWorkProgressSummary.findOne({
-            userId:             userContext.userId,
-            designVersionId:    userContext.designVersionId,
-            workSummaryType:    itemType,
-            name:               itemName
-        });
+        let item = null;
+        let workProgress = null;
+
+        switch(itemType){
+            case WorkSummaryType.WORK_SUMMARY_BASE_DV:
+            case WorkSummaryType.WORK_SUMMARY_UPDATE_DV:
+
+                workProgress = UserWorkProgressSummary.findOne({
+                    userId: userContext.userId,
+                    designVersionId: userContext.designVersionId,
+                    workSummaryType: itemType
+                });
+
+                break;
+
+            case WorkSummaryType.WORK_SUMMARY_UPDATE:
+
+                item = DesignUpdates.findOne({updateName: itemName});
+
+                if(item) {
+                    workProgress = UserWorkProgressSummary.findOne({
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        designUpdateId: item._id,
+                        workSummaryType: itemType
+                    });
+                }
+
+                break;
+
+            case WorkSummaryType.WORK_SUMMARY_BASE_WP:
+            case WorkSummaryType.WORK_SUMMARY_UPDATE_WP:
+
+                item = WorkPackages.findOne({workPackageName: itemName});
+
+                if(item) {
+                    workProgress = UserWorkProgressSummary.findOne({
+                        userId: userContext.userId,
+                        designVersionId: userContext.designVersionId,
+                        workPackageId: item._id,
+                        workSummaryType: itemType
+                    });
+                }
+                break;
+        }
+
 
         if(workProgress){
             return workProgress;
         } else {
             throw new Meteor.Error("NOT_FOUND", "Work Progress item " + itemType + " called " + itemName + " not found for user " + userContext.userId);
         }
+
+
+
     }
 
 }
