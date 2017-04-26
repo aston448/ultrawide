@@ -119,7 +119,7 @@ describe('UC 508 - View Design Update Summary', function(){
 
         // Scenario1 added to Modifications
         DesignUpdateActions.refreshUpdateSummary();
-        expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'NewScenario'));
+        expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'New Scenario'));
     });
 
     it('The Design Update Summary is updated when a Scenario is added to the Design Update Scope', function(){
@@ -161,7 +161,7 @@ describe('UC 508 - View Design Update Summary', function(){
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
 
         // Remove it again
-        UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario8');
+        UpdateComponentActions.designerRemovesUpdateScenario('Actions', 'Scenario8');
 
         // Not in additions or removals
         DesignUpdateActions.refreshUpdateSummary();
