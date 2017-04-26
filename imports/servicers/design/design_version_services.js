@@ -219,17 +219,24 @@ class DesignVersionServices{
             let dvNoTestScenarios = 0;
 
             if(dvSummary) {
+
+                // Can use the already calculated summary data
                 dvTotalScenarios = dvSummary.scenarioCount;
                 dvPassingScenarios = dvSummary.passingScenarioCount;
                 dvFailingScenarios = dvSummary.failingScenarioCount;
                 dvNoTestScenarios = dvSummary.untestedScenarioCount;
+
             } else {
+
                 // No test data yet - set all as no test
-                dvNoTestScenarios = DesignVersionComponents.find({
+                const totalScenarios = DesignVersionComponents.find({
                         designVersionId:    userContext.designVersionId,
                         componentType:      ComponentType.SCENARIO,
                         updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
                     }).count();
+
+                dvTotalScenarios = totalScenarios;
+                dvNoTestScenarios = totalScenarios;
             }
 
             // dvScenarios.forEach((dvScenario) =>{
