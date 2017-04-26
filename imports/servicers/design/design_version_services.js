@@ -201,37 +201,41 @@ class DesignVersionServices{
             const dv = DesignVersions.findOne({_id: userContext.designVersionId});
 
             // Get DV stats
-            const dvTotalScenarios = DesignVersionComponents.find({
+            const dvScenarios = DesignVersionComponents.find({
                 designVersionId:    userContext.designVersionId,
                 componentType:      ComponentType.SCENARIO,
                 updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-            }).count();
+            }).fetch();
 
-            const dvPassingScenarios = UserDevTestSummaryData.find({
-                userId:             userContext.userId,
-                designVersionId:    userContext.designVersionId,
-                scenarioReferenceId: {$ne: 'NONE'},
-                $or: [{accTestStatus: MashTestStatus.MASH_PASS}, {intTestStatus: MashTestStatus.MASH_PASS}, {unitTestPassCount: {$gt: 0}}],
-                accTestStatus: {$ne: MashTestStatus.MASH_FAIL},
-                intTestStatus: {$ne: MashTestStatus.MASH_FAIL},
-                unitTestFailCount: 0,
-            }).count();
+            const dvTotalScenarios = dvScenarios.length;
+            let dvPassingScenarios = 0;
+            let dvFailingScenarios = 0;
+            let dvNoTestScenarios = 0;
 
-            const dvFailingScenarios = UserDevTestSummaryData.find({
-                userId:             userContext.userId,
-                designVersionId:    userContext.designVersionId,
-                scenarioReferenceId: {$ne: 'NONE'},
-                $or: [{accTestStatus: MashTestStatus.MASH_FAIL}, {intTestStatus: MashTestStatus.MASH_FAIL}, {unitTestFailCount: {$gt: 0}}],
-            }).count();
+            dvScenarios.forEach((wpScenario) =>{
 
-            const dvNoTestScenarios = dvTotalScenarios - (dvPassingScenarios + dvFailingScenarios);
+                let testResult = UserDevTestSummaryData.findOne({
+                    userId:                     userContext.userId,
+                    designVersionId:            userContext.designVersionId,
+                    scenarioReferenceId:        wpScenario.componentReferenceId
+                });
 
-            //const dvSummary = UserDevDesignSummaryData.findOne({userId: userContext.userId, designVersionId: userContext.designVersionId});
+                if(testResult) {
+                    if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+                        dvFailingScenarios++;
+                    } else {
+                        if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+                            dvPassingScenarios++;
+                        } else {
+                            dvNoTestScenarios++;
+                        }
+                    }
+                } else {
+                    dvNoTestScenarios++;
+                }
+            });
 
-            // if(!dvSummary){
-            //     // No test summary data yet...
-            //     return;
-            // }
+            log((msg) => {console.log(msg)}, LogLevel.DEBUG, "DV: Total: {} Passing: {} Failing: {} NoTest {}", dvTotalScenarios, dvPassingScenarios, dvFailingScenarios, dvNoTestScenarios);
 
             switch(dv.designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
