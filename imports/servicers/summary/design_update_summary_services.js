@@ -184,8 +184,9 @@ class DesignUpdateSummaryServices {
                         if (item.componentType === ComponentType.SCENARIO) {
 
                             const testSummary = UserDevTestSummaryData.findOne({
-                                designVersionId: item.designVersionId,
-                                scenarioReferenceId: item.componentReferenceId
+                                userId:                 userContext.userId,
+                                designVersionId:        item.designVersionId,
+                                scenarioReferenceId:    item.componentReferenceId
                             });
 
                             if (testSummary) {

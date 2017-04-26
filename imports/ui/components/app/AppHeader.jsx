@@ -49,13 +49,13 @@ export class AppHeader extends Component {
         }
     }
 
-    onGoToHome(){
+    onGoToRoles(){
         // Back to Roles Screen
         ClientAppHeaderServices.setViewRoles();
     }
 
     onGoToSelect(){
-        // Back to Roles Screen
+        // Back to Selection Screen
         ClientAppHeaderServices.setViewSelection();
     }
 
@@ -73,7 +73,7 @@ export class AppHeader extends Component {
         let appHeaderMenuContent = <div>Loading</div>;
 
         // Menu Items
-        const homeItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="HOME" actionFunction={() => this.onGoToHome()}/>;
+        const rolesItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="ROLES" actionFunction={() => this.onGoToRoles()}/>;
         const selectItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="SELECT" actionFunction={() => this.onGoToSelect()}/>;
         const logoutItem = <UltrawideMenuItem menuType={MenuType.MENU_TOP} itemName="Logout" actionFunction={() => this.onLogOut(userContext)}/>;
 
@@ -116,7 +116,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
@@ -134,7 +134,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
@@ -144,7 +144,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
@@ -154,7 +154,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
@@ -164,7 +164,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         {logoutItem}
                     </div>;
@@ -180,7 +180,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         {selectItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
@@ -194,7 +194,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         {selectItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>
@@ -207,7 +207,7 @@ export class AppHeader extends Component {
 
                 appHeaderMenuContent =
                     <div className="top-menu-bar">
-                        {homeItem}
+                        {rolesItem}
                         {selectItem}
                         <UltrawideMenuDropdown itemName="Go To" menuType={MenuDropdown.MENU_DROPDOWN_GOTO}/>
                         <UltrawideMenuDropdown itemName="View" menuType={MenuDropdown.MENU_DROPDOWN_VIEW}/>

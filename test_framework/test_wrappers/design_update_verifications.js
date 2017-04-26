@@ -85,6 +85,54 @@ class DesignUpdateVerifications{
         );
     }
 
+    updateWpStatusForUpdate_ForDesignerIs(updateName, status){
+        server.call('verifyDesignUpdates.designUpdateWpStatusIs', updateName, status, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateWpStatusForUpdate_ForDeveloperIs(updateName, status){
+        server.call('verifyDesignUpdates.designUpdateWpStatusIs', updateName, status, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateWpStatusForUpdate_ForManagerIs(updateName, status){
+        server.call('verifyDesignUpdates.designUpdateWpStatusIs', updateName, status, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateTestStatusForUpdate_ForDesignerIs(updateName, status){
+        server.call('verifyDesignUpdates.designUpdateTestStatusIs', updateName, status, 'gloria',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateTestStatusForUpdate_ForDeveloperIs(updateName, status){
+        server.call('verifyDesignUpdates.designUpdateTestStatusIs', updateName, status, 'hugh',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
+    updateTestStatusForUpdate_ForManagerIs(updateName, status){
+        server.call('verifyDesignUpdates.designUpdateTestStatusIs', updateName, status, 'miles',
+            (function(error, result){
+                return(error === null);
+            })
+        );
+    }
+
     currentUpdateForDesignerIs(updateName){
         server.call('verifyDesignUpdates.currentDesignUpdateNameIs', updateName, 'gloria',
             (function(error, result){

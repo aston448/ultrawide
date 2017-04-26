@@ -30,7 +30,7 @@ class TextLookups {
             case ViewType.AUTHORISE:
                 return 'LOGIN';
             case ViewType.HOME:
-                return 'HOME';
+                return 'ROLE SELECTION';
             case ViewType.CONFIGURE:
                 return 'LOCAL SETTINGS';
             case ViewType.TEST_OUTPUTS:

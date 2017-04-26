@@ -88,7 +88,7 @@ class RoleAction extends Component {
 
                         newContext = ClientUserContextServices.setOpenDesignVersionItems(userContext);
 
-                        if(newContext.designUpdateId != 'NONE'){
+                        if(newContext.designUpdateId !== 'NONE'){
 
                             newContext = ClientUserContextServices.setOpenDesignUpdateItems(newContext);
                         }
@@ -97,7 +97,7 @@ class RoleAction extends Component {
                 } else {
 
                     // If the data is there, open the WP items that need it
-                    if (store.getState().workPackageDataLoaded) {
+                    if (store.getState().designVersionDataLoaded) {
 
                         newContext = ClientUserContextServices.setOpenWorkPackageItems(userContext);
                     }

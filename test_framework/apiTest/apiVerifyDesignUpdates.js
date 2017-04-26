@@ -102,5 +102,29 @@ Meteor.methods({
         }
     },
 
+    'verifyDesignUpdates.designUpdateWpStatusIs'(designUpdateName, wpStatus, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        if(designUpdate.updateWpStatus === wpStatus){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected DU WP Status " + wpStatus + " but has status " + designUpdate.updateWpStatus);
+        }
+    },
+
+    'verifyDesignUpdates.designUpdateTestStatusIs'(designUpdateName, testStatus, userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+        const designUpdate = TestDataHelpers.getDesignUpdate(userContext.designVersionId, designUpdateName);
+
+        if(designUpdate.updateTestStatus === testStatus){
+            return true;
+        } else {
+            throw new Meteor.Error("FAIL", "Expected DU test Status " + testStatus + " but has status " + designUpdate.updateTestStatus);
+        }
+    },
+
 });
 
