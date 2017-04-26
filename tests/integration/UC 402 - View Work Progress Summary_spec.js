@@ -259,11 +259,11 @@ describe('UC 402 - View Work Progress Summary', function(){
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
-            totalScenarios:             4,
+            totalScenarios:             3,
             scenariosInWp:              0, // Not shown
             scenariosPassing:           1,
             scenariosFailing:           1,
-            scenariosNoTests:           2
+            scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage1', summary));
 
@@ -287,11 +287,11 @@ describe('UC 402 - View Work Progress Summary', function(){
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
-            totalScenarios:             4,
+            totalScenarios:             3,
             scenariosInWp:              0, // Not shown
             scenariosPassing:           1,
             scenariosFailing:           1,
-            scenariosNoTests:           2
+            scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage1', summary));
 
@@ -315,11 +315,11 @@ describe('UC 402 - View Work Progress Summary', function(){
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
-            totalScenarios:             4,
+            totalScenarios:             3,
             scenariosInWp:              0, // Not shown
             scenariosPassing:           1,
             scenariosFailing:           1,
-            scenariosNoTests:           2
+            scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage1', summary));
 
@@ -343,11 +343,11 @@ describe('UC 402 - View Work Progress Summary', function(){
         DesignVersionActions.workProgressIsUpdatedForDesigner();
 
         let summary = {
-            totalScenarios:             4,
+            totalScenarios:             3,
             scenariosInWp:              0, // Not shown
             scenariosPassing:           1,
             scenariosFailing:           1,
-            scenariosNoTests:           2
+            scenariosNoTests:           1
         };
         expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('WorkPackage1', summary));
 
