@@ -451,7 +451,7 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosFailing:           1,
             scenariosNoTests:           0
         };
-        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateWorkPackageIs('UpdateWorkPackage1', summary));
 
     });
 
@@ -498,7 +498,7 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosFailing:           1,
             scenariosNoTests:           0
         };
-        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateWorkPackageIs('UpdateWorkPackage1', summary));
     });
 
     it('The number of Scenarios with failing tests in a Work Package is displayed', function(){
@@ -544,7 +544,7 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosFailing:           1,
             scenariosNoTests:           0
         };
-        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateWorkPackageIs('UpdateWorkPackage1', summary));
     });
 
     it('The number of Scenarios with no tests in a Work Package is displayed', function(){
@@ -590,7 +590,7 @@ describe('UC 402 - View Work Progress Summary', function(){
             scenariosFailing:           1,
             scenariosNoTests:           0
         };
-        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForBaseWorkPackageIs('UpdateWorkPackage1', summary));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryForUpdateWorkPackageIs('UpdateWorkPackage1', summary));
     });
 
 
