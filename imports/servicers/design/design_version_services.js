@@ -1,6 +1,7 @@
 
 // Ultrawide Collections
 import {DesignVersions}             from '../../collections/design/design_versions.js';
+import {DesignVersionComponents}    from '../../collections/design/design_version_components.js';
 import {DesignUpdates}              from '../../collections/design_update/design_updates.js';
 import {DesignUpdateComponents}     from '../../collections/design_update/design_update_components.js';
 import {WorkPackages}               from '../../collections/work/work_packages.js';
@@ -10,7 +11,7 @@ import {UserDevDesignSummaryData}   from '../../collections/summary/user_dev_des
 import {UserDevTestSummaryData}     from '../../collections/summary/user_dev_test_summary_data.js';
 
 // Ultrawide Services
-import { DesignVersionStatus, WorkSummaryType, WorkPackageStatus, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, LogLevel }      from '../../constants/constants.js';
+import { DesignVersionStatus, WorkSummaryType, WorkPackageStatus, ComponentType, WorkPackageScopeType, UpdateScopeType, MashTestStatus, DesignUpdateStatus, DesignUpdateMergeAction, UpdateMergeStatus, LogLevel }      from '../../constants/constants.js';
 import { DefaultItemNames }         from '../../constants/default_names.js';
 import { log } from '../../common/utils.js';
 
@@ -200,12 +201,37 @@ class DesignVersionServices{
             const dv = DesignVersions.findOne({_id: userContext.designVersionId});
 
             // Get DV stats
-            const dvSummary = UserDevDesignSummaryData.findOne({userId: userContext.userId, designVersionId: userContext.designVersionId});
+            const dvTotalScenarios = DesignVersionComponents.find({
+                designVersionId:    userContext.designVersionId,
+                componentType:      ComponentType.SCENARIO,
+                updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            }).count();
 
-            if(!dvSummary){
-                // No test summary data yet...
-                return;
-            }
+            const dvPassingScenarios = UserDevTestSummaryData.find({
+                userId:             userContext.userId,
+                designVersionId:    userContext.designVersionId,
+                scenarioReferenceId: {$ne: 'NONE'},
+                $or: [{accTestStatus: MashTestStatus.MASH_PASS}, {intTestStatus: MashTestStatus.MASH_PASS}, {unitTestPassCount: {$gt: 0}}],
+                accTestStatus: {$ne: MashTestStatus.MASH_FAIL},
+                intTestStatus: {$ne: MashTestStatus.MASH_FAIL},
+                unitTestFailCount: 0,
+            }).count();
+
+            const dvFailingScenarios = UserDevTestSummaryData.find({
+                userId:             userContext.userId,
+                designVersionId:    userContext.designVersionId,
+                scenarioReferenceId: {$ne: 'NONE'},
+                $or: [{accTestStatus: MashTestStatus.MASH_FAIL}, {intTestStatus: MashTestStatus.MASH_FAIL}, {unitTestFailCount: {$gt: 0}}],
+            }).count();
+
+            const dvNoTestScenarios = dvTotalScenarios - (dvPassingScenarios + dvFailingScenarios);
+
+            //const dvSummary = UserDevDesignSummaryData.findOne({userId: userContext.userId, designVersionId: userContext.designVersionId});
+
+            // if(!dvSummary){
+            //     // No test summary data yet...
+            //     return;
+            // }
 
             switch(dv.designVersionStatus){
                 case DesignVersionStatus.VERSION_NEW:
@@ -286,11 +312,11 @@ class DesignVersionServices{
                         designVersionId:            userContext.designVersionId,
                         workSummaryType:            WorkSummaryType.WORK_SUMMARY_BASE_DV,
                         name:                       dv.designVersionName,
-                        totalScenarios:             dvSummary.scenarioCount,
+                        totalScenarios:             dvTotalScenarios,
                         scenariosInWp:              dvWpScenarios,
-                        scenariosPassing:           dvSummary.passingScenarioCount,
-                        scenariosFailing:           dvSummary.failingScenarioCount,
-                        scenariosNoTests:           dvSummary.untestedScenarioCount
+                        scenariosPassing:           dvPassingScenarios,
+                        scenariosFailing:           dvFailingScenarios,
+                        scenariosNoTests:           dvNoTestScenarios
                     });
                     break;
 
