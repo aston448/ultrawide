@@ -33,10 +33,11 @@ class ClientDesignUpdateSummary{
         const viewOptions = store.getState().currentUserViewOptions;
 
         // Only worth refreshing the data if the Update is visible
-        if(
+        if( viewOptions && (
             (view === ViewType.SELECT && userContext.designUpdateId !== 'NONE') ||
             (view === ViewType.DESIGN_UPDATE_EDIT && viewOptions.updateSummaryVisible) ||
             (view === ViewType.DESIGN_UPDATE_VIEW && viewOptions.updateSummaryVisible)
+            )
         ) {
 
             DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, updateChanged, (err, result) => {
