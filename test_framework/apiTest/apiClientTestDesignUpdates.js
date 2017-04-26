@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import ClientDesignUpdateServices       from '../../imports/apiClient/apiClientDesignUpdate.js';
+import ClientDesignUpdateSummary        from '../../imports/apiClient/apiClientDesignUpdateSummary.js';
 import TestDataHelpers                  from '../test_modules/test_data_helpers.js'
 
 import {RoleType} from '../../imports/constants/constants.js';
@@ -135,13 +136,10 @@ Meteor.methods({
         TestDataHelpers.processClientCallOutcome(outcome, expectation, 'Remove Update');
     },
 
-    // 'testDesignUpdates.refreshUpdateSummary'(userName){
-    //
-    //     const userContext = TestDataHelpers.getUserContext(userName);
-    //
-    //     if(userContext.designUpdateId !== 'NONE') {
-    //         ClientDesignUpdateServices.refreshSummary(userContext.designUpdateId);
-    //     }
-    // }
+    'testDesignUpdates.refreshUpdateSummary'(userName){
+
+        // Used because in actual app call is async.  For testing we need to ensure data is refreshed before we check it
+        ClientDesignUpdateSummary.getDesignUpdateSummary(true);
+    }
 
 });

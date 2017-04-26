@@ -92,6 +92,7 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateFeatureAspect('Feature1', 'Actions');
 
         // New Scenario in Update Summary
+        DesignUpdateActions.refreshUpdateSummary();
         DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME);
     });
 

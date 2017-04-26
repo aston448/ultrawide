@@ -258,7 +258,7 @@ class DesignUpdateSummaryServices {
                                 scenarioTestStatus = testStatus;
                             }
 
-                            log((message) => console.log(message), LogLevel.DEBUG, 'Adding ' + summaryType + ' item with test status ' + scenarioTestStatus);
+                            log((message) => console.log(message), LogLevel.INFO, 'Adding {} item {} with test status {}', summaryType, item.componentNameNew, scenarioTestStatus);
 
                             // Add the item
                             UserDesignUpdateSummary.insert({

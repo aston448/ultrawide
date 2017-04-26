@@ -443,11 +443,6 @@ class ClientDesignUpdateServices {
 
     };
 
-    // // User chose to refresh the Update Summary ------------------------------------------------------------------------
-    // refreshSummary(designUpdateId){
-    //
-    //     ClientDesignUpdateSummary.getDesignUpdateSummary(designUpdateId);
-    // }
 
 
 }
