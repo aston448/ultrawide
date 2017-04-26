@@ -201,39 +201,44 @@ class DesignVersionServices{
             const dv = DesignVersions.findOne({_id: userContext.designVersionId});
 
             // Get DV stats
-            const dvScenarios = DesignVersionComponents.find({
-                designVersionId:    userContext.designVersionId,
-                componentType:      ComponentType.SCENARIO,
-                updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
-            }).fetch();
-
-            const dvTotalScenarios = dvScenarios.length;
-            let dvPassingScenarios = 0;
-            let dvFailingScenarios = 0;
-            let dvNoTestScenarios = 0;
-
-            dvScenarios.forEach((dvScenario) =>{
-
-                let testResult = UserDevTestSummaryData.findOne({
-                    userId:                     userContext.userId,
-                    designVersionId:            userContext.designVersionId,
-                    scenarioReferenceId:        dvScenario.componentReferenceId
-                });
-
-                if(testResult) {
-                    if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
-                        dvFailingScenarios++;
-                    } else {
-                        if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
-                            dvPassingScenarios++;
-                        } else {
-                            dvNoTestScenarios++;
-                        }
-                    }
-                } else {
-                    dvNoTestScenarios++;
-                }
+            const dvSummary = UserDevDesignSummaryData.findOne({
+                userId:             userContext.userId,
+                designVersionId:    userContext.designVersionId
             });
+
+            // const dvScenarios = DesignVersionComponents.find({
+            //     designVersionId:    userContext.designVersionId,
+            //     componentType:      ComponentType.SCENARIO,
+            //     updateMergeStatus:  {$ne: UpdateMergeStatus.COMPONENT_REMOVED}
+            // }).fetch();
+
+            let dvTotalScenarios = dvSummary.scenarioCount;
+            let dvPassingScenarios = dvSummary.passingScenarioCount;
+            let dvFailingScenarios = dvSummary.failingScenarioCount;
+            let dvNoTestScenarios = dvSummary.untestedScenarioCount;
+
+            // dvScenarios.forEach((dvScenario) =>{
+            //
+            //     let testResult = UserDevTestSummaryData.findOne({
+            //         userId:                     userContext.userId,
+            //         designVersionId:            userContext.designVersionId,
+            //         scenarioReferenceId:        dvScenario.componentReferenceId
+            //     });
+            //
+            //     if(testResult) {
+            //         if (testResult.accTestStatus === MashTestStatus.MASH_FAIL || testResult.intTestStatus === MashTestStatus.MASH_FAIL || testResult.unitTestFailCount > 0) {
+            //             dvFailingScenarios++;
+            //         } else {
+            //             if (testResult.accTestStatus === MashTestStatus.MASH_PASS || testResult.intTestStatus === MashTestStatus.MASH_PASS || testResult.unitTestPassCount > 0) {
+            //                 dvPassingScenarios++;
+            //             } else {
+            //                 dvNoTestScenarios++;
+            //             }
+            //         }
+            //     } else {
+            //         dvNoTestScenarios++;
+            //     }
+            // });
 
             log((msg) => {console.log(msg)}, LogLevel.DEBUG, "DV: Total: {} Passing: {} Failing: {} NoTest {}", dvTotalScenarios, dvPassingScenarios, dvFailingScenarios, dvNoTestScenarios);
 
