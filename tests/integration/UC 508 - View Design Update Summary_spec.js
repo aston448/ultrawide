@@ -24,6 +24,9 @@ import {DesignUpdateComponentValidationErrors} from '../../imports/constants/val
 
 describe('UC 508 - View Design Update Summary', function(){
 
+    // NOTE: Need to explicitly refresh the test summary in these tests to check the results.  In actual app the update happens async as we don't care when it happens
+    // and don't want it blocking the actual editing process.  These tests are testing the content of the summary not that it updates...
+
     before(function(){
         TestFixtures.logTestSuite('UC 508 - View Design Update Summary');
     });
@@ -103,6 +106,7 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerLogicallyDeletesUpdateScenario('Actions', 'Scenario1');
 
         // Seen in REMOVE list
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario1'));
     });
 
@@ -114,6 +118,7 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('New Scenario');
 
         // Scenario1 added to Modifications
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_ChangedTo_IsInCurrentDesignUpdateSummaryChangesForDesigner('Scenario1', 'NewScenario'));
     });
 
@@ -123,6 +128,7 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Scenario1 in the Queries
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
     });
 
@@ -131,11 +137,12 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Check Scenario1 in the Queries
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
 
         // Remove from scope
         UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario1');
-
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryQueriesForDesigner('Scenario1'));
     });
 
@@ -150,12 +157,14 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario8');
 
         // New Scenario in Update Summary
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
 
         // Remove it again
         UpdateComponentActions.designerRemovesScenarioFromCurrentUpdateScope('Actions', 'Scenario8');
 
         // Not in additions or removals
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
         expect(DesignUpdateSummaryVerifications.scenario_IsNotInCurrentDesignUpdateSummaryRemovalsForDesigner('Scenario8'));
 
@@ -169,6 +178,7 @@ describe('UC 508 - View Design Update Summary', function(){
 
 
         // New Scenario in Update Summary
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner(DefaultComponentNames.NEW_SCENARIO_NAME));
 
         // Now give it a proper name
@@ -176,6 +186,7 @@ describe('UC 508 - View Design Update Summary', function(){
         UpdateComponentActions.designerUpdatesSelectedUpdateComponentNameTo('Scenario8');
 
         // Still a NEW item even though name changed
+        DesignUpdateActions.refreshUpdateSummary();
         expect(DesignUpdateSummaryVerifications.scenario_IsInCurrentDesignUpdateSummaryAdditionsForDesigner('Scenario8'));
     });
 
