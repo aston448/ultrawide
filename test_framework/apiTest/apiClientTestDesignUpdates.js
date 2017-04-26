@@ -140,6 +140,15 @@ Meteor.methods({
 
         // Used because in actual app call is async.  For testing we need to ensure data is refreshed before we check it
         ClientDesignUpdateSummary.getDesignUpdateSummary(true);
+    },
+
+    'testDesignUpdates.refreshUpdateStatuses'(userName){
+
+        const userContext = TestDataHelpers.getUserContext(userName);
+
+        // Used because in actual app call is async.  For testing we need to ensure data is refreshed before we check it
+        ClientDesignUpdateServices.updateDesignUpdateStatuses(userContext);
     }
+
 
 });

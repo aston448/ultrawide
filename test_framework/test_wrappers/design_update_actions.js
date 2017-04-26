@@ -122,7 +122,18 @@ class DesignUpdateActions{
         server.call('testDesignUpdates.refreshUpdateSummary');
     }
 
+    // Refresh Update Statuses
+    designerRefreshesUpdateStatuses(){
+        server.call('testDesignUpdates.refreshUpdateStatuses', 'gloria');
+    }
 
+    developerRefreshesUpdateStatuses(){
+        server.call('testDesignUpdates.refreshUpdateStatuses', 'hugh');
+    }
+
+    managerRefreshesUpdateStatuses(){
+        server.call('testDesignUpdates.refreshUpdateStatuses', 'miles');
+    }
 }
 
 export default new DesignUpdateActions();

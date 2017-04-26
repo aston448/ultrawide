@@ -103,6 +103,7 @@ describe('UC 511 - View Design Update Status Summary', function(){
         UpdateComponentActions.designerAddsScenarioToCurrentUpdateScope('Actions', 'Scenario1');
 
         // Verify
+        DesignUpdateActions.designerRefreshesUpdateStatuses();
         expect(DesignUpdateVerifications.updateWpStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateWpStatus.DU_NO_WP_SCENARIOS));
     });
 
@@ -127,6 +128,7 @@ describe('UC 511 - View Design Update Status Summary', function(){
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Verify DU WP status - partial coverage
+        DesignUpdateActions.designerRefreshesUpdateStatuses();
         expect(DesignUpdateVerifications.updateWpStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateWpStatus.DU_SOME_WP_SCENARIOS));
     });
 
@@ -158,6 +160,7 @@ describe('UC 511 - View Design Update Status Summary', function(){
         WorkPackageActions.managerPublishesSelectedWorkPackage();
 
         // Verify DU WP status - full coverage
+        DesignUpdateActions.designerRefreshesUpdateStatuses();
         expect(DesignUpdateVerifications.updateWpStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateWpStatus.DU_ALL_WP_SCENARIOS));
     });
 
@@ -189,10 +192,8 @@ describe('UC 511 - View Design Update Status Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResults);
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
-        // Ensure test status updated by selecting update
-        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
-
         // Verify DU Test status - failing tests
+        DesignUpdateActions.designerRefreshesUpdateStatuses();
         expect(DesignUpdateVerifications.updateTestStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateTestStatus.DU_SCENARIOS_FAILING));
     });
 
@@ -224,10 +225,9 @@ describe('UC 511 - View Design Update Status Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResults);
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
-        // Ensure test status updated by selecting update
-        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
 
         // Verify DU Test status - failing tests
+        DesignUpdateActions.designerRefreshesUpdateStatuses();
         expect(DesignUpdateVerifications.updateTestStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateTestStatus.DU_SOME_SCENARIOS_PASSING));
     });
 
@@ -259,10 +259,8 @@ describe('UC 511 - View Design Update Status Summary', function(){
         TestFixtures.writeIntegrationTestResults_ChimpMocha('Location1', intResults);
         TestResultActions.designerRefreshesTestResultsForBaseDesignVersion();
 
-        // Ensure test status updated by selecting update
-        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
-
         // Verify DU Test status - failing tests
+        DesignUpdateActions.designerRefreshesUpdateStatuses();
         expect(DesignUpdateVerifications.updateTestStatusForUpdate_ForDesignerIs('DesignUpdate1', DesignUpdateTestStatus.DU_ALL_SCENARIOS_PASSING));
     });
 
