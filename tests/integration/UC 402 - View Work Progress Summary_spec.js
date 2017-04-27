@@ -20,7 +20,7 @@ import UserContextVerifications     from '../../test_framework/test_wrappers/use
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, RoleType, FeatureTestSummaryStatus} from '../../imports/constants/constants.js';
+import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, DesignUpdateMergeAction, RoleType, FeatureTestSummaryStatus} from '../../imports/constants/constants.js';
 
 describe('UC 402 - View Work Progress Summary', function(){
 
@@ -109,6 +109,21 @@ describe('UC 402 - View Work Progress Summary', function(){
         WorkPackageActions.managerPublishesSelectedWorkPackage();
         WorkPackageActions.managerEditsUpdateWorkPackage('UpdateWorkPackage1');
         WpComponentActions.managerAddsFeatureAspectToScopeForCurrentWp('Feature2', 'Actions');
+
+        // Add an unpublished Design Update
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate2');
+
+        // Add a published Design Update that is excluded from the DV
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerAddsAnUpdateCalled('DesignUpdate3');
+        DesignUpdateActions.designerPublishesUpdate('DesignUpdate3');
+        DesignUpdateActions.designerSetsUpdateMergeActionTo(DesignUpdateMergeAction.MERGE_ROLL);
+
+        // Add an unavailable Work Package
+        DesignVersionActions.managerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.managerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.managerAddsUpdateWorkPackageCalled('UpdateWorkPackage2');
     });
 
     after(function(){
@@ -663,10 +678,42 @@ describe('UC 402 - View Work Progress Summary', function(){
 
 
     // Conditions
-    it('Design Updates that are not yet Published are not displayed');
+    it('Design Updates that are not yet Published are not displayed', function(){
 
-    it('Design Updates that are not included in the Design Version are not displayed');
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
 
-    it('Work Packages that are not yet Available are not displayed');
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        // Verify Published Update is shown but unpublished is not
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdateableDesignVersion('DesignVersion2'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdate('DesignUpdate1'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryDoesNotContainUpdate('DesignUpdate2'));
+
+    });
+
+    it('Design Updates that are not included in the Design Version are not displayed', function() {
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        // Verify Published Update is shown but unpublished is not
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdateableDesignVersion('DesignVersion2'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdate('DesignUpdate1'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryDoesNotContainUpdate('DesignUpdate3'));
+    });
+
+    it('Work Packages that are not yet Available are not displayed', function(){
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+
+        DesignVersionActions.workProgressIsUpdatedForDesigner();
+
+        // Verify Published Update WP is shown but unpublished is not
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdateableDesignVersion('DesignVersion2'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdate('DesignUpdate1'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryContainsUpdateWp('UpdateWorkPackage1'));
+        expect(WorkProgressSummaryVerifications.designerWorkProgressSummaryDoesNotContainUpdateWp('UpdateWorkPackage2'));
+    });
 
 });
