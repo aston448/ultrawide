@@ -103,25 +103,17 @@ class ClientUserContextServices {
             const viewOptions = {
                 userId:                     userId,
                 designDetailsVisible:       userViewOptions.designDetailsVisible,
-                designTestSummaryVisible:   userViewOptions.designTestSummaryVisible,
                 designDomainDictVisible:    userViewOptions.designDomainDictVisible,
-                // Design Update Screen - Scope and Design always visible
-                updateDetailsVisible:       userViewOptions.updateDetailsVisible,
+                testSummaryVisible:         userViewOptions.testSummaryVisible,
                 updateProgressVisible:      userViewOptions.updateProgressVisible,
                 updateSummaryVisible:       userViewOptions.updateSummaryVisible,
-                updateDomainDictVisible:    userViewOptions.updateDomainDictVisible,
-                updateTestSummaryVisible:   userViewOptions.updateTestSummaryVisible,
-                // Work package editor - Scope and Design always visible
-                wpDetailsVisible:           userViewOptions.wpDetailsVisible,
-                wpDomainDictVisible:        userViewOptions.wpDomainDictVisible,
-                // Developer Screen - Design always visible
-                devDetailsVisible:          userViewOptions.devDetailsVisible,
                 devAccTestsVisible:         userViewOptions.devAccTestsVisible,
                 devIntTestsVisible:         userViewOptions.devIntTestsVisible,
                 devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
-                devTestSummaryVisible:      userViewOptions.devTestSummaryVisible,
                 devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
-                devDomainDictVisible:       userViewOptions.devDomainDictVisible
+                designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
+                updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
+                workShowAllAsTabs:          userViewOptions.workShowAllAsTabs,
             };
 
             store.dispatch(setCurrentUserViewOptions(viewOptions, false)); // Don't save - we are reading from DB here!
@@ -131,25 +123,17 @@ class ClientUserContextServices {
             const defaultOptions = {
                 userId:                     userId,
                 designDetailsVisible:       true,
-                designTestSummaryVisible:   false,
-                designDomainDictVisible:    true,
-                // Design Update Screen - Scope and Design always visible
-                updateDetailsVisible:       true,
-                updateProgressVisible:      true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:         false,
+                updateProgressVisible:      false,
                 updateSummaryVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
-                // Work package editor - Scope and Design always visible
-                wpDetailsVisible:           true,
-                wpDomainDictVisible:        false,
-                // Developer Screen - Design always visible
-                devDetailsVisible:          false,
                 devAccTestsVisible:         false,
                 devIntTestsVisible:         false,
                 devUnitTestsVisible:        false,
-                devTestSummaryVisible:      false,
                 devFeatureFilesVisible:     false,
-                devDomainDictVisible:       false
+                designShowAllAsTabs:        false,
+                updateShowAllAsTabs:        false,
+                workShowAllAsTabs:          false,
             };
 
             store.dispatch(setCurrentUserViewOptions(defaultOptions, true));

@@ -220,6 +220,8 @@ class TextLookups {
                 return 'Feature Files';
             case MenuAction.MENU_ACTION_VIEW_DICT:
                 return 'Domain Dictionary';
+            case MenuAction.MENU_ACTION_VIEW_ALL_TABS:
+                return 'View All as Tabs';
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
                 return 'Test Data';
         }

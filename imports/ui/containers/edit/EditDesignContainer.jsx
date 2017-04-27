@@ -26,7 +26,7 @@ import ClientDesignVersionServices          from '../../../apiClient/apiClientDe
 import ClientUserContextServices            from '../../../apiClient/apiClientUserContext.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -110,10 +110,6 @@ export class DesignApplicationsList extends Component {
         let layout = '';
 
         let addComponent = '';
-        let designDetails = '';
-        let domainDictionary = '';
-        let intTests = '';
-        let unitTests = '';
         let displayedItems = 1;
 
         // Get the correct display context
@@ -166,7 +162,7 @@ export class DesignApplicationsList extends Component {
                     displayContext={displayContext}
                 />
                 <div className={editorClass}>
-                    {this.renderApplications(applications, displayContext, view, mode, viewOptions.designTestSummaryVisible)}
+                    {this.renderApplications(applications, displayContext, view, mode, viewOptions.testSummaryVisible)}
                     {addComponent}
                 </div>
                 <DesignEditorFooter
@@ -176,6 +172,118 @@ export class DesignApplicationsList extends Component {
                 />
             </div>;
 
+        const designDetails =
+            <DesignComponentTextContainer params={{
+                currentContext: userContext,
+                view: view,
+                displayContext: displayContext
+            }}/>;
+
+        const domainDictionary =
+            <DomainDictionaryContainer params={{
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId
+            }}/>;
+
+        let intTests = '';
+
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                case ComponentType.DESIGN_SECTION:
+                    // Tests not displayed for these items
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: 'NONE',
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE:
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.FEATURE_ASPECT,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                case ComponentType.SCENARIO:
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+
+                    break;
+            }
+        } else {
+            intTests =
+                <MashSelectedItemContainer params={{
+                    componentType: 'NONE',
+                    designItemId: 'NONE',
+                    userContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.MASH_INT_TESTS
+                }}/>;
+        }
+
+        let unitTests = '';
+
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                case ComponentType.DESIGN_SECTION:
+                    // Tests not displayed for these items
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: 'NONE',
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE:
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.FEATURE_ASPECT,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                case ComponentType.SCENARIO:
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
+
+                    break;
+            }
+        } else {
+            unitTests =
+                <MashSelectedItemContainer params={{
+                    componentType: 'NONE',
+                    designItemId: 'NONE',
+                    userContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                }}/>;
+        }
 
         // WHAT COMPONENTS ARE VISIBLE (Besides Design)
 
@@ -188,249 +296,149 @@ export class DesignApplicationsList extends Component {
         let col4width = 6;
         let col5width = 6;
 
-        // Details
-        if(viewOptions.designDetailsVisible){
-            designDetails =
-                <DesignComponentTextContainer params={{
-                    currentContext: userContext,
-                    view: view,
-                    displayContext: displayContext
-                }}/>;
+        if(viewOptions.designShowAllAsTabs){
 
-            displayedItems++;
-        }
+            // Layout is 6 - 6
 
-        // Domain Dictionary
-        if(viewOptions.designDomainDictVisible) {
-            domainDictionary =
-                <DomainDictionaryContainer params={{
-                    designId: userContext.designId,
-                    designVersionId: userContext.designVersionId
-                }}/>;
+        } else {
 
-            if(displayedItems === 2){
-                // There are now 3 cols so change widths
-                col1width = 4;
-                col2width = 4;
-                col3width = 4;
-                col5width = 4;
+            // Details
+            if (viewOptions.designDetailsVisible) {
+
+                displayedItems++;
             }
 
-            displayedItems++;
-        }
+            // Domain Dictionary
+            if (viewOptions.designDomainDictVisible) {
 
-        if(viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER){
+                if (displayedItems === 2) {
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col5width = 4;
+                }
 
-            if(userContext.designComponentType !== 'NONE'){
-                switch(userContext.designComponentType){
-                    case ComponentType.APPLICATION:
-                    case ComponentType.DESIGN_SECTION:
-                        // Tests not displayed for these items
-                        intTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: 'NONE',
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_INT_TESTS
-                            }}/>;
+                displayedItems++;
+            }
+
+            if (viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER) {
+
+                switch (displayedItems) {
+                    case 1:
+                        // Now 2 items
+                        col1width = 6;
+                        col2width = 6;
+                        col3width = 6;
+                        col4width = 6;
+                        col5width = 6;
                         break;
-                    case ComponentType.FEATURE:
-                        intTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.FEATURE_ASPECT,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_INT_TESTS
-                            }}/>;
+                    case 2:
+                        // Now 3 items
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
                         break;
-                    case ComponentType.FEATURE_ASPECT:
-                    case ComponentType.SCENARIO:
-                        intTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.SCENARIO,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_INT_TESTS
-                            }}/>;
-
+                    case 3:
+                        // Now 4 items
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
                         break;
                 }
-            } else {
-                intTests =
-                    <MashSelectedItemContainer params={{
-                        componentType: 'NONE',
-                        designItemId: 'NONE',
-                        userContext: userContext,
-                        view: view,
-                        displayContext: DisplayContext.MASH_INT_TESTS
-                    }}/>;
+
+                displayedItems++;
             }
 
-            switch(displayedItems){
-                case 1:
-                    // Now 2 items
-                    col1width = 6;
-                    col2width = 6;
-                    col3width = 6;
-                    col4width = 6;
-                    col5width = 6;
-                    break;
-                case 2:
-                    // Now 3 items
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    break;
-                case 3:
-                    // Now 4 items
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    break;
-            }
+            if (viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER) {
 
-            displayedItems++;
-        }
-
-        if(viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER){
-
-            if(userContext.designComponentType !== 'NONE'){
-                switch(userContext.designComponentType){
-                    case ComponentType.APPLICATION:
-                    case ComponentType.DESIGN_SECTION:
-                        // Tests not displayed for these items
-                        unitTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: 'NONE',
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_UNIT_TESTS
-                            }}/>;
+                switch (displayedItems) {
+                    case 1:
+                        // Now 2 items
+                        col1width = 6;
+                        col2width = 6;
+                        col3width = 6;
+                        col4width = 6;
+                        col5width = 6;
                         break;
-                    case ComponentType.FEATURE:
-                        unitTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.FEATURE_ASPECT,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_UNIT_TESTS
-                            }}/>;
+                    case 2:
+                        // Now 3 items
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
                         break;
-                    case ComponentType.FEATURE_ASPECT:
-                    case ComponentType.SCENARIO:
-                        unitTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.SCENARIO,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_UNIT_TESTS
-                            }}/>;
-
+                    case 3:
+                        // Now 4 items
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        break;
+                    case 4:
+                        // Now 5 items
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
                         break;
                 }
-            } else {
-                unitTests =
-                    <MashSelectedItemContainer params={{
-                        componentType: 'NONE',
-                        designItemId: 'NONE',
-                        userContext: userContext,
-                        view: view,
-                        displayContext: DisplayContext.MASH_UNIT_TESTS
-                    }}/>;
+
+                displayedItems++;
             }
 
-            switch(displayedItems){
-                case 1:
-                    // Now 2 items
-                    col1width = 6;
-                    col2width = 6;
-                    col3width = 6;
-                    col4width = 6;
-                    col5width = 6;
-                    break;
-                case 2:
-                    // Now 3 items
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    break;
-                case 3:
-                    // Now 4 items
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    break;
-                case 4:
-                    // Now 5 items
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    break;
-            }
+            // Test Summary - this actually just makes col 1 wider
+            if (viewOptions.testSummaryVisible) {
 
-            displayedItems++;
-        }
-
-        // Test Summary - this actually just makes col 1 wider
-        if(viewOptions.designTestSummaryVisible){
-
-            switch(displayedItems){
-                case 1:
-                    // Col 1 gets bigger
-                    col1width = 12;
-                    col2width = 0;
-                    col3width = 0;
-                    col4width = 0;
-                    col5width = 0;
-                    break;
-                case 2:
-                    // Col 1 gets bigger
-                    col1width = 8;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    break;
-                case 3:
-                    // Col 1 gets bigger
-                    col1width = 6;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    break;
-                case 4:
-                    // Col 1 gets bigger
-                    col1width = 6;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    break;
-                case 5:
-                    // Col 1 gets bigger
-                    col1width = 4;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    break;
+                switch (displayedItems) {
+                    case 1:
+                        // Col 1 gets bigger
+                        col1width = 12;
+                        col2width = 0;
+                        col3width = 0;
+                        col4width = 0;
+                        col5width = 0;
+                        break;
+                    case 2:
+                        // Col 1 gets bigger
+                        col1width = 8;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        break;
+                    case 3:
+                        // Col 1 gets bigger
+                        col1width = 6;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        break;
+                    case 4:
+                        // Col 1 gets bigger
+                        col1width = 6;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        break;
+                    case 5:
+                        // Col 1 gets bigger
+                        col1width = 4;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        break;
+                }
             }
         }
 
@@ -439,7 +447,6 @@ export class DesignApplicationsList extends Component {
         // Create the layout depending on the current view...
         if(baseApplications) {
 
-
             let col1 =
                 <Col id="column1" md={col1width} className="close-col">
                     {designEditor}
@@ -447,55 +454,94 @@ export class DesignApplicationsList extends Component {
 
 
             // Optional display columns
-            let col2 = '';
-            if(viewOptions.designDetailsVisible){
-                col2 =
-                    <Col id="column2" md={col2width} className="close-col">
-                        {designDetails}
-                    </Col>;
-            }
+            if(viewOptions.designShowAllAsTabs){
 
-            let col3 = '';
-            if(viewOptions.designDomainDictVisible){
-                col3 =
-                    <Col id="column3" md={col3width} className="close-col">
-                        {domainDictionary}
-                    </Col>;
-            }
+                let col2 = '';
+                switch(view){
+                    case ViewType.DESIGN_NEW_EDIT:
+                        col2 =
+                            <Col id="column2" md={col2width} className="close-col">
+                                <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                                    <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
+                                    <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
+                                </Tabs>
+                            </Col>;
+                        break;
+                    case ViewType.DESIGN_PUBLISHED_VIEW:
+                    case ViewType.DESIGN_UPDATABLE_VIEW:
+                        col2 =
+                            <Col id="column2" md={col2width} className="close-col">
+                                <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                                    <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
+                                    <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
+                                    <Tab eventKey={3} title="INTEGRATION TESTS">{intTests}</Tab>
+                                    <Tab eventKey={4} title="UNIT TESTS">{unitTests}</Tab>
+                                </Tabs>
+                            </Col>;
+                        break;
+                }
 
-            let col4 = '';
-            if(viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER){
-                col4 =
-                    <Col id="column4" md={col4width} className="close-col">
-                        {intTests}
-                    </Col>;
-            }
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                        </Row>
+                    </Grid>;
 
-            let col5 = '';
-            if(viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER){
-                col5 =
-                    <Col id="column5" md={col5width} className="close-col">
-                        {unitTests}
-                    </Col>;
-            }
+            } else {
+                let col2 = '';
+                if (viewOptions.designDetailsVisible) {
+                    col2 =
+                        <Col id="column2" md={col2width} className="close-col">
+                            {designDetails}
+                        </Col>;
+                }
 
-            // Make up the layout based on the view options
-            layout =
-                <Grid >
-                    <Row>
-                        {col1}
-                        {col2}
-                        {col3}
-                        {col4}
-                        {col5}
-                    </Row>
-                </Grid>;
+                let col3 = '';
+                if (viewOptions.designDomainDictVisible) {
+                    col3 =
+                        <Col id="column3" md={col3width} className="close-col">
+                            {domainDictionary}
+                        </Col>;
+                }
+
+                let col4 = '';
+                if (viewOptions.devIntTestsVisible && userRole === RoleType.DEVELOPER) {
+                    col4 =
+                        <Col id="column4" md={col4width} className="close-col">
+                            {intTests}
+                        </Col>;
+                }
+
+                let col5 = '';
+                if (viewOptions.devUnitTestsVisible && userRole === RoleType.DEVELOPER) {
+                    col5 =
+                        <Col id="column5" md={col5width} className="close-col">
+                            {unitTests}
+                        </Col>;
+                }
+
+                // Make up the layout based on the view options
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                            {col3}
+                            {col4}
+                            {col5}
+                        </Row>
+                    </Grid>;
+
+            }
 
             return (
                 <div>
                     {layout}
                 </div>
             );
+
 
         } else {
             // No apps yet so just return the add new item (if there is one)
@@ -525,7 +571,7 @@ function mapStateToProps(state) {
         mode:                   state.currentViewMode,
         userRole:               state.currentUserRole,
         viewOptions:            state.currentUserViewOptions,
-        currentViewDataValue:   state.currentViewDataValue
+        currentViewDataValue:   state.currentViewOptionsDataValue
     }
 }
 

@@ -49,28 +49,19 @@ class UserContextServices{
 
             // And add new
             UserCurrentViewOptions.insert({
-                userId:                         userViewOptions.userId,
-                designDetailsVisible:           userViewOptions.designDetailsVisible,
-                designTestSummaryVisible:       userViewOptions.designTestSummaryVisible,
-                designDomainDictVisible:        userViewOptions.designDomainDictVisible,
-                // Design Update Screen - Scope and Design always visible
-                updateDetailsVisible:           userViewOptions.updateDetailsVisible,
-                updateProgressVisible:          userViewOptions.updateProgressVisible,
-                updateSummaryVisible:           userViewOptions.updateSummaryVisible,
-                updateDomainDictVisible:        userViewOptions.updateDomainDictVisible,
-                updateTestSummaryVisible:       userViewOptions.updateTestSummaryVisible,
-
-                // Work package editor - Scope and Design always visible
-                wpDetailsVisible:               userViewOptions.wpDetailsVisible,
-                wpDomainDictVisible:            userViewOptions.wpDomainDictVisible,
-                // Developer Screen - Design always visible
-                devDetailsVisible:              userViewOptions.devDetailsVisible,
-                devTestSummaryVisible:          userViewOptions.devTestSummaryVisible,
-                devAccTestsVisible:             userViewOptions.devAccTestsVisible,
-                devIntTestsVisible:             userViewOptions.devIntTestsVisible,
-                devUnitTestsVisible:            userViewOptions.devUnitTestsVisible,
-                devFeatureFilesVisible:         userViewOptions.devFeatureFilesVisible,
-                devDomainDictVisible:           userViewOptions.devDomainDictVisible
+                userId:                     userViewOptions.userId,
+                designDetailsVisible:       userViewOptions.designDetailsVisible,
+                designDomainDictVisible:    userViewOptions.designDomainDictVisible,
+                testSummaryVisible:         userViewOptions.testSummaryVisible,
+                updateProgressVisible:      userViewOptions.updateProgressVisible,
+                updateSummaryVisible:       userViewOptions.updateSummaryVisible,
+                devAccTestsVisible:         userViewOptions.devAccTestsVisible,
+                devIntTestsVisible:         userViewOptions.devIntTestsVisible,
+                devUnitTestsVisible:        userViewOptions.devUnitTestsVisible,
+                devFeatureFilesVisible:     userViewOptions.devFeatureFilesVisible,
+                designShowAllAsTabs:        userViewOptions.designShowAllAsTabs,
+                updateShowAllAsTabs:        userViewOptions.updateShowAllAsTabs,
+                workShowAllAsTabs:          userViewOptions.workShowAllAsTabs,
             });
         }
     };

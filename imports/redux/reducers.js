@@ -43,7 +43,7 @@ const initialState = {
     testSummaryDataLoaded:              false,      // True when the Test Summmary data has been calculated
     testDataStale:                      true,       // True when new test data is available
     mashDataStale:                      true,       // True when design has changed or mash needs recalculating
-    currentViewOptionsDataValue:        false,
+    currentViewOptionsDataValue:        0,
     openItemsFlag:                      false
 
 };

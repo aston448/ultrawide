@@ -52,7 +52,8 @@ export const DetailsViewType = {
     VIEW_ACC_FILES:             'VIEW_ACC_FILES',
     VIEW_UPD_SUMM:              'VIEW_UPD_SUMM',
     VIEW_DOM_DICT:              'VIEW_DOM_DICT',
-    VIEW_VERSION_PROGRESS:      'VIEW_VERSION_PROGRESS'
+    VIEW_VERSION_PROGRESS:      'VIEW_VERSION_PROGRESS',
+    VIEW_ALL_AS_TABS:           'VIEW_ALL_AS_TABS'
 };
 
 export const MenuType = {
@@ -80,6 +81,7 @@ export const MenuAction = {
     MENU_ACTION_VIEW_UNIT_TESTS:    'MENU_ACTION_VIEW_UNIT_TESTS',
     MENU_ACTION_VIEW_ACC_FILES:     'MENU_ACTION_VIEW_ACC_FILES',
     MENU_ACTION_VIEW_TEST_SUMM:     'MENU_ACTION_VIEW_TEST_SUMM',
+    MENU_ACTION_VIEW_ALL_TABS:      'MENU_ACTION_VIEW_ALL_TABS',
     MENU_ACTION_REFRESH_TESTS:      'MENU_ACTION_REFRESH_TESTS'
 };
 
@@ -91,22 +93,25 @@ export const ViewMode = {
 
 export const ViewOptionType = {
     DESIGN_DETAILS:     'designDetailsVisible',
-    DESIGN_TEST_SUMMARY:'designTestSummaryVisible',
+    DESIGN_TEST_SUMMARY:'testSummaryVisible',
     DESIGN_DICT:        'designDomainDictVisible',
-    UPDATE_DETAILS:     'updateDetailsVisible',
+    UPDATE_DETAILS:     'designDetailsVisible',
     UPDATE_PROGRESS:    'updateProgressVisible',
-    UPDATE_DICT:        'updateDomainDictVisible',
+    UPDATE_DICT:        'designDomainDictVisible',
     UPDATE_SUMMARY:     'updateSummaryVisible',
-    UPDATE_TEST_SUMMARY:'updateTestSummaryVisible',
-    WP_DETAILS:         'wpDetailsVisible',
-    WP_DICT:            'wpDomainDictVisible',
-    DEV_DETAILS:        'devDetailsVisible',
+    UPDATE_TEST_SUMMARY:'testSummaryVisible',
+    WP_DETAILS:         'designDetailsVisible',
+    WP_DICT:            'designDomainDictVisible',
+    DEV_DETAILS:        'designDetailsVisible',
     DEV_ACC_TESTS:      'devAccTestsVisible',
     DEV_INT_TESTS:      'devIntTestsVisible',
     DEV_UNIT_TESTS:     'devUnitTestsVisible',
     DEV_FILES:          'devFeatureFilesVisible',
-    DEV_DICT:           'devDomainDictVisible',
-    DEV_TEST_SUMMARY:   'devTestSummaryVisible',
+    DEV_DICT:           'designDomainDictVisible',
+    DEV_TEST_SUMMARY:   'testSummaryVisible',
+    DESIGN_ALL_AS_TABS: 'designShowAllAsTabs',
+    UPDATE_ALL_AS_TABS: 'updateShowAllAsTabs',
+    WORK_ALL_AS_TABS:   'workShowAllAsTabs',
     NONE:               ''
 };
 

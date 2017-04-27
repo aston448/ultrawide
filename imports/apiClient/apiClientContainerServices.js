@@ -1990,6 +1990,8 @@ class ClientContainerServices{
 
         let detailsOption= '';
         let detailsValue = false;
+        let dictOption = '';
+        let dictValue = false;
         let progressOption = '';
         let progressValue = false;
         let updSummaryOption = '';
@@ -2004,8 +2006,9 @@ class ClientContainerServices{
         let intTestValue = false;
         let unitTestOption = '';
         let unitTestValue = false;
-        let dictOption = '';
-        let dictValue = false;
+        let allAsTabsOption = '';
+        let allAsTabsValue = false;
+
 
         // Get the correct user view options for the view context
         switch(view){
@@ -2016,11 +2019,13 @@ class ClientContainerServices{
                 dictOption = ViewOptionType.DESIGN_DICT;
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
-                testSummaryValue = userViewOptions.designTestSummaryVisible;
+                testSummaryValue = userViewOptions.testSummaryVisible;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
                 intTestValue = userViewOptions.devIntTestsVisible;
                 unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
                 unitTestValue = userViewOptions.devUnitTestsVisible;
+                allAsTabsOption = ViewOptionType.DESIGN_ALL_AS_TABS;
+                allAsTabsValue = userViewOptions.designShowAllAsTabs;
                 break;
             case ViewType.DESIGN_UPDATABLE_VIEW:
                 detailsOption = ViewOptionType.DESIGN_DETAILS;
@@ -2028,43 +2033,49 @@ class ClientContainerServices{
                 dictOption = ViewOptionType.DESIGN_DICT;
                 dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DESIGN_TEST_SUMMARY;
-                testSummaryValue = userViewOptions.designTestSummaryVisible;
+                testSummaryValue = userViewOptions.testSummaryVisible;
                 intTestOption = ViewOptionType.DEV_INT_TESTS;
                 intTestValue = userViewOptions.devIntTestsVisible;
                 unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
                 unitTestValue = userViewOptions.devUnitTestsVisible;
+                allAsTabsOption = ViewOptionType.DESIGN_ALL_AS_TABS;
+                allAsTabsValue = userViewOptions.designShowAllAsTabs;
                 break;
             case ViewType.DESIGN_UPDATE_EDIT:
             case ViewType.DESIGN_UPDATE_VIEW:
                 detailsOption = ViewOptionType.UPDATE_DETAILS;
-                detailsValue = userViewOptions.updateDetailsVisible;
+                detailsValue = userViewOptions.designDetailsVisible;
                 progressOption = ViewOptionType.UPDATE_PROGRESS;
                 progressValue = userViewOptions.updateProgressVisible;
                 updSummaryOption = ViewOptionType.UPDATE_SUMMARY;
                 updSummaryValue = userViewOptions.updateSummaryVisible;
                 dictOption = ViewOptionType.UPDATE_DICT;
-                dictValue = userViewOptions.updateDomainDictVisible;
+                dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.UPDATE_TEST_SUMMARY;
-                testSummaryValue = userViewOptions.updateTestSummaryVisible;
+                testSummaryValue = userViewOptions.testSummaryVisible;
+                allAsTabsOption = ViewOptionType.UPDATE_ALL_AS_TABS;
+                allAsTabsValue = userViewOptions.updateShowAllAsTabs;
                 break;
             case ViewType.WORK_PACKAGE_BASE_EDIT:
             case ViewType.WORK_PACKAGE_UPDATE_EDIT:
                 detailsOption = ViewOptionType.WP_DETAILS;
-                detailsValue = userViewOptions.wpDetailsVisible;
+                detailsValue = userViewOptions.designDetailsVisible;
                 dictOption = ViewOptionType.WP_DICT;
-                dictValue = userViewOptions.wpDomainDictVisible;
+                dictValue = userViewOptions.designDomainDictVisible;
+                allAsTabsOption = ViewOptionType.WORK_ALL_AS_TABS;
+                allAsTabsValue = userViewOptions.workShowAllAsTabs;
                 break;
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
                 dictOption = ViewOptionType.WP_DICT;
-                dictValue = userViewOptions.wpDomainDictVisible;
+                dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
-                testSummaryValue = userViewOptions.devTestSummaryVisible;
+                testSummaryValue = userViewOptions.testSummaryVisible;
                 break;
             case ViewType.DEVELOP_BASE_WP:
             case ViewType.DEVELOP_UPDATE_WP:
                 detailsOption = ViewOptionType.DEV_DETAILS;
-                detailsValue = userViewOptions.devDetailsVisible;
+                detailsValue = userViewOptions.designDetailsVisible;
                 accTestOption = ViewOptionType.DEV_ACC_TESTS;
                 accTestValue = userViewOptions.devAccTestsVisible;
                 accFilesOption = ViewOptionType.DEV_FILES;
@@ -2074,9 +2085,11 @@ class ClientContainerServices{
                 unitTestOption = ViewOptionType.DEV_UNIT_TESTS;
                 unitTestValue = userViewOptions.devUnitTestsVisible;
                 dictOption = ViewOptionType.DEV_DICT;
-                dictValue = userViewOptions.devDomainDictVisible;
+                dictValue = userViewOptions.designDomainDictVisible;
                 testSummaryOption = ViewOptionType.DEV_TEST_SUMMARY;
-                testSummaryValue = userViewOptions.devTestSummaryVisible;
+                testSummaryValue = userViewOptions.testSummaryVisible;
+                allAsTabsOption = ViewOptionType.WORK_ALL_AS_TABS;
+                allAsTabsValue = userViewOptions.workShowAllAsTabs;
                 break;
         }
 
@@ -2089,7 +2102,8 @@ class ClientContainerServices{
             accTests:       {option: accTestOption, value: accTestValue},
             accFiles:       {option: accFilesOption, value: accFilesValue},
             intTests:       {option: intTestOption, value: intTestValue},
-            unitTests:      {option: unitTestOption, value: unitTestValue}
+            unitTests:      {option: unitTestOption, value: unitTestValue},
+            allAsTabs:      {option: allAsTabsOption, value: allAsTabsValue}
         }
 
     }
@@ -2119,6 +2133,9 @@ class ClientContainerServices{
 
             case DetailsViewType.VIEW_ACC_FILES:
                 return currentOptions.accFiles;
+
+            case DetailsViewType.VIEW_ALL_AS_TABS:
+                return currentOptions.allAsTabs;
 
             case DetailsViewType.VIEW_VERSION_PROGRESS:
                 return currentOptions.progress;
@@ -2250,6 +2267,15 @@ class ClientContainerServices{
             viewOptionType: currentOptions.dictionary.option
         };
 
+        const viewAllAsTabs = {
+            key: MenuAction.MENU_ACTION_VIEW_ALL_TABS,
+            itemName: TextLookups.menuItems(MenuAction.MENU_ACTION_VIEW_ALL_TABS),
+            action: MenuAction.MENU_ACTION_VIEW_ALL_TABS,
+            hasCheckbox: true,
+            checkboxValue: currentOptions.allAsTabs.value,
+            viewOptionType: currentOptions.allAsTabs.option
+        };
+
         // Dropdown Items - Refresh
         const refreshTestData = {
             key: MenuAction.MENU_ACTION_REFRESH_TESTS,
@@ -2298,45 +2324,6 @@ class ClientContainerServices{
                 break;
 
             case ViewType.DESIGN_NEW_EDIT:
-            case ViewType.DESIGN_PUBLISHED_VIEW:
-
-                switch (menuType) {
-                    case MenuDropdown.MENU_DROPDOWN_GOTO:
-                        return  [
-                                gotoSelection,
-                                gotoConfig,
-                                gotoDesigns
-                            ];
-
-                    case MenuDropdown.MENU_DROPDOWN_VIEW:
-
-                        switch(userRole){
-                            // Developer can access test results on this screen
-                            case RoleType.DEVELOPER:
-                                return [
-                                    viewDetails,
-                                    viewDomainDict,
-                                    viewIntTests,
-                                    viewUnitTests,
-                                    viewTestSummary
-                                ];
-                            default:
-                                return [
-                                    viewDetails,
-                                    viewDomainDict,
-                                    viewTestSummary
-                                ];
-                        }
-
-                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
-
-                        return [
-                            refreshTestData
-                        ];
-
-                }
-                break;
-            case ViewType.DESIGN_UPDATABLE_VIEW:
 
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
@@ -2348,23 +2335,12 @@ class ClientContainerServices{
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
 
-                        switch(userRole){
-                            // Developer can access test results on this screen
-                            case RoleType.DEVELOPER:
-                                return [
-                                    viewDetails,
-                                    viewDomainDict,
-                                    viewIntTests,
-                                    viewUnitTests,
-                                    viewTestSummary
-                                ];
-                            default:
-                                return [
-                                    viewDetails,
-                                    viewDomainDict,
-                                    viewTestSummary
-                                ];
-                        }
+                        return [
+                            viewDetails,
+                            viewDomainDict,
+                            viewTestSummary,
+                            viewAllAsTabs
+                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
 
@@ -2373,6 +2349,37 @@ class ClientContainerServices{
                         ];
                 }
                 break;
+
+            case ViewType.DESIGN_PUBLISHED_VIEW:
+            case ViewType.DESIGN_UPDATABLE_VIEW:
+                switch (menuType) {
+                    case MenuDropdown.MENU_DROPDOWN_GOTO:
+                        return  [
+                                gotoSelection,
+                                gotoConfig,
+                                gotoDesigns
+                            ];
+
+                    case MenuDropdown.MENU_DROPDOWN_VIEW:
+
+                        return [
+                            viewDetails,
+                            viewDomainDict,
+                            viewIntTests,
+                            viewUnitTests,
+                            viewTestSummary,
+                            viewAllAsTabs
+                        ];
+
+                    case MenuDropdown.MENU_DROPDOWN_REFRESH:
+
+                        return [
+                            refreshTestData
+                        ];
+
+                }
+                break;
+
             case ViewType.WORK_PACKAGE_BASE_VIEW:
             case ViewType.WORK_PACKAGE_UPDATE_VIEW:
 
@@ -2403,26 +2410,27 @@ class ClientContainerServices{
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return [
-                                gotoSelection,
-                                gotoConfig,
-                                gotoDesigns
-                            ];
+                            gotoSelection,
+                            gotoConfig,
+                            gotoDesigns
+                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
 
                         return [
-                                viewDetails,
-                                viewProgress,
-                                viewUpdateSummary,
-                                viewDomainDict,
-                                viewTestSummary
-                            ];
+                            viewDetails,
+                            viewProgress,
+                            viewUpdateSummary,
+                            viewDomainDict,
+                            viewTestSummary,
+                            viewAllAsTabs
+                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
 
                         return [
-                                refreshTestData
-                            ];
+                            refreshTestData
+                        ];
 
                 }
                 break;
@@ -2433,16 +2441,17 @@ class ClientContainerServices{
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return [
-                                gotoSelection,
-                                gotoConfig,
-                                gotoDesigns
-                            ];
+                            gotoSelection,
+                            gotoConfig,
+                            gotoDesigns
+                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
                         return [
-                                viewDetails,
-                                viewDomainDict,
-                            ];
+                            viewDetails,
+                            viewDomainDict,
+                            viewAllAsTabs
+                        ];
 
                 }
                 break;
@@ -2453,26 +2462,27 @@ class ClientContainerServices{
                 switch (menuType) {
                     case MenuDropdown.MENU_DROPDOWN_GOTO:
                         return [
-                                gotoSelection,
-                                gotoConfig,
-                                gotoDesigns
-                            ];
+                            gotoSelection,
+                            gotoConfig,
+                            gotoDesigns
+                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_VIEW:
                         return [
-                                viewDetails,
-                                viewDomainDict,
-                                viewAccTests,
-                                viewAccFiles,
-                                viewIntTests,
-                                viewUnitTests,
-                                viewTestSummary
-                            ];
+                            viewDetails,
+                            viewDomainDict,
+                            viewAccTests,
+                            viewAccFiles,
+                            viewIntTests,
+                            viewUnitTests,
+                            viewTestSummary,
+                            viewAllAsTabs
+                        ];
 
                     case MenuDropdown.MENU_DROPDOWN_REFRESH:
                         return [
-                                refreshTestData
-                            ];
+                            refreshTestData
+                        ];
                 }
                 break;
 

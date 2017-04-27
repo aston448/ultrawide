@@ -7,28 +7,22 @@ export const UserCurrentViewOptions = new Mongo.Collection('userCurrentViewOptio
 
 let Schema = new SimpleSchema({
     userId:                     {type: String},                             // Meteor user id
-    // Base Design Screen - Design always visible
+    // All screens
     designDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
-    designTestSummaryVisible:   {type: Boolean, defaultValue: false},       // Test Summary add-on
     designDomainDictVisible:    {type: Boolean, defaultValue: true},        // Domain Dictionary pane
-    // Design Update Screen - Scope and Design always visible
-    updateDetailsVisible:       {type: Boolean, defaultValue: true},        // The details pane
-    updateProgressVisible:      {type: Boolean, defaultValue: true},        // The merged version pane
-    updateDomainDictVisible:    {type: Boolean, defaultValue: false},       // Domain Dictionary pane
-    updateSummaryVisible:       {type: Boolean, defaultValue: false},       // Update Summary pane
-    updateTestSummaryVisible:   {type: Boolean, defaultValue: false},       // Test Summary add-on
-    // Work package editor - Scope and Design always visible
-    wpDetailsVisible:           {type: Boolean, defaultValue: true},        // The details pane
-    wpDomainDictVisible:        {type: Boolean, defaultValue: false},       // Domain Dictionary pane
-    // Developer Screen - Design always visible
-    devDetailsVisible:          {type: Boolean, defaultValue: false},       // The details pane
-    devAccTestsVisible:         {type: Boolean, defaultValue: true},        // Acceptance Tests view
-    devIntTestsVisible:         {type: Boolean, defaultValue: true},        // Integration Tests view
-    devUnitTestsVisible:         {type: Boolean, defaultValue: false},       // Unit Tests view
-    devTestSummaryVisible:      {type: Boolean, defaultValue: false},       // Test Summary add-on
-    devFeatureFilesVisible:     {type: Boolean, defaultValue: true},        // Feature Files view
-    devDomainDictVisible:       {type: Boolean, defaultValue: false},       // Domain Dictionary pane
-
+    testSummaryVisible:         {type: Boolean, defaultValue: false},       // Test Summary add-on
+    // Design Updates specific
+    updateProgressVisible:      {type: Boolean, defaultValue: false},       // The merged version pane
+    updateSummaryVisible:       {type: Boolean, defaultValue: true},        // Update Summary pane
+    // Test Specific
+    devAccTestsVisible:         {type: Boolean, defaultValue: false},        // Acceptance Tests view
+    devIntTestsVisible:         {type: Boolean, defaultValue: false},        // Integration Tests view
+    devUnitTestsVisible:        {type: Boolean, defaultValue: false},       // Unit Tests view
+    devFeatureFilesVisible:     {type: Boolean, defaultValue: false},        // Feature Files view
+    // Tabs or Panes
+    designShowAllAsTabs:        {type: Boolean, defaultValue: false},       // Show all available in Design screen as tabs
+    updateShowAllAsTabs:        {type: Boolean, defaultValue: false},       // Show all available in Update screen as tabs
+    workShowAllAsTabs:          {type: Boolean, defaultValue: false},       // Show all available in Work Package screen as tabs
 });
 
 UserCurrentViewOptions.attachSchema(Schema);

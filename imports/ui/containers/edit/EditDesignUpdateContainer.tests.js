@@ -42,9 +42,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -69,9 +69,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -96,9 +96,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -126,9 +126,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -153,9 +153,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -180,9 +180,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -210,9 +210,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -237,9 +237,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -264,9 +264,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -294,9 +294,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -321,9 +321,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -348,9 +348,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -378,9 +378,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:         false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      false
             };
@@ -405,9 +405,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:         false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      false
             };
@@ -432,9 +432,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      false
             };
@@ -462,9 +462,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -489,9 +489,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -516,9 +516,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -546,9 +546,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -573,9 +573,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -600,9 +600,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -630,9 +630,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -657,9 +657,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -684,9 +684,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -714,9 +714,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
     //
     //         // No extra stuff selected
     //         const viewOptions = {
-    //             updateDetailsVisible:       false,
-    //             updateDomainDictVisible:    false,
-    //             updateTestSummaryVisible:   true,
+    //             designDetailsVisible:       false,
+    //             designDomainDictVisible:    false,
+    //             testSummaryVisible:   true,
     //             updateSummaryVisible:       false,
     //             updateProgressVisible:      false
     //         };
@@ -741,9 +741,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
     //
     //         // No extra stuff selected
     //         const viewOptions = {
-    //             updateDetailsVisible:       false,
-    //             updateDomainDictVisible:    false,
-    //             updateTestSummaryVisible:   true,
+    //             designDetailsVisible:       false,
+    //             designDomainDictVisible:    false,
+    //             testSummaryVisible:   true,
     //             updateSummaryVisible:       false,
     //             updateProgressVisible:      false
     //         };
@@ -769,9 +769,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
     //
     //         // No extra stuff selected
     //         const viewOptions = {
-    //             updateDetailsVisible:       false,
-    //             updateDomainDictVisible:    false,
-    //             updateTestSummaryVisible:   true,
+    //             designDetailsVisible:       false,
+    //             designDomainDictVisible:    false,
+    //             testSummaryVisible:   true,
     //             updateSummaryVisible:       false,
     //             updateProgressVisible:      false
     //         };
@@ -800,9 +800,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -820,9 +820,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -840,9 +840,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -862,9 +862,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -884,9 +884,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -908,9 +908,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -932,9 +932,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -958,9 +958,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -984,9 +984,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -1012,9 +1012,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_VIEW;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -1042,9 +1042,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -1064,9 +1064,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -1086,9 +1086,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -1110,9 +1110,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      false
             };
@@ -1134,9 +1134,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -1160,9 +1160,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       false,
                 updateProgressVisible:      true
             };
@@ -1186,9 +1186,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -1214,9 +1214,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -1242,9 +1242,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -1272,9 +1272,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
             const view = ViewType.DESIGN_UPDATE_EDIT;
 
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    true,
-                updateTestSummaryVisible:   true,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    true,
+                testSummaryVisible:   true,
                 updateSummaryVisible:       true,
                 updateProgressVisible:      true
             };
@@ -1307,9 +1307,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -1324,9 +1324,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -1341,9 +1341,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       true,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       true,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);
@@ -1361,9 +1361,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
                 updateSummaryVisible:       true
             };
 
@@ -1379,9 +1379,9 @@ describe('JSX: EditDesignUpdateContainer', () => {
 
             // No extra stuff selected
             const viewOptions = {
-                updateDetailsVisible:       false,
-                updateDomainDictVisible:    false,
-                updateTestSummaryVisible:   false,
+                designDetailsVisible:       false,
+                designDomainDictVisible:    false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignUpdateContainer(mode, view, viewOptions);

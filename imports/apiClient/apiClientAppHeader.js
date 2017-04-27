@@ -38,7 +38,7 @@ class ClientAppHeaderServices{
 
         // If in Design Update Edit need to make sure Test Summary turned off when going back to edit mode...
         if(view === ViewType.DESIGN_UPDATE_EDIT && newMode === ViewMode.MODE_EDIT){
-            viewOptions.updateTestSummaryVisible = false;
+            viewOptions.testSummaryVisible = false;
 
             store.dispatch(setCurrentUserViewOptions(viewOptions, true));
         }
@@ -54,9 +54,59 @@ class ClientAppHeaderServices{
         newOptions[optionType] = !currentOptions[optionType];
 
         store.dispatch(setCurrentUserViewOptions(newOptions, true));
-        store.dispatch(updateViewOptionsData(!currentDataValue));
+        store.dispatch(updateViewOptionsData());
 
         return {success: true, message: ''};
+    }
+
+    toggleTabsViewOption(optionType, currentOptions, currentDataValue){
+
+        let newOptions = currentOptions;
+        let isVisible = false;
+
+        console.log("Toggling option " + optionType);
+
+        if(currentOptions[optionType]){
+
+            // Hiding stuff
+            isVisible = false;
+
+        } else {
+
+            // Displaying stuff
+            isVisible = true
+        }
+
+        // Set all options on or off depending on the change
+        switch(optionType){
+            case ViewOptionType.DESIGN_ALL_AS_TABS:
+                newOptions[ViewOptionType.DEV_UNIT_TESTS] = isVisible;
+                newOptions[ViewOptionType.DEV_INT_TESTS] = isVisible;
+                newOptions[ViewOptionType.DEV_ACC_TESTS] = isVisible;
+                newOptions[ViewOptionType.DEV_FILES] = isVisible;
+                newOptions[ViewOptionType.DESIGN_DETAILS] = isVisible;
+                newOptions[ViewOptionType.DESIGN_DICT] = isVisible;
+                newOptions[optionType] = !currentOptions[optionType];
+                break;
+            case ViewOptionType.UPDATE_ALL_AS_TABS:
+                newOptions[ViewOptionType.UPDATE_PROGRESS] = isVisible;
+                newOptions[ViewOptionType.UPDATE_SUMMARY] = isVisible;
+                newOptions[ViewOptionType.UPDATE_DETAILS] = isVisible;
+                newOptions[ViewOptionType.UPDATE_DICT] = isVisible;
+                newOptions[optionType] = !currentOptions[optionType];
+                break;
+            case ViewOptionType.WORK_ALL_AS_TABS:
+                newOptions[ViewOptionType.DEV_UNIT_TESTS] = isVisible;
+                newOptions[ViewOptionType.DEV_INT_TESTS] = isVisible;
+                newOptions[ViewOptionType.DEV_ACC_TESTS] = isVisible;
+                newOptions[ViewOptionType.DEV_FILES] = isVisible;
+                newOptions[ViewOptionType.WP_DETAILS] = isVisible;
+                newOptions[ViewOptionType.WP_DICT] = isVisible;
+                newOptions[optionType] = !currentOptions[optionType];
+        }
+
+        store.dispatch(setCurrentUserViewOptions(newOptions, true));
+        store.dispatch(updateViewOptionsData());
     }
 
     setViewLevelFeatures(userContext, displayContext){

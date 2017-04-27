@@ -66,30 +66,6 @@ class FeatureAspectsList extends Component {
 
         if (components) {
 
-            // Get the appropriate test summary flag for the view
-            let actualTestSummary = false;
-
-            if(testSummary) {
-
-                switch (view) {
-                    case ViewType.DESIGN_NEW_EDIT:
-                    case ViewType.DESIGN_PUBLISHED_VIEW:
-                    case ViewType.DESIGN_UPDATABLE_VIEW:
-                        actualTestSummary = viewOptions.designTestSummaryVisible;
-                        break;
-                    case ViewType.DESIGN_UPDATE_EDIT:
-                    case ViewType.DESIGN_UPDATE_VIEW:
-                        actualTestSummary = viewOptions.updateTestSummaryVisible;
-                        break;
-                    case ViewType.DEVELOP_BASE_WP:
-                    case ViewType.DEVELOP_UPDATE_WP:
-                    case ViewType.WORK_PACKAGE_BASE_VIEW:
-                    case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                        actualTestSummary = viewOptions.devTestSummaryVisible;
-                        break;
-                }
-            }
-
             return components.map((featureAspect) => {
 
                 return (
@@ -101,7 +77,7 @@ class FeatureAspectsList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
-                        testSummary={actualTestSummary}
+                        testSummary={viewOptions.testSummaryVisible}
                     />
                 );
             });

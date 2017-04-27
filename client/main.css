@@ -653,7 +653,7 @@ input {
 }
 
 .scroll-col{
-    max-height: 900px;
+    max-height: 850px;
     overflow-y: auto;
 }
 
@@ -1378,14 +1378,14 @@ input {
 .design-editor-large{
     margin: 0;
     padding: 3px;
-    max-height: 1200px;
+    max-height: 1100px;
     overflow-y: auto;
 }
 
 .design-editor-small{
     margin: 0;
     padding: 3px;
-    max-height: 900px;
+    max-height: 850px;
     overflow-y: auto;
 }
 

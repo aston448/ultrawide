@@ -23,77 +23,77 @@ Meteor.methods({
 
             switch(optionType){
                 case ViewOptionType.DESIGN_DETAILS:
-                    if(userOptions.designDetailsVisible != true){
+                    if(userOptions.designDetailsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DESIGN_TEST_SUMMARY:
-                    if(userOptions.designTestSummaryVisible != true){
+                    if(userOptions.testSummaryVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DESIGN_DICT:
-                    if(userOptions.designDomainDictVisible != true){
+                    if(userOptions.designDomainDictVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.UPDATE_DETAILS:
-                    if(userOptions.updateDetailsVisible != true){
+                    if(userOptions.designDetailsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.UPDATE_TEST_SUMMARY:
-                    if(userOptions.updateTestSummaryVisible != true){
+                    if(userOptions.testSummaryVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.UPDATE_DICT:
-                    if(userOptions.updateDomainDictVisible != true){
+                    if(userOptions.designDomainDictVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.WP_DETAILS:
-                    if(userOptions.wpDetailsVisible != true){
+                    if(userOptions.designDetailsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.WP_DICT:
-                    if(userOptions.wpDomainDictVisible != true){
+                    if(userOptions.designDomainDictVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_DETAILS:
-                    if(userOptions.devDetailsVisible != true){
+                    if(userOptions.designDetailsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_ACC_TESTS:
-                    if(userOptions.devAccTestsVisible != true){
+                    if(userOptions.devAccTestsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_INT_TESTS:
-                    if(userOptions.devIntTestsVisible != true){
+                    if(userOptions.devIntTestsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_UNIT_TESTS:
-                    if(userOptions.devUnitTestsVisible != true){
+                    if(userOptions.devUnitTestsVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_TEST_SUMMARY:
-                    if(userOptions.devTestSummaryVisible != true){
+                    if(userOptions.testSummaryVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_FILES:
-                    if(userOptions.devFeatureFilesVisible != true){
+                    if(userOptions.devFeatureFilesVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
                 case ViewOptionType.DEV_DICT:
-                    if(userOptions.devDomainDictVisible != true){
+                    if(userOptions.designDomainDictVisible !== true){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be visible");
                     }
                     break;
@@ -112,77 +112,77 @@ Meteor.methods({
 
             switch(optionType){
                 case ViewOptionType.DESIGN_DETAILS:
-                    if(userOptions.designDetailsVisible != false){
+                    if(userOptions.designDetailsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DESIGN_TEST_SUMMARY:
-                    if(userOptions.designTestSummaryVisible != false){
+                    if(userOptions.testSummaryVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DESIGN_DICT:
-                    if(userOptions.designDomainDictVisible != false){
+                    if(userOptions.designDomainDictVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.UPDATE_DETAILS:
-                    if(userOptions.updateDetailsVisible != false){
+                    if(userOptions.designDetailsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.UPDATE_TEST_SUMMARY:
-                    if(userOptions.updateTestSummaryVisible != false){
+                    if(userOptions.testSummaryVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.UPDATE_DICT:
-                    if(userOptions.updateDomainDictVisible != false){
+                    if(userOptions.designDomainDictVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.WP_DETAILS:
-                    if(userOptions.wpDetailsVisible != false){
+                    if(userOptions.designDetailsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.WP_DICT:
-                    if(userOptions.wpDomainDictVisible != false){
+                    if(userOptions.designDomainDictVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_DETAILS:
-                    if(userOptions.devDetailsVisible != false){
+                    if(userOptions.designDetailsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_ACC_TESTS:
-                    if(userOptions.devAccTestsVisible != false){
+                    if(userOptions.devAccTestsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_INT_TESTS:
-                    if(userOptions.devIntTestsVisible != false){
+                    if(userOptions.devIntTestsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_UNIT_TESTS:
-                    if(userOptions.devUnitTestsVisible != false){
+                    if(userOptions.devUnitTestsVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_TEST_SUMMARY:
-                    if(userOptions.devTestSummaryVisible != false){
+                    if(userOptions.testSummaryVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_FILES:
-                    if(userOptions.devFeatureFilesVisible != false){
+                    if(userOptions.devFeatureFilesVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;
                 case ViewOptionType.DEV_DICT:
-                    if(userOptions.devDomainDictVisible != false){
+                    if(userOptions.designDomainDictVisible !== false){
                         throw new Meteor.Error("FAIL", "Expected option " + optionType + " to be hidden");
                     }
                     break;

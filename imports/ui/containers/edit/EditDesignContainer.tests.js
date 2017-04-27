@@ -44,7 +44,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       true,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -65,7 +65,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -86,7 +86,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    true,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -107,7 +107,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -128,7 +128,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -149,7 +149,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   true,
+                testSummaryVisible:   true,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -170,7 +170,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       true,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -192,7 +192,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       true,
                 designDomainDictVisible:    true,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -215,7 +215,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       true,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   true,
+                testSummaryVisible:   true,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -237,7 +237,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    true,
-                designTestSummaryVisible:   true,
+                testSummaryVisible:   true,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -259,7 +259,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       true,
                 designDomainDictVisible:    true,
-                designTestSummaryVisible:   true,
+                testSummaryVisible:   true,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -285,7 +285,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);
@@ -302,7 +302,7 @@ describe('JSX: EditDesignContainer', () => {
             const viewOptions = {
                 designDetailsVisible:       false,
                 designDomainDictVisible:    false,
-                designTestSummaryVisible:   false,
+                testSummaryVisible:   false,
             };
 
             const item = testEditDesignContainer(mode, view, viewOptions);

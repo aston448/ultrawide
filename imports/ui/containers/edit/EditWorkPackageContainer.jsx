@@ -24,7 +24,7 @@ import ClientUserContextServices            from '../../../apiClient/apiClientUs
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -139,13 +139,29 @@ class WorkPackageApplicationsList extends Component {
                     displayContext={DisplayContext.WP_VIEW}
                 />
                 <div className={editorClass}>
-                    {this.renderViewApplications(wpApplications, DisplayContext.WP_VIEW, view, mode, userContext, viewOptions.devTestSummaryVisible)}
+                    {this.renderViewApplications(wpApplications, DisplayContext.WP_VIEW, view, mode, userContext, viewOptions.testSummaryVisible)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.WP_VIEW}
                     hasDesignSummary={false}
                 />
             </div>;
+
+        let domainDictionary =
+            <DomainDictionaryContainer params={{
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId
+            }}/>;
+
+        let wpTextComponentView =
+            <DesignComponentTextContainer params={{
+                currentContext: userContext,
+                view: view,
+                displayContext: DisplayContext.WP_VIEW
+            }}/>;
+
+
+        // Layout ------------------------------------------------------------------------------------------------------
 
         // Initial assumption is only 2 cols showing
 
@@ -154,8 +170,7 @@ class WorkPackageApplicationsList extends Component {
         let col3width = 6;
         let col4width = 6;
 
-        let wpTextComponent = '';
-        let domainDictionary = '';
+
 
         let displayedItems = 2;
 
@@ -172,32 +187,9 @@ class WorkPackageApplicationsList extends Component {
                 col3width = 6;
 
                 // Details
-                let wpTextHeader = '';
-
-                switch(view){
-                    case ViewType.WORK_PACKAGE_BASE_VIEW:
-                        wpTextHeader = 'Text';
-                        break;
-                    case ViewType.WORK_PACKAGE_UPDATE_VIEW:
-                        wpTextHeader = 'New and Old Text';
-                        break;
-                }
-
-                wpTextComponent =
-                    <DesignComponentTextContainer params={{
-                        currentContext: userContext,
-                        view: view,
-                        displayContext: DisplayContext.WP_VIEW
-                    }}/>;
-
 
                 // Domain Dictionary
-                if(viewOptions.wpDomainDictVisible) {
-                    domainDictionary =
-                        <DomainDictionaryContainer params={{
-                            designId: userContext.designId,
-                            designVersionId: userContext.designVersionId
-                        }}/>;
+                if(viewOptions.designDomainDictVisible) {
 
                         // There are now 3 cols
                         col1width = 4;
@@ -208,7 +200,7 @@ class WorkPackageApplicationsList extends Component {
                 }
 
                 // Test Summary - this actually just makes col 1 wider
-                if(viewOptions.devTestSummaryVisible){
+                if(viewOptions.testSummaryVisible){
 
                     switch(displayedItems){
                         case 1:
@@ -240,20 +232,18 @@ class WorkPackageApplicationsList extends Component {
                 // Col 2 - Details
                 let col2 =
                     <Col md={col2width} className="close-col">
-                        {wpTextComponent}
+                        {wpTextComponentView}
                     </Col>;
 
 
                 // Col 3 - Domain Dictionary - Optional
                 let col3 = '';
-                if(viewOptions.wpDomainDictVisible){
+                if(viewOptions.designDomainDictVisible){
                     col3 =
                         <Col md={col3width}>
                             {domainDictionary}
                         </Col>;
                 }
-
-
 
                 // Make up the layout based on the view options
                 layout =
@@ -278,7 +268,7 @@ class WorkPackageApplicationsList extends Component {
 
                 // Create the layout
                 if(scopeApplications) {
-                    // Layout is SCOPE | WP | TEXT | opt DICT
+                    // Layout is SCOPE | WP | opt TEXT | opt DICT
 
                     // WHAT OPTIONAL COMPONENTS ARE VISIBLE (Besides Scope and WP)
 
@@ -288,105 +278,122 @@ class WorkPackageApplicationsList extends Component {
                     col3width = 6;
                     col4width = 6;
 
-                    // Details
-                    if(viewOptions.wpDetailsVisible){
-                        let wpTextHeader = '';
+                    if(viewOptions.workShowAllAsTabs){
 
-                        switch(view){
-                            case ViewType.WORK_PACKAGE_BASE_EDIT:
-                                wpTextHeader = 'Text';
-                                break;
-                            case ViewType.WORK_PACKAGE_UPDATE_EDIT:
-                                wpTextHeader = 'New and Old Text';
-                                break;
-                        }
-
-                        wpTextComponent =
-                            <DesignComponentTextContainer params={{
-                                currentContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.WP_VIEW
-                            }}/>;
-
-                        // Now 3 cols
                         col1width = 4;
                         col2width = 4;
                         col3width = 4;
-                        col4width = 4;
 
-                        displayedItems++;
-                    }
+                        // Col 1 - Scope
+                        let col1 =
+                            <Col md={col1width} className="close-col">
+                                {wpScopeComponent}
+                            </Col>;
 
-                    // Domain Dictionary
-                    if(viewOptions.wpDomainDictVisible) {
-                        domainDictionary =
-                            <DomainDictionaryContainer params={{
-                                designId: userContext.designId,
-                                designVersionId: userContext.designVersionId
-                            }}/>;
+                        // Col 2 - Content
+                        let col2 =
+                            <Col md={col2width} className="close-col">
+                                {wpViewComponent}
+                            </Col>;
 
-                        switch(displayedItems){
-                            case 2:
-                                // There are now 3 cols
-                                col1width = 4;
-                                col2width = 4;
-                                col3width = 4;
-                                col4width = 4;
-                                break;
-                            case 3:
-                                // There are now 4 cols
-                                col1width = 3;
-                                col2width = 3;
-                                col3width = 3;
-                                col4width = 3;
-                                break;
+                        // Col 3 - Tabs
+                        let col3 =
+                            <Col id="column2" md={col2width} className="close-col">
+                                <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                                    <Tab eventKey={1} title="DETAILS">{wpTextComponentView}</Tab>
+                                    <Tab eventKey={2} title="DICTIONARY">{domainDictionary}</Tab>
+                                </Tabs>
+                            </Col>;
+
+                        // Make up the layout based on the view options
+                        layout =
+                            <Grid >
+                                <Row>
+                                    {col1}
+                                    {col2}
+                                    {col3}
+                                </Row>
+                            </Grid>;
+
+                    } else {
+
+                        // Details
+                        if (viewOptions.designDetailsVisible) {
+
+                            // Now 3 cols
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+
+                            displayedItems++;
                         }
-                    }
 
-                    // Create the layout depending on the current view...
+                        // Domain Dictionary
+                        if (viewOptions.designDomainDictVisible) {
 
-                    // Col 1 - Scope
-                    let col1 =
-                        <Col md={col1width} className="close-col">
-                            {wpScopeComponent}
-                        </Col>;
+                            switch (displayedItems) {
+                                case 2:
+                                    // There are now 3 cols
+                                    col1width = 4;
+                                    col2width = 4;
+                                    col3width = 4;
+                                    col4width = 4;
+                                    break;
+                                case 3:
+                                    // There are now 4 cols
+                                    col1width = 3;
+                                    col2width = 3;
+                                    col3width = 3;
+                                    col4width = 3;
+                                    break;
+                            }
+                        }
 
-                    // Col 2 - Content
-                    let col2 =
-                        <Col md={col2width} className="close-col">
-                            {wpViewComponent}
-                        </Col>;
+                        // Create the layout depending on the current view...
 
-                    // Col 3 - Details - Optional
-                    let col3 = '';
-                    if(viewOptions.wpDetailsVisible){
-                        col3 =
-                            <Col md={col3width}  className="close-col">
-                                {wpTextComponent}
+                        // Col 1 - Scope
+                        let col1 =
+                            <Col md={col1width} className="close-col">
+                                {wpScopeComponent}
                             </Col>;
-                    }
 
-                    // Col 4 - Domain Dictionary - Optional
-                    let col4 = '';
-                    if(viewOptions.wpDomainDictVisible){
-                        col4 =
-                            <Col md={col4width} className="close-col">
-                                {domainDictionary}
+                        // Col 2 - Content
+                        let col2 =
+                            <Col md={col2width} className="close-col">
+                                {wpViewComponent}
                             </Col>;
+
+                        // Col 3 - Details - Optional
+                        let col3 = '';
+                        if (viewOptions.designDetailsVisible) {
+                            col3 =
+                                <Col md={col3width} className="close-col">
+                                    {wpTextComponentView}
+                                </Col>;
+                        }
+
+                        // Col 4 - Domain Dictionary - Optional
+                        let col4 = '';
+                        if (viewOptions.designDomainDictVisible) {
+                            col4 =
+                                <Col md={col4width} className="close-col">
+                                    {domainDictionary}
+                                </Col>;
+                        }
+
+
+                        // Make up the layout based on the view options
+                        layout =
+                            <Grid >
+                                <Row>
+                                    {col1}
+                                    {col2}
+                                    {col3}
+                                    {col4}
+                                </Row>
+                            </Grid>;
                     }
-
-
-                    // Make up the layout based on the view options
-                    layout =
-                        <Grid >
-                            <Row>
-                                {col1}
-                                {col2}
-                                {col3}
-                                {col4}
-                            </Row>
-                        </Grid>;
-
                     return (
                         <div>
                             {layout}

@@ -21,20 +21,12 @@ Meteor.methods({
                 $set:{
                     userId:                     userContext.userId,
                     designDetailsVisible:       false,
-                    designTestSummaryVisible:   false,
+                    testSummaryVisible:         false,
                     designDomainDictVisible:    false,
-                    updateDetailsVisible:       false,
-                    updateTestSummaryVisible:   false,
-                    updateDomainDictVisible:    false,
-                    wpDetailsVisible:           false,
-                    wpDomainDictVisible:        false,
-                    devDetailsVisible:          false,
                     devAccTestsVisible:         false,
                     devIntTestsVisible:         false,
                     devUnitTestsVisible:        false,
-                    devTestSummaryVisible:      false,
-                    devFeatureFilesVisible:     false,
-                    devDomainDictVisible:       false
+                    devFeatureFilesVisible:     false
                 }
             }
         )

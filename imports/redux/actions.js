@@ -450,7 +450,12 @@ export function setMashDataStaleTo(newValue) {
 }
 
 // User View Options
-export function updateViewOptionsData(newValue) {
+export function updateViewOptionsData() {
+
+    let newValue = store.getState().currentViewOptionsDataValue + 1
+    if(newValue > 100){
+        newValue = 0;
+    }
 
     return function (dispatch) {
         dispatch({type: UPDATE_VIEW_OPTIONS_DATA, newDataValue: newValue});

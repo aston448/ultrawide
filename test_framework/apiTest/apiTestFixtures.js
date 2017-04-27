@@ -281,20 +281,12 @@ Meteor.methods({
             {
                 $set:{
                     designDetailsVisible:       true,
-                    designTestSummaryVisible:   false,
+                    testSummaryVisible:         false,
                     designDomainDictVisible:    true,
-                    updateDetailsVisible:       true,
-                    updateTestSummaryVisible:   false,
-                    updateDomainDictVisible:    false,
-                    wpDetailsVisible:           true,
-                    wpDomainDictVisible:        false,
-                    devDetailsVisible:          false,
                     devAccTestsVisible:         false,
                     devIntTestsVisible:         false,
                     devUnitTestsVisible:        false,
-                    devTestSummaryVisible:      false,
-                    devFeatureFilesVisible:     false,
-                    devDomainDictVisible:       false
+                    devFeatureFilesVisible:     false
                 }
             },
             {multi: true}

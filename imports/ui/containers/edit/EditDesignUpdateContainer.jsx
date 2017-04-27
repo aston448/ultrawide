@@ -25,7 +25,7 @@ import ClientDesignVersionServices          from '../../../apiClient/apiClientDe
 import ClientContainerServices              from '../../../apiClient/apiClientContainerServices.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 
 // REDUX services
 import {connect} from 'react-redux';
@@ -165,7 +165,7 @@ export class UpdateApplicationsList extends Component {
                     displayContext={DisplayContext.UPDATE_SCOPE}
                 />
                 <div className={editorClass}>
-                    {this.renderScopeApplications(baseApplications, DisplayContext.UPDATE_SCOPE, view, mode, userContext, viewOptions.updateTestSummaryVisible)}
+                    {this.renderScopeApplications(baseApplications, DisplayContext.UPDATE_SCOPE, view, mode, userContext, viewOptions.testSummaryVisible)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.UPDATE_SCOPE}
@@ -213,7 +213,7 @@ export class UpdateApplicationsList extends Component {
                     displayContext={DisplayContext.UPDATE_VIEW}
                 />
                 <div className={editorClass}>
-                    {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.updateTestSummaryVisible)}
+                    {this.renderUpdateApplications(updateApplications, DisplayContext.UPDATE_VIEW, view, mode, viewOptions.testSummaryVisible)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.UPDATE_VIEW}
@@ -296,226 +296,265 @@ export class UpdateApplicationsList extends Component {
 
             displayedItems = 2;
 
-            if(viewOptions.updateDetailsVisible){
+            if(viewOptions.updateShowAllAsTabs){
 
-                // There are now 3 cols so change widths
                 col1width = 4;
                 col2width = 4;
                 col3width = 4;
-                col4width = 4;
-                col5width = 4;
-                col6width = 4;
 
-                displayedItems++;
-            }
+                let col1 =
+                    <Col id="scopeCol" md={col1width} className="close-col">
+                        {updateScopeComponent}
+                    </Col>;
 
-            if(viewOptions.updateProgressVisible){
 
-                switch(displayedItems){
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        col6width = 4;
-                        break;
-                    case 3:
-                        // There are now 4 cols so change widths
-                        col1width = 3;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        col6width = 3;
-                        break;
+                let col2 =
+                    <Col id="editCol" md={col2width} className="close-col">
+                        {updateEditComponent}
+                    </Col>;
+
+
+                let col3 =
+                    <Col id="tabsCol" md={col2width} className="close-col">
+                        <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                            <Tab eventKey={1} title="DETAILS">{updateTextComponent}</Tab>
+                            <Tab eventKey={2} title="WORKING VIEW">{workingVersionComponent}</Tab>
+                            <Tab eventKey={3} title="SUMMARY">{updateSummary}</Tab>
+                            <Tab eventKey={4} title="DICTIONARY">{domainDictionary}</Tab>
+                        </Tabs>
+                    </Col>;
+
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                            {col3}
+                        </Row>
+                    </Grid>;
+            } else {
+
+                if (viewOptions.designDetailsVisible) {
+
+                    // There are now 3 cols so change widths
+                    col1width = 4;
+                    col2width = 4;
+                    col3width = 4;
+                    col4width = 4;
+                    col5width = 4;
+                    col6width = 4;
+
+                    displayedItems++;
                 }
 
-                displayedItems++;
-            }
+                if (viewOptions.updateProgressVisible) {
 
-            if(viewOptions.updateSummaryVisible){
+                    switch (displayedItems) {
+                        case 2:
+                            // There are now 3 cols so change widths
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            col6width = 4;
+                            break;
+                        case 3:
+                            // There are now 4 cols so change widths
+                            col1width = 3;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            col6width = 3;
+                            break;
+                    }
 
-                switch(displayedItems){
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        col6width = 4;
-                        break;
-                    case 3:
-                        // There are now 4 cols so change widths
-                        col1width = 3;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        col6width = 3;
-                        break;
-                    case 4:
-                        // There are now 5 cols so change widths
-                        col1width = 2;
-                        col2width = 3;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 3;
-                        col6width = 2;
-                        break;
-                }
-                displayedItems++;
-            }
-
-            if(viewOptions.updateDomainDictVisible){
-
-                switch(displayedItems){
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        col6width = 4;
-                        break;
-                    case 3:
-                        // There are now 4 cols so change widths
-                        col1width = 3;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        col6width = 3;
-
-                        break;
-                    case 4:
-                        // There are now 5 cols so change widths
-                        col1width = 2;
-                        col2width = 3;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 3;
-                        col6width = 2;
-
-                        break;
-                    case 5:
-                        // There are now 6 cols so change widths
-                        col1width = 2;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 2;
-                        col6width = 2;
-                }
-                displayedItems++;
-            }
-
-            if(viewOptions.updateTestSummaryVisible){
-
-                switch(displayedItems){
-                    case 2:
-                        col1width = 6;
-                        col2width = 6;
-                        col3width = 6;
-                        col4width = 6;
-                        col5width = 6;
-                        col6width = 6;
-                        break;
-                    case 3:
-                        col1width = 6;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        col6width = 3;
-                        break;
-                    case 4:
-                        col1width = 6;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 2;
-                        col6width = 2;
-                        break;
-                    case 5:
-                        col1width = 4;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 2;
-                        col6width = 2;
-                        break;
-                    case 6:
-                        col1width = 2;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 2;
-                        col6width = 2;
+                    displayedItems++;
                 }
 
-            }
+                if (viewOptions.updateSummaryVisible) {
 
-            let col1 =
-                <Col id="scopeCol" md={col1width} className="close-col">
-                    {updateScopeComponent}
-                </Col>;
+                    switch (displayedItems) {
+                        case 2:
+                            // There are now 3 cols so change widths
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            col6width = 4;
+                            break;
+                        case 3:
+                            // There are now 4 cols so change widths
+                            col1width = 3;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            col6width = 3;
+                            break;
+                        case 4:
+                            // There are now 5 cols so change widths
+                            col1width = 2;
+                            col2width = 3;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 3;
+                            col6width = 2;
+                            break;
+                    }
+                    displayedItems++;
+                }
 
+                if (viewOptions.designDomainDictVisible) {
 
-            let col2 =
-                <Col id="editCol" md={col2width} className="close-col">
-                    {updateEditComponent}
-                </Col>;
+                    switch (displayedItems) {
+                        case 2:
+                            // There are now 3 cols so change widths
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            col6width = 4;
+                            break;
+                        case 3:
+                            // There are now 4 cols so change widths
+                            col1width = 3;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            col6width = 3;
 
+                            break;
+                        case 4:
+                            // There are now 5 cols so change widths
+                            col1width = 2;
+                            col2width = 3;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 3;
+                            col6width = 2;
 
-            let col3 = '';
-            if(viewOptions.updateDetailsVisible){
-                col3 =
-                    <Col id="detailsCol" md={col3width} className="close-col">
-                        {updateTextComponent}
+                            break;
+                        case 5:
+                            // There are now 6 cols so change widths
+                            col1width = 2;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 2;
+                            col6width = 2;
+                    }
+                    displayedItems++;
+                }
+
+                if (viewOptions.testSummaryVisible) {
+
+                    switch (displayedItems) {
+                        case 2:
+                            col1width = 6;
+                            col2width = 6;
+                            col3width = 6;
+                            col4width = 6;
+                            col5width = 6;
+                            col6width = 6;
+                            break;
+                        case 3:
+                            col1width = 6;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            col6width = 3;
+                            break;
+                        case 4:
+                            col1width = 6;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 2;
+                            col6width = 2;
+                            break;
+                        case 5:
+                            col1width = 4;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 2;
+                            col6width = 2;
+                            break;
+                        case 6:
+                            col1width = 2;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 2;
+                            col6width = 2;
+                    }
+
+                }
+
+                let col1 =
+                    <Col id="scopeCol" md={col1width} className="close-col">
+                        {updateScopeComponent}
                     </Col>;
-            }
 
-            let col4 = '';
-            if(viewOptions.updateProgressVisible){
-                console.log("RENDER PROGRESS " + view);
-                col4 =
-                    <Col id="workingCol" md={col4width} className="close-col">
-                        {workingVersionComponent}
+
+                let col2 =
+                    <Col id="editCol" md={col2width} className="close-col">
+                        {updateEditComponent}
                     </Col>;
-            }
 
-            let col5 = '';
-            if(viewOptions.updateSummaryVisible){
-                col5 =
-                    <Col id="summaryCol" md={col5width} className="close-col">
-                        {updateSummary}
-                    </Col>;
-            }
 
-            let col6 = '';
-            if(viewOptions.updateDomainDictVisible){
-                col6 =
-                    <Col id="dictCol" md={col6width} className="close-col">
-                        {domainDictionary}
-                    </Col>;
-            }
+                let col3 = '';
+                if (viewOptions.designDetailsVisible) {
+                    col3 =
+                        <Col id="detailsCol" md={col3width} className="close-col">
+                            {updateTextComponent}
+                        </Col>;
+                }
 
-            // Make up the layout based on the view options
-            layout =
-                <Grid >
-                    <Row>
-                        {col1}
-                        {col2}
-                        {col3}
-                        {col4}
-                        {col5}
-                        {col6}
-                    </Row>
-                </Grid>;
+                let col4 = '';
+                if (viewOptions.updateProgressVisible) {
+                    console.log("RENDER PROGRESS " + view);
+                    col4 =
+                        <Col id="workingCol" md={col4width} className="close-col">
+                            {workingVersionComponent}
+                        </Col>;
+                }
+
+                let col5 = '';
+                if (viewOptions.updateSummaryVisible) {
+                    col5 =
+                        <Col id="summaryCol" md={col5width} className="close-col">
+                            {updateSummary}
+                        </Col>;
+                }
+
+                let col6 = '';
+                if (viewOptions.designDomainDictVisible) {
+                    col6 =
+                        <Col id="dictCol" md={col6width} className="close-col">
+                            {domainDictionary}
+                        </Col>;
+                }
+
+                // Make up the layout based on the view options
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                            {col3}
+                            {col4}
+                            {col5}
+                            {col6}
+                        </Row>
+                    </Grid>;
+            }
 
             return (
                 <div>
@@ -532,201 +571,232 @@ export class UpdateApplicationsList extends Component {
 
             displayedItems = 1;
 
-            if (viewOptions.updateDetailsVisible) {
+            if(viewOptions.updateShowAllAsTabs){
 
-                // There are now 2 cols so change widths
                 col1width = 6;
                 col2width = 6;
-                col3width = 6;
-                col4width = 6;
-                col5width = 6;
 
-                displayedItems++;
-            }
+                let col1 =
+                    <Col id="viewCol" md={col1width} className="close-col">
+                        {updateViewComponent}
+                    </Col>;
 
-            if (viewOptions.updateProgressVisible) {
 
-                switch (displayedItems) {
-                    case 1:
-                        // There are now 2 cols so change widths
-                        col1width = 6;
-                        col2width = 6;
-                        col3width = 6;
-                        col4width = 6;
-                        col5width = 6;
-                        break;
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        break;
+                let col2 =
+                    <Col id="tabsCol" md={col2width} className="close-col">
+                        <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                            <Tab eventKey={1} title="DETAILS">{updateTextComponent}</Tab>
+                            <Tab eventKey={2} title="WORKING VIEW">{workingVersionComponent}</Tab>
+                            <Tab eventKey={3} title="SUMMARY">{updateSummary}</Tab>
+                            <Tab eventKey={4} title="DICTIONARY">{domainDictionary}</Tab>
+                        </Tabs>
+                    </Col>;
+
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                        </Row>
+                    </Grid>;
+
+            } else {
+
+                if (viewOptions.designDetailsVisible) {
+
+                    // There are now 2 cols so change widths
+                    col1width = 6;
+                    col2width = 6;
+                    col3width = 6;
+                    col4width = 6;
+                    col5width = 6;
+
+                    displayedItems++;
                 }
 
-                displayedItems++;
-            }
+                if (viewOptions.updateProgressVisible) {
 
-            if (viewOptions.updateSummaryVisible) {
+                    switch (displayedItems) {
+                        case 1:
+                            // There are now 2 cols so change widths
+                            col1width = 6;
+                            col2width = 6;
+                            col3width = 6;
+                            col4width = 6;
+                            col5width = 6;
+                            break;
+                        case 2:
+                            // There are now 3 cols so change widths
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            break;
+                    }
 
-                switch (displayedItems) {
-                    case 1:
-                        // There are now 2 cols so change widths
-                        col1width = 6;
-                        col2width = 6;
-                        col3width = 6;
-                        col4width = 6;
-                        col5width = 6;
-                        break;
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        break;
-                    case 3:
-                        // There are now 4 cols so change widths
-                        col1width = 3;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        break;
+                    displayedItems++;
                 }
-                displayedItems++;
-            }
 
-            if (viewOptions.updateDomainDictVisible) {
+                if (viewOptions.updateSummaryVisible) {
 
-                switch (displayedItems) {
-                    case 1:
-                        // There are now 2 cols so change widths
-                        col1width = 6;
-                        col2width = 6;
-                        col3width = 6;
-                        col4width = 6;
-                        col5width = 6;
-                        break;
-                    case 2:
-                        // There are now 3 cols so change widths
-                        col1width = 4;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        break;
-                    case 3:
-                        // There are now 4 cols so change widths
-                        col1width = 3;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        break;
-                    case 4:
-                        // There are now 5 cols so change widths
-                        col1width = 3;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 3;
-                        col5width = 2;
+                    switch (displayedItems) {
+                        case 1:
+                            // There are now 2 cols so change widths
+                            col1width = 6;
+                            col2width = 6;
+                            col3width = 6;
+                            col4width = 6;
+                            col5width = 6;
+                            break;
+                        case 2:
+                            // There are now 3 cols so change widths
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            break;
+                        case 3:
+                            // There are now 4 cols so change widths
+                            col1width = 3;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            break;
+                    }
+                    displayedItems++;
                 }
-                displayedItems++;
-            }
 
-            if (viewOptions.updateTestSummaryVisible) {
-                // Expand col 1
-                switch (displayedItems) {
-                    case 1:
-                        col1width = 12;
-                        col2width = 0;
-                        col3width = 0;
-                        col4width = 0;
-                        col5width = 0;
-                        break;
-                    case 2:
-                        col1width = 8;
-                        col2width = 4;
-                        col3width = 4;
-                        col4width = 4;
-                        col5width = 4;
-                        break;
-                    case 3:
-                        col1width = 6;
-                        col2width = 3;
-                        col3width = 3;
-                        col4width = 3;
-                        col5width = 3;
-                        break;
-                    case 4:
-                        col1width = 6;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 2;
-                        break;
-                    case 5:
-                        col1width = 4;
-                        col2width = 2;
-                        col3width = 2;
-                        col4width = 2;
-                        col5width = 2;
+                if (viewOptions.designDomainDictVisible) {
+
+                    switch (displayedItems) {
+                        case 1:
+                            // There are now 2 cols so change widths
+                            col1width = 6;
+                            col2width = 6;
+                            col3width = 6;
+                            col4width = 6;
+                            col5width = 6;
+                            break;
+                        case 2:
+                            // There are now 3 cols so change widths
+                            col1width = 4;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            break;
+                        case 3:
+                            // There are now 4 cols so change widths
+                            col1width = 3;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            break;
+                        case 4:
+                            // There are now 5 cols so change widths
+                            col1width = 3;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 3;
+                            col5width = 2;
+                    }
+                    displayedItems++;
                 }
-            }
 
-            let col1 =
-                <Col id="viewCol" md={col1width} className="close-col">
-                    {updateViewComponent}
-                </Col>;
+                if (viewOptions.testSummaryVisible) {
+                    // Expand col 1
+                    switch (displayedItems) {
+                        case 1:
+                            col1width = 12;
+                            col2width = 0;
+                            col3width = 0;
+                            col4width = 0;
+                            col5width = 0;
+                            break;
+                        case 2:
+                            col1width = 8;
+                            col2width = 4;
+                            col3width = 4;
+                            col4width = 4;
+                            col5width = 4;
+                            break;
+                        case 3:
+                            col1width = 6;
+                            col2width = 3;
+                            col3width = 3;
+                            col4width = 3;
+                            col5width = 3;
+                            break;
+                        case 4:
+                            col1width = 6;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 2;
+                            break;
+                        case 5:
+                            col1width = 4;
+                            col2width = 2;
+                            col3width = 2;
+                            col4width = 2;
+                            col5width = 2;
+                    }
+                }
 
-
-            let col2 = '';
-            if (viewOptions.updateDetailsVisible) {
-                col2 =
-                    <Col id="detailsCol" md={col2width} className="close-col">
-                        {updateViewTextComponent}
+                let col1 =
+                    <Col id="viewCol" md={col1width} className="close-col">
+                        {updateViewComponent}
                     </Col>;
+
+
+                let col2 = '';
+                if (viewOptions.designDetailsVisible) {
+                    col2 =
+                        <Col id="detailsCol" md={col2width} className="close-col">
+                            {updateViewTextComponent}
+                        </Col>;
+                }
+
+                let col3 = '';
+                if (viewOptions.updateProgressVisible) {
+                    col3 =
+                        <Col id="workingCol" md={col3width} className="close-col">
+                            {workingVersionComponent}
+                        </Col>;
+                }
+
+                let col4 = '';
+                if (viewOptions.updateSummaryVisible) {
+                    col4 =
+                        <Col id="summaryCol" md={col4width} className="close-col">
+                            {updateSummary}
+                        </Col>;
+                }
+
+                let col5 = '';
+                if (viewOptions.designDomainDictVisible) {
+                    col5 =
+                        <Col id="dictCol" md={col5width} className="close-col">
+                            {domainDictionary}
+                        </Col>;
+                }
+
+                // Make up the layout based on the view options
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                            {col3}
+                            {col4}
+                            {col5}
+                        </Row>
+                    </Grid>;
             }
-
-            let col3 = '';
-            if (viewOptions.updateProgressVisible) {
-                col3 =
-                    <Col id="workingCol" md={col3width} className="close-col">
-                        {workingVersionComponent}
-                    </Col>;
-            }
-
-            let col4 = '';
-            if (viewOptions.updateSummaryVisible) {
-                col4 =
-                    <Col id="summaryCol" md={col4width} className="close-col">
-                        {updateSummary}
-                    </Col>;
-            }
-
-            let col5 = '';
-            if (viewOptions.updateDomainDictVisible) {
-                col5 =
-                    <Col id="dictCol" md={col5width} className="close-col">
-                        {domainDictionary}
-                    </Col>;
-            }
-
-            // Make up the layout based on the view options
-            layout =
-                <Grid >
-                    <Row>
-                        {col1}
-                        {col2}
-                        {col3}
-                        {col4}
-                        {col5}
-                    </Row>
-                </Grid>;
-
             return (
                 <div>
                     {layout}
@@ -753,7 +823,8 @@ function mapStateToProps(state) {
         viewOptions:            state.currentUserViewOptions,
         testDataFlag:           state.testDataFlag,
         updateScopeFlag:        state.currentUpdateScopeFlag,
-        workPackageScopeFlag:   state.currentWorkPackageScopeFlag
+        workPackageScopeFlag:   state.currentWorkPackageScopeFlag,
+        currentViewDataValue:   state.currentViewOptionsDataValue
     }
 }
 

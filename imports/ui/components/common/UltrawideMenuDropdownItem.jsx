@@ -88,6 +88,9 @@ export class UltrawideMenuDropdownItem extends Component {
             case MenuAction.MENU_ACTION_VIEW_UPD_SUMM:
                 ClientAppHeaderServices.toggleViewOption(viewOptionType, userViewOptions, currentViewDataValue);
                 break;
+            case MenuAction.MENU_ACTION_VIEW_ALL_TABS:
+                ClientAppHeaderServices.toggleTabsViewOption(viewOptionType, userViewOptions, currentViewDataValue);
+                break;
             case MenuAction.MENU_ACTION_REFRESH_TESTS:
                 ClientTestIntegrationServices.refreshTestData(userContext);
                 break;

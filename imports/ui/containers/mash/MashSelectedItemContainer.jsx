@@ -44,15 +44,6 @@ class MashSelectedItemList extends Component {
 
     }
 
-    shouldComponentUpdate(nextProps, nextState){
-
-        // if(nextProps.userContext.designComponentId !== this.props.userContext.designComponentId){
-        //     return true;
-        // }
-
-        return true;
-    }
-
     onExportFeatureFile(userContext){
         ClientMashDataServices.exportFeature(userContext);
     }

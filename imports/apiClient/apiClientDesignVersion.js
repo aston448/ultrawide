@@ -266,7 +266,7 @@ class ClientDesignVersionServices{
         // Only want to reset component though if changing DV
         let designComponentId = userContext.designComponentId;
 
-        if(newDesignVersionId !== userContext.designVersionId){
+        if(newDesignVersionId !== userContext.designVersionId || forceReset){
             designComponentId = 'NONE';
         }
 
@@ -323,7 +323,7 @@ class ClientDesignVersionServices{
         ClientTestIntegrationServices.refreshTestData(userContext);
 
         // Recalculate the progress data
-        this.updateWorkProgress(userContext);
+        ClientDesignVersionServices.updateWorkProgress(userContext);
 
     }
 

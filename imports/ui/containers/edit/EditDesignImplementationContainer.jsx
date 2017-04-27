@@ -25,7 +25,7 @@ import ClientUserContextServices            from '../../../apiClient/apiClientUs
 import ClientDesignVersionServices          from '../../../apiClient/apiClientDesignVersion.js';
 
 // Bootstrap
-import {Grid, Row, Col} from 'react-bootstrap';
+import {Grid, Row, Col, Tabs, Tab} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
 
 // REDUX services
@@ -128,7 +128,7 @@ class DevApplicationsList extends Component {
                     displayContext={DisplayContext.DEV_DESIGN}
                 />
                 <div className={editorClass}>
-                    {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.devTestSummaryVisible, userContext)}
+                    {this.renderApplications(wpApplications, view, mode, DisplayContext.DEV_DESIGN, viewOptions.testSummaryVisible, userContext)}
                 </div>
                 <DesignEditorFooter
                     displayContext={DisplayContext.DEV_DESIGN}
@@ -136,508 +136,557 @@ class DevApplicationsList extends Component {
                 />
             </div>;
 
-        // Details
-        if(viewOptions.devDetailsVisible){
-            designDetails =
-                <DesignComponentTextContainer params={{
-                    currentContext: userContext,
+        // Deatails Pane
+        designDetails =
+            <DesignComponentTextContainer params={{
+                currentContext: userContext,
+                view: view,
+                displayContext: DisplayContext.EDIT_STEP_WP_DEV
+            }}/>;
+
+        // Acceptance Tests Pane
+        featureTests = <div></div>;
+
+        // Acceptance Tests Files Pane
+        devFiles =
+            <Panel header="Build Feature Files" className="panel-update panel-update-body">
+                <Grid>
+                    <Row>
+                        <Col md={12} className="close-col">
+                            <DevFilesContainer params={{
+                                userContext: userContext
+                            }}/>
+                        </Col>
+                    </Row>
+                </Grid>
+            </Panel>;
+
+
+        // Integration Tests Pane
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.DESIGN_SECTION,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.DESIGN_SECTION:
+                    intTests =
+                        <div>
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.FEATURE,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_INT_TESTS
+                            }}/>
+                            <MashSelectedItemContainer params={{
+                                componentType: ComponentType.DESIGN_SECTION,
+                                designItemId: 'NONE',
+                                userContext: userContext,
+                                view: view,
+                                displayContext: DisplayContext.MASH_INT_TESTS
+                            }}/>
+                        </div>;
+                    break;
+                case ComponentType.FEATURE:
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.FEATURE_ASPECT,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                case ComponentType.SCENARIO:
+                    intTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_INT_TESTS
+                        }}/>;
+
+                    break;
+            }
+        } else {
+            intTests =
+                <MashSelectedItemContainer params={{
+                    componentType: 'NONE',
+                    designItemId: 'NONE',
+                    userContext: userContext,
                     view: view,
-                    displayContext: DisplayContext.EDIT_STEP_WP_DEV
+                    displayContext: DisplayContext.MASH_INT_TESTS
                 }}/>;
-
-            displayedItems++;
         }
 
-        // Acceptance (Feature) Tests
-        if(viewOptions.devAccTestsVisible){
-            featureTests = <div></div>;
-
-            switch(displayedItems){
-                case 1:
-                    // There are now 2 cols so change widths
-                    col1width = 5;
-                    col2width = 7;
-                    col3width = 7;
-                    col4width = 7;
-                    col5width = 7;
-                    col6width = 7;
-                    col7width = 7;
+        // Unit Tests Pane
+        if(userContext.designComponentType !== 'NONE'){
+            switch(userContext.designComponentType){
+                case ComponentType.APPLICATION:
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.DESIGN_SECTION,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
                     break;
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    col7width = 4;
-                    break;
-            }
-
-            displayedItems++;
-
-        }
-
-        if(viewOptions.devFeatureFilesVisible){
-
-            devFiles =
-                <Panel header="Build Feature Files" className="panel-update panel-update-body">
-                    <Grid>
-                        <Row>
-                            <Col md={12} className="close-col">
-                                <DevFilesContainer params={{
-                                    userContext: userContext
-                                }}/>
-                            </Col>
-                        </Row>
-                    </Grid>
-                </Panel>;
-
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    col7width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-            }
-
-            displayedItems++;
-        }
-
-        // Integration Tests
-        if(viewOptions.devIntTestsVisible){
-
-            if(userContext.designComponentType !== 'NONE'){
-                switch(userContext.designComponentType){
-                    case ComponentType.APPLICATION:
-                        intTests =
+                case ComponentType.DESIGN_SECTION:
+                    unitTests =
+                        <div>
                             <MashSelectedItemContainer params={{
-                                componentType: ComponentType.DESIGN_SECTION,
+                                componentType: ComponentType.FEATURE,
                                 designItemId: 'NONE',
                                 userContext: userContext,
                                 view: view,
-                                displayContext: DisplayContext.MASH_INT_TESTS
-                            }}/>;
-                        break;
-                    case ComponentType.DESIGN_SECTION:
-                        intTests =
-                            <div>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.FEATURE,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_INT_TESTS
-                                }}/>
-                            </div>;
-                        break;
-                    case ComponentType.FEATURE:
-                        intTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.FEATURE_ASPECT,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_INT_TESTS
-                            }}/>;
-                        break;
-                    case ComponentType.FEATURE_ASPECT:
-                    case ComponentType.SCENARIO:
-                        intTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.SCENARIO,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_INT_TESTS
-                            }}/>;
-
-                        break;
-                }
-            } else {
-                intTests =
-                    <MashSelectedItemContainer params={{
-                        componentType: 'NONE',
-                        designItemId: 'NONE',
-                        userContext: userContext,
-                        view: view,
-                        displayContext: DisplayContext.MASH_INT_TESTS
-                    }}/>;
-            }
-
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    col7width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-                case 4:
-                    // There are now 5 cols so change widths
-                    col1width = 3;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-            }
-            displayedItems++;
-        }
-
-        // Module Tests
-        if(viewOptions.devUnitTestsVisible){
-
-            if(userContext.designComponentType !== 'NONE'){
-                switch(userContext.designComponentType){
-                    case ComponentType.APPLICATION:
-                        unitTests =
+                                displayContext: DisplayContext.MASH_UNIT_TESTS
+                            }}/>
                             <MashSelectedItemContainer params={{
                                 componentType: ComponentType.DESIGN_SECTION,
                                 designItemId: 'NONE',
                                 userContext: userContext,
                                 view: view,
                                 displayContext: DisplayContext.MASH_UNIT_TESTS
-                            }}/>;
-                        break;
-                    case ComponentType.DESIGN_SECTION:
-                        unitTests =
-                            <div>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.FEATURE,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>
-                                <MashSelectedItemContainer params={{
-                                    componentType: ComponentType.DESIGN_SECTION,
-                                    designItemId: 'NONE',
-                                    userContext: userContext,
-                                    view: view,
-                                    displayContext: DisplayContext.MASH_UNIT_TESTS
-                                }}/>
-                            </div>;
-                        break;
-                    case ComponentType.FEATURE:
-                        unitTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.FEATURE_ASPECT,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_UNIT_TESTS
-                            }}/>;
-                        break;
-                    case ComponentType.FEATURE_ASPECT:
-                    case ComponentType.SCENARIO:
-                        unitTests =
-                            <MashSelectedItemContainer params={{
-                                componentType: ComponentType.SCENARIO,
-                                designItemId: 'NONE',
-                                userContext: userContext,
-                                view: view,
-                                displayContext: DisplayContext.MASH_UNIT_TESTS
-                            }}/>;
+                            }}/>
+                        </div>;
+                    break;
+                case ComponentType.FEATURE:
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.FEATURE_ASPECT,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
+                    break;
+                case ComponentType.FEATURE_ASPECT:
+                case ComponentType.SCENARIO:
+                    unitTests =
+                        <MashSelectedItemContainer params={{
+                            componentType: ComponentType.SCENARIO,
+                            designItemId: 'NONE',
+                            userContext: userContext,
+                            view: view,
+                            displayContext: DisplayContext.MASH_UNIT_TESTS
+                        }}/>;
 
+                    break;
+            }
+        } else {
+            unitTests =
+                <MashSelectedItemContainer params={{
+                    componentType: 'NONE',
+                    designItemId: 'NONE',
+                    userContext: userContext,
+                    view: view,
+                    displayContext: DisplayContext.MASH_UNIT_TESTS
+                }}/>;
+        }
+
+        domainDictionary =
+            <DomainDictionaryContainer params={{
+                designId: userContext.designId,
+                designVersionId: userContext.designVersionId
+            }}/>;
+
+
+        // Layout ------------------------------------------------------------------------------------------------------
+
+        if(viewOptions.workShowAllAsTabs){
+
+            // Main design plus tabs column
+            col1width = 6;
+            col2width = 6;
+
+        } else {
+
+            // Details
+            if (viewOptions.designDetailsVisible) {
+
+                displayedItems++;
+            }
+
+            // Acceptance (Feature) Tests
+            if (viewOptions.devAccTestsVisible) {
+
+                switch (displayedItems) {
+                    case 1:
+                        // There are now 2 cols so change widths
+                        col1width = 5;
+                        col2width = 7;
+                        col3width = 7;
+                        col4width = 7;
+                        col5width = 7;
+                        col6width = 7;
+                        col7width = 7;
+                        break;
+                    case 2:
+                        // There are now 3 cols so change widths
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        col6width = 4;
+                        col7width = 4;
                         break;
                 }
-            } else {
-                unitTests =
-                    <MashSelectedItemContainer params={{
-                        componentType: 'NONE',
-                        designItemId: 'NONE',
-                        userContext: userContext,
-                        view: view,
-                        displayContext: DisplayContext.MASH_UNIT_TESTS
-                    }}/>;
+
+                displayedItems++;
+
             }
 
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    col7width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-                case 4:
-                    // There are now 5 cols so change widths
-                    col1width = 3;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-                case 5:
-                    // There are now 6 cols so change widths
-                    col1width = 2;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 2;
-                    col7width = 2;
+            if (viewOptions.devFeatureFilesVisible) {
+
+                switch (displayedItems) {
+                    case 2:
+                        // There are now 3 cols so change widths
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        col6width = 4;
+                        col7width = 4;
+                        break;
+                    case 3:
+                        // There are now 4 cols so change widths
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                }
+
+                displayedItems++;
             }
-            displayedItems++;
-        }
 
-        // Domain Dictionary
-        if(viewOptions.devDomainDictVisible) {
-            domainDictionary =
-                <DomainDictionaryContainer params={{
-                    designId: userContext.designId,
-                    designVersionId: userContext.designVersionId
-                }}/>;
+            // Integration Tests
+            if (viewOptions.devIntTestsVisible) {
 
-            switch(displayedItems){
-                case 2:
-                    // There are now 3 cols so change widths
-                    col1width = 4;
-                    col2width = 4;
-                    col3width = 4;
-                    col4width = 4;
-                    col5width = 4;
-                    col6width = 4;
-                    col7width = 4;
-                    break;
-                case 3:
-                    // There are now 4 cols so change widths
-                    col1width = 3;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-                case 4:
-                    // There are now 5 cols so change widths
-                    col1width = 4;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 2;
-                    col7width = 2;
-                    break;
-                case 5:
-                    // There are now 6 cols so change widths
-                    col1width = 2;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 2;
-                    col7width = 2;
-                    break;
-                case 6:
-                    // There are now 7 cols so change widths
-                    col1width = 2;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 1;
-                    col7width = 1;
-                    break;
+                switch (displayedItems) {
+                    case 2:
+                        // There are now 3 cols so change widths
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        col6width = 4;
+                        col7width = 4;
+                        break;
+                    case 3:
+                        // There are now 4 cols so change widths
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                    case 4:
+                        // There are now 5 cols so change widths
+                        col1width = 3;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                }
+                displayedItems++;
             }
-            displayedItems++;
-        }
 
-        // Test Summary - this actually just makes col 1 wider
-        if(viewOptions.devTestSummaryVisible){
+            // Unt Tests
+            if (viewOptions.devUnitTestsVisible) {
 
-            switch(displayedItems){
-                case 1:
-                    col1width = 12;
-                    col2width = 0;
-                    col3width = 0;
-                    col4width = 0;
-                    col5width = 0;
-                    col6width = 0;
-                    col7width = 0;
-                    break;
-                case 2:
-                    col1width = 7;
-                    col2width = 5;
-                    col3width = 5;
-                    col4width = 5;
-                    col5width = 5;
-                    col6width = 5;
-                    col7width = 5;
-                    break;
-                case 3:
-                    col1width = 6;
-                    col2width = 3;
-                    col3width = 3;
-                    col4width = 3;
-                    col5width = 3;
-                    col6width = 3;
-                    col7width = 3;
-                    break;
-                case 4:
-                    col1width = 6;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 2;
-                    col7width = 2;
-                    break;
-                case 5:
-                    col1width = 4;
-                    col2width = 2;
-                    col3width = 2;
-                    col4width = 2;
-                    col5width = 2;
-                    col6width = 2;
-                    col7width = 2;
-                    break;
-                case 6:
-                    col1width = 7;
-                    col2width = 1;
-                    col3width = 1;
-                    col4width = 1;
-                    col5width = 1;
-                    col6width = 1;
-                    col7width = 1;
-                    break;
-                case 7:
-                    col1width = 6;
-                    col2width = 1;
-                    col3width = 1;
-                    col4width = 1;
-                    col5width = 1;
-                    col6width = 1;
-                    col7width = 1;
-                    break;
+                switch (displayedItems) {
+                    case 2:
+                        // There are now 3 cols so change widths
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        col6width = 4;
+                        col7width = 4;
+                        break;
+                    case 3:
+                        // There are now 4 cols so change widths
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                    case 4:
+                        // There are now 5 cols so change widths
+                        col1width = 3;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                    case 5:
+                        // There are now 6 cols so change widths
+                        col1width = 2;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        col7width = 2;
+                }
+                displayedItems++;
+            }
+
+            // Domain Dictionary
+            if (viewOptions.designDomainDictVisible) {
+
+
+                switch (displayedItems) {
+                    case 2:
+                        // There are now 3 cols so change widths
+                        col1width = 4;
+                        col2width = 4;
+                        col3width = 4;
+                        col4width = 4;
+                        col5width = 4;
+                        col6width = 4;
+                        col7width = 4;
+                        break;
+                    case 3:
+                        // There are now 4 cols so change widths
+                        col1width = 3;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                    case 4:
+                        // There are now 5 cols so change widths
+                        col1width = 4;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        col7width = 2;
+                        break;
+                    case 5:
+                        // There are now 6 cols so change widths
+                        col1width = 2;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        col7width = 2;
+                        break;
+                    case 6:
+                        // There are now 7 cols so change widths
+                        col1width = 2;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 1;
+                        col7width = 1;
+                        break;
+                }
+                displayedItems++;
+            }
+
+            // Test Summary - this actually just makes col 1 wider
+            if (viewOptions.testSummaryVisible) {
+
+                switch (displayedItems) {
+                    case 1:
+                        col1width = 12;
+                        col2width = 0;
+                        col3width = 0;
+                        col4width = 0;
+                        col5width = 0;
+                        col6width = 0;
+                        col7width = 0;
+                        break;
+                    case 2:
+                        col1width = 7;
+                        col2width = 5;
+                        col3width = 5;
+                        col4width = 5;
+                        col5width = 5;
+                        col6width = 5;
+                        col7width = 5;
+                        break;
+                    case 3:
+                        col1width = 6;
+                        col2width = 3;
+                        col3width = 3;
+                        col4width = 3;
+                        col5width = 3;
+                        col6width = 3;
+                        col7width = 3;
+                        break;
+                    case 4:
+                        col1width = 6;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        col7width = 2;
+                        break;
+                    case 5:
+                        col1width = 4;
+                        col2width = 2;
+                        col3width = 2;
+                        col4width = 2;
+                        col5width = 2;
+                        col6width = 2;
+                        col7width = 2;
+                        break;
+                    case 6:
+                        col1width = 7;
+                        col2width = 1;
+                        col3width = 1;
+                        col4width = 1;
+                        col5width = 1;
+                        col6width = 1;
+                        col7width = 1;
+                        break;
+                    case 7:
+                        col1width = 6;
+                        col2width = 1;
+                        col3width = 1;
+                        col4width = 1;
+                        col5width = 1;
+                        col6width = 1;
+                        col7width = 1;
+                        break;
+                }
             }
         }
 
         // Create the layout depending on the current view...
         if(wpApplications) {
 
-            let col1 =
-                <Col md={col1width} className="close-col">
-                    {design}
-                </Col>;
+            if(viewOptions.workShowAllAsTabs){
 
-            let col2 = '';
-            if(viewOptions.devDetailsVisible){
-                col2 =
-                    <Col md={col2width} className="close-col">
-                        {designDetails}
+                let col1 =
+                    <Col id="designCol" md={col1width} className="close-col">
+                        {design}
                     </Col>;
-            }
 
-            let col3 = '';
-            if(viewOptions.devAccTestsVisible){
-                col3 =
-                    <Col md={col3width} className="close-col">
-                        {featureTests}
+                let col2 =
+                    <Col id="tabsCol" md={col2width} className="close-col">
+                        <Tabs defaultActiveKey={1} id="updatable-view_tabs">
+                            <Tab eventKey={1} title="DETAILS">{designDetails}</Tab>
+                            <Tab eventKey={2} title="INTEGRATION TESTS">{intTests}</Tab>
+                            <Tab eventKey={3} title="UNIT TESTS">{unitTests}</Tab>
+                            <Tab eventKey={4} title="DICTIONARY">{domainDictionary}</Tab>
+                        </Tabs>
                     </Col>;
-            }
 
-            let col4 = '';
-            if(viewOptions.devFeatureFilesVisible){
-                col4 =
-                    <Col md={col4width} className="close-col">
-                        {devFiles}
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                        </Row>
+                    </Grid>;
+
+            } else {
+                let col1 =
+                    <Col md={col1width} className="close-col">
+                        {design}
                     </Col>;
+
+                let col2 = '';
+                if (viewOptions.devDetailsVisible) {
+                    col2 =
+                        <Col md={col2width} className="close-col">
+                            {designDetails}
+                        </Col>;
+                }
+
+                let col3 = '';
+                if (viewOptions.devAccTestsVisible) {
+                    col3 =
+                        <Col md={col3width} className="close-col">
+                            {featureTests}
+                        </Col>;
+                }
+
+                let col4 = '';
+                if (viewOptions.devFeatureFilesVisible) {
+                    col4 =
+                        <Col md={col4width} className="close-col">
+                            {devFiles}
+                        </Col>;
+                }
+
+                let col5 = '';
+                if (viewOptions.devIntTestsVisible) {
+                    col5 =
+                        <Col md={col5width} className="close-col">
+                            {intTests}
+                        </Col>;
+                }
+
+                let col6 = '';
+                if (viewOptions.devUnitTestsVisible) {
+                    col6 =
+                        <Col md={col6width} className="close-col">
+                            {unitTests}
+                        </Col>;
+                }
+
+                let col7 = '';
+                if (viewOptions.devDomainDictVisible) {
+                    col7 =
+                        <Col md={col7width} className="close-col">
+                            {domainDictionary}
+                        </Col>;
+                }
+
+
+                // Make up the layout based on the view options
+                layout =
+                    <Grid >
+                        <Row>
+                            {col1}
+                            {col2}
+                            {col3}
+                            {col4}
+                            {col5}
+                            {col6}
+                            {col7}
+                        </Row>
+                    </Grid>;
             }
-
-            let col5 = '';
-            if(viewOptions.devIntTestsVisible){
-                col5 =
-                    <Col md={col5width} className="close-col">
-                        {intTests}
-                    </Col>;
-            }
-
-            let col6 = '';
-            if(viewOptions.devUnitTestsVisible){
-                col6 =
-                    <Col md={col6width} className="close-col">
-                        {unitTests}
-                    </Col>;
-            }
-
-            let col7 = '';
-            if(viewOptions.devDomainDictVisible){
-                col7 =
-                    <Col md={col7width} className="close-col">
-                        {domainDictionary}
-                    </Col>;
-            }
-
-
-            // Make up the layout based on the view options
-            layout =
-                <Grid >
-                    <Row>
-                        {col1}
-                        {col2}
-                        {col3}
-                        {col4}
-                        {col5}
-                        {col6}
-                        {col7}
-                    </Row>
-                </Grid>;
 
             return (
                 <div>

@@ -16,6 +16,7 @@ import WorkPackageValidationApi         from '../apiValidation/apiWorkPackageVal
 import ServerWorkPackageApi             from '../apiServer/apiWorkPackage.js';
 import ClientTestIntegrationServices    from './apiClientTestIntegration';
 import ClientUserContextServices        from '../apiClient/apiClientUserContext.js';
+import ClientDesignVersionServices      from '../apiClient/apiClientDesignVersion.js';
 
 // REDUX services
 import store from '../redux/store'
@@ -146,6 +147,9 @@ class ClientWorkPackageServices {
                 // Ensure that the published WP is set in the current user context
                 this.setWorkPackage(userContext, workPackageToPublishId);
 
+                // Should now appear in Work Progress
+                ClientDesignVersionServices.updateWorkProgress(userContext);
+
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
@@ -183,6 +187,9 @@ class ClientWorkPackageServices {
 
                 // Ensure that the published WP is set in the current user context
                 this.setWorkPackage(userContext, workPackageToWithdrawId);
+
+                // Should now not appear in Work Progress
+                ClientDesignVersionServices.updateWorkProgress(userContext);
 
                 // Show action success on screen
                 store.dispatch(updateUserMessage({
