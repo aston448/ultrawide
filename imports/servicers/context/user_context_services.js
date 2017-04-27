@@ -37,7 +37,7 @@ class UserContextServices{
             );
         }
 
-        console.log("User Context Saved.  DV: " + context.designVersionId + " DU: " + context.designUpdateId + " WP: " + context.workPackageId);
+        //console.log("User Context Saved.  DV: " + context.designVersionId + " DU: " + context.designUpdateId + " WP: " + context.workPackageId);
     };
 
     saveUserViewOptions(userViewOptions){

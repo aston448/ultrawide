@@ -60,7 +60,7 @@ Meteor.methods({
             case WorkSummaryType.WORK_SUMMARY_BASE_WP:
             case WorkSummaryType.WORK_SUMMARY_UPDATE_WP:
 
-                item = WorkPackages.find({workPackageName: itemName});
+                item = WorkPackages.findOne({workPackageName: itemName});
 
                 if(item){
                     workSummaryItem = UserWorkProgressSummary.findOne({
