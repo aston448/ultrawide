@@ -22,9 +22,11 @@ Meteor.methods({
 
         const userContext = TestDataHelpers.getUserContext(userName);
 
+        let workProgress = null;
+
         // This will error if not found
         try {
-            const workProgress = TestDataHelpers.getWorkProgressDataFor(userContext, itemType, itemName);
+            workProgress = TestDataHelpers.getWorkProgressDataFor(userContext, itemType, itemName);
         } catch (e){
             if(e.error === 'NOT_FOUND'){
                 return true;
@@ -33,7 +35,7 @@ Meteor.methods({
             }
         }
 
-        throw new Meteor.Error("FAIL", itemType + " called " + itemName + " was found in Work Progress Summary");
+        throw new Meteor.Error("FAIL", itemType + " called " + workProgress.name + " was found in Work Progress Summary");
     },
 
     'verifyWorkProgress.summaryForWorkItemIs'(itemType, itemName, expectedSummary, userName){
