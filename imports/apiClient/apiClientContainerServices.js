@@ -1482,8 +1482,9 @@ class ClientContainerServices{
                         componentType: ComponentType.SCENARIO,
                         componentParentReferenceId: featureAspectReferenceId,
                         scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    }
-                );
+                    },
+                    {sort: {componentIndex: 1}}
+                ).fetch();
             } else {
                 wpComponents = WorkPackageComponents.find(
                     {
@@ -1492,8 +1493,9 @@ class ClientContainerServices{
                         componentReferenceId: scenarioReferenceId,
                         componentParentReferenceId: featureAspectReferenceId,
                         scopeType: WorkPackageScopeType.SCOPE_ACTIVE
-                    }
-                );
+                    },
+                    {sort: {componentIndex: 1}}
+                ).fetch();
             }
 
             wpComponents.forEach((wpComponent) => {

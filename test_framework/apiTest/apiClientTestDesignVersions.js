@@ -14,7 +14,7 @@ Meteor.methods({
         const userRole = TestDataHelpers.getUserRole(userName);
 
         // This is not a validated method - don't process outcome
-        ClientDesignVersionServices.setDesignVersion(userContext, userRole, designVersion._id, false);
+        ClientDesignVersionServices.setDesignVersion(userContext, userRole, designVersion._id, true);
 
     },
 
