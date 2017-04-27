@@ -442,10 +442,11 @@ class DesignVersionServices{
                             scenariosNoTests:           duUntestedScenarios
                         });
 
-                        // Get the DU Work Packages
+                        // Get the published DU Work Packages
                         let duWorkPackages = WorkPackages.find(
                             {
-                                designUpdateId: du._id
+                                designUpdateId: du._id,
+                                workPackageStatus: {$ne: WorkPackageStatus.WP_NEW}
                             },
                             {
                                 $sort: {workPackageName: 1}
