@@ -72,6 +72,13 @@ class UserContextServices{
             });
         }
     };
+
+    saveUserRole(role){
+
+        if(Meteor.isServer) {
+
+        }
+    }
 }
 
 export default new UserContextServices();

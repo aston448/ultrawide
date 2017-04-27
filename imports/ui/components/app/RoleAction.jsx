@@ -60,7 +60,8 @@ class RoleAction extends Component {
     onActionSelect(roleAction, roleType, userContext, userRole, view){
 
         // Set the role as desired...
-        ClientUserContextServices.setUserRole(roleType);
+        ClientUserContextServices.setUserRole(userContext.userId, roleType);
+
         userRole = roleType;
 
         const testIntegrationDataContext = {

@@ -35,7 +35,7 @@ class WorkProgressItem extends Component {
     }
 
     onGotoItemAsRole(roleType, item){
-        ClientDesignVersionServices.gotoDesignVersionSummaryItemAsRole(item, roleType);
+        ClientDesignVersionServices.gotoWorkProgressSummaryItemAsRole(item, roleType);
     }
 
     render(){

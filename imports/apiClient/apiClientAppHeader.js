@@ -347,7 +347,7 @@ class ClientAppHeaderServices{
 
 
             // Clear role and username
-            store.dispatch(setCurrentRole(RoleType.NONE));
+            store.dispatch(setCurrentRole(userContext.userId, RoleType.NONE));
             store.dispatch(setCurrentUserName(''));
         }
 

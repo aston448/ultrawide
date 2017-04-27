@@ -854,7 +854,7 @@ class ImpExServices{
 
             let designId = getIdFromMap(designsMapping, component.designId);
             let designVersionId = getIdFromMap(designVersionsMapping, component.designVersionId);
-            let workPackageId = getIdFromMap(workPackagesMapping, updateComponent.workPackageId);
+            let workPackageId = getIdFromMap(workPackagesMapping, component.workPackageId);
 
             let designComponentId = DesignComponentServices.importComponent(
                 designId,

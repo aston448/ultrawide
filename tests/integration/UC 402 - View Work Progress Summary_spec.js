@@ -13,12 +13,14 @@ import TestIntegrationActions       from '../../test_framework/test_wrappers/tes
 import TestSummaryVerifications     from '../../test_framework/test_wrappers/test_summary_verifications.js';
 import DesignUpdateActions          from '../../test_framework/test_wrappers/design_update_actions.js';
 import UpdateComponentActions       from '../../test_framework/test_wrappers/design_update_component_actions.js';
+import WorkProgressSummaryActions   from '../../test_framework/test_wrappers/workProgressSummaryActions.js';
 import WorkProgressSummaryVerifications from '../../test_framework/test_wrappers/workProgressSummaryVerifications.js';
+import UserContextVerifications     from '../../test_framework/test_wrappers/user_context_verifications.js';
 
 import {DefaultLocationText} from '../../imports/constants/default_names.js';
 import {DefaultItemNames, DefaultComponentNames} from '../../imports/constants/default_names.js';
 import {TestOutputLocationValidationErrors}   from '../../imports/constants/validation_errors.js';
-import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, ComponentType, FeatureTestSummaryStatus} from '../../imports/constants/constants.js';
+import {TestLocationType, TestLocationAccessType, TestLocationFileType, TestRunner, MashTestStatus, ViewOptionType, RoleType, FeatureTestSummaryStatus} from '../../imports/constants/constants.js';
 
 describe('UC 402 - View Work Progress Summary', function(){
 
@@ -597,9 +599,65 @@ describe('UC 402 - View Work Progress Summary', function(){
     // Actions
     it('Work progress summary data is refreshed when the summary is viewed');
 
-    it('The user can navigate to a Design Update displayed in the work progress summary');
+    it('The user can navigate to the Design Version displayed in the work progress summary', function(){
 
-    it('The user can navigate to a Work Package displayed in the work progress summary');
+        // This effectively means that if a DU / WP was selected you are back to the DV with no selection...
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        DesignUpdateActions.designerSelectsUpdate('DesignUpdate1');
+        WorkPackageActions.designerSelectsWorkPackage('UpdateWorkPackage1');
+
+        // Check user Context
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
+        expect(UserContextVerifications.userContextForRole_DesignUpdateIs(RoleType.DESIGNER, 'DesignUpdate1'));
+        expect(UserContextVerifications.userContextForRole_WorkPackageIs(RoleType.DESIGNER, 'UpdateWorkPackage1'));
+
+        // Execute
+        WorkProgressSummaryActions.designerGoesToUpdatableDesignVersion('DesignVersion2');
+
+        // Verify
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
+        expect(UserContextVerifications.userContextDesignUpdateNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextWorkPackageNotSetForRole(RoleType.DESIGNER));
+
+    });
+
+    it('The user can navigate to a Design Update displayed in the work progress summary', function(){
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        WorkProgressSummaryActions.designerGoesToUpdatableDesignVersion('DesignVersion2');
+
+        // Check user Context
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
+        expect(UserContextVerifications.userContextDesignUpdateNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextWorkPackageNotSetForRole(RoleType.DESIGNER));
+
+        // Execute
+        WorkProgressSummaryActions.designerGoesToDesignUpdate('DesignUpdate1');
+
+        // Verify
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
+        expect(UserContextVerifications.userContextForRole_DesignUpdateIs(RoleType.DESIGNER, 'DesignUpdate1'));
+        expect(UserContextVerifications.userContextWorkPackageNotSetForRole(RoleType.DESIGNER));
+    });
+
+    it('The user can navigate to a Work Package displayed in the work progress summary', function(){
+
+        DesignVersionActions.designerSelectsDesignVersion('DesignVersion2');
+        WorkProgressSummaryActions.designerGoesToUpdatableDesignVersion('DesignVersion2');
+
+        // Check user Context
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
+        expect(UserContextVerifications.userContextDesignUpdateNotSetForRole(RoleType.DESIGNER));
+        expect(UserContextVerifications.userContextWorkPackageNotSetForRole(RoleType.DESIGNER));
+
+        // Execute
+        WorkProgressSummaryActions.designerGoesToUpdateWorkPackage('UpdateWorkPackage1');
+
+        // Verify
+        expect(UserContextVerifications.userContextForRole_DesignVersionIs(RoleType.DESIGNER, 'DesignVersion2'));
+        expect(UserContextVerifications.userContextForRole_DesignUpdateIs(RoleType.DESIGNER, 'DesignUpdate1'));
+        expect(UserContextVerifications.userContextForRole_WorkPackageIs(RoleType.DESIGNER, 'UpdateWorkPackage1'));
+    });
 
     it('The user can navigate to an item in the work progress summary as any role available to the user');
 

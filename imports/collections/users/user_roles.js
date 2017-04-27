@@ -15,7 +15,8 @@ let Schema = new SimpleSchema({
     isDeveloper:        {type: Boolean},
     isManager:          {type: Boolean},
     isAdmin:            {type: Boolean, defaultValue: false},   // Only for the startup admin user
-    isActive:           {type: Boolean, defaultValue: true}     // Determines whether this user can be used or not
+    isActive:           {type: Boolean, defaultValue: true},     // Determines whether this user can be used or not
+    currentRole:        {type: String, defaultValue: 'NONE'}    // Records what current role is employed by this user
 });
 
 UserRoles.attachSchema(Schema);

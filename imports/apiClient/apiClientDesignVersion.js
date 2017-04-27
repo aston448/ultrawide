@@ -10,7 +10,7 @@ import {UserRoles}                  from '../collections/users/user_roles.js';
 
 // Ultrawide Services
 import { ViewType, ViewMode, RoleType, ComponentType, DesignVersionStatus, DesignUpdateStatus, UpdateScopeType, MessageType, WorkSummaryType, LogLevel } from '../constants/constants.js';
-import { Validation } from '../constants/validation_errors.js';
+import { Validation, UserRolesValidationErrors} from '../constants/validation_errors.js';
 import { DesignVersionMessages } from '../constants/message_texts.js';
 import { log } from '../common/utils.js';
 
@@ -491,7 +491,7 @@ class ClientDesignVersionServices{
     }
 
     // User has clicked on the WP icon for a Scenario in the DV working view
-    gotoDesignVersionSummaryItemAsRole(item, role){
+    gotoWorkProgressSummaryItemAsRole(item, role){
 
         const userContext = store.getState().currentUserItemContext;
 
@@ -522,7 +522,7 @@ class ClientDesignVersionServices{
             store.dispatch(setCurrentUserItemContext(newContext, true));
 
             // Set new role
-            store.dispatch(setCurrentRole(role));
+            store.dispatch(setCurrentRole(userContext.userId, role));
 
             // Select the item wanted
             if(item.designUpdateId !== 'NONE'){
@@ -538,9 +538,11 @@ class ClientDesignVersionServices{
             // Go to Selection screen
             store.dispatch(setCurrentView(ViewType.SELECT));
 
+            return {success: true, message: ''};
+
         } else {
             // No action
-            return {success: false, message: 'Invalid role'};
+            return {success: false, message: UserRolesValidationErrors.INVALID_ROLE_FOR_USER};
         }
 
     }

@@ -25,6 +25,10 @@ export const UserManagementValidationErrors = {
 
 };
 
+export const UserRolesValidationErrors = {
+    INVALID_ROLE_FOR_USER:                      'This role is not assigned to the current user'
+};
+
 export const DesignValidationErrors = {
     DESIGN_NOT_EXIST:               'Design does not exist!',
     DESIGN_INVALID_ROLE_REMOVE:     'Only a Designer can remove Designs',

@@ -158,8 +158,8 @@ class ClientUserContextServices {
         return userViewOptions;
     }
 
-    setUserRole(roleType){
-        store.dispatch(setCurrentRole(roleType));
+    setUserRole(userId, roleType){
+        store.dispatch(setCurrentRole(userId, roleType));
     }
 
     loadMainData(userContext){
