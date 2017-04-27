@@ -821,10 +821,11 @@ export class DesignComponentHeader extends Component{
         let wpStatusClass = 'update-merge-status invisible';
         let wpStatusGlyph = 'tasks';
 
-        updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
-        updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
+        if(currentItem.updateMergeStatus) {
+            updateStatusClass = 'update-merge-status ' + currentItem.updateMergeStatus;
+            updateStatusText = TextLookups.updateMergeStatus(currentItem.updateMergeStatus);
+        }
         updateStatusGlyph = 'th-large';
-
 
         switch(displayContext){
             case DisplayContext.WORKING_VIEW:
@@ -878,20 +879,24 @@ export class DesignComponentHeader extends Component{
                     if(updateItem.componentType === ComponentType.SCENARIO && updateItem.scopeType === UpdateScopeType.SCOPE_IN_SCOPE) {
                         // Just in scope its a query
                         updateStatusGlyph = 'question-sign';
-                        updateStatusClass = 'update-merge-status component-scenario-queried'
+                        updateStatusClass = 'update-merge-status component-scenario-queried';
+                        updateStatusText = "Check Tests";
                     }
                     // Override for other statuses
                     if(updateItem.isChanged){
                         updateStatusGlyph = 'adjust';
-                        updateStatusClass = 'update-merge-status component-modified'
+                        updateStatusClass = 'update-merge-status component-modified';
+                        updateStatusText = "Modified Item";
                     }
                     if(updateItem.isNew){
                         updateStatusGlyph = 'plus-sign';
-                        updateStatusClass = 'update-merge-status component-added'
+                        updateStatusClass = 'update-merge-status component-added';
+                        updateStatusText = "New Item";
                     }
                     if(updateItem.isRemoved){
                         updateStatusGlyph = 'trash';
-                        updateStatusClass = 'update-merge-status component-removed'
+                        updateStatusClass = 'update-merge-status component-removed';
+                        updateStatusText = "Removed Item";
                     }
                 }
                 break;
@@ -935,133 +940,182 @@ export class DesignComponentHeader extends Component{
 
         // Header components -------------------------------------------------------------------------------------------
 
+        // Minor --------------------------
+
+        let openClose =
+            <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
+                <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
+            </InputGroup.Addon>;
+
+        let indent =
+            <InputGroup.Addon className={itemIndent}></InputGroup.Addon>;
+
+        let scopeToggle =
+            <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem, updateItem, !inScope)}>
+                <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
+            </InputGroup.Addon>;
+
+        let editableEditor =
+            <div id="editorEdit" className="editableItem" onClick={ () => this.setCurrentComponent()}>
+                <Editor
+                    editorState={this.state.editorState}
+                    handleKeyCommand={this.handleTitleKeyCommand}
+                    keyBindingFn={this.keyBindings}
+                    onChange={this.onTitleChange}
+                    spellCheck={true}
+                    ref="editor"
+                    readOnly={false}
+                />
+            </div>;
+
+        let readOnlyEditor =
+            <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
+                <Editor
+                    editorState={this.state.editorState}
+                    spellCheck={true}
+                    ref="editorReadOnly"
+                    readOnly={true}
+                />
+            </div>;
+
+        let wpStatus =
+            <InputGroup.Addon>
+                <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
+                    <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
+                </OverlayTrigger>
+            </InputGroup.Addon>;
+
+        let updateStatus = '';
+
+        if(updateStatusClass === 'update-merge-status component-hidden'){
+
+            updateStatus = <div></div>;
+
+        } else {
+            if (updateStatusText === '') {
+                updateStatus =
+                    <InputGroup.Addon id="updateStatusIcon">
+                        <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                    </InputGroup.Addon>;
+            } else {
+                updateStatus =
+                    <InputGroup.Addon id="updateStatusIcon">
+                        <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
+                            <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
+                        </OverlayTrigger>
+                    </InputGroup.Addon>;
+            }
+        }
+
+        let hiddenIcon =
+            <InputGroup.Addon>
+                <div className="invisible"><Glyphicon glyph="star"/></div>
+            </InputGroup.Addon>;
+
+        let editAction =
+            <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
+                <OverlayTrigger overlay={tooltipEdit}>
+                    <div className="blue"><Glyphicon glyph="edit"/></div>
+                </OverlayTrigger>
+            </InputGroup.Addon>;
+
+        let deleteAction =
+            <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
+                <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
+            </InputGroup.Addon>;
+
+        let moveAction =
+            <InputGroup.Addon>
+                <div id="actionMove" className="lgrey">
+                    <Glyphicon glyph="move"/>
+                </div>
+            </InputGroup.Addon>;
+
+        let draggableMoveAction =
+            <InputGroup.Addon>
+                {connectDragSource(
+                    <div id="actionMove" className="lgrey">
+                        <Glyphicon glyph="move"/>
+                    </div>)
+                }
+            </InputGroup.Addon>
+
+        let saveAction =
+            <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
+                <div className="green"><Glyphicon glyph="ok"/></div>
+            </InputGroup.Addon>;
+
+        let undoAction =
+            <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
+                <div className="red"><Glyphicon glyph="arrow-left"/></div>
+            </InputGroup.Addon>;
+
+        // Major --------------------------
+
         let headerWithCheckbox =
             <div id="scopeHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <InputGroup.Addon id="scope" onClick={ () => this.toggleScope(view, mode, displayContext, userContext, currentItem, updateItem, !inScope)}>
-                        <div id="scopeCheckBox" className={scopeStatus}><Glyphicon glyph="ok"/></div>
-                    </InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            spellCheck={true}
-                            ref="editorReadOnly"
-                            readOnly={true}
-                        />
-                    </div>
+                    {openClose}
+                    {indent}
+                    {scopeToggle}
+                    {readOnlyEditor}
                 </InputGroup>
             </div>;
 
         let viewOnlyHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            spellCheck={false}
-                            ref="editorViewMode"
-                            readOnly={true}
-                        />
-                    </div>
+                    {openClose}
+                    {indent}
+                    {readOnlyEditor}
                 </InputGroup>
             </div>;
 
         let updateViewOnlyHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon>
-                        <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
-                            <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="updateStatusIcon">
-                        <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle} onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            spellCheck={false}
-                            ref="editorViewMode"
-                            readOnly={true}
-                        />
-                    </div>
+                    {openClose}
+                    {indent}
+                    {readOnlyEditor}
+                    {hiddenIcon}
+                    {hiddenIcon}
+                    {wpStatus}
+                    {updateStatus}
+                </InputGroup>
+            </div>;
+
+        let wpViewOnlyHeader =
+            <div id="editorHeaderItem">
+                <InputGroup>
+                    {openClose}
+                    {indent}
+                    {readOnlyEditor}
+                    {updateStatus}
                 </InputGroup>
             </div>;
 
         let editingHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorEdit" className="editableItem" onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            handleKeyCommand={this.handleTitleKeyCommand}
-                            keyBindingFn={this.keyBindings}
-                            onChange={this.onTitleChange}
-                            spellCheck={true}
-                            ref="editor"
-                            readOnly={false}
-                        />
-                    </div>
-                    <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
-                        <div className="green"><Glyphicon glyph="ok"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
-                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
+                    {hiddenIcon}
+                    {indent}
+                    {editableEditor}
+                    {saveAction}
+                    {undoAction}
+                    {hiddenIcon}
                 </InputGroup>
             </div>;
 
         let updateEditingHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorEdit" className="editableItem" onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            handleKeyCommand={this.handleTitleKeyCommand}
-                            keyBindingFn={this.keyBindings}
-                            onChange={this.onTitleChange}
-                            spellCheck={true}
-                            ref="editor"
-                            readOnly={false}
-                        />
-                    </div>
-                    <InputGroup.Addon id="actionSave" onClick={ () => this.saveComponentName(view, mode)}>
-                        <div className="green"><Glyphicon glyph="ok"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="actionUndo" onClick={ () => this.undoComponentNameChange()}>
-                        <div className="red"><Glyphicon glyph="arrow-left"/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
+                    {hiddenIcon}
+                    {hiddenIcon}
+                    {indent}
+                    {editableEditor}
+                    {saveAction}
+                    {undoAction}
+                    {hiddenIcon}
                 </InputGroup>
             </div>;
 
@@ -1071,72 +1125,28 @@ export class DesignComponentHeader extends Component{
             draggableHeader =
                 <div id="editorHeaderItem">
                     <InputGroup>
-                        <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                            <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                        <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                            <Editor
-                                editorState={this.state.editorState}
-                                handleKeyCommand={this.handleTitleKeyCommand}
-                                keyBindingFn={this.keyBindings}
-                                spellCheck={false}
-                                ref="editorReadOnly"
-                                readOnly={true}
-                            />
-                        </div>
-                        <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                            <OverlayTrigger overlay={tooltipEdit}>
-                                <div className="blue"><Glyphicon glyph="edit"/></div>
-                            </OverlayTrigger>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                            <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            <div id="actionMove" className="lgrey">
-                                <Glyphicon glyph="move"/>
-                            </div>
-                        </InputGroup.Addon>
+                        {openClose}
+                        {indent}
+                        {readOnlyEditor}
+                        {editAction}
+                        {deleteAction}
+                        {moveAction}
                     </InputGroup>
                 </div>
         } else {
             draggableHeader =
-            connectDragPreview(
-                <div id="editorHeaderItem">
-                    <InputGroup>
-                        <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                            <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                        <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                            <Editor
-                                editorState={this.state.editorState}
-                                handleKeyCommand={this.handleTitleKeyCommand}
-                                keyBindingFn={this.keyBindings}
-                                spellCheck={false}
-                                ref="editorReadOnly"
-                                readOnly={true}
-                            />
-                        </div>
-                        <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                            <OverlayTrigger overlay={tooltipEdit}>
-                                <div className="blue"><Glyphicon glyph="edit"/></div>
-                            </OverlayTrigger>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                            <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            {connectDragSource(
-                                <div id="actionMove" className="lgrey">
-                                    <Glyphicon glyph="move"/>
-                                </div>)
-                            }
-                        </InputGroup.Addon>
-                    </InputGroup>
-                </div>
-            );
+                connectDragPreview(
+                    <div id="editorHeaderItem">
+                        <InputGroup>
+                            {openClose}
+                            {indent}
+                            {readOnlyEditor}
+                            {editAction}
+                            {deleteAction}
+                            {draggableMoveAction}
+                        </InputGroup>
+                    </div>
+                );
         }
 
         let updateDraggableHeader = '';
@@ -1144,38 +1154,14 @@ export class DesignComponentHeader extends Component{
             updateDraggableHeader =
                 <div id="editorHeaderItem">
                     <InputGroup>
-                        <InputGroup.Addon id="updateStatusIcon">
-                            <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                                <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
-                            </OverlayTrigger>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                            <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                        <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                            <Editor
-                                editorState={this.state.editorState}
-                                handleKeyCommand={this.handleTitleKeyCommand}
-                                keyBindingFn={this.keyBindings}
-                                spellCheck={false}
-                                ref="editorReadOnly"
-                                readOnly={true}
-                            />
-                        </div>
-                        <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                            <OverlayTrigger overlay={tooltipEdit}>
-                                <div className="blue"><Glyphicon glyph="edit"/></div>
-                            </OverlayTrigger>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                            <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                        </InputGroup.Addon>
-                        <InputGroup.Addon>
-                            <div id="actionMove" className="lgrey">
-                                <Glyphicon glyph="move"/>
-                            </div>
-                        </InputGroup.Addon>
+                        {openClose}
+                        {indent}
+                        {readOnlyEditor}
+                        {editAction}
+                        {deleteAction}
+                        {moveAction}
+                        {hiddenIcon}
+                        {updateStatus}
                     </InputGroup>
                 </div>
         } else {
@@ -1183,40 +1169,14 @@ export class DesignComponentHeader extends Component{
                 connectDragPreview(
                     <div id="editorHeaderItem">
                         <InputGroup>
-                            <InputGroup.Addon id="updateStatusIcon">
-                                <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                                    <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
-                                </OverlayTrigger>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                                <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                            <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                                <Editor
-                                    editorState={this.state.editorState}
-                                    handleKeyCommand={this.handleTitleKeyCommand}
-                                    keyBindingFn={this.keyBindings}
-                                    spellCheck={false}
-                                    ref="editorReadOnly"
-                                    readOnly={true}
-                                />
-                            </div>
-                            <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                                <OverlayTrigger overlay={tooltipEdit}>
-                                    <div className="blue"><Glyphicon glyph="edit"/></div>
-                                </OverlayTrigger>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                                <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                            </InputGroup.Addon>
-                            <InputGroup.Addon>
-                                {connectDragSource(
-                                    <div id="actionMove" className="lgrey">
-                                        <Glyphicon glyph="move"/>
-                                    </div>)
-                                }
-                            </InputGroup.Addon>
+                            {openClose}
+                            {indent}
+                            {readOnlyEditor}
+                            {editAction}
+                            {deleteAction}
+                            {draggableMoveAction}
+                            {hiddenIcon}
+                            {updateStatus}
                         </InputGroup>
                     </div>
                 );
@@ -1225,96 +1185,36 @@ export class DesignComponentHeader extends Component{
         let nonDraggableHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            handleKeyCommand={this.handleTitleKeyCommand}
-                            keyBindingFn={this.keyBindings}
-                            spellCheck={false}
-                            ref="editorReadOnly"
-                            readOnly={true}
-                        />
-                    </div>
-                    <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                        <OverlayTrigger overlay={tooltipEdit}>
-                            <div className="blue"><Glyphicon glyph="edit"/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                        <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
+                    {openClose}
+                    {indent}
+                    {readOnlyEditor}
+                    {editAction}
+                    {deleteAction}
+                    {hiddenIcon}
                 </InputGroup>
             </div>;
 
         let updateNonDraggableHeader =
             <div id="editorHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon id="updateStatusIcon">
-                        <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="openClose" onClick={ () => this.toggleOpen()}>
-                        <div id="openCloseIcon" className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle}  onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            handleKeyCommand={this.handleTitleKeyCommand}
-                            keyBindingFn={this.keyBindings}
-                            spellCheck={false}
-                            ref="editorReadOnly"
-                            readOnly={true}
-                        />
-                    </div>
-                    <InputGroup.Addon id="actionEdit" onClick={ () => this.editComponentName()}>
-                        <OverlayTrigger overlay={tooltipEdit}>
-                            <div className="blue"><Glyphicon glyph="edit"/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="actionDelete" onClick={ () => this.deleteRestoreComponent(view, mode, currentItem, userContext)}>
-                        <div className={deleteStyle}><Glyphicon id="deleteIcon" glyph={deleteGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <div className="invisible"><Glyphicon glyph="star"/></div>
-                    </InputGroup.Addon>
+                    {openClose}
+                    {indent}
+                    {readOnlyEditor}
+                    {editAction}
+                    {deleteAction}
+                    {hiddenIcon}
+                    {updateStatus}
                 </InputGroup>
             </div>;
 
         let viewOnlyVersionProgressHeader =
             <div id="workingHeaderItem">
                 <InputGroup>
-                    <InputGroup.Addon>
-                        <OverlayTrigger placement="bottom" overlay={tooltipGotoWp}>
-                            <div id="wpStatusIcon" className={wpStatusClass} onClick={() => this.onGotoWorkPackage(currentItem.workPackageId)}><Glyphicon glyph={wpStatusGlyph}/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon>
-                        <OverlayTrigger placement="bottom" overlay={tooltipUpdateStatus}>
-                            <div id="updateStatusIcon" className={updateStatusClass}><Glyphicon glyph={updateStatusGlyph}/></div>
-                        </OverlayTrigger>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon id="openClose"  onClick={ () => this.toggleOpen()}>
-                        <div className={openStatus}><Glyphicon glyph={openGlyph}/></div>
-                    </InputGroup.Addon>
-                    <InputGroup.Addon className={itemIndent}></InputGroup.Addon>
-                    <div id="editorReadOnly" className={"readOnlyItem " + itemStyle + updateTextClass} onClick={ () => this.setCurrentComponent()}>
-                        <Editor
-                            editorState={this.state.editorState}
-                            customStyleMap={ClientTextEditorServices.getColourMap()}
-                            spellCheck={false}
-                            ref="editorViewMode"
-                            readOnly={true}
-                        />
-                    </div>
+                    {wpStatus}
+                    {updateStatus}
+                    {openClose}
+                    {indent}
+                    {readOnlyEditor}
                 </InputGroup>
             </div>;
 
@@ -1347,7 +1247,7 @@ export class DesignComponentHeader extends Component{
             case DisplayContext.WP_VIEW:
                 // View only
                 if(updateItem){
-                    designComponentElement = updateViewOnlyHeader;
+                    designComponentElement = wpViewOnlyHeader;
                 } else {
                     designComponentElement = viewOnlyHeader;
                 }
@@ -1425,7 +1325,7 @@ export class DesignComponentHeader extends Component{
                     case  ViewMode.MODE_VIEW:
                         // View only
                         if(updateItem){
-                            designComponentElement = updateViewOnlyHeader;
+                            designComponentElement = wpViewOnlyHeader;
                         } else {
                             designComponentElement = viewOnlyHeader;
                         }
@@ -1451,7 +1351,7 @@ export class DesignComponentHeader extends Component{
                         } else {
                             // Item is out of scope so cannot be edited or dragged
                             if(updateItem){
-                                designComponentElement = updateViewOnlyHeader;
+                                designComponentElement = wpViewOnlyHeader;
                             } else {
                                 designComponentElement = viewOnlyHeader;
                             }

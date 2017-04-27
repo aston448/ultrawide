@@ -83,7 +83,7 @@ class ScenariosList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
-                        testSummary={viewOptions.testSummaryVisible}
+                        testSummary={testSummary}
                         testSummaryData={testSummaryData}
                     />
                 );

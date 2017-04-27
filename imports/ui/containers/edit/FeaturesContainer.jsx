@@ -71,7 +71,7 @@ class FeaturesList extends Component {
 
                 let testSummaryData = null;
 
-                if(viewOptions.testSummaryVisible) {
+                if(testSummary) {
                     testSummaryData = ClientContainerServices.getTestSummaryFeatureData(feature);
                 }
 
@@ -84,7 +84,7 @@ class FeaturesList extends Component {
                         displayContext={displayContext}
                         view={view}
                         mode={mode}
-                        testSummary={viewOptions.testSummaryVisible}
+                        testSummary={testSummary}
                         testSummaryData={testSummaryData}
                     />
                 );
