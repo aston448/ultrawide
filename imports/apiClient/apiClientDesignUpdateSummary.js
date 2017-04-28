@@ -11,7 +11,8 @@ import { WorkPackageComponents }    from '../collections/work/work_package_compo
 // Ultrawide GUI Components
 
 // Ultrawide Services
-import { DesignUpdateSummaryCategory, WorkPackageScopeType, DesignUpdateSummaryType, ViewType} from '../constants/constants.js';
+import { DesignUpdateSummaryCategory, WorkPackageScopeType, DesignUpdateSummaryType, ViewType, LogLevel} from '../constants/constants.js';
+import { log }        from '../common/utils.js';
 
 import DesignUpdateSummaryServices from '../apiServer/apiDesignUpdateSummary.js';
 
@@ -32,6 +33,9 @@ class ClientDesignUpdateSummary{
         const view = store.getState().currentAppView;
         const viewOptions = store.getState().currentUserViewOptions;
 
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Client: Refreshing DU Summary for view {}", view);
+        log((msg) => console.log(msg), LogLevel.DEBUG, "Options: updateSummaryVisible {}", viewOptions.updateSummaryVisible);
+
         // Only worth refreshing the data if the Update is visible
         if( viewOptions && (
             (view === ViewType.SELECT && userContext.designUpdateId !== 'NONE') ||
@@ -40,6 +44,7 @@ class ClientDesignUpdateSummary{
             )
         ) {
 
+            log((msg) => console.log(msg), LogLevel.DEBUG, "Client: Refreshing DU Summary...");
             DesignUpdateSummaryServices.refreshDesignUpdateSummary(userContext, updateChanged, (err, result) => {
 
                 if (err) {

@@ -90,7 +90,7 @@ class ClientTestIntegrationServices {
                 alert('Unexpected error: ' + err.reason + '.  Contact support if persists!');
             } else {
 
-                //store.dispatch(updateTestDataFlag());
+                store.dispatch(updateTestDataFlag());
 
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
@@ -120,7 +120,7 @@ class ClientTestIntegrationServices {
 
                 // Mash is populated to carry on with test data if needed
 
-                //store.dispatch(updateTestDataFlag());
+                store.dispatch(updateTestDataFlag());
 
                 store.dispatch(updateUserMessage({
                     messageType: MessageType.INFO,
