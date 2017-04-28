@@ -21,15 +21,22 @@ Meteor.methods({
                 $set:{
                     userId:                     userContext.userId,
                     designDetailsVisible:       false,
-                    testSummaryVisible:         false,
                     designDomainDictVisible:    false,
+                    testSummaryVisible:         false,
+                    updateProgressVisible:      false,
+                    updateSummaryVisible:       false,
                     devAccTestsVisible:         false,
                     devIntTestsVisible:         false,
                     devUnitTestsVisible:        false,
-                    devFeatureFilesVisible:     false
+                    devFeatureFilesVisible:     false,
+                    designShowAllAsTabs:        false,
+                    updateShowAllAsTabs:        false,
+                    workShowAllAsTabs:          false
                 }
             }
-        )
+        );
+
+        // Toggle an option to ensure that redux object is populated for tests
     },
 
     'testViewOptions.toggleViewOption'(optionType, userName, expectation){
